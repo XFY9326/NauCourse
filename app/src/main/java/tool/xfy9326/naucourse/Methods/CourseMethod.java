@@ -1,6 +1,7 @@
 package tool.xfy9326.naucourse.Methods;
 
 import android.content.Context;
+import android.graphics.Paint;
 
 import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.data.column.Column;
@@ -32,7 +33,6 @@ public class CourseMethod {
     private final ArrayList<Course> courses;
     private final SchoolTime schoolTime;
     private OnCourseTableItemClickListener onCourseTableClick;
-    private boolean isDoubleWeek;
     private int weekNum;
     private SmartTable<TableLine> smartTable;
     private boolean loadSuccess;
@@ -53,32 +53,14 @@ public class CourseMethod {
         loadSuccess = false;
     }
 
-    public void setTableView(SmartTable<TableLine> smartTable) {
-        this.smartTable = smartTable;
-        loadView();
-    }
-
-    public boolean updateCourseTableView(int weekNum) {
-        if (loadSuccess) {
-            this.weekNum = weekNum;
-            loadSuccess = false;
-            loadView();
-            return true;
-        }
-        return false;
-    }
-
-    synchronized public String[] getNextClass(int weekNum) {
+    private static String[] getNextClass(Context context, String[][] this_week_table, String[][] this_week_id_table, ArrayList<Course> courses) {
         String[] result = new String[3];
-        if (this.weekNum != weekNum) {
-            getTable(weekNum, schoolTime.getStartTime());
-        }
         //仅限周一到周五的计算
         Calendar calendar = Calendar.getInstance(Locale.CHINA);
         int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 
-        String[] today = table[weekDayNum];
-        String[] todayId = id_table[weekDayNum];
+        String[] today = this_week_table[weekDayNum];
+        String[] todayId = this_week_id_table[weekDayNum];
         String[] times = context.getResources().getStringArray(R.array.course_finish_time);
         int nowTime = calendar.get(Calendar.HOUR) * 60 + calendar.get(Calendar.MINUTE);
 
@@ -105,17 +87,38 @@ public class CourseMethod {
         return result;
     }
 
+    public void setTableView(SmartTable<TableLine> smartTable) {
+        this.smartTable = smartTable;
+        loadView();
+    }
+
+    public boolean updateCourseTableView(int weekNum) {
+        if (loadSuccess) {
+            this.weekNum = weekNum;
+            loadSuccess = false;
+            loadView();
+            return true;
+        }
+        return false;
+    }
+
+    //课程名称 上课地点 授课教师
+    public String[] getNextClass(int weekNum) {
+        if (this.weekNum != weekNum || table == null) {
+            getTable(weekNum, schoolTime.getStartTime());
+        }
+        return getNextClass(context, table, id_table, courses);
+    }
+
     public void setOnCourseTableClickListener(OnCourseTableItemClickListener onCourseTableClick) {
         this.onCourseTableClick = onCourseTableClick;
     }
 
     synchronized private void loadView() {
         if (smartTable != null && !loadSuccess) {
-            isDoubleWeek = weekNum % 2 == 0;
-
             setTableCourse();
             //表格数值加载到视图
-            String title = context.getString(R.string.week, weekNum) + "  " + context.getString(R.string.table_title);
+            String title = context.getString(R.string.table_title);
             List<String> week_day = BaseMethod.getWeekDayArray(context, weekNum, schoolTime.getStartTime());
 
             //仅支持五天课程
@@ -152,7 +155,6 @@ public class CourseMethod {
             columns.add(columnFr);
 
             TableData<TableLine> tableData = new TableData<>(title, tableLines, columns);
-
             smartTable.setTableData(tableData);
             smartTable.notifyDataChanged();
             System.gc();
@@ -162,7 +164,8 @@ public class CourseMethod {
 
     private void columnSet(Column<String> column) {
         column.setAutoMerge(true);
-        column.setWidth(20);
+        column.setAutoCount(false);
+        column.setTextAlign(Paint.Align.CENTER);
         column.setOnColumnItemClickListener(new OnColumnItemClickListener<String>() {
             @Override
             public void onClick(Column<String> column, String value, String str, int position) {
@@ -214,7 +217,9 @@ public class CourseMethod {
         }
     }
 
-    private void getTable(int weekNum, String startSchoolDate) {
+    synchronized private void getTable(int weekNum, String startSchoolDate) {
+        boolean isDoubleWeek = weekNum % 2 == 0;
+
         table = new String[Config.MAX_WEEK_DAY + 1][Config.MAX_DAY_COURSE];
         id_table = new String[Config.MAX_WEEK_DAY + 1][Config.MAX_DAY_COURSE];
         for (Course course : courses) {

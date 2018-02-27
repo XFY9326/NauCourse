@@ -19,7 +19,9 @@ public class BaseApplication extends Application {
 
     public void onCreate() {
         super.onCreate();
-        Bugly.init(this, "7b78d5ccdc", BuildConfig.DEBUG);
+        if (!BuildConfig.DEBUG) {
+            Bugly.init(this, "7b78d5ccdc", BuildConfig.DEBUG);
+        }
         client = new NauJwcClient(this);
     }
 

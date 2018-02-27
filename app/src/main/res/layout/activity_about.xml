@@ -99,26 +99,27 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"
+                android:padding="5dp"
                 android:text="@string/open_source"
-                android:textIsSelectable="true"
                 android:textColor="@android:color/black"
+                android:textIsSelectable="true"
                 android:textSize="15sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:gravity="center"
                 android:text="@string/copyright"
-                android:layout_marginBottom="10dp"
                 android:textSize="16sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textIsSelectable="true"
                 android:autoLink="web"
-                android:text="@string/web" />
+                android:gravity="center"
+                android:text="@string/web"
+                android:textIsSelectable="true" />
 
         </LinearLayout>
 

@@ -124,6 +124,8 @@ public class PersonFragment extends Fragment {
 
     private void TimeTextSet(SchoolTime schoolTime, Context context) {
         if (context != null && schoolTime != null) {
+            schoolTime.setWeekNum(BaseMethod.getNowWeekNum(schoolTime));
+
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
             String time = context.getString(R.string.time_now) + simpleDateFormat.format(new Date());
             ((TextView) view.findViewById(R.id.textView_timeNow)).setText(time);

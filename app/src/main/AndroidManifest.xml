@@ -58,7 +58,18 @@
                 android:value=".Activities.MainActivity" />
         </activity>
 
-    </application>
+        <receiver
+            android:name=".Views.NextClassWidget"
+            tools:ignore="InnerclassSeparator">
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_widget_next_class_provider" />
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="tool.xfy9326.naucourse.Views.NextClassWidget.OnClick" />
+            </intent-filter>
+        </receiver>
 
+    </application>
 
 </manifest>

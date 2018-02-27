@@ -131,7 +131,7 @@ public class InfoMethod {
         Elements tags = detailDocument.body().getElementsByTag("p");
         List<String> data = tags.eachText();
         for (String str : data) {
-            if(str.equals("") || str.equals(" ")){
+            if (str.equals("") || str.equals(" ")) {
                 result.append("\n");
             } else {
                 result.append(str.replace("\\b", " ")).append("\n");

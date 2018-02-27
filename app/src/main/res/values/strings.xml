@@ -5,7 +5,7 @@
     <string name="user_id">用户名</string>
     <string name="user_pw">密码</string>
     <string name="login_attention">本程序不会上传任何用户信息，账户密码均加密保存在本地,所有教务信息均通过用户手机直接查询，源代码开放在Github，请放心使用。</string>
-    <string name="course_now">当前课程</string>
+    <string name="course_next">下一节课</string>
     <string name="course">课程</string>
     <string name="location">教室</string>
     <string name="teacher">老师</string>

@@ -83,7 +83,7 @@ public class BaseMethod {
                 Calendar calendar_start = Calendar.getInstance(Locale.CHINA);
                 calendar_start.setTime(startDate);
 
-                while (startDay > endDay) {
+                while (startDay < endDay) {
                     calendar_start.add(Calendar.DATE, 7);
                     startDay = calendar_start.getTimeInMillis();
                     max_week++;
@@ -102,13 +102,38 @@ public class BaseMethod {
         return week;
     }
 
+    //获取当前是第几周（用于非联网更新状态）
+    public static int getNowWeekNum(SchoolTime schoolTime) {
+        int weekNum = 0;
+        if (schoolTime != null) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+            try {
+                Date startDate = simpleDateFormat.parse(schoolTime.getStartTime());
+                long startDay = startDate.getTime();
+                long nowDay = new Date().getTime();
+
+                Calendar calendar_start = Calendar.getInstance(Locale.CHINA);
+                calendar_start.setTime(startDate);
+
+                while (startDay < nowDay) {
+                    calendar_start.add(Calendar.DATE, 7);
+                    startDay = calendar_start.getTimeInMillis();
+                    weekNum++;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return weekNum;
+    }
+
     //获取第几周星期几的日期
     static List<String> getWeekDayArray(Context context, int week_num, String startSchoolDate) {
         List<String> week = new ArrayList<>();
         String[] num = context.getResources().getStringArray(R.array.week_number);
         String[] week_day_date = getWeekDayDate(week_num, startSchoolDate);
         for (int i = 1; i <= Config.MAX_WEEK_DAY; i++) {
-            week.add(context.getString(R.string.week_day, num[i - 1]) + "  " + week_day_date[i - 1]);
+            week.add(context.getString(R.string.week_day, num[i - 1]) + " " + week_day_date[i - 1]);
         }
         return week;
     }

@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.Fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.CourseDetail;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
 import tool.xfy9326.naucourse.Utils.TableLine;
+import tool.xfy9326.naucourse.Views.NextClassWidget;
 
 /**
  * Created by xfy9326 on 18-2-20.
@@ -74,9 +76,13 @@ public class TableFragment extends Fragment {
     private void ViewSet() {
         courseTable = view.findViewById(R.id.course_table);
         courseTable.setZoom(false);
+
         TableConfig tableConfig = courseTable.getConfig();
         tableConfig.setShowXSequence(false);
         tableConfig.setShowYSequence(false);
+        tableConfig.setShowTableTitle(false);
+        tableConfig.setVerticalPadding(5);
+        tableConfig.setHorizontalPadding(5);
         tableConfig.setColumnTitleBackgroundColor(Color.LTGRAY);
 
         if (BaseMethod.isDataAutoUpdate(context)) {
@@ -88,6 +94,8 @@ public class TableFragment extends Fragment {
         if (context != null && courses != null && schoolTime != null) {
             int weekNum;
             boolean inVacation = false;
+            schoolTime.setWeekNum(BaseMethod.getNowWeekNum(schoolTime));
+
             if (schoolTime.getWeekNum() == 0) {
                 weekNum = 1;
                 inVacation = true;
@@ -153,6 +161,10 @@ public class TableFragment extends Fragment {
                     CourseCardSet(context, course);
                 }
             });
+
+            if (loadTime > 0) {
+                context.sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
+            }
         }
     }
 
