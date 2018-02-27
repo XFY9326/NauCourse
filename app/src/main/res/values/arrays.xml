@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="course_time">
+        <item>08:30</item>
+        <item>09:20</item>
+        <item>10:20</item>
+        <item>11:10</item>
+        <item>12:00</item>
+        <item>13:30</item>
+        <item>14:20</item>
+        <item>15:20</item>
+        <item>16:10</item>
+        <item>17:00</item>
+        <item>18:30</item>
+        <item>19:20</item>
+        <item>20:10</item>
+    </string-array>
+
+    <string-array name="course_finish_time">
+        <item>09:10</item>
+        <item>10:00</item>
+        <item>11:00</item>
+        <item>11:50</item>
+        <item>12:40</item>
+        <item>14:10</item>
+        <item>15:00</item>
+        <item>16:00</item>
+        <item>16:50</item>
+        <item>17:30</item>
+        <item>19:10</item>
+        <item>20:00</item>
+        <item>20:50</item>
+    </string-array>
+
+    <string-array name="week_number">
+        <item>一</item>
+        <item>二</item>
+        <item>三</item>
+        <item>四</item>
+        <item>五</item>
+        <item>六</item>
+        <item>七</item>
+    </string-array>
+
+    <string-array name="open_source_name">
+        <item>Android Support Library</item>
+        <item>Jsoup</item>
+        <item>Okhttp3</item>
+        <item>SmartTable</item>
+        <item>Gson</item>
+    </string-array>
+
+    <string-array name="open_source_web">
+        <item>http://source.android.com</item>
+        <item>https://jsoup.org</item>
+        <item>http://square.github.io/okhttp</item>
+        <item>https://github.com/huangyanbin/smartTable</item>
+        <item>https://github.com/google/gson</item>
+    </string-array>
+
+</resources>
