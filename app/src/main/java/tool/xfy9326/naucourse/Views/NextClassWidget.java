@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,6 +63,12 @@ public class NextClassWidget extends AppWidgetProvider {
         remoteViews.setViewVisibility(R.id.layout_app_widget_nextClass, View.GONE);
 
         return remoteViews;
+    }
+
+    @Override
+    public void onEnabled(Context context) {
+        super.onEnabled(context);
+        Toast.makeText(context, R.string.click_to_update, Toast.LENGTH_LONG).show();
     }
 
     @Override
