@@ -23,8 +23,10 @@ import java.util.Date;
 import java.util.Locale;
 
 import tool.xfy9326.naucourse.Methods.BaseMethod;
-import tool.xfy9326.naucourse.Methods.InfoMethod;
+import tool.xfy9326.naucourse.Methods.JwInfoMethod;
+import tool.xfy9326.naucourse.Methods.JwcInfoMethod;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.Utils.JwTopic;
 import tool.xfy9326.naucourse.Utils.JwcTopic;
 import tool.xfy9326.naucourse.Views.InfoAdapter;
 
@@ -124,13 +126,13 @@ public class HomeFragment extends Fragment {
         linearLayout_nextClass.setVisibility(View.VISIBLE);
     }
 
-    private void InfoSet(JwcTopic jwcTopic, Context context) {
-        if (jwcTopic != null) {
+    private void InfoSet(JwcTopic jwcTopic, JwTopic jwTopic, Context context) {
+        if (jwcTopic != null || jwTopic != null) {
             if (infoAdapter == null) {
-                infoAdapter = new InfoAdapter(context, jwcTopic);
+                infoAdapter = new InfoAdapter(context, jwcTopic, jwTopic);
                 recyclerView.setAdapter(infoAdapter);
             } else {
-                infoAdapter.updateJwcTopic(jwcTopic);
+                infoAdapter.updateJwcTopic(jwcTopic, jwTopic);
             }
         }
     }
@@ -152,8 +154,10 @@ public class HomeFragment extends Fragment {
 
     @SuppressLint("StaticFieldLeak")
     class InfoAsync extends AsyncTask<Context, Void, Context> {
-        boolean loadSuccess = false;
+        boolean JwcLoadSuccess = false;
+        boolean JwLoadSuccess = false;
         private JwcTopic jwcTopic;
+        private JwTopic jwTopic;
 
         InfoAsync() {
             jwcTopic = null;
@@ -163,15 +167,26 @@ public class HomeFragment extends Fragment {
         protected Context doInBackground(Context... context) {
             if (context[0] != null) {
                 if (loadTime == 0) {
-                    jwcTopic = (JwcTopic) BaseMethod.getOfflineData(context[0], JwcTopic.class, InfoMethod.FILE_NAME);
-                    loadSuccess = true;
+                    jwcTopic = (JwcTopic) BaseMethod.getOfflineData(context[0], JwcTopic.class, JwcInfoMethod.FILE_NAME);
+                    jwTopic = (JwTopic) BaseMethod.getOfflineData(context[0], JwTopic.class, JwInfoMethod.FILE_NAME);
+                    JwcLoadSuccess = true;
+                    JwLoadSuccess = true;
                     loadTime++;
                     return context[0];
                 } else {
-                    InfoMethod infoMethod = new InfoMethod(context[0]);
-                    loadSuccess = infoMethod.load();
-                    if (loadSuccess) {
-                        jwcTopic = infoMethod.getJwcTopic();
+                    JwcInfoMethod jwcInfoMethod = new JwcInfoMethod(context[0]);
+                    JwcLoadSuccess = jwcInfoMethod.load();
+                    if (JwcLoadSuccess) {
+                        jwcTopic = jwcInfoMethod.getJwcTopic();
+                    }
+
+                    JwInfoMethod jwInfoMethod = new JwInfoMethod(context[0]);
+                    JwLoadSuccess = jwInfoMethod.load();
+                    if (JwLoadSuccess) {
+                        jwTopic = jwInfoMethod.getJwTopic();
+                    }
+
+                    if (JwcLoadSuccess || JwLoadSuccess) {
                         loadTime++;
                         return context[0];
                     }
@@ -182,8 +197,8 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Context context) {
-            if (loadSuccess) {
-                InfoSet(jwcTopic, context);
+            if (JwcLoadSuccess || JwLoadSuccess) {
+                InfoSet(jwcTopic, jwTopic, context);
                 if (swipeRefreshLayout != null) {
                     if (swipeRefreshLayout.isRefreshing()) {
                         swipeRefreshLayout.setRefreshing(false);

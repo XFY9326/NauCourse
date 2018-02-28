@@ -11,6 +11,7 @@ import org.jsoup.select.Elements;
 import java.util.List;
 
 import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.JwcTopic;
 
 /**
@@ -18,15 +19,15 @@ import tool.xfy9326.naucourse.Utils.JwcTopic;
  * 教务信息获取方法
  */
 
-public class InfoMethod {
+public class JwcInfoMethod {
     public static final String FILE_NAME = "JwcTopic";
-    private static final int TOPIC_COUNT = 30;
+    private static final int TOPIC_COUNT = 15;
     private final Context context;
     private JwcTopic jwcTopic;
     private Document document;
     private Document detailDocument;
 
-    public InfoMethod(Context context) {
+    public JwcInfoMethod(Context context) {
         this.context = context;
         this.document = null;
         this.detailDocument = null;
@@ -79,7 +80,11 @@ public class InfoMethod {
                 } else if (divideCount == 5) {
                     click[totalTopic] = str.trim();
                 } else if (divideCount == 6) {
-                    type[totalTopic] = str.trim();
+                    String temp = str.trim();
+                    if (temp.contains("教务通知")) {
+                        temp = context.getString(R.string.jw_system_info);
+                    }
+                    type[totalTopic] = temp;
 
                     divideCount = 0;
                     totalTopic++;
@@ -129,7 +134,10 @@ public class InfoMethod {
     public String getDetail() {
         StringBuilder result = new StringBuilder();
         Elements tags = detailDocument.body().getElementsByTag("p");
+        Elements tags_h = detailDocument.body().getElementsByTag("h3");
         List<String> data = tags.eachText();
+        List<String> data_h = tags_h.eachText();
+        data.addAll(data_h);
         for (String str : data) {
             if (str.equals("") || str.equals(" ")) {
                 result.append("\n");

@@ -21,6 +21,7 @@ public class Config {
     public static final String INTENT_INFO_DETAIL_DATE = "INFO_DETAIL_DATE";
     public static final String INTENT_INFO_DETAIL_CLICK = "INFO_DETAIL_CLICK";
     public static final String INTENT_INFO_DETAIL_POST = "INFO_DETAIL_POST";
+    public static final String INTENT_INFO_DETAIL_SOURCE = "INFO_DETAIL_SOURCE";
     public static final String INTENT_INFO_DETAIL_URL = "INFO_DETAIL_URL";
     public static final String INTENT_IS_LOGIN_OUT = "IS_LOGIN_OUT";
 

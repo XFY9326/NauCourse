@@ -16,8 +16,10 @@ import android.widget.Toast;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
-import tool.xfy9326.naucourse.Methods.InfoMethod;
+import tool.xfy9326.naucourse.Methods.JwInfoMethod;
+import tool.xfy9326.naucourse.Methods.JwcInfoMethod;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.Views.InfoAdapter;
 
 /**
  * Created by 10696 on 2018/2/25.
@@ -29,6 +31,7 @@ public class InfoDetailActivity extends AppCompatActivity {
     private String info_click;
     private String info_date;
     private String info_url;
+    private String info_source;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,6 +59,7 @@ public class InfoDetailActivity extends AppCompatActivity {
             info_post = intent.getStringExtra(Config.INTENT_INFO_DETAIL_POST);
             info_click = intent.getStringExtra(Config.INTENT_INFO_DETAIL_CLICK);
             info_date = intent.getStringExtra(Config.INTENT_INFO_DETAIL_DATE);
+            info_source = intent.getStringExtra(Config.INTENT_INFO_DETAIL_SOURCE);
         }
     }
 
@@ -73,7 +77,11 @@ public class InfoDetailActivity extends AppCompatActivity {
 
         textView_title.setText(info_title);
         textView_post.setText(getString(R.string.info_post, info_post));
-        textView_click.setText(getString(R.string.info_click, info_click));
+        if (info_click != null) {
+            textView_click.setText(getString(R.string.info_click, info_click));
+        } else {
+            textView_click.setVisibility(View.GONE);
+        }
         textView_date.setText(getString(R.string.info_date, info_date));
     }
 
@@ -95,10 +103,18 @@ public class InfoDetailActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Context... context) {
             if (context[0] != null) {
-                InfoMethod infoMethod = new InfoMethod(context[0]);
-                loadSuccess = infoMethod.loadDetail(info_url);
-                if (loadSuccess) {
-                    return infoMethod.getDetail();
+                if (info_source.equals(InfoAdapter.TOPIC_SOURCE_JWC)) {
+                    JwcInfoMethod jwcInfoMethod = new JwcInfoMethod(context[0]);
+                    loadSuccess = jwcInfoMethod.loadDetail(info_url);
+                    if (loadSuccess) {
+                        return jwcInfoMethod.getDetail();
+                    }
+                } else if (info_source.equals(InfoAdapter.TOPIC_SOURCE_JW)) {
+                    JwInfoMethod jwInfoMethod = new JwInfoMethod(context[0]);
+                    loadSuccess = jwInfoMethod.loadDetail(info_url);
+                    if (loadSuccess) {
+                        return jwInfoMethod.getDetail();
+                    }
                 }
             }
             return null;
