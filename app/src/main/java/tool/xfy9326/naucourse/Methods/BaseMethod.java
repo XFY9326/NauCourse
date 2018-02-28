@@ -52,7 +52,7 @@ public class BaseMethod {
 
     public static void doubleClickExit(Activity activity) {
         long time = System.currentTimeMillis();
-        if (time - DoubleClickTime > 800) {
+        if (time - DoubleClickTime > 1200) {
             DoubleClickTime = time;
             Toast.makeText(activity, activity.getString(R.string.double_click_exit), Toast.LENGTH_SHORT).show();
         } else {

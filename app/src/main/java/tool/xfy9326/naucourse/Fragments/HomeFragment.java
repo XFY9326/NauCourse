@@ -11,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,10 +88,6 @@ public class HomeFragment extends Fragment {
         });
         scrollToPosition();
 
-        if (BaseMethod.isDataAutoUpdate(context)) {
-            new InfoAsync().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, context);
-        }
-
         swipeRefreshLayout = view.findViewById(R.id.swipeLayout_home);
         swipeRefreshLayout.setDistanceToTriggerSync(200);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
@@ -101,10 +98,19 @@ public class HomeFragment extends Fragment {
                     new InfoAsync().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, context);
                 } else {
                     Toast.makeText(context, R.string.network_error, Toast.LENGTH_SHORT).show();
-                    swipeRefreshLayout.setRefreshing(false);
+                    swipeRefreshLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
                 }
             }
         });
+
+        if (loadTime == 0) {
+            new InfoAsync().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, context);
+        }
 
         TextView textView_dateNow = view.findViewById(R.id.textView_dateNow);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
@@ -204,7 +210,10 @@ public class HomeFragment extends Fragment {
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 }
-                if (loadTime == 1 && BaseMethod.isNetworkConnected(context)) {
+                //离线数据加载完成，开始拉取网络数据
+                if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
+                    swipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
+                    swipeRefreshLayout.setRefreshing(true);
                     new InfoAsync().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, context);
                 }
             }

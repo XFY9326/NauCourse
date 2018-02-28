@@ -85,7 +85,7 @@ public class TableFragment extends Fragment {
         tableConfig.setHorizontalPadding(5);
         tableConfig.setColumnTitleBackgroundColor(Color.LTGRAY);
 
-        if (BaseMethod.isDataAutoUpdate(context)) {
+        if (loadTime == 0) {
             new TableAsync().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, context);
         }
     }
@@ -259,7 +259,8 @@ public class TableFragment extends Fragment {
         protected void onPostExecute(Context context) {
             if (tableLoadSuccess && timeLoadSuccess) {
                 CourseSet(course, schoolTime, context);
-                if (loadTime == 1 && BaseMethod.isNetworkConnected(context)) {
+                //离线数据加载完成，开始拉取网络数据
+                if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
                     new TableAsync().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, context);
                 }
             }

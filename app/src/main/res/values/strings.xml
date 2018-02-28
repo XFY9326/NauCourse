@@ -70,7 +70,6 @@
     <string name="on_start_data_get">数据自动更新</string>
     <string name="on_start_data_get_sum">在联网情况下每次开启时自动更新数据</string>
     <string name="web">https://github.com/XFY9326/NauCourse</string>
-    <string name="click_to_update">点击小部件可以立即更新下一节课的信息</string>
     <string name="jw_system_info">教务系统通知</string>
     <string name="jwc">教务委员会</string>
 </resources>
