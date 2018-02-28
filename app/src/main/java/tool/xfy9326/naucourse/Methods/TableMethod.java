@@ -21,7 +21,7 @@ import tool.xfy9326.naucourse.Utils.CourseDetail;
  */
 
 public class TableMethod {
-    public static final String FILE_NAME = "Course";
+    static final String FILE_NAME = "Course";
     private final Context context;
     private Document document;
 

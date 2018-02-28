@@ -6,6 +6,16 @@
             android:key="UPDATE_DATA_ON_START"
             android:summary="@string/on_start_data_get_sum"
             android:title="@string/on_start_data_get" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="UPDATE_DATA_ON_START"
+            android:key="ONLY_UPDATE_UNDER_WIFI"
+            android:summary="@string/only_update_under_wifi_sum"
+            android:title="@string/only_update_under_wifi" />
+        <Preference
+            android:key="UPDATE_COURSE_TABLE"
+            android:summary="@string/update_course_table_sum"
+            android:title="@string/update_course_table" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/user_manage">
         <Preference

@@ -2,9 +2,9 @@
     <string name="app_name">NAU课程表</string>
     <string name="login">登录</string>
     <string name="remember_pw">记住密码</string>
-    <string name="user_id">用户名</string>
+    <string name="user_id">学号</string>
     <string name="user_pw">密码</string>
-    <string name="login_attention">本程序不会上传任何用户信息，账户密码均加密保存在本地,所有教务信息均通过用户手机直接查询，源代码开放在Github，请放心使用。</string>
+    <string name="login_attention">本程序不会上传任何用户信息，账户密码均加密保存在本地,所有教务信息均通过用户手机直接查询。\n本客户端登陆后十分钟内教务网无法再次登陆，请注意！</string>
     <string name="course_next">下一节课</string>
     <string name="course">课程</string>
     <string name="location">教室</string>
@@ -72,4 +72,9 @@
     <string name="web">https://github.com/XFY9326/NauCourse</string>
     <string name="jw_system_info">教务系统通知</string>
     <string name="jwc">教务委员会</string>
+    <string name="updating">正在更新</string>
+    <string name="update_course_table">更新课程表</string>
+    <string name="update_course_table_sum">手动强制更新课程表</string>
+    <string name="only_update_under_wifi">仅在Wifi网络下自动更新数据</string>
+    <string name="only_update_under_wifi_sum">避免自动更新数据使用移动网络消耗流量</string>
 </resources>

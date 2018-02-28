@@ -7,6 +7,5 @@
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
     <color name="ic_launcher_background">#E1FAFF</color>
-    <color name="grey">#848484</color>
     <color name="light_grey">#eeeeee</color>
 </resources>

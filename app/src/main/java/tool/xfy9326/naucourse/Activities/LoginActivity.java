@@ -73,39 +73,35 @@ public class LoginActivity extends AppCompatActivity {
                 if (BaseMethod.isNetworkConnected(LoginActivity.this)) {
                     final String id = editText_userId.getText().toString().trim();
                     final String pw = editText_userPw.getText().toString().trim();
-                    if (id.length() > 7 && pw.length() == 6) {
-                        final NauJwcClient nauJwcClient = BaseMethod.getBaseApplication(LoginActivity.this).getClient();
-                        showLoadingDialog(LoginActivity.this);
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    if (nauJwcClient.login(id, pw)) {
-                                        loginURL = nauJwcClient.getLoginUrl();
-                                        if (loginURL != null) {
-                                            loginSuccess = true;
-                                        }
+                    final NauJwcClient nauJwcClient = BaseMethod.getBaseApplication(LoginActivity.this).getClient();
+                    showLoadingDialog(LoginActivity.this);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                if (nauJwcClient.login(id, pw)) {
+                                    loginURL = nauJwcClient.getLoginUrl();
+                                    if (loginURL != null) {
+                                        loginSuccess = true;
                                     }
-                                    loginErrorCode = nauJwcClient.getLoginErrorCode();
-                                    Looper.prepare();
-                                    if (loadingDialog != null) {
-                                        loadingDialog.cancel();
-                                        loadingDialog = null;
-                                    }
-                                    Looper.loop();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
                                 }
+                                loginErrorCode = nauJwcClient.getLoginErrorCode();
+                                Looper.prepare();
+                                if (loadingDialog != null) {
+                                    loadingDialog.cancel();
+                                    loadingDialog = null;
+                                }
+                                Looper.loop();
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
-                        }).start();
-                        if (checkBox_rememberPw.isChecked()) {
-                            String en_pw = AES.encrypt(String.valueOf(pw), String.valueOf(id));
-                            sharedPreferences.edit().putString(Config.PREFERENCE_USER_ID, id).putString(Config.PREFERENCE_USER_PW, en_pw).putBoolean(Config.PREFERENCE_REMEMBER_PW, true).apply();
-                        } else {
-                            sharedPreferences.edit().putString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID).putString(Config.PREFERENCE_USER_PW, Config.DEFAULT_PREFERENCE_USER_PW).putBoolean(Config.PREFERENCE_REMEMBER_PW, false).apply();
                         }
+                    }).start();
+                    if (checkBox_rememberPw.isChecked()) {
+                        String en_pw = AES.encrypt(String.valueOf(pw), String.valueOf(id));
+                        sharedPreferences.edit().putString(Config.PREFERENCE_USER_ID, id).putString(Config.PREFERENCE_USER_PW, en_pw).putBoolean(Config.PREFERENCE_REMEMBER_PW, true).apply();
                     } else {
-                        Snackbar.make(findViewById(R.id.layout_login_content), R.string.user_info_error, Snackbar.LENGTH_SHORT).show();
+                        sharedPreferences.edit().putString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID).putString(Config.PREFERENCE_USER_PW, Config.DEFAULT_PREFERENCE_USER_PW).putBoolean(Config.PREFERENCE_REMEMBER_PW, false).apply();
                     }
                 } else {
                     Snackbar.make(findViewById(R.id.layout_login_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();

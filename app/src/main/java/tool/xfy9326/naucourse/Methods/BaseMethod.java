@@ -50,6 +50,19 @@ public class BaseMethod {
         return false;
     }
 
+    private static boolean isWifiNetWork(Context context) {
+        if (context != null) {
+            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (connectivityManager != null) {
+                NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+                if (networkInfo != null) {
+                    return networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
+                }
+            }
+        }
+        return false;
+    }
+
     public static void doubleClickExit(Activity activity) {
         long time = System.currentTimeMillis();
         if (time - DoubleClickTime > 1200) {
@@ -66,7 +79,16 @@ public class BaseMethod {
     }
 
     public static boolean isDataAutoUpdate(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_UPDATE_DATA_ON_START, Config.DEFAULT_PREFERENCE_UPDATE_DATA_ON_START);
+        boolean autoUpdate = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_UPDATE_DATA_ON_START, Config.DEFAULT_PREFERENCE_UPDATE_DATA_ON_START);
+        if (isDataWifiAutoUpdate(context)) {
+            return isWifiNetWork(context) && autoUpdate;
+        } else {
+            return autoUpdate;
+        }
+    }
+
+    private static boolean isDataWifiAutoUpdate(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_ONLY_UPDATE_UNDER_WIFI, Config.DEFAULT_PREFERENCE_ONLY_UPDATE_UNDER_WIFI);
     }
 
     //获取最大周数，返回周数数组

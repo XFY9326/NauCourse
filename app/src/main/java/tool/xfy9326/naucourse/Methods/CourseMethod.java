@@ -164,6 +164,7 @@ public class CourseMethod {
 
     private void columnSet(Column<String> column) {
         column.setAutoMerge(true);
+        column.setMaxMergeCount(5);
         column.setAutoCount(false);
         column.setTextAlign(Paint.Align.CENTER);
         column.setOnColumnItemClickListener(new OnColumnItemClickListener<String>() {

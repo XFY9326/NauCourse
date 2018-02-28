@@ -226,9 +226,11 @@ public class PersonFragment extends Fragment {
                 }
                 //离线数据加载完成，开始拉取网络数据
                 if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
+
                     swipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
                     swipeRefreshLayout.setRefreshing(true);
                     new StudentAsync().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, context);
+
                 }
             }
             super.onPostExecute(context);

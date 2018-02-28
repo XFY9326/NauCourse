@@ -43,6 +43,18 @@ public class SettingsFragment extends PreferenceFragment {
                 return true;
             }
         });
+        findPreference(Config.PREFERENCE_UPDATE_COURSE_TABLE).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                if (BaseMethod.isNetworkConnected(getActivity())) {
+                    Toast.makeText(getActivity(), R.string.updating, Toast.LENGTH_SHORT).show();
+                    BaseMethod.getBaseApplication(getActivity()).getViewPagerAdapter().getTableFragment().UpdateCourseTable();
+                } else {
+                    Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            }
+        });
     }
 
     private void loginOut() {

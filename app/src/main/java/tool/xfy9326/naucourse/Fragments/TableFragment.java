@@ -90,6 +90,10 @@ public class TableFragment extends Fragment {
         }
     }
 
+    synchronized public void UpdateCourseTable() {
+        new TableAsync().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, context);
+    }
+
     private void CourseSet(ArrayList<Course> courses, SchoolTime schoolTime, final Context context) {
         if (context != null && courses != null && schoolTime != null) {
             int weekNum;

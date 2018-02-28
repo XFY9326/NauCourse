@@ -21,7 +21,7 @@ import tool.xfy9326.naucourse.Utils.JwcTopic;
 
 public class JwcInfoMethod {
     public static final String FILE_NAME = "JwcTopic";
-    private static final int TOPIC_COUNT = 15;
+    private static final int TOPIC_COUNT = 10;
     private final Context context;
     private JwcTopic jwcTopic;
     private Document document;
