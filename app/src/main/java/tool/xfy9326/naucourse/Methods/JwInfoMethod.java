@@ -13,6 +13,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Utils.JwTopic;
 
 /**
@@ -33,17 +34,17 @@ public class JwInfoMethod {
         this.document_detail = null;
     }
 
-    public boolean load() {
-        try {
-            String data = loadUrl(server_url);
-            if (data != null) {
+    public int load() throws Exception {
+        String data = loadUrl(server_url);
+        if (data != null) {
+            document = Jsoup.parse(data);
+            if (LoginMethod.checkUserLogin(data)) {
                 document = Jsoup.parse(data);
-                return true;
+                return Config.NET_WORK_GET_SUCCESS;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            return Config.NET_WORK_ERROR_CODE_CONNECT_USER_DATA;
         }
-        return false;
+        return Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR;
     }
 
     public JwTopic getJwTopic() {
@@ -111,18 +112,17 @@ public class JwInfoMethod {
         return jwTopic;
     }
 
-    public boolean loadDetail(String url) {
-        try {
-            String data = loadUrl(server_url + url);
-            if (data != null) {
-                data = data.replace("&nbsp;", "\\b");
+    public int loadDetail(String url) throws Exception {
+        String data = loadUrl(server_url + url);
+        if (data != null) {
+            data = data.replace("&nbsp;", "\\b");
+            if (LoginMethod.checkUserLogin(data)) {
                 document_detail = Jsoup.parse(data);
-                return true;
+                return Config.NET_WORK_GET_SUCCESS;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            return Config.NET_WORK_ERROR_CODE_CONNECT_USER_DATA;
         }
-        return false;
+        return Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR;
     }
 
     public String getDetail() {

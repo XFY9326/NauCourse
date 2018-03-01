@@ -41,12 +41,12 @@ public class NauJwcClient {
         client = client_builder.build();
     }
 
-    synchronized public boolean login(String userId, String userPw) throws IOException {
+    synchronized public boolean login(String userId, String userPw) throws Exception {
         String url = loadUrl();
         return url != null && userLogin(userId, userPw, getCheckCode(url), false);
     }
 
-    synchronized public void loginOut() throws IOException {
+    synchronized public void loginOut() throws Exception {
         userLoginOut();
     }
 

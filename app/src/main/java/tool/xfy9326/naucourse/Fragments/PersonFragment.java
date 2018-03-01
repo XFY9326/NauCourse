@@ -75,7 +75,7 @@ public class PersonFragment extends Fragment {
             @Override
             public void onRefresh() {
                 if (BaseMethod.isNetworkConnected(context)) {
-                    new StudentAsync().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, context);
+                    getData();
                 } else {
                     Toast.makeText(context, R.string.network_error, Toast.LENGTH_SHORT).show();
                     swipeRefreshLayout.post(new Runnable() {
@@ -89,7 +89,7 @@ public class PersonFragment extends Fragment {
         });
 
         if (loadTime == 0) {
-            new StudentAsync().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, context);
+            getData();
         }
 
         CardView cardView_settings = view.findViewById(R.id.cardView_settings);
@@ -163,10 +163,15 @@ public class PersonFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    private void getData() {
+        new StudentAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context);
+    }
+
     @SuppressLint("StaticFieldLeak")
     class StudentAsync extends AsyncTask<Context, Void, Context> {
-        boolean personLoadSuccess = false;
-        boolean timeLoadSuccess = false;
+        int personLoadSuccess = -1;
+        int timeLoadSuccess = -1;
+        int loadCode = Config.NET_WORK_GET_SUCCESS;
         private StudentScore studentScore;
         private StudentInfo studentInfo;
         private SchoolTime schoolTime;
@@ -179,59 +184,60 @@ public class PersonFragment extends Fragment {
 
         @Override
         protected Context doInBackground(Context... context) {
-            if (context[0] != null) {
+            try {
                 if (loadTime == 0) {
                     studentScore = (StudentScore) BaseMethod.getOfflineData(context[0], StudentScore.class, PersonMethod.FILE_NAME_SCORE);
                     studentInfo = (StudentInfo) BaseMethod.getOfflineData(context[0], StudentInfo.class, PersonMethod.FILE_NAME_DATA);
                     schoolTime = (SchoolTime) BaseMethod.getOfflineData(context[0], SchoolTime.class, TimeMethod.FILE_NAME);
-                    personLoadSuccess = true;
-                    timeLoadSuccess = true;
+                    personLoadSuccess = Config.NET_WORK_GET_SUCCESS;
+                    timeLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                     loadTime++;
-                    return context[0];
                 } else {
                     PersonMethod personMethod = new PersonMethod(context[0]);
                     personLoadSuccess = personMethod.load();
-                    if (personLoadSuccess) {
+                    if (personLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                         studentScore = personMethod.getUserScore();
                         studentInfo = personMethod.getUserData();
                     }
 
                     TimeMethod timeMethod = new TimeMethod(context[0]);
                     timeLoadSuccess = timeMethod.load();
-                    if (timeLoadSuccess) {
+                    if (timeLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                         schoolTime = timeMethod.getSchoolTime();
                     }
-                    if (personLoadSuccess || timeLoadSuccess) {
+
+                    if (personLoadSuccess == Config.NET_WORK_GET_SUCCESS && timeLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                         loadTime++;
-                        return context[0];
                     }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+                loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
             }
-            return null;
+            return context[0];
         }
 
         @Override
         protected void onPostExecute(Context context) {
-            if (personLoadSuccess) {
+            if (BaseMethod.checkNetWorkCode(context, new int[]{personLoadSuccess, timeLoadSuccess}, loadCode)) {
                 PersonTextSet(studentInfo, studentScore, context);
-            }
-            if (timeLoadSuccess) {
                 TimeTextSet(schoolTime, context);
             }
-            if (personLoadSuccess || timeLoadSuccess) {
-                if (swipeRefreshLayout != null) {
-                    if (swipeRefreshLayout.isRefreshing()) {
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
+            if (swipeRefreshLayout != null) {
+                if (swipeRefreshLayout.isRefreshing()) {
+                    swipeRefreshLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
                 }
-                //离线数据加载完成，开始拉取网络数据
-                if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
-
-                    swipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
-                    swipeRefreshLayout.setRefreshing(true);
-                    new StudentAsync().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, context);
-
-                }
+            }
+            //离线数据加载完成，开始拉取网络数据
+            if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
+                swipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
+                swipeRefreshLayout.setRefreshing(true);
+                getData();
             }
             super.onPostExecute(context);
         }

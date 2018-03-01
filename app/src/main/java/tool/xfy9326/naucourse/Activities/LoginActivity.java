@@ -21,8 +21,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.IOException;
-
 import lib.xfy9326.naujwc.NauJwcClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
@@ -92,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                                     loadingDialog = null;
                                 }
                                 Looper.loop();
-                            } catch (IOException e) {
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }

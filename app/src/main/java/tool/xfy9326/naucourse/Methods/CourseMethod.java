@@ -54,28 +54,45 @@ public class CourseMethod {
     }
 
     private static String[] getNextClass(Context context, String[][] this_week_table, String[][] this_week_id_table, ArrayList<Course> courses) {
-        String[] result = new String[3];
+        String[] result = new String[4];
         //仅限周一到周五的计算
         Calendar calendar = Calendar.getInstance(Locale.CHINA);
         int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 
         String[] today = this_week_table[weekDayNum];
         String[] todayId = this_week_id_table[weekDayNum];
+        String[] startTimes = context.getResources().getStringArray(R.array.course_time);
         String[] times = context.getResources().getStringArray(R.array.course_finish_time);
-        int nowTime = calendar.get(Calendar.HOUR) * 60 + calendar.get(Calendar.MINUTE);
-
+        long nowTime = calendar.getTimeInMillis();
+        String lastId = "";
+        String course_startTime = "";
+        String course_endTime = "";
+        long todayFinalCourseTime = 0;
         for (int i = 0; i < times.length; i++) {
-            String[] time_temp = times[i].split(":");
-            int courseTime = Integer.valueOf(time_temp[0]) * 60 + Integer.valueOf(time_temp[1]);
-            if (courseTime > nowTime) {
-                if (today[i] != null) {
+            if (today[i] != null) {
+                String[] time_temp = times[i].split(":");
+                calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time_temp[0]));
+                calendar.set(Calendar.MINUTE, Integer.valueOf(time_temp[1]));
+                long courseTime = calendar.getTimeInMillis();
+                if (courseTime > nowTime) {
                     result[0] = today[i].substring(today[i].indexOf("\n") + 1);
                     result[1] = today[i].substring(1, today[i].indexOf("\n"));
                     result[2] = todayId[i];
-                    break;
+                    course_endTime = times[i];
+                    if (!lastId.equals(todayId[i])) {
+                        course_startTime = startTimes[i];
+                    }
                 }
+                todayFinalCourseTime = courseTime;
+                lastId = todayId[i];
             }
         }
+        if (nowTime > todayFinalCourseTime) {
+            return new String[4];
+        }
+
+        result[3] = course_startTime + "~" + course_endTime;
+
         if (result[2] != null) {
             for (Course course : courses) {
                 if (course.getCourseId().equals(result[2])) {
@@ -102,7 +119,7 @@ public class CourseMethod {
         return false;
     }
 
-    //课程名称 上课地点 授课教师
+    //课程名称 上课地点 授课教师 上课时间
     public String[] getNextClass(int weekNum) {
         if (this.weekNum != weekNum || table == null) {
             getTable(weekNum, schoolTime.getStartTime());

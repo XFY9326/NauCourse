@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Locale;
 
 import tool.xfy9326.naucourse.BaseApplication;
+import tool.xfy9326.naucourse.BuildConfig;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Tools.AES;
@@ -36,6 +37,28 @@ import tool.xfy9326.naucourse.Utils.SchoolTime;
 
 public class BaseMethod {
     private static long DoubleClickTime = 0;
+
+    public static boolean checkNetWorkCode(Context context, int[] dataLoadCode, int contentLoadCode) {
+        if (contentLoadCode == Config.NET_WORK_ERROR_CODE_CONNECT_ERROR) {
+            Toast.makeText(context, R.string.network_get_error, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        for (int code : dataLoadCode) {
+            if (code == Config.NET_WORK_ERROR_CODE_CONNECT_NO_LOGIN) {
+                Toast.makeText(context, R.string.user_login_error, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            if (code == Config.NET_WORK_ERROR_CODE_CONNECT_USER_DATA) {
+                Toast.makeText(context, R.string.data_get_error, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            if (code == Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR) {
+                Toast.makeText(context, R.string.user_login_error, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+        return true;
+    }
 
     public static boolean isNetworkConnected(Context context) {
         if (context != null) {
@@ -200,7 +223,11 @@ public class BaseMethod {
         if (file.exists()) {
             String data = IO.readFile(path);
             String id = PreferenceManager.getDefaultSharedPreferences(context).getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
-            return new Gson().fromJson(AES.decrypt(data, id), file_class);
+            if (BuildConfig.DEBUG) {
+                return new Gson().fromJson(data, file_class);
+            } else {
+                return new Gson().fromJson(AES.decrypt(data, id), file_class);
+            }
         } else {
             return null;
         }
@@ -214,7 +241,11 @@ public class BaseMethod {
             String id = PreferenceManager.getDefaultSharedPreferences(context).getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
             Type type = new TypeToken<ArrayList<Course>>() {
             }.getType();
-            return new Gson().fromJson(AES.decrypt(data, id), type);
+            if (BuildConfig.DEBUG) {
+                return new Gson().fromJson(data, type);
+            } else {
+                return new Gson().fromJson(AES.decrypt(data, id), type);
+            }
         } else {
             return null;
         }
@@ -226,7 +257,13 @@ public class BaseMethod {
             public void run() {
                 String id = PreferenceManager.getDefaultSharedPreferences(context).getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
                 String data = new Gson().toJson(o);
-                if (!IO.writeFile(AES.encrypt(data, id), context.getFilesDir() + File.separator + FILE_NAME)) {
+                String content;
+                if (BuildConfig.DEBUG) {
+                    content = data;
+                } else {
+                    content = AES.encrypt(data, id);
+                }
+                if (!IO.writeFile(content, context.getFilesDir() + File.separator + FILE_NAME)) {
                     Log.d(Config.TAG_TEMP_SAVE_FAILED, FILE_NAME);
                 }
             }

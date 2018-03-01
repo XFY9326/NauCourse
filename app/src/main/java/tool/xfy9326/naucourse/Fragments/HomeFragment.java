@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.JwInfoMethod;
 import tool.xfy9326.naucourse.Methods.JwcInfoMethod;
@@ -95,7 +96,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onRefresh() {
                 if (BaseMethod.isNetworkConnected(context)) {
-                    new InfoAsync().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, context);
+                    getData();
                 } else {
                     Toast.makeText(context, R.string.network_error, Toast.LENGTH_SHORT).show();
                     swipeRefreshLayout.post(new Runnable() {
@@ -109,7 +110,7 @@ public class HomeFragment extends Fragment {
         });
 
         if (loadTime == 0) {
-            new InfoAsync().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, context);
+            getData();
         }
 
         TextView textView_dateNow = view.findViewById(R.id.textView_dateNow);
@@ -117,14 +118,16 @@ public class HomeFragment extends Fragment {
         textView_dateNow.setText(simpleDateFormat.format(new Date()));
     }
 
-    public void setNextCourse(String name, String location, String teacher) {
+    public void setNextCourse(String name, String location, String teacher, String time) {
         TextView textView_nextClass = view.findViewById(R.id.textView_nextClass);
         TextView textView_nextLocation = view.findViewById(R.id.textView_nextLocation);
         TextView textView_nextTeacher = view.findViewById(R.id.textView_nextTeacher);
+        TextView textView_nextTime = view.findViewById(R.id.textView_nextTime);
 
         textView_nextClass.setText(name);
         textView_nextLocation.setText(location);
         textView_nextTeacher.setText(teacher);
+        textView_nextTime.setText(time);
 
         TextView textView_noNextClass = view.findViewById(R.id.textView_noNextClass);
         textView_noNextClass.setVisibility(View.GONE);
@@ -133,7 +136,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void InfoSet(JwcTopic jwcTopic, JwTopic jwTopic, Context context) {
-        if (jwcTopic != null || jwTopic != null) {
+        if (context != null && jwcTopic != null && jwTopic != null) {
             if (infoAdapter == null) {
                 infoAdapter = new InfoAdapter(context, jwcTopic, jwTopic);
                 recyclerView.setAdapter(infoAdapter);
@@ -158,64 +161,76 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    private void getData() {
+        new InfoAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context);
+    }
+
     @SuppressLint("StaticFieldLeak")
     class InfoAsync extends AsyncTask<Context, Void, Context> {
-        boolean JwcLoadSuccess = false;
-        boolean JwLoadSuccess = false;
+        int JwcLoadSuccess = -1;
+        int JwLoadSuccess = -1;
+        int loadCode = Config.NET_WORK_GET_SUCCESS;
         private JwcTopic jwcTopic;
         private JwTopic jwTopic;
 
         InfoAsync() {
             jwcTopic = null;
+            jwTopic = null;
         }
 
         @Override
-        protected Context doInBackground(Context... context) {
-            if (context[0] != null) {
+        protected Context doInBackground(final Context... context) {
+            try {
                 if (loadTime == 0) {
                     jwcTopic = (JwcTopic) BaseMethod.getOfflineData(context[0], JwcTopic.class, JwcInfoMethod.FILE_NAME);
                     jwTopic = (JwTopic) BaseMethod.getOfflineData(context[0], JwTopic.class, JwInfoMethod.FILE_NAME);
-                    JwcLoadSuccess = true;
-                    JwLoadSuccess = true;
+                    JwcLoadSuccess = Config.NET_WORK_GET_SUCCESS;
+                    JwLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                     loadTime++;
-                    return context[0];
                 } else {
                     JwcInfoMethod jwcInfoMethod = new JwcInfoMethod(context[0]);
                     JwcLoadSuccess = jwcInfoMethod.load();
-                    if (JwcLoadSuccess) {
+                    if (JwcLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                         jwcTopic = jwcInfoMethod.getJwcTopic();
                     }
 
                     JwInfoMethod jwInfoMethod = new JwInfoMethod(context[0]);
                     JwLoadSuccess = jwInfoMethod.load();
-                    if (JwLoadSuccess) {
+                    if (JwLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                         jwTopic = jwInfoMethod.getJwTopic();
                     }
 
-                    if (JwcLoadSuccess || JwLoadSuccess) {
+                    if (JwcLoadSuccess == Config.NET_WORK_GET_SUCCESS && JwLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                         loadTime++;
-                        return context[0];
                     }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+                loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
             }
-            return null;
+            return context[0];
         }
 
         @Override
         protected void onPostExecute(Context context) {
-            if (JwcLoadSuccess || JwLoadSuccess) {
+            if (BaseMethod.checkNetWorkCode(context, new int[]{JwLoadSuccess, JwcLoadSuccess}, loadCode)) {
                 InfoSet(jwcTopic, jwTopic, context);
-                if (swipeRefreshLayout != null) {
-                    if (swipeRefreshLayout.isRefreshing()) {
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
+            }
+            if (swipeRefreshLayout != null) {
+                if (swipeRefreshLayout.isRefreshing()) {
+                    swipeRefreshLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
                 }
-                //离线数据加载完成，开始拉取网络数据
-                if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
-                    swipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
-                    swipeRefreshLayout.setRefreshing(true);
-                    new InfoAsync().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, context);
-                }
+            }
+            //离线数据加载完成，开始拉取网络数据
+            if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
+                swipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
+                swipeRefreshLayout.setRefreshing(true);
+                getData();
             }
             super.onPostExecute(context);
         }

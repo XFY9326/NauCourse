@@ -17,7 +17,6 @@
         android:layout_margin="10dp"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        android:paddingBottom="5dp"
         android:paddingTop="5dp">
 
         <LinearLayout
@@ -45,9 +44,9 @@
         <TextView
             android:id="@+id/textView_noNextClass"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="15dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
             android:drawablePadding="30dp"
             android:drawableStart="@drawable/ic_rest"
             android:gravity="center"
@@ -57,8 +56,8 @@
         <LinearLayout
             android:id="@+id/layout_nextClass"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
             android:visibility="gone">
 
             <LinearLayout
@@ -74,14 +73,20 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="2dp"
                     android:text="@string/location" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="2dp"
                     android:text="@string/teacher" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/time" />
 
             </LinearLayout>
 
@@ -101,13 +106,19 @@
                     android:id="@+id/textView_nextLocation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginTop="2dp" />
 
                 <TextView
                     android:id="@+id/textView_nextTeacher"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginTop="2dp" />
+
+                <TextView
+                    android:id="@+id/textView_nextTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp" />
 
             </LinearLayout>
 

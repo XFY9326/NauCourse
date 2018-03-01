@@ -34,16 +34,21 @@ public class JwcInfoMethod {
         this.jwcTopic = null;
     }
 
-    public boolean load() {
+    public int load() throws Exception {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
             String data = LoginMethod.getData(context, "/Issue/TopicList.aspx?bn=%E6%95%99%E5%8A%A1%E9%80%9A%E7%9F%A5&sn=%E6%95%99%E5%8A%A1%E9%80%9A%E7%9F%A5");
             if (data != null) {
                 document = Jsoup.parse(data);
-                return true;
+                if (LoginMethod.checkUserLogin(data)) {
+                    detailDocument = Jsoup.parse(data);
+                    return Config.NET_WORK_GET_SUCCESS;
+                }
+                return Config.NET_WORK_ERROR_CODE_CONNECT_USER_DATA;
             }
+            return Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR;
         }
-        return false;
+        return Config.NET_WORK_ERROR_CODE_CONNECT_NO_LOGIN;
     }
 
     public JwcTopic getJwcTopic() {
@@ -118,17 +123,21 @@ public class JwcInfoMethod {
         return jwcTopic;
     }
 
-    public boolean loadDetail(String url) {
+    public int loadDetail(String url) throws Exception {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
             String data = LoginMethod.getData(context, url);
             if (data != null) {
                 data = data.replace("&nbsp;", "\\b");
-                detailDocument = Jsoup.parse(data);
-                return true;
+                if (LoginMethod.checkUserLogin(data)) {
+                    document = Jsoup.parse(data);
+                    return Config.NET_WORK_GET_SUCCESS;
+                }
+                return Config.NET_WORK_ERROR_CODE_CONNECT_USER_DATA;
             }
+            return Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR;
         }
-        return false;
+        return Config.NET_WORK_ERROR_CODE_CONNECT_NO_LOGIN;
     }
 
     public String getDetail() {

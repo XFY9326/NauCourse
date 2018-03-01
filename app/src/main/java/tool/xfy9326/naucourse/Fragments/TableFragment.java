@@ -49,9 +49,9 @@ public class TableFragment extends Fragment {
     private int loadTime = 0;
 
     public TableFragment() {
-        view = null;
-        context = null;
-        courseTable = null;
+        this.view = null;
+        this.context = null;
+        this.courseTable = null;
     }
 
     @Override
@@ -86,12 +86,12 @@ public class TableFragment extends Fragment {
         tableConfig.setColumnTitleBackgroundColor(Color.LTGRAY);
 
         if (loadTime == 0) {
-            new TableAsync().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, context);
+            getData();
         }
     }
 
     synchronized public void UpdateCourseTable() {
-        new TableAsync().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, context);
+        getData();
     }
 
     private void CourseSet(ArrayList<Course> courses, SchoolTime schoolTime, final Context context) {
@@ -155,7 +155,7 @@ public class TableFragment extends Fragment {
                 HomeFragment homeFragment = BaseMethod.getBaseApplication(context).getViewPagerAdapter().getHomeFragment();
                 String[] courseNext = courseMethod.getNextClass(weekNum);
                 if (courseNext[0] != null) {
-                    homeFragment.setNextCourse(courseNext[0], courseNext[1], courseNext[2]);
+                    homeFragment.setNextCourse(courseNext[0], courseNext[1], courseNext[2], courseNext[3]);
                 }
             }
 
@@ -216,10 +216,15 @@ public class TableFragment extends Fragment {
         }
     }
 
+    private void getData() {
+        new TableAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context);
+    }
+
     @SuppressLint("StaticFieldLeak")
     class TableAsync extends AsyncTask<Context, Void, Context> {
-        boolean tableLoadSuccess = false;
-        boolean timeLoadSuccess = false;
+        int tableLoadSuccess = -1;
+        int timeLoadSuccess = -1;
+        int loadCode = Config.NET_WORK_GET_SUCCESS;
         private ArrayList<Course> course;
         private SchoolTime schoolTime;
 
@@ -230,43 +235,44 @@ public class TableFragment extends Fragment {
 
         @Override
         protected Context doInBackground(Context... context) {
-            if (context[0] != null) {
+            try {
                 if (loadTime == 0) {
                     schoolTime = (SchoolTime) BaseMethod.getOfflineData(context[0], SchoolTime.class, TimeMethod.FILE_NAME);
                     course = BaseMethod.getOfflineTableData(context[0]);
-                    tableLoadSuccess = true;
-                    timeLoadSuccess = true;
+                    tableLoadSuccess = Config.NET_WORK_GET_SUCCESS;
+                    timeLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                     loadTime++;
-                    return context[0];
                 } else {
                     TableMethod tableMethod = new TableMethod(context[0]);
                     tableLoadSuccess = tableMethod.load();
-                    if (tableLoadSuccess) {
+                    if (tableLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                         course = tableMethod.getCourseTable();
                     }
 
                     TimeMethod timeMethod = new TimeMethod(context[0]);
                     timeLoadSuccess = timeMethod.load();
-                    if (timeLoadSuccess) {
+                    if (timeLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                         schoolTime = timeMethod.getSchoolTime();
                     }
-                    if (tableLoadSuccess && timeLoadSuccess) {
+                    if (tableLoadSuccess == Config.NET_WORK_GET_SUCCESS && timeLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                         loadTime++;
-                        return context[0];
                     }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+                loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
             }
-            return null;
+            return context[0];
         }
 
         @Override
         protected void onPostExecute(Context context) {
-            if (tableLoadSuccess && timeLoadSuccess) {
+            if (BaseMethod.checkNetWorkCode(context, new int[]{tableLoadSuccess, timeLoadSuccess}, loadCode)) {
                 CourseSet(course, schoolTime, context);
-                //离线数据加载完成，开始拉取网络数据
-                if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
-                    new TableAsync().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, context);
-                }
+            }
+            //离线数据加载完成，开始拉取网络数据
+            if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
+                getData();
             }
             super.onPostExecute(context);
         }

@@ -86,46 +86,56 @@ public class InfoDetailActivity extends AppCompatActivity {
     }
 
     private void InfoDetailSet(String content) {
-        TextView textView_content = findViewById(R.id.textView_info_detail_content);
-        textView_content.setText(content);
-        ProgressBar progressBar_loading = findViewById(R.id.progressBar_info_detail_loading);
-        progressBar_loading.setVisibility(View.GONE);
-        textView_content.setVisibility(View.VISIBLE);
+        if (content != null) {
+            TextView textView_content = findViewById(R.id.textView_info_detail_content);
+            textView_content.setText(content);
+            textView_content.setVisibility(View.VISIBLE);
+            ProgressBar progressBar_loading = findViewById(R.id.progressBar_info_detail_loading);
+            progressBar_loading.setVisibility(View.GONE);
+        }
     }
 
     @SuppressLint("StaticFieldLeak")
-    class InfoDetailAsync extends AsyncTask<Context, Void, String> {
-        boolean loadSuccess = false;
+    class InfoDetailAsync extends AsyncTask<Context, Void, Context> {
+        String data;
+        int loadSuccess = -1;
+        int loadCode = Config.NET_WORK_GET_SUCCESS;
 
         InfoDetailAsync() {
+            data = null;
         }
 
         @Override
-        protected String doInBackground(Context... context) {
-            if (context[0] != null) {
-                if (info_source.equals(InfoAdapter.TOPIC_SOURCE_JWC)) {
-                    JwcInfoMethod jwcInfoMethod = new JwcInfoMethod(context[0]);
-                    loadSuccess = jwcInfoMethod.loadDetail(info_url);
-                    if (loadSuccess) {
-                        return jwcInfoMethod.getDetail();
-                    }
-                } else if (info_source.equals(InfoAdapter.TOPIC_SOURCE_JW)) {
-                    JwInfoMethod jwInfoMethod = new JwInfoMethod(context[0]);
-                    loadSuccess = jwInfoMethod.loadDetail(info_url);
-                    if (loadSuccess) {
-                        return jwInfoMethod.getDetail();
+        protected Context doInBackground(Context... context) {
+            try {
+                if (context[0] != null) {
+                    if (info_source.equals(InfoAdapter.TOPIC_SOURCE_JWC)) {
+                        JwcInfoMethod jwcInfoMethod = new JwcInfoMethod(context[0]);
+                        loadSuccess = jwcInfoMethod.loadDetail(info_url);
+                        if (loadSuccess == Config.NET_WORK_GET_SUCCESS) {
+                            data = jwcInfoMethod.getDetail();
+                        }
+                    } else if (info_source.equals(InfoAdapter.TOPIC_SOURCE_JW)) {
+                        JwInfoMethod jwInfoMethod = new JwInfoMethod(context[0]);
+                        loadSuccess = jwInfoMethod.loadDetail(info_url);
+                        if (loadSuccess == Config.NET_WORK_GET_SUCCESS) {
+                            data = jwInfoMethod.getDetail();
+                        }
                     }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+                loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
             }
-            return null;
+            return context[0];
         }
 
         @Override
-        protected void onPostExecute(String str) {
-            if (loadSuccess) {
-                InfoDetailSet(str);
+        protected void onPostExecute(Context context) {
+            if (BaseMethod.checkNetWorkCode(context, new int[]{loadSuccess}, loadCode)) {
+                InfoDetailSet(data);
             }
-            super.onPostExecute(str);
+            super.onPostExecute(context);
         }
     }
 }

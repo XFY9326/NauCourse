@@ -30,16 +30,20 @@ public class PersonMethod {
         this.document = null;
     }
 
-    public boolean load() {
+    public int load() throws Exception {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
             String data = LoginMethod.getData(context, "/Students/StudentIndex.aspx");
             if (data != null) {
-                document = Jsoup.parse(data);
-                return true;
+                if (LoginMethod.checkUserLogin(data)) {
+                    document = Jsoup.parse(data);
+                    return Config.NET_WORK_GET_SUCCESS;
+                }
+                return Config.NET_WORK_ERROR_CODE_CONNECT_USER_DATA;
             }
+            return Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR;
         }
-        return false;
+        return Config.NET_WORK_ERROR_CODE_CONNECT_NO_LOGIN;
     }
 
     public StudentScore getUserScore() {

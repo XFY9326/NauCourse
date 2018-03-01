@@ -2,16 +2,12 @@ package tool.xfy9326.naucourse.Methods;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.File;
-import java.io.IOException;
 
 import tool.xfy9326.naucourse.Config;
-import tool.xfy9326.naucourse.R;
 
 /**
  * Created by xfy9326 on 18-2-20.
@@ -20,16 +16,12 @@ import tool.xfy9326.naucourse.R;
 
 public class LoginMethod {
 
-    static String getData(Context context, String url) {
-        try {
-            return BaseMethod.getBaseApplication(context).getClient().getUserData(url);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Looper.prepare();
-            Toast.makeText(context, R.string.network_get_error, Toast.LENGTH_SHORT).show();
-            Looper.loop();
-        }
-        return null;
+    static String getData(final Context context, final String url) throws Exception {
+        return BaseMethod.getBaseApplication(context).getClient().getUserData(url);
+    }
+
+    static boolean checkUserLogin(String data) {
+        return !(data.contains("系统错误提示页") && data.contains("当前程序在执行过程中出现了未知异常，请重试") || data.contains("用户登录_南京审计大学教务管理系统"));
     }
 
     public static boolean loginOut(Context context) {
@@ -48,7 +40,7 @@ public class LoginMethod {
             }
             Log.d("LOGIN_OUT_CLEAR", String.valueOf(result));
             return true;
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;

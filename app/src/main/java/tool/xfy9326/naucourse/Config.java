@@ -47,4 +47,10 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_ONLY_UPDATE_UNDER_WIFI = false;
 
     public static final String TAG_TEMP_SAVE_FAILED = "TEMP_SAVE_FAILED";
+
+    public static final int NET_WORK_GET_SUCCESS = 0;
+    public static final int NET_WORK_ERROR_CODE_CONNECT_ERROR = 1;
+    public static final int NET_WORK_ERROR_CODE_CONNECT_USER_DATA = 2;
+    public static final int NET_WORK_ERROR_CODE_CONNECT_NO_LOGIN = 3;
+    public static final int NET_WORK_ERROR_CODE_GET_DATA_ERROR = 4;
 }
