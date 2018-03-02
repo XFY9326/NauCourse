@@ -59,52 +59,55 @@ public class CourseMethod {
         Calendar calendar = Calendar.getInstance(Locale.CHINA);
         int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 
-        String[] today = this_week_table[weekDayNum];
-        String[] todayId = this_week_id_table[weekDayNum];
-        String[] startTimes = context.getResources().getStringArray(R.array.course_time);
-        String[] times = context.getResources().getStringArray(R.array.course_finish_time);
-        long nowTime = calendar.getTimeInMillis();
-        String lastId = "";
-        String findCourseId = "";
-        String course_startTime = "";
-        String course_endTime = "";
-        long todayFinalCourseTime = 0;
-        for (int i = 0; i < times.length; i++) {
-            if (today[i] != null) {
-                String[] time_temp = times[i].split(":");
-                calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time_temp[0]));
-                calendar.set(Calendar.MINUTE, Integer.valueOf(time_temp[1]));
-                long courseTime = calendar.getTimeInMillis();
-                if (courseTime > nowTime) {
-                    if (!findCourseId.equals(todayId[i]) && !findCourseId.equals("")) {
+        if (weekDayNum > 0 && weekDayNum < 6) {
+            String[] today = this_week_table[weekDayNum];
+            String[] todayId = this_week_id_table[weekDayNum];
+            String[] startTimes = context.getResources().getStringArray(R.array.course_time);
+            String[] times = context.getResources().getStringArray(R.array.course_finish_time);
+            long nowTime = calendar.getTimeInMillis();
+            String lastId = "";
+            String findCourseId = "";
+            String course_startTime = "";
+            String course_endTime = "";
+            long todayFinalCourseTime = 0;
+            for (int i = 0; i < times.length; i++) {
+                if (today[i] != null) {
+                    String[] time_temp = times[i].split(":");
+                    calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time_temp[0]));
+                    calendar.set(Calendar.MINUTE, Integer.valueOf(time_temp[1]));
+                    long courseTime = calendar.getTimeInMillis();
+                    if (courseTime > nowTime) {
+                        if (!findCourseId.equals(todayId[i]) && !findCourseId.equals("")) {
+                            break;
+                        }
+                        result[0] = today[i].substring(today[i].indexOf("\n") + 1);
+                        result[1] = today[i].substring(1, today[i].indexOf("\n"));
+                        result[2] = todayId[i];
+                        course_endTime = times[i];
+                        if (!lastId.equals(todayId[i])) {
+                            course_startTime = startTimes[i];
+                            findCourseId = todayId[i];
+                        }
+                        lastId = todayId[i];
+                    }
+                    todayFinalCourseTime = courseTime;
+                }
+            }
+            if (nowTime > todayFinalCourseTime) {
+                return new String[4];
+            }
+
+            result[3] = course_startTime + "~" + course_endTime;
+
+            if (result[2] != null) {
+                for (Course course : courses) {
+                    if (course.getCourseId().equals(result[2])) {
+                        result[2] = course.getCourseTeacher();
                         break;
                     }
-                    result[0] = today[i].substring(today[i].indexOf("\n") + 1);
-                    result[1] = today[i].substring(1, today[i].indexOf("\n"));
-                    result[2] = todayId[i];
-                    course_endTime = times[i];
-                    if (!lastId.equals(todayId[i])) {
-                        course_startTime = startTimes[i];
-                        findCourseId = todayId[i];
-                    }
-                    lastId = todayId[i];
-                }
-                todayFinalCourseTime = courseTime;
-            }
-        }
-        if (nowTime > todayFinalCourseTime) {
-            return new String[4];
-        }
-
-        result[3] = course_startTime + "~" + course_endTime;
-
-        if (result[2] != null) {
-            for (Course course : courses) {
-                if (course.getCourseId().equals(result[2])) {
-                    result[2] = course.getCourseTeacher();
-                    break;
                 }
             }
+
         }
         return result;
     }

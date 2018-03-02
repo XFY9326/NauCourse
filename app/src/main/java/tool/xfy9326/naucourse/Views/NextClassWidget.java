@@ -74,6 +74,7 @@ public class NextClassWidget extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             appWidgetManager.updateAppWidget(appWidgetId, ViewGet(context));
         }
+        System.gc();
     }
 
     @Override
@@ -86,5 +87,6 @@ public class NextClassWidget extends AppWidgetProvider {
                 AppWidgetManager.getInstance(context).updateAppWidget(componentName, ViewGet(context));
             }
         }
+        System.gc();
     }
 }
