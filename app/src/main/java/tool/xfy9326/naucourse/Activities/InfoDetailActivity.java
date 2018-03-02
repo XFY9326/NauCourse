@@ -9,10 +9,17 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.URLSpan;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
@@ -85,10 +92,34 @@ public class InfoDetailActivity extends AppCompatActivity {
         textView_date.setText(getString(R.string.info_date, info_date));
     }
 
-    private void InfoDetailSet(String content) {
+    private void InfoDetailSet(String content, String[] extraFile) {
         if (content != null) {
             TextView textView_content = findViewById(R.id.textView_info_detail_content);
-            textView_content.setText(content);
+
+            if (extraFile.length > 0) {
+                int p = 0;
+                int[] strLength = new int[extraFile.length];
+                int[] strStart = new int[extraFile.length];
+                Pattern pattern = Pattern.compile("(附件).*(\\.\\S*)");
+                Matcher matcher = pattern.matcher(content);
+                while (matcher.find()) {
+                    String text = matcher.group();
+                    content = content.replace(text, "\n" + text);
+                    strLength[p] = text.length();
+                    strStart[p] = content.indexOf(text);
+                    p++;
+                }
+
+                SpannableString spannableString = new SpannableString(content);
+                for (int i = 0; i < extraFile.length; i++) {
+                    spannableString.setSpan(new URLSpan(extraFile[i]), strStart[i], strStart[i] + strLength[i], Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+                textView_content.setText(spannableString);
+                textView_content.setMovementMethod(LinkMovementMethod.getInstance());
+            } else {
+                textView_content.setText(content);
+            }
+
             textView_content.setVisibility(View.VISIBLE);
             ProgressBar progressBar_loading = findViewById(R.id.progressBar_info_detail_loading);
             progressBar_loading.setVisibility(View.GONE);
@@ -98,11 +129,13 @@ public class InfoDetailActivity extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
     class InfoDetailAsync extends AsyncTask<Context, Void, Context> {
         String data;
+        String[] extraFile;
         int loadSuccess = -1;
         int loadCode = Config.NET_WORK_GET_SUCCESS;
 
         InfoDetailAsync() {
-            data = null;
+            this.data = null;
+            this.extraFile = null;
         }
 
         @Override
@@ -120,6 +153,7 @@ public class InfoDetailActivity extends AppCompatActivity {
                         loadSuccess = jwInfoMethod.loadDetail(info_url);
                         if (loadSuccess == Config.NET_WORK_GET_SUCCESS) {
                             data = jwInfoMethod.getDetail();
+                            extraFile = jwInfoMethod.getExtraFileUrl();
                         }
                     }
                 }
@@ -133,7 +167,7 @@ public class InfoDetailActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Context context) {
             if (BaseMethod.checkNetWorkCode(context, new int[]{loadSuccess}, loadCode)) {
-                InfoDetailSet(data);
+                InfoDetailSet(data, extraFile);
             }
             super.onPostExecute(context);
         }

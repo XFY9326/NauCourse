@@ -7,6 +7,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -137,6 +138,16 @@ public class JwInfoMethod {
             }
         }
         return result.toString();
+    }
+
+    public String[] getExtraFileUrl() {
+        ArrayList<String> list = new ArrayList<>();
+        Elements tags = document_detail.body().getElementsContainingText("附件");
+        List<String> data = tags.eachAttr("href");
+        for (String str : data) {
+            list.add(server_url + str);
+        }
+        return list.toArray(new String[]{});
     }
 
     private String loadUrl(String url) throws IOException {

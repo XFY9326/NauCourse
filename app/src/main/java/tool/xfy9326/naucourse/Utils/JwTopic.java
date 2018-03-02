@@ -9,6 +9,7 @@ public class JwTopic {
     private String[] postTitle;
     private String[] postType;
     private String[] postUrl;
+
     private int postLength = 0;
 
     public JwTopic() {
