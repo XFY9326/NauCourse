@@ -23,6 +23,7 @@ import tool.xfy9326.naucourse.Utils.SchoolTime;
 
 /**
  * Created by 10696 on 2018/2/27.
+ * 显示下一节课的桌面小部件
  */
 
 public class NextClassWidget extends AppWidgetProvider {

@@ -78,6 +78,7 @@ public class HomeFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView_information);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        //保证从其他视图返回时列表位置不变
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -182,6 +183,7 @@ public class HomeFragment extends Fragment {
         protected Context doInBackground(final Context... context) {
             try {
                 if (loadTime == 0) {
+                    //首次只加载离线数据
                     jwcTopic = (JwcTopic) BaseMethod.getOfflineData(context[0], JwcTopic.class, JwcInfoMethod.FILE_NAME);
                     jwTopic = (JwTopic) BaseMethod.getOfflineData(context[0], JwTopic.class, JwInfoMethod.FILE_NAME);
                     JwcLoadSuccess = Config.NET_WORK_GET_SUCCESS;

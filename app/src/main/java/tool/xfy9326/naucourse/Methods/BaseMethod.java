@@ -38,6 +38,7 @@ import tool.xfy9326.naucourse.Utils.SchoolTime;
 public class BaseMethod {
     private static long DoubleClickTime = 0;
 
+    //网络连接情况检测以及错误提示
     public static boolean checkNetWorkCode(Context context, int[] dataLoadCode, int contentLoadCode) {
         if (contentLoadCode == Config.NET_WORK_ERROR_CODE_CONNECT_ERROR) {
             Toast.makeText(context, R.string.network_get_error, Toast.LENGTH_SHORT).show();

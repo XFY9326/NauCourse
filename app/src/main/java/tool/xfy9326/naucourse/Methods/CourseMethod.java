@@ -240,6 +240,7 @@ public class CourseMethod {
         }
     }
 
+    //获取该周信息表格
     synchronized private void getTable(int weekNum, String startSchoolDate) {
         boolean isDoubleWeek = weekNum % 2 == 0;
 
@@ -324,6 +325,7 @@ public class CourseMethod {
         return 1;
     }
 
+    //表格插件问题，换行后下一行的会显示在上面
     private String getShowDetail(Course course, CourseDetail courseDetail) {
         return ("@" + courseDetail.getLocation() + "\n" + course.getCourseName()).trim();
     }

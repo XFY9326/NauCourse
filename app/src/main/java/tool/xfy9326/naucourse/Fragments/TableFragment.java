@@ -172,6 +172,7 @@ public class TableFragment extends Fragment {
         }
     }
 
+    //表格中的课程详细信息显示
     private void CourseCardSet(Context context, Course course) {
         if (getActivity() != null) {
             LayoutInflater layoutInflater = getLayoutInflater();
@@ -237,6 +238,7 @@ public class TableFragment extends Fragment {
         protected Context doInBackground(Context... context) {
             try {
                 if (loadTime == 0) {
+                    //首次只加载离线数据
                     schoolTime = (SchoolTime) BaseMethod.getOfflineData(context[0], SchoolTime.class, TimeMethod.FILE_NAME);
                     course = BaseMethod.getOfflineTableData(context[0]);
                     tableLoadSuccess = Config.NET_WORK_GET_SUCCESS;

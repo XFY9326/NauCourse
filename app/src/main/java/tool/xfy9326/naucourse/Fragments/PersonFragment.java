@@ -186,6 +186,7 @@ public class PersonFragment extends Fragment {
         protected Context doInBackground(Context... context) {
             try {
                 if (loadTime == 0) {
+                    //首次只加载离线数据
                     studentScore = (StudentScore) BaseMethod.getOfflineData(context[0], StudentScore.class, PersonMethod.FILE_NAME_SCORE);
                     studentInfo = (StudentInfo) BaseMethod.getOfflineData(context[0], StudentInfo.class, PersonMethod.FILE_NAME_DATA);
                     schoolTime = (SchoolTime) BaseMethod.getOfflineData(context[0], SchoolTime.class, TimeMethod.FILE_NAME);

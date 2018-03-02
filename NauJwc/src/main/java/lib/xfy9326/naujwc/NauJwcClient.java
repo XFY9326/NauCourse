@@ -63,7 +63,7 @@ public class NauJwcClient {
                 Log.d("NAU_JWC_CLIENT", "Get Data Response Null");
             }
         } else {
-            Log.d("NAU_JWC_CLIENT", "Get Data Response Null");
+            Log.d("NAU_JWC_CLIENT", "Get Data Failed");
         }
         return null;
     }

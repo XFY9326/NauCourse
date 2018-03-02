@@ -22,6 +22,7 @@ import tool.xfy9326.naucourse.Utils.JwcTopic;
 
 /**
  * Created by xfy9326 on 18-2-20.
+ * 主页信息显示
  */
 
 public class InfoAdapter extends RecyclerView.Adapter<InfoViewHolder> {
@@ -49,6 +50,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoViewHolder> {
         setData();
     }
 
+    //更新列表
     public void updateJwcTopic(JwcTopic jwcTopic, JwTopic jwTopic) {
         this.jwcTopic = jwcTopic;
         this.jwTopic = jwTopic;
@@ -97,6 +99,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoViewHolder> {
         });
     }
 
+    //设置数据（多来源数据整合）
     private void setData() {
         if (jwcTopic != null) {
             for (int i = 0; i < jwcTopic.getTopic_length(); i++) {
@@ -127,6 +130,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoViewHolder> {
         sort();
     }
 
+    //数据按照日期排序（新的展现在前面)
     synchronized private void sort() {
         Comparator<ArrayList<String>> date_comparator = new Comparator<ArrayList<String>>() {
             @Override

@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 
 /**
  * Created by 10696 on 2018/2/27.
+ * 实现无法滑屏滚动
  */
 
 public class AdvancedViewPager extends ViewPager {
