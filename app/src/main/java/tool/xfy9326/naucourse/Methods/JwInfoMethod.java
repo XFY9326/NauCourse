@@ -142,11 +142,12 @@ public class JwInfoMethod {
 
     public String[] getExtraFileUrl() {
         ArrayList<String> list = new ArrayList<>();
-        Elements tags = document_detail.body().getElementsContainingText("附件");
+        Elements tags = document_detail.body().getElementsByAttributeValueContaining("href", "/picture/article/");
         List<String> data = tags.eachAttr("href");
         for (String str : data) {
             list.add(server_url + str);
         }
+        System.out.println(list.toString());
         return list.toArray(new String[]{});
     }
 

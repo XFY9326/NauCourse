@@ -95,31 +95,33 @@ public class InfoDetailActivity extends AppCompatActivity {
     private void InfoDetailSet(String content, String[] extraFile) {
         if (content != null) {
             TextView textView_content = findViewById(R.id.textView_info_detail_content);
+            if (extraFile != null) {
+                if (extraFile.length > 0) {
+                    int p = 0;
+                    int[] strLength = new int[extraFile.length];
+                    int[] strStart = new int[extraFile.length];
+                    Pattern pattern = Pattern.compile("(附件).*(\\.\\S*)");
+                    Matcher matcher = pattern.matcher(content);
+                    while (matcher.find()) {
+                        String text = matcher.group();
+                        content = content.replace(text, "\n" + text);
+                        strLength[p] = text.length();
+                        strStart[p] = content.indexOf(text);
+                        p++;
+                    }
 
-            if (extraFile.length > 0) {
-                int p = 0;
-                int[] strLength = new int[extraFile.length];
-                int[] strStart = new int[extraFile.length];
-                Pattern pattern = Pattern.compile("(附件).*(\\.\\S*)");
-                Matcher matcher = pattern.matcher(content);
-                while (matcher.find()) {
-                    String text = matcher.group();
-                    content = content.replace(text, "\n" + text);
-                    strLength[p] = text.length();
-                    strStart[p] = content.indexOf(text);
-                    p++;
+                    SpannableString spannableString = new SpannableString(content);
+                    for (int i = 0; i < extraFile.length; i++) {
+                        spannableString.setSpan(new URLSpan(extraFile[i]), strStart[i], strStart[i] + strLength[i], Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                    textView_content.setText(spannableString);
+                    textView_content.setMovementMethod(LinkMovementMethod.getInstance());
+                } else {
+                    textView_content.setText(content);
                 }
-
-                SpannableString spannableString = new SpannableString(content);
-                for (int i = 0; i < extraFile.length; i++) {
-                    spannableString.setSpan(new URLSpan(extraFile[i]), strStart[i], strStart[i] + strLength[i], Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
-                textView_content.setText(spannableString);
-                textView_content.setMovementMethod(LinkMovementMethod.getInstance());
             } else {
                 textView_content.setText(content);
             }
-
             textView_content.setVisibility(View.VISIBLE);
             ProgressBar progressBar_loading = findViewById(R.id.progressBar_info_detail_loading);
             progressBar_loading.setVisibility(View.GONE);
