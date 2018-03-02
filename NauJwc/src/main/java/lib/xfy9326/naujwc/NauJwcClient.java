@@ -65,6 +65,7 @@ public class NauJwcClient {
         } else {
             Log.d("NAU_JWC_CLIENT", "Get Data Failed");
         }
+        System.gc();
         return null;
     }
 

@@ -242,6 +242,7 @@ public class BaseMethod {
             String id = PreferenceManager.getDefaultSharedPreferences(context).getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
             Type type = new TypeToken<ArrayList<Course>>() {
             }.getType();
+            System.gc();
             //Debug模式下数据不加密
             if (BuildConfig.DEBUG) {
                 return new Gson().fromJson(data, type);
@@ -260,6 +261,7 @@ public class BaseMethod {
                 String id = PreferenceManager.getDefaultSharedPreferences(context).getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
                 String data = new Gson().toJson(o);
                 String content;
+                System.gc();
                 //Debug模式下数据不加密
                 if (BuildConfig.DEBUG) {
                     content = data;

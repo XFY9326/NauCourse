@@ -14,7 +14,7 @@ import tool.xfy9326.naucourse.Utils.CourseScore;
  */
 
 public class ScoreAdapter extends RecyclerView.Adapter<ScoreViewHolder> {
-    private Context context;
+    private final Context context;
     private CourseScore courseScore;
 
     public ScoreAdapter(Context context, CourseScore courseScore) {

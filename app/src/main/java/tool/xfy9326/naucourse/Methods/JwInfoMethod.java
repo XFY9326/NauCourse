@@ -37,6 +37,7 @@ public class JwInfoMethod {
 
     public int load() throws Exception {
         String data = loadUrl(server_url);
+        System.gc();
         if (data != null) {
             document = Jsoup.parse(data);
             if (LoginMethod.checkUserLogin(data)) {
@@ -147,7 +148,6 @@ public class JwInfoMethod {
         for (String str : data) {
             list.add(server_url + str);
         }
-        System.out.println(list.toString());
         return list.toArray(new String[]{});
     }
 

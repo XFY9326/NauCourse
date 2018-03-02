@@ -20,7 +20,7 @@ import tool.xfy9326.naucourse.Utils.CourseScore;
 
 public class ScoreMethod {
     public static final String FILE_NAME = "CourseScore";
-    private Context context;
+    private final Context context;
     private Document document;
 
     public ScoreMethod(Context context) {

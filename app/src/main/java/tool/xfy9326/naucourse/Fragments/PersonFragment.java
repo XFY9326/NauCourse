@@ -1,6 +1,5 @@
 package tool.xfy9326.naucourse.Fragments;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -24,10 +23,9 @@ import java.util.Locale;
 import tool.xfy9326.naucourse.Activities.AboutActivity;
 import tool.xfy9326.naucourse.Activities.ScoreActivity;
 import tool.xfy9326.naucourse.Activities.SettingsActivity;
+import tool.xfy9326.naucourse.AsyncTasks.StudentAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
-import tool.xfy9326.naucourse.Methods.PersonMethod;
-import tool.xfy9326.naucourse.Methods.TimeMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
 import tool.xfy9326.naucourse.Utils.StudentInfo;
@@ -62,8 +60,8 @@ public class PersonFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onStart() {
+        super.onStart();
         ViewSet();
     }
 
@@ -118,7 +116,7 @@ public class PersonFragment extends Fragment {
         });
     }
 
-    private void PersonTextSet(StudentInfo studentInfo, Context context) {
+    public void PersonTextSet(StudentInfo studentInfo, Context context) {
         if (context != null && studentInfo != null) {
             ((TextView) view.findViewById(R.id.textView_stdId)).setText(context.getString(R.string.std_id, studentInfo.getStd_id()));
             ((TextView) view.findViewById(R.id.textView_stdClass)).setText(context.getString(R.string.std_class, studentInfo.getStd_class()));
@@ -130,7 +128,7 @@ public class PersonFragment extends Fragment {
         }
     }
 
-    private void TimeTextSet(SchoolTime schoolTime, Context context) {
+    public void TimeTextSet(SchoolTime schoolTime, Context context) {
         if (context != null && schoolTime != null) {
             schoolTime.setWeekNum(BaseMethod.getNowWeekNum(schoolTime));
 
@@ -151,6 +149,25 @@ public class PersonFragment extends Fragment {
         }
     }
 
+    public void lastViewSet(Context context) {
+        if (swipeRefreshLayout != null) {
+            if (swipeRefreshLayout.isRefreshing()) {
+                swipeRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+            }
+        }
+        //离线数据加载完成，开始拉取网络数据
+        if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
+            swipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
+            swipeRefreshLayout.setRefreshing(true);
+            getData();
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Config.REQUEST_ACTIVITY_SETTINGS_LOGIN_OUT) {
@@ -166,79 +183,15 @@ public class PersonFragment extends Fragment {
     }
 
     private void getData() {
-        new StudentAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context);
+        new StudentAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getApplicationContext());
     }
 
-    @SuppressLint("StaticFieldLeak")
-    class StudentAsync extends AsyncTask<Context, Void, Context> {
-        int personLoadSuccess = -1;
-        int timeLoadSuccess = -1;
-        int loadCode = Config.NET_WORK_GET_SUCCESS;
-        private StudentInfo studentInfo;
-        private SchoolTime schoolTime;
-
-        StudentAsync() {
-            studentInfo = null;
-            schoolTime = null;
-        }
-
-        @Override
-        protected Context doInBackground(Context... context) {
-            try {
-                if (loadTime == 0) {
-                    //首次只加载离线数据
-                    studentInfo = (StudentInfo) BaseMethod.getOfflineData(context[0], StudentInfo.class, PersonMethod.FILE_NAME_DATA);
-                    schoolTime = (SchoolTime) BaseMethod.getOfflineData(context[0], SchoolTime.class, TimeMethod.FILE_NAME);
-                    personLoadSuccess = Config.NET_WORK_GET_SUCCESS;
-                    timeLoadSuccess = Config.NET_WORK_GET_SUCCESS;
-                    loadTime++;
-                } else {
-                    PersonMethod personMethod = new PersonMethod(context[0]);
-                    personLoadSuccess = personMethod.load();
-                    if (personLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                        studentInfo = personMethod.getUserData();
-                    }
-
-                    TimeMethod timeMethod = new TimeMethod(context[0]);
-                    timeLoadSuccess = timeMethod.load();
-                    if (timeLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                        schoolTime = timeMethod.getSchoolTime();
-                    }
-
-                    if (personLoadSuccess == Config.NET_WORK_GET_SUCCESS && timeLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                        loadTime++;
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
-            }
-            return context[0];
-        }
-
-        @Override
-        protected void onPostExecute(Context context) {
-            if (BaseMethod.checkNetWorkCode(context, new int[]{personLoadSuccess, timeLoadSuccess}, loadCode)) {
-                PersonTextSet(studentInfo, context);
-                TimeTextSet(schoolTime, context);
-            }
-            if (swipeRefreshLayout != null) {
-                if (swipeRefreshLayout.isRefreshing()) {
-                    swipeRefreshLayout.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    });
-                }
-            }
-            //离线数据加载完成，开始拉取网络数据
-            if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
-                swipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
-                swipeRefreshLayout.setRefreshing(true);
-                getData();
-            }
-            super.onPostExecute(context);
-        }
+    public int getLoadTime() {
+        return loadTime;
     }
+
+    public void setLoadTime(int loadTime) {
+        this.loadTime = loadTime;
+    }
+
 }

@@ -1,6 +1,5 @@
 package tool.xfy9326.naucourse.Fragments;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,10 +22,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.AsyncTasks.InfoAsync;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
-import tool.xfy9326.naucourse.Methods.JwInfoMethod;
-import tool.xfy9326.naucourse.Methods.JwcInfoMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.JwTopic;
 import tool.xfy9326.naucourse.Utils.JwcTopic;
@@ -62,8 +59,8 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onStart() {
+        super.onStart();
         ViewSet();
     }
 
@@ -136,7 +133,15 @@ public class HomeFragment extends Fragment {
         linearLayout_nextClass.setVisibility(View.VISIBLE);
     }
 
-    private void InfoSet(JwcTopic jwcTopic, JwTopic jwTopic, Context context) {
+    public int getLoadTime() {
+        return loadTime;
+    }
+
+    public void setLoadTime(int loadTime) {
+        this.loadTime = loadTime;
+    }
+
+    public void InfoSet(JwcTopic jwcTopic, JwTopic jwTopic, Context context) {
         if (context != null && jwcTopic != null && jwTopic != null) {
             if (infoAdapter == null) {
                 infoAdapter = new InfoAdapter(context, jwcTopic, jwTopic);
@@ -144,6 +149,25 @@ public class HomeFragment extends Fragment {
             } else {
                 infoAdapter.updateJwcTopic(jwcTopic, jwTopic);
             }
+        }
+    }
+
+    public void lastViewSet(Context context) {
+        if (swipeRefreshLayout != null) {
+            if (swipeRefreshLayout.isRefreshing()) {
+                swipeRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+            }
+        }
+        //离线数据加载完成，开始拉取网络数据
+        if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
+            swipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
+            swipeRefreshLayout.setRefreshing(true);
+            getData();
         }
     }
 
@@ -163,79 +187,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void getData() {
-        new InfoAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context);
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    class InfoAsync extends AsyncTask<Context, Void, Context> {
-        int JwcLoadSuccess = -1;
-        int JwLoadSuccess = -1;
-        int loadCode = Config.NET_WORK_GET_SUCCESS;
-        private JwcTopic jwcTopic;
-        private JwTopic jwTopic;
-
-        InfoAsync() {
-            jwcTopic = null;
-            jwTopic = null;
-        }
-
-        @Override
-        protected Context doInBackground(final Context... context) {
-            try {
-                if (loadTime == 0) {
-                    //首次只加载离线数据
-                    jwcTopic = (JwcTopic) BaseMethod.getOfflineData(context[0], JwcTopic.class, JwcInfoMethod.FILE_NAME);
-                    jwTopic = (JwTopic) BaseMethod.getOfflineData(context[0], JwTopic.class, JwInfoMethod.FILE_NAME);
-                    JwcLoadSuccess = Config.NET_WORK_GET_SUCCESS;
-                    JwLoadSuccess = Config.NET_WORK_GET_SUCCESS;
-                    loadTime++;
-                } else {
-                    JwcInfoMethod jwcInfoMethod = new JwcInfoMethod(context[0]);
-                    JwcLoadSuccess = jwcInfoMethod.load();
-                    if (JwcLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                        jwcTopic = jwcInfoMethod.getJwcTopic();
-                    }
-
-                    JwInfoMethod jwInfoMethod = new JwInfoMethod(context[0]);
-                    JwLoadSuccess = jwInfoMethod.load();
-                    if (JwLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                        jwTopic = jwInfoMethod.getJwTopic();
-                    }
-
-                    if (JwcLoadSuccess == Config.NET_WORK_GET_SUCCESS && JwLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                        loadTime++;
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
-            }
-            return context[0];
-        }
-
-        @Override
-        protected void onPostExecute(Context context) {
-            if (BaseMethod.checkNetWorkCode(context, new int[]{JwLoadSuccess, JwcLoadSuccess}, loadCode)) {
-                InfoSet(jwcTopic, jwTopic, context);
-            }
-            if (swipeRefreshLayout != null) {
-                if (swipeRefreshLayout.isRefreshing()) {
-                    swipeRefreshLayout.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    });
-                }
-            }
-            //离线数据加载完成，开始拉取网络数据
-            if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
-                swipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
-                swipeRefreshLayout.setRefreshing(true);
-                getData();
-            }
-            super.onPostExecute(context);
-        }
+        new InfoAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getApplicationContext());
     }
 
 }

@@ -17,7 +17,9 @@ import tool.xfy9326.naucourse.Config;
 public class LoginMethod {
 
     static String getData(final Context context, final String url) throws Exception {
-        return BaseMethod.getBaseApplication(context).getClient().getUserData(url);
+        String data = BaseMethod.getBaseApplication(context).getClient().getUserData(url);
+        System.gc();
+        return data;
     }
 
     static boolean checkUserLogin(String data) {

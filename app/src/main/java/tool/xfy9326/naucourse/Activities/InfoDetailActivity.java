@@ -1,7 +1,5 @@
 package tool.xfy9326.naucourse.Activities;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -23,10 +21,9 @@ import android.widget.Toast;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import tool.xfy9326.naucourse.AsyncTasks.InfoDetailAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
-import tool.xfy9326.naucourse.Methods.JwInfoMethod;
-import tool.xfy9326.naucourse.Methods.JwcInfoMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Views.InfoAdapter;
 
@@ -46,6 +43,7 @@ public class InfoDetailActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_detail);
+        BaseMethod.getBaseApplication(this).setInfoDetailActivity(this);
         ToolBarSet();
         GetData();
         ViewSet();
@@ -58,6 +56,13 @@ public class InfoDetailActivity extends AppCompatActivity {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        BaseMethod.getBaseApplication(this).setInfoDetailActivity(null);
+        System.gc();
+        super.onDestroy();
     }
 
     private void GetData() {
@@ -74,7 +79,7 @@ public class InfoDetailActivity extends AppCompatActivity {
 
     private void ViewSet() {
         if (BaseMethod.isNetworkConnected(this)) {
-            new InfoDetailAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
+            getData();
         } else {
             Toast.makeText(this, R.string.network_error, Toast.LENGTH_SHORT).show();
         }
@@ -94,7 +99,7 @@ public class InfoDetailActivity extends AppCompatActivity {
         textView_date.setText(getString(R.string.info_date, info_date));
     }
 
-    private void InfoDetailSet(String content, String[] extraFile) {
+    public void InfoDetailSet(String content, String[] extraFile) {
         if (content != null) {
             TextView textView_content = findViewById(R.id.textView_info_detail_content);
             if (info_source.equals(InfoAdapter.TOPIC_SOURCE_JWC)) {
@@ -139,50 +144,10 @@ public class InfoDetailActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    class InfoDetailAsync extends AsyncTask<Context, Void, Context> {
-        String data;
-        String[] extraFile;
-        int loadSuccess = -1;
-        int loadCode = Config.NET_WORK_GET_SUCCESS;
-
-        InfoDetailAsync() {
-            this.data = null;
-            this.extraFile = null;
-        }
-
-        @Override
-        protected Context doInBackground(Context... context) {
-            try {
-                if (context[0] != null) {
-                    if (info_source.equals(InfoAdapter.TOPIC_SOURCE_JWC)) {
-                        JwcInfoMethod jwcInfoMethod = new JwcInfoMethod(context[0]);
-                        loadSuccess = jwcInfoMethod.loadDetail(info_url);
-                        if (loadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                            data = jwcInfoMethod.getDetail();
-                        }
-                    } else if (info_source.equals(InfoAdapter.TOPIC_SOURCE_JW)) {
-                        JwInfoMethod jwInfoMethod = new JwInfoMethod(context[0]);
-                        loadSuccess = jwInfoMethod.loadDetail(info_url);
-                        if (loadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                            data = jwInfoMethod.getDetail();
-                            extraFile = jwInfoMethod.getExtraFileUrl();
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
-            }
-            return context[0];
-        }
-
-        @Override
-        protected void onPostExecute(Context context) {
-            if (BaseMethod.checkNetWorkCode(context, new int[]{loadSuccess}, loadCode)) {
-                InfoDetailSet(data, extraFile);
-            }
-            super.onPostExecute(context);
-        }
+    private void getData() {
+        InfoDetailAsync infoDetailAsync = new InfoDetailAsync();
+        infoDetailAsync.setData(info_source, info_url);
+        infoDetailAsync.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
     }
+
 }

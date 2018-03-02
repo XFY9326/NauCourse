@@ -1,6 +1,5 @@
 package tool.xfy9326.naucourse.Fragments;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -26,11 +25,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import tool.xfy9326.naucourse.AsyncTasks.TableAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.CourseMethod;
-import tool.xfy9326.naucourse.Methods.TableMethod;
-import tool.xfy9326.naucourse.Methods.TimeMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.CourseDetail;
@@ -61,8 +59,8 @@ public class TableFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onStart() {
+        super.onStart();
         ViewSet();
     }
 
@@ -94,7 +92,7 @@ public class TableFragment extends Fragment {
         getData();
     }
 
-    private void CourseSet(ArrayList<Course> courses, SchoolTime schoolTime, final Context context) {
+    public void CourseSet(ArrayList<Course> courses, SchoolTime schoolTime, final Context context) {
         if (context != null && courses != null && schoolTime != null) {
             int weekNum;
             boolean inVacation = false;
@@ -162,7 +160,7 @@ public class TableFragment extends Fragment {
             courseMethod.setOnCourseTableClickListener(new CourseMethod.OnCourseTableItemClickListener() {
                 @Override
                 public void OnItemClick(Course course) {
-                    CourseCardSet(context, course);
+                    CourseCardSet(course);
                 }
             });
 
@@ -173,7 +171,7 @@ public class TableFragment extends Fragment {
     }
 
     //表格中的课程详细信息显示
-    private void CourseCardSet(Context context, Course course) {
+    private void CourseCardSet(Course course) {
         if (getActivity() != null) {
             LayoutInflater layoutInflater = getLayoutInflater();
             View view_dialog = layoutInflater.inflate(R.layout.dialog_course_card, (ViewGroup) getActivity().findViewById(R.id.layout_course_card));
@@ -198,7 +196,7 @@ public class TableFragment extends Fragment {
             textView_class.setText(context.getString(R.string.course_card_class, course.getCourseClass()));
             textView_class_combined.setText(context.getString(R.string.course_card_combined_class, course.getCourseCombinedClass()));
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
             CourseDetail[] details = course.getCourseDetail();
             for (CourseDetail detail : details) {
@@ -229,65 +227,22 @@ public class TableFragment extends Fragment {
     }
 
     private void getData() {
-        new TableAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context);
+        new TableAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getApplicationContext());
     }
 
-    @SuppressLint("StaticFieldLeak")
-    class TableAsync extends AsyncTask<Context, Void, Context> {
-        int tableLoadSuccess = -1;
-        int timeLoadSuccess = -1;
-        int loadCode = Config.NET_WORK_GET_SUCCESS;
-        private ArrayList<Course> course;
-        private SchoolTime schoolTime;
-
-        TableAsync() {
-            course = null;
-            schoolTime = null;
-        }
-
-        @Override
-        protected Context doInBackground(Context... context) {
-            try {
-                if (loadTime == 0) {
-                    //首次只加载离线数据
-                    schoolTime = (SchoolTime) BaseMethod.getOfflineData(context[0], SchoolTime.class, TimeMethod.FILE_NAME);
-                    course = BaseMethod.getOfflineTableData(context[0]);
-                    tableLoadSuccess = Config.NET_WORK_GET_SUCCESS;
-                    timeLoadSuccess = Config.NET_WORK_GET_SUCCESS;
-                    loadTime++;
-                } else {
-                    TableMethod tableMethod = new TableMethod(context[0]);
-                    tableLoadSuccess = tableMethod.load();
-                    if (tableLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                        course = tableMethod.getCourseTable();
-                    }
-
-                    TimeMethod timeMethod = new TimeMethod(context[0]);
-                    timeLoadSuccess = timeMethod.load();
-                    if (timeLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                        schoolTime = timeMethod.getSchoolTime();
-                    }
-                    if (tableLoadSuccess == Config.NET_WORK_GET_SUCCESS && timeLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                        loadTime++;
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
-            }
-            return context[0];
-        }
-
-        @Override
-        protected void onPostExecute(Context context) {
-            if (BaseMethod.checkNetWorkCode(context, new int[]{tableLoadSuccess, timeLoadSuccess}, loadCode)) {
-                CourseSet(course, schoolTime, context);
-            }
-            //离线数据加载完成，开始拉取网络数据
-            if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
-                getData();
-            }
-            super.onPostExecute(context);
+    public void lastViewSet(Context context) {
+        //离线数据加载完成，开始拉取网络数据
+        if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
+            getData();
         }
     }
+
+    public int getLoadTime() {
+        return loadTime;
+    }
+
+    public void setLoadTime(int loadTime) {
+        this.loadTime = loadTime;
+    }
+
 }

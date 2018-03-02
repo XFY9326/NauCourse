@@ -5,6 +5,8 @@ import android.app.Application;
 import com.tencent.bugly.Bugly;
 
 import lib.xfy9326.naujwc.NauJwcClient;
+import tool.xfy9326.naucourse.Activities.InfoDetailActivity;
+import tool.xfy9326.naucourse.Activities.ScoreActivity;
 import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
 
 /**
@@ -14,6 +16,8 @@ import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
 public class BaseApplication extends Application {
     private NauJwcClient client;
     private ViewPagerAdapter viewPagerAdapter;
+    private InfoDetailActivity infoDetailActivity;
+    private ScoreActivity scoreActivity;
 
     @Override
 
@@ -35,5 +39,21 @@ public class BaseApplication extends Application {
 
     public void setViewPagerAdapter(ViewPagerAdapter viewPagerAdapter) {
         this.viewPagerAdapter = viewPagerAdapter;
+    }
+
+    public InfoDetailActivity getInfoDetailActivity() {
+        return infoDetailActivity;
+    }
+
+    public void setInfoDetailActivity(InfoDetailActivity infoDetailActivity) {
+        this.infoDetailActivity = infoDetailActivity;
+    }
+
+    public ScoreActivity getScoreActivity() {
+        return scoreActivity;
+    }
+
+    public void setScoreActivity(ScoreActivity scoreActivity) {
+        this.scoreActivity = scoreActivity;
     }
 }

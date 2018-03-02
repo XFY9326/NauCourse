@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -84,12 +83,15 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 }
                                 loginErrorCode = nauJwcClient.getLoginErrorCode();
-                                Looper.prepare();
-                                if (loadingDialog != null) {
-                                    loadingDialog.cancel();
-                                    loadingDialog = null;
-                                }
-                                Looper.loop();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (loadingDialog != null) {
+                                            loadingDialog.cancel();
+                                            loadingDialog = null;
+                                        }
+                                    }
+                                });
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -117,6 +119,7 @@ public class LoginActivity extends AppCompatActivity {
         builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
+                System.gc();
                 if (loginSuccess) {
                     Toast.makeText(LoginActivity.this, R.string.login_success, Toast.LENGTH_SHORT).show();
                     PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(Config.PREFERENCE_HAS_LOGIN, true).putString(Config.PREFERENCE_LOGIN_URL, loginURL).apply();

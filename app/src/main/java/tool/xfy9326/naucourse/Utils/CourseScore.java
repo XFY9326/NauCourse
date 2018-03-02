@@ -40,6 +40,7 @@ public class CourseScore {
         this.courseAmount = courseAmount;
     }
 
+    @SuppressWarnings("unused")
     public String[] getScoreCourseId() {
         return scoreCourseId;
     }
