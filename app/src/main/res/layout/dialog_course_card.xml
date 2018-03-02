@@ -13,23 +13,78 @@
         android:padding="10dp"
         android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/textView_course_card_id"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:padding="3dp"
-        android:text="@string/course_card_id"
-        android:textSize="14sp" />
+        android:layout_margin="5dp"
+        android:baselineAligned="false">
 
-    <TextView
-        android:id="@+id/textView_course_card_teacher"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:padding="3dp"
-        android:text="@string/course_card_teacher"
-        android:textSize="14sp" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView_course_card_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="@string/course_card_id"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView_course_card_teacher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="@string/course_card_teacher"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView_course_card_score"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="@string/course_card_score"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView_course_card_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="@string/course_card_type"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView_course_card_class"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="@string/course_card_class"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView_course_card_combined_class"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="@string/course_card_combined_class"
+                android:textSize="14sp" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"

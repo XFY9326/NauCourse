@@ -66,8 +66,19 @@ public class TableMethod {
             String[] info = course_Info.split(" ");
             String[] detail = course_Detail.split("上课地点：");
 
+            if (info[2].contains("级")) {
+                info[2] = info[2].substring(info[2].indexOf("级") + 1);
+            }
+            if (info[4].contains("级")) {
+                info[4] = info[4].substring(info[4].indexOf("级") + 1);
+            }
+
             course.setCourseId(info[0]);
             course.setCourseName(info[1]);
+            course.setCourseClass(info[2]);
+            course.setCourseScore(info[3]);
+            course.setCourseCombinedClass(info[4]);
+            course.setCourseType(info[5]);
             course.setCourseTeacher(info[6]);
 
             CourseDetail[] courseDetail_list = new CourseDetail[detail.length];

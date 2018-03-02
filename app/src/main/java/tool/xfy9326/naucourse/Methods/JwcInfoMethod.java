@@ -130,7 +130,7 @@ public class JwcInfoMethod {
             if (data != null) {
                 data = data.replace("&nbsp;", "\\b");
                 if (LoginMethod.checkUserLogin(data)) {
-                    document = Jsoup.parse(data);
+                    detailDocument = Jsoup.parse(data);
                     return Config.NET_WORK_GET_SUCCESS;
                 }
                 return Config.NET_WORK_ERROR_CODE_CONNECT_USER_DATA;

@@ -8,9 +8,46 @@ public class Course {
     private String courseId = null;
     private String courseName = null;
     private String courseTeacher = null;
+    private String courseClass = null;
+    private String courseCombinedClass = null;
+    private String courseScore = null;
+    private String courseType = null;
+
     private CourseDetail[] courseDetail = null;
 
     public Course() {
+    }
+
+    public String getCourseClass() {
+        return courseClass;
+    }
+
+    public void setCourseClass(String courseClass) {
+        this.courseClass = courseClass;
+    }
+
+    public String getCourseCombinedClass() {
+        return courseCombinedClass;
+    }
+
+    public void setCourseCombinedClass(String courseCombinedClass) {
+        this.courseCombinedClass = courseCombinedClass;
+    }
+
+    public String getCourseScore() {
+        return courseScore;
+    }
+
+    public void setCourseScore(String courseScore) {
+        this.courseScore = courseScore;
+    }
+
+    public String getCourseType() {
+        return courseType;
+    }
+
+    public void setCourseType(String courseType) {
+        this.courseType = courseType;
     }
 
     public String getCourseId() {

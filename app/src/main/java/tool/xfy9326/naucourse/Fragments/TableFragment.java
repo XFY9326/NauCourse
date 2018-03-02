@@ -180,12 +180,23 @@ public class TableFragment extends Fragment {
 
             LinearLayout linearLayout_content = view_dialog.findViewById(R.id.layout_course_card_content);
             TextView textView_name = view_dialog.findViewById(R.id.textView_course_card_name);
+
             TextView textView_id = view_dialog.findViewById(R.id.textView_course_card_id);
             TextView textView_teacher = view_dialog.findViewById(R.id.textView_course_card_teacher);
+            TextView textView_type = view_dialog.findViewById(R.id.textView_course_card_type);
+            TextView textView_score = view_dialog.findViewById(R.id.textView_course_card_score);
+            TextView textView_class = view_dialog.findViewById(R.id.textView_course_card_class);
+            TextView textView_class_combined = view_dialog.findViewById(R.id.textView_course_card_combined_class);
+
 
             textView_name.setText(course.getCourseName());
+
             textView_id.setText(context.getString(R.string.course_card_id, course.getCourseId()));
             textView_teacher.setText(context.getString(R.string.course_card_teacher, course.getCourseTeacher()));
+            textView_score.setText(context.getString(R.string.course_card_score, course.getCourseScore()));
+            textView_type.setText(context.getString(R.string.course_card_type, course.getCourseType()));
+            textView_class.setText(context.getString(R.string.course_card_class, course.getCourseClass()));
+            textView_class_combined.setText(context.getString(R.string.course_card_combined_class, course.getCourseCombinedClass()));
 
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
