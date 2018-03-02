@@ -4,11 +4,13 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
@@ -95,33 +97,42 @@ public class InfoDetailActivity extends AppCompatActivity {
     private void InfoDetailSet(String content, String[] extraFile) {
         if (content != null) {
             TextView textView_content = findViewById(R.id.textView_info_detail_content);
-            if (extraFile != null) {
-                if (extraFile.length > 0) {
-                    int p = 0;
-                    int[] strLength = new int[extraFile.length];
-                    int[] strStart = new int[extraFile.length];
-                    Pattern pattern = Pattern.compile("(附件).*(\\.\\S*)");
-                    Matcher matcher = pattern.matcher(content);
-                    while (matcher.find()) {
-                        String text = matcher.group();
-                        content = content.replace(text, "\n" + text);
-                        strLength[p] = text.length();
-                        strStart[p] = content.indexOf(text);
-                        p++;
-                    }
+            if (info_source.equals(InfoAdapter.TOPIC_SOURCE_JWC)) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    textView_content.setText(Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY));
+                } else {
+                    textView_content.setText(Html.fromHtml(content));
+                }
+            } else if (info_source.equals(InfoAdapter.TOPIC_SOURCE_JW)) {
+                if (extraFile != null) {
+                    if (extraFile.length > 0) {
+                        int p = 0;
+                        int[] strLength = new int[extraFile.length];
+                        int[] strStart = new int[extraFile.length];
+                        Pattern pattern = Pattern.compile("(附件).*(\\.\\S*)");
+                        Matcher matcher = pattern.matcher(content);
+                        while (matcher.find()) {
+                            String text = matcher.group();
+                            content = content.replace(text, "\n" + text);
+                            strLength[p] = text.length();
+                            strStart[p] = content.indexOf(text);
+                            p++;
+                        }
 
-                    SpannableString spannableString = new SpannableString(content);
-                    for (int i = 0; i < extraFile.length; i++) {
-                        spannableString.setSpan(new URLSpan(extraFile[i]), strStart[i], strStart[i] + strLength[i], Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        SpannableString spannableString = new SpannableString(content);
+                        for (int i = 0; i < extraFile.length; i++) {
+                            spannableString.setSpan(new URLSpan(extraFile[i]), strStart[i], strStart[i] + strLength[i], Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+                        textView_content.setText(spannableString);
+                        textView_content.setMovementMethod(LinkMovementMethod.getInstance());
+                    } else {
+                        textView_content.setText(content);
                     }
-                    textView_content.setText(spannableString);
-                    textView_content.setMovementMethod(LinkMovementMethod.getInstance());
                 } else {
                     textView_content.setText(content);
                 }
-            } else {
-                textView_content.setText(content);
             }
+
             textView_content.setVisibility(View.VISIBLE);
             ProgressBar progressBar_loading = findViewById(R.id.progressBar_info_detail_loading);
             progressBar_loading.setVisibility(View.GONE);

@@ -128,7 +128,6 @@ public class JwcInfoMethod {
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
             String data = LoginMethod.getData(context, url);
             if (data != null) {
-                data = data.replace("&nbsp;", "\\b");
                 if (LoginMethod.checkUserLogin(data)) {
                     detailDocument = Jsoup.parse(data);
                     return Config.NET_WORK_GET_SUCCESS;
@@ -141,19 +140,12 @@ public class JwcInfoMethod {
     }
 
     public String getDetail() {
-        StringBuilder result = new StringBuilder();
-        Elements tags = detailDocument.body().getElementsByTag("p");
-        Elements tags_h = detailDocument.body().getElementsByTag("h3");
-        List<String> data = tags.eachText();
-        List<String> data_h = tags_h.eachText();
-        data.addAll(data_h);
-        for (String str : data) {
-            if (str.equals("") || str.equals(" ")) {
-                result.append("\n");
-            } else {
-                result.append(str.replace("\\b", " ")).append("\n");
-            }
+        Elements tags = detailDocument.body().getElementsByTag("tr");
+        String[] temp = tags.html().split("</td>");
+        String result = temp[temp.length - 1].trim();
+        if (result.startsWith("<td><br>")) {
+            result = "<td>" + result.substring(8);
         }
-        return result.toString();
+        return result;
     }
 }
