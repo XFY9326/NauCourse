@@ -29,7 +29,7 @@ public class NextClassWidget extends AppWidgetProvider {
     public static final String ACTION_ON_CLICK = "tool.xfy9326.naucourse.Views.NextClassWidget.OnClick";
     private static final int REQUEST_ON_CLICK = 1;
 
-    private static RemoteViews ViewGet(Context context) {
+    synchronized private static RemoteViews ViewGet(Context context) {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.app_widget_next_class);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_ON_CLICK, new Intent(ACTION_ON_CLICK), PendingIntent.FLAG_UPDATE_CURRENT);

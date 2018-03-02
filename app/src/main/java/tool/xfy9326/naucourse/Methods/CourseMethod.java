@@ -87,9 +87,9 @@ public class CourseMethod {
                         course_startTime = startTimes[i];
                         findCourseId = todayId[i];
                     }
+                    lastId = todayId[i];
                 }
                 todayFinalCourseTime = courseTime;
-                lastId = todayId[i];
             }
         }
         if (nowTime > todayFinalCourseTime) {
