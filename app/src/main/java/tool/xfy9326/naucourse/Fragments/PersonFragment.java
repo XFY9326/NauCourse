@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import tool.xfy9326.naucourse.Activities.AboutActivity;
+import tool.xfy9326.naucourse.Activities.ScoreActivity;
 import tool.xfy9326.naucourse.Activities.SettingsActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
@@ -30,7 +31,6 @@ import tool.xfy9326.naucourse.Methods.TimeMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
 import tool.xfy9326.naucourse.Utils.StudentInfo;
-import tool.xfy9326.naucourse.Utils.StudentScore;
 
 /**
  * Created by xfy9326 on 18-2-20.
@@ -94,6 +94,14 @@ public class PersonFragment extends Fragment {
 
         CardView cardView_settings = view.findViewById(R.id.cardView_settings);
         CardView cardView_about = view.findViewById(R.id.cardView_about);
+        CardView cardView_score = view.findViewById(R.id.cardView_score_search);
+        cardView_score.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ScoreActivity.class);
+                context.startActivity(intent);
+            }
+        });
         cardView_settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,8 +118,8 @@ public class PersonFragment extends Fragment {
         });
     }
 
-    private void PersonTextSet(StudentInfo studentInfo, StudentScore studentScore, Context context) {
-        if (context != null && studentInfo != null && studentScore != null) {
+    private void PersonTextSet(StudentInfo studentInfo, Context context) {
+        if (context != null && studentInfo != null) {
             ((TextView) view.findViewById(R.id.textView_stdId)).setText(context.getString(R.string.std_id, studentInfo.getStd_id()));
             ((TextView) view.findViewById(R.id.textView_stdClass)).setText(context.getString(R.string.std_class, studentInfo.getStd_class()));
             ((TextView) view.findViewById(R.id.textView_stdCollage)).setText(context.getString(R.string.std_collage, studentInfo.getStd_collage()));
@@ -119,12 +127,6 @@ public class PersonFragment extends Fragment {
             ((TextView) view.findViewById(R.id.textView_stdGrade)).setText(context.getString(R.string.std_grade, studentInfo.getStd_grade()));
             ((TextView) view.findViewById(R.id.textView_stdMajor)).setText(context.getString(R.string.std_major, studentInfo.getStd_major()));
             ((TextView) view.findViewById(R.id.textView_stdName)).setText(context.getString(R.string.std_name, studentInfo.getStd_name()));
-
-            ((TextView) view.findViewById(R.id.textView_scoreXF)).setText(context.getString(R.string.score_XF, studentScore.getScoreXF()));
-            ((TextView) view.findViewById(R.id.textView_scoreJD)).setText(context.getString(R.string.score_JD, studentScore.getScoreJD()));
-            ((TextView) view.findViewById(R.id.textView_scoreNP)).setText(context.getString(R.string.score_NP, studentScore.getScoreNP()));
-            ((TextView) view.findViewById(R.id.textView_scoreZP)).setText(context.getString(R.string.score_ZP, studentScore.getScoreZP()));
-            ((TextView) view.findViewById(R.id.textView_scoreBP)).setText(context.getString(R.string.score_BP, studentScore.getScoreBP()));
         }
     }
 
@@ -172,12 +174,10 @@ public class PersonFragment extends Fragment {
         int personLoadSuccess = -1;
         int timeLoadSuccess = -1;
         int loadCode = Config.NET_WORK_GET_SUCCESS;
-        private StudentScore studentScore;
         private StudentInfo studentInfo;
         private SchoolTime schoolTime;
 
         StudentAsync() {
-            studentScore = null;
             studentInfo = null;
             schoolTime = null;
         }
@@ -187,7 +187,6 @@ public class PersonFragment extends Fragment {
             try {
                 if (loadTime == 0) {
                     //首次只加载离线数据
-                    studentScore = (StudentScore) BaseMethod.getOfflineData(context[0], StudentScore.class, PersonMethod.FILE_NAME_SCORE);
                     studentInfo = (StudentInfo) BaseMethod.getOfflineData(context[0], StudentInfo.class, PersonMethod.FILE_NAME_DATA);
                     schoolTime = (SchoolTime) BaseMethod.getOfflineData(context[0], SchoolTime.class, TimeMethod.FILE_NAME);
                     personLoadSuccess = Config.NET_WORK_GET_SUCCESS;
@@ -197,7 +196,6 @@ public class PersonFragment extends Fragment {
                     PersonMethod personMethod = new PersonMethod(context[0]);
                     personLoadSuccess = personMethod.load();
                     if (personLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                        studentScore = personMethod.getUserScore();
                         studentInfo = personMethod.getUserData();
                     }
 
@@ -221,7 +219,7 @@ public class PersonFragment extends Fragment {
         @Override
         protected void onPostExecute(Context context) {
             if (BaseMethod.checkNetWorkCode(context, new int[]{personLoadSuccess, timeLoadSuccess}, loadCode)) {
-                PersonTextSet(studentInfo, studentScore, context);
+                PersonTextSet(studentInfo, context);
                 TimeTextSet(schoolTime, context);
             }
             if (swipeRefreshLayout != null) {

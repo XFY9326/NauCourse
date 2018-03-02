@@ -32,6 +32,15 @@
             tools:ignore="InnerclassSeparator" />
 
         <activity
+            android:name=".Activities.ScoreActivity"
+            android:label="@string/score"
+            tools:ignore="InnerclassSeparator">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.MainActivity" />
+        </activity>
+
+        <activity
             android:name=".Activities.InfoDetailActivity"
             android:label="@string/info_label"
             tools:ignore="InnerclassSeparator">

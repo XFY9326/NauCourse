@@ -26,6 +26,7 @@
     <string name="std_grade">年级：%1$s</string>
     <string name="std_major">专业：%1$s</string>
     <string name="std_direction">方向：%1$s</string>
+    <string name="score">成绩查询</string>
     <string name="score_XF">总学分：%1$s</string>
     <string name="score_JD">总绩点：%1$s</string>
     <string name="score_NP">年级排名：%1$s</string>
@@ -84,4 +85,13 @@
     <string name="course_card_class">教学班：%1$s</string>
     <string name="course_card_combined_class">合班号：%1$s</string>
     <string name="course_card_type">类别：%1$s</string>
+    <string name="student_detail">◈ 学生个人信息</string>
+    <string name="school_time_detail">◈ 学期信息</string>
+    <string name="main_score_detail">◈ 总体成绩</string>
+    <string name="term_score_detail">◈ 本学期课程成绩</string>
+    <string name="score_course_name">课程名称：%1$s</string>
+    <string name="score_common">平时：%1$s</string>
+    <string name="score_mid">期中：%1$s</string>
+    <string name="score_final">期末：%1$s</string>
+    <string name="score_total">总评：%1$s</string>
 </resources>

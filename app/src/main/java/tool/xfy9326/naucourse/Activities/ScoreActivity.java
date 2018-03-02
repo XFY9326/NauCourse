@@ -1,0 +1,177 @@
+package tool.xfy9326.naucourse.Activities;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.Methods.BaseMethod;
+import tool.xfy9326.naucourse.Methods.PersonMethod;
+import tool.xfy9326.naucourse.Methods.ScoreMethod;
+import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.Utils.CourseScore;
+import tool.xfy9326.naucourse.Utils.StudentScore;
+import tool.xfy9326.naucourse.Views.ScoreAdapter;
+
+/**
+ * Created by 10696 on 2018/3/2.
+ */
+
+public class ScoreActivity extends AppCompatActivity {
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private RecyclerView recyclerView;
+    private ScoreAdapter scoreAdapter;
+    private int loadTime = 0;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_score);
+        ToolBarSet();
+        ViewSet();
+    }
+
+    private void ToolBarSet() {
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    private void ViewSet() {
+        recyclerView = findViewById(R.id.recyclerView_score_term);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        swipeRefreshLayout = findViewById(R.id.swipeLayout_score);
+        swipeRefreshLayout.setDistanceToTriggerSync(200);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (BaseMethod.isNetworkConnected(ScoreActivity.this)) {
+                    getData();
+                } else {
+                    Toast.makeText(ScoreActivity.this, R.string.network_error, Toast.LENGTH_SHORT).show();
+                    swipeRefreshLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
+                }
+            }
+        });
+
+        if (loadTime == 0) {
+            getData();
+        }
+    }
+
+    private void setMainScore(StudentScore studentScore, CourseScore courseScore) {
+        if (studentScore != null && courseScore != null) {
+            ((TextView) findViewById(R.id.textView_scoreXF)).setText(getString(R.string.score_XF, studentScore.getScoreXF()));
+            ((TextView) findViewById(R.id.textView_scoreJD)).setText(getString(R.string.score_JD, studentScore.getScoreJD()));
+            ((TextView) findViewById(R.id.textView_scoreNP)).setText(getString(R.string.score_NP, studentScore.getScoreNP()));
+            ((TextView) findViewById(R.id.textView_scoreZP)).setText(getString(R.string.score_ZP, studentScore.getScoreZP()));
+            ((TextView) findViewById(R.id.textView_scoreBP)).setText(getString(R.string.score_BP, studentScore.getScoreBP()));
+
+            if (scoreAdapter == null) {
+                scoreAdapter = new ScoreAdapter(ScoreActivity.this, courseScore);
+                recyclerView.setAdapter(scoreAdapter);
+            } else {
+                scoreAdapter.updateData(courseScore);
+            }
+        }
+    }
+
+    private void getData() {
+        new ScoreAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, ScoreActivity.this);
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    class ScoreAsync extends AsyncTask<Context, Void, Context> {
+        int personLoadSuccess = -1;
+        int scoreLoadSuccess = -1;
+        int loadCode = Config.NET_WORK_GET_SUCCESS;
+        private StudentScore studentScore;
+        private CourseScore courseScore;
+
+        ScoreAsync() {
+            this.studentScore = null;
+            this.courseScore = null;
+        }
+
+        @Override
+        protected Context doInBackground(Context... context) {
+            try {
+                if (loadTime == 0) {
+                    //首次只加载离线数据
+                    studentScore = (StudentScore) BaseMethod.getOfflineData(context[0], StudentScore.class, PersonMethod.FILE_NAME_SCORE);
+                    courseScore = (CourseScore) BaseMethod.getOfflineData(context[0], CourseScore.class, ScoreMethod.FILE_NAME);
+                    personLoadSuccess = Config.NET_WORK_GET_SUCCESS;
+                    scoreLoadSuccess = Config.NET_WORK_GET_SUCCESS;
+                    loadTime++;
+                } else {
+                    PersonMethod personMethod = new PersonMethod(context[0]);
+                    personLoadSuccess = personMethod.load();
+                    if (personLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
+                        studentScore = personMethod.getUserScore();
+                    }
+
+                    ScoreMethod scoreMethod = new ScoreMethod(context[0]);
+                    scoreLoadSuccess = scoreMethod.load();
+                    if (scoreLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
+                        courseScore = scoreMethod.getCourseScore();
+                    }
+
+                    if (personLoadSuccess == Config.NET_WORK_GET_SUCCESS && scoreLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
+                        loadTime++;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+            }
+            return context[0];
+        }
+
+        @Override
+        protected void onPostExecute(Context context) {
+            if (BaseMethod.checkNetWorkCode(context, new int[]{personLoadSuccess, scoreLoadSuccess}, loadCode)) {
+                setMainScore(studentScore, courseScore);
+            }
+            if (swipeRefreshLayout != null) {
+                if (swipeRefreshLayout.isRefreshing()) {
+                    swipeRefreshLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
+                }
+            }
+            //离线数据加载完成，开始拉取网络数据
+            if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
+                swipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
+                swipeRefreshLayout.setRefreshing(true);
+                getData();
+            }
+            super.onPostExecute(context);
+        }
+    }
+}

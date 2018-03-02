@@ -213,7 +213,7 @@ public class TableFragment extends Fragment {
                     String[] course_times = detail.getCourseTime();
                     String[] week_num = context.getResources().getStringArray(R.array.week_number);
                     for (String course_time : course_times) {
-                        View view_card = layoutInflater.inflate(R.layout.dialog_course_card_item, (ViewGroup) getActivity().findViewById(R.id.layout_course_card_item));
+                        View view_card = layoutInflater.inflate(R.layout.item_course_card, (ViewGroup) getActivity().findViewById(R.id.layout_course_card_item));
                         String time = context.getString(R.string.course_card_time, course_week, weekmode, week_num[detail.getWeekDay() - 1], course_time);
                         String location = context.getString(R.string.course_card_location, detail.getLocation());
                         ((TextView) view_card.findViewById(R.id.textView_course_card_time)).setText(time);
