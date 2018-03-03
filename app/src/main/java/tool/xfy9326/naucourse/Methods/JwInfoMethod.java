@@ -23,7 +23,7 @@ import tool.xfy9326.naucourse.Utils.JwTopic;
 
 public class JwInfoMethod {
     public static final String FILE_NAME = "JwTopic";
-    private static final String server_url = "http://jw.nau.edu.cn";
+    public static final String server_url = "http://jw.nau.edu.cn";
     private static final int TOPIC_COUNT = 20;
     private final Context context;
     private Document document;

@@ -1,6 +1,7 @@
 package tool.xfy9326.naucourse.Activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -24,6 +27,7 @@ import java.util.regex.Pattern;
 import tool.xfy9326.naucourse.AsyncTasks.InfoDetailAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
+import tool.xfy9326.naucourse.Methods.JwInfoMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Views.InfoAdapter;
 
@@ -42,10 +46,10 @@ public class InfoDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GetData();
         setContentView(R.layout.activity_info_detail);
         BaseMethod.getBaseApplication(this).setInfoDetailActivity(this);
         ToolBarSet();
-        GetData();
         ViewSet();
     }
 
@@ -56,6 +60,28 @@ public class InfoDetailActivity extends AppCompatActivity {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (info_source.equals(InfoAdapter.TOPIC_SOURCE_JW)) {
+            getMenuInflater().inflate(R.menu.menu_info_detail, menu);
+            return true;
+        } else {
+            return super.onCreateOptionsMenu(menu);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_info_detail_open_in_browser) {
+            Intent intent = new Intent();
+            intent.setAction("android.intent.action.VIEW");
+            Uri content_url = Uri.parse(JwInfoMethod.server_url + info_url);
+            intent.setData(content_url);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
