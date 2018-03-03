@@ -10,6 +10,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -17,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.core.TableConfig;
@@ -53,6 +57,28 @@ public class TableFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_table, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_table_refresh) {
+            Toast.makeText(getActivity(), R.string.updating, Toast.LENGTH_SHORT).show();
+            getData();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onAttach(Context context) {
         this.context = context;
         super.onAttach(context);
@@ -86,10 +112,6 @@ public class TableFragment extends Fragment {
         if (loadTime == 0) {
             getData();
         }
-    }
-
-    synchronized public void UpdateCourseTable() {
-        getData();
     }
 
     public void CourseSet(ArrayList<Course> courses, SchoolTime schoolTime, final Context context) {
@@ -226,7 +248,7 @@ public class TableFragment extends Fragment {
         }
     }
 
-    private void getData() {
+    synchronized private void getData() {
         new TableAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getApplicationContext());
     }
 
