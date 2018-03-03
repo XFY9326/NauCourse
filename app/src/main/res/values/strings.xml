@@ -94,4 +94,10 @@
     <string name="score_final">期末：%1$s</string>
     <string name="score_total">总评：%1$s</string>
     <string name="open_in_browser">在浏览器中打开</string>
+    <string name="exam">考试查询</string>
+    <string name="exam_detail">◈ 本学期考试日程</string>
+    <string name="no_exam">当前没有安排的考试</string>
+    <string name="exam_time">时间：%1$s</string>
+    <string name="exam_location">地点：%1$s</string>
+    <string name="exam_type">形式：%1$s</string>
 </resources>

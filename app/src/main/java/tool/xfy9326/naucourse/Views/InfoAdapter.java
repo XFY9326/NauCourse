@@ -62,7 +62,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoViewHolder> {
     @Override
     public InfoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.item_card, parent, false);
+        View view = inflater.inflate(R.layout.item_info_card, parent, false);
         return new InfoViewHolder(view);
     }
 

@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import tool.xfy9326.naucourse.Activities.AboutActivity;
+import tool.xfy9326.naucourse.Activities.ExamActivity;
 import tool.xfy9326.naucourse.Activities.ScoreActivity;
 import tool.xfy9326.naucourse.Activities.SettingsActivity;
 import tool.xfy9326.naucourse.AsyncTasks.StudentAsync;
@@ -93,10 +94,18 @@ public class PersonFragment extends Fragment {
         CardView cardView_settings = view.findViewById(R.id.cardView_settings);
         CardView cardView_about = view.findViewById(R.id.cardView_about);
         CardView cardView_score = view.findViewById(R.id.cardView_score_search);
+        CardView cardView_exam = view.findViewById(R.id.cardView_exam);
         cardView_score.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ScoreActivity.class);
+                context.startActivity(intent);
+            }
+        });
+        cardView_exam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ExamActivity.class);
                 context.startActivity(intent);
             }
         });

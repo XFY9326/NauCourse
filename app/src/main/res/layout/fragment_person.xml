@@ -161,28 +161,56 @@
 
             </android.support.v7.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="3dp"
-                app:cardPreventCornerOverlap="true">
+                android:layout_marginTop="10dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:padding="5dp"
-                    android:text="@string/school_time_detail" />
+                    android:layout_weight="2"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardCornerRadius="4dp"
+                    app:cardElevation="3dp"
+                    app:cardPreventCornerOverlap="true">
 
-            </android.support.v7.widget.CardView>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:padding="5dp"
+                        android:text="@string/school_time_detail" />
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cardView_exam"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardCornerRadius="4dp"
+                    app:cardElevation="3dp"
+                    app:cardPreventCornerOverlap="true">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="@string/exam" />
+
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
