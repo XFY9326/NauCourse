@@ -36,7 +36,6 @@ public class Config {
     public static final String PREFERENCE_LOGIN_URL = "LOGIN_URL";
     public static final String PREFERENCE_LOGIN_OUT = "LOGIN_OUT";
     public static final String PREFERENCE_UPDATE_DATA_ON_START = "UPDATE_DATA_ON_START";
-    public static final String PREFERENCE_UPDATE_COURSE_TABLE = "UPDATE_COURSE_TABLE";
     public static final String PREFERENCE_ONLY_UPDATE_UNDER_WIFI = "ONLY_UPDATE_UNDER_WIFI";
 
     public static final boolean DEFAULT_PREFERENCE_HAS_LOGIN = false;

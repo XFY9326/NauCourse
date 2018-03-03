@@ -16,6 +16,7 @@ android {
         targetSdkVersion 27
         versionCode 7
         versionName "1.6"
+        resConfigs "zh"
     }
 
     buildTypes {
