@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +13,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
-import android.widget.Toast;
 
 import tool.xfy9326.naucourse.AsyncTasks.ExamAsync;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
@@ -69,7 +69,7 @@ public class ExamActivity extends AppCompatActivity {
                 if (BaseMethod.isNetworkConnected(ExamActivity.this)) {
                     getData();
                 } else {
-                    Toast.makeText(ExamActivity.this, R.string.network_error, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.layout_exam_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
                     swipeRefreshLayout.post(new Runnable() {
                         @Override
                         public void run() {
@@ -95,7 +95,7 @@ public class ExamActivity extends AppCompatActivity {
                     examAdapter.updateData(exam);
                 }
             } else if (loadTime > 1) {
-                Toast.makeText(ExamActivity.this, R.string.no_exam, Toast.LENGTH_SHORT).show();
+                Snackbar.make(findViewById(R.id.layout_exam_content), R.string.no_exam, Snackbar.LENGTH_SHORT).show();
             }
         }
     }

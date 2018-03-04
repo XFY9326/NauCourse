@@ -43,6 +43,18 @@ public class SettingsFragment extends PreferenceFragment {
                 return true;
             }
         });
+        findPreference(Config.PREFERENCE_SHOW_NEXT_WEEK).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if (BaseMethod.isNetworkConnected(getActivity())) {
+                    BaseMethod.getBaseApplication(getActivity()).getViewPagerAdapter().getTableFragment().updateTable();
+                } else {
+                    Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                return true;
+            }
+        });
     }
 
     private void loginOut() {

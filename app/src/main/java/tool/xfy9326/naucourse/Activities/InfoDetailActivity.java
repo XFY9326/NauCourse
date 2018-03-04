@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -107,7 +107,7 @@ public class InfoDetailActivity extends AppCompatActivity {
         if (BaseMethod.isNetworkConnected(this)) {
             getData();
         } else {
-            Toast.makeText(this, R.string.network_error, Toast.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(R.id.layout_info_detail_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
         }
 
         TextView textView_title = findViewById(R.id.textView_info_detail_title);

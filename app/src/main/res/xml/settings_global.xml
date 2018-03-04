@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/user_manage">
+        <Preference
+            android:key="LOGIN_OUT"
+            android:summary="@string/login_out_sum"
+            android:title="@string/login_out" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/data_get">
         <CheckBoxPreference
             android:defaultValue="true"
@@ -13,10 +19,11 @@
             android:summary="@string/only_update_under_wifi_sum"
             android:title="@string/only_update_under_wifi" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/user_manage">
-        <Preference
-            android:key="LOGIN_OUT"
-            android:summary="@string/login_out_sum"
-            android:title="@string/login_out" />
+    <PreferenceCategory android:title="@string/course_table_manage">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="SHOW_NEXT_WEEK"
+            android:summary="@string/show_next_week_sum"
+            android:title="@string/show_next_week" />
     </PreferenceCategory>
 </PreferenceScreen>

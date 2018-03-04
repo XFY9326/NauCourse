@@ -121,10 +121,22 @@ public class BaseMethod {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_ONLY_UPDATE_UNDER_WIFI, Config.DEFAULT_PREFERENCE_ONLY_UPDATE_UNDER_WIFI);
     }
 
-    //获取最大周数，返回周数数组
+    //获取周数数组
     public static List<String> getWeekArray(Context context, SchoolTime schoolTime) {
-        int max_week = 0;
         List<String> week = new ArrayList<>();
+        int max_week = getMaxWeekNum(schoolTime);
+        if (max_week == 0) {
+            max_week = Config.DEFAULT_MAX_WEEK;
+        }
+        for (int i = 1; i <= max_week; i++) {
+            week.add(context.getString(R.string.week, i));
+        }
+        return week;
+    }
+
+    //获取最大周数
+    public static int getMaxWeekNum(SchoolTime schoolTime) {
+        int max_week = 0;
         if (schoolTime != null) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
             try {
@@ -145,13 +157,7 @@ public class BaseMethod {
                 e.printStackTrace();
             }
         }
-        if (max_week == 0) {
-            max_week = Config.DEFAULT_MAX_WEEK;
-        }
-        for (int i = 1; i <= max_week; i++) {
-            week.add(context.getString(R.string.week, i));
-        }
-        return week;
+        return max_week;
     }
 
     //获取当前是第几周（用于非联网更新状态）

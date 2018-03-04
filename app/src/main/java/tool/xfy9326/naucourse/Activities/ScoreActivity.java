@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +14,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import tool.xfy9326.naucourse.AsyncTasks.ScoreAsync;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
@@ -71,7 +71,7 @@ public class ScoreActivity extends AppCompatActivity {
                 if (BaseMethod.isNetworkConnected(ScoreActivity.this)) {
                     getData();
                 } else {
-                    Toast.makeText(ScoreActivity.this, R.string.network_error, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.layout_score_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
                     swipeRefreshLayout.post(new Runnable() {
                         @Override
                         public void run() {

@@ -100,4 +100,7 @@
     <string name="exam_time">时间：%1$s</string>
     <string name="exam_location">地点：%1$s</string>
     <string name="exam_type">形式：%1$s</string>
+    <string name="course_table_manage">课程表管理</string>
+    <string name="show_next_week">提前显示下周的课程表</string>
+    <string name="show_next_week_sum">在周六周日时提前显示下一周的课程表</string>
 </resources>

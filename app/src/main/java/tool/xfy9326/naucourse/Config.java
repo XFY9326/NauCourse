@@ -37,6 +37,7 @@ public class Config {
     public static final String PREFERENCE_LOGIN_OUT = "LOGIN_OUT";
     public static final String PREFERENCE_UPDATE_DATA_ON_START = "UPDATE_DATA_ON_START";
     public static final String PREFERENCE_ONLY_UPDATE_UNDER_WIFI = "ONLY_UPDATE_UNDER_WIFI";
+    public static final String PREFERENCE_SHOW_NEXT_WEEK = "SHOW_NEXT_WEEK";
 
     public static final boolean DEFAULT_PREFERENCE_HAS_LOGIN = false;
     public static final boolean DEFAULT_PREFERENCE_REMEMBER_PW = true;
@@ -44,6 +45,7 @@ public class Config {
     public static final String DEFAULT_PREFERENCE_USER_PW = "NULL";
     public static final boolean DEFAULT_PREFERENCE_UPDATE_DATA_ON_START = true;
     public static final boolean DEFAULT_PREFERENCE_ONLY_UPDATE_UNDER_WIFI = false;
+    public static final boolean DEFAULT_PREFERENCE_SHOW_NEXT_WEEK = true;
 
     public static final String TAG_TEMP_SAVE_FAILED = "TEMP_SAVE_FAILED";
 

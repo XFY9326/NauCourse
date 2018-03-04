@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -167,7 +168,15 @@ public class TableFragment extends Fragment {
                 public void onNothingSelected(AdapterView<?> parent) {
                 }
             });
-            spinner_week.setSelection(weekNum - 1);
+
+            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_NEXT_WEEK, Config.DEFAULT_PREFERENCE_SHOW_NEXT_WEEK)) {
+                if (weekNum + 1 <= BaseMethod.getMaxWeekNum(schoolTime)) {
+                    spinner_week.setSelection(weekNum);
+                    courseMethod.updateCourseTableView(weekNum);
+                }
+            } else {
+                spinner_week.setSelection(weekNum - 1);
+            }
 
             courseMethod.setTableView(courseTable);
 
@@ -246,6 +255,10 @@ public class TableFragment extends Fragment {
             builder.setView(view_dialog);
             builder.show();
         }
+    }
+
+    public void updateTable() {
+        getData();
     }
 
     synchronized private void getData() {

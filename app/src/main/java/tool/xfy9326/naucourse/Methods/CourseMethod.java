@@ -44,7 +44,7 @@ public class CourseMethod {
         this.context = context;
         this.courses = courses;
         this.schoolTime = schoolTime;
-        weekNum = schoolTime.getWeekNum();
+        this.weekNum = schoolTime.getWeekNum();
         if (weekNum == 0) {
             weekNum = 1;
         }
@@ -140,7 +140,7 @@ public class CourseMethod {
     }
 
     synchronized private void loadView() {
-        if (smartTable != null && !loadSuccess) {
+        if (smartTable != null && !loadSuccess && weekNum != 0) {
             setTableCourse();
             //表格数值加载到视图
             String title = context.getString(R.string.table_title);
