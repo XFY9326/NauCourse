@@ -3,6 +3,7 @@ package tool.xfy9326.naucourse.AsyncTasks;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import tool.xfy9326.naucourse.Activities.ScoreActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.PersonMethod;
@@ -29,7 +30,11 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
     @Override
     protected Context doInBackground(Context... context) {
         try {
-            int loadTime = BaseMethod.getBaseApplication(context[0]).getScoreActivity().getLoadTime();
+            int loadTime = 0;
+            ScoreActivity scoreActivity = BaseMethod.getBaseApplication(context[0]).getScoreActivity();
+            if (scoreActivity != null) {
+                loadTime = scoreActivity.getLoadTime();
+            }
             if (loadTime == 0) {
                 //首次只加载离线数据
                 studentScore = (StudentScore) BaseMethod.getOfflineData(context[0], StudentScore.class, PersonMethod.FILE_NAME_SCORE);
@@ -37,7 +42,9 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
                 personLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 scoreLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 loadTime++;
-                BaseMethod.getBaseApplication(context[0]).getScoreActivity().setLoadTime(loadTime);
+                if (scoreActivity != null) {
+                    scoreActivity.setLoadTime(loadTime);
+                }
             } else {
                 PersonMethod personMethod = new PersonMethod(context[0]);
                 personLoadSuccess = personMethod.load();
@@ -51,10 +58,8 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
                     courseScore = scoreMethod.getCourseScore();
                 }
 
-                if (personLoadSuccess == Config.NET_WORK_GET_SUCCESS && scoreLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                    loadTime++;
-                    BaseMethod.getBaseApplication(context[0]).getScoreActivity().setLoadTime(loadTime);
-                }
+                loadTime++;
+                scoreActivity.setLoadTime(loadTime);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -65,10 +70,13 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
 
     @Override
     protected void onPostExecute(Context context) {
-        if (BaseMethod.checkNetWorkCode(context, new int[]{personLoadSuccess, scoreLoadSuccess}, loadCode)) {
-            BaseMethod.getBaseApplication(context).getScoreActivity().setMainScore(studentScore, courseScore);
+        ScoreActivity scoreActivity = BaseMethod.getBaseApplication(context).getScoreActivity();
+        if (scoreActivity != null) {
+            if (BaseMethod.checkNetWorkCode(context, new int[]{personLoadSuccess, scoreLoadSuccess}, loadCode)) {
+                scoreActivity.setMainScore(studentScore, courseScore);
+            }
+            scoreActivity.lastViewSet(context);
         }
-        BaseMethod.getBaseApplication(context).getScoreActivity().lastViewSet(context);
         System.gc();
         super.onPostExecute(context);
     }

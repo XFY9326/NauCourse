@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.Views;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,8 +60,9 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoViewHolder> {
         notifyDataSetChanged();
     }
 
+    @NonNull
     @Override
-    public InfoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public InfoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.item_info_card, parent, false);
         return new InfoViewHolder(view);
@@ -72,7 +74,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final InfoViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final InfoViewHolder holder, int position) {
         holder.textView_type.setText(context.getString(R.string.info_type, topic_data.get(holder.getAdapterPosition()).get(topic_type)));
         holder.textView_title.setText(topic_data.get(holder.getAdapterPosition()).get(topic_title));
         String click = topic_data.get(holder.getAdapterPosition()).get(topic_click);

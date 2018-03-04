@@ -1,6 +1,7 @@
 package tool.xfy9326.naucourse.Views;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,15 +29,16 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ExamViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ExamViewHolder holder, int position) {
         holder.textView_exam_name.setText(context.getString(R.string.score_course_name, exam.getExamName()[holder.getAdapterPosition()]));
         holder.textView_exam_type.setText(context.getString(R.string.exam_type, exam.getExamType()[holder.getAdapterPosition()]));
         holder.textView_exam_time.setText(context.getString(R.string.exam_time, exam.getExamTime()[holder.getAdapterPosition()]));
         holder.textView_exam_location.setText(context.getString(R.string.exam_location, exam.getExamLocation()[holder.getAdapterPosition()]));
     }
 
+    @NonNull
     @Override
-    public ExamViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ExamViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.item_exam_card, parent, false);
         return new ExamViewHolder(view);

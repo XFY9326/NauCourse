@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.Fragments.HomeFragment;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.JwInfoMethod;
 import tool.xfy9326.naucourse.Methods.JwcInfoMethod;
@@ -29,7 +30,11 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
     @Override
     protected Context doInBackground(final Context... context) {
         try {
-            int loadTime = BaseMethod.getBaseApplication(context[0]).getViewPagerAdapter().getHomeFragment().getLoadTime();
+            int loadTime = 0;
+            HomeFragment homeFragment = BaseMethod.getBaseApplication(context[0]).getViewPagerAdapter().getHomeFragment();
+            if (homeFragment != null) {
+                loadTime = homeFragment.getLoadTime();
+            }
             if (loadTime == 0) {
                 //首次只加载离线数据
                 jwcTopic = (JwcTopic) BaseMethod.getOfflineData(context[0], JwcTopic.class, JwcInfoMethod.FILE_NAME);
@@ -37,7 +42,9 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
                 JwcLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 JwLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 loadTime++;
-                BaseMethod.getBaseApplication(context[0]).getViewPagerAdapter().getHomeFragment().setLoadTime(loadTime);
+                if (homeFragment != null) {
+                    homeFragment.setLoadTime(loadTime);
+                }
             } else {
                 JwcInfoMethod jwcInfoMethod = new JwcInfoMethod(context[0]);
                 JwcLoadSuccess = jwcInfoMethod.load();
@@ -51,10 +58,8 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
                     jwTopic = jwInfoMethod.getJwTopic();
                 }
 
-                if (JwcLoadSuccess == Config.NET_WORK_GET_SUCCESS && JwLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                    loadTime++;
-                    BaseMethod.getBaseApplication(context[0]).getViewPagerAdapter().getHomeFragment().setLoadTime(loadTime);
-                }
+                loadTime++;
+                BaseMethod.getBaseApplication(context[0]).getViewPagerAdapter().getHomeFragment().setLoadTime(loadTime);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -65,10 +70,13 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
 
     @Override
     protected void onPostExecute(Context context) {
-        if (BaseMethod.checkNetWorkCode(context, new int[]{JwLoadSuccess, JwcLoadSuccess}, loadCode)) {
-            BaseMethod.getBaseApplication(context).getViewPagerAdapter().getHomeFragment().InfoSet(jwcTopic, jwTopic, context);
+        HomeFragment homeFragment = BaseMethod.getBaseApplication(context).getViewPagerAdapter().getHomeFragment();
+        if (homeFragment != null) {
+            if (BaseMethod.checkNetWorkCode(context, new int[]{JwLoadSuccess, JwcLoadSuccess}, loadCode)) {
+                homeFragment.InfoSet(jwcTopic, jwTopic, context);
+            }
+            homeFragment.lastViewSet(context);
         }
-        BaseMethod.getBaseApplication(context).getViewPagerAdapter().getHomeFragment().lastViewSet(context);
         System.gc();
         super.onPostExecute(context);
     }

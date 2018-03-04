@@ -20,6 +20,7 @@ public class BaseApplication extends Application {
     private InfoDetailActivity infoDetailActivity;
     private ScoreActivity scoreActivity;
     private ExamActivity examActivity;
+    private boolean showLoginErrorOnce = false;
 
     @Override
 
@@ -65,5 +66,14 @@ public class BaseApplication extends Application {
 
     public void setExamActivity(ExamActivity examActivity) {
         this.examActivity = examActivity;
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public boolean isShowLoginErrorOnce() {
+        return showLoginErrorOnce;
+    }
+
+    public void setShowLoginErrorOnce() {
+        this.showLoginErrorOnce = true;
     }
 }

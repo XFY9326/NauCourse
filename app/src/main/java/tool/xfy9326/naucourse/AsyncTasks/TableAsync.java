@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import java.util.ArrayList;
 
 import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.Fragments.TableFragment;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.TableMethod;
 import tool.xfy9326.naucourse.Methods.TimeMethod;
@@ -31,7 +32,11 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
     @Override
     protected Context doInBackground(Context... context) {
         try {
-            int loadTime = BaseMethod.getBaseApplication(context[0]).getViewPagerAdapter().getTableFragment().getLoadTime();
+            int loadTime = 0;
+            TableFragment tableFragment = BaseMethod.getBaseApplication(context[0]).getViewPagerAdapter().getTableFragment();
+            if (tableFragment != null) {
+                loadTime = tableFragment.getLoadTime();
+            }
             if (loadTime == 0) {
                 //首次只加载离线数据
                 schoolTime = (SchoolTime) BaseMethod.getOfflineData(context[0], SchoolTime.class, TimeMethod.FILE_NAME);
@@ -39,7 +44,9 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
                 tableLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 timeLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 loadTime++;
-                BaseMethod.getBaseApplication(context[0]).getViewPagerAdapter().getTableFragment().setLoadTime(loadTime);
+                if (tableFragment != null) {
+                    tableFragment.setLoadTime(loadTime);
+                }
             } else {
                 TableMethod tableMethod = new TableMethod(context[0]);
                 tableLoadSuccess = tableMethod.load();
@@ -52,10 +59,9 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
                 if (timeLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                     schoolTime = timeMethod.getSchoolTime();
                 }
-                if (tableLoadSuccess == Config.NET_WORK_GET_SUCCESS && timeLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                    loadTime++;
-                    BaseMethod.getBaseApplication(context[0]).getViewPagerAdapter().getTableFragment().setLoadTime(loadTime);
-                }
+
+                loadTime++;
+                BaseMethod.getBaseApplication(context[0]).getViewPagerAdapter().getTableFragment().setLoadTime(loadTime);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,10 +72,13 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
 
     @Override
     protected void onPostExecute(Context context) {
-        if (BaseMethod.checkNetWorkCode(context, new int[]{tableLoadSuccess, timeLoadSuccess}, loadCode)) {
-            BaseMethod.getBaseApplication(context).getViewPagerAdapter().getTableFragment().CourseSet(course, schoolTime, context);
+        TableFragment tableFragment = BaseMethod.getBaseApplication(context).getViewPagerAdapter().getTableFragment();
+        if (tableFragment != null) {
+            if (BaseMethod.checkNetWorkCode(context, new int[]{tableLoadSuccess, timeLoadSuccess}, loadCode)) {
+                tableFragment.CourseSet(course, schoolTime, context);
+            }
+            tableFragment.lastViewSet(context);
         }
-        BaseMethod.getBaseApplication(context).getViewPagerAdapter().getTableFragment().lastViewSet(context);
         System.gc();
         super.onPostExecute(context);
     }

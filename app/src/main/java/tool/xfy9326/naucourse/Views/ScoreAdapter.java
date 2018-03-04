@@ -1,6 +1,7 @@
 package tool.xfy9326.naucourse.Views;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +29,7 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ScoreViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ScoreViewHolder holder, int position) {
         holder.textView_score_course_name.setText(context.getString(R.string.score_course_name, courseScore.getScoreCourseName()[holder.getAdapterPosition()]));
         holder.textView_score_course_xf.setText(context.getString(R.string.course_card_score, courseScore.getScoreCourseXf()[holder.getAdapterPosition()]));
         holder.textView_score_common.setText(context.getString(R.string.score_common, courseScore.getScoreCommon()[holder.getAdapterPosition()]));
@@ -42,8 +43,9 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreViewHolder> {
         return courseScore.getCourseAmount();
     }
 
+    @NonNull
     @Override
-    public ScoreViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ScoreViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.item_score_card, parent, false);
         return new ScoreViewHolder(view);

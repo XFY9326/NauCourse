@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.Fragments.PersonFragment;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.PersonMethod;
 import tool.xfy9326.naucourse.Methods.TimeMethod;
@@ -29,7 +30,11 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
     @Override
     protected Context doInBackground(Context... context) {
         try {
-            int loadTime = BaseMethod.getBaseApplication(context[0]).getViewPagerAdapter().getPersonFragment().getLoadTime();
+            int loadTime = 0;
+            PersonFragment personFragment = BaseMethod.getBaseApplication(context[0]).getViewPagerAdapter().getPersonFragment();
+            if (personFragment != null) {
+                loadTime = personFragment.getLoadTime();
+            }
             if (loadTime == 0) {
                 //首次只加载离线数据
                 studentInfo = (StudentInfo) BaseMethod.getOfflineData(context[0], StudentInfo.class, PersonMethod.FILE_NAME_DATA);
@@ -37,7 +42,9 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
                 personLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 timeLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 loadTime++;
-                BaseMethod.getBaseApplication(context[0]).getViewPagerAdapter().getPersonFragment().setLoadTime(loadTime);
+                if (personFragment != null) {
+                    BaseMethod.getBaseApplication(context[0]).getViewPagerAdapter().getPersonFragment().setLoadTime(loadTime);
+                }
             } else {
                 PersonMethod personMethod = new PersonMethod(context[0]);
                 personLoadSuccess = personMethod.load();
@@ -51,10 +58,8 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
                     schoolTime = timeMethod.getSchoolTime();
                 }
 
-                if (personLoadSuccess == Config.NET_WORK_GET_SUCCESS && timeLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                    loadTime++;
-                    BaseMethod.getBaseApplication(context[0]).getViewPagerAdapter().getPersonFragment().setLoadTime(loadTime);
-                }
+                loadTime++;
+                BaseMethod.getBaseApplication(context[0]).getViewPagerAdapter().getPersonFragment().setLoadTime(loadTime);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -65,11 +70,14 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
 
     @Override
     protected void onPostExecute(Context context) {
-        if (BaseMethod.checkNetWorkCode(context, new int[]{personLoadSuccess, timeLoadSuccess}, loadCode)) {
-            BaseMethod.getBaseApplication(context).getViewPagerAdapter().getPersonFragment().PersonTextSet(studentInfo, context);
-            BaseMethod.getBaseApplication(context).getViewPagerAdapter().getPersonFragment().TimeTextSet(schoolTime, context);
+        PersonFragment personFragment = BaseMethod.getBaseApplication(context).getViewPagerAdapter().getPersonFragment();
+        if (personFragment != null) {
+            if (BaseMethod.checkNetWorkCode(context, new int[]{personLoadSuccess, timeLoadSuccess}, loadCode)) {
+                personFragment.PersonTextSet(studentInfo, context);
+                personFragment.TimeTextSet(schoolTime, context);
+            }
+            personFragment.lastViewSet(context);
         }
-        BaseMethod.getBaseApplication(context).getViewPagerAdapter().getPersonFragment().lastViewSet(context);
         System.gc();
         super.onPostExecute(context);
     }

@@ -3,6 +3,7 @@ package tool.xfy9326.naucourse.AsyncTasks;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import tool.xfy9326.naucourse.Activities.InfoDetailActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.JwInfoMethod;
@@ -61,8 +62,11 @@ public class InfoDetailAsync extends AsyncTask<Context, Void, Context> {
 
     @Override
     protected void onPostExecute(Context context) {
-        if (BaseMethod.checkNetWorkCode(context, new int[]{loadSuccess}, loadCode)) {
-            BaseMethod.getBaseApplication(context).getInfoDetailActivity().InfoDetailSet(data, extraFile);
+        InfoDetailActivity infoDetailActivity = BaseMethod.getBaseApplication(context).getInfoDetailActivity();
+        if (infoDetailActivity != null) {
+            if (BaseMethod.checkNetWorkCode(context, new int[]{loadSuccess}, loadCode)) {
+                infoDetailActivity.InfoDetailSet(data, extraFile);
+            }
         }
         System.gc();
         super.onPostExecute(context);

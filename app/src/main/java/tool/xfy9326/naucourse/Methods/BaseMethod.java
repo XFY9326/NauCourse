@@ -46,15 +46,21 @@ public class BaseMethod {
         }
         for (int code : dataLoadCode) {
             if (code == Config.NET_WORK_ERROR_CODE_CONNECT_NO_LOGIN) {
-                Toast.makeText(context, R.string.user_login_error, Toast.LENGTH_SHORT).show();
+                if (!getBaseApplication(context).isShowLoginErrorOnce()) {
+                    Toast.makeText(context, R.string.user_login_error, Toast.LENGTH_LONG).show();
+                    getBaseApplication(context).setShowLoginErrorOnce();
+                }
                 return false;
             }
             if (code == Config.NET_WORK_ERROR_CODE_CONNECT_USER_DATA) {
-                Toast.makeText(context, R.string.data_get_error, Toast.LENGTH_SHORT).show();
+                if (!getBaseApplication(context).isShowLoginErrorOnce()) {
+                    Toast.makeText(context, R.string.user_login_error, Toast.LENGTH_LONG).show();
+                    getBaseApplication(context).setShowLoginErrorOnce();
+                }
                 return false;
             }
             if (code == Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR) {
-                Toast.makeText(context, R.string.user_login_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.data_get_error, Toast.LENGTH_SHORT).show();
                 return false;
             }
         }
@@ -155,12 +161,30 @@ public class BaseMethod {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
             try {
                 Date startDate = simpleDateFormat.parse(schoolTime.getStartTime());
-                long startDay = startDate.getTime();
-                long nowDay = new Date().getTime();
+                Date endDate = simpleDateFormat.parse(schoolTime.getEndTime());
 
                 Calendar calendar_start = Calendar.getInstance(Locale.CHINA);
                 calendar_start.setTime(startDate);
 
+                Calendar calendar_end = Calendar.getInstance(Locale.CHINA);
+                calendar_end.setTime(endDate);
+                calendar_end.add(Calendar.DATE, 1);
+
+                Calendar calendar_now = Calendar.getInstance(Locale.CHINA);
+                calendar_now.setTime(new Date());
+
+                if (calendar_now.getTimeInMillis() < calendar_start.getTimeInMillis() || calendar_now.getTimeInMillis() > calendar_end.getTimeInMillis()) {
+                    return 0;
+                }
+
+                calendar_start.add(Calendar.DATE, calendar_start.getFirstDayOfWeek() - calendar_start.get(Calendar.DAY_OF_WEEK) + 1);
+                calendar_now.add(Calendar.DATE, -7);
+                if (calendar_now.getTimeInMillis() < calendar_start.getTimeInMillis()) {
+                    return 1;
+                }
+
+                long startDay = calendar_start.getTimeInMillis();
+                long nowDay = new Date().getTime();
                 while (startDay < nowDay) {
                     calendar_start.add(Calendar.DATE, 7);
                     startDay = calendar_start.getTimeInMillis();

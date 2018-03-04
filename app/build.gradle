@@ -14,8 +14,8 @@ android {
         applicationId "tool.xfy9326.naucourse"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 7
-        versionName "1.6"
+        versionCode 8
+        versionName "1.7"
         resConfigs "zh"
     }
 
@@ -34,8 +34,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.squareup.okhttp3:okhttp:3.9.1'
     implementation 'com.github.huangyanbin:SmartTable:1.8.7'
-    implementation 'com.android.support:design:27.0.2'
-    implementation 'com.android.support:appcompat-v7:27.0.2'
-    implementation 'com.android.support:cardview-v7:27.0.2'
+    implementation 'com.android.support:design:27.1.0'
+    implementation 'com.android.support:appcompat-v7:27.1.0'
+    implementation 'com.android.support:cardview-v7:27.1.0'
     implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
 }

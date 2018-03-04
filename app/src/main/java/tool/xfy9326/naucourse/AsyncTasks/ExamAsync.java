@@ -3,6 +3,7 @@ package tool.xfy9326.naucourse.AsyncTasks;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import tool.xfy9326.naucourse.Activities.ExamActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.ExamMethod;
@@ -24,13 +25,19 @@ public class ExamAsync extends AsyncTask<Context, Void, Context> {
     @Override
     protected Context doInBackground(Context... context) {
         try {
-            int loadTime = BaseMethod.getBaseApplication(context[0]).getExamActivity().getLoadTime();
+            int loadTime = 0;
+            ExamActivity examActivity = BaseMethod.getBaseApplication(context[0]).getExamActivity();
+            if (examActivity != null) {
+                loadTime = examActivity.getLoadTime();
+            }
             if (loadTime == 0) {
                 //首次只加载离线数据
                 exam = (Exam) BaseMethod.getOfflineData(context[0], Exam.class, ExamMethod.FILE_NAME);
                 examLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 loadTime++;
-                BaseMethod.getBaseApplication(context[0]).getExamActivity().setLoadTime(loadTime);
+                if (examActivity != null) {
+                    examActivity.setLoadTime(loadTime);
+                }
             } else {
                 ExamMethod examMethod = new ExamMethod(context[0]);
                 examLoadSuccess = examMethod.load();
@@ -38,10 +45,8 @@ public class ExamAsync extends AsyncTask<Context, Void, Context> {
                     exam = examMethod.getExam();
                 }
 
-                if (examLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                    loadTime++;
-                    BaseMethod.getBaseApplication(context[0]).getExamActivity().setLoadTime(loadTime);
-                }
+                loadTime++;
+                BaseMethod.getBaseApplication(context[0]).getExamActivity().setLoadTime(loadTime);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -52,10 +57,13 @@ public class ExamAsync extends AsyncTask<Context, Void, Context> {
 
     @Override
     protected void onPostExecute(Context context) {
-        if (BaseMethod.checkNetWorkCode(context, new int[]{examLoadSuccess}, loadCode)) {
-            BaseMethod.getBaseApplication(context).getExamActivity().setExam(exam);
+        ExamActivity examActivity = BaseMethod.getBaseApplication(context).getExamActivity();
+        if (examActivity != null) {
+            if (BaseMethod.checkNetWorkCode(context, new int[]{examLoadSuccess}, loadCode)) {
+                examActivity.setExam(exam);
+            }
+            examActivity.lastViewSet(context);
         }
-        BaseMethod.getBaseApplication(context).getExamActivity().lastViewSet(context);
         System.gc();
         super.onPostExecute(context);
     }
