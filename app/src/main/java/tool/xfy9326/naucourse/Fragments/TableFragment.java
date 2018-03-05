@@ -130,73 +130,78 @@ public class TableFragment extends Fragment {
 
             final int nowWeek = weekNum;
 
-            TextView textView_date = view.findViewById(R.id.textView_table_date);
-            Calendar calendar = Calendar.getInstance(Locale.CHINA);
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH) + 1;
-            String week = context.getString(R.string.week, weekNum);
-            if (schoolTime.getWeekNum() == 0) {
-                week = context.getString(R.string.time_vacation);
-            }
-            String time = context.getString(R.string.time_now) + context.getString(R.string.table_date, year, month) + " " + week;
-            textView_date.setText(time);
+            if (isAdded()) {
+                TextView textView_date = view.findViewById(R.id.textView_table_date);
+                Calendar calendar = Calendar.getInstance(Locale.CHINA);
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH) + 1;
+                String week = context.getString(R.string.week, weekNum);
+                if (schoolTime.getWeekNum() == 0) {
+                    week = context.getString(R.string.time_vacation);
+                }
+                String time = context.getString(R.string.time_now) + context.getString(R.string.table_date, year, month) + " " + week;
+                textView_date.setText(time);
 
-            final CourseMethod courseMethod = new CourseMethod(context, courses, schoolTime);
+                final CourseMethod courseMethod = new CourseMethod(context, courses, schoolTime);
 
-            final Spinner spinner_week = view.findViewById(R.id.spinner_table_week_chose);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, BaseMethod.getWeekArray(context, schoolTime));
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner_week.setAdapter(adapter);
-            spinner_week.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                private int lastSelect = nowWeek - 1;
+                final Spinner spinner_week = view.findViewById(R.id.spinner_table_week_chose);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, BaseMethod.getWeekArray(context, schoolTime));
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_week.setAdapter(adapter);
+                spinner_week.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    private int lastSelect = nowWeek - 1;
 
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (lastSelect == position) {
-                        spinner_week.setSelection(lastSelect);
-                    } else {
-                        if (courseMethod.updateCourseTableView(position + 1)) {
-                            lastSelect = position;
-                        } else {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        if (lastSelect == position) {
                             spinner_week.setSelection(lastSelect);
+                        } else {
+                            if (courseMethod.updateCourseTableView(position + 1)) {
+                                lastSelect = position;
+                            } else {
+                                spinner_week.setSelection(lastSelect);
+                            }
                         }
+
                     }
 
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                    }
+                });
+
+                int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK);
+                if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_NEXT_WEEK, Config.DEFAULT_PREFERENCE_SHOW_NEXT_WEEK)) {
+                    if ((weekDayNum == Calendar.SUNDAY || weekDayNum == Calendar.SATURDAY) && weekNum + 1 <= BaseMethod.getMaxWeekNum(schoolTime)) {
+                        spinner_week.setSelection(weekNum);
+                        courseMethod.updateCourseTableView(weekNum);
+                    } else {
+                        spinner_week.setSelection(weekNum - 1);
+                    }
+                } else {
+                    spinner_week.setSelection(weekNum - 1);
                 }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
+                courseMethod.setTableView(courseTable);
+
+                if (!inVacation) {
+                    HomeFragment homeFragment = BaseMethod.getBaseApplication(context).getViewPagerAdapter().getHomeFragment();
+                    String[] courseNext = courseMethod.getNextClass(weekNum);
+                    if (courseNext[0] != null) {
+                        homeFragment.setNextCourse(courseNext[0], courseNext[1], courseNext[2], courseNext[3]);
+                    }
                 }
-            });
 
-            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_NEXT_WEEK, Config.DEFAULT_PREFERENCE_SHOW_NEXT_WEEK)) {
-                if (weekNum + 1 <= BaseMethod.getMaxWeekNum(schoolTime)) {
-                    spinner_week.setSelection(weekNum);
-                    courseMethod.updateCourseTableView(weekNum);
+                courseMethod.setOnCourseTableClickListener(new CourseMethod.OnCourseTableItemClickListener() {
+                    @Override
+                    public void OnItemClick(Course course) {
+                        CourseCardSet(course);
+                    }
+                });
+
+                if (loadTime > 0) {
+                    context.sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
                 }
-            } else {
-                spinner_week.setSelection(weekNum - 1);
-            }
-
-            courseMethod.setTableView(courseTable);
-
-            if (!inVacation) {
-                HomeFragment homeFragment = BaseMethod.getBaseApplication(context).getViewPagerAdapter().getHomeFragment();
-                String[] courseNext = courseMethod.getNextClass(weekNum);
-                if (courseNext[0] != null) {
-                    homeFragment.setNextCourse(courseNext[0], courseNext[1], courseNext[2], courseNext[3]);
-                }
-            }
-
-            courseMethod.setOnCourseTableClickListener(new CourseMethod.OnCourseTableItemClickListener() {
-                @Override
-                public void OnItemClick(Course course) {
-                    CourseCardSet(course);
-                }
-            });
-
-            if (loadTime > 0) {
-                context.sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
             }
         }
     }
@@ -258,7 +263,9 @@ public class TableFragment extends Fragment {
     }
 
     public void updateTable() {
-        getData();
+        if (isAdded()) {
+            getData();
+        }
     }
 
     synchronized private void getData() {
@@ -266,9 +273,11 @@ public class TableFragment extends Fragment {
     }
 
     public void lastViewSet(Context context) {
-        //离线数据加载完成，开始拉取网络数据
-        if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
-            getData();
+        if (isAdded()) {
+            //离线数据加载完成，开始拉取网络数据
+            if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
+                getData();
+            }
         }
     }
 

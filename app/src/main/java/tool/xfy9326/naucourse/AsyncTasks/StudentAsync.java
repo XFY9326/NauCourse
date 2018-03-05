@@ -59,7 +59,7 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
                 }
 
                 loadTime++;
-                BaseMethod.getBaseApplication(context[0]).getViewPagerAdapter().getPersonFragment().setLoadTime(loadTime);
+                personFragment.setLoadTime(loadTime);
             }
         } catch (Exception e) {
             e.printStackTrace();

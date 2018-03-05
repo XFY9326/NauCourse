@@ -130,54 +130,62 @@ public class PersonFragment extends Fragment {
     }
 
     public void PersonTextSet(StudentInfo studentInfo, Context context) {
-        if (context != null && studentInfo != null) {
-            ((TextView) view.findViewById(R.id.textView_stdId)).setText(context.getString(R.string.std_id, studentInfo.getStd_id()));
-            ((TextView) view.findViewById(R.id.textView_stdClass)).setText(context.getString(R.string.std_class, studentInfo.getStd_class()));
-            ((TextView) view.findViewById(R.id.textView_stdCollage)).setText(context.getString(R.string.std_collage, studentInfo.getStd_collage()));
-            ((TextView) view.findViewById(R.id.textView_stdDirection)).setText(context.getString(R.string.std_direction, studentInfo.getStd_direction()));
-            ((TextView) view.findViewById(R.id.textView_stdGrade)).setText(context.getString(R.string.std_grade, studentInfo.getStd_grade()));
-            ((TextView) view.findViewById(R.id.textView_stdMajor)).setText(context.getString(R.string.std_major, studentInfo.getStd_major()));
-            ((TextView) view.findViewById(R.id.textView_stdName)).setText(context.getString(R.string.std_name, studentInfo.getStd_name()));
+        if (isAdded()) {
+            if (context != null && studentInfo != null) {
+                ((TextView) view.findViewById(R.id.textView_stdId)).setText(context.getString(R.string.std_id, studentInfo.getStd_id()));
+                ((TextView) view.findViewById(R.id.textView_stdClass)).setText(context.getString(R.string.std_class, studentInfo.getStd_class()));
+                ((TextView) view.findViewById(R.id.textView_stdCollage)).setText(context.getString(R.string.std_collage, studentInfo.getStd_collage()));
+                ((TextView) view.findViewById(R.id.textView_stdDirection)).setText(context.getString(R.string.std_direction, studentInfo.getStd_direction()));
+                ((TextView) view.findViewById(R.id.textView_stdGrade)).setText(context.getString(R.string.std_grade, studentInfo.getStd_grade()));
+                ((TextView) view.findViewById(R.id.textView_stdMajor)).setText(context.getString(R.string.std_major, studentInfo.getStd_major()));
+                ((TextView) view.findViewById(R.id.textView_stdName)).setText(context.getString(R.string.std_name, studentInfo.getStd_name()));
+            }
         }
     }
 
     public void TimeTextSet(SchoolTime schoolTime, Context context) {
-        if (context != null && schoolTime != null) {
-            schoolTime.setWeekNum(BaseMethod.getNowWeekNum(schoolTime));
+        if (isAdded()) {
+            if (context != null && schoolTime != null) {
+                schoolTime.setWeekNum(BaseMethod.getNowWeekNum(schoolTime));
 
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
-            String time = context.getString(R.string.time_now) + simpleDateFormat.format(new Date());
-            ((TextView) view.findViewById(R.id.textView_timeNow)).setText(time);
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+                String time = context.getString(R.string.time_now) + simpleDateFormat.format(new Date());
+                ((TextView) view.findViewById(R.id.textView_timeNow)).setText(time);
 
-            String week;
-            if (schoolTime.getWeekNum() == 0) {
-                week = context.getString(R.string.time_week) + context.getString(R.string.time_vacation);
-            } else {
-                week = context.getString(R.string.time_week) + context.getString(R.string.week, schoolTime.getWeekNum());
+                String week;
+                if (schoolTime.getWeekNum() == 0) {
+                    week = context.getString(R.string.time_week) + context.getString(R.string.time_vacation);
+                } else {
+                    week = context.getString(R.string.time_week) + context.getString(R.string.week, schoolTime.getWeekNum());
+                }
+                ((TextView) view.findViewById(R.id.textView_timeWeek)).setText(week);
+
+                ((TextView) view.findViewById(R.id.textView_timeSchoolStart)).setText(context.getString(R.string.time_school_start, schoolTime.getStartTime()));
+                ((TextView) view.findViewById(R.id.textView_timeSchoolEnd)).setText(context.getString(R.string.time_school_end, schoolTime.getEndTime()));
             }
-            ((TextView) view.findViewById(R.id.textView_timeWeek)).setText(week);
-
-            ((TextView) view.findViewById(R.id.textView_timeSchoolStart)).setText(context.getString(R.string.time_school_start, schoolTime.getStartTime()));
-            ((TextView) view.findViewById(R.id.textView_timeSchoolEnd)).setText(context.getString(R.string.time_school_end, schoolTime.getEndTime()));
         }
     }
 
     public void lastViewSet(Context context) {
-        if (swipeRefreshLayout != null) {
-            if (swipeRefreshLayout.isRefreshing()) {
-                swipeRefreshLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                });
+        if (isAdded()) {
+            if (swipeRefreshLayout != null) {
+                if (swipeRefreshLayout.isRefreshing()) {
+                    swipeRefreshLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (isAdded()) {
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                        }
+                    });
+                }
             }
-        }
-        //离线数据加载完成，开始拉取网络数据
-        if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
-            swipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
-            swipeRefreshLayout.setRefreshing(true);
-            getData();
+            //离线数据加载完成，开始拉取网络数据
+            if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
+                swipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
+                swipeRefreshLayout.setRefreshing(true);
+                getData();
+            }
         }
     }
 

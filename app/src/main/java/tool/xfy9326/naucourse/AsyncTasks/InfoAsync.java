@@ -59,7 +59,7 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
                 }
 
                 loadTime++;
-                BaseMethod.getBaseApplication(context[0]).getViewPagerAdapter().getHomeFragment().setLoadTime(loadTime);
+                homeFragment.setLoadTime(loadTime);
             }
         } catch (Exception e) {
             e.printStackTrace();

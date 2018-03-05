@@ -22,8 +22,8 @@ public class NauJwcClient {
     public static final int LOGIN_ALREADY_LOGIN = 2;
     public static final int LOGIN_CHECKCODE_WRONG = 3;
     public static final int LOGIN_USER_INFO_WRONG = 4;
+    public static final String server_url = "http://jwc.nau.edu.cn";
     private static final int LOGIN_SUCCESS = 0;
-    private static final String server_url = "http://jwc.nau.edu.cn";
     private final OkHttpClient client;
     private final CookieStore cookieStore;
     private int loginErrorCode = LOGIN_SUCCESS;

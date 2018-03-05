@@ -24,6 +24,7 @@ import android.widget.TextView;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import lib.xfy9326.naujwc.NauJwcClient;
 import tool.xfy9326.naucourse.AsyncTasks.InfoDetailAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
@@ -64,12 +65,8 @@ public class InfoDetailActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (info_source.equals(InfoAdapter.TOPIC_SOURCE_JW)) {
-            getMenuInflater().inflate(R.menu.menu_info_detail, menu);
-            return true;
-        } else {
-            return super.onCreateOptionsMenu(menu);
-        }
+        getMenuInflater().inflate(R.menu.menu_info_detail, menu);
+        return true;
     }
 
     @Override
@@ -77,7 +74,13 @@ public class InfoDetailActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.menu_info_detail_open_in_browser) {
             Intent intent = new Intent();
             intent.setAction("android.intent.action.VIEW");
-            Uri content_url = Uri.parse(JwInfoMethod.server_url + info_url);
+            String url;
+            if (info_source.equals(InfoAdapter.TOPIC_SOURCE_JW)) {
+                url = JwInfoMethod.server_url + info_url;
+            } else {
+                url = NauJwcClient.server_url + info_url;
+            }
+            Uri content_url = Uri.parse(url);
             intent.setData(content_url);
             startActivity(intent);
         }

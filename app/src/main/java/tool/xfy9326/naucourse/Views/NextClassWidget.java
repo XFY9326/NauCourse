@@ -44,7 +44,6 @@ public class NextClassWidget extends AppWidgetProvider {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
-
             SchoolTime schoolTime = (SchoolTime) BaseMethod.getOfflineData(context, SchoolTime.class, TimeMethod.FILE_NAME);
             ArrayList<Course> courses = BaseMethod.getOfflineTableData(context);
 
@@ -54,7 +53,6 @@ public class NextClassWidget extends AppWidgetProvider {
                 schoolTime.setWeekNum(weekNum);
                 CourseMethod courseMethod = new CourseMethod(context, courses, schoolTime);
                 String[] result = courseMethod.getNextClass(weekNum);
-
                 if (result[0] != null) {
                     remoteViews.setTextViewText(R.id.textView_app_widget_nextClass, result[0]);
                     remoteViews.setTextViewText(R.id.textView_app_widget_nextLocation, result[1]);
@@ -77,16 +75,15 @@ public class NextClassWidget extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        super.onUpdate(context, appWidgetManager, appWidgetIds);
         for (int appWidgetId : appWidgetIds) {
             appWidgetManager.updateAppWidget(appWidgetId, ViewGet(context));
         }
         System.gc();
+        super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        super.onReceive(context, intent);
         String action = intent.getAction();
         if (action != null) {
             if (action.equals(ACTION_ON_CLICK)) {
@@ -95,5 +92,6 @@ public class NextClassWidget extends AppWidgetProvider {
             }
         }
         System.gc();
+        super.onReceive(context, intent);
     }
 }

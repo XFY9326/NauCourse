@@ -61,7 +61,7 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
                 }
 
                 loadTime++;
-                BaseMethod.getBaseApplication(context[0]).getViewPagerAdapter().getTableFragment().setLoadTime(loadTime);
+                tableFragment.setLoadTime(loadTime);
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -142,10 +142,17 @@ public class JwcInfoMethod {
     public String getDetail() {
         Elements tags = detailDocument.body().getElementsByTag("tr");
         String[] temp = tags.html().split("</td>");
-        String result = temp[temp.length - 1].trim();
-        if (result.startsWith("<td><br>")) {
-            result = "<td>" + result.substring(8);
+        StringBuilder result = new StringBuilder();
+        boolean nextContent = false;
+        for (String str : temp) {
+            if (str.contains("发布者：")) {
+                nextContent = true;
+                continue;
+            }
+            if (nextContent) {
+                result.append(str);
+            }
         }
-        return result;
+        return result.toString().trim();
     }
 }

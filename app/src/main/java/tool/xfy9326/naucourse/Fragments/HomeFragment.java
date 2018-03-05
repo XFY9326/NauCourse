@@ -117,20 +117,22 @@ public class HomeFragment extends Fragment {
     }
 
     public void setNextCourse(String name, String location, String teacher, String time) {
-        TextView textView_nextClass = view.findViewById(R.id.textView_nextClass);
-        TextView textView_nextLocation = view.findViewById(R.id.textView_nextLocation);
-        TextView textView_nextTeacher = view.findViewById(R.id.textView_nextTeacher);
-        TextView textView_nextTime = view.findViewById(R.id.textView_nextTime);
+        if (isAdded()) {
+            TextView textView_nextClass = view.findViewById(R.id.textView_nextClass);
+            TextView textView_nextLocation = view.findViewById(R.id.textView_nextLocation);
+            TextView textView_nextTeacher = view.findViewById(R.id.textView_nextTeacher);
+            TextView textView_nextTime = view.findViewById(R.id.textView_nextTime);
 
-        textView_nextClass.setText(name);
-        textView_nextLocation.setText(location);
-        textView_nextTeacher.setText(teacher);
-        textView_nextTime.setText(time);
+            textView_nextClass.setText(name);
+            textView_nextLocation.setText(location);
+            textView_nextTeacher.setText(teacher);
+            textView_nextTime.setText(time);
 
-        TextView textView_noNextClass = view.findViewById(R.id.textView_noNextClass);
-        textView_noNextClass.setVisibility(View.GONE);
-        LinearLayout linearLayout_nextClass = view.findViewById(R.id.layout_nextClass);
-        linearLayout_nextClass.setVisibility(View.VISIBLE);
+            TextView textView_noNextClass = view.findViewById(R.id.textView_noNextClass);
+            textView_noNextClass.setVisibility(View.GONE);
+            LinearLayout linearLayout_nextClass = view.findViewById(R.id.layout_nextClass);
+            linearLayout_nextClass.setVisibility(View.VISIBLE);
+        }
     }
 
     public int getLoadTime() {
@@ -142,32 +144,38 @@ public class HomeFragment extends Fragment {
     }
 
     public void InfoSet(JwcTopic jwcTopic, JwTopic jwTopic, Context context) {
-        if (context != null && jwcTopic != null && jwTopic != null) {
-            if (infoAdapter == null) {
-                infoAdapter = new InfoAdapter(context, jwcTopic, jwTopic);
-                recyclerView.setAdapter(infoAdapter);
-            } else {
-                infoAdapter.updateJwcTopic(jwcTopic, jwTopic);
+        if (isAdded()) {
+            if (context != null && jwcTopic != null && jwTopic != null) {
+                if (infoAdapter == null) {
+                    infoAdapter = new InfoAdapter(context, jwcTopic, jwTopic);
+                    recyclerView.setAdapter(infoAdapter);
+                } else {
+                    infoAdapter.updateJwcTopic(jwcTopic, jwTopic);
+                }
             }
         }
     }
 
     public void lastViewSet(Context context) {
-        if (swipeRefreshLayout != null) {
-            if (swipeRefreshLayout.isRefreshing()) {
-                swipeRefreshLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                });
+        if (isAdded()) {
+            if (swipeRefreshLayout != null) {
+                if (swipeRefreshLayout.isRefreshing()) {
+                    swipeRefreshLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (isAdded()) {
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                        }
+                    });
+                }
             }
-        }
-        //离线数据加载完成，开始拉取网络数据
-        if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
-            swipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
-            swipeRefreshLayout.setRefreshing(true);
-            getData();
+            //离线数据加载完成，开始拉取网络数据
+            if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
+                swipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
+                swipeRefreshLayout.setRefreshing(true);
+                getData();
+            }
         }
     }
 
