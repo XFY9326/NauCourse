@@ -96,6 +96,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoViewHolder> {
                 intent.putExtra(Config.INTENT_INFO_DETAIL_POST, topic_data.get(holder.getAdapterPosition()).get(topic_post));
                 intent.putExtra(Config.INTENT_INFO_DETAIL_SOURCE, topic_data.get(holder.getAdapterPosition()).get(topic_source));
                 intent.putExtra(Config.INTENT_INFO_DETAIL_URL, topic_data.get(holder.getAdapterPosition()).get(topic_url));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         });

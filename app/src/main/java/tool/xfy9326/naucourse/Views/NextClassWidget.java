@@ -6,6 +6,8 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.CourseMethod;
 import tool.xfy9326.naucourse.Methods.TimeMethod;
@@ -33,37 +36,41 @@ public class NextClassWidget extends AppWidgetProvider {
     synchronized private static RemoteViews ViewGet(Context context) {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.app_widget_next_class);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_ON_CLICK, new Intent(ACTION_ON_CLICK), PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.layout_app_widget, pendingIntent);
-
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
         remoteViews.setTextViewText(R.id.textView_app_widget_dateNow, simpleDateFormat.format(new Date()));
 
-        SchoolTime schoolTime = (SchoolTime) BaseMethod.getOfflineData(context, SchoolTime.class, TimeMethod.FILE_NAME);
-        ArrayList<Course> courses = BaseMethod.getOfflineTableData(context);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_ON_CLICK, new Intent(ACTION_ON_CLICK), PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setOnClickPendingIntent(R.id.layout_app_widget, pendingIntent);
 
-        int weekNum = BaseMethod.getNowWeekNum(schoolTime);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
 
-        if (schoolTime != null && courses != null && weekNum != 0) {
-            schoolTime.setWeekNum(weekNum);
-            CourseMethod courseMethod = new CourseMethod(context, courses, schoolTime);
-            String[] result = courseMethod.getNextClass(weekNum);
+            SchoolTime schoolTime = (SchoolTime) BaseMethod.getOfflineData(context, SchoolTime.class, TimeMethod.FILE_NAME);
+            ArrayList<Course> courses = BaseMethod.getOfflineTableData(context);
 
-            if (result[0] != null) {
-                remoteViews.setTextViewText(R.id.textView_app_widget_nextClass, result[0]);
-                remoteViews.setTextViewText(R.id.textView_app_widget_nextLocation, result[1]);
-                remoteViews.setTextViewText(R.id.textView_app_widget_nextTeacher, result[2]);
-                remoteViews.setTextViewText(R.id.textView_app_widget_nextTime, result[3]);
+            int weekNum = BaseMethod.getNowWeekNum(schoolTime);
 
-                remoteViews.setViewVisibility(R.id.textView_app_widget_noNextClass, View.GONE);
-                remoteViews.setViewVisibility(R.id.layout_app_widget_nextClass, View.VISIBLE);
+            if (schoolTime != null && courses != null && weekNum != 0) {
+                schoolTime.setWeekNum(weekNum);
+                CourseMethod courseMethod = new CourseMethod(context, courses, schoolTime);
+                String[] result = courseMethod.getNextClass(weekNum);
+
+                if (result[0] != null) {
+                    remoteViews.setTextViewText(R.id.textView_app_widget_nextClass, result[0]);
+                    remoteViews.setTextViewText(R.id.textView_app_widget_nextLocation, result[1]);
+                    remoteViews.setTextViewText(R.id.textView_app_widget_nextTeacher, result[2]);
+                    remoteViews.setTextViewText(R.id.textView_app_widget_nextTime, result[3]);
+
+                    remoteViews.setViewVisibility(R.id.textView_app_widget_noNextClass, View.GONE);
+                    remoteViews.setViewVisibility(R.id.layout_app_widget_nextClass, View.VISIBLE);
+                } else {
+                    remoteViews.setViewVisibility(R.id.textView_app_widget_noNextClass, View.VISIBLE);
+                    remoteViews.setViewVisibility(R.id.layout_app_widget_nextClass, View.GONE);
+                }
             } else {
                 remoteViews.setViewVisibility(R.id.textView_app_widget_noNextClass, View.VISIBLE);
                 remoteViews.setViewVisibility(R.id.layout_app_widget_nextClass, View.GONE);
             }
-        } else {
-            remoteViews.setViewVisibility(R.id.textView_app_widget_noNextClass, View.VISIBLE);
-            remoteViews.setViewVisibility(R.id.layout_app_widget_nextClass, View.GONE);
         }
         return remoteViews;
     }
