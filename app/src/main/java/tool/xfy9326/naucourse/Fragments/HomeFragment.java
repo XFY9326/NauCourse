@@ -1,12 +1,15 @@
 package tool.xfy9326.naucourse.Fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,14 +22,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
 import tool.xfy9326.naucourse.AsyncTasks.InfoAsync;
+import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
+import tool.xfy9326.naucourse.Methods.CourseMethod;
+import tool.xfy9326.naucourse.Methods.TimeMethod;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.JwTopic;
 import tool.xfy9326.naucourse.Utils.JwcTopic;
+import tool.xfy9326.naucourse.Utils.SchoolTime;
 import tool.xfy9326.naucourse.Views.InfoAdapter;
 
 /**
@@ -114,6 +123,34 @@ public class HomeFragment extends Fragment {
         TextView textView_dateNow = view.findViewById(R.id.textView_dateNow);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
         textView_dateNow.setText(simpleDateFormat.format(new Date()));
+
+        CardView cardView_nextClass = view.findViewById(R.id.cardView_local_next_course);
+        cardView_nextClass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setNextCourse();
+            }
+        });
+
+    }
+
+    private void setNextCourse() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
+            SchoolTime schoolTime = (SchoolTime) BaseMethod.getOfflineData(context, SchoolTime.class, TimeMethod.FILE_NAME);
+            ArrayList<Course> courses = BaseMethod.getOfflineTableData(context);
+
+            int weekNum = BaseMethod.getNowWeekNum(schoolTime);
+
+            if (schoolTime != null && courses != null && weekNum != 0) {
+                schoolTime.setWeekNum(weekNum);
+                CourseMethod courseMethod = new CourseMethod(context, courses, schoolTime);
+                String[] result = courseMethod.getNextClass(weekNum);
+                if (result[0] != null) {
+                    setNextCourse(result[0], result[1], result[2], result[3]);
+                }
+            }
+        }
     }
 
     public void setNextCourse(String name, String location, String teacher, String time) {

@@ -39,6 +39,8 @@ public class CourseMethod {
     // 列 行
     private String[][] table;
     private String[][] id_table;
+    private List<TableLine> tableLines;
+    private TableData<TableLine> tableData;
 
     public CourseMethod(Context context, ArrayList<Course> courses, SchoolTime schoolTime) {
         this.context = context;
@@ -48,9 +50,11 @@ public class CourseMethod {
         if (weekNum == 0) {
             weekNum = 1;
         }
-        smartTable = null;
-        onCourseTableClick = null;
-        loadSuccess = false;
+        this.smartTable = null;
+        this.onCourseTableClick = null;
+        this.loadSuccess = false;
+        this.tableLines = null;
+        this.tableData = null;
     }
 
     private static String[] getNextClass(Context context, String[][] this_week_table, String[][] this_week_id_table, ArrayList<Course> courses) {
@@ -122,6 +126,7 @@ public class CourseMethod {
             this.weekNum = weekNum;
             loadSuccess = false;
             loadView();
+            smartTable.notifyDataChanged();
             return true;
         }
         return false;
@@ -142,12 +147,12 @@ public class CourseMethod {
     synchronized private void loadView() {
         if (smartTable != null && !loadSuccess && weekNum != 0) {
             setTableCourse();
-            //表格数值加载到视图
-            String title = context.getString(R.string.table_title);
-            List<String> week_day = BaseMethod.getWeekDayArray(context, weekNum, schoolTime.getStartTime());
-
-            //仅支持五天课程
-            List<TableLine> tableLines = new ArrayList<>();
+            //表格数值加载到视图, 仅支持五天课程
+            if (tableLines != null) {
+                tableLines.clear();
+            } else {
+                tableLines = new ArrayList<>();
+            }
             for (int i = 0; i < Config.MAX_DAY_COURSE; i++) {
                 String mo = table[1][i];
                 String tu = table[2][i];
@@ -157,6 +162,16 @@ public class CourseMethod {
                 TableLine tableLine = new TableLine(table[0][i], mo, tu, we, th, fr);
                 tableLines.add(tableLine);
             }
+            getTableData(tableLines);
+            System.gc();
+            loadSuccess = true;
+        }
+    }
+
+    private void getTableData(List<TableLine> tableLines) {
+        if (tableData == null) {
+            String title = context.getString(R.string.table_title);
+            List<String> week_day = BaseMethod.getWeekDayArray(context, weekNum, schoolTime.getStartTime());
 
             Column<String> columnDate = new Column<>(context.getString(R.string.date), "courseTime");
             columnDate.setFixed(true);
@@ -179,11 +194,10 @@ public class CourseMethod {
             columns.add(columnTh);
             columns.add(columnFr);
 
-            TableData<TableLine> tableData = new TableData<>(title, tableLines, columns);
+            tableData = new TableData<>(title, tableLines, columns);
             smartTable.setTableData(tableData);
-            smartTable.notifyDataChanged();
-            System.gc();
-            loadSuccess = true;
+        } else {
+            tableData.setT(tableLines);
         }
     }
 
