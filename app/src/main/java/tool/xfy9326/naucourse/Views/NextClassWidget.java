@@ -39,7 +39,7 @@ public class NextClassWidget extends AppWidgetProvider {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
         remoteViews.setTextViewText(R.id.textView_app_widget_dateNow, simpleDateFormat.format(new Date()));
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_ON_CLICK, new Intent(ACTION_ON_CLICK), PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_ON_CLICK, new Intent(context, NextClassWidget.class).setAction(ACTION_ON_CLICK), PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.layout_app_widget, pendingIntent);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -78,7 +78,6 @@ public class NextClassWidget extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             appWidgetManager.updateAppWidget(appWidgetId, ViewGet(context));
         }
-        System.gc();
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
@@ -91,7 +90,6 @@ public class NextClassWidget extends AppWidgetProvider {
                 AppWidgetManager.getInstance(context).updateAppWidget(componentName, ViewGet(context));
             }
         }
-        System.gc();
         super.onReceive(context, intent);
     }
 }
