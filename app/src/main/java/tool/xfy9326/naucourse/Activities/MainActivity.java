@@ -13,6 +13,7 @@ import android.widget.Toast;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.Receivers.UpdateReceiver;
 import tool.xfy9326.naucourse.Views.AdvancedViewPager;
 import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
 
@@ -75,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
             tab_table.setIcon(R.drawable.selector_tab_table);
             tab_person.setIcon(R.drawable.selector_tab_person);
         }
+
+        sendBroadcast(new Intent(UpdateReceiver.UPDATE_ACTION).putExtra(Config.INTENT_IS_ONLY_INIT, true));
     }
 
     @Override

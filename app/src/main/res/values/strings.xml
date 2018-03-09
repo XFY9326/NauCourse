@@ -103,4 +103,9 @@
     <string name="course_table_manage">课程表管理</string>
     <string name="show_next_week">提前显示下周的课程表</string>
     <string name="show_next_week_sum">在周六周日时提前显示下一周的课程表</string>
+    <string name="notification_channel">上课消息提示</string>
+    <string name="notification_channel_des">用于在上课前提示下一节课的信息</string>
+    <string name="notification_manage">通知管理</string>
+    <string name="next_class_notify">提示下一节课的信息</string>
+    <string name="next_class_notify_sum">将会在上课前十分钟提示上课信息</string>
 </resources>

@@ -187,9 +187,7 @@ public class TableFragment extends Fragment {
                 if (!inVacation) {
                     HomeFragment homeFragment = BaseMethod.getBaseApplication(context).getViewPagerAdapter().getHomeFragment();
                     String[] courseNext = courseMethod.getNextClass(weekNum);
-                    if (courseNext[0] != null) {
-                        homeFragment.setNextCourse(courseNext[0], courseNext[1], courseNext[2], courseNext[3]);
-                    }
+                    homeFragment.setNextCourse(courseNext[0], courseNext[1], courseNext[2], courseNext[3]);
                 }
 
                 courseMethod.setOnCourseTableClickListener(new CourseMethod.OnCourseTableItemClickListener() {

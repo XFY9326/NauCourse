@@ -6,6 +6,13 @@
             android:summary="@string/login_out_sum"
             android:title="@string/login_out" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="@string/notification_manage">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="NOTIFY_NEXT_CLASS"
+            android:summary="@string/next_class_notify_sum"
+            android:title="@string/next_class_notify" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/data_get">
         <CheckBoxPreference
             android:defaultValue="true"

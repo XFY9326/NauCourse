@@ -77,6 +77,15 @@
         </activity>
 
         <receiver
+            android:name=".Receivers.UpdateReceiver"
+            android:exported="false"
+            tools:ignore="InnerclassSeparator">
+            <intent-filter>
+                <action android:name="tool.xfy9326.naucourse.Receivers.UpdateReceiver.Update" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
             android:name=".Views.NextClassWidget"
             tools:ignore="InnerclassSeparator">
             <meta-data

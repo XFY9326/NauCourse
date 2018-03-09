@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="course_time">
+    <string-array name="course_start_time">
         <item>08:30</item>
         <item>09:20</item>
         <item>10:20</item>

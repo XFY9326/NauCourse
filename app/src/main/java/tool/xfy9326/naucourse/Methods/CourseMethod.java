@@ -58,7 +58,7 @@ public class CourseMethod {
     }
 
     private static String[] getNextClass(Context context, String[][] this_week_table, String[][] this_week_id_table, ArrayList<Course> courses) {
-        String[] result = new String[4];
+        String[] result = new String[5];
         //仅限周一到周五的计算
         Calendar calendar = Calendar.getInstance(Locale.CHINA);
         int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK) - 1;
@@ -66,7 +66,7 @@ public class CourseMethod {
         if (weekDayNum > 0 && weekDayNum < 6) {
             String[] today = this_week_table[weekDayNum];
             String[] todayId = this_week_id_table[weekDayNum];
-            String[] startTimes = context.getResources().getStringArray(R.array.course_time);
+            String[] startTimes = context.getResources().getStringArray(R.array.course_start_time);
             String[] times = context.getResources().getStringArray(R.array.course_finish_time);
             long nowTime = calendar.getTimeInMillis();
             String lastId = "";
@@ -98,10 +98,12 @@ public class CourseMethod {
                 }
             }
             if (nowTime > todayFinalCourseTime) {
-                return new String[4];
+                return new String[5];
             }
 
             result[3] = course_startTime + "~" + course_endTime;
+
+            result[4] = result[2];
 
             if (result[2] != null) {
                 for (Course course : courses) {
@@ -132,7 +134,7 @@ public class CourseMethod {
         return false;
     }
 
-    //课程名称 上课地点 授课教师 上课时间
+    //课程名称 上课地点 授课教师 上课时间 id
     public String[] getNextClass(int weekNum) {
         if (this.weekNum != weekNum || table == null) {
             getTable(weekNum, schoolTime.getStartTime());
@@ -171,34 +173,39 @@ public class CourseMethod {
     private void getTableData(List<TableLine> tableLines) {
         if (tableData == null) {
             String title = context.getString(R.string.table_title);
-            List<String> week_day = BaseMethod.getWeekDayArray(context, weekNum, schoolTime.getStartTime());
-
-            Column<String> columnDate = new Column<>(context.getString(R.string.date), "courseTime");
-            columnDate.setFixed(true);
-            Column<String> columnMo = new Column<>(week_day.get(0), "courseMo");
-            columnSet(columnMo);
-            Column<String> columnTu = new Column<>(week_day.get(1), "courseTu");
-            columnSet(columnTu);
-            Column<String> columnWe = new Column<>(week_day.get(2), "courseWe");
-            columnSet(columnWe);
-            Column<String> columnTh = new Column<>(week_day.get(3), "courseTh");
-            columnSet(columnTh);
-            Column<String> columnFr = new Column<>(week_day.get(4), "courseFr");
-            columnSet(columnFr);
-
-            List<Column> columns = new ArrayList<>();
-            columns.add(columnDate);
-            columns.add(columnMo);
-            columns.add(columnTu);
-            columns.add(columnWe);
-            columns.add(columnTh);
-            columns.add(columnFr);
-
-            tableData = new TableData<>(title, tableLines, columns);
+            tableData = new TableData<>(title, tableLines, getColumns());
             smartTable.setTableData(tableData);
         } else {
+            tableData.setColumns(getColumns());
             tableData.setT(tableLines);
         }
+    }
+
+    private List<Column> getColumns() {
+        List<String> week_day = BaseMethod.getWeekDayArray(context, weekNum, schoolTime.getStartTime());
+
+        Column<String> columnDate = new Column<>(context.getString(R.string.date), "courseTime");
+        columnDate.setFixed(true);
+        Column<String> columnMo = new Column<>(week_day.get(0), "courseMo");
+        columnSet(columnMo);
+        Column<String> columnTu = new Column<>(week_day.get(1), "courseTu");
+        columnSet(columnTu);
+        Column<String> columnWe = new Column<>(week_day.get(2), "courseWe");
+        columnSet(columnWe);
+        Column<String> columnTh = new Column<>(week_day.get(3), "courseTh");
+        columnSet(columnTh);
+        Column<String> columnFr = new Column<>(week_day.get(4), "courseFr");
+        columnSet(columnFr);
+
+        List<Column> columns = new ArrayList<>();
+        columns.add(columnDate);
+        columns.add(columnMo);
+        columns.add(columnTu);
+        columns.add(columnWe);
+        columns.add(columnTh);
+        columns.add(columnFr);
+
+        return columns;
     }
 
     private void columnSet(Column<String> column) {

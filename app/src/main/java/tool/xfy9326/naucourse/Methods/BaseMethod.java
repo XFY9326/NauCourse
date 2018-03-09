@@ -241,7 +241,7 @@ public class BaseMethod {
     //获取上课时间
     static List<String> getCourseTimeArray(Context context) {
         List<String> day = new ArrayList<>();
-        String[] time = context.getResources().getStringArray(R.array.course_time);
+        String[] time = context.getResources().getStringArray(R.array.course_start_time);
         for (int i = 1; i <= Config.MAX_DAY_COURSE; i++) {
             day.add(i + "\n" + time[i - 1]);
         }

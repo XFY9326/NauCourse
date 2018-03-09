@@ -24,6 +24,8 @@ public class Config {
     public static final String INTENT_INFO_DETAIL_SOURCE = "INFO_DETAIL_SOURCE";
     public static final String INTENT_INFO_DETAIL_URL = "INFO_DETAIL_URL";
     public static final String INTENT_IS_LOGIN_OUT = "IS_LOGIN_OUT";
+    public static final String INTENT_IS_ONLY_INIT = "IS_ONLY_INIT";
+    public static final String INTENT_NEXT_CLASS_DATA = "NEXT_CLASS_DATA";
 
     public static final int DEFAULT_MAX_WEEK = 24;
     public static final int MAX_WEEK_DAY = 5;
@@ -38,6 +40,10 @@ public class Config {
     public static final String PREFERENCE_UPDATE_DATA_ON_START = "UPDATE_DATA_ON_START";
     public static final String PREFERENCE_ONLY_UPDATE_UNDER_WIFI = "ONLY_UPDATE_UNDER_WIFI";
     public static final String PREFERENCE_SHOW_NEXT_WEEK = "SHOW_NEXT_WEEK";
+    public static final String PREFERENCE_LAST_NOTIFY_ID = "LAST_NOTIFY_ID";
+    public static final String PREFERENCE_LAST_NOTIFY_TIME = "LAST_NOTIFY_TIME";
+    public static final String PREFERENCE_CLASS_BEFORE_NOTIFY = "CLASS_BEFORE_NOTIFY";
+    public static final String PREFERENCE_NOTIFY_NEXT_CLASS = "NOTIFY_NEXT_CLASS";
 
     public static final boolean DEFAULT_PREFERENCE_HAS_LOGIN = false;
     public static final boolean DEFAULT_PREFERENCE_REMEMBER_PW = true;
@@ -46,6 +52,7 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_UPDATE_DATA_ON_START = true;
     public static final boolean DEFAULT_PREFERENCE_ONLY_UPDATE_UNDER_WIFI = false;
     public static final boolean DEFAULT_PREFERENCE_SHOW_NEXT_WEEK = true;
+    public static final boolean DEFAULT_PREFERENCE_NOTIFY_NEXT_CLASS = true;
 
     public static final String TAG_TEMP_SAVE_FAILED = "TEMP_SAVE_FAILED";
 

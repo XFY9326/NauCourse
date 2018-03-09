@@ -146,29 +146,32 @@ public class HomeFragment extends Fragment {
                 schoolTime.setWeekNum(weekNum);
                 CourseMethod courseMethod = new CourseMethod(context, courses, schoolTime);
                 String[] result = courseMethod.getNextClass(weekNum);
-                if (result[0] != null) {
-                    setNextCourse(result[0], result[1], result[2], result[3]);
-                }
+                setNextCourse(result[0], result[1], result[2], result[3]);
             }
         }
     }
 
     public void setNextCourse(String name, String location, String teacher, String time) {
         if (isAdded()) {
-            TextView textView_nextClass = view.findViewById(R.id.textView_nextClass);
-            TextView textView_nextLocation = view.findViewById(R.id.textView_nextLocation);
-            TextView textView_nextTeacher = view.findViewById(R.id.textView_nextTeacher);
-            TextView textView_nextTime = view.findViewById(R.id.textView_nextTime);
-
-            textView_nextClass.setText(name);
-            textView_nextLocation.setText(location);
-            textView_nextTeacher.setText(teacher);
-            textView_nextTime.setText(time);
-
             TextView textView_noNextClass = view.findViewById(R.id.textView_noNextClass);
-            textView_noNextClass.setVisibility(View.GONE);
             LinearLayout linearLayout_nextClass = view.findViewById(R.id.layout_nextClass);
-            linearLayout_nextClass.setVisibility(View.VISIBLE);
+            if (name == null) {
+                linearLayout_nextClass.setVisibility(View.GONE);
+                textView_noNextClass.setVisibility(View.VISIBLE);
+            } else {
+                TextView textView_nextClass = view.findViewById(R.id.textView_nextClass);
+                TextView textView_nextLocation = view.findViewById(R.id.textView_nextLocation);
+                TextView textView_nextTeacher = view.findViewById(R.id.textView_nextTeacher);
+                TextView textView_nextTime = view.findViewById(R.id.textView_nextTime);
+
+                textView_nextClass.setText(name);
+                textView_nextLocation.setText(location);
+                textView_nextTeacher.setText(teacher);
+                textView_nextTime.setText(time);
+
+                textView_noNextClass.setVisibility(View.GONE);
+                linearLayout_nextClass.setVisibility(View.VISIBLE);
+            }
         }
     }
 
