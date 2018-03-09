@@ -16,7 +16,7 @@ import tool.xfy9326.naucourse.Utils.JwcTopic;
 
 /**
  * Created by xfy9326 on 18-2-21.
- * 教务信息获取方法
+ * 获取教务系统信息
  */
 
 public class JwcInfoMethod {

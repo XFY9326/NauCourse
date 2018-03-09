@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.Utils;
 
 /**
  * Created by xfy9326 on 18-2-21.
+ * 课程信息
  */
 
 public class Course {

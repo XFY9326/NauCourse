@@ -54,8 +54,7 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_SHOW_NEXT_WEEK = true;
     public static final boolean DEFAULT_PREFERENCE_NOTIFY_NEXT_CLASS = true;
 
-    public static final String TAG_TEMP_SAVE_FAILED = "TEMP_SAVE_FAILED";
-
+    //网络连接错误代码
     public static final int NET_WORK_GET_SUCCESS = 0;
     public static final int NET_WORK_ERROR_CODE_CONNECT_ERROR = 1;
     public static final int NET_WORK_ERROR_CODE_CONNECT_USER_DATA = 2;

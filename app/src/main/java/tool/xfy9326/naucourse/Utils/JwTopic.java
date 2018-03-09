@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.Utils;
 
 /**
  * Created by 10696 on 2018/2/28.
+ * 教务处信息
  */
 
 public class JwTopic {

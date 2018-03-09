@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Locale;
 
 import tool.xfy9326.naucourse.BaseApplication;
-import tool.xfy9326.naucourse.BuildConfig;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Tools.AES;
@@ -67,6 +66,7 @@ public class BaseMethod {
         return true;
     }
 
+    //网络是否联接检测
     public static boolean isNetworkConnected(Context context) {
         if (context != null) {
             ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -80,6 +80,7 @@ public class BaseMethod {
         return false;
     }
 
+    //WIFI网络检测
     private static boolean isWifiNetWork(Context context) {
         if (context != null) {
             ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -93,6 +94,7 @@ public class BaseMethod {
         return false;
     }
 
+    //双击退出
     public static void doubleClickExit(Activity activity) {
         long time = System.currentTimeMillis();
         if (time - DoubleClickTime > 1200) {
@@ -254,11 +256,7 @@ public class BaseMethod {
         if (file.exists()) {
             String data = IO.readFile(path);
             String id = PreferenceManager.getDefaultSharedPreferences(context).getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
-            if (BuildConfig.DEBUG) {
-                return new Gson().fromJson(data, file_class);
-            } else {
-                return new Gson().fromJson(AES.decrypt(data, id), file_class);
-            }
+            return new Gson().fromJson(AES.decrypt(data, id), file_class);
         } else {
             return null;
         }
@@ -273,12 +271,7 @@ public class BaseMethod {
             Type type = new TypeToken<ArrayList<Course>>() {
             }.getType();
             System.gc();
-            //Debug模式下数据不加密
-            if (BuildConfig.DEBUG) {
-                return new Gson().fromJson(data, type);
-            } else {
-                return new Gson().fromJson(AES.decrypt(data, id), type);
-            }
+            return new Gson().fromJson(AES.decrypt(data, id), type);
         } else {
             return null;
         }
@@ -292,14 +285,9 @@ public class BaseMethod {
                 String data = new Gson().toJson(o);
                 String content;
                 System.gc();
-                //Debug模式下数据不加密
-                if (BuildConfig.DEBUG) {
-                    content = data;
-                } else {
-                    content = AES.encrypt(data, id);
-                }
+                content = AES.encrypt(data, id);
                 if (!IO.writeFile(content, context.getFilesDir() + File.separator + FILE_NAME)) {
-                    Log.d(Config.TAG_TEMP_SAVE_FAILED, FILE_NAME);
+                    Log.d("TEMP_SAVE_FAILED", FILE_NAME);
                 }
             }
         }).start();

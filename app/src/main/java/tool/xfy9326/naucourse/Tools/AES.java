@@ -9,6 +9,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Created by xfy9326 on 18-2-20.
+ * AES加密解密
  */
 
 public class AES {

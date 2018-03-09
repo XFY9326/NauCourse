@@ -19,6 +19,7 @@ import tool.xfy9326.naucourse.Utils.JwTopic;
 
 /**
  * Created by 10696 on 2018/2/28.
+ * 获取教务信息
  */
 
 public class JwInfoMethod {

@@ -21,12 +21,13 @@ import tool.xfy9326.naucourse.Views.NextClassWidget;
 
 /**
  * Created by 10696 on 2018/3/8.
+ * 课程信息自动定时更新
  */
 
 public class UpdateReceiver extends BroadcastReceiver {
     public static final String UPDATE_ACTION = "tool.xfy9326.naucourse.Receivers.UpdateReceiver.Update";
     private static final int REQUEST_ON_UPDATE = 1;
-    boolean isClassBeforeNotify = false;
+    private boolean isClassBeforeNotify = false;
     private String[] nextData;
 
     private static void setNextAlarm(Context context, long time) {
@@ -62,6 +63,7 @@ public class UpdateReceiver extends BroadcastReceiver {
         }
     }
 
+    //获取下次更新的时间
     private long nextUpdateTimeCount(Context context) {
         long time;
         Calendar calendar = Calendar.getInstance(Locale.CHINA);
@@ -76,6 +78,7 @@ public class UpdateReceiver extends BroadcastReceiver {
         calendar.set(Calendar.MINUTE, Integer.valueOf(time_end[1]));
         boolean todayCourseFinish = nowTime >= calendar.getTimeInMillis();
 
+        //一天的上课结束后
         if (todayCourseFinish || nextData[0] == null) {
             String[] time_temp = startTime[0].split(":");
             calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time_temp[0]));
@@ -91,12 +94,14 @@ public class UpdateReceiver extends BroadcastReceiver {
             calendar.add(Calendar.MINUTE, -10);
 
             if (nowTime >= calendar.getTimeInMillis()) {
+                //过了上课时间
                 time_temp = nextData[3].split("~")[1].split(":");
                 calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time_temp[0]));
                 calendar.set(Calendar.MINUTE, Integer.valueOf(time_temp[1]) + 1);
                 time = calendar.getTimeInMillis();
                 isClassBeforeNotify = false;
             } else {
+                //上课前
                 time = calendar.getTimeInMillis();
                 isClassBeforeNotify = true;
             }

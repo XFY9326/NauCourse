@@ -176,12 +176,14 @@ public class CourseMethod {
             tableData = new TableData<>(title, tableLines, getColumns());
             smartTable.setTableData(tableData);
         } else {
+            //更新表格顶部的日期
             tableData.setColumns(getColumns());
             tableData.setT(tableLines);
         }
     }
 
     private List<Column> getColumns() {
+        //仅支持周一到周五的计算
         List<String> week_day = BaseMethod.getWeekDayArray(context, weekNum, schoolTime.getStartTime());
 
         Column<String> columnDate = new Column<>(context.getString(R.string.date), "courseTime");
@@ -258,6 +260,7 @@ public class CourseMethod {
         System.gc();
     }
 
+    //设置表格的上课时间列
     private void setTableTimeLine(List<String> course_time) {
         for (int i = 0; i < course_time.size(); i++) {
             table[0][i] = course_time.get(i);
@@ -296,6 +299,7 @@ public class CourseMethod {
 
     }
 
+    //检查是否在该周上课
     private boolean weekCheck(CourseDetail detail, int weekNum) {
         String[] weeks = detail.getWeeks();
         for (String week : weeks) {
@@ -313,6 +317,7 @@ public class CourseMethod {
         return false;
     }
 
+    //设置课程到二维数组
     private void courseSet(Course course, CourseDetail detail, int weekNum, String startSchoolDate) {
         String[] courseTimes = detail.getCourseTime();
         int startSchoolWeekDay = getStartSchoolWeekDay(startSchoolDate);
@@ -349,7 +354,7 @@ public class CourseMethod {
         return 1;
     }
 
-    //表格插件问题，换行后下一行的会显示在上面
+    //表格插件问题，换行后下一行的会显示在上面，未来可能会修复（1.9.0未修复）
     private String getShowDetail(Course course, CourseDetail courseDetail) {
         return ("@" + courseDetail.getLocation() + "\n" + course.getCourseName()).trim();
     }

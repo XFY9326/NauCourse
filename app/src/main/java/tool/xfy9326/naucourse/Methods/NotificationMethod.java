@@ -17,6 +17,7 @@ import tool.xfy9326.naucourse.R;
 
 /**
  * Created by 10696 on 2018/3/9.
+ * 显示上课信息的通知
  */
 
 public class NotificationMethod {

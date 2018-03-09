@@ -12,6 +12,7 @@ import tool.xfy9326.naucourse.Utils.SchoolTime;
 
 /**
  * Created by 10696 on 2018/3/9.
+ * 非Fragment内获取下一节课
  */
 
 public class NextClassMethod {

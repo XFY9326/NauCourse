@@ -16,6 +16,7 @@ import tool.xfy9326.naucourse.Utils.Exam;
 
 /**
  * Created by 10696 on 2018/3/3.
+ * 获取考试信息
  */
 
 public class ExamMethod {
