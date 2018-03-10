@@ -35,6 +35,7 @@ import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.JwTopic;
 import tool.xfy9326.naucourse.Utils.JwcTopic;
+import tool.xfy9326.naucourse.Utils.NextCourse;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
 import tool.xfy9326.naucourse.Views.InfoAdapter;
 
@@ -145,8 +146,8 @@ public class HomeFragment extends Fragment {
             if (schoolTime != null && courses != null && weekNum != 0) {
                 schoolTime.setWeekNum(weekNum);
                 CourseMethod courseMethod = new CourseMethod(context, courses, schoolTime);
-                String[] result = courseMethod.getNextClass(weekNum);
-                setNextCourse(result[0], result[1], result[2], result[3]);
+                NextCourse nextCourse = courseMethod.getNextClass(weekNum);
+                setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
             }
         }
     }

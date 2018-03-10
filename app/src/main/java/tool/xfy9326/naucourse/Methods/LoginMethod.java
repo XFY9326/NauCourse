@@ -18,6 +18,7 @@ import tool.xfy9326.naucourse.Tools.AES;
 
 public class LoginMethod {
 
+    //获取教务系统详情数据
     static String getData(Context context, String url) throws Exception {
         String data = BaseMethod.getBaseApplication(context).getClient().getUserData(url);
         if (!checkUserLogin(data)) {
@@ -31,11 +32,13 @@ public class LoginMethod {
         return data;
     }
 
+    //用户登陆成功检测
     static boolean checkUserLogin(String data) {
         return !(data.contains("系统错误提示页") && data.contains("当前程序在执行过程中出现了未知异常，请重试") || data.contains("用户登录_南京审计大学教务管理系统"));
     }
 
-    private static boolean reLogin(Context context) throws Exception {
+    //用户cookie过期后自动尝试重登录
+    synchronized private static boolean reLogin(Context context) throws Exception {
         Log.d("DATA", "TRY LOGIN");
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String id = sharedPreferences.getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
@@ -54,6 +57,7 @@ public class LoginMethod {
         return false;
     }
 
+    //注销登陆
     public static boolean loginOut(Context context) {
         try {
             boolean result = false;

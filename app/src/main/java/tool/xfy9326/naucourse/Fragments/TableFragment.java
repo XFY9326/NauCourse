@@ -37,6 +37,7 @@ import tool.xfy9326.naucourse.Methods.CourseMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.CourseDetail;
+import tool.xfy9326.naucourse.Utils.NextCourse;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
 import tool.xfy9326.naucourse.Utils.TableLine;
 import tool.xfy9326.naucourse.Views.NextClassWidget;
@@ -186,8 +187,8 @@ public class TableFragment extends Fragment {
 
                 if (!inVacation) {
                     HomeFragment homeFragment = BaseMethod.getBaseApplication(context).getViewPagerAdapter().getHomeFragment();
-                    String[] courseNext = courseMethod.getNextClass(weekNum);
-                    homeFragment.setNextCourse(courseNext[0], courseNext[1], courseNext[2], courseNext[3]);
+                    NextCourse nextCourse = courseMethod.getNextClass(weekNum);
+                    homeFragment.setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
                 }
 
                 courseMethod.setOnCourseTableClickListener(new CourseMethod.OnCourseTableItemClickListener() {

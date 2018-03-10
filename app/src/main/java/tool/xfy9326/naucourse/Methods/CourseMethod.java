@@ -20,6 +20,7 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.CourseDetail;
+import tool.xfy9326.naucourse.Utils.NextCourse;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
 import tool.xfy9326.naucourse.Utils.TableLine;
 
@@ -57,7 +58,9 @@ public class CourseMethod {
         this.tableData = null;
     }
 
-    private static String[] getNextClass(Context context, String[][] this_week_table, String[][] this_week_id_table, ArrayList<Course> courses) {
+    private static NextCourse getNextClass(Context context, String[][] this_week_table, String[][] this_week_id_table, ArrayList<Course> courses) {
+        NextCourse nextCourse = new NextCourse();
+        //数组内容： 课程名称 上课地点 授课教师 上课时间 id
         String[] result = new String[5];
         //仅限周一到周五的计算
         Calendar calendar = Calendar.getInstance(Locale.CHINA);
@@ -86,7 +89,7 @@ public class CourseMethod {
                         }
                         result[0] = today[i].substring(today[i].indexOf("\n") + 1);
                         result[1] = today[i].substring(1, today[i].indexOf("\n"));
-                        result[2] = todayId[i];
+                        result[4] = todayId[i];
                         course_endTime = times[i];
                         if (!lastId.equals(todayId[i])) {
                             course_startTime = startTimes[i];
@@ -98,16 +101,14 @@ public class CourseMethod {
                 }
             }
             if (nowTime > todayFinalCourseTime) {
-                return new String[5];
+                return nextCourse;
             }
 
             result[3] = course_startTime + "~" + course_endTime;
 
-            result[4] = result[2];
-
-            if (result[2] != null) {
+            if (result[4] != null) {
                 for (Course course : courses) {
-                    if (course.getCourseId().equals(result[2])) {
+                    if (course.getCourseId().equals(result[4])) {
                         result[2] = course.getCourseTeacher();
                         break;
                     }
@@ -115,7 +116,13 @@ public class CourseMethod {
             }
 
         }
-        return result;
+
+        nextCourse.setCourseId(result[4]);
+        nextCourse.setCourseName(result[0]);
+        nextCourse.setCourseLocation(result[1]);
+        nextCourse.setCourseTeacher(result[2]);
+        nextCourse.setCourseTime(result[3]);
+        return nextCourse;
     }
 
     public void setTableView(SmartTable<TableLine> smartTable) {
@@ -134,8 +141,8 @@ public class CourseMethod {
         return false;
     }
 
-    //课程名称 上课地点 授课教师 上课时间 id
-    public String[] getNextClass(int weekNum) {
+    //获取下一节课信息
+    public NextCourse getNextClass(int weekNum) {
         if (this.weekNum != weekNum || table == null) {
             getTable(weekNum, schoolTime.getStartTime());
         }

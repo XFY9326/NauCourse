@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.AlarmManagerCompat;
+import android.util.Log;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -17,6 +18,7 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.NextClassMethod;
 import tool.xfy9326.naucourse.Methods.NotificationMethod;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.Utils.NextCourse;
 import tool.xfy9326.naucourse.Views.NextClassWidget;
 
 /**
@@ -28,7 +30,7 @@ public class UpdateReceiver extends BroadcastReceiver {
     public static final String UPDATE_ACTION = "tool.xfy9326.naucourse.Receivers.UpdateReceiver.Update";
     private static final int REQUEST_ON_UPDATE = 1;
     private boolean isClassBeforeNotify = false;
-    private String[] nextData;
+    private NextCourse nextCourse;
 
     private static void setNextAlarm(Context context, long time) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -46,15 +48,13 @@ public class UpdateReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction() != null) {
             if (intent.getAction().equals(UPDATE_ACTION)) {
+                nextCourse = NextClassMethod.getNextClassArray(context);
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
                 if (!intent.getBooleanExtra(Config.INTENT_IS_ONLY_INIT, false)) {
-                    nextData = NextClassMethod.getNextClassArray(context);
-
                     if (sharedPreferences.getBoolean(Config.PREFERENCE_CLASS_BEFORE_NOTIFY, false) && sharedPreferences.getBoolean(Config.PREFERENCE_NOTIFY_NEXT_CLASS, Config.DEFAULT_PREFERENCE_NOTIFY_NEXT_CLASS)) {
-                        NotificationMethod.showNextClassNotification(context, nextData);
+                        NotificationMethod.showNextClassNotification(context, nextCourse);
                     }
-
-                    context.sendBroadcast(new Intent(context, NextClassWidget.class).setAction(NextClassWidget.ACTION_ON_CLICK).putExtra(Config.INTENT_NEXT_CLASS_DATA, nextData));
+                    context.sendBroadcast(new Intent(context, NextClassWidget.class).setAction(NextClassWidget.ACTION_ON_CLICK).putExtra(Config.INTENT_NEXT_CLASS_DATA, nextCourse));
                 }
                 setNextAlarm(context, nextUpdateTimeCount(context));
 
@@ -79,7 +79,7 @@ public class UpdateReceiver extends BroadcastReceiver {
         boolean todayCourseFinish = nowTime >= calendar.getTimeInMillis();
 
         //一天的上课结束后
-        if (todayCourseFinish || nextData[0] == null) {
+        if (todayCourseFinish || nextCourse.getCourseId() == null) {
             String[] time_temp = startTime[0].split(":");
             calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time_temp[0]));
             calendar.set(Calendar.MINUTE, Integer.valueOf(time_temp[1]));
@@ -88,14 +88,14 @@ public class UpdateReceiver extends BroadcastReceiver {
             time = calendar.getTimeInMillis();
             isClassBeforeNotify = false;
         } else {
-            String[] time_temp = nextData[3].split("~")[0].split(":");
+            String[] time_temp = nextCourse.getCourseTime().split("~")[0].split(":");
             calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time_temp[0]));
             calendar.set(Calendar.MINUTE, Integer.valueOf(time_temp[1]));
             calendar.add(Calendar.MINUTE, -10);
 
             if (nowTime >= calendar.getTimeInMillis()) {
                 //过了上课时间
-                time_temp = nextData[3].split("~")[1].split(":");
+                time_temp = nextCourse.getCourseTime().split("~")[1].split(":");
                 calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time_temp[0]));
                 calendar.set(Calendar.MINUTE, Integer.valueOf(time_temp[1]) + 1);
                 time = calendar.getTimeInMillis();
@@ -106,6 +106,7 @@ public class UpdateReceiver extends BroadcastReceiver {
                 isClassBeforeNotify = true;
             }
         }
+        Log.d("NEXT_ALARM_TIME", String.valueOf(time / 1000));
         return time;
     }
 

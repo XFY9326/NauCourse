@@ -18,6 +18,7 @@ import java.util.Locale;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.NextClassMethod;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.Utils.NextCourse;
 
 /**
  * Created by 10696 on 2018/2/27.
@@ -27,7 +28,7 @@ import tool.xfy9326.naucourse.R;
 public class NextClassWidget extends AppWidgetProvider {
     public static final String ACTION_ON_CLICK = "tool.xfy9326.naucourse.Views.NextClassWidget.OnClick";
     private static final int REQUEST_ON_CLICK = 1;
-    private static String[] nextData;
+    private static NextCourse nextCourse = null;
 
     synchronized private static RemoteViews ViewGet(Context context) {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.app_widget_next_class);
@@ -40,18 +41,16 @@ public class NextClassWidget extends AppWidgetProvider {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
-            String[] result;
-            if (nextData != null) {
-                result = nextData;
-            } else {
-                result = NextClassMethod.getNextClassArray(context);
+            NextCourse next = nextCourse;
+            if (next == null) {
+                next = NextClassMethod.getNextClassArray(context);
             }
-            if (result != null) {
-                if (result[0] != null) {
-                    remoteViews.setTextViewText(R.id.textView_app_widget_nextClass, result[0]);
-                    remoteViews.setTextViewText(R.id.textView_app_widget_nextLocation, result[1]);
-                    remoteViews.setTextViewText(R.id.textView_app_widget_nextTeacher, result[2]);
-                    remoteViews.setTextViewText(R.id.textView_app_widget_nextTime, result[3]);
+            if (next != null) {
+                if (next.getCourseId() != null) {
+                    remoteViews.setTextViewText(R.id.textView_app_widget_nextClass, next.getCourseName());
+                    remoteViews.setTextViewText(R.id.textView_app_widget_nextLocation, next.getCourseLocation());
+                    remoteViews.setTextViewText(R.id.textView_app_widget_nextTeacher, next.getCourseTeacher());
+                    remoteViews.setTextViewText(R.id.textView_app_widget_nextTime, next.getCourseTime());
 
                     remoteViews.setViewVisibility(R.id.textView_app_widget_noNextClass, View.GONE);
                     remoteViews.setViewVisibility(R.id.layout_app_widget_nextClass, View.VISIBLE);
@@ -82,7 +81,7 @@ public class NextClassWidget extends AppWidgetProvider {
             if (action.equals(ACTION_ON_CLICK)) {
                 ComponentName componentName = new ComponentName(context, NextClassWidget.class);
                 AppWidgetManager.getInstance(context).updateAppWidget(componentName, ViewGet(context));
-                nextData = intent.getStringArrayExtra(Config.INTENT_NEXT_CLASS_DATA);
+                nextCourse = (NextCourse) intent.getSerializableExtra(Config.INTENT_NEXT_CLASS_DATA);
             }
         }
         super.onReceive(context, intent);

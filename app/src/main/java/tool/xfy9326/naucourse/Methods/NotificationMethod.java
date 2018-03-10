@@ -14,6 +14,7 @@ import android.support.v4.app.NotificationCompat;
 import tool.xfy9326.naucourse.Activities.MainActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.Utils.NextCourse;
 
 /**
  * Created by 10696 on 2018/3/9.
@@ -25,11 +26,11 @@ public class NotificationMethod {
     private static final int NOTIFICATION_CODE = 1;
     private static final String CHANNEL_ID = "channel_next_course_notify";
 
-    public static void showNextClassNotification(Context context, String[] nextClassData) {
-        if (nextClassData[0] != null) {
+    public static void showNextClassNotification(Context context, NextCourse nextCourse) {
+        if (nextCourse.getCourseId() != null) {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             String lastNotifyId = sharedPreferences.getString(Config.PREFERENCE_LAST_NOTIFY_ID, null);
-            if (lastNotifyId == null || !lastNotifyId.equals(nextClassData[4])) {
+            if (lastNotifyId == null || !lastNotifyId.equals(nextCourse.getCourseId())) {
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 if (notificationManager != null) {
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
@@ -37,15 +38,15 @@ public class NotificationMethod {
                     CreateNotificationChannel(context, notificationManager);
 
                     builder.setSmallIcon(R.mipmap.ic_launcher_round);
-                    builder.setContentTitle(nextClassData[0]);
-                    builder.setContentText(nextClassData[2] + "  " + nextClassData[1] + "  " + nextClassData[3]);
+                    builder.setContentTitle(nextCourse.getCourseName());
+                    builder.setContentText(nextCourse.getCourseTeacher() + "  " + nextCourse.getCourseLocation() + "  " + nextCourse.getCourseTime());
                     builder.setAutoCancel(true);
 
                     PendingIntent pendingIntent = PendingIntent.getActivity(context, ACTIVITY_REQUEST_CODE, new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), PendingIntent.FLAG_CANCEL_CURRENT);
                     builder.setContentIntent(pendingIntent);
 
                     notificationManager.notify(NOTIFICATION_CODE, builder.build());
-                    sharedPreferences.edit().putString(Config.PREFERENCE_LAST_NOTIFY_ID, nextClassData[4]).apply();
+                    sharedPreferences.edit().putString(Config.PREFERENCE_LAST_NOTIFY_ID, nextCourse.getCourseId()).apply();
                 }
             }
         }
