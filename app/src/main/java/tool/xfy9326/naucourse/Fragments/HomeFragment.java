@@ -174,6 +174,7 @@ public class HomeFragment extends Fragment {
             if (name == null) {
                 linearLayout_nextClass.setVisibility(View.GONE);
                 textView_noNextClass.setVisibility(View.VISIBLE);
+                BaseMethod.deleteOfflineData(context, NEXT_COURSE_FILE_NAME);
             } else {
                 TextView textView_nextClass = view.findViewById(R.id.textView_nextClass);
                 TextView textView_nextLocation = view.findViewById(R.id.textView_nextLocation);
