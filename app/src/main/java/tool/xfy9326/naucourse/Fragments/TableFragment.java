@@ -201,7 +201,9 @@ public class TableFragment extends Fragment {
                 });
 
                 //初始化自动更新
-                context.sendBroadcast(new Intent(UpdateReceiver.UPDATE_ACTION).putExtra(Config.INTENT_IS_ONLY_INIT, true));
+                if (getActivity() != null) {
+                    getActivity().sendBroadcast(new Intent(context, UpdateReceiver.class).setAction(UpdateReceiver.UPDATE_ACTION).putExtra(Config.INTENT_IS_ONLY_INIT, true));
+                }
 
                 if (loadTime > 0) {
                     context.sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));

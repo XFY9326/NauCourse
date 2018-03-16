@@ -23,7 +23,7 @@ import tool.xfy9326.naucourse.Views.NextClassWidget;
 
 /**
  * Created by 10696 on 2018/3/8.
- * 课程信息自动定时更新
+ * 课程信息自动定时更新(Testing)
  */
 
 public class UpdateReceiver extends BroadcastReceiver {

@@ -15,7 +15,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 27
         versionCode 11
-        versionName "2.0-beta"
+        versionName "2.0"
         resConfigs "zh"
     }
 
