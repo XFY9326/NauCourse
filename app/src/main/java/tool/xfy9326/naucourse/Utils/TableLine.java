@@ -13,14 +13,18 @@ public class TableLine {
     private String courseWe = null;
     private String courseTh = null;
     private String courseFr = null;
+    private String courseSa = null;
+    private String courseSu = null;
 
-    public TableLine(String courseTime, String courseMo, String courseTu, String courseWe, String courseTh, String courseFr) {
+    public TableLine(String courseTime, String courseMo, String courseTu, String courseWe, String courseTh, String courseFr, String courseSa, String courseSu) {
         this.courseTime = courseTime;
         this.courseMo = courseMo;
         this.courseTu = courseTu;
         this.courseWe = courseWe;
         this.courseTh = courseTh;
         this.courseFr = courseFr;
+        this.courseSa = courseSa;
+        this.courseSu = courseSu;
     }
 
     public String getCourseTime() {
@@ -69,5 +73,21 @@ public class TableLine {
 
     public void setCourseFr(String courseFr) {
         this.courseFr = courseFr;
+    }
+
+    public String getCourseSa() {
+        return courseSa;
+    }
+
+    public void setCourseSa(String courseSa) {
+        this.courseSa = courseSa;
+    }
+
+    public String getCourseSu() {
+        return courseSu;
+    }
+
+    public void setCourseSu(String courseSu) {
+        this.courseSu = courseSu;
     }
 }

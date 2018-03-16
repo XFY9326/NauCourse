@@ -25,7 +25,6 @@ import tool.xfy9326.naucourse.Activities.ExamActivity;
 import tool.xfy9326.naucourse.Activities.ScoreActivity;
 import tool.xfy9326.naucourse.Activities.SettingsActivity;
 import tool.xfy9326.naucourse.AsyncTasks.StudentAsync;
-import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
@@ -98,33 +97,49 @@ public class PersonFragment extends Fragment {
         cardView_score.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, ScoreActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+                if (getActivity() != null) {
+                    if (isAdded()) {
+                        Intent intent = new Intent(context, ScoreActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getActivity().startActivity(intent);
+                    }
+                }
             }
         });
         cardView_exam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, ExamActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+                if (getActivity() != null) {
+                    if (isAdded()) {
+                        Intent intent = new Intent(context, ExamActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getActivity().startActivity(intent);
+                    }
+                }
             }
         });
         cardView_settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, SettingsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivityForResult(intent, Config.REQUEST_ACTIVITY_SETTINGS_LOGIN_OUT);
+                if (getActivity() != null) {
+                    if (isAdded()) {
+                        Intent intent = new Intent(context, SettingsActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getActivity().startActivity(intent);
+                    }
+                }
             }
         });
         cardView_about.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, AboutActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+                if (getActivity() != null) {
+                    if (isAdded()) {
+                        Intent intent = new Intent(context, AboutActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getActivity().startActivity(intent);
+                    }
+                }
             }
         });
     }
@@ -187,20 +202,6 @@ public class PersonFragment extends Fragment {
                 getData();
             }
         }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Config.REQUEST_ACTIVITY_SETTINGS_LOGIN_OUT) {
-            if (data != null) {
-                if (data.getBooleanExtra(Config.INTENT_IS_LOGIN_OUT, false)) {
-                    if (getActivity() != null) {
-                        getActivity().finish();
-                    }
-                }
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void getData() {

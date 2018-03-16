@@ -46,6 +46,10 @@ public class ExamMethod {
         return Config.NET_WORK_ERROR_CODE_CONNECT_NO_LOGIN;
     }
 
+    public void saveTemp() {
+        getExam();
+    }
+
     public Exam getExam() {
         ArrayList<String> examId = new ArrayList<>();
         ArrayList<String> examName = new ArrayList<>();

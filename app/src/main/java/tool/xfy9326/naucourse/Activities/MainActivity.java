@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
+import tool.xfy9326.naucourse.AsyncTasks.TempAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.R;
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loginCheck();
+        BaseMethod.getBaseApplication(this).setMainActivity(this);
         setContentView(R.layout.activity_main);
         ToolBarSet();
         ViewSet();
@@ -44,7 +47,9 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, Config.REQUEST_ACTIVITY_LOGIN);
             finish();
         } else {
-            if (!BaseMethod.isNetworkConnected(this)) {
+            if (BaseMethod.isNetworkConnected(this)) {
+                new TempAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
+            } else {
                 Toast.makeText(this, R.string.network_error, Toast.LENGTH_SHORT).show();
             }
         }
@@ -95,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         System.gc();
+        BaseMethod.getBaseApplication(this).setMainActivity(null);
         super.onDestroy();
     }
 }

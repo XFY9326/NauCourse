@@ -29,6 +29,13 @@
     <PreferenceCategory android:title="@string/course_table_manage">
         <CheckBoxPreference
             android:defaultValue="true"
+            android:disableDependentsState="true"
+            android:key="SHOW_WEEKEND"
+            android:summary="@string/show_weekend_sum"
+            android:title="@string/show_weekend" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="SHOW_WEEKEND"
             android:key="SHOW_NEXT_WEEK"
             android:summary="@string/show_next_week_sum"
             android:title="@string/show_next_week" />

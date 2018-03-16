@@ -1,0 +1,36 @@
+package tool.xfy9326.naucourse.AsyncTasks;
+
+import android.content.Context;
+import android.os.AsyncTask;
+
+import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.Methods.ExamMethod;
+import tool.xfy9326.naucourse.Methods.ScoreMethod;
+
+/**
+ * Created by 10696 on 2018/3/16.
+ * 提前缓存数据
+ */
+
+public class TempAsync extends AsyncTask<Context, Void, Void> {
+
+    public TempAsync() {
+    }
+
+    @Override
+    protected Void doInBackground(Context... contexts) {
+        try {
+            ExamMethod examMethod = new ExamMethod(contexts[0]);
+            if (examMethod.load() == Config.NET_WORK_GET_SUCCESS) {
+                examMethod.saveTemp();
+            }
+            ScoreMethod scoreMethod = new ScoreMethod(contexts[0]);
+            if (scoreMethod.load() == Config.NET_WORK_GET_SUCCESS) {
+                scoreMethod.saveTemp();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+}

@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.Methods;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.preference.PreferenceManager;
 
 import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.data.column.Column;
@@ -47,6 +48,7 @@ public class CourseMethod {
         this.context = context;
         this.courses = courses;
         this.schoolTime = schoolTime;
+        //假期中默认显示第一周
         this.weekNum = schoolTime.getWeekNum();
         if (weekNum == 0) {
             weekNum = 1;
@@ -62,60 +64,60 @@ public class CourseMethod {
         NextCourse nextCourse = new NextCourse();
         //数组内容： 课程名称 上课地点 授课教师 上课时间 id
         String[] result = new String[5];
-        //仅限周一到周五的计算
         Calendar calendar = Calendar.getInstance(Locale.CHINA);
         int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        if (weekDayNum == 0) {
+            weekDayNum = 7;
+        }
 
-        if (weekDayNum > 0 && weekDayNum < 6) {
-            String[] today = this_week_table[weekDayNum];
-            String[] todayId = this_week_id_table[weekDayNum];
-            String[] startTimes = context.getResources().getStringArray(R.array.course_start_time);
-            String[] times = context.getResources().getStringArray(R.array.course_finish_time);
-            long nowTime = calendar.getTimeInMillis();
-            String lastId = "";
-            String findCourseId = "";
-            String course_startTime = "";
-            String course_endTime = "";
-            long todayFinalCourseTime = 0;
-            for (int i = 0; i < times.length; i++) {
-                if (today[i] != null) {
-                    String[] time_temp = times[i].split(":");
-                    calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time_temp[0]));
-                    calendar.set(Calendar.MINUTE, Integer.valueOf(time_temp[1]));
-                    long courseTime = calendar.getTimeInMillis();
-                    if (courseTime > nowTime) {
-                        if (!findCourseId.equals(todayId[i]) && !findCourseId.equals("")) {
-                            break;
-                        }
-                        result[0] = today[i].substring(0, today[i].indexOf("\n"));
-                        result[1] = today[i].substring(today[i].indexOf("\n") + 2);
-                        result[4] = todayId[i];
-                        course_endTime = times[i];
-                        if (!lastId.equals(todayId[i])) {
-                            course_startTime = startTimes[i];
-                            findCourseId = todayId[i];
-                        }
-                        lastId = todayId[i];
-                    }
-                    todayFinalCourseTime = courseTime;
-                }
-            }
-            if (nowTime > todayFinalCourseTime) {
-                return nextCourse;
-            }
-
-            result[3] = course_startTime + "~" + course_endTime;
-
-            if (result[4] != null) {
-                for (Course course : courses) {
-                    if (course.getCourseId().equals(result[4])) {
-                        result[2] = course.getCourseTeacher();
+        String[] today = this_week_table[weekDayNum];
+        String[] todayId = this_week_id_table[weekDayNum];
+        String[] startTimes = context.getResources().getStringArray(R.array.course_start_time);
+        String[] times = context.getResources().getStringArray(R.array.course_finish_time);
+        long nowTime = calendar.getTimeInMillis();
+        String lastId = "";
+        String findCourseId = "";
+        String course_startTime = "";
+        String course_endTime = "";
+        long todayFinalCourseTime = 0;
+        for (int i = 0; i < times.length; i++) {
+            if (today[i] != null) {
+                String[] time_temp = times[i].split(":");
+                calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time_temp[0]));
+                calendar.set(Calendar.MINUTE, Integer.valueOf(time_temp[1]));
+                long courseTime = calendar.getTimeInMillis();
+                if (courseTime > nowTime) {
+                    if (!findCourseId.equals(todayId[i]) && !findCourseId.equals("")) {
                         break;
                     }
+                    result[0] = today[i].substring(0, today[i].indexOf("\n"));
+                    result[1] = today[i].substring(today[i].indexOf("\n") + 2);
+                    result[4] = todayId[i];
+                    course_endTime = times[i];
+                    if (!lastId.equals(todayId[i])) {
+                        course_startTime = startTimes[i];
+                        findCourseId = todayId[i];
+                    }
+                    lastId = todayId[i];
+                }
+                todayFinalCourseTime = courseTime;
+            }
+        }
+        if (nowTime > todayFinalCourseTime) {
+            return nextCourse;
+        }
+
+        result[3] = course_startTime + "~" + course_endTime;
+
+        if (result[4] != null) {
+            for (Course course : courses) {
+                if (course.getCourseId().equals(result[4])) {
+                    result[2] = course.getCourseTeacher();
+                    break;
                 }
             }
-
         }
+
 
         nextCourse.setCourseId(result[4]);
         nextCourse.setCourseName(result[0]);
@@ -141,6 +143,16 @@ public class CourseMethod {
         return false;
     }
 
+    public boolean updateCourseTableView() {
+        if (loadSuccess) {
+            loadSuccess = false;
+            loadView();
+            smartTable.notifyDataChanged();
+            return true;
+        }
+        return false;
+    }
+
     //获取下一节课信息
     public NextCourse getNextClass(int weekNum) {
         if (this.weekNum != weekNum || table == null) {
@@ -156,7 +168,6 @@ public class CourseMethod {
     synchronized private void loadView() {
         if (smartTable != null && !loadSuccess && weekNum != 0) {
             setTableCourse();
-            //表格数值加载到视图, 仅支持五天课程
             if (tableLines != null) {
                 tableLines.clear();
             } else {
@@ -168,7 +179,9 @@ public class CourseMethod {
                 String we = table[3][i];
                 String th = table[4][i];
                 String fr = table[5][i];
-                TableLine tableLine = new TableLine(table[0][i], mo, tu, we, th, fr);
+                String sa = table[6][i];
+                String su = table[7][i];
+                TableLine tableLine = new TableLine(table[0][i], mo, tu, we, th, fr, sa, su);
                 tableLines.add(tableLine);
             }
             getTableData(tableLines);
@@ -190,7 +203,6 @@ public class CourseMethod {
     }
 
     private List<Column> getColumns() {
-        //仅支持周一到周五的计算
         List<String> week_day = BaseMethod.getWeekDayArray(context, weekNum, schoolTime.getStartTime());
 
         Column<String> columnDate = new Column<>(context.getString(R.string.date), "courseTime");
@@ -205,6 +217,10 @@ public class CourseMethod {
         columnSet(columnTh);
         Column<String> columnFr = new Column<>(week_day.get(4), "courseFr");
         columnSet(columnFr);
+        Column<String> columnSa = new Column<>(week_day.get(5), "courseSa");
+        columnSet(columnSa);
+        Column<String> columnSu = new Column<>(week_day.get(6), "courseSu");
+        columnSet(columnSu);
 
         List<Column> columns = new ArrayList<>();
         columns.add(columnDate);
@@ -214,6 +230,10 @@ public class CourseMethod {
         columns.add(columnTh);
         columns.add(columnFr);
 
+        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_WEEKEND, Config.DEFAULT_PREFERENCE_SHOW_WEEKEND)) {
+            columns.add(columnSa);
+            columns.add(columnSu);
+        }
         return columns;
     }
 
@@ -225,7 +245,6 @@ public class CourseMethod {
         column.setOnColumnItemClickListener(new OnColumnItemClickListener<String>() {
             @Override
             public void onClick(Column<String> column, String value, String str, int position) {
-                //仅支持五天课程
                 if (onCourseTableClick != null) {
                     String fieldName = column.getFieldName();
                     String id = null;
@@ -244,6 +263,12 @@ public class CourseMethod {
                             break;
                         case "courseFr":
                             id = id_table[5][position];
+                            break;
+                        case "courseSa":
+                            id = id_table[6][position];
+                            break;
+                        case "courseSu":
+                            id = id_table[7][position];
                             break;
                     }
                     if (id != null) {
@@ -353,8 +378,11 @@ public class CourseMethod {
             Date date = simpleDateFormat.parse(startSchoolDate);
             Calendar calendar = Calendar.getInstance(Locale.CHINA);
             calendar.setTime(date);
-            //仅限周一到周五的计算
-            return calendar.get(Calendar.DAY_OF_WEEK) - 1;
+            if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                return 7;
+            } else {
+                return calendar.get(Calendar.DAY_OF_WEEK) - 1;
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }

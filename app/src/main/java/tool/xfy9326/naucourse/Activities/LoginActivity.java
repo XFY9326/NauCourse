@@ -94,6 +94,17 @@ public class LoginActivity extends AppCompatActivity {
                                 });
                             } catch (Exception e) {
                                 e.printStackTrace();
+                                loginSuccess = false;
+                                loginErrorCode = NauJwcClient.LOGIN_ERROR;
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (loadingDialog != null) {
+                                            loadingDialog.cancel();
+                                            loadingDialog = null;
+                                        }
+                                    }
+                                });
                             }
                         }
                     }).start();

@@ -1,6 +1,5 @@
 package tool.xfy9326.naucourse.Fragments;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -47,13 +46,13 @@ public class SettingsFragment extends PreferenceFragment {
         findPreference(Config.PREFERENCE_SHOW_NEXT_WEEK).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (BaseMethod.isNetworkConnected(getActivity())) {
-                    BaseMethod.getBaseApplication(getActivity()).getViewPagerAdapter().getTableFragment().updateTable();
-                } else {
-                    Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_SHORT).show();
-                    return false;
-                }
-                return true;
+                return BaseMethod.getBaseApplication(getActivity()).getViewPagerAdapter().getTableFragment().reloadTable();
+            }
+        });
+        findPreference(Config.PREFERENCE_SHOW_WEEKEND).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                return BaseMethod.getBaseApplication(getActivity()).getViewPagerAdapter().getTableFragment().reloadTable();
             }
         });
         findPreference(Config.PREFERENCE_NOTIFY_NEXT_CLASS).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -77,20 +76,28 @@ public class SettingsFragment extends PreferenceFragment {
         builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (LoginMethod.loginOut(getActivity())) {
-                            Looper.prepare();
-                            getActivity().setResult(Activity.RESULT_OK, new Intent().putExtra(Config.INTENT_IS_LOGIN_OUT, true));
-                            startActivity(new Intent(getActivity(), MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP + Intent.FLAG_ACTIVITY_CLEAR_TASK));
-                            getActivity().finish();
-                            Looper.loop();
-                        } else {
-                            Toast.makeText(getActivity(), R.string.login_out_error, Toast.LENGTH_SHORT).show();
+                try {
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!LoginMethod.loginOut(getActivity())) {
+                                Looper.prepare();
+                                Toast.makeText(getActivity(), R.string.login_out_error, Toast.LENGTH_SHORT).show();
+                                Looper.loop();
+                            }
                         }
-                    }
-                }).start();
+                    });
+                    thread.start();
+                    thread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                getActivity().startActivity(new Intent(getActivity(), MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP));
+                MainActivity activity = BaseMethod.getBaseApplication(getActivity()).getMainActivity();
+                if (activity != null) {
+                    activity.finish();
+                }
+                getActivity().finish();
             }
         });
         builder.setNegativeButton(android.R.string.cancel, null);

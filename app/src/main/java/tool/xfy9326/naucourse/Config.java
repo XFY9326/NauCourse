@@ -15,7 +15,6 @@ public class Config {
     public static final int COURSE_DETAIL_WEEKMODE_ONCE_MORE = 4;
 
     public static final int REQUEST_ACTIVITY_LOGIN = 1;
-    public static final int REQUEST_ACTIVITY_SETTINGS_LOGIN_OUT = 2;
 
     public static final String INTENT_INFO_DETAIL_TITLE = "INFO_DETAIL_TITLE";
     public static final String INTENT_INFO_DETAIL_DATE = "INFO_DETAIL_DATE";
@@ -23,12 +22,11 @@ public class Config {
     public static final String INTENT_INFO_DETAIL_POST = "INFO_DETAIL_POST";
     public static final String INTENT_INFO_DETAIL_SOURCE = "INFO_DETAIL_SOURCE";
     public static final String INTENT_INFO_DETAIL_URL = "INFO_DETAIL_URL";
-    public static final String INTENT_IS_LOGIN_OUT = "IS_LOGIN_OUT";
     public static final String INTENT_IS_ONLY_INIT = "IS_ONLY_INIT";
     public static final String INTENT_NEXT_CLASS_DATA = "NEXT_CLASS_DATA";
 
     public static final int DEFAULT_MAX_WEEK = 24;
-    public static final int MAX_WEEK_DAY = 5;
+    public static final int MAX_WEEK_DAY = 7;
     public static final int MAX_DAY_COURSE = 13;
 
     public static final String PREFERENCE_HAS_LOGIN = "HAS_LOGIN";
@@ -44,6 +42,7 @@ public class Config {
     public static final String PREFERENCE_LAST_NOTIFY_TIME = "LAST_NOTIFY_TIME";
     public static final String PREFERENCE_CLASS_BEFORE_NOTIFY = "CLASS_BEFORE_NOTIFY";
     public static final String PREFERENCE_NOTIFY_NEXT_CLASS = "NOTIFY_NEXT_CLASS";
+    public static final String PREFERENCE_SHOW_WEEKEND = "SHOW_WEEKEND";
 
     public static final boolean DEFAULT_PREFERENCE_HAS_LOGIN = false;
     public static final boolean DEFAULT_PREFERENCE_REMEMBER_PW = true;
@@ -53,6 +52,7 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_ONLY_UPDATE_UNDER_WIFI = false;
     public static final boolean DEFAULT_PREFERENCE_SHOW_NEXT_WEEK = true;
     public static final boolean DEFAULT_PREFERENCE_NOTIFY_NEXT_CLASS = false;
+    public static final boolean DEFAULT_PREFERENCE_SHOW_WEEKEND = true;
 
     //网络连接错误代码
     public static final int NET_WORK_GET_SUCCESS = 0;

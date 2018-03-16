@@ -46,6 +46,10 @@ public class ScoreMethod {
         return Config.NET_WORK_ERROR_CODE_CONNECT_NO_LOGIN;
     }
 
+    public void saveTemp() {
+        getCourseScore();
+    }
+
     public CourseScore getCourseScore() {
         ArrayList<String> scoreCourseId = new ArrayList<>();
         ArrayList<String> scoreCourseName = new ArrayList<>();

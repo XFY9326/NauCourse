@@ -49,12 +49,14 @@ public class TableFragment extends Fragment {
     private View view;
     private Context context;
     private SmartTable<TableLine> courseTable;
+    private CourseMethod courseMethod;
     private int loadTime = 0;
 
     public TableFragment() {
         this.view = null;
         this.context = null;
         this.courseTable = null;
+        this.courseMethod = null;
     }
 
     @Override
@@ -120,6 +122,7 @@ public class TableFragment extends Fragment {
             boolean inVacation = false;
             schoolTime.setWeekNum(BaseMethod.getNowWeekNum(schoolTime));
 
+            //假期中默认显示第一周
             if (schoolTime.getWeekNum() == 0) {
                 weekNum = 1;
                 inVacation = true;
@@ -141,7 +144,7 @@ public class TableFragment extends Fragment {
                 String time = context.getString(R.string.time_now) + context.getString(R.string.table_date, year, month) + " " + week;
                 textView_date.setText(time);
 
-                final CourseMethod courseMethod = new CourseMethod(context, courses, schoolTime);
+                courseMethod = new CourseMethod(context, courses, schoolTime);
 
                 final Spinner spinner_week = view.findViewById(R.id.spinner_table_week_chose);
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, BaseMethod.getWeekArray(context, schoolTime));
@@ -259,10 +262,16 @@ public class TableFragment extends Fragment {
         }
     }
 
-    public void updateTable() {
-        if (isAdded()) {
-            getData();
-        }
+// --Commented out by Inspection START (2018/3/16 上午 11:25):
+//    public void updateTable() {
+//        if (isAdded()) {
+//            getData();
+//        }
+//    }
+// --Commented out by Inspection STOP (2018/3/16 上午 11:25)
+
+    synchronized public boolean reloadTable() {
+        return courseMethod != null && isAdded() && courseMethod.updateCourseTableView();
     }
 
     synchronized private void getData() {
