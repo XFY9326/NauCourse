@@ -46,6 +46,10 @@ public class PersonMethod {
         return Config.NET_WORK_ERROR_CODE_CONNECT_NO_LOGIN;
     }
 
+    public void saveScoreTemp() {
+        getUserScore();
+    }
+
     public StudentScore getUserScore() {
         boolean nextScore = false;
         StudentScore studentScore = new StudentScore();

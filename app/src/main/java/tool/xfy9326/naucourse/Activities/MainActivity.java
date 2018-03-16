@@ -15,7 +15,6 @@ import tool.xfy9326.naucourse.AsyncTasks.TempAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.Receivers.UpdateReceiver;
 import tool.xfy9326.naucourse.Views.AdvancedViewPager;
 import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
 
@@ -33,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ToolBarSet();
         ViewSet();
+        tempLoad();
     }
 
     @Override
@@ -47,9 +47,7 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, Config.REQUEST_ACTIVITY_LOGIN);
             finish();
         } else {
-            if (BaseMethod.isNetworkConnected(this)) {
-                new TempAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
-            } else {
+            if (!BaseMethod.isNetworkConnected(this)) {
                 Toast.makeText(this, R.string.network_error, Toast.LENGTH_SHORT).show();
             }
         }
@@ -81,9 +79,16 @@ public class MainActivity extends AppCompatActivity {
             tab_table.setIcon(R.drawable.selector_tab_table);
             tab_person.setIcon(R.drawable.selector_tab_person);
         }
+    }
 
-        //初始化自动更新
-        sendBroadcast(new Intent(UpdateReceiver.UPDATE_ACTION).putExtra(Config.INTENT_IS_ONLY_INIT, true));
+    private void tempLoad() {
+        if (getIntent() != null) {
+            if (getIntent().getBooleanExtra(Config.INTENT_JUST_LOGIN, false)) {
+                if (BaseMethod.isNetworkConnected(this)) {
+                    new TempAsync().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, getApplicationContext());
+                }
+            }
+        }
     }
 
     @Override

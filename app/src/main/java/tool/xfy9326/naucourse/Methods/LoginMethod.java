@@ -60,24 +60,29 @@ public class LoginMethod {
     //注销登陆
     public static boolean loginOut(Context context) {
         try {
-            boolean result = false;
             BaseMethod.getBaseApplication(context).getClient().loginOut();
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             sharedPreferences.edit().remove(Config.PREFERENCE_LOGIN_URL).putBoolean(Config.PREFERENCE_HAS_LOGIN, false).apply();
-            File cache_file = context.getCacheDir();
-            for (File file : cache_file.listFiles()) {
-                result = file.delete();
-            }
-            File data_file = context.getFilesDir();
-            for (File file : data_file.listFiles()) {
-                result = file.delete();
-            }
-            Log.d("LOGIN_OUT_CLEAR", String.valueOf(result));
+            cleanUserTemp(context);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
+    }
+
+    //清空用户缓存数据
+    public static void cleanUserTemp(Context context) {
+        boolean result = false;
+        File cache_file = context.getCacheDir();
+        for (File file : cache_file.listFiles()) {
+            result = file.delete();
+        }
+        File data_file = context.getFilesDir();
+        for (File file : data_file.listFiles()) {
+            result = file.delete();
+        }
+        Log.d("LOGIN_OUT_CLEAR", String.valueOf(result));
     }
 
 }

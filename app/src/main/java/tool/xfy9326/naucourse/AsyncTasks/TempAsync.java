@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.ExamMethod;
+import tool.xfy9326.naucourse.Methods.PersonMethod;
 import tool.xfy9326.naucourse.Methods.ScoreMethod;
 
 /**
@@ -13,9 +14,6 @@ import tool.xfy9326.naucourse.Methods.ScoreMethod;
  */
 
 public class TempAsync extends AsyncTask<Context, Void, Void> {
-
-    public TempAsync() {
-    }
 
     @Override
     protected Void doInBackground(Context... contexts) {
@@ -27,6 +25,10 @@ public class TempAsync extends AsyncTask<Context, Void, Void> {
             ScoreMethod scoreMethod = new ScoreMethod(contexts[0]);
             if (scoreMethod.load() == Config.NET_WORK_GET_SUCCESS) {
                 scoreMethod.saveTemp();
+            }
+            PersonMethod personMethod = new PersonMethod(contexts[0]);
+            if (personMethod.load() == Config.NET_WORK_GET_SUCCESS) {
+                personMethod.saveScoreTemp();
             }
         } catch (Exception e) {
             e.printStackTrace();

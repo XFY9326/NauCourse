@@ -277,7 +277,7 @@ public class BaseMethod {
         }
     }
 
-    static void saveOfflineData(final Context context, final Object o, final String FILE_NAME) {
+    public static void saveOfflineData(final Context context, final Object o, final String FILE_NAME) {
         new Thread(new Runnable() {
             @Override
             public void run() {

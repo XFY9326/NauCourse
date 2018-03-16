@@ -24,6 +24,7 @@ public class Config {
     public static final String INTENT_INFO_DETAIL_URL = "INFO_DETAIL_URL";
     public static final String INTENT_IS_ONLY_INIT = "IS_ONLY_INIT";
     public static final String INTENT_NEXT_CLASS_DATA = "NEXT_CLASS_DATA";
+    public static final String INTENT_JUST_LOGIN = "JUST_LOGIN";
 
     public static final int DEFAULT_MAX_WEEK = 24;
     public static final int MAX_WEEK_DAY = 7;
@@ -43,6 +44,7 @@ public class Config {
     public static final String PREFERENCE_CLASS_BEFORE_NOTIFY = "CLASS_BEFORE_NOTIFY";
     public static final String PREFERENCE_NOTIFY_NEXT_CLASS = "NOTIFY_NEXT_CLASS";
     public static final String PREFERENCE_SHOW_WEEKEND = "SHOW_WEEKEND";
+    public static final String PREFERENCE_LAST_NEXT_COURSE = "LAST_NEXT_COURSE";
 
     public static final boolean DEFAULT_PREFERENCE_HAS_LOGIN = false;
     public static final boolean DEFAULT_PREFERENCE_REMEMBER_PW = true;

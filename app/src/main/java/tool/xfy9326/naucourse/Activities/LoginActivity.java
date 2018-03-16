@@ -23,6 +23,7 @@ import android.widget.Toast;
 import lib.xfy9326.naujwc.NauJwcClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
+import tool.xfy9326.naucourse.Methods.LoginMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Tools.AES;
 
@@ -72,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                     final String pw = editText_userPw.getText().toString().trim();
                     final NauJwcClient nauJwcClient = BaseMethod.getBaseApplication(LoginActivity.this).getClient();
                     showLoadingDialog(LoginActivity.this);
+                    LoginMethod.cleanUserTemp(LoginActivity.this);
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -134,7 +136,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (loginSuccess) {
                     Toast.makeText(LoginActivity.this, R.string.login_success, Toast.LENGTH_SHORT).show();
                     PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(Config.PREFERENCE_HAS_LOGIN, true).putString(Config.PREFERENCE_LOGIN_URL, loginURL).apply();
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP));
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP).putExtra(Config.INTENT_JUST_LOGIN, true));
                     finish();
                 } else {
                     if (loginErrorCode == NauJwcClient.LOGIN_ERROR) {

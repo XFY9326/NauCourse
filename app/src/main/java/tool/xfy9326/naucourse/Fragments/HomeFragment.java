@@ -1,6 +1,7 @@
 package tool.xfy9326.naucourse.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -38,19 +39,20 @@ import tool.xfy9326.naucourse.Utils.JwcTopic;
 import tool.xfy9326.naucourse.Utils.NextCourse;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
 import tool.xfy9326.naucourse.Views.InfoAdapter;
+import tool.xfy9326.naucourse.Views.NextClassWidget;
 
 /**
  * Created by xfy9326 on 18-2-20.
  */
 
 public class HomeFragment extends Fragment {
+    private static final String NEXT_COURSE_FILE_NAME = "NextCourse";
     private View view;
     private Context context;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private InfoAdapter infoAdapter;
     private int loadTime = 0;
-
     private int lastOffset = 0;
     private int lastPosition = 0;
 
@@ -125,14 +127,24 @@ public class HomeFragment extends Fragment {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
         textView_dateNow.setText(simpleDateFormat.format(new Date()));
 
+        loadTempNextCourse();
+
         CardView cardView_nextClass = view.findViewById(R.id.cardView_local_next_course);
         cardView_nextClass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setNextCourse();
+                context.sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
             }
         });
 
+    }
+
+    private void loadTempNextCourse() {
+        NextCourse nextCourse = (NextCourse) BaseMethod.getOfflineData(context, NextCourse.class, NEXT_COURSE_FILE_NAME);
+        if (nextCourse != null) {
+            setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
+        }
     }
 
     private void setNextCourse() {
@@ -147,6 +159,7 @@ public class HomeFragment extends Fragment {
                 schoolTime.setWeekNum(weekNum);
                 CourseMethod courseMethod = new CourseMethod(context, courses, schoolTime);
                 NextCourse nextCourse = courseMethod.getNextClass(weekNum);
+                BaseMethod.saveOfflineData(context, nextCourse, NEXT_COURSE_FILE_NAME);
                 setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
             }
         }

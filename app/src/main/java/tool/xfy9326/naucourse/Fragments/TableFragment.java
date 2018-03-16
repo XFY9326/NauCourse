@@ -34,6 +34,7 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.CourseMethod;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.Receivers.UpdateReceiver;
 import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.CourseDetail;
 import tool.xfy9326.naucourse.Utils.NextCourse;
@@ -198,6 +199,9 @@ public class TableFragment extends Fragment {
                         CourseCardSet(course);
                     }
                 });
+
+                //初始化自动更新
+                context.sendBroadcast(new Intent(UpdateReceiver.UPDATE_ACTION).putExtra(Config.INTENT_IS_ONLY_INIT, true));
 
                 if (loadTime > 0) {
                     context.sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
