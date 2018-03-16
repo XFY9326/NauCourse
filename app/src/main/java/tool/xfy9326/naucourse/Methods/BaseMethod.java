@@ -292,4 +292,18 @@ public class BaseMethod {
             }
         }).start();
     }
+
+    @SuppressWarnings("SameParameterValue")
+    public static void deleteOfflineData(final Context context, final String FILE_NAME) {
+        new Thread(new Runnable() {
+            @SuppressWarnings("ResultOfMethodCallIgnored")
+            @Override
+            public void run() {
+                File file = new File(context.getFilesDir() + File.separator + FILE_NAME);
+                if (file.exists()) {
+                    file.delete();
+                }
+            }
+        }).start();
+    }
 }

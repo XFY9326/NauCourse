@@ -81,7 +81,7 @@ public class SettingsFragment extends PreferenceFragment {
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            if (!LoginMethod.loginOut(getActivity())) {
+                            if (LoginMethod.userLoginOut(getActivity())) {
                                 Looper.prepare();
                                 Toast.makeText(getActivity(), R.string.login_out_error, Toast.LENGTH_SHORT).show();
                                 Looper.loop();

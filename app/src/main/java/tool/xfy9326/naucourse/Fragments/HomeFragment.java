@@ -161,6 +161,8 @@ public class HomeFragment extends Fragment {
                 NextCourse nextCourse = courseMethod.getNextClass(weekNum);
                 BaseMethod.saveOfflineData(context, nextCourse, NEXT_COURSE_FILE_NAME);
                 setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
+            } else {
+                BaseMethod.deleteOfflineData(context, NEXT_COURSE_FILE_NAME);
             }
         }
     }

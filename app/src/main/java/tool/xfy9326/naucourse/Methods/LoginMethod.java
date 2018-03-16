@@ -58,17 +58,17 @@ public class LoginMethod {
     }
 
     //注销登陆
-    public static boolean loginOut(Context context) {
+    public static boolean userLoginOut(Context context) {
         try {
             BaseMethod.getBaseApplication(context).getClient().loginOut();
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             sharedPreferences.edit().remove(Config.PREFERENCE_LOGIN_URL).putBoolean(Config.PREFERENCE_HAS_LOGIN, false).apply();
             cleanUserTemp(context);
-            return true;
+            return false;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return true;
     }
 
     //清空用户缓存数据
