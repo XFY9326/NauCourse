@@ -18,6 +18,7 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.LoginMethod;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.Receivers.UpdateReceiver;
 
 /**
  * Created by xfy9326 on 18-2-20.
@@ -51,6 +52,16 @@ public class SettingsFragment extends PreferenceFragment {
                 } else {
                     Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_SHORT).show();
                     return false;
+                }
+                return true;
+            }
+        });
+        findPreference(Config.PREFERENCE_NOTIFY_NEXT_CLASS).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if ((boolean) newValue) {
+                    //初始化自动更新
+                    getActivity().sendBroadcast(new Intent(UpdateReceiver.UPDATE_ACTION).putExtra(Config.INTENT_IS_ONLY_INIT, true));
                 }
                 return true;
             }

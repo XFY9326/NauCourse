@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
             tab_person.setIcon(R.drawable.selector_tab_person);
         }
 
+        //初始化自动更新
         sendBroadcast(new Intent(UpdateReceiver.UPDATE_ACTION).putExtra(Config.INTENT_IS_ONLY_INIT, true));
     }
 

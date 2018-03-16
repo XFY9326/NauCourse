@@ -18,6 +18,7 @@ import java.util.Locale;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.NextClassMethod;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.Receivers.UpdateReceiver;
 import tool.xfy9326.naucourse.Utils.NextCourse;
 
 /**
@@ -64,6 +65,13 @@ public class NextClassWidget extends AppWidgetProvider {
             remoteViews.setViewVisibility(R.id.layout_app_widget_nextClass, View.GONE);
         }
         return remoteViews;
+    }
+
+    @Override
+    public void onEnabled(Context context) {
+        //初始化自动更新
+        context.sendBroadcast(new Intent(UpdateReceiver.UPDATE_ACTION).putExtra(Config.INTENT_IS_ONLY_INIT, true));
+        super.onEnabled(context);
     }
 
     @Override

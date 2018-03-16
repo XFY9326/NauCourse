@@ -52,7 +52,7 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_UPDATE_DATA_ON_START = true;
     public static final boolean DEFAULT_PREFERENCE_ONLY_UPDATE_UNDER_WIFI = false;
     public static final boolean DEFAULT_PREFERENCE_SHOW_NEXT_WEEK = true;
-    public static final boolean DEFAULT_PREFERENCE_NOTIFY_NEXT_CLASS = true;
+    public static final boolean DEFAULT_PREFERENCE_NOTIFY_NEXT_CLASS = false;
 
     //网络连接错误代码
     public static final int NET_WORK_GET_SUCCESS = 0;

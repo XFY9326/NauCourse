@@ -2,7 +2,6 @@ package tool.xfy9326.naucourse.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -107,9 +106,8 @@ public class TableFragment extends Fragment {
         tableConfig.setShowXSequence(false);
         tableConfig.setShowYSequence(false);
         tableConfig.setShowTableTitle(false);
-        tableConfig.setVerticalPadding(5);
-        tableConfig.setHorizontalPadding(5);
-        tableConfig.setColumnTitleBackgroundColor(Color.LTGRAY);
+        tableConfig.setVerticalPadding(8);
+        tableConfig.setHorizontalPadding(8);
 
         if (loadTime == 0) {
             getData();

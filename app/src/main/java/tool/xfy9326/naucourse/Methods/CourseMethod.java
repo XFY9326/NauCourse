@@ -87,8 +87,8 @@ public class CourseMethod {
                         if (!findCourseId.equals(todayId[i]) && !findCourseId.equals("")) {
                             break;
                         }
-                        result[0] = today[i].substring(today[i].indexOf("\n") + 1);
-                        result[1] = today[i].substring(1, today[i].indexOf("\n"));
+                        result[0] = today[i].substring(0, today[i].indexOf("\n"));
+                        result[1] = today[i].substring(today[i].indexOf("\n") + 2);
                         result[4] = todayId[i];
                         course_endTime = times[i];
                         if (!lastId.equals(todayId[i])) {
@@ -361,9 +361,8 @@ public class CourseMethod {
         return 1;
     }
 
-    //表格插件问题，换行后下一行的会显示在上面，未来可能会修复（1.9.0未修复）
     private String getShowDetail(Course course, CourseDetail courseDetail) {
-        return ("@" + courseDetail.getLocation() + "\n" + course.getCourseName()).trim();
+        return (course.getCourseName()).trim() + "\n" + "@" + courseDetail.getLocation();
     }
 
     public interface OnCourseTableItemClickListener {
