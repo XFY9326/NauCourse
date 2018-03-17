@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import tool.xfy9326.naucourse.Activities.MainActivity;
 import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.Handlers.MainHandler;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.LoginMethod;
 import tool.xfy9326.naucourse.R;
@@ -47,13 +48,17 @@ public class SettingsFragment extends PreferenceFragment {
         findPreference(Config.PREFERENCE_SHOW_NEXT_WEEK).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                return BaseMethod.getBaseApplication(getActivity()).getViewPagerAdapter().getTableFragment().reloadTable();
+                MainHandler mainHandler = new MainHandler(getActivity());
+                mainHandler.sendEmptyMessageDelayed(Config.HANDLER_RELOAD_TABLE, Config.RELOAD_TABLE_DELAY_TIME);
+                return true;
             }
         });
         findPreference(Config.PREFERENCE_SHOW_WEEKEND).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                return BaseMethod.getBaseApplication(getActivity()).getViewPagerAdapter().getTableFragment().reloadTable();
+                MainHandler mainHandler = new MainHandler(getActivity());
+                mainHandler.sendEmptyMessageDelayed(Config.HANDLER_RELOAD_TABLE, Config.RELOAD_TABLE_DELAY_TIME);
+                return true;
             }
         });
         findPreference(Config.PREFERENCE_NOTIFY_NEXT_CLASS).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -77,31 +82,28 @@ public class SettingsFragment extends PreferenceFragment {
         builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                try {
-                    Thread thread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (LoginMethod.userLoginOut(getActivity())) {
-                                Looper.prepare();
-                                Toast.makeText(getActivity(), R.string.login_out_error, Toast.LENGTH_SHORT).show();
-                                Looper.loop();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (LoginMethod.loginOut(getActivity())) {
+                            Looper.prepare();
+                            Toast.makeText(getActivity(), R.string.login_out_error, Toast.LENGTH_SHORT).show();
+                            Looper.loop();
+                        } else {
+                            Looper.prepare();
+                            //小部件清空
+                            getActivity().sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
+                            //重启当前程序
+                            getActivity().startActivity(new Intent(getActivity(), MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP));
+                            MainActivity activity = BaseMethod.getBaseApplication(getActivity()).getMainActivity();
+                            if (activity != null) {
+                                activity.finish();
                             }
+                            getActivity().finish();
+                            Looper.loop();
                         }
-                    });
-                    thread.start();
-                    thread.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                //小部件清空
-                getActivity().sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
-                //重启当前程序
-                getActivity().startActivity(new Intent(getActivity(), MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP));
-                MainActivity activity = BaseMethod.getBaseApplication(getActivity()).getMainActivity();
-                if (activity != null) {
-                    activity.finish();
-                }
-                getActivity().finish();
+                    }
+                }).start();
             }
         });
         builder.setNegativeButton(android.R.string.cancel, null);

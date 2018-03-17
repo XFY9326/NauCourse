@@ -34,6 +34,7 @@ public class CourseMethod {
     private final Context context;
     private final ArrayList<Course> courses;
     private final SchoolTime schoolTime;
+
     private OnCourseTableItemClickListener onCourseTableClick;
     private int weekNum;
     private SmartTable<TableLine> smartTable;
@@ -43,6 +44,7 @@ public class CourseMethod {
     private String[][] id_table;
     private List<TableLine> tableLines;
     private TableData<TableLine> tableData;
+    private List<String> course_time;
 
     public CourseMethod(Context context, ArrayList<Course> courses, SchoolTime schoolTime) {
         this.context = context;
@@ -58,6 +60,7 @@ public class CourseMethod {
         this.loadSuccess = false;
         this.tableLines = null;
         this.tableData = null;
+        this.course_time = null;
     }
 
     private static NextCourse getNextClass(Context context, String[][] this_week_table, String[][] this_week_id_table, ArrayList<Course> courses) {
@@ -118,7 +121,6 @@ public class CourseMethod {
             }
         }
 
-
         nextCourse.setCourseId(result[4]);
         nextCourse.setCourseName(result[0]);
         nextCourse.setCourseLocation(result[1]);
@@ -135,16 +137,6 @@ public class CourseMethod {
     public boolean updateCourseTableView(int weekNum) {
         if (loadSuccess) {
             this.weekNum = weekNum;
-            loadSuccess = false;
-            loadView();
-            smartTable.notifyDataChanged();
-            return true;
-        }
-        return false;
-    }
-
-    public boolean updateCourseTableView() {
-        if (loadSuccess) {
             loadSuccess = false;
             loadView();
             smartTable.notifyDataChanged();
@@ -217,10 +209,6 @@ public class CourseMethod {
         columnSet(columnTh);
         Column<String> columnFr = new Column<>(week_day.get(4), "courseFr");
         columnSet(columnFr);
-        Column<String> columnSa = new Column<>(week_day.get(5), "courseSa");
-        columnSet(columnSa);
-        Column<String> columnSu = new Column<>(week_day.get(6), "courseSu");
-        columnSet(columnSu);
 
         List<Column> columns = new ArrayList<>();
         columns.add(columnDate);
@@ -231,6 +219,11 @@ public class CourseMethod {
         columns.add(columnFr);
 
         if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_WEEKEND, Config.DEFAULT_PREFERENCE_SHOW_WEEKEND)) {
+            Column<String> columnSa = new Column<>(week_day.get(5), "courseSa");
+            columnSet(columnSa);
+            Column<String> columnSu = new Column<>(week_day.get(6), "courseSu");
+            columnSet(columnSu);
+
             columns.add(columnSa);
             columns.add(columnSu);
         }
@@ -286,7 +279,9 @@ public class CourseMethod {
 
     //表格赋值
     private void setTableCourse() {
-        List<String> course_time = BaseMethod.getCourseTimeArray(context);
+        if (course_time == null) {
+            course_time = BaseMethod.getCourseTimeArray(context);
+        }
         getTable(weekNum, schoolTime.getStartTime());
         setTableTimeLine(course_time);
         System.gc();

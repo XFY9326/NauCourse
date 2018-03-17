@@ -16,6 +16,10 @@ public class Config {
 
     public static final int REQUEST_ACTIVITY_LOGIN = 1;
 
+    public static final int RELOAD_TABLE_DELAY_TIME = 1500;
+
+    public static final int HANDLER_RELOAD_TABLE = 0;
+
     public static final String INTENT_INFO_DETAIL_TITLE = "INFO_DETAIL_TITLE";
     public static final String INTENT_INFO_DETAIL_DATE = "INFO_DETAIL_DATE";
     public static final String INTENT_INFO_DETAIL_CLICK = "INFO_DETAIL_CLICK";

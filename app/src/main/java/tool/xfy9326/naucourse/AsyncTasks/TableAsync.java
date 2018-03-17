@@ -75,7 +75,7 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
         TableFragment tableFragment = BaseMethod.getBaseApplication(context).getViewPagerAdapter().getTableFragment();
         if (tableFragment != null) {
             if (BaseMethod.checkNetWorkCode(context, new int[]{tableLoadSuccess, timeLoadSuccess}, loadCode)) {
-                tableFragment.CourseSet(course, schoolTime, context);
+                tableFragment.CourseSet(course, schoolTime, context, false);
             }
             tableFragment.lastViewSet(context);
         }

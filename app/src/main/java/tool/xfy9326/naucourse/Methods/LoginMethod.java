@@ -58,7 +58,7 @@ public class LoginMethod {
     }
 
     //注销登陆
-    public static boolean userLoginOut(Context context) {
+    public static boolean loginOut(Context context) {
         try {
             BaseMethod.getBaseApplication(context).getClient().loginOut();
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -73,16 +73,16 @@ public class LoginMethod {
 
     //清空用户缓存数据
     public static void cleanUserTemp(Context context) {
-        boolean result = false;
         File cache_file = context.getCacheDir();
         for (File file : cache_file.listFiles()) {
-            result = file.delete();
+            //noinspection ResultOfMethodCallIgnored
+            file.delete();
         }
         File data_file = context.getFilesDir();
         for (File file : data_file.listFiles()) {
-            result = file.delete();
+            //noinspection ResultOfMethodCallIgnored
+            file.delete();
         }
-        Log.d("LOGIN_OUT_CLEAR", String.valueOf(result));
     }
 
 }

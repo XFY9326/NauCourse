@@ -50,14 +50,16 @@ public class TableFragment extends Fragment {
     private View view;
     private Context context;
     private SmartTable<TableLine> courseTable;
-    private CourseMethod courseMethod;
     private int loadTime = 0;
+    private ArrayList<Course> courses;
+    private SchoolTime schoolTime;
 
     public TableFragment() {
         this.view = null;
         this.context = null;
         this.courseTable = null;
-        this.courseMethod = null;
+        this.courses = null;
+        this.schoolTime = null;
     }
 
     @Override
@@ -117,8 +119,13 @@ public class TableFragment extends Fragment {
         }
     }
 
-    public void CourseSet(ArrayList<Course> courses, SchoolTime schoolTime, final Context context) {
+    public void CourseSet(ArrayList<Course> courses, SchoolTime schoolTime, final Context context, boolean isReload) {
         if (context != null && courses != null && schoolTime != null) {
+            if (!isReload) {
+                this.courses = courses;
+                this.schoolTime = schoolTime;
+            }
+
             int weekNum;
             boolean inVacation = false;
             schoolTime.setWeekNum(BaseMethod.getNowWeekNum(schoolTime));
@@ -145,7 +152,7 @@ public class TableFragment extends Fragment {
                 String time = context.getString(R.string.time_now) + context.getString(R.string.table_date, year, month) + " " + week;
                 textView_date.setText(time);
 
-                courseMethod = new CourseMethod(context, courses, schoolTime);
+                final CourseMethod courseMethod = new CourseMethod(context, courses, schoolTime);
 
                 final Spinner spinner_week = view.findViewById(R.id.spinner_table_week_chose);
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, BaseMethod.getWeekArray(context, schoolTime));
@@ -175,10 +182,14 @@ public class TableFragment extends Fragment {
 
                 //提前显示下一周的课表
                 int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK);
-                if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_NEXT_WEEK, Config.DEFAULT_PREFERENCE_SHOW_NEXT_WEEK) && !PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_WEEKEND, Config.DEFAULT_PREFERENCE_SHOW_WEEKEND)) {
-                    if ((weekDayNum == Calendar.SUNDAY || weekDayNum == Calendar.SATURDAY) && weekNum + 1 <= BaseMethod.getMaxWeekNum(schoolTime)) {
-                        spinner_week.setSelection(weekNum);
-                        courseMethod.updateCourseTableView(weekNum);
+                if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_NEXT_WEEK, Config.DEFAULT_PREFERENCE_SHOW_NEXT_WEEK)) {
+                    if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_WEEKEND, Config.DEFAULT_PREFERENCE_SHOW_WEEKEND)) {
+                        if ((weekDayNum == Calendar.SUNDAY || weekDayNum == Calendar.SATURDAY) && weekNum + 1 <= BaseMethod.getMaxWeekNum(schoolTime)) {
+                            spinner_week.setSelection(weekNum);
+                            courseMethod.updateCourseTableView(weekNum);
+                        } else {
+                            spinner_week.setSelection(weekNum - 1);
+                        }
                     } else {
                         spinner_week.setSelection(weekNum - 1);
                     }
@@ -269,16 +280,10 @@ public class TableFragment extends Fragment {
         }
     }
 
-// --Commented out by Inspection START (2018/3/16 上午 11:25):
-//    public void updateTable() {
-//        if (isAdded()) {
-//            getData();
-//        }
-//    }
-// --Commented out by Inspection STOP (2018/3/16 上午 11:25)
-
-    synchronized public boolean reloadTable() {
-        return courseMethod != null && isAdded() && courseMethod.updateCourseTableView();
+    synchronized public void reloadTable() {
+        if (isAdded() && courses != null && schoolTime != null) {
+            CourseSet(courses, schoolTime, context, true);
+        }
     }
 
     synchronized private void getData() {
