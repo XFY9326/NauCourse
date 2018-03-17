@@ -52,6 +52,8 @@ public class AboutActivity extends AppCompatActivity {
         });
     }
 
+
+    //开源资源列表显示
     private void showOpenSourceList() {
         LayoutInflater layoutInflater = getLayoutInflater();
 

@@ -2,10 +2,8 @@ package tool.xfy9326.naucourse.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,21 +21,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
 import tool.xfy9326.naucourse.AsyncTasks.InfoAsync;
-import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
-import tool.xfy9326.naucourse.Methods.CourseMethod;
-import tool.xfy9326.naucourse.Methods.TimeMethod;
+import tool.xfy9326.naucourse.Methods.NextClassMethod;
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.JwTopic;
 import tool.xfy9326.naucourse.Utils.JwcTopic;
 import tool.xfy9326.naucourse.Utils.NextCourse;
-import tool.xfy9326.naucourse.Utils.SchoolTime;
 import tool.xfy9326.naucourse.Views.InfoAdapter;
 import tool.xfy9326.naucourse.Views.NextClassWidget;
 
@@ -140,6 +133,7 @@ public class HomeFragment extends Fragment {
 
     }
 
+    //优先加载缓存中的下一节课
     private void loadTempNextCourse() {
         NextCourse nextCourse = (NextCourse) BaseMethod.getOfflineData(context, NextCourse.class, NEXT_COURSE_FILE_NAME);
         if (nextCourse != null) {
@@ -147,26 +141,19 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    //内部刷新设置下一节课
     private void setNextCourse() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
-            SchoolTime schoolTime = (SchoolTime) BaseMethod.getOfflineData(context, SchoolTime.class, TimeMethod.FILE_NAME);
-            ArrayList<Course> courses = BaseMethod.getOfflineTableData(context);
-
-            int weekNum = BaseMethod.getNowWeekNum(schoolTime);
-
-            if (schoolTime != null && courses != null && weekNum != 0) {
-                schoolTime.setWeekNum(weekNum);
-                CourseMethod courseMethod = new CourseMethod(context, courses, schoolTime);
-                NextCourse nextCourse = courseMethod.getNextClass(weekNum);
-                BaseMethod.saveOfflineData(context, nextCourse, NEXT_COURSE_FILE_NAME);
-                setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
-            } else {
-                BaseMethod.deleteOfflineData(context, NEXT_COURSE_FILE_NAME);
-            }
+        NextCourse nextCourse = NextClassMethod.getNextClassArray(getActivity());
+        if (nextCourse.getCourseId() != null) {
+            BaseMethod.saveOfflineData(context, nextCourse, NEXT_COURSE_FILE_NAME);
+            setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
+        } else {
+            //缓存是错误的就删除
+            BaseMethod.deleteOfflineData(context, NEXT_COURSE_FILE_NAME);
         }
     }
 
+    //外部设置下一节课
     public void setNextCourse(String name, String location, String teacher, String time) {
         if (isAdded()) {
             TextView textView_noNextClass = view.findViewById(R.id.textView_noNextClass);
@@ -236,6 +223,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    //还原下拉的列表位置
     private void getPositionAndOffset() {
         LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         View topView = layoutManager.getChildAt(0);

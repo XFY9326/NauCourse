@@ -250,6 +250,7 @@ public class BaseMethod {
         return day;
     }
 
+    //获取离线数据
     public static Object getOfflineData(Context context, Class file_class, String FILE_NAME) {
         String path = context.getFilesDir() + File.separator + FILE_NAME;
         File file = new File(path);
@@ -262,6 +263,7 @@ public class BaseMethod {
         }
     }
 
+    //获取离线课表数据
     public static ArrayList<Course> getOfflineTableData(Context context) {
         String path = context.getFilesDir() + File.separator + TableMethod.FILE_NAME;
         File file = new File(path);
@@ -277,6 +279,7 @@ public class BaseMethod {
         }
     }
 
+    //保存离线数据
     public static void saveOfflineData(final Context context, final Object o, final String FILE_NAME) {
         new Thread(new Runnable() {
             @Override
@@ -293,6 +296,7 @@ public class BaseMethod {
         }).start();
     }
 
+    //删除离线数据
     @SuppressWarnings("SameParameterValue")
     public static void deleteOfflineData(final Context context, final String FILE_NAME) {
         new Thread(new Runnable() {

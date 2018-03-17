@@ -280,6 +280,7 @@ public class TableFragment extends Fragment {
         }
     }
 
+    //重新加载表格
     synchronized public void reloadTable() {
         if (isAdded() && courses != null && schoolTime != null) {
             CourseSet(courses, schoolTime, context, true);
