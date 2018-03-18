@@ -51,7 +51,7 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
                 TableMethod tableMethod = new TableMethod(context[0]);
                 tableLoadSuccess = tableMethod.load();
                 if (tableLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                    course = tableMethod.getCourseTable(loadTime == 1);
+                    course = tableMethod.getCourseTable(loadTime > 1);
                 }
 
                 TimeMethod timeMethod = new TimeMethod(context[0]);

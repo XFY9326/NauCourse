@@ -98,7 +98,9 @@ public class BaseMethod {
         long time = System.currentTimeMillis();
         if (time - DoubleClickTime > 1200) {
             DoubleClickTime = time;
-            Toast.makeText(activity, activity.getString(R.string.double_click_exit), Toast.LENGTH_SHORT).show();
+            if (!activity.isDestroyed()) {
+                Toast.makeText(activity, activity.getString(R.string.double_click_exit), Toast.LENGTH_SHORT).show();
+            }
         } else {
             DoubleClickTime = time;
             activity.finish();

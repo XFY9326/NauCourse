@@ -49,13 +49,13 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
                 JwcInfoMethod jwcInfoMethod = new JwcInfoMethod(context[0]);
                 JwcLoadSuccess = jwcInfoMethod.load();
                 if (JwcLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                    jwcTopic = jwcInfoMethod.getJwcTopic(loadTime == 1);
+                    jwcTopic = jwcInfoMethod.getJwcTopic(loadTime > 1);
                 }
 
                 JwInfoMethod jwInfoMethod = new JwInfoMethod(context[0]);
                 JwLoadSuccess = jwInfoMethod.load();
                 if (JwLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                    jwTopic = jwInfoMethod.getJwTopic(loadTime == 1);
+                    jwTopic = jwInfoMethod.getJwTopic(loadTime > 1);
                 }
 
                 loadTime++;

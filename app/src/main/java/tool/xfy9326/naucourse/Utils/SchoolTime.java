@@ -6,7 +6,9 @@ package tool.xfy9326.naucourse.Utils;
  */
 
 public class SchoolTime {
+    //yyyy-MM-dd
     private String startTime = null;
+    //yyyy-MM-dd
     private String endTime = null;
     private int weekNum = 0;
 
