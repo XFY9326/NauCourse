@@ -85,6 +85,17 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 }
                                 loginErrorCode = nauJwcClient.getLoginErrorCode();
+                                if (loginErrorCode == NauJwcClient.LOGIN_ALREADY_LOGIN) {
+                                    LoginMethod.loginOut(LoginActivity.this);
+                                    Thread.sleep(1000);
+                                    if (nauJwcClient.login(id, pw)) {
+                                        loginURL = nauJwcClient.getLoginUrl();
+                                        if (loginURL != null) {
+                                            loginSuccess = true;
+                                        }
+                                    }
+                                    loginErrorCode = nauJwcClient.getLoginErrorCode();
+                                }
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
