@@ -67,8 +67,10 @@ public class TimeMethod {
                         break;
                 }
             }
-            BaseMethod.saveOfflineData(context, schoolTime, FILE_NAME);
-            return schoolTime;
+
+            if (BaseMethod.saveOfflineData(context, schoolTime, FILE_NAME, false)) {
+                return schoolTime;
+            }
         }
         return null;
     }

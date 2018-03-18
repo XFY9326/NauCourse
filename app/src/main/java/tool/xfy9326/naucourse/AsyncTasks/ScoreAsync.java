@@ -49,13 +49,13 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
                 PersonMethod personMethod = new PersonMethod(context[0]);
                 personLoadSuccess = personMethod.load();
                 if (personLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                    studentScore = personMethod.getUserScore();
+                    studentScore = personMethod.getUserScore(loadTime == 1);
                 }
 
                 ScoreMethod scoreMethod = new ScoreMethod(context[0]);
                 scoreLoadSuccess = scoreMethod.load();
                 if (scoreLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                    courseScore = scoreMethod.getCourseScore();
+                    courseScore = scoreMethod.getCourseScore(loadTime == 1);
                 }
 
                 loadTime++;

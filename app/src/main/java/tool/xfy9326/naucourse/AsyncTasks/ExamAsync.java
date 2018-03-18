@@ -42,7 +42,7 @@ public class ExamAsync extends AsyncTask<Context, Void, Context> {
                 ExamMethod examMethod = new ExamMethod(context[0]);
                 examLoadSuccess = examMethod.load();
                 if (examLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                    exam = examMethod.getExam();
+                    exam = examMethod.getExam(loadTime == 1);
                 }
 
                 loadTime++;

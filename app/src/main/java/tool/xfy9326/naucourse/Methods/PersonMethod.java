@@ -47,10 +47,10 @@ public class PersonMethod {
     }
 
     public void saveScoreTemp() {
-        getUserScore();
+        getUserScore(false);
     }
 
-    public StudentScore getUserScore() {
+    public StudentScore getUserScore(boolean checkTemp) {
         boolean nextScore = false;
         StudentScore studentScore = new StudentScore();
         Elements tags = document.body().getElementsByTag("tr");
@@ -82,11 +82,14 @@ public class PersonMethod {
                 studentScore.setScoreBP(str.substring(6).trim());
             }
         }
-        BaseMethod.saveOfflineData(context, studentScore, FILE_NAME_SCORE);
-        return studentScore;
+        if (BaseMethod.saveOfflineData(context, studentScore, FILE_NAME_SCORE, checkTemp)) {
+            return studentScore;
+        } else {
+            return null;
+        }
     }
 
-    public StudentInfo getUserData() {
+    public StudentInfo getUserData(boolean checkTemp) {
         StudentInfo studentInfo = new StudentInfo();
         Elements tags = document.body().getElementsByTag("tr");
         List<String> data = tags.eachText();
@@ -119,8 +122,11 @@ public class PersonMethod {
                 studentInfo.setStd_class(str.substring(str.indexOf("级", 5) + 1).trim());
             }
         }
-        BaseMethod.saveOfflineData(context, studentInfo, FILE_NAME_DATA);
-        return studentInfo;
+        if (BaseMethod.saveOfflineData(context, studentInfo, FILE_NAME_DATA, checkTemp)) {
+            return studentInfo;
+        } else {
+            return null;
+        }
     }
 
 }

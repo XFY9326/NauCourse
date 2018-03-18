@@ -49,7 +49,7 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
                 PersonMethod personMethod = new PersonMethod(context[0]);
                 personLoadSuccess = personMethod.load();
                 if (personLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                    studentInfo = personMethod.getUserData();
+                    studentInfo = personMethod.getUserData(loadTime == 1);
                 }
 
                 TimeMethod timeMethod = new TimeMethod(context[0]);

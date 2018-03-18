@@ -47,7 +47,7 @@ public class TableMethod {
     }
 
     //数据分类方法：课程基本信息——上课周数——上课节数
-    public ArrayList<Course> getCourseTable() {
+    public ArrayList<Course> getCourseTable(boolean checkTemp) {
         ArrayList<Course> courseList = new ArrayList<>();
         Elements tags = document.body().getElementsByTag("tr");
         List<String> data = tags.eachText();
@@ -129,8 +129,12 @@ public class TableMethod {
 
             courseList.add(course);
         }
-        BaseMethod.saveOfflineData(context, courseList, FILE_NAME);
-        return courseList;
+
+        if (BaseMethod.saveOfflineData(context, courseList, FILE_NAME, checkTemp)) {
+            return courseList;
+        } else {
+            return null;
+        }
     }
 
 }

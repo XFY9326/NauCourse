@@ -47,10 +47,10 @@ public class ExamMethod {
     }
 
     public void saveTemp() {
-        getExam();
+        getExam(false);
     }
 
-    public Exam getExam() {
+    public Exam getExam(boolean checkTemp) {
         ArrayList<String> examId = new ArrayList<>();
         ArrayList<String> examName = new ArrayList<>();
         ArrayList<String> examType = new ArrayList<>();
@@ -83,8 +83,10 @@ public class ExamMethod {
         exam.setExamType(examType.toArray(new String[]{}));
         exam.setExamLocation(examLocation.toArray(new String[]{}));
 
-        BaseMethod.saveOfflineData(context, exam, FILE_NAME);
-
-        return exam;
+        if (BaseMethod.saveOfflineData(context, exam, FILE_NAME, checkTemp)) {
+            return exam;
+        } else {
+            return null;
+        }
     }
 }

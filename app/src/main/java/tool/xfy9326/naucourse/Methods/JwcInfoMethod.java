@@ -51,7 +51,7 @@ public class JwcInfoMethod {
         return Config.NET_WORK_ERROR_CODE_CONNECT_NO_LOGIN;
     }
 
-    public JwcTopic getJwcTopic() {
+    public JwcTopic getJwcTopic(boolean checkTemp) {
         int divideCount = 0;
         int totalTopic = 0;
         boolean nextTopic = false;
@@ -119,8 +119,11 @@ public class JwcInfoMethod {
         }
 
         jwcTopic.setTopic_url(url);
-        BaseMethod.saveOfflineData(context, jwcTopic, FILE_NAME);
-        return jwcTopic;
+        if (BaseMethod.saveOfflineData(context, jwcTopic, FILE_NAME, checkTemp)) {
+            return jwcTopic;
+        } else {
+            return null;
+        }
     }
 
     public int loadDetail(String url) throws Exception {

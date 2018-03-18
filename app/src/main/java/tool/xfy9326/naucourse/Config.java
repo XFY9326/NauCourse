@@ -16,8 +16,6 @@ public class Config {
 
     public static final int REQUEST_ACTIVITY_LOGIN = 1;
 
-    public static final int RELOAD_TABLE_DELAY_TIME = 1500;
-
     public static final int HANDLER_RELOAD_TABLE = 0;
 
     public static final int VIEWPAGER_TABLE_PAGE = 1;

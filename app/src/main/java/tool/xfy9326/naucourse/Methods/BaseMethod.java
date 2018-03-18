@@ -280,11 +280,19 @@ public class BaseMethod {
 
     //保存离线数据
     @SuppressWarnings("UnusedReturnValue")
-    public static boolean saveOfflineData(final Context context, final Object o, final String FILE_NAME) {
+    public static boolean saveOfflineData(final Context context, final Object o, final String FILE_NAME, boolean checkTemp) {
+        String path = context.getFilesDir() + File.separator + FILE_NAME;
         String id = PreferenceManager.getDefaultSharedPreferences(context).getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
         String data = new Gson().toJson(o);
         String content = AES.encrypt(data, id);
-        return IO.writeFile(content, context.getFilesDir() + File.separator + FILE_NAME);
+        if (checkTemp) {
+            String text = IO.readFile(path);
+            if (text != null) {
+                text = text.replace("\n", "");
+                return !text.equalsIgnoreCase(content) && IO.writeFile(content, path);
+            }
+        }
+        return IO.writeFile(content, path);
     }
 
     //删除离线数据

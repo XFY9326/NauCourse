@@ -26,6 +26,8 @@ import tool.xfy9326.naucourse.Views.NextClassWidget;
  */
 
 public class SettingsFragment extends PreferenceFragment {
+    private boolean updateCourseTable = false;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,16 +50,14 @@ public class SettingsFragment extends PreferenceFragment {
         findPreference(Config.PREFERENCE_SHOW_NEXT_WEEK).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                MainHandler mainHandler = new MainHandler(getActivity());
-                mainHandler.sendEmptyMessageDelayed(Config.HANDLER_RELOAD_TABLE, Config.RELOAD_TABLE_DELAY_TIME);
+                updateCourseTable = true;
                 return true;
             }
         });
         findPreference(Config.PREFERENCE_SHOW_WEEKEND).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                MainHandler mainHandler = new MainHandler(getActivity());
-                mainHandler.sendEmptyMessageDelayed(Config.HANDLER_RELOAD_TABLE, Config.RELOAD_TABLE_DELAY_TIME);
+                updateCourseTable = true;
                 return true;
             }
         });
@@ -108,5 +108,14 @@ public class SettingsFragment extends PreferenceFragment {
         });
         builder.setNegativeButton(android.R.string.cancel, null);
         builder.show();
+    }
+
+    @Override
+    public void onDestroy() {
+        if (updateCourseTable) {
+            MainHandler mainHandler = new MainHandler(getActivity());
+            mainHandler.sendEmptyMessage(Config.HANDLER_RELOAD_TABLE);
+        }
+        super.onDestroy();
     }
 }

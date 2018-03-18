@@ -47,10 +47,10 @@ public class ScoreMethod {
     }
 
     public void saveTemp() {
-        getCourseScore();
+        getCourseScore(false);
     }
 
-    public CourseScore getCourseScore() {
+    public CourseScore getCourseScore(boolean checkTemp) {
         ArrayList<String> scoreCourseId = new ArrayList<>();
         ArrayList<String> scoreCourseName = new ArrayList<>();
         ArrayList<String> scoreCommon = new ArrayList<>();
@@ -92,9 +92,11 @@ public class ScoreMethod {
         courseScore.setScoreFinal(scoreFinal.toArray(new String[]{}));
         courseScore.setScoreTotal(scoreTotal.toArray(new String[]{}));
 
-        BaseMethod.saveOfflineData(context, courseScore, FILE_NAME);
-
-        return courseScore;
+        if (BaseMethod.saveOfflineData(context, courseScore, FILE_NAME, checkTemp)) {
+            return courseScore;
+        } else {
+            return null;
+        }
     }
 
 }

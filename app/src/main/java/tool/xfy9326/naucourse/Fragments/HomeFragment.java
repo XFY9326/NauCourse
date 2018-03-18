@@ -145,8 +145,9 @@ public class HomeFragment extends Fragment {
     private void setNextCourse() {
         NextCourse nextCourse = NextClassMethod.getNextClassArray(getActivity());
         if (nextCourse.getCourseId() != null) {
-            BaseMethod.saveOfflineData(context, nextCourse, NEXT_COURSE_FILE_NAME);
-            setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
+            if (BaseMethod.saveOfflineData(context, nextCourse, NEXT_COURSE_FILE_NAME, false)) {
+                setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
+            }
         } else {
             //缓存是错误的就删除
             BaseMethod.deleteOfflineData(context, NEXT_COURSE_FILE_NAME);

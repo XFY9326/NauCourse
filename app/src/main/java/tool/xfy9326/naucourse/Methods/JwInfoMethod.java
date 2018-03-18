@@ -50,7 +50,7 @@ public class JwInfoMethod {
         return Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR;
     }
 
-    public JwTopic getJwTopic() {
+    public JwTopic getJwTopic(boolean checkTemp) {
         JwTopic jwTopic = new JwTopic();
         String[] postTime = new String[TOPIC_COUNT];
         String[] postTitle = new String[TOPIC_COUNT];
@@ -110,9 +110,11 @@ public class JwInfoMethod {
         jwTopic.setPostUrl(postUrl);
         jwTopic.setPostLength(TOPIC_COUNT);
 
-        BaseMethod.saveOfflineData(context, jwTopic, FILE_NAME);
-
-        return jwTopic;
+        if (BaseMethod.saveOfflineData(context, jwTopic, FILE_NAME, checkTemp)) {
+            return jwTopic;
+        } else {
+            return null;
+        }
     }
 
     public int loadDetail(String url) throws Exception {
