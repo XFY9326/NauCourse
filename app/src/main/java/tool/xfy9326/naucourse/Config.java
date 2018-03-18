@@ -20,6 +20,8 @@ public class Config {
 
     public static final int HANDLER_RELOAD_TABLE = 0;
 
+    public static final int VIEWPAGER_TABLE_PAGE = 1;
+
     public static final String INTENT_INFO_DETAIL_TITLE = "INFO_DETAIL_TITLE";
     public static final String INTENT_INFO_DETAIL_DATE = "INFO_DETAIL_DATE";
     public static final String INTENT_INFO_DETAIL_CLICK = "INFO_DETAIL_CLICK";
@@ -48,6 +50,7 @@ public class Config {
     public static final String PREFERENCE_CLASS_BEFORE_NOTIFY = "CLASS_BEFORE_NOTIFY";
     public static final String PREFERENCE_NOTIFY_NEXT_CLASS = "NOTIFY_NEXT_CLASS";
     public static final String PREFERENCE_SHOW_WEEKEND = "SHOW_WEEKEND";
+    public static final String PREFERENCE_DEFAULT_SHOW_TABLE_PAGE = "DEFAULT_SHOW_TABLE_PAGE";
 
     public static final boolean DEFAULT_PREFERENCE_HAS_LOGIN = false;
     public static final boolean DEFAULT_PREFERENCE_REMEMBER_PW = true;
@@ -58,6 +61,7 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_SHOW_NEXT_WEEK = true;
     public static final boolean DEFAULT_PREFERENCE_NOTIFY_NEXT_CLASS = false;
     public static final boolean DEFAULT_PREFERENCE_SHOW_WEEKEND = true;
+    public static final boolean DEFAULT_PREFERENCE_DEFAULT_SHOW_TABLE_PAGE = false;
 
     //网络连接错误代码
     public static final int NET_WORK_GET_SUCCESS = 0;

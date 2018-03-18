@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -107,6 +108,14 @@ public class TableFragment extends Fragment {
         courseTable = view.findViewById(R.id.course_table);
         courseTable.setZoom(false);
 
+        CardView cardView_date = view.findViewById(R.id.cardview_table_date);
+        cardView_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reloadTable();
+            }
+        });
+
         TableConfig tableConfig = courseTable.getConfig();
         tableConfig.setShowXSequence(false);
         tableConfig.setShowYSequence(false);
@@ -152,6 +161,19 @@ public class TableFragment extends Fragment {
                 String time = context.getString(R.string.time_now) + context.getString(R.string.table_date, year, month) + " " + week;
                 textView_date.setText(time);
 
+                //提前显示下一周的课表
+                if (schoolTime.getWeekNum() != 0) {
+                    int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK);
+                    if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_NEXT_WEEK, Config.DEFAULT_PREFERENCE_SHOW_NEXT_WEEK)) {
+                        if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_WEEKEND, Config.DEFAULT_PREFERENCE_SHOW_WEEKEND)) {
+                            if ((weekDayNum == Calendar.SUNDAY || weekDayNum == Calendar.SATURDAY) && weekNum + 1 <= BaseMethod.getMaxWeekNum(schoolTime)) {
+                                weekNum++;
+                                schoolTime.setWeekNum(weekNum);
+                            }
+                        }
+                    }
+                }
+
                 final CourseMethod courseMethod = new CourseMethod(context, courses, schoolTime);
 
                 final Spinner spinner_week = view.findViewById(R.id.spinner_table_week_chose);
@@ -180,25 +202,11 @@ public class TableFragment extends Fragment {
                     }
                 });
 
-                //提前显示下一周的课表
-                int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK);
-                if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_NEXT_WEEK, Config.DEFAULT_PREFERENCE_SHOW_NEXT_WEEK)) {
-                    if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_WEEKEND, Config.DEFAULT_PREFERENCE_SHOW_WEEKEND)) {
-                        if ((weekDayNum == Calendar.SUNDAY || weekDayNum == Calendar.SATURDAY) && weekNum + 1 <= BaseMethod.getMaxWeekNum(schoolTime)) {
-                            spinner_week.setSelection(weekNum);
-                            courseMethod.updateCourseTableView(weekNum);
-                        } else {
-                            spinner_week.setSelection(weekNum - 1);
-                        }
-                    } else {
-                        spinner_week.setSelection(weekNum - 1);
-                    }
-                } else {
-                    spinner_week.setSelection(weekNum - 1);
-                }
+                spinner_week.setSelection(weekNum - 1);
 
                 courseMethod.setTableView(courseTable);
 
+                //主页面下一节课设置
                 if (!inVacation) {
                     HomeFragment homeFragment = BaseMethod.getBaseApplication(context).getViewPagerAdapter().getHomeFragment();
                     NextCourse nextCourse = courseMethod.getNextClass(weekNum);

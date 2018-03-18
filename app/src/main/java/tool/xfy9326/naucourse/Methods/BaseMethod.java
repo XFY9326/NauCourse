@@ -5,7 +5,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -280,34 +279,21 @@ public class BaseMethod {
     }
 
     //保存离线数据
-    public static void saveOfflineData(final Context context, final Object o, final String FILE_NAME) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String id = PreferenceManager.getDefaultSharedPreferences(context).getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
-                String data = new Gson().toJson(o);
-                String content;
-                System.gc();
-                content = AES.encrypt(data, id);
-                if (!IO.writeFile(content, context.getFilesDir() + File.separator + FILE_NAME)) {
-                    Log.d("TEMP_SAVE_FAILED", FILE_NAME);
-                }
-            }
-        }).start();
+    @SuppressWarnings("UnusedReturnValue")
+    public static boolean saveOfflineData(final Context context, final Object o, final String FILE_NAME) {
+        String id = PreferenceManager.getDefaultSharedPreferences(context).getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
+        String data = new Gson().toJson(o);
+        String content = AES.encrypt(data, id);
+        return IO.writeFile(content, context.getFilesDir() + File.separator + FILE_NAME);
     }
 
     //删除离线数据
     @SuppressWarnings("SameParameterValue")
     public static void deleteOfflineData(final Context context, final String FILE_NAME) {
-        new Thread(new Runnable() {
-            @SuppressWarnings("ResultOfMethodCallIgnored")
-            @Override
-            public void run() {
-                File file = new File(context.getFilesDir() + File.separator + FILE_NAME);
-                if (file.exists()) {
-                    file.delete();
-                }
-            }
-        }).start();
+        File file = new File(context.getFilesDir() + File.separator + FILE_NAME);
+        if (file.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            file.delete();
+        }
     }
 }

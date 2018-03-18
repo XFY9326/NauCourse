@@ -28,6 +28,11 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/course_table_manage">
         <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="DEFAULT_SHOW_TABLE_PAGE"
+            android:summary="@string/default_show_table_page_sum"
+            android:title="@string/default_show_table_page" />
+        <CheckBoxPreference
             android:defaultValue="true"
             android:disableDependentsState="true"
             android:key="SHOW_WEEKEND"

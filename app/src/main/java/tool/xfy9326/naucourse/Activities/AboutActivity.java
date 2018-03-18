@@ -58,7 +58,7 @@ public class AboutActivity extends AppCompatActivity {
         LayoutInflater layoutInflater = getLayoutInflater();
 
         LinearLayout linearLayout = new LinearLayout(AboutActivity.this);
-        linearLayout.setPadding(5, 20, 5, 20);
+        linearLayout.setPadding(10, 30, 10, 25);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
         String[] names = getResources().getStringArray(R.array.open_source_name);

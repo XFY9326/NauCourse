@@ -66,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setScroll(false);
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Config.PREFERENCE_DEFAULT_SHOW_TABLE_PAGE, Config.DEFAULT_PREFERENCE_DEFAULT_SHOW_TABLE_PAGE)) {
+            viewPager.setCurrentItem(Config.VIEWPAGER_TABLE_PAGE, true);
+        }
 
         tabLayout.setupWithViewPager(viewPager);
 
@@ -81,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //首次登陆提前加载考试与成绩的数据
     private void tempLoad() {
         if (getIntent() != null) {
             if (getIntent().getBooleanExtra(Config.INTENT_JUST_LOGIN, false)) {

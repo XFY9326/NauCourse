@@ -65,8 +65,6 @@ public class CourseMethod {
 
     private static NextCourse getNextClass(Context context, String[][] this_week_table, String[][] this_week_id_table, ArrayList<Course> courses) {
         NextCourse nextCourse = new NextCourse();
-        //数组内容： 课程名称 上课地点 授课教师 上课时间 id
-        String[] result = new String[5];
         Calendar calendar = Calendar.getInstance(Locale.CHINA);
         int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK) - 1;
         if (weekDayNum == 0) {
@@ -93,9 +91,9 @@ public class CourseMethod {
                     if (!findCourseId.equals(todayId[i]) && !findCourseId.equals("")) {
                         break;
                     }
-                    result[0] = today[i].substring(0, today[i].indexOf("\n"));
-                    result[1] = today[i].substring(today[i].indexOf("\n") + 2);
-                    result[4] = todayId[i];
+                    nextCourse.setCourseName(today[i].substring(0, today[i].indexOf("\n")));
+                    nextCourse.setCourseLocation(today[i].substring(today[i].indexOf("\n") + 2));
+                    nextCourse.setCourseId(todayId[i]);
                     course_endTime = times[i];
                     if (!lastId.equals(todayId[i])) {
                         course_startTime = startTimes[i];
@@ -110,22 +108,17 @@ public class CourseMethod {
             return nextCourse;
         }
 
-        result[3] = course_startTime + "~" + course_endTime;
+        nextCourse.setCourseTime(course_startTime + "~" + course_endTime);
 
-        if (result[4] != null) {
+        if (nextCourse.getCourseId() != null) {
             for (Course course : courses) {
-                if (course.getCourseId().equals(result[4])) {
-                    result[2] = course.getCourseTeacher();
+                if (course.getCourseId().equals(nextCourse.getCourseId())) {
+                    nextCourse.setCourseTeacher(course.getCourseTeacher());
                     break;
                 }
             }
         }
 
-        nextCourse.setCourseId(result[4]);
-        nextCourse.setCourseName(result[0]);
-        nextCourse.setCourseLocation(result[1]);
-        nextCourse.setCourseTeacher(result[2]);
-        nextCourse.setCourseTime(result[3]);
         return nextCourse;
     }
 

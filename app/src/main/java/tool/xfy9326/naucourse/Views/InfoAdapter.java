@@ -133,7 +133,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoViewHolder> {
         sort();
     }
 
-    //数据是年日期排序
+    //数据按照日期排序
     synchronized private void sort() {
         Comparator<ArrayList<String>> date_comparator = new Comparator<ArrayList<String>>() {
             @Override
