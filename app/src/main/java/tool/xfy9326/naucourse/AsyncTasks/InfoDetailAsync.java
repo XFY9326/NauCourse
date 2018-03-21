@@ -29,6 +29,12 @@ public class InfoDetailAsync extends AsyncTask<Context, Void, Context> {
         this.info_url = null;
     }
 
+    /**
+     * 设置加载详细信息来源与地址
+     *
+     * @param info_source 信息来源
+     * @param info_url    信息地址
+     */
     public void setData(String info_source, String info_url) {
         this.info_source = info_source;
         this.info_url = info_url;

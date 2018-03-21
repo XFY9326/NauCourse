@@ -80,8 +80,10 @@ public class LoginMethod {
         }
         File data_file = context.getFilesDir();
         for (File file : data_file.listFiles()) {
-            //noinspection ResultOfMethodCallIgnored
-            file.delete();
+            if (file.isFile()) {
+                //noinspection ResultOfMethodCallIgnored
+                file.delete();
+            }
         }
     }
 

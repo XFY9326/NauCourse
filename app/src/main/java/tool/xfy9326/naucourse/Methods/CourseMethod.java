@@ -63,6 +63,16 @@ public class CourseMethod {
         this.course_time = null;
     }
 
+    /**
+     * 获取下一节课的信息
+     * 仅在内部使用
+     *
+     * @param context            Context
+     * @param this_week_table    课程信息二维数组
+     * @param this_week_id_table 课程ID二维数组
+     * @param courses            课程信息列表
+     * @return NextCourse对象
+     */
     private static NextCourse getNextClass(Context context, String[][] this_week_table, String[][] this_week_id_table, ArrayList<Course> courses) {
         NextCourse nextCourse = new NextCourse();
         Calendar calendar = Calendar.getInstance(Locale.CHINA);
@@ -140,7 +150,7 @@ public class CourseMethod {
 
     /**
      * 获取下一节课的信息
-     *
+     * 对外接口
      * @param weekNum 周数
      * @return 下一节课的信息
      */

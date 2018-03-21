@@ -26,6 +26,12 @@ public class NotificationMethod {
     private static final int NOTIFICATION_CODE = 1;
     private static final String CHANNEL_ID = "channel_next_course_notify";
 
+    /**
+     * 显示下一节课的通知
+     *
+     * @param context    Context
+     * @param nextCourse NextCourse对象
+     */
     public static void showNextClassNotification(Context context, NextCourse nextCourse) {
         if (nextCourse.getCourseId() != null) {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -52,6 +58,12 @@ public class NotificationMethod {
         }
     }
 
+    /**
+     * 设置通知渠道
+     *
+     * @param context             Context
+     * @param notificationManager NotificationManager
+     */
     private static void CreateNotificationChannel(Context context, NotificationManager notificationManager) {
         if (Build.VERSION.SDK_INT >= 26) {
             NotificationChannel notificationChannel = notificationManager.getNotificationChannel(CHANNEL_ID);

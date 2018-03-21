@@ -74,6 +74,7 @@ public class BaseMethod {
 
     /**
      * 网络是否联接检测
+     *
      * @param context Context
      * @return 网络是否联接
      */
@@ -92,6 +93,7 @@ public class BaseMethod {
 
     /**
      * WIFI网络检测
+     *
      * @param context Context
      * @return WIFI网络是否联接
      */
@@ -110,6 +112,7 @@ public class BaseMethod {
 
     /**
      * 双击退出
+     *
      * @param activity 需要退出的Activity
      */
     public static void doubleClickExit(Activity activity) {
@@ -137,6 +140,7 @@ public class BaseMethod {
 
     /**
      * 是否数据自动更新
+     *
      * @param context Context
      * @return 是否数据自动更新
      */
@@ -151,6 +155,7 @@ public class BaseMethod {
 
     /**
      * 是否Wifi下数据自动更新
+     *
      * @param context Context
      * @return 是否Wifi下数据自动更新
      */
@@ -160,7 +165,8 @@ public class BaseMethod {
 
     /**
      * 获取周数数组
-     * @param context Context
+     *
+     * @param context    Context
      * @param schoolTime SchoolTime
      * @return 周数列表
      */
@@ -178,6 +184,7 @@ public class BaseMethod {
 
     /**
      * 获取最大周数
+     *
      * @param schoolTime SchoolTime对象
      * @return 最大周数
      */
@@ -210,6 +217,7 @@ public class BaseMethod {
     /**
      * 获取当前是第几周
      * 主要用于非联网更新状态，但是目前主要使用，减少网络更新
+     *
      * @param schoolTime SchoolTime对象
      * @return 周数
      */
@@ -257,8 +265,9 @@ public class BaseMethod {
 
     /**
      * 获取指定周每一天的的日期
-     * @param context Context
-     * @param week_num 周数
+     *
+     * @param context         Context
+     * @param week_num        周数
      * @param startSchoolDate 开学时间（SchoolTime）
      * @return 周数与日期的列表
      */
@@ -298,6 +307,7 @@ public class BaseMethod {
 
     /**
      * 获取上课的节数与时间列表
+     *
      * @param context Context
      * @return 时间列表
      */
@@ -312,9 +322,10 @@ public class BaseMethod {
 
     /**
      * 获取离线数据
-     * @param context Context
+     *
+     * @param context    Context
      * @param file_class JavaBean Class
-     * @param FILE_NAME 缓存数据文件名
+     * @param FILE_NAME  缓存数据文件名
      * @return JavaBean对象
      */
     public static Object getOfflineData(Context context, Class file_class, String FILE_NAME) {
@@ -331,6 +342,7 @@ public class BaseMethod {
 
     /**
      * 获取离线课表数据
+     *
      * @param context Context
      * @return 课表信息列表
      */
@@ -351,8 +363,9 @@ public class BaseMethod {
 
     /**
      * 保存离线数据
-     * @param context Context
-     * @param o JavaBean对象
+     *
+     * @param context   Context
+     * @param o         JavaBean对象
      * @param FILE_NAME 储存的文件名
      * @param checkTemp 是否检测缓存与要储存的数据相同
      * @return 是否保存成功
@@ -375,7 +388,8 @@ public class BaseMethod {
 
     /**
      * 删除离线数据
-     * @param context Context
+     *
+     * @param context   Context
      * @param FILE_NAME 离线数据的文件名
      */
     @SuppressWarnings("SameParameterValue")
