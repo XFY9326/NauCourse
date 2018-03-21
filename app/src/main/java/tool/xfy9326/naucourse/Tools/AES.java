@@ -49,6 +49,14 @@ public class AES {
         return null;
     }
 
+    /**
+     * AES加密
+     *
+     * @param content  需要加密的内容
+     * @param password 加密的密码
+     * @return 加密后的字符
+     */
+
     public static String encrypt(String content, String password) {
         if (content != null) {
             byte[] data = null;
@@ -76,6 +84,12 @@ public class AES {
         return null;
     }
 
+    /**
+     * AES解密
+     * @param content 需要解密的内容
+     * @param password 解密的密码
+     * @return 解密完成的内容
+     */
     public static String decrypt(String content, String password) {
         if (content != null) {
             byte[] data = null;

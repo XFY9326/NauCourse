@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (BaseMethod.isNetworkConnected(LoginActivity.this)) {
                     final String id = editText_userId.getText().toString().trim();
                     final String pw = editText_userPw.getText().toString().trim();
-                    final NauJwcClient nauJwcClient = BaseMethod.getBaseApplication(LoginActivity.this).getClient();
+                    final NauJwcClient nauJwcClient = BaseMethod.getApp(LoginActivity.this).getClient();
                     showLoadingDialog(LoginActivity.this);
                     LoginMethod.cleanUserTemp(LoginActivity.this);
                     new Thread(new Runnable() {

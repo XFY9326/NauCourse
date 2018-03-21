@@ -22,7 +22,7 @@ public class MainHandler extends Handler {
     public void handleMessage(Message msg) {
         switch (msg.what) {
             case 0:
-                TableFragment tableFragment = BaseMethod.getBaseApplication(context).getViewPagerAdapter().getTableFragment();
+                TableFragment tableFragment = BaseMethod.getApp(context).getViewPagerAdapter().getTableFragment();
                 tableFragment.reloadTable();
                 break;
         }

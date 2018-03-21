@@ -26,7 +26,7 @@ public class ExamAsync extends AsyncTask<Context, Void, Context> {
     protected Context doInBackground(Context... context) {
         try {
             int loadTime = 0;
-            ExamActivity examActivity = BaseMethod.getBaseApplication(context[0]).getExamActivity();
+            ExamActivity examActivity = BaseMethod.getApp(context[0]).getExamActivity();
             if (examActivity != null) {
                 loadTime = examActivity.getLoadTime();
             }
@@ -46,7 +46,7 @@ public class ExamAsync extends AsyncTask<Context, Void, Context> {
                 }
 
                 loadTime++;
-                BaseMethod.getBaseApplication(context[0]).getExamActivity().setLoadTime(loadTime);
+                BaseMethod.getApp(context[0]).getExamActivity().setLoadTime(loadTime);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -57,7 +57,7 @@ public class ExamAsync extends AsyncTask<Context, Void, Context> {
 
     @Override
     protected void onPostExecute(Context context) {
-        ExamActivity examActivity = BaseMethod.getBaseApplication(context).getExamActivity();
+        ExamActivity examActivity = BaseMethod.getApp(context).getExamActivity();
         if (examActivity != null) {
             if (BaseMethod.checkNetWorkCode(context, new int[]{examLoadSuccess}, loadCode)) {
                 examActivity.setExam(exam);

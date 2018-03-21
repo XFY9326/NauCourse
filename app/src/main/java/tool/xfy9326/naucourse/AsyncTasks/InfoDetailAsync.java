@@ -62,7 +62,7 @@ public class InfoDetailAsync extends AsyncTask<Context, Void, Context> {
 
     @Override
     protected void onPostExecute(Context context) {
-        InfoDetailActivity infoDetailActivity = BaseMethod.getBaseApplication(context).getInfoDetailActivity();
+        InfoDetailActivity infoDetailActivity = BaseMethod.getApp(context).getInfoDetailActivity();
         if (infoDetailActivity != null) {
             if (BaseMethod.checkNetWorkCode(context, new int[]{loadSuccess}, loadCode)) {
                 infoDetailActivity.InfoDetailSet(data, extraFile);

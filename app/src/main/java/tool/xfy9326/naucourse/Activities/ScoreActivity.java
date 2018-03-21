@@ -35,14 +35,14 @@ public class ScoreActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score);
-        BaseMethod.getBaseApplication(this).setScoreActivity(this);
+        BaseMethod.getApp(this).setScoreActivity(this);
         ToolBarSet();
         ViewSet();
     }
 
     @Override
     protected void onDestroy() {
-        BaseMethod.getBaseApplication(this).setScoreActivity(null);
+        BaseMethod.getApp(this).setScoreActivity(null);
         System.gc();
         super.onDestroy();
     }

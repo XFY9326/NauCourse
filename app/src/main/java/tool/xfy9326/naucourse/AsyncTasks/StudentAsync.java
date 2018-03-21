@@ -31,7 +31,7 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
     protected Context doInBackground(Context... context) {
         try {
             int loadTime = 0;
-            PersonFragment personFragment = BaseMethod.getBaseApplication(context[0]).getViewPagerAdapter().getPersonFragment();
+            PersonFragment personFragment = BaseMethod.getApp(context[0]).getViewPagerAdapter().getPersonFragment();
             if (personFragment != null) {
                 loadTime = personFragment.getLoadTime();
             }
@@ -43,7 +43,7 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
                 timeLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 loadTime++;
                 if (personFragment != null) {
-                    BaseMethod.getBaseApplication(context[0]).getViewPagerAdapter().getPersonFragment().setLoadTime(loadTime);
+                    BaseMethod.getApp(context[0]).getViewPagerAdapter().getPersonFragment().setLoadTime(loadTime);
                 }
             } else {
                 PersonMethod personMethod = new PersonMethod(context[0]);
@@ -70,7 +70,7 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
 
     @Override
     protected void onPostExecute(Context context) {
-        PersonFragment personFragment = BaseMethod.getBaseApplication(context).getViewPagerAdapter().getPersonFragment();
+        PersonFragment personFragment = BaseMethod.getApp(context).getViewPagerAdapter().getPersonFragment();
         if (personFragment != null) {
             if (BaseMethod.checkNetWorkCode(context, new int[]{personLoadSuccess, timeLoadSuccess}, loadCode)) {
                 personFragment.PersonTextSet(studentInfo, context);

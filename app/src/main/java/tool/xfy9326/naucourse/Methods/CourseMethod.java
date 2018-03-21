@@ -138,7 +138,12 @@ public class CourseMethod {
         return false;
     }
 
-    //获取下一节课信息
+    /**
+     * 获取下一节课的信息
+     *
+     * @param weekNum 周数
+     * @return 下一节课的信息
+     */
     public NextCourse getNextClass(int weekNum) {
         if (this.weekNum != weekNum || table == null) {
             getTable(weekNum, schoolTime.getStartTime());

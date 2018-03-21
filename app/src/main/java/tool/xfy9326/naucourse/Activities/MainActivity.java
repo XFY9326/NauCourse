@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loginCheck();
-        BaseMethod.getBaseApplication(this).setMainActivity(this);
+        BaseMethod.getApp(this).setMainActivity(this);
         setContentView(R.layout.activity_main);
         ToolBarSet();
         ViewSet();
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout.setupWithViewPager(viewPager);
 
-        BaseMethod.getBaseApplication(this).setViewPagerAdapter(viewPagerAdapter);
+        BaseMethod.getApp(this).setViewPagerAdapter(viewPagerAdapter);
 
         TabLayout.Tab tab_home = tabLayout.getTabAt(0);
         TabLayout.Tab tab_table = tabLayout.getTabAt(1);
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         System.gc();
-        BaseMethod.getBaseApplication(this).setMainActivity(null);
+        BaseMethod.getApp(this).setMainActivity(null);
         super.onDestroy();
     }
 }

@@ -153,7 +153,15 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    //外部设置下一节课
+    /**
+     * 设置下一节课
+     * 主要用于外部调用更新UI
+     *
+     * @param name     课程名称
+     * @param location 上课地点
+     * @param teacher  上课老师
+     * @param time     上课时间
+     */
     public void setNextCourse(String name, String location, String teacher, String time) {
         if (isAdded()) {
             TextView textView_noNextClass = view.findViewById(R.id.textView_noNextClass);

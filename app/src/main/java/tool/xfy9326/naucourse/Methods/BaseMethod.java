@@ -36,7 +36,14 @@ import tool.xfy9326.naucourse.Utils.SchoolTime;
 public class BaseMethod {
     private static long DoubleClickTime = 0;
 
-    //网络连接情况检测以及错误提示
+    /**
+     * 网络连接情况检测以及错误提示
+     *
+     * @param context         Context
+     * @param dataLoadCode    单个数据请求错误代码
+     * @param contentLoadCode 整体网络请求错误代码
+     * @return 网络检查是否通过
+     */
     public static boolean checkNetWorkCode(Context context, int[] dataLoadCode, int contentLoadCode) {
         if (contentLoadCode == Config.NET_WORK_ERROR_CODE_CONNECT_ERROR) {
             Toast.makeText(context, R.string.network_get_error, Toast.LENGTH_SHORT).show();
@@ -44,16 +51,16 @@ public class BaseMethod {
         }
         for (int code : dataLoadCode) {
             if (code == Config.NET_WORK_ERROR_CODE_CONNECT_NO_LOGIN) {
-                if (!getBaseApplication(context).isShowLoginErrorOnce()) {
+                if (!getApp(context).isShowLoginErrorOnce()) {
                     Toast.makeText(context, R.string.user_login_error, Toast.LENGTH_LONG).show();
-                    getBaseApplication(context).setShowLoginErrorOnce();
+                    getApp(context).setShowLoginErrorOnce();
                 }
                 return false;
             }
             if (code == Config.NET_WORK_ERROR_CODE_CONNECT_USER_DATA) {
-                if (!getBaseApplication(context).isShowLoginErrorOnce()) {
+                if (!getApp(context).isShowLoginErrorOnce()) {
                     Toast.makeText(context, R.string.user_login_error, Toast.LENGTH_LONG).show();
-                    getBaseApplication(context).setShowLoginErrorOnce();
+                    getApp(context).setShowLoginErrorOnce();
                 }
                 return false;
             }
@@ -65,7 +72,11 @@ public class BaseMethod {
         return true;
     }
 
-    //网络是否联接检测
+    /**
+     * 网络是否联接检测
+     * @param context Context
+     * @return 网络是否联接
+     */
     public static boolean isNetworkConnected(Context context) {
         if (context != null) {
             ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -79,7 +90,11 @@ public class BaseMethod {
         return false;
     }
 
-    //WIFI网络检测
+    /**
+     * WIFI网络检测
+     * @param context Context
+     * @return WIFI网络是否联接
+     */
     private static boolean isWifiNetWork(Context context) {
         if (context != null) {
             ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -93,7 +108,10 @@ public class BaseMethod {
         return false;
     }
 
-    //双击退出
+    /**
+     * 双击退出
+     * @param activity 需要退出的Activity
+     */
     public static void doubleClickExit(Activity activity) {
         long time = System.currentTimeMillis();
         if (time - DoubleClickTime > 1200) {
@@ -107,10 +125,21 @@ public class BaseMethod {
         }
     }
 
-    public static BaseApplication getBaseApplication(Context context) {
+    /**
+     * 获取BaseApplication对象
+     *
+     * @param context Context
+     * @return BaseApplication对象
+     */
+    public static BaseApplication getApp(Context context) {
         return (BaseApplication) context.getApplicationContext();
     }
 
+    /**
+     * 是否数据自动更新
+     * @param context Context
+     * @return 是否数据自动更新
+     */
     public static boolean isDataAutoUpdate(Context context) {
         boolean autoUpdate = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_UPDATE_DATA_ON_START, Config.DEFAULT_PREFERENCE_UPDATE_DATA_ON_START);
         if (isDataWifiAutoUpdate(context)) {
@@ -120,11 +149,21 @@ public class BaseMethod {
         }
     }
 
+    /**
+     * 是否Wifi下数据自动更新
+     * @param context Context
+     * @return 是否Wifi下数据自动更新
+     */
     private static boolean isDataWifiAutoUpdate(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_ONLY_UPDATE_UNDER_WIFI, Config.DEFAULT_PREFERENCE_ONLY_UPDATE_UNDER_WIFI);
     }
 
-    //获取周数数组
+    /**
+     * 获取周数数组
+     * @param context Context
+     * @param schoolTime SchoolTime
+     * @return 周数列表
+     */
     public static List<String> getWeekArray(Context context, SchoolTime schoolTime) {
         List<String> week = new ArrayList<>();
         int max_week = getMaxWeekNum(schoolTime);
@@ -137,7 +176,11 @@ public class BaseMethod {
         return week;
     }
 
-    //获取最大周数
+    /**
+     * 获取最大周数
+     * @param schoolTime SchoolTime对象
+     * @return 最大周数
+     */
     public static int getMaxWeekNum(SchoolTime schoolTime) {
         int max_week = 0;
         if (schoolTime != null) {
@@ -163,7 +206,13 @@ public class BaseMethod {
         return max_week;
     }
 
-    //获取当前是第几周（用于非联网更新状态）
+
+    /**
+     * 获取当前是第几周
+     * 主要用于非联网更新状态，但是目前主要使用，减少网络更新
+     * @param schoolTime SchoolTime对象
+     * @return 周数
+     */
     public static int getNowWeekNum(SchoolTime schoolTime) {
         int weekNum = 0;
         if (schoolTime != null) {
@@ -206,7 +255,13 @@ public class BaseMethod {
         return weekNum;
     }
 
-    //获取第几周星期几的日期
+    /**
+     * 获取指定周每一天的的日期
+     * @param context Context
+     * @param week_num 周数
+     * @param startSchoolDate 开学时间（SchoolTime）
+     * @return 周数与日期的列表
+     */
     static List<String> getWeekDayArray(Context context, int week_num, String startSchoolDate) {
         List<String> week = new ArrayList<>();
         String[] num = context.getResources().getStringArray(R.array.week_number);
@@ -241,7 +296,11 @@ public class BaseMethod {
         return weekDayDate;
     }
 
-    //获取上课时间
+    /**
+     * 获取上课的节数与时间列表
+     * @param context Context
+     * @return 时间列表
+     */
     static List<String> getCourseTimeArray(Context context) {
         List<String> day = new ArrayList<>();
         String[] time = context.getResources().getStringArray(R.array.course_start_time);
@@ -251,7 +310,13 @@ public class BaseMethod {
         return day;
     }
 
-    //获取离线数据
+    /**
+     * 获取离线数据
+     * @param context Context
+     * @param file_class JavaBean Class
+     * @param FILE_NAME 缓存数据文件名
+     * @return JavaBean对象
+     */
     public static Object getOfflineData(Context context, Class file_class, String FILE_NAME) {
         String path = context.getFilesDir() + File.separator + FILE_NAME;
         File file = new File(path);
@@ -264,7 +329,11 @@ public class BaseMethod {
         }
     }
 
-    //获取离线课表数据
+    /**
+     * 获取离线课表数据
+     * @param context Context
+     * @return 课表信息列表
+     */
     public static ArrayList<Course> getOfflineTableData(Context context) {
         String path = context.getFilesDir() + File.separator + TableMethod.FILE_NAME;
         File file = new File(path);
@@ -280,7 +349,14 @@ public class BaseMethod {
         }
     }
 
-    //保存离线数据
+    /**
+     * 保存离线数据
+     * @param context Context
+     * @param o JavaBean对象
+     * @param FILE_NAME 储存的文件名
+     * @param checkTemp 是否检测缓存与要储存的数据相同
+     * @return 是否保存成功
+     */
     @SuppressWarnings("UnusedReturnValue")
     public static boolean saveOfflineData(final Context context, final Object o, final String FILE_NAME, boolean checkTemp) {
         String path = context.getFilesDir() + File.separator + FILE_NAME;
@@ -297,7 +373,11 @@ public class BaseMethod {
         return IO.writeFile(content, path);
     }
 
-    //删除离线数据
+    /**
+     * 删除离线数据
+     * @param context Context
+     * @param FILE_NAME 离线数据的文件名
+     */
     @SuppressWarnings("SameParameterValue")
     public static void deleteOfflineData(final Context context, final String FILE_NAME) {
         File file = new File(context.getFilesDir() + File.separator + FILE_NAME);

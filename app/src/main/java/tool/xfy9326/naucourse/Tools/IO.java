@@ -16,6 +16,13 @@ import java.io.OutputStream;
 
 public class IO {
 
+    /**
+     * 写入文字到文件
+     *
+     * @param content 需要写入的内容
+     * @param path    文件路径
+     * @return 是否写入成功
+     */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean writeFile(String content, String path) {
         File file = new File(path);
@@ -35,6 +42,11 @@ public class IO {
         return false;
     }
 
+    /**
+     * 从文件中读取文字
+     * @param path 文件路径
+     * @return 读取的文字
+     */
     public static String readFile(String path) {
         File file = new File(path);
         try {

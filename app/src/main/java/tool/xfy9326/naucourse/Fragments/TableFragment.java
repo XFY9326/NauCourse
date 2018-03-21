@@ -128,6 +128,14 @@ public class TableFragment extends Fragment {
         }
     }
 
+    /**
+     * 设置课程
+     *
+     * @param courses    课程信息列表
+     * @param schoolTime SchoolTime对象
+     * @param context    Context
+     * @param isReload   是否是刷新本地信息
+     */
     public void CourseSet(ArrayList<Course> courses, SchoolTime schoolTime, final Context context, boolean isReload) {
         if (context != null && courses != null && schoolTime != null) {
             if (!isReload) {
@@ -208,7 +216,7 @@ public class TableFragment extends Fragment {
 
                 //主页面下一节课设置
                 if (!inVacation) {
-                    HomeFragment homeFragment = BaseMethod.getBaseApplication(context).getViewPagerAdapter().getHomeFragment();
+                    HomeFragment homeFragment = BaseMethod.getApp(context).getViewPagerAdapter().getHomeFragment();
                     NextCourse nextCourse = courseMethod.getNextClass(weekNum);
                     homeFragment.setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
                 }
@@ -288,7 +296,9 @@ public class TableFragment extends Fragment {
         }
     }
 
-    //重新加载表格
+    /**
+     * 重新加载课程表
+     */
     synchronized public void reloadTable() {
         if (isAdded() && courses != null && schoolTime != null) {
             CourseSet(courses, schoolTime, context, true);

@@ -33,14 +33,14 @@ public class ExamActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam);
-        BaseMethod.getBaseApplication(this).setExamActivity(this);
+        BaseMethod.getApp(this).setExamActivity(this);
         ToolBarSet();
         ViewSet();
     }
 
     @Override
     protected void onDestroy() {
-        BaseMethod.getBaseApplication(this).setExamActivity(null);
+        BaseMethod.getApp(this).setExamActivity(null);
         System.gc();
         super.onDestroy();
     }

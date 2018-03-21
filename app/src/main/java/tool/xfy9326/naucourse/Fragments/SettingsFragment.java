@@ -95,7 +95,7 @@ public class SettingsFragment extends PreferenceFragment {
                             getActivity().sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
                             //重启当前程序
                             getActivity().startActivity(new Intent(getActivity(), MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP));
-                            MainActivity activity = BaseMethod.getBaseApplication(getActivity()).getMainActivity();
+                            MainActivity activity = BaseMethod.getApp(getActivity()).getMainActivity();
                             if (activity != null) {
                                 activity.finish();
                             }

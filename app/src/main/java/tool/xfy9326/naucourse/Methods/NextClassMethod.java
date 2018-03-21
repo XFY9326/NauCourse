@@ -18,7 +18,12 @@ import tool.xfy9326.naucourse.Utils.SchoolTime;
 
 public class NextClassMethod {
 
-    //获取下一节课
+    /**
+     * 获取下一节课的信息
+     *
+     * @param context Context
+     * @return 下一节课的信息
+     */
     public static NextCourse getNextClassArray(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {

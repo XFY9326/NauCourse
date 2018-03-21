@@ -49,7 +49,7 @@ public class InfoDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         GetData();
         setContentView(R.layout.activity_info_detail);
-        BaseMethod.getBaseApplication(this).setInfoDetailActivity(this);
+        BaseMethod.getApp(this).setInfoDetailActivity(this);
         ToolBarSet();
         ViewSet();
     }
@@ -89,7 +89,7 @@ public class InfoDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        BaseMethod.getBaseApplication(this).setInfoDetailActivity(null);
+        BaseMethod.getApp(this).setInfoDetailActivity(null);
         System.gc();
         super.onDestroy();
     }

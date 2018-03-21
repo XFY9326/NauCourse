@@ -31,7 +31,7 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
     protected Context doInBackground(Context... context) {
         try {
             int loadTime = 0;
-            ScoreActivity scoreActivity = BaseMethod.getBaseApplication(context[0]).getScoreActivity();
+            ScoreActivity scoreActivity = BaseMethod.getApp(context[0]).getScoreActivity();
             if (scoreActivity != null) {
                 loadTime = scoreActivity.getLoadTime();
             }
@@ -70,7 +70,7 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
 
     @Override
     protected void onPostExecute(Context context) {
-        ScoreActivity scoreActivity = BaseMethod.getBaseApplication(context).getScoreActivity();
+        ScoreActivity scoreActivity = BaseMethod.getApp(context).getScoreActivity();
         if (scoreActivity != null) {
             if (BaseMethod.checkNetWorkCode(context, new int[]{personLoadSuccess, scoreLoadSuccess}, loadCode)) {
                 scoreActivity.setMainScore(studentScore, courseScore);

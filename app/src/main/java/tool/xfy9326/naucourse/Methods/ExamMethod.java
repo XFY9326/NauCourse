@@ -50,6 +50,7 @@ public class ExamMethod {
         getExam(false);
     }
 
+    @SuppressWarnings("SameParameterValue")
     public Exam getExam(boolean checkTemp) {
         ArrayList<String> examId = new ArrayList<>();
         ArrayList<String> examName = new ArrayList<>();

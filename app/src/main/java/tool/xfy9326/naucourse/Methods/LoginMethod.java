@@ -20,10 +20,10 @@ public class LoginMethod {
 
     //获取教务系统详情数据
     static String getData(Context context, String url) throws Exception {
-        String data = BaseMethod.getBaseApplication(context).getClient().getUserData(url);
+        String data = BaseMethod.getApp(context).getClient().getUserData(url);
         if (!checkUserLogin(data)) {
             if (reLogin(context)) {
-                data = BaseMethod.getBaseApplication(context).getClient().getUserData(url);
+                data = BaseMethod.getApp(context).getClient().getUserData(url);
             } else {
                 Log.d("DATA", "LOGIN ERROR");
             }
@@ -44,7 +44,7 @@ public class LoginMethod {
         String id = sharedPreferences.getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
         String pw = sharedPreferences.getString(Config.PREFERENCE_USER_PW, Config.DEFAULT_PREFERENCE_USER_PW);
         pw = AES.decrypt(pw, id);
-        NauJwcClient nauJwcClient = BaseMethod.getBaseApplication(context).getClient();
+        NauJwcClient nauJwcClient = BaseMethod.getApp(context).getClient();
         nauJwcClient.loginOut();
         if (nauJwcClient.login(id, pw)) {
             String loginURL = nauJwcClient.getLoginUrl();
@@ -60,7 +60,7 @@ public class LoginMethod {
     //注销登陆
     public static boolean loginOut(Context context) {
         try {
-            BaseMethod.getBaseApplication(context).getClient().loginOut();
+            BaseMethod.getApp(context).getClient().loginOut();
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             sharedPreferences.edit().remove(Config.PREFERENCE_LOGIN_URL).putBoolean(Config.PREFERENCE_HAS_LOGIN, false).apply();
             cleanUserTemp(context);
