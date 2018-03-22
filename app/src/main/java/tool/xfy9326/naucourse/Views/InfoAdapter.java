@@ -18,6 +18,7 @@ import java.util.Locale;
 import tool.xfy9326.naucourse.Activities.InfoDetailActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.Utils.InfoDetail;
 import tool.xfy9326.naucourse.Utils.JwTopic;
 import tool.xfy9326.naucourse.Utils.JwcTopic;
 
@@ -30,16 +31,8 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoViewHolder> {
     public static final String TOPIC_SOURCE_JWC = "JWC";
     public static final String TOPIC_SOURCE_JW = "JW";
 
-    private static final int topic_type = 0;
-    private static final int topic_title = 1;
-    private static final int topic_click = 2;
-    private static final int topic_post = 3;
-    private static final int topic_date = 4;
-    private static final int topic_url = 5;
-    private static final int topic_source = 6;
-
     private final Context context;
-    private final ArrayList<ArrayList<String>> topic_data;
+    private final ArrayList<InfoDetail> topic_data;
     private JwcTopic jwcTopic;
     private JwTopic jwTopic;
 
@@ -75,27 +68,22 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull final InfoViewHolder holder, int position) {
-        holder.textView_type.setText(context.getString(R.string.info_type, topic_data.get(holder.getAdapterPosition()).get(topic_type)));
-        holder.textView_title.setText(topic_data.get(holder.getAdapterPosition()).get(topic_title));
-        String click = topic_data.get(holder.getAdapterPosition()).get(topic_click);
+        holder.textView_type.setText(context.getString(R.string.info_type, topic_data.get(holder.getAdapterPosition()).getType()));
+        holder.textView_title.setText(topic_data.get(holder.getAdapterPosition()).getTitle());
+        String click = topic_data.get(holder.getAdapterPosition()).getClick();
         if (click != null) {
             holder.textView_click.setVisibility(View.VISIBLE);
             holder.textView_click.setText(context.getString(R.string.info_click, click));
         } else {
             holder.textView_click.setVisibility(View.INVISIBLE);
         }
-        holder.textView_post.setText(context.getString(R.string.info_post, topic_data.get(holder.getAdapterPosition()).get(topic_post)));
-        holder.textView_date.setText(context.getString(R.string.info_date, topic_data.get(holder.getAdapterPosition()).get(topic_date)));
+        holder.textView_post.setText(context.getString(R.string.info_post, topic_data.get(holder.getAdapterPosition()).getPost()));
+        holder.textView_date.setText(context.getString(R.string.info_date, topic_data.get(holder.getAdapterPosition()).getDate()));
         holder.cardView_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, InfoDetailActivity.class);
-                intent.putExtra(Config.INTENT_INFO_DETAIL_TITLE, topic_data.get(holder.getAdapterPosition()).get(topic_title));
-                intent.putExtra(Config.INTENT_INFO_DETAIL_CLICK, topic_data.get(holder.getAdapterPosition()).get(topic_click));
-                intent.putExtra(Config.INTENT_INFO_DETAIL_DATE, topic_data.get(holder.getAdapterPosition()).get(topic_date));
-                intent.putExtra(Config.INTENT_INFO_DETAIL_POST, topic_data.get(holder.getAdapterPosition()).get(topic_post));
-                intent.putExtra(Config.INTENT_INFO_DETAIL_SOURCE, topic_data.get(holder.getAdapterPosition()).get(topic_source));
-                intent.putExtra(Config.INTENT_INFO_DETAIL_URL, topic_data.get(holder.getAdapterPosition()).get(topic_url));
+                intent.putExtra(Config.INTENT_INFO_DETAIL, topic_data.get(holder.getAdapterPosition()));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
@@ -106,28 +94,28 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoViewHolder> {
     private void setData() {
         if (jwcTopic != null) {
             for (int i = 0; i < jwcTopic.getTopic_length(); i++) {
-                ArrayList<String> data = new ArrayList<>(7);
-                data.add(topic_type, jwcTopic.getTopic_type()[i]);
-                data.add(topic_title, jwcTopic.getTopic_title()[i]);
-                data.add(topic_click, jwcTopic.getTopic_click()[i]);
-                data.add(topic_post, jwcTopic.getTopic_post()[i]);
-                data.add(topic_date, jwcTopic.getTopic_date()[i]);
-                data.add(topic_url, jwcTopic.getTopic_url()[i]);
-                data.add(topic_source, TOPIC_SOURCE_JWC);
-                topic_data.add(data);
+                InfoDetail infoDetail = new InfoDetail();
+                infoDetail.setTitle(jwcTopic.getTopic_title()[i]);
+                infoDetail.setClick(jwcTopic.getTopic_click()[i]);
+                infoDetail.setDate(jwcTopic.getTopic_date()[i]);
+                infoDetail.setPost(jwcTopic.getTopic_post()[i]);
+                infoDetail.setSource(TOPIC_SOURCE_JWC);
+                infoDetail.setUrl(jwcTopic.getTopic_url()[i]);
+                infoDetail.setType(jwcTopic.getTopic_type()[i]);
+                topic_data.add(infoDetail);
             }
         }
         if (jwTopic != null) {
             for (int i = 0; i < jwTopic.getPostLength(); i++) {
-                ArrayList<String> data = new ArrayList<>(7);
-                data.add(topic_type, jwTopic.getPostType()[i]);
-                data.add(topic_title, jwTopic.getPostTitle()[i]);
-                data.add(topic_click, null);
-                data.add(topic_post, context.getString(R.string.jwc));
-                data.add(topic_date, jwTopic.getPostTime()[i]);
-                data.add(topic_url, jwTopic.getPostUrl()[i]);
-                data.add(topic_source, TOPIC_SOURCE_JW);
-                topic_data.add(data);
+                InfoDetail infoDetail = new InfoDetail();
+                infoDetail.setTitle(jwTopic.getPostTitle()[i]);
+                infoDetail.setClick(null);
+                infoDetail.setDate(jwTopic.getPostTime()[i]);
+                infoDetail.setPost(context.getString(R.string.jwc));
+                infoDetail.setSource(TOPIC_SOURCE_JW);
+                infoDetail.setUrl(jwTopic.getPostUrl()[i]);
+                infoDetail.setType(jwTopic.getPostType()[i]);
+                topic_data.add(infoDetail);
             }
         }
         sort();
@@ -135,12 +123,12 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoViewHolder> {
 
     //数据按照日期排序
     synchronized private void sort() {
-        Comparator<ArrayList<String>> date_comparator = new Comparator<ArrayList<String>>() {
+        Comparator<InfoDetail> date_comparator = new Comparator<InfoDetail>() {
             @Override
-            public int compare(ArrayList<String> o1, ArrayList<String> o2) {
+            public int compare(InfoDetail o1, InfoDetail o2) {
                 try {
-                    String time1 = o1.get(topic_date).trim();
-                    String time2 = o2.get(topic_date).trim();
+                    String time1 = o1.getDate().trim();
+                    String time2 = o2.getDate().trim();
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
                     long day1 = simpleDateFormat.parse(time1).getTime();
                     long day2 = simpleDateFormat.parse(time2).getTime();

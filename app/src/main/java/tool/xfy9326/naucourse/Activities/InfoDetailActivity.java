@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,6 +31,7 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.JwInfoMethod;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.Utils.InfoDetail;
 import tool.xfy9326.naucourse.Views.InfoAdapter;
 
 /**
@@ -43,15 +45,20 @@ public class InfoDetailActivity extends AppCompatActivity {
     private String info_date;
     private String info_url;
     private String info_source;
+    private String info_type;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GetData();
         setContentView(R.layout.activity_info_detail);
         BaseMethod.getApp(this).setInfoDetailActivity(this);
-        ToolBarSet();
-        ViewSet();
+        if (GetData()) {
+            ToolBarSet();
+            ViewSet();
+        } else {
+            Toast.makeText(this, R.string.data_get_error, Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
     private void ToolBarSet() {
@@ -60,6 +67,7 @@ public class InfoDetailActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(info_type);
         }
     }
 
@@ -94,16 +102,22 @@ public class InfoDetailActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void GetData() {
+    private boolean GetData() {
         Intent intent = getIntent();
         if (intent != null) {
-            info_url = intent.getStringExtra(Config.INTENT_INFO_DETAIL_URL);
-            info_title = intent.getStringExtra(Config.INTENT_INFO_DETAIL_TITLE);
-            info_post = intent.getStringExtra(Config.INTENT_INFO_DETAIL_POST);
-            info_click = intent.getStringExtra(Config.INTENT_INFO_DETAIL_CLICK);
-            info_date = intent.getStringExtra(Config.INTENT_INFO_DETAIL_DATE);
-            info_source = intent.getStringExtra(Config.INTENT_INFO_DETAIL_SOURCE);
+            InfoDetail infoDetail = (InfoDetail) intent.getSerializableExtra(Config.INTENT_INFO_DETAIL);
+            if (infoDetail != null) {
+                info_url = infoDetail.getUrl();
+                info_title = infoDetail.getTitle();
+                info_post = infoDetail.getPost();
+                info_click = infoDetail.getClick();
+                info_date = infoDetail.getDate();
+                info_source = infoDetail.getSource();
+                info_type = infoDetail.getType();
+                return true;
+            }
         }
+        return false;
     }
 
     private void ViewSet() {

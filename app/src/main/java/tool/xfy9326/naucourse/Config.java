@@ -20,12 +20,7 @@ public class Config {
 
     public static final int VIEWPAGER_TABLE_PAGE = 1;
 
-    public static final String INTENT_INFO_DETAIL_TITLE = "INFO_DETAIL_TITLE";
-    public static final String INTENT_INFO_DETAIL_DATE = "INFO_DETAIL_DATE";
-    public static final String INTENT_INFO_DETAIL_CLICK = "INFO_DETAIL_CLICK";
-    public static final String INTENT_INFO_DETAIL_POST = "INFO_DETAIL_POST";
-    public static final String INTENT_INFO_DETAIL_SOURCE = "INFO_DETAIL_SOURCE";
-    public static final String INTENT_INFO_DETAIL_URL = "INFO_DETAIL_URL";
+    public static final String INTENT_INFO_DETAIL = "INFO_DETAIL";
     public static final String INTENT_IS_ONLY_INIT = "IS_ONLY_INIT";
     public static final String INTENT_NEXT_CLASS_DATA = "NEXT_CLASS_DATA";
     public static final String INTENT_JUST_LOGIN = "JUST_LOGIN";
