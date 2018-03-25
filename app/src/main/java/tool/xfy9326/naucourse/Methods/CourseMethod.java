@@ -151,6 +151,7 @@ public class CourseMethod {
     /**
      * 获取下一节课的信息
      * 对外接口
+     *
      * @param weekNum 周数
      * @return 下一节课的信息
      */

@@ -124,7 +124,7 @@ public class InfoDetailActivity extends AppCompatActivity {
         if (BaseMethod.isNetworkConnected(this)) {
             getData();
         } else {
-            Snackbar.make(findViewById(R.id.layout_info_detail_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
+            BaseMethod.forceShowSnackbarWithAnimation(findViewById(R.id.layout_info_detail_content), R.string.network_error, Snackbar.LENGTH_SHORT);
         }
 
         TextView textView_title = findViewById(R.id.textView_info_detail_title);
