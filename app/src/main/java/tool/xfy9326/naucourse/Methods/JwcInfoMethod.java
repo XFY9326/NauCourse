@@ -37,7 +37,7 @@ public class JwcInfoMethod {
     public int load() throws Exception {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
-            String data = LoginMethod.getData(context, "/Issue/TopicList.aspx?bn=%E6%95%99%E5%8A%A1%E9%80%9A%E7%9F%A5&sn=%E6%95%99%E5%8A%A1%E9%80%9A%E7%9F%A5");
+            String data = LoginMethod.getData(context, "/Issue/TopicList.aspx?bn=%E6%95%99%E5%8A%A1%E9%80%9A%E7%9F%A5&sn=%E6%95%99%E5%8A%A1%E9%80%9A%E7%9F%A5", true);
             if (data != null) {
                 document = Jsoup.parse(data);
                 if (LoginMethod.checkUserLogin(data)) {
@@ -129,7 +129,7 @@ public class JwcInfoMethod {
     public int loadDetail(String url) throws Exception {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
-            String data = LoginMethod.getData(context, url);
+            String data = LoginMethod.getData(context, url, true);
             if (data != null) {
                 if (LoginMethod.checkUserLogin(data)) {
                     detailDocument = Jsoup.parse(data);

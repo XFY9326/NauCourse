@@ -34,7 +34,7 @@ public class TimeMethod {
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
             String url = sharedPreferences.getString(Config.PREFERENCE_LOGIN_URL, null);
             if (url != null) {
-                String data = LoginMethod.getData(context, url);
+                String data = LoginMethod.getData(context, url, true);
                 if (LoginMethod.checkUserLogin(data)) {
                     document = Jsoup.parse(data);
                     return Config.NET_WORK_GET_SUCCESS;

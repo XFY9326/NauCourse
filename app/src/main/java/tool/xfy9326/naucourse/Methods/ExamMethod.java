@@ -32,7 +32,7 @@ public class ExamMethod {
     public int load() throws Exception {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
-            String data = LoginMethod.getData(context, "/Students/MyExamArrangeList.aspx");
+            String data = LoginMethod.getData(context, "/Students/MyExamArrangeList.aspx", true);
             if (data != null) {
                 document = Jsoup.parse(data);
                 if (LoginMethod.checkUserLogin(data)) {

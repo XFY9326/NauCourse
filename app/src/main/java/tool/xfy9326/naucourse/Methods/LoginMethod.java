@@ -17,47 +17,86 @@ import tool.xfy9326.naucourse.Tools.AES;
  */
 
 public class LoginMethod {
+    private static boolean isTryingReLogin = false;
 
-    //获取教务系统详情数据
-    static String getData(Context context, String url) throws Exception {
+    /**
+     * 获取教务系统详情数据
+     * 必须在非UI线程运行
+     *
+     * @param context    Context
+     * @param url        需要获取的url
+     * @param tryReLogin 检测到登陆错误后是否尝试重新登陆
+     * @return 获取的数据字符串
+     * @throws Exception 网络连接中的错误
+     */
+    static String getData(Context context, String url, boolean tryReLogin) throws Exception {
         String data = BaseMethod.getApp(context).getClient().getUserData(url);
-        if (!checkUserLogin(data)) {
-            if (reLogin(context)) {
+        if (!checkUserLogin(data) && tryReLogin) {
+            int reLogin_result = reLogin(context);
+            if (reLogin_result == Config.RE_LOGIN_SUCCESS) {
                 data = BaseMethod.getApp(context).getClient().getUserData(url);
-            } else {
-                Log.d("DATA", "LOGIN ERROR");
+            } else if (reLogin_result == Config.RE_LOGIN_TRYING) {
+                Log.d("NETWORK", "WAITING LOGIN RESULT");
+                while (isTryingReLogin) {
+                    Thread.sleep(500);
+                }
+                return getData(context, url, false);
+            } else if (reLogin_result == Config.RE_LOGIN_FAILED) {
+                Log.d("NETWORK", "LOGIN ERROR");
             }
         }
         System.gc();
         return data;
     }
 
-    //用户登陆成功检测
+    /**
+     * 检测用用户是否登陆成功
+     * @param data 获取的网络数据
+     * @return 是否登陆成功
+     */
     static boolean checkUserLogin(String data) {
         return !(data.contains("系统错误提示页") && data.contains("当前程序在执行过程中出现了未知异常，请重试") || data.contains("用户登录_南京审计大学教务管理系统"));
     }
 
-    //用户cookie过期后自动尝试重登录
-    synchronized private static boolean reLogin(Context context) throws Exception {
-        Log.d("DATA", "TRY LOGIN");
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String id = sharedPreferences.getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
-        String pw = sharedPreferences.getString(Config.PREFERENCE_USER_PW, Config.DEFAULT_PREFERENCE_USER_PW);
-        pw = AES.decrypt(pw, id);
-        NauJwcClient nauJwcClient = BaseMethod.getApp(context).getClient();
-        nauJwcClient.loginOut();
-        if (nauJwcClient.login(id, pw)) {
-            String loginURL = nauJwcClient.getLoginUrl();
-            if (loginURL != null) {
-                sharedPreferences.edit().putString(Config.PREFERENCE_LOGIN_URL, loginURL).apply();
-                return true;
+    /**
+     * 用户Cookie过期后尝试重新登陆
+     *
+     * @param context Context
+     * @return ReLogin状态值
+     * @throws Exception 重新登陆时的网络错误
+     */
+    private static int reLogin(Context context) throws Exception {
+        if (!isTryingReLogin) {
+            isTryingReLogin = true;
+            Log.d("NETWORK", "TRY LOGIN AGAIN");
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            String id = sharedPreferences.getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
+            String pw = sharedPreferences.getString(Config.PREFERENCE_USER_PW, Config.DEFAULT_PREFERENCE_USER_PW);
+            pw = AES.decrypt(pw, id);
+            NauJwcClient nauJwcClient = BaseMethod.getApp(context).getClient();
+            nauJwcClient.loginOut();
+            Thread.sleep(1000);
+            if (nauJwcClient.login(id, pw)) {
+                String loginURL = nauJwcClient.getLoginUrl();
+                if (loginURL != null) {
+                    sharedPreferences.edit().putString(Config.PREFERENCE_LOGIN_URL, loginURL).apply();
+                    isTryingReLogin = false;
+                    return Config.RE_LOGIN_SUCCESS;
+                }
             }
+            sharedPreferences.edit().putBoolean(Config.PREFERENCE_HAS_LOGIN, false).apply();
+            isTryingReLogin = false;
+            return Config.RE_LOGIN_FAILED;
+        } else {
+            return Config.RE_LOGIN_TRYING;
         }
-        sharedPreferences.edit().putBoolean(Config.PREFERENCE_HAS_LOGIN, false).apply();
-        return false;
     }
 
-    //注销登陆
+    /**
+     * 注销用户登陆
+     * @param context Context
+     * @return 是否成功注销登陆
+     */
     public static boolean loginOut(Context context) {
         try {
             BaseMethod.getApp(context).getClient().loginOut();
@@ -71,7 +110,10 @@ public class LoginMethod {
         return true;
     }
 
-    //清空用户缓存数据
+    /**
+     * 清空用户缓存的数据
+     * @param context Context
+     */
     public static void cleanUserTemp(Context context) {
         File cache_file = context.getCacheDir();
         for (File file : cache_file.listFiles()) {

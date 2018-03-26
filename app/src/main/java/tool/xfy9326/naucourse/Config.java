@@ -14,6 +14,10 @@ public class Config {
     //多个连续的间断周或多个间断周
     public static final int COURSE_DETAIL_WEEKMODE_ONCE_MORE = 4;
 
+    public static final int RE_LOGIN_SUCCESS = 0;
+    public static final int RE_LOGIN_FAILED = 1;
+    public static final int RE_LOGIN_TRYING = 2;
+
     public static final int REQUEST_ACTIVITY_LOGIN = 1;
 
     public static final int HANDLER_RELOAD_TABLE = 0;

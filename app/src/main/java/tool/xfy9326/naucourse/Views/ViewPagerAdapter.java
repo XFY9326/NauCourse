@@ -33,12 +33,10 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         return homeFragment;
     }
 
-    @SuppressWarnings("unused")
     public TableFragment getTableFragment() {
         return tableFragment;
     }
 
-    @SuppressWarnings("unused")
     public PersonFragment getPersonFragment() {
         return personFragment;
     }
