@@ -51,6 +51,7 @@ public class LoginMethod {
 
     /**
      * 检测用用户是否登陆成功
+     *
      * @param data 获取的网络数据
      * @return 是否登陆成功
      */
@@ -94,6 +95,7 @@ public class LoginMethod {
 
     /**
      * 注销用户登陆
+     *
      * @param context Context
      * @return 是否成功注销登陆
      */
@@ -112,6 +114,7 @@ public class LoginMethod {
 
     /**
      * 清空用户缓存的数据
+     *
      * @param context Context
      */
     public static void cleanUserTemp(Context context) {

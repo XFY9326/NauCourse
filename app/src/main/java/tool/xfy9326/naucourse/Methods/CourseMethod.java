@@ -394,7 +394,7 @@ public class CourseMethod {
     }
 
     private String getShowDetail(Course course, CourseDetail courseDetail) {
-        return (course.getCourseName()).trim() + "\n" + "@" + courseDetail.getLocation();
+        return (course.getCourseName()).trim() + "\n" + "@" + courseDetail.getLocation().trim();
     }
 
     public interface OnCourseTableItemClickListener {
