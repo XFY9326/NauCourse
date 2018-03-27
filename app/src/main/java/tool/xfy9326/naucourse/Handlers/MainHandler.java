@@ -21,6 +21,7 @@ public class MainHandler extends Handler {
     @Override
     public void handleMessage(Message msg) {
         switch (msg.what) {
+            //重新加载课程表
             case 0:
                 TableFragment tableFragment = BaseMethod.getApp(context).getViewPagerAdapter().getTableFragment();
                 tableFragment.reloadTable();

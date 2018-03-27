@@ -24,13 +24,12 @@
             android:layout_margin="5dp"
             android:background="@drawable/shape_corner_square_light_grey"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:padding="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:padding="5dp"
                 tools:ignore="UseCompoundDrawables">
 
                 <ImageView
@@ -43,15 +42,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="@string/course_card_time" />
+                    android:text="@string/course_card_time"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
-                android:padding="5dp"
                 tools:ignore="UseCompoundDrawables">
 
                 <ImageView
@@ -64,7 +64,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="@string/course_card_location" />
+                    android:text="@string/course_card_location"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 

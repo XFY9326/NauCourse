@@ -6,8 +6,10 @@ package tool.xfy9326.naucourse.Utils;
  */
 
 public class CourseDetail {
+    //Num-Num,Num...
     private String weeks[] = null;
     private int weekDay = 0;
+    //Num-Num,Num...
     private String courseTime[] = null;
     private int weekMode = 0;
     private String location = null;

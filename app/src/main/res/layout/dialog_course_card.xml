@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:padding="3dp"
                 android:text="@string/course_card_id"
-                android:textSize="14sp" />
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/textView_course_card_teacher"
@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:padding="3dp"
                 android:text="@string/course_card_teacher"
-                android:textSize="14sp" />
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/textView_course_card_score"
@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:padding="3dp"
                 android:text="@string/course_card_score"
-                android:textSize="14sp" />
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/textView_course_card_type"
@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:padding="3dp"
                 android:text="@string/course_card_type"
-                android:textSize="14sp" />
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/textView_course_card_class"
@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:padding="3dp"
                 android:text="@string/course_card_class"
-                android:textSize="14sp" />
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/textView_course_card_combined_class"
@@ -81,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:padding="3dp"
                 android:text="@string/course_card_combined_class"
-                android:textSize="14sp" />
+                android:textSize="13sp" />
 
         </LinearLayout>
 

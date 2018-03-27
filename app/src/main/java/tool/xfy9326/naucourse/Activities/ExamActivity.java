@@ -93,7 +93,7 @@ public class ExamActivity extends AppCompatActivity {
                 } else {
                     examAdapter.updateData(exam);
                 }
-            } else if (loadTime > 1) {
+            } else {
                 BaseMethod.forceShowSnackbarWithAnimation(findViewById(R.id.layout_exam_content), R.string.no_exam, Snackbar.LENGTH_SHORT);
             }
         }

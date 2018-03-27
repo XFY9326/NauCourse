@@ -120,8 +120,9 @@ public class TableFragment extends Fragment {
         tableConfig.setShowXSequence(false);
         tableConfig.setShowYSequence(false);
         tableConfig.setShowTableTitle(false);
-        tableConfig.setVerticalPadding(8);
-        tableConfig.setHorizontalPadding(8);
+        tableConfig.setFixedTitle(true);
+        tableConfig.setVerticalPadding(5);
+        tableConfig.setHorizontalPadding(5);
 
         if (loadTime == 0) {
             getData();
