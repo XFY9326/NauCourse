@@ -307,7 +307,7 @@ public class BaseMethod {
         String[] num = context.getResources().getStringArray(R.array.week_number);
         String[] week_day_date = getWeekDayDate(week_num, startSchoolDate);
         for (int i = 1; i <= Config.MAX_WEEK_DAY; i++) {
-            week.add(context.getString(R.string.week_day, num[i - 1]) + " " + week_day_date[i - 1]);
+            week.add(context.getString(R.string.week_day, num[i - 1]) + "\n" + week_day_date[i - 1]);
         }
         return week;
     }

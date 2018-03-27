@@ -1,13 +1,14 @@
 package tool.xfy9326.naucourse.Methods;
 
 import android.content.Context;
-import android.graphics.Paint;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
-
-import com.bin.david.form.core.SmartTable;
-import com.bin.david.form.data.column.Column;
-import com.bin.david.form.data.table.TableData;
-import com.bin.david.form.listener.OnColumnItemClickListener;
+import android.support.v7.widget.GridLayout;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,7 +24,6 @@ import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.CourseDetail;
 import tool.xfy9326.naucourse.Utils.NextCourse;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
-import tool.xfy9326.naucourse.Utils.TableLine;
 
 /**
  * Created by xfy9326 on 18-2-22.
@@ -37,16 +37,14 @@ public class CourseMethod {
 
     private OnCourseTableItemClickListener onCourseTableClick;
     private int weekNum;
-    private SmartTable<TableLine> smartTable;
-    private boolean loadSuccess;
+    private GridLayout course_table_layout;
     // 列 行
     private String[][] table;
     private String[][] id_table;
-    private List<TableLine> tableLines;
-    private TableData<TableLine> tableData;
     private List<String> course_time;
+    private int parent_width = 0;
 
-    public CourseMethod(Context context, ArrayList<Course> courses, SchoolTime schoolTime) {
+    public CourseMethod(Context context, int parent_width, ArrayList<Course> courses, SchoolTime schoolTime) {
         this.context = context;
         this.courses = courses;
         this.schoolTime = schoolTime;
@@ -55,12 +53,10 @@ public class CourseMethod {
         if (weekNum == 0) {
             weekNum = 1;
         }
-        this.smartTable = null;
+        this.course_table_layout = null;
         this.onCourseTableClick = null;
-        this.loadSuccess = false;
-        this.tableLines = null;
-        this.tableData = null;
         this.course_time = null;
+        this.parent_width = parent_width;
     }
 
     /**
@@ -92,24 +88,24 @@ public class CourseMethod {
         String course_endTime = "";
         long todayFinalCourseTime = 0;
         for (int i = 0; i < times.length; i++) {
-            if (today[i] != null) {
+            if (today[i + 1] != null) {
                 String[] time_temp = times[i].split(":");
                 calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time_temp[0]));
                 calendar.set(Calendar.MINUTE, Integer.valueOf(time_temp[1]));
                 long courseTime = calendar.getTimeInMillis();
                 if (courseTime > nowTime) {
-                    if (!findCourseId.equals(todayId[i]) && !findCourseId.equals("")) {
+                    if (!findCourseId.equals(todayId[i + 1]) && !findCourseId.equals("")) {
                         break;
                     }
-                    nextCourse.setCourseName(today[i].substring(0, today[i].indexOf("\n")));
-                    nextCourse.setCourseLocation(today[i].substring(today[i].indexOf("\n") + 2));
-                    nextCourse.setCourseId(todayId[i]);
-                    course_endTime = times[i];
-                    if (!lastId.equals(todayId[i])) {
+                    nextCourse.setCourseName(today[i + 1].substring(0, today[i + 1].indexOf("\n")));
+                    nextCourse.setCourseLocation(today[i + 1].substring(today[i + 1].indexOf("\n") + 2));
+                    nextCourse.setCourseId(todayId[i + 1]);
+                    course_endTime = times[i + 1];
+                    if (!lastId.equals(todayId[i + 1])) {
                         course_startTime = startTimes[i];
-                        findCourseId = todayId[i];
+                        findCourseId = todayId[i + 1];
                     }
-                    lastId = todayId[i];
+                    lastId = todayId[i + 1];
                 }
                 todayFinalCourseTime = courseTime;
             }
@@ -128,24 +124,18 @@ public class CourseMethod {
                 }
             }
         }
-
+        System.gc();
         return nextCourse;
     }
 
-    public void setTableView(SmartTable<TableLine> smartTable) {
-        this.smartTable = smartTable;
+    public void setTableView(GridLayout gridLayout) {
+        this.course_table_layout = gridLayout;
         loadView();
     }
 
-    public boolean updateCourseTableView(int weekNum) {
-        if (loadSuccess) {
-            this.weekNum = weekNum;
-            loadSuccess = false;
-            loadView();
-            smartTable.notifyDataChanged();
-            return true;
-        }
-        return false;
+    public void updateCourseTableView(int weekNum) {
+        this.weekNum = weekNum;
+        loadView();
     }
 
     /**
@@ -167,122 +157,85 @@ public class CourseMethod {
     }
 
     synchronized private void loadView() {
-        if (smartTable != null && !loadSuccess && weekNum != 0) {
+        if (course_table_layout != null && weekNum != 0 && parent_width != 0) {
             setTableCourse();
-            if (tableLines != null) {
-                tableLines.clear();
-            } else {
-                tableLines = new ArrayList<>();
-            }
-            for (int i = 0; i < Config.MAX_DAY_COURSE; i++) {
-                String mo = table[1][i];
-                String tu = table[2][i];
-                String we = table[3][i];
-                String th = table[4][i];
-                String fr = table[5][i];
-                String sa = table[6][i];
-                String su = table[7][i];
-                TableLine tableLine = new TableLine(table[0][i], mo, tu, we, th, fr, sa, su);
-                tableLines.add(tableLine);
-            }
-            getTableData(tableLines);
-            System.gc();
-            loadSuccess = true;
-        }
-    }
 
-    private void getTableData(List<TableLine> tableLines) {
-        if (tableData == null) {
-            String title = context.getString(R.string.table_title);
-            tableData = new TableData<>(title, tableLines, getColumns());
-            smartTable.setTableData(tableData);
-        } else {
-            //更新表格顶部的日期
-            tableData.setColumns(getColumns());
-            tableData.setT(tableLines);
-        }
-    }
+            course_table_layout.removeAllViews();
 
-    private List<Column> getColumns() {
-        List<String> week_day = BaseMethod.getWeekDayArray(context, weekNum, schoolTime.getStartTime());
+            boolean showWeekend = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_WEEKEND, Config.DEFAULT_PREFERENCE_SHOW_WEEKEND);
 
-        Column<String> columnDate = new Column<>(context.getString(R.string.date), "courseTime");
-        columnDate.setFixed(true);
-        Column<String> columnMo = new Column<>(week_day.get(0), "courseMo");
-        columnSet(columnMo);
-        Column<String> columnTu = new Column<>(week_day.get(1), "courseTu");
-        columnSet(columnTu);
-        Column<String> columnWe = new Column<>(week_day.get(2), "courseWe");
-        columnSet(columnWe);
-        Column<String> columnTh = new Column<>(week_day.get(3), "courseTh");
-        columnSet(columnTh);
-        Column<String> columnFr = new Column<>(week_day.get(4), "courseFr");
-        columnSet(columnFr);
+            int row_max = Config.MAX_DAY_COURSE + 1;
+            int col_max = showWeekend ? Config.MAX_WEEK_DAY + 1 : Config.MAX_WEEK_DAY - 1;
 
-        List<Column> columns = new ArrayList<>();
-        columns.add(columnDate);
-        columns.add(columnMo);
-        columns.add(columnTu);
-        columns.add(columnWe);
-        columns.add(columnTh);
-        columns.add(columnFr);
+            course_table_layout.setColumnCount(col_max);
+            course_table_layout.setRowCount(row_max);
+            course_table_layout.setMinimumWidth(parent_width);
 
-        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_WEEKEND, Config.DEFAULT_PREFERENCE_SHOW_WEEKEND)) {
-            Column<String> columnSa = new Column<>(week_day.get(5), "courseSa");
-            columnSet(columnSa);
-            Column<String> columnSu = new Column<>(week_day.get(6), "courseSu");
-            columnSet(columnSu);
+            for (int col = 0; col < col_max; col++) {
 
-            columns.add(columnSa);
-            columns.add(columnSu);
-        }
-        return columns;
-    }
+                for (int row = 0; row < row_max; row++) {
+                    int merge = 1;
+                    String text = table[col][row];
 
-    private void columnSet(Column<String> column) {
-        column.setAutoMerge(true);
-        column.setAutoCount(false);
-        column.setTextAlign(Paint.Align.CENTER);
-        column.setOnColumnItemClickListener(new OnColumnItemClickListener<String>() {
-            @Override
-            public void onClick(Column<String> column, String value, String str, int position) {
-                if (onCourseTableClick != null) {
-                    String fieldName = column.getFieldName();
-                    String id = null;
-                    switch (fieldName) {
-                        case "courseMo":
-                            id = id_table[1][position];
-                            break;
-                        case "courseTu":
-                            id = id_table[2][position];
-                            break;
-                        case "courseWe":
-                            id = id_table[3][position];
-                            break;
-                        case "courseTh":
-                            id = id_table[4][position];
-                            break;
-                        case "courseFr":
-                            id = id_table[5][position];
-                            break;
-                        case "courseSa":
-                            id = id_table[6][position];
-                            break;
-                        case "courseSu":
-                            id = id_table[7][position];
-                            break;
-                    }
-                    if (id != null) {
-                        for (Course course : courses) {
-                            if (course.getCourseId().equals(id)) {
-                                onCourseTableClick.OnItemClick(course);
-                                break;
+                    if (col > 0 && row > 0) {
+                        if (text != null && !text.isEmpty()) {
+                            for (merge = 1; row + merge < row_max && merge <= row_max; merge++) {
+                                if (table[col][row + merge] == null || !table[col][row + merge].equalsIgnoreCase(text)) {
+                                    break;
+                                }
                             }
                         }
+                        row += merge - 1;
+                    }
+
+                    int weight_col = col == 0 ? 1 : 2;
+                    GridLayout.Spec col_merge = GridLayout.spec(GridLayout.UNDEFINED, 1, weight_col);
+                    GridLayout.Spec row_merge = GridLayout.spec(GridLayout.UNDEFINED, merge, 1);
+                    GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams(row_merge, col_merge);
+                    layoutParams.setGravity(Gravity.FILL);
+                    layoutParams.setMargins(2, 2, 2, 2);
+
+                    int width = col == 0 ? 0 : parent_width / col_max;
+                    course_table_layout.addView(getCellView(text, width, col, row), layoutParams);
+                }
+            }
+        }
+    }
+
+    private View getCellView(String text, int width, final int col, final int row) {
+        LinearLayout linearLayout = new LinearLayout(context);
+        linearLayout.setGravity(Gravity.CENTER);
+        linearLayout.setBackgroundColor(Color.WHITE);
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (Course course : courses) {
+                    if (course.getCourseId().equals(id_table[col][row])) {
+                        onCourseTableClick.OnItemClick(course);
+                        break;
                     }
                 }
             }
         });
+
+        TextView textView = new TextView(context);
+        if (col == 0) {
+            textView.setPadding(10, 5, 3, 10);
+        } else {
+            textView.setPadding(3, 5, 3, 5);
+            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_WIDE_TABLE, Config.DEFAULT_SHOW_WIDE_TABLE)) {
+                width *= 2;
+            }
+            textView.setLayoutParams(new ViewGroup.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT));
+        }
+
+        textView.setGravity(Gravity.CENTER);
+        textView.setSingleLine(false);
+        textView.setText(text);
+        textView.setTextSize(13);
+
+        linearLayout.addView(textView);
+        return linearLayout;
     }
 
     //表格赋值
@@ -290,15 +243,20 @@ public class CourseMethod {
         if (course_time == null) {
             course_time = BaseMethod.getCourseTimeArray(context);
         }
+        List<String> week_day = BaseMethod.getWeekDayArray(context, weekNum, schoolTime.getStartTime());
         getTable(weekNum, schoolTime.getStartTime());
-        setTableTimeLine(course_time);
+        setTableTimeLine(course_time, week_day);
         System.gc();
     }
 
     //设置表格的上课时间列
-    private void setTableTimeLine(List<String> course_time) {
+    private void setTableTimeLine(List<String> course_time, List<String> course_weekDay) {
+        table[0][0] = context.getString(R.string.date);
         for (int i = 0; i < course_time.size(); i++) {
-            table[0][i] = course_time.get(i);
+            table[0][i + 1] = course_time.get(i);
+        }
+        for (int i = 0; i < Config.MAX_WEEK_DAY; i++) {
+            table[i + 1][0] = course_weekDay.get(i);
         }
     }
 
@@ -306,8 +264,8 @@ public class CourseMethod {
     synchronized private void getTable(int weekNum, String startSchoolDate) {
         boolean isDoubleWeek = weekNum % 2 == 0;
 
-        table = new String[Config.MAX_WEEK_DAY + 1][Config.MAX_DAY_COURSE];
-        id_table = new String[Config.MAX_WEEK_DAY + 1][Config.MAX_DAY_COURSE];
+        table = new String[Config.MAX_WEEK_DAY + 1][Config.MAX_DAY_COURSE + 1];
+        id_table = new String[Config.MAX_WEEK_DAY + 1][Config.MAX_DAY_COURSE + 1];
         for (Course course : courses) {
             CourseDetail[] courseDetail = course.getCourseDetail();
             for (CourseDetail detail : courseDetail) {
@@ -365,12 +323,12 @@ public class CourseMethod {
                 int t_start = Integer.valueOf(time[0]);
                 int t_end = Integer.valueOf(time[1]);
                 for (int t = t_start; t <= t_end; t++) {
-                    table[detail.getWeekDay()][t - 1] = getShowDetail(course, detail);
-                    id_table[detail.getWeekDay()][t - 1] = course.getCourseId();
+                    table[detail.getWeekDay()][t] = getShowDetail(course, detail);
+                    id_table[detail.getWeekDay()][t] = course.getCourseId();
                 }
             } else {
-                table[detail.getWeekDay()][Integer.valueOf(courseTime) - 1] = getShowDetail(course, detail);
-                id_table[detail.getWeekDay()][Integer.valueOf(courseTime) - 1] = course.getCourseId();
+                table[detail.getWeekDay()][Integer.valueOf(courseTime)] = getShowDetail(course, detail);
+                id_table[detail.getWeekDay()][Integer.valueOf(courseTime)] = course.getCourseId();
             }
         }
     }

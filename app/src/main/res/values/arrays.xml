@@ -47,7 +47,6 @@
         <item>Android Support Library</item>
         <item>Jsoup</item>
         <item>Okhttp3</item>
-        <item>SmartTable</item>
         <item>Gson</item>
     </string-array>
 
@@ -55,7 +54,6 @@
         <item>http://source.android.com</item>
         <item>https://jsoup.org</item>
         <item>http://square.github.io/okhttp</item>
-        <item>https://github.com/huangyanbin/smartTable</item>
         <item>https://github.com/google/gson</item>
     </string-array>
 

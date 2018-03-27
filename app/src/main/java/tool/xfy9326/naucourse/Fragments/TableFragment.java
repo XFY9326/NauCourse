@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.GridLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,9 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.bin.david.form.core.SmartTable;
-import com.bin.david.form.core.TableConfig;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,7 +38,6 @@ import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.CourseDetail;
 import tool.xfy9326.naucourse.Utils.NextCourse;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
-import tool.xfy9326.naucourse.Utils.TableLine;
 import tool.xfy9326.naucourse.Views.NextClassWidget;
 
 /**
@@ -50,15 +47,14 @@ import tool.xfy9326.naucourse.Views.NextClassWidget;
 public class TableFragment extends Fragment {
     private View view;
     private Context context;
-    private SmartTable<TableLine> courseTable;
     private int loadTime = 0;
+    private GridLayout course_table_layout;
     private ArrayList<Course> courses;
     private SchoolTime schoolTime;
 
     public TableFragment() {
         this.view = null;
         this.context = null;
-        this.courseTable = null;
         this.courses = null;
         this.schoolTime = null;
     }
@@ -105,8 +101,7 @@ public class TableFragment extends Fragment {
     }
 
     private void ViewSet() {
-        courseTable = view.findViewById(R.id.course_table);
-        courseTable.setZoom(false);
+        course_table_layout = view.findViewById(R.id.course_table_layout);
 
         CardView cardView_date = view.findViewById(R.id.cardview_table_date);
         cardView_date.setOnClickListener(new View.OnClickListener() {
@@ -115,14 +110,6 @@ public class TableFragment extends Fragment {
                 reloadTable();
             }
         });
-
-        TableConfig tableConfig = courseTable.getConfig();
-        tableConfig.setShowXSequence(false);
-        tableConfig.setShowYSequence(false);
-        tableConfig.setShowTableTitle(false);
-        tableConfig.setFixedTitle(true);
-        tableConfig.setVerticalPadding(5);
-        tableConfig.setHorizontalPadding(5);
 
         if (loadTime == 0) {
             getData();
@@ -183,7 +170,8 @@ public class TableFragment extends Fragment {
                     }
                 }
 
-                final CourseMethod courseMethod = new CourseMethod(context, courses, schoolTime);
+                CardView cardView_course = view.findViewById(R.id.cardView_courseTable);
+                final CourseMethod courseMethod = new CourseMethod(context, cardView_course.getWidth(), courses, schoolTime);
 
                 final Spinner spinner_week = view.findViewById(R.id.spinner_table_week_chose);
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, BaseMethod.getWeekArray(context, schoolTime));
@@ -197,11 +185,8 @@ public class TableFragment extends Fragment {
                         if (lastSelect == position) {
                             spinner_week.setSelection(lastSelect);
                         } else {
-                            if (courseMethod.updateCourseTableView(position + 1)) {
-                                lastSelect = position;
-                            } else {
-                                spinner_week.setSelection(lastSelect);
-                            }
+                            courseMethod.updateCourseTableView(position + 1);
+                            lastSelect = position;
                         }
 
                     }
@@ -213,7 +198,7 @@ public class TableFragment extends Fragment {
 
                 spinner_week.setSelection(weekNum - 1);
 
-                courseMethod.setTableView(courseTable);
+                courseMethod.setTableView(course_table_layout);
 
                 //主页面下一节课设置
                 if (!inVacation) {
