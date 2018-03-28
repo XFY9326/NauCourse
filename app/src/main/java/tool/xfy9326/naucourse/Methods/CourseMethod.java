@@ -1,14 +1,7 @@
 package tool.xfy9326.naucourse.Methods;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.preference.PreferenceManager;
-import android.support.v7.widget.GridLayout;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,36 +20,25 @@ import tool.xfy9326.naucourse.Utils.SchoolTime;
 
 /**
  * Created by xfy9326 on 18-2-22.
- * 课程表课程排序与展示方法
+ * 课程表课程排序方法
  */
 
 public class CourseMethod {
     private final Context context;
     private final ArrayList<Course> courses;
-    private final SchoolTime schoolTime;
-
-    private OnCourseTableItemClickListener onCourseTableClick;
+    private SchoolTime schoolTime;
     private int weekNum;
-    private GridLayout course_table_layout;
+
     // 列 行
     private String[][] table;
     private String[][] id_table;
     private List<String> course_time;
-    private int parent_width = 0;
 
-    public CourseMethod(Context context, int parent_width, ArrayList<Course> courses, SchoolTime schoolTime) {
+    public CourseMethod(Context context, ArrayList<Course> courses, SchoolTime schoolTime) {
         this.context = context;
         this.courses = courses;
-        this.schoolTime = schoolTime;
-        //假期中默认显示第一周
-        this.weekNum = schoolTime.getWeekNum();
-        if (weekNum == 0) {
-            weekNum = 1;
-        }
-        this.course_table_layout = null;
-        this.onCourseTableClick = null;
         this.course_time = null;
-        this.parent_width = parent_width;
+        updateTableCourse(schoolTime, false);
     }
 
     /**
@@ -128,16 +110,6 @@ public class CourseMethod {
         return nextCourse;
     }
 
-    public void setTableView(GridLayout gridLayout) {
-        this.course_table_layout = gridLayout;
-        loadView();
-    }
-
-    public void updateCourseTableView(int weekNum) {
-        this.weekNum = weekNum;
-        loadView();
-    }
-
     /**
      * 获取下一节课的信息
      * 对外接口
@@ -152,111 +124,56 @@ public class CourseMethod {
         return getNextClass(context, table, id_table, courses);
     }
 
-    public void setOnCourseTableClickListener(OnCourseTableItemClickListener onCourseTableClick) {
-        this.onCourseTableClick = onCourseTableClick;
+    /**
+     * 获取课程信息二维数组
+     *
+     * @return 课程信息二维数组
+     */
+    public String[][] getTableData() {
+        return table;
     }
 
-    synchronized private void loadView() {
-        if (course_table_layout != null && weekNum != 0 && parent_width != 0) {
-            setTableCourse();
+    /**
+     * 获取课程信息对应ID的二维数组
+     *
+     * @return 对应ID的二维数组
+     */
+    public String[][] getTableIdData() {
+        return id_table;
+    }
 
-            course_table_layout.removeAllViews();
-
-            boolean showWeekend = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_WEEKEND, Config.DEFAULT_PREFERENCE_SHOW_WEEKEND);
-
-            int row_max = Config.MAX_DAY_COURSE + 1;
-            int col_max = showWeekend ? Config.MAX_WEEK_DAY + 1 : Config.MAX_WEEK_DAY - 1;
-
-            course_table_layout.setColumnCount(col_max);
-            course_table_layout.setRowCount(row_max);
-            course_table_layout.setMinimumWidth(parent_width);
-
-            for (int col = 0; col < col_max; col++) {
-
-                for (int row = 0; row < row_max; row++) {
-                    int merge = 1;
-                    String text = table[col][row];
-
-                    if (col > 0 && row > 0) {
-                        if (text != null && !text.isEmpty()) {
-                            for (merge = 1; row + merge < row_max && merge <= row_max; merge++) {
-                                if (table[col][row + merge] == null || !table[col][row + merge].equalsIgnoreCase(text)) {
-                                    break;
-                                }
-                            }
-                        }
-                        row += merge - 1;
-                    }
-
-                    int weight_col = col == 0 ? 1 : 2;
-                    GridLayout.Spec col_merge = GridLayout.spec(GridLayout.UNDEFINED, 1, weight_col);
-                    GridLayout.Spec row_merge = GridLayout.spec(GridLayout.UNDEFINED, merge, 1);
-                    GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams(row_merge, col_merge);
-                    layoutParams.setGravity(Gravity.FILL);
-                    layoutParams.setMargins(2, 2, 2, 2);
-
-                    int width = col == 0 ? 0 : parent_width / col_max;
-                    course_table_layout.addView(getCellView(text, width, col, row), layoutParams);
-                }
+    /**
+     * 设置需要计算的周数并计算全部课程
+     *
+     * @param schoolTime  SchoolTime对象
+     * @param noCheckSame 不在检查到周数相同时放弃计算数据
+     */
+    public void updateTableCourse(SchoolTime schoolTime, boolean noCheckSame) {
+        this.schoolTime = schoolTime;
+        //假期中默认显示第一周
+        int weekNum = schoolTime.getWeekNum();
+        if (weekNum == 0) {
+            weekNum = 1;
+        }
+        if (weekNum != this.weekNum || noCheckSame) {
+            if (course_time == null) {
+                course_time = BaseMethod.getCourseTimeArray(context);
             }
+            List<String> week_day = BaseMethod.getWeekDayArray(context, weekNum, schoolTime.getStartTime());
+            getTable(weekNum, schoolTime.getStartTime());
+            setTableTimeLine(course_time, week_day);
+            this.weekNum = weekNum;
         }
     }
 
-    private View getCellView(String text, int width, final int col, final int row) {
-        LinearLayout linearLayout = new LinearLayout(context);
-        linearLayout.setGravity(Gravity.CENTER);
-        linearLayout.setBackgroundColor(Color.WHITE);
-        linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for (Course course : courses) {
-                    if (course.getCourseId().equals(id_table[col][row])) {
-                        onCourseTableClick.OnItemClick(course);
-                        break;
-                    }
-                }
-            }
-        });
-
-        TextView textView = new TextView(context);
-        if (col == 0) {
-            textView.setPadding(10, 5, 3, 10);
-        } else {
-            textView.setPadding(3, 5, 3, 5);
-            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_WIDE_TABLE, Config.DEFAULT_SHOW_WIDE_TABLE)) {
-                width *= 2;
-            }
-            textView.setLayoutParams(new ViewGroup.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT));
-        }
-
-        textView.setGravity(Gravity.CENTER);
-        textView.setSingleLine(false);
-        textView.setText(text);
-        textView.setTextSize(13);
-
-        linearLayout.addView(textView);
-        return linearLayout;
-    }
-
-    //表格赋值
-    private void setTableCourse() {
-        if (course_time == null) {
-            course_time = BaseMethod.getCourseTimeArray(context);
-        }
-        List<String> week_day = BaseMethod.getWeekDayArray(context, weekNum, schoolTime.getStartTime());
-        getTable(weekNum, schoolTime.getStartTime());
-        setTableTimeLine(course_time, week_day);
-        System.gc();
-    }
-
-    //设置表格的上课时间列
+    //设置表格的上课时间列与上课日期行
     private void setTableTimeLine(List<String> course_time, List<String> course_weekDay) {
         table[0][0] = context.getString(R.string.date);
         for (int i = 0; i < course_time.size(); i++) {
-            table[0][i + 1] = course_time.get(i);
+            table[0][i + 1] = course_time.get(i).trim();
         }
         for (int i = 0; i < Config.MAX_WEEK_DAY; i++) {
-            table[i + 1][0] = course_weekDay.get(i);
+            table[i + 1][0] = course_weekDay.get(i).trim();
         }
     }
 
@@ -333,6 +250,14 @@ public class CourseMethod {
         }
     }
 
+    private String getShowDetail(Course course, CourseDetail courseDetail) {
+        String mid = "\n";
+        if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_WIDE_TABLE, Config.DEFAULT_PREFERENCE_SHOW_WIDE_TABLE)) {
+            mid = "\n\n";
+        }
+        return course.getCourseName().trim() + mid + "@" + courseDetail.getLocation().trim();
+    }
+
     private int getStartSchoolWeekDay(String startSchoolDate) {
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
@@ -348,14 +273,6 @@ public class CourseMethod {
             e.printStackTrace();
         }
         return 1;
-    }
-
-    private String getShowDetail(Course course, CourseDetail courseDetail) {
-        return (course.getCourseName()).trim() + "\n" + "@" + courseDetail.getLocation().trim();
-    }
-
-    public interface OnCourseTableItemClickListener {
-        void OnItemClick(Course course);
     }
 
 }

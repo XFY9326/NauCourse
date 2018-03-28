@@ -8,4 +8,5 @@
     <color name="colorSecondaryText">#757575</color>
     <color name="ic_launcher_background">#E1FAFF</color>
     <color name="light_grey">#eeeeee</color>
+    <color name="course_cell_background">#90caf9</color>
 </resources>

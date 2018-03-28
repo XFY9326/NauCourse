@@ -33,6 +33,11 @@
             android:summary="@string/default_show_table_page_sum"
             android:title="@string/default_show_table_page" />
         <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="COURSE_TABLE_CELL_COLOR"
+            android:summary="@string/course_table_cell_color_sum"
+            android:title="@string/course_table_cell_color" />
+        <CheckBoxPreference
             android:defaultValue="false"
             android:key="SHOW_WIDE_TABLE"
             android:summary="@string/show_wide_course_table_sum"

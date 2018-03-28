@@ -32,6 +32,7 @@ import tool.xfy9326.naucourse.AsyncTasks.TableAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.CourseMethod;
+import tool.xfy9326.naucourse.Methods.CourseViewMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Receivers.UpdateReceiver;
 import tool.xfy9326.naucourse.Utils.Course;
@@ -51,12 +52,21 @@ public class TableFragment extends Fragment {
     private GridLayout course_table_layout;
     private ArrayList<Course> courses;
     private SchoolTime schoolTime;
+    private CourseMethod courseMethod;
+    private CourseViewMethod courseViewMethod;
+    private Spinner spinner_week;
+    private int lastSelect;
 
     public TableFragment() {
         this.view = null;
         this.context = null;
         this.courses = null;
         this.schoolTime = null;
+        this.course_table_layout = null;
+        this.courseMethod = null;
+        this.courseViewMethod = null;
+        this.spinner_week = null;
+        this.lastSelect = 0;
     }
 
     @Override
@@ -102,6 +112,7 @@ public class TableFragment extends Fragment {
 
     private void ViewSet() {
         course_table_layout = view.findViewById(R.id.course_table_layout);
+        course_table_layout.setDrawingCacheEnabled(true);
 
         CardView cardView_date = view.findViewById(R.id.cardview_table_date);
         cardView_date.setOnClickListener(new View.OnClickListener() {
@@ -110,6 +121,28 @@ public class TableFragment extends Fragment {
                 reloadTable();
             }
         });
+
+        if (spinner_week == null) {
+            spinner_week = view.findViewById(R.id.spinner_table_week_chose);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, BaseMethod.getWeekArray(context, schoolTime));
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner_week.setSelection(lastSelect);
+            spinner_week.setAdapter(adapter);
+            spinner_week.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (lastSelect != position) {
+                        TableFragment.this.schoolTime.setWeekNum(position + 1);
+                        setTableData(TableFragment.this.schoolTime, false);
+                        lastSelect = position;
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+        }
 
         if (loadTime == 0) {
             getData();
@@ -143,8 +176,6 @@ public class TableFragment extends Fragment {
                 weekNum = schoolTime.getWeekNum();
             }
 
-            final int nowWeek = weekNum;
-
             if (isAdded()) {
                 TextView textView_date = view.findViewById(R.id.textView_table_date);
                 Calendar calendar = Calendar.getInstance(Locale.CHINA);
@@ -170,35 +201,12 @@ public class TableFragment extends Fragment {
                     }
                 }
 
-                CardView cardView_course = view.findViewById(R.id.cardView_courseTable);
-                final CourseMethod courseMethod = new CourseMethod(context, cardView_course.getWidth(), courses, schoolTime);
+                setTableData(schoolTime, isReload);
 
-                final Spinner spinner_week = view.findViewById(R.id.spinner_table_week_chose);
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, BaseMethod.getWeekArray(context, schoolTime));
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinner_week.setAdapter(adapter);
-                spinner_week.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    private int lastSelect = nowWeek - 1;
-
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        if (lastSelect == position) {
-                            spinner_week.setSelection(lastSelect);
-                        } else {
-                            courseMethod.updateCourseTableView(position + 1);
-                            lastSelect = position;
-                        }
-
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-                    }
-                });
-
-                spinner_week.setSelection(weekNum - 1);
-
-                courseMethod.setTableView(course_table_layout);
+                if (lastSelect != weekNum - 1) {
+                    spinner_week.setSelection(weekNum - 1);
+                    lastSelect = weekNum - 1;
+                }
 
                 //主页面下一节课设置
                 if (!inVacation) {
@@ -206,13 +214,6 @@ public class TableFragment extends Fragment {
                     NextCourse nextCourse = courseMethod.getNextClass(weekNum);
                     homeFragment.setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
                 }
-
-                courseMethod.setOnCourseTableClickListener(new CourseMethod.OnCourseTableItemClickListener() {
-                    @Override
-                    public void OnItemClick(Course course) {
-                        CourseCardSet(course);
-                    }
-                });
 
                 //初始化自动更新
                 if (getActivity() != null) {
@@ -224,6 +225,26 @@ public class TableFragment extends Fragment {
                 }
             }
         }
+    }
+
+    private void setTableData(SchoolTime schoolTime, boolean isReload) {
+        if (courseViewMethod == null) {
+            CardView cardView_course = view.findViewById(R.id.cardView_courseTable);
+            courseViewMethod = new CourseViewMethod(context, courses);
+            courseViewMethod.setTableView(course_table_layout, cardView_course.getWidth());
+            courseViewMethod.setOnCourseTableClickListener(new CourseViewMethod.OnCourseTableItemClickListener() {
+                @Override
+                public void OnItemClick(Course course) {
+                    CourseCardSet(course);
+                }
+            });
+        }
+        if (courseMethod == null) {
+            courseMethod = new CourseMethod(context, courses, schoolTime);
+        } else {
+            courseMethod.updateTableCourse(schoolTime, isReload);
+        }
+        courseViewMethod.updateCourseTableView(courseMethod.getTableData(), courseMethod.getTableIdData(), !isReload);
     }
 
     //表格中的课程详细信息显示
