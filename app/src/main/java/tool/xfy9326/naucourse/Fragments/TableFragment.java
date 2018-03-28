@@ -122,28 +122,6 @@ public class TableFragment extends Fragment {
             }
         });
 
-        if (spinner_week == null) {
-            spinner_week = view.findViewById(R.id.spinner_table_week_chose);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, BaseMethod.getWeekArray(context, schoolTime));
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner_week.setSelection(lastSelect);
-            spinner_week.setAdapter(adapter);
-            spinner_week.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (lastSelect != position) {
-                        TableFragment.this.schoolTime.setWeekNum(position + 1);
-                        setTableData(TableFragment.this.schoolTime, false);
-                        lastSelect = position;
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                }
-            });
-        }
-
         if (loadTime == 0) {
             getData();
         }
@@ -187,6 +165,28 @@ public class TableFragment extends Fragment {
                 }
                 String time = context.getString(R.string.time_now) + context.getString(R.string.table_date, year, month) + " " + week;
                 textView_date.setText(time);
+
+                if (spinner_week == null) {
+                    spinner_week = view.findViewById(R.id.spinner_table_week_chose);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, BaseMethod.getWeekArray(context, schoolTime));
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner_week.setSelection(lastSelect);
+                    spinner_week.setAdapter(adapter);
+                    spinner_week.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            if (lastSelect != position) {
+                                TableFragment.this.schoolTime.setWeekNum(position + 1);
+                                setTableData(TableFragment.this.schoolTime, false);
+                                lastSelect = position;
+                            }
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+                        }
+                    });
+                }
 
                 //提前显示下一周的课表
                 if (schoolTime.getWeekNum() != 0) {
