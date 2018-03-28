@@ -250,6 +250,7 @@ public class CourseMethod {
         }
     }
 
+    //获取需要显示的信息
     private String getShowDetail(Course course, CourseDetail courseDetail) {
         String mid = "\n";
         if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_WIDE_TABLE, Config.DEFAULT_PREFERENCE_SHOW_WIDE_TABLE)) {
@@ -258,6 +259,7 @@ public class CourseMethod {
         return course.getCourseName().trim() + mid + "@" + courseDetail.getLocation().trim();
     }
 
+    //获取开学是周几
     private int getStartSchoolWeekDay(String startSchoolDate) {
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);

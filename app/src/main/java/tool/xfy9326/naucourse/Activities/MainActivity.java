@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
@@ -15,7 +16,6 @@ import tool.xfy9326.naucourse.AsyncTasks.TempAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.Views.AdvancedViewPager;
 import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
 
 /**
@@ -58,14 +58,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void ViewSet() {
-        AdvancedViewPager viewPager = findViewById(R.id.viewPaper_main);
+        ViewPager viewPager = findViewById(R.id.viewPaper_main);
         TabLayout tabLayout = findViewById(R.id.tabLayout_main);
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(viewPagerAdapter);
-        viewPager.setScroll(false);
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Config.PREFERENCE_DEFAULT_SHOW_TABLE_PAGE, Config.DEFAULT_PREFERENCE_DEFAULT_SHOW_TABLE_PAGE)) {
             viewPager.setCurrentItem(Config.VIEWPAGER_TABLE_PAGE, true);
         }

@@ -24,14 +24,14 @@ import tool.xfy9326.naucourse.Utils.Course;
  */
 
 public class CourseViewMethod {
-    private Context context;
+    private final Context context;
+    private final ArrayList<Course> courses;
+    private final SharedPreferences sharedPreferences;
     private int parent_width = 0;
     private GridLayout course_table_layout;
     private String[][] table;
     private String[][] id_table;
-    private ArrayList<Course> courses;
     private OnCourseTableItemClickListener onCourseTableClick;
-    private SharedPreferences sharedPreferences;
 
     public CourseViewMethod(Context context, ArrayList<Course> courses) {
         this.context = context;
