@@ -346,7 +346,7 @@ public class BaseMethod {
         List<String> day = new ArrayList<>();
         String[] time = context.getResources().getStringArray(R.array.course_start_time);
         for (int i = 1; i <= Config.MAX_DAY_COURSE; i++) {
-            day.add(i + "\n" + time[i - 1]);
+            day.add(time[i - 1] + "\n" + i);
         }
         return day;
     }

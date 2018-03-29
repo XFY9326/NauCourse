@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.GridLayout;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.AbsoluteSizeSpan;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -181,9 +184,22 @@ public class CourseViewMethod {
             } else {
                 textView.setGravity(Gravity.CENTER);
             }
-            textView.setText(text);
-            textView.setTextSize(13);
             textView.setTextColor(textColor);
+
+            if (col == 0 && row != 0) {
+                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(text);
+                spannableStringBuilder.setSpan(new AbsoluteSizeSpan(11, true), 0, text.indexOf("\n"), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                spannableStringBuilder.setSpan(new AbsoluteSizeSpan(13, true), text.indexOf("\n") + 1, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                textView.setText(spannableStringBuilder);
+            } else if (row == 0 && col != 0) {
+                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(text);
+                spannableStringBuilder.setSpan(new AbsoluteSizeSpan(13, true), 0, text.indexOf("\n"), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                spannableStringBuilder.setSpan(new AbsoluteSizeSpan(11, true), text.indexOf("\n") + 1, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                textView.setText(spannableStringBuilder);
+            } else {
+                textView.setTextSize(13);
+                textView.setText(text);
+            }
 
             //单元格监听
             if (row != 0 && col != 0) {

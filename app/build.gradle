@@ -14,8 +14,8 @@ android {
         applicationId "tool.xfy9326.naucourse"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 14
-        versionName "2.3"
+        versionCode 15
+        versionName "2.4"
         resConfigs "zh"
     }
 

@@ -69,6 +69,10 @@ public class CourseMethod {
         String course_startTime = "";
         String course_endTime = "";
         long todayFinalCourseTime = 0;
+        String mid = "\n";
+        if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_WIDE_TABLE, Config.DEFAULT_PREFERENCE_SHOW_WIDE_TABLE)) {
+            mid = "\n\n";
+        }
         for (int i = 0; i < times.length; i++) {
             if (today[i + 1] != null) {
                 String[] time_temp = times[i].split(":");
@@ -79,10 +83,10 @@ public class CourseMethod {
                     if (!findCourseId.equals(todayId[i + 1]) && !findCourseId.equals("")) {
                         break;
                     }
-                    nextCourse.setCourseName(today[i + 1].substring(0, today[i + 1].indexOf("\n")));
-                    nextCourse.setCourseLocation(today[i + 1].substring(today[i + 1].indexOf("\n") + 2));
+                    nextCourse.setCourseName(today[i + 1].substring(0, today[i + 1].indexOf(mid)));
+                    nextCourse.setCourseLocation(today[i + 1].substring(today[i + 1].indexOf("@") + 1));
                     nextCourse.setCourseId(todayId[i + 1]);
-                    course_endTime = times[i + 1];
+                    course_endTime = times[i];
                     if (!lastId.equals(todayId[i + 1])) {
                         course_startTime = startTimes[i];
                         findCourseId = todayId[i + 1];
