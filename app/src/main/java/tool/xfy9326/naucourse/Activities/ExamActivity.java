@@ -68,7 +68,7 @@ public class ExamActivity extends AppCompatActivity {
                 if (BaseMethod.isNetworkConnected(ExamActivity.this)) {
                     getData();
                 } else {
-                    BaseMethod.forceShowSnackbarWithAnimation(findViewById(R.id.layout_exam_content), R.string.network_error, Snackbar.LENGTH_SHORT);
+                    Snackbar.make(findViewById(R.id.layout_exam_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
                     swipeRefreshLayout.post(new Runnable() {
                         @Override
                         public void run() {
@@ -94,7 +94,7 @@ public class ExamActivity extends AppCompatActivity {
                     examAdapter.updateData(exam);
                 }
             } else if (loadTime > 1 || !BaseMethod.isNetworkConnected(this)) {
-                BaseMethod.forceShowSnackbarWithAnimation(findViewById(R.id.layout_exam_content), R.string.no_exam, Snackbar.LENGTH_SHORT);
+                Snackbar.make(findViewById(R.id.layout_exam_content), R.string.no_exam, Snackbar.LENGTH_SHORT).show();
             }
         }
     }

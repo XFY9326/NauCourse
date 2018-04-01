@@ -5,18 +5,12 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
-import android.support.design.widget.BaseTransientBottomBar;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
-import android.view.View;
-import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,31 +35,6 @@ import tool.xfy9326.naucourse.Utils.SchoolTime;
 
 public class BaseMethod {
     private static long DoubleClickTime = 0;
-
-    /**
-     * 强制允许SnackBar在辅助服务开启时显示动画
-     *
-     * @param view     CoordinatorLayout
-     * @param textId   文字资源ID
-     * @param duration 显示时长
-     */
-
-    @SuppressWarnings("SameParameterValue")
-    public static void forceShowSnackbarWithAnimation(View view, int textId, int duration) {
-        Snackbar snackbar = Snackbar.make(view, textId, duration);
-        try {
-            Field mAccessibilityManagerField = BaseTransientBottomBar.class.getDeclaredField("mAccessibilityManager");
-            mAccessibilityManagerField.setAccessible(true);
-            AccessibilityManager accessibilityManager = (AccessibilityManager) mAccessibilityManagerField.get(snackbar);
-            Field mIsEnabledField = AccessibilityManager.class.getDeclaredField("mIsEnabled");
-            mIsEnabledField.setAccessible(true);
-            mIsEnabledField.setBoolean(accessibilityManager, false);
-            mAccessibilityManagerField.set(snackbar, accessibilityManager);
-        } catch (Exception e) {
-            Log.d("Snackbar", "Reflection error: " + e.toString());
-        }
-        snackbar.show();
-    }
 
     /**
      * 网络连接情况检测以及错误提示

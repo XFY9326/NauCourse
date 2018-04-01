@@ -59,7 +59,7 @@
     <string name="ask_login_out">是否注销当前账户（%1$s）并清空用户缓存？</string>
     <string name="course_card_id">编号：%1$s</string>
     <string name="course_card_teacher">教师：%1$s</string>
-    <string name="course_card_time">上课时间：第%1$s周%2$s&#160;&#160;\n周%3$s&#160;&#160;第%4$s节</string>
+    <string name="course_card_time">上课时间：第%1$s周%2$s&#160;&#160;周%3$s&#160;&#160;第%4$s节</string>
     <string name="course_card_time_week_mode">之%1$s周</string>
     <string name="single_week_mode">单</string>
     <string name="double_week_mode">双</string>

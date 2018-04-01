@@ -70,7 +70,7 @@ public class ScoreActivity extends AppCompatActivity {
                 if (BaseMethod.isNetworkConnected(ScoreActivity.this)) {
                     getData();
                 } else {
-                    BaseMethod.forceShowSnackbarWithAnimation(findViewById(R.id.layout_score_content), R.string.network_error, Snackbar.LENGTH_SHORT);
+                    Snackbar.make(findViewById(R.id.layout_score_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
                     swipeRefreshLayout.post(new Runnable() {
                         @Override
                         public void run() {

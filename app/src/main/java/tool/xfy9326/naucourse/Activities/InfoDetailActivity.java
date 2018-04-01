@@ -124,7 +124,7 @@ public class InfoDetailActivity extends AppCompatActivity {
         if (BaseMethod.isNetworkConnected(this)) {
             getData();
         } else {
-            BaseMethod.forceShowSnackbarWithAnimation(findViewById(R.id.layout_info_detail_content), R.string.network_error, Snackbar.LENGTH_SHORT);
+            Snackbar.make(findViewById(R.id.layout_info_detail_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
         }
 
         TextView textView_title = findViewById(R.id.textView_info_detail_title);
@@ -157,7 +157,7 @@ public class InfoDetailActivity extends AppCompatActivity {
                         int p = 0;
                         int[] strLength = new int[extraFile.length];
                         int[] strStart = new int[extraFile.length];
-                        Pattern pattern = Pattern.compile("(附件).*(\\.\\S*)");
+                        Pattern pattern = Pattern.compile("(附件)(\\S?)(：).*(\\.\\S*)");
                         Matcher matcher = pattern.matcher(content);
                         while (matcher.find()) {
                             String text = matcher.group();

@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
                         sharedPreferences.edit().putString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID).putString(Config.PREFERENCE_USER_PW, Config.DEFAULT_PREFERENCE_USER_PW).putBoolean(Config.PREFERENCE_REMEMBER_PW, false).apply();
                     }
                 } else {
-                    BaseMethod.forceShowSnackbarWithAnimation(findViewById(R.id.layout_login_content), R.string.network_error, Snackbar.LENGTH_SHORT);
+                    Snackbar.make(findViewById(R.id.layout_login_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
                 }
             }
         });
@@ -151,13 +151,13 @@ public class LoginActivity extends AppCompatActivity {
                     finish();
                 } else {
                     if (loginErrorCode == NauJwcClient.LOGIN_ERROR) {
-                        BaseMethod.forceShowSnackbarWithAnimation(findViewById(R.id.layout_login_content), R.string.login_error, Snackbar.LENGTH_SHORT);
+                        Snackbar.make(findViewById(R.id.layout_login_content), R.string.login_error, Snackbar.LENGTH_SHORT).show();
                     } else if (loginErrorCode == NauJwcClient.LOGIN_ALREADY_LOGIN) {
-                        BaseMethod.forceShowSnackbarWithAnimation(findViewById(R.id.layout_login_content), R.string.already_login_error, Snackbar.LENGTH_SHORT);
+                        Snackbar.make(findViewById(R.id.layout_login_content), R.string.already_login_error, Snackbar.LENGTH_SHORT).show();
                     } else if (loginErrorCode == NauJwcClient.LOGIN_CHECKCODE_WRONG) {
-                        BaseMethod.forceShowSnackbarWithAnimation(findViewById(R.id.layout_login_content), R.string.checkcode_error, Snackbar.LENGTH_SHORT);
+                        Snackbar.make(findViewById(R.id.layout_login_content), R.string.checkcode_error, Snackbar.LENGTH_SHORT).show();
                     } else if (loginErrorCode == NauJwcClient.LOGIN_USER_INFO_WRONG) {
-                        BaseMethod.forceShowSnackbarWithAnimation(findViewById(R.id.layout_login_content), R.string.user_info_error, Snackbar.LENGTH_SHORT);
+                        Snackbar.make(findViewById(R.id.layout_login_content), R.string.user_info_error, Snackbar.LENGTH_SHORT).show();
                     }
                 }
             }
