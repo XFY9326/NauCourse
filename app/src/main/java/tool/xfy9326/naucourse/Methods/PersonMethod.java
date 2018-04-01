@@ -12,6 +12,7 @@ import java.util.List;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Utils.StudentInfo;
+import tool.xfy9326.naucourse.Utils.StudentLearnProcess;
 import tool.xfy9326.naucourse.Utils.StudentScore;
 
 /**
@@ -21,6 +22,7 @@ import tool.xfy9326.naucourse.Utils.StudentScore;
 
 public class PersonMethod {
     public static final String FILE_NAME_SCORE = "StudentScore";
+    public static final String FILE_NAME_PROCESS = "StudentLearnProcess";
     public static final String FILE_NAME_DATA = "StudentInfo";
     private final Context context;
     private Document document;
@@ -48,6 +50,51 @@ public class PersonMethod {
 
     public void saveScoreTemp() {
         getUserScore(false);
+    }
+
+    public StudentLearnProcess getUserProcess(boolean checkTemp) {
+        StudentLearnProcess studentLearnProcess = new StudentLearnProcess();
+        Elements tags = document.body().getElementsByTag("tr");
+        List<String> data = tags.eachText();
+        for (String str : data) {
+            if (str.contains("必修课: 目标学分：")) {
+                str = str.replace("必修课: ", "");
+                studentLearnProcess.setScoreBXAim(str.substring(str.indexOf("：") + 1, str.indexOf("，")).trim());
+                str = str.substring(str.indexOf("，") + 1, str.length());
+                studentLearnProcess.setScoreBXNow(str.substring(str.indexOf("：") + 1, str.indexOf("，")).trim());
+                str = str.substring(str.indexOf("，") + 1, str.length());
+                studentLearnProcess.setScoreBXStill(str.substring(str.indexOf("：") + 1, str.length()).trim());
+            } else if (str.contains("专选课: 目标学分：")) {
+                str = str.replace("专选课: ", "");
+                studentLearnProcess.setScoreZXAim(str.substring(str.indexOf("：") + 1, str.indexOf("，")).trim());
+                str = str.substring(str.indexOf("，") + 1, str.length());
+                studentLearnProcess.setScoreZXNow(str.substring(str.indexOf("：") + 1, str.indexOf("，")).trim());
+                str = str.substring(str.indexOf("，") + 1, str.length());
+                studentLearnProcess.setScoreZXStill(str.substring(str.indexOf("：") + 1, str.length()).trim());
+            } else if (str.contains("任选课: 目标学分：")) {
+                str = str.replace("任选课: ", "");
+                studentLearnProcess.setScoreRXAim(str.substring(str.indexOf("：") + 1, str.indexOf("，")).trim());
+                str = str.substring(str.indexOf("，") + 1, str.length());
+                studentLearnProcess.setScoreRXNow(str.substring(str.indexOf("：") + 1, str.indexOf("，")).trim());
+                str = str.substring(str.indexOf("，") + 1, str.length());
+                studentLearnProcess.setScoreRXAward(str.substring(str.indexOf("：") + 1, str.indexOf("，")).trim());
+                str = str.substring(str.indexOf("，") + 1, str.length());
+                studentLearnProcess.setScoreRXStill(str.substring(str.indexOf("：") + 1, str.length()).trim());
+            } else if (str.contains("实践课: 目标学分：")) {
+                str = str.replace("实践课: ", "");
+                studentLearnProcess.setScoreSJAim(str.substring(str.indexOf("：") + 1, str.indexOf("，")).trim());
+                str = str.substring(str.indexOf("，") + 1, str.length());
+                studentLearnProcess.setScoreSJNow(str.substring(str.indexOf("：") + 1, str.indexOf("，")).trim());
+                str = str.substring(str.indexOf("，") + 1, str.length());
+                studentLearnProcess.setScoreSJStill(str.substring(str.indexOf("：") + 1, str.length()).trim());
+                break;
+            }
+        }
+        if (BaseMethod.saveOfflineData(context, studentLearnProcess, FILE_NAME_PROCESS, checkTemp)) {
+            return studentLearnProcess;
+        } else {
+            return null;
+        }
     }
 
     public StudentScore getUserScore(boolean checkTemp) {

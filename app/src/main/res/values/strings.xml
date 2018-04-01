@@ -117,4 +117,15 @@
     <string name="show_wide_course_table_sum">课程表将会显示得更宽而不拥挤</string>
     <string name="course_table_cell_color">课程信息背景色显示</string>
     <string name="course_table_cell_color_sum">课程表的课程信息下将会显示背景色</string>
+    <string name="learn_process">修学进度</string>
+    <string name="data_is_loading">数据正在加载中，请稍后再试</string>
+    <string name="process_bx">必修课</string>
+    <string name="process_zx">专选课</string>
+    <string name="process_rx">任选课</string>
+    <string name="process_sj">实践课</string>
+    <string name="process_name">课程类型：%1$s</string>
+    <string name="process_aim">目标学分：%1$s</string>
+    <string name="process_now">已修学分：%1$s</string>
+    <string name="process_award">奖励学分：%1$s</string>
+    <string name="process_still">学分差额：%1$s</string>
 </resources>

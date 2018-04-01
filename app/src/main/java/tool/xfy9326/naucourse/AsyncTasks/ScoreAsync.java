@@ -9,6 +9,7 @@ import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.PersonMethod;
 import tool.xfy9326.naucourse.Methods.ScoreMethod;
 import tool.xfy9326.naucourse.Utils.CourseScore;
+import tool.xfy9326.naucourse.Utils.StudentLearnProcess;
 import tool.xfy9326.naucourse.Utils.StudentScore;
 
 /**
@@ -21,10 +22,12 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
     private int loadCode = Config.NET_WORK_GET_SUCCESS;
     private StudentScore studentScore;
     private CourseScore courseScore;
+    private StudentLearnProcess studentLearnProcess;
 
     public ScoreAsync() {
         this.studentScore = null;
         this.courseScore = null;
+        this.studentLearnProcess = null;
     }
 
     @Override
@@ -38,6 +41,7 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
             if (loadTime == 0) {
                 //首次只加载离线数据
                 studentScore = (StudentScore) BaseMethod.getOfflineData(context[0], StudentScore.class, PersonMethod.FILE_NAME_SCORE);
+                studentLearnProcess = (StudentLearnProcess) BaseMethod.getOfflineData(context[0], StudentLearnProcess.class, PersonMethod.FILE_NAME_PROCESS);
                 courseScore = (CourseScore) BaseMethod.getOfflineData(context[0], CourseScore.class, ScoreMethod.FILE_NAME);
                 personLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 scoreLoadSuccess = Config.NET_WORK_GET_SUCCESS;
@@ -50,6 +54,7 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
                 personLoadSuccess = personMethod.load();
                 if (personLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                     studentScore = personMethod.getUserScore(loadTime > 1);
+                    studentLearnProcess = personMethod.getUserProcess(loadTime > 1);
                 }
 
                 ScoreMethod scoreMethod = new ScoreMethod(context[0]);
@@ -73,7 +78,7 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
         ScoreActivity scoreActivity = BaseMethod.getApp(context).getScoreActivity();
         if (scoreActivity != null) {
             if (BaseMethod.checkNetWorkCode(context, new int[]{personLoadSuccess, scoreLoadSuccess}, loadCode)) {
-                scoreActivity.setMainScore(studentScore, courseScore);
+                scoreActivity.setMainScore(studentScore, studentLearnProcess, courseScore);
             }
             scoreActivity.lastViewSet(context);
         }
