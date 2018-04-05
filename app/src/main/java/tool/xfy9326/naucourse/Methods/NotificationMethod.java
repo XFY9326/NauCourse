@@ -43,7 +43,7 @@ public class NotificationMethod {
 
                     CreateNotificationChannel(context, notificationManager);
 
-                    builder.setSmallIcon(R.mipmap.ic_launcher_round);
+                    builder.setSmallIcon(R.mipmap.ic_launcher_foreground);
                     builder.setContentTitle(nextCourse.getCourseName());
                     builder.setContentText(nextCourse.getCourseTeacher() + "  " + nextCourse.getCourseLocation() + "  " + nextCourse.getCourseTime());
                     builder.setAutoCancel(true);

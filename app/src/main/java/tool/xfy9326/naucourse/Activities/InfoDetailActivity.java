@@ -52,7 +52,7 @@ public class InfoDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_detail);
         BaseMethod.getApp(this).setInfoDetailActivity(this);
-        if (GetData()) {
+        if (getIntentData()) {
             ToolBarSet();
             ViewSet();
         } else {
@@ -102,7 +102,7 @@ public class InfoDetailActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private boolean GetData() {
+    private boolean getIntentData() {
         Intent intent = getIntent();
         if (intent != null) {
             InfoDetail infoDetail = (InfoDetail) intent.getSerializableExtra(Config.INTENT_INFO_DETAIL);
