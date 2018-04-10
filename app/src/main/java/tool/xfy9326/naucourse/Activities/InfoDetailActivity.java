@@ -79,17 +79,25 @@ public class InfoDetailActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_info_detail_open_in_browser) {
-            Intent intent = new Intent();
-            intent.setAction("android.intent.action.VIEW");
-            String url;
-            if (info_source.equals(InfoAdapter.TOPIC_SOURCE_JW)) {
-                url = JwInfoMethod.server_url + info_url;
-            } else {
-                url = NauJwcClient.server_url + info_url;
+        String url = null;
+        if (info_source.equals(InfoAdapter.TOPIC_SOURCE_JW)) {
+            url = JwInfoMethod.server_url + info_url;
+        } else if (info_source.equals(InfoAdapter.TOPIC_SOURCE_JWC)) {
+            url = NauJwcClient.server_url + info_url;
+        }
+        Intent intent = new Intent();
+        if (url != null) {
+            if (item.getItemId() == R.id.menu_info_detail_open_in_browser) {
+                intent.setAction("android.intent.action.VIEW");
+                Uri content_url = Uri.parse(url);
+                intent.setData(content_url);
+            } else if (item.getItemId() == R.id.menu_info_detail_share) {
+                intent.setAction(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_SUBJECT, info_type);
+                intent.putExtra(Intent.EXTRA_TEXT, info_title + "\n" + url);
+                intent = Intent.createChooser(intent, getString(R.string.share));
             }
-            Uri content_url = Uri.parse(url);
-            intent.setData(content_url);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

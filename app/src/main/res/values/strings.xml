@@ -128,4 +128,5 @@
     <string name="process_now">已修学分：%1$s</string>
     <string name="process_award">奖励学分：%1$s</string>
     <string name="process_still">学分差额：%1$s</string>
+    <string name="share">分享</string>
 </resources>
