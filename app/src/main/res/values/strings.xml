@@ -71,7 +71,7 @@
     <string name="data_get">数据获取</string>
     <string name="on_start_data_get">数据自动更新</string>
     <string name="on_start_data_get_sum">在联网情况下每次开启时自动更新数据</string>
-    <string name="web">https://github.com/XFY9326/NauCourse</string>
+    <string name="web">https://xfy9326.github.io/NauCourse/</string>
     <string name="jw_system_info">教务系统通知</string>
     <string name="jwc">教务委员会</string>
     <string name="updating">正在更新</string>
@@ -110,7 +110,7 @@
     <string name="notification_manage">通知管理</string>
     <string name="next_class_notify">提示下一节课的信息（试验性功能）</string>
     <string name="next_class_notify_sum">将会在上课前十分钟提示上课信息</string>
-    <string name="open_source_license">本应用采用GPL 3.0开源协议开源</string>
+    <string name="open_source_license">本应用开源在南京审计大学Git仓库</string>
     <string name="default_show_table_page">默认显示课程表界面</string>
     <string name="default_show_table_page_sum">打开应用时直接显示课程表，减少用用户操作</string>
     <string name="show_wide_course_table">增加课程表内课程信息的显示宽度</string>
