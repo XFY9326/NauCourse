@@ -15,6 +15,7 @@ import android.widget.Toast;
 import tool.xfy9326.naucourse.AsyncTasks.TempAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
+import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
 
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, Config.REQUEST_ACTIVITY_LOGIN);
             finish();
         } else {
-            if (!BaseMethod.isNetworkConnected(this)) {
+            if (!NetMethod.isNetworkConnected(this)) {
                 Toast.makeText(this, R.string.network_error, Toast.LENGTH_SHORT).show();
             }
         }
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
     private void tempLoad() {
         if (getIntent() != null) {
             if (getIntent().getBooleanExtra(Config.INTENT_JUST_LOGIN, false)) {
-                if (BaseMethod.isNetworkConnected(this)) {
+                if (NetMethod.isNetworkConnected(this)) {
                     new TempAsync().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, getApplicationContext());
                 }
             }

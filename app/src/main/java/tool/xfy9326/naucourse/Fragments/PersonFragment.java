@@ -25,6 +25,7 @@ import tool.xfy9326.naucourse.Activities.ScoreActivity;
 import tool.xfy9326.naucourse.Activities.SettingsActivity;
 import tool.xfy9326.naucourse.AsyncTasks.StudentAsync;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
+import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
 import tool.xfy9326.naucourse.Utils.StudentInfo;
@@ -71,7 +72,7 @@ public class PersonFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (BaseMethod.isNetworkConnected(context)) {
+                if (NetMethod.isNetworkConnected(context)) {
                     getData();
                 } else {
                     Toast.makeText(context, R.string.network_error, Toast.LENGTH_SHORT).show();
@@ -195,7 +196,7 @@ public class PersonFragment extends Fragment {
                 }
             }
             //离线数据加载完成，开始拉取网络数据
-            if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
+            if (loadTime == 1 && NetMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
                 swipeRefreshLayout.post(new Runnable() {
                     @Override
                     public void run() {

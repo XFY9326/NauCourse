@@ -24,6 +24,7 @@ import lib.xfy9326.naujwc.NauJwcClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.LoginMethod;
+import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Tools.AES;
 
@@ -68,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (BaseMethod.isNetworkConnected(LoginActivity.this)) {
+                if (NetMethod.isNetworkConnected(LoginActivity.this)) {
                     final String id = editText_userId.getText().toString().trim();
                     final String pw = editText_userPw.getText().toString().trim();
                     final NauJwcClient nauJwcClient = BaseMethod.getApp(LoginActivity.this).getClient();

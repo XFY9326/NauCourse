@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Activities.MainActivity">
+
+    <item
+        android:id="@+id/menu_home_wifi"
+        android:icon="@drawable/ic_wifi"
+        android:orderInCategory="0"
+        android:title="@string/connect_nau_wifi"
+        app:showAsAction="always" />
+
+</menu>

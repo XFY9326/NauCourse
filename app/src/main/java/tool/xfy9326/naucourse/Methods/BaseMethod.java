@@ -2,8 +2,6 @@ package tool.xfy9326.naucourse.Methods;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
@@ -73,44 +71,6 @@ public class BaseMethod {
     }
 
     /**
-     * 网络是否联接检测
-     *
-     * @param context Context
-     * @return 网络是否联接
-     */
-    public static boolean isNetworkConnected(Context context) {
-        if (context != null) {
-            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            if (connectivityManager != null) {
-                NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-                if (networkInfo != null) {
-                    return networkInfo.isAvailable();
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * WIFI网络检测
-     *
-     * @param context Context
-     * @return WIFI网络是否联接
-     */
-    private static boolean isWifiNetWork(Context context) {
-        if (context != null) {
-            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            if (connectivityManager != null) {
-                NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-                if (networkInfo != null) {
-                    return networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
      * 双击退出
      *
      * @param activity 需要退出的Activity
@@ -147,7 +107,7 @@ public class BaseMethod {
     public static boolean isDataAutoUpdate(Context context) {
         boolean autoUpdate = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_UPDATE_DATA_ON_START, Config.DEFAULT_PREFERENCE_UPDATE_DATA_ON_START);
         if (isDataWifiAutoUpdate(context)) {
-            return isWifiNetWork(context) && autoUpdate;
+            return NetMethod.isWifiNetWork(context) && autoUpdate;
         } else {
             return autoUpdate;
         }

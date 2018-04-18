@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 
 import tool.xfy9326.naucourse.AsyncTasks.ExamAsync;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
+import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Exam;
 import tool.xfy9326.naucourse.Views.ExamAdapter;
@@ -65,7 +66,7 @@ public class ExamActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (BaseMethod.isNetworkConnected(ExamActivity.this)) {
+                if (NetMethod.isNetworkConnected(ExamActivity.this)) {
                     getData();
                 } else {
                     Snackbar.make(findViewById(R.id.layout_exam_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
@@ -93,7 +94,7 @@ public class ExamActivity extends AppCompatActivity {
                 } else {
                     examAdapter.updateData(exam);
                 }
-            } else if (loadTime > 1 || !BaseMethod.isNetworkConnected(this)) {
+            } else if (loadTime > 1 || !NetMethod.isNetworkConnected(this)) {
                 Snackbar.make(findViewById(R.id.layout_exam_content), R.string.no_exam, Snackbar.LENGTH_SHORT).show();
             }
         }
@@ -123,7 +124,7 @@ public class ExamActivity extends AppCompatActivity {
             }
         }
         //离线数据加载完成，开始拉取网络数据
-        if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
+        if (loadTime == 1 && NetMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
             swipeRefreshLayout.post(new Runnable() {
                 @Override
                 public void run() {

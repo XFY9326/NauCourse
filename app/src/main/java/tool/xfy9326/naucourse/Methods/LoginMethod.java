@@ -103,7 +103,12 @@ public class LoginMethod {
         try {
             BaseMethod.getApp(context).getClient().loginOut();
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-            sharedPreferences.edit().remove(Config.PREFERENCE_LOGIN_URL).putBoolean(Config.PREFERENCE_HAS_LOGIN, false).apply();
+            sharedPreferences.edit().remove(Config.PREFERENCE_LOGIN_URL)
+                    .remove(Config.PREFERENCE_NETWORK_ACCOUNT)
+                    .remove(Config.PREFERENCE_NETWORK_PASSWORD)
+                    .remove(Config.PREFERENCE_NETWORK_REMEMBER_PASSWORD)
+                    .putBoolean(Config.PREFERENCE_HAS_LOGIN, false)
+                    .apply();
             cleanUserTemp(context);
             return false;
         } catch (Exception e) {

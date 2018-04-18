@@ -30,6 +30,7 @@ import tool.xfy9326.naucourse.AsyncTasks.InfoDetailAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.JwInfoMethod;
+import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.InfoDetail;
 import tool.xfy9326.naucourse.Views.InfoAdapter;
@@ -129,7 +130,7 @@ public class InfoDetailActivity extends AppCompatActivity {
     }
 
     private void ViewSet() {
-        if (BaseMethod.isNetworkConnected(this)) {
+        if (NetMethod.isNetworkConnected(this)) {
             getData();
         } else {
             Snackbar.make(findViewById(R.id.layout_info_detail_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();

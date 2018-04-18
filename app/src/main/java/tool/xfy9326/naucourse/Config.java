@@ -50,6 +50,10 @@ public class Config {
     public static final String PREFERENCE_DEFAULT_SHOW_TABLE_PAGE = "DEFAULT_SHOW_TABLE_PAGE";
     public static final String PREFERENCE_SHOW_WIDE_TABLE = "SHOW_WIDE_TABLE";
     public static final String PREFERENCE_COURSE_TABLE_CELL_COLOR = "COURSE_TABLE_CELL_COLOR";
+    public static final String PREFERENCE_NETWORK_ACCOUNT = "NETWORK_ACCOUNT";
+    public static final String PREFERENCE_NETWORK_PASSWORD = "NETWORK_PASSWORD";
+    public static final String PREFERENCE_NETWORK_REMEMBER_PASSWORD = "NETWORK_REMEMBER_PASSWORD";
+    public static final String PREFERENCE_NETWORK_PROVIDER = "NETWORK_PROVIDER";
 
     public static final boolean DEFAULT_PREFERENCE_HAS_LOGIN = false;
     public static final boolean DEFAULT_PREFERENCE_REMEMBER_PW = true;
@@ -63,6 +67,8 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_DEFAULT_SHOW_TABLE_PAGE = false;
     public static final boolean DEFAULT_PREFERENCE_SHOW_WIDE_TABLE = false;
     public static final boolean DEFAULT_PREFERENCE_COURSE_TABLE_CELL_COLOR = true;
+    public static final boolean DEFAULT_PREFERENCE_NETWORK_REMEMBER_PASSWORD = true;
+    public static final int DEFAULT_PREFERENCE_NETWORK_PROVIDER = 0;
 
     //网络连接错误代码
     public static final int NET_WORK_GET_SUCCESS = 0;

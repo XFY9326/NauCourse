@@ -33,6 +33,7 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.CourseMethod;
 import tool.xfy9326.naucourse.Methods.CourseViewMethod;
+import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Receivers.UpdateReceiver;
 import tool.xfy9326.naucourse.Utils.Course;
@@ -319,7 +320,7 @@ public class TableFragment extends Fragment {
     public void lastViewSet(Context context) {
         if (isAdded()) {
             //离线数据加载完成，开始拉取网络数据
-            if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
+            if (loadTime == 1 && NetMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
                 getData();
             }
         }

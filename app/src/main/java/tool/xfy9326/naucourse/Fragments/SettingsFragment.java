@@ -17,6 +17,7 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Handlers.MainHandler;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.LoginMethod;
+import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Receivers.UpdateReceiver;
 import tool.xfy9326.naucourse.Views.NextClassWidget;
@@ -52,7 +53,7 @@ public class SettingsFragment extends PreferenceFragment {
         findPreference(Config.PREFERENCE_LOGIN_OUT).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                if (BaseMethod.isNetworkConnected(getActivity())) {
+                if (NetMethod.isNetworkConnected(getActivity())) {
                     loginOut();
                 } else {
                     Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_SHORT).show();

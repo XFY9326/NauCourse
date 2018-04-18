@@ -13,6 +13,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -23,8 +26,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import tool.xfy9326.naucourse.Activities.WifiConnectActivity;
 import tool.xfy9326.naucourse.AsyncTasks.InfoAsync;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
+import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Methods.NextClassMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.JwTopic;
@@ -57,6 +62,12 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public void onAttach(Context context) {
         this.context = context;
         super.onAttach(context);
@@ -66,6 +77,25 @@ public class HomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
         ViewSet();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_home, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_home_wifi) {
+            if (isAdded() && getActivity() != null) {
+                Intent intent = new Intent(context, WifiConnectActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getActivity().startActivity(intent);
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Nullable
@@ -97,7 +127,7 @@ public class HomeFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (BaseMethod.isNetworkConnected(context)) {
+                if (NetMethod.isNetworkConnected(context)) {
                     getData();
                 } else {
                     Toast.makeText(context, R.string.network_error, Toast.LENGTH_SHORT).show();
@@ -218,7 +248,7 @@ public class HomeFragment extends Fragment {
                 }
             }
             //离线数据加载完成，开始拉取网络数据
-            if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
+            if (loadTime == 1 && NetMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
                 swipeRefreshLayout.post(new Runnable() {
                     @Override
                     public void run() {

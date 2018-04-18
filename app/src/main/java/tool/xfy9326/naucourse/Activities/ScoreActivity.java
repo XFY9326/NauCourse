@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import tool.xfy9326.naucourse.AsyncTasks.ScoreAsync;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
+import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.CourseScore;
 import tool.xfy9326.naucourse.Utils.StudentLearnProcess;
@@ -78,7 +79,7 @@ public class ScoreActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (BaseMethod.isNetworkConnected(ScoreActivity.this)) {
+                if (NetMethod.isNetworkConnected(ScoreActivity.this)) {
                     getData();
                 } else {
                     Snackbar.make(findViewById(R.id.layout_score_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
@@ -223,7 +224,7 @@ public class ScoreActivity extends AppCompatActivity {
             }
         }
         //离线数据加载完成，开始拉取网络数据
-        if (loadTime == 1 && BaseMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
+        if (loadTime == 1 && NetMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
             swipeRefreshLayout.post(new Runnable() {
                 @Override
                 public void run() {

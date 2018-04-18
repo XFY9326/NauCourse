@@ -5,13 +5,23 @@
       <w>bmportal</w>
       <w>bugly</w>
       <w>ccdc</w>
+      <w>cmcc</w>
+      <w>ddddd</w>
       <w>github</w>
       <w>gson</w>
       <w>jsoup</w>
       <w>naujwc</w>
       <w>okhttp</w>
       <w>snackbar</w>
+      <w>ssid</w>
+      <w>telecom</w>
       <w>tencent</w>
+      <w>unicom</w>
+      <w>upass</w>
+      <w>vlanid</w>
+      <w>wlanacip</w>
+      <w>wlanacname</w>
+      <w>wlanuserip</w>
     </words>
   </dictionary>
 </component>
