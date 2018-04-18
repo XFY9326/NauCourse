@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourse.Activities;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -99,7 +100,12 @@ public class InfoDetailActivity extends AppCompatActivity {
                 intent.putExtra(Intent.EXTRA_TEXT, info_title + "\n" + url);
                 intent = Intent.createChooser(intent, getString(R.string.share));
             }
-            startActivity(intent);
+            try {
+                startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(this, R.string.no_available_application, Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
         }
         return super.onOptionsItemSelected(item);
     }

@@ -145,4 +145,5 @@
     <string name="permission_error">未给予相关权限！</string>
     <string name="edit_after_login_out">注销后方可编辑登录信息！</string>
     <string name="net_testing">正在检测当前网络状态。。。</string>
+    <string name="no_available_application">无可用APP</string>
 </resources>
