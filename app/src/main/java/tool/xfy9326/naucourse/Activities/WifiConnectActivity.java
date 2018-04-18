@@ -42,14 +42,14 @@ public class WifiConnectActivity extends AppCompatActivity {
     private static final int ACCESS_FINE_LOCATION_COMMANDS_REQUEST_CODE = 0;
     private SharedPreferences sharedPreferences;
     private boolean hasLogin;
-    private boolean activityDestoryed;
+    private boolean activityDestroyed;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wifi_connect);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        activityDestoryed = false;
+        activityDestroyed = false;
         ToolBarSet();
         requestPermission();
         testNet();
@@ -57,7 +57,7 @@ public class WifiConnectActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        activityDestoryed = true;
+        activityDestroyed = true;
         super.onDestroy();
     }
 
@@ -85,7 +85,7 @@ public class WifiConnectActivity extends AppCompatActivity {
                 if (checkNet(WifiConnectActivity.this)) {
                     hasLogin = NetMethod.pingIpAddress("114.114.114.114");
                 }
-                if (!activityDestoryed) {
+                if (!activityDestroyed) {
                     WifiConnectActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

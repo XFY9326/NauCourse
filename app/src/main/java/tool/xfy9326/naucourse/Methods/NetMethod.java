@@ -57,7 +57,7 @@ public class NetMethod {
      */
     public static boolean pingIpAddress(String ipAddress) {
         try {
-            Process process = Runtime.getRuntime().exec("/system/bin/ping -c 1 -w 3 " + ipAddress);
+            Process process = Runtime.getRuntime().exec("/system/bin/ping -c 1 -w 2 " + ipAddress);
             int status = process.waitFor();
             return status == 0;
         } catch (Exception e) {
