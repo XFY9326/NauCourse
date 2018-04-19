@@ -96,6 +96,9 @@ public class CourseMethod {
                 todayFinalCourseTime = courseTime;
             }
         }
+
+        nextCourse.setDataVersionCode(Config.DATA_VERSION_NEXT_COURSE);
+
         if (nowTime > todayFinalCourseTime) {
             return nextCourse;
         }
@@ -161,9 +164,9 @@ public class CourseMethod {
         }
         if (weekNum != this.weekNum || noCheckSame) {
             if (course_time == null) {
-                course_time = BaseMethod.getCourseTimeArray(context);
+                course_time = TimeMethod.getCourseTimeArray(context);
             }
-            List<String> week_day = BaseMethod.getWeekDayArray(context, weekNum, schoolTime.getStartTime());
+            List<String> week_day = TimeMethod.getWeekDayArray(context, weekNum, schoolTime.getStartTime());
             getTable(weekNum, schoolTime.getStartTime());
             setTableTimeLine(course_time, week_day);
             this.weekNum = weekNum;

@@ -55,6 +55,7 @@ public class ExamMethod {
         ArrayList<String> examId = new ArrayList<>();
         ArrayList<String> examName = new ArrayList<>();
         ArrayList<String> examType = new ArrayList<>();
+        ArrayList<String> examScore = new ArrayList<>();
         ArrayList<String> examTime = new ArrayList<>();
         ArrayList<String> examLocation = new ArrayList<>();
 
@@ -71,9 +72,10 @@ public class ExamMethod {
                 String[] data = str.trim().split(" ");
                 examId.add(data[1]);
                 examName.add(data[2]);
+                examScore.add(data[3]);
                 examType.add(data[8]);
-                examTime.add(data[5]);
-                examLocation.add(data[6]);
+                examTime.add(data[5] + " " + data[6]);
+                examLocation.add(data[7]);
             }
         }
 
@@ -82,9 +84,11 @@ public class ExamMethod {
         exam.setExamTime(examTime.toArray(new String[]{}));
         exam.setExamName(examName.toArray(new String[]{}));
         exam.setExamType(examType.toArray(new String[]{}));
+        exam.setExamScore(examScore.toArray(new String[]{}));
         exam.setExamLocation(examLocation.toArray(new String[]{}));
+        exam.setDataVersionCode(Config.DATA_VERSION_EXAM);
 
-        if (BaseMethod.saveOfflineData(context, exam, FILE_NAME, checkTemp)) {
+        if (DataMethod.saveOfflineData(context, exam, FILE_NAME, checkTemp)) {
             return exam;
         } else {
             return null;

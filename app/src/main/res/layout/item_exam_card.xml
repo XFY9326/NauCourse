@@ -52,9 +52,18 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/textView_exam_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="@string/course_card_score"
+                    android:textSize="13sp" />
+
+                <TextView
                     android:id="@+id/textView_exam_time"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
+                    android:layout_marginTop="5dp"
                     android:layout_weight="1"
                     android:text="@string/exam_time"
                     android:textSize="13sp" />

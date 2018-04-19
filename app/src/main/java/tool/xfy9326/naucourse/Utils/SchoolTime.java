@@ -11,6 +11,7 @@ public class SchoolTime {
     //yyyy-MM-dd
     private String endTime = null;
     private int weekNum = 0;
+    private int dataVersionCode = 0;
 
     public SchoolTime() {
     }
@@ -37,5 +38,13 @@ public class SchoolTime {
 
     public void setWeekNum(int weekNum) {
         this.weekNum = weekNum;
+    }
+
+    public int getDataVersionCode() {
+        return dataVersionCode;
+    }
+
+    public void setDataVersionCode(int dataVersionCode) {
+        this.dataVersionCode = dataVersionCode;
     }
 }

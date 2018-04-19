@@ -29,6 +29,7 @@ import java.util.Locale;
 import tool.xfy9326.naucourse.Activities.WifiConnectActivity;
 import tool.xfy9326.naucourse.AsyncTasks.InfoAsync;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
+import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Methods.NextClassMethod;
 import tool.xfy9326.naucourse.R;
@@ -164,7 +165,7 @@ public class HomeFragment extends Fragment {
 
     //优先加载缓存中的下一节课
     private void loadTempNextCourse() {
-        NextCourse nextCourse = (NextCourse) BaseMethod.getOfflineData(context, NextCourse.class, NEXT_COURSE_FILE_NAME);
+        NextCourse nextCourse = (NextCourse) DataMethod.getOfflineData(context, NextCourse.class, NEXT_COURSE_FILE_NAME);
         if (nextCourse != null) {
             setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
         }
@@ -173,7 +174,7 @@ public class HomeFragment extends Fragment {
     //内部刷新设置下一节课
     private void setNextCourse() {
         NextCourse nextCourse = NextClassMethod.getNextClassArray(getActivity());
-        if (BaseMethod.saveOfflineData(context, nextCourse, NEXT_COURSE_FILE_NAME, false)) {
+        if (DataMethod.saveOfflineData(context, nextCourse, NEXT_COURSE_FILE_NAME, false)) {
             setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
         }
     }
@@ -194,7 +195,7 @@ public class HomeFragment extends Fragment {
             if (name == null) {
                 linearLayout_nextClass.setVisibility(View.GONE);
                 textView_noNextClass.setVisibility(View.VISIBLE);
-                BaseMethod.deleteOfflineData(context, NEXT_COURSE_FILE_NAME);
+                DataMethod.deleteOfflineData(context, NEXT_COURSE_FILE_NAME);
             } else {
                 TextView textView_nextClass = view.findViewById(R.id.textView_nextClass);
                 TextView textView_nextLocation = view.findViewById(R.id.textView_nextLocation);

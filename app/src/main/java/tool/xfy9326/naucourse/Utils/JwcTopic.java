@@ -13,6 +13,7 @@ public class JwcTopic {
     private String[] topic_date = null;
     private String[] topic_url = null;
     private int topic_length = 0;
+    private int dataVersionCode = 0;
 
     public JwcTopic() {
     }
@@ -72,5 +73,13 @@ public class JwcTopic {
 
     public void setTopic_url(String[] topic_url) {
         this.topic_url = topic_url;
+    }
+
+    public int getDataVersionCode() {
+        return dataVersionCode;
+    }
+
+    public void setDataVersionCode(int dataVersionCode) {
+        this.dataVersionCode = dataVersionCode;
     }
 }

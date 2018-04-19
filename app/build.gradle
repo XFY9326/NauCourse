@@ -14,8 +14,8 @@ android {
         applicationId "tool.xfy9326.naucourse"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 18
-        versionName "2.7"
+        versionCode 19
+        versionName "2.8"
         resConfigs "zh"
     }
 
@@ -30,7 +30,7 @@ android {
 
 dependencies {
     implementation project(':NauJwc')
-    implementation 'org.jsoup:jsoup:1.11.2'
+    implementation 'org.jsoup:jsoup:1.11.3'
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.android.support:design:27.1.1'

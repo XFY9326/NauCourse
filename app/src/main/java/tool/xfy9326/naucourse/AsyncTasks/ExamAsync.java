@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import tool.xfy9326.naucourse.Activities.ExamActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
+import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.ExamMethod;
 import tool.xfy9326.naucourse.Utils.Exam;
 
@@ -32,7 +33,7 @@ public class ExamAsync extends AsyncTask<Context, Void, Context> {
             }
             if (loadTime == 0) {
                 //首次只加载离线数据
-                exam = (Exam) BaseMethod.getOfflineData(context[0], Exam.class, ExamMethod.FILE_NAME);
+                exam = (Exam) DataMethod.getOfflineData(context[0], Exam.class, ExamMethod.FILE_NAME);
                 examLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 loadTime++;
                 if (examActivity != null) {

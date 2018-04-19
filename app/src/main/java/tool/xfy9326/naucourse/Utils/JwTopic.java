@@ -10,6 +10,7 @@ public class JwTopic {
     private String[] postTitle;
     private String[] postType;
     private String[] postUrl;
+    private int dataVersionCode = 0;
 
     private int postLength = 0;
 
@@ -59,5 +60,13 @@ public class JwTopic {
 
     public void setPostUrl(String[] postUrl) {
         this.postUrl = postUrl;
+    }
+
+    public int getDataVersionCode() {
+        return dataVersionCode;
+    }
+
+    public void setDataVersionCode(int dataVersionCode) {
+        this.dataVersionCode = dataVersionCode;
     }
 }

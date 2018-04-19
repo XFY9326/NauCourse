@@ -26,6 +26,7 @@ import tool.xfy9326.naucourse.Activities.SettingsActivity;
 import tool.xfy9326.naucourse.AsyncTasks.StudentAsync;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
+import tool.xfy9326.naucourse.Methods.TimeMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
 import tool.xfy9326.naucourse.Utils.StudentInfo;
@@ -161,7 +162,7 @@ public class PersonFragment extends Fragment {
     public void TimeTextSet(SchoolTime schoolTime, Context context) {
         if (isAdded()) {
             if (context != null && schoolTime != null) {
-                schoolTime.setWeekNum(BaseMethod.getNowWeekNum(schoolTime));
+                schoolTime.setWeekNum(TimeMethod.getNowWeekNum(schoolTime));
 
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
                 String time = context.getString(R.string.time_now) + simpleDateFormat.format(new Date());

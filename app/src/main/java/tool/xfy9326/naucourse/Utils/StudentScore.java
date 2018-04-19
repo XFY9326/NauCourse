@@ -11,6 +11,7 @@ public class StudentScore {
     private String scoreNP = null;
     private String scoreZP = null;
     private String scoreBP = null;
+    private int dataVersionCode = 0;
 
     public StudentScore() {
 
@@ -54,5 +55,13 @@ public class StudentScore {
 
     public void setScoreBP(String scoreBP) {
         this.scoreBP = scoreBP;
+    }
+
+    public int getDataVersionCode() {
+        return dataVersionCode;
+    }
+
+    public void setDataVersionCode(int dataVersionCode) {
+        this.dataVersionCode = dataVersionCode;
     }
 }

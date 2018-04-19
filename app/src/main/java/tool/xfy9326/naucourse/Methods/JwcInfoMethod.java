@@ -119,7 +119,8 @@ public class JwcInfoMethod {
         }
 
         jwcTopic.setTopic_url(url);
-        if (BaseMethod.saveOfflineData(context, jwcTopic, FILE_NAME, checkTemp)) {
+        jwcTopic.setDataVersionCode(Config.DATA_VERSION_JWC_TOPIC);
+        if (DataMethod.saveOfflineData(context, jwcTopic, FILE_NAME, checkTemp)) {
             return jwcTopic;
         } else {
             return null;

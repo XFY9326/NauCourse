@@ -11,13 +11,16 @@ public class Exam {
     private String[] examType;
     private String[] examTime;
     private String[] examLocation;
+    private String[] examScore;
     private int examMount;
+    private int dataVersionCode = 0;
 
     public Exam() {
         this.examId = null;
         this.examName = null;
         this.examType = null;
         this.examTime = null;
+        this.examScore = null;
         this.examLocation = null;
         this.examMount = 0;
     }
@@ -69,5 +72,21 @@ public class Exam {
 
     public void setExamMount(int examMount) {
         this.examMount = examMount;
+    }
+
+    public String[] getExamScore() {
+        return examScore;
+    }
+
+    public void setExamScore(String[] examScore) {
+        this.examScore = examScore;
+    }
+
+    public int getDataVersionCode() {
+        return dataVersionCode;
+    }
+
+    public void setDataVersionCode(int dataVersionCode) {
+        this.dataVersionCode = dataVersionCode;
     }
 }

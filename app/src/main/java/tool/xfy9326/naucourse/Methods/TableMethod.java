@@ -80,6 +80,7 @@ public class TableMethod {
             course.setCourseCombinedClass(info[4]);
             course.setCourseType(info[5]);
             course.setCourseTeacher(info[6]);
+            course.setDataVersionCode(Config.DATA_VERSION_COURSE);
 
             CourseDetail[] courseDetail_list = new CourseDetail[detail.length];
 
@@ -130,7 +131,7 @@ public class TableMethod {
             courseList.add(course);
         }
 
-        if (BaseMethod.saveOfflineData(context, courseList, FILE_NAME, checkTemp)) {
+        if (DataMethod.saveOfflineData(context, courseList, FILE_NAME, checkTemp)) {
             return courseList;
         } else {
             return null;

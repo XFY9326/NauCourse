@@ -6,8 +6,9 @@ import android.os.AsyncTask;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Fragments.PersonFragment;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
+import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.PersonMethod;
-import tool.xfy9326.naucourse.Methods.TimeMethod;
+import tool.xfy9326.naucourse.Methods.SchoolTimeMethod;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
 import tool.xfy9326.naucourse.Utils.StudentInfo;
 
@@ -37,8 +38,8 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
             }
             if (loadTime == 0) {
                 //首次只加载离线数据
-                studentInfo = (StudentInfo) BaseMethod.getOfflineData(context[0], StudentInfo.class, PersonMethod.FILE_NAME_DATA);
-                schoolTime = (SchoolTime) BaseMethod.getOfflineData(context[0], SchoolTime.class, TimeMethod.FILE_NAME);
+                studentInfo = (StudentInfo) DataMethod.getOfflineData(context[0], StudentInfo.class, PersonMethod.FILE_NAME_DATA);
+                schoolTime = (SchoolTime) DataMethod.getOfflineData(context[0], SchoolTime.class, SchoolTimeMethod.FILE_NAME);
                 personLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 timeLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 loadTime++;
@@ -52,10 +53,10 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
                     studentInfo = personMethod.getUserData(loadTime > 1);
                 }
 
-                TimeMethod timeMethod = new TimeMethod(context[0]);
-                timeLoadSuccess = timeMethod.load();
+                SchoolTimeMethod schoolTimeMethod = new SchoolTimeMethod(context[0]);
+                timeLoadSuccess = schoolTimeMethod.load();
                 if (timeLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                    schoolTime = timeMethod.getSchoolTime();
+                    schoolTime = schoolTimeMethod.getSchoolTime();
                 }
 
                 loadTime++;

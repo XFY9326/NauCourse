@@ -92,7 +92,8 @@ public class ScoreMethod {
         courseScore.setScoreFinal(scoreFinal.toArray(new String[]{}));
         courseScore.setScoreTotal(scoreTotal.toArray(new String[]{}));
 
-        if (BaseMethod.saveOfflineData(context, courseScore, FILE_NAME, checkTemp)) {
+        courseScore.setDataVersionCode(Config.DATA_VERSION_COURSE_SCORE);
+        if (DataMethod.saveOfflineData(context, courseScore, FILE_NAME, checkTemp)) {
             return courseScore;
         } else {
             return null;

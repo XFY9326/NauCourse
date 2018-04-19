@@ -13,6 +13,7 @@ public class StudentInfo {
     private String std_major = null;
     private String std_direction = null;
     private String std_class = null;
+    private int dataVersionCode = 0;
 
     public StudentInfo() {
     }
@@ -71,6 +72,14 @@ public class StudentInfo {
 
     public void setStd_class(String std_class) {
         this.std_class = std_class;
+    }
+
+    public int getDataVersionCode() {
+        return dataVersionCode;
+    }
+
+    public void setDataVersionCode(int dataVersionCode) {
+        this.dataVersionCode = dataVersionCode;
     }
 
 }

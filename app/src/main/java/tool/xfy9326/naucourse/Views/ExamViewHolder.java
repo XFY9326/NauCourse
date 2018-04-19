@@ -13,6 +13,7 @@ import tool.xfy9326.naucourse.R;
 class ExamViewHolder extends RecyclerView.ViewHolder {
     final TextView textView_exam_name;
     final TextView textView_exam_type;
+    final TextView textView_exam_score;
     final TextView textView_exam_time;
     final TextView textView_exam_location;
 
@@ -20,6 +21,7 @@ class ExamViewHolder extends RecyclerView.ViewHolder {
         super(view);
         textView_exam_name = view.findViewById(R.id.textView_exam_name);
         textView_exam_type = view.findViewById(R.id.textView_exam_type);
+        textView_exam_score = view.findViewById(R.id.textView_exam_score);
         textView_exam_time = view.findViewById(R.id.textView_exam_time);
         textView_exam_location = view.findViewById(R.id.textView_exam_location);
     }

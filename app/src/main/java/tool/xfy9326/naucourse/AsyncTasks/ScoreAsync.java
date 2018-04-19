@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import tool.xfy9326.naucourse.Activities.ScoreActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
+import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.PersonMethod;
 import tool.xfy9326.naucourse.Methods.ScoreMethod;
 import tool.xfy9326.naucourse.Utils.CourseScore;
@@ -40,9 +41,9 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
             }
             if (loadTime == 0) {
                 //首次只加载离线数据
-                studentScore = (StudentScore) BaseMethod.getOfflineData(context[0], StudentScore.class, PersonMethod.FILE_NAME_SCORE);
-                studentLearnProcess = (StudentLearnProcess) BaseMethod.getOfflineData(context[0], StudentLearnProcess.class, PersonMethod.FILE_NAME_PROCESS);
-                courseScore = (CourseScore) BaseMethod.getOfflineData(context[0], CourseScore.class, ScoreMethod.FILE_NAME);
+                studentScore = (StudentScore) DataMethod.getOfflineData(context[0], StudentScore.class, PersonMethod.FILE_NAME_SCORE);
+                studentLearnProcess = (StudentLearnProcess) DataMethod.getOfflineData(context[0], StudentLearnProcess.class, PersonMethod.FILE_NAME_PROCESS);
+                courseScore = (CourseScore) DataMethod.getOfflineData(context[0], CourseScore.class, ScoreMethod.FILE_NAME);
                 personLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 scoreLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 loadTime++;

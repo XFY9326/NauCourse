@@ -13,6 +13,7 @@ public class CourseScore {
     private String[] scoreFinal;
     private String[] scoreTotal;
     private String[] scoreCourseXf;
+    private int dataVersionCode = 0;
 
     private int courseAmount;
 
@@ -88,5 +89,13 @@ public class CourseScore {
 
     public void setScoreTotal(String[] scoreTotal) {
         this.scoreTotal = scoreTotal;
+    }
+
+    public int getDataVersionCode() {
+        return dataVersionCode;
+    }
+
+    public void setDataVersionCode(int dataVersionCode) {
+        this.dataVersionCode = dataVersionCode;
     }
 }

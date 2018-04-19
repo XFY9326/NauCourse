@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Fragments.HomeFragment;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
+import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.JwInfoMethod;
 import tool.xfy9326.naucourse.Methods.JwcInfoMethod;
 import tool.xfy9326.naucourse.Utils.JwTopic;
@@ -37,8 +38,8 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
             }
             if (loadTime == 0) {
                 //首次只加载离线数据
-                jwcTopic = (JwcTopic) BaseMethod.getOfflineData(context[0], JwcTopic.class, JwcInfoMethod.FILE_NAME);
-                jwTopic = (JwTopic) BaseMethod.getOfflineData(context[0], JwTopic.class, JwInfoMethod.FILE_NAME);
+                jwcTopic = (JwcTopic) DataMethod.getOfflineData(context[0], JwcTopic.class, JwcInfoMethod.FILE_NAME);
+                jwTopic = (JwTopic) DataMethod.getOfflineData(context[0], JwTopic.class, JwInfoMethod.FILE_NAME);
                 JwcLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 JwLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 loadTime++;

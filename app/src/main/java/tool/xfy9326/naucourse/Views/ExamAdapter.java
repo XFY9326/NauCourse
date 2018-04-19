@@ -32,6 +32,7 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamViewHolder> {
     public void onBindViewHolder(@NonNull ExamViewHolder holder, int position) {
         holder.textView_exam_name.setText(context.getString(R.string.score_course_name, exam.getExamName()[holder.getAdapterPosition()]));
         holder.textView_exam_type.setText(context.getString(R.string.exam_type, exam.getExamType()[holder.getAdapterPosition()]));
+        holder.textView_exam_score.setText(context.getString(R.string.course_card_score, exam.getExamScore()[holder.getAdapterPosition()]));
         holder.textView_exam_time.setText(context.getString(R.string.exam_time, exam.getExamTime()[holder.getAdapterPosition()]));
         holder.textView_exam_location.setText(context.getString(R.string.exam_location, exam.getExamLocation()[holder.getAdapterPosition()]));
     }

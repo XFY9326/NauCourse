@@ -76,4 +76,16 @@ public class Config {
     public static final int NET_WORK_ERROR_CODE_CONNECT_USER_DATA = 2;
     public static final int NET_WORK_ERROR_CODE_CONNECT_NO_LOGIN = 3;
     public static final int NET_WORK_ERROR_CODE_GET_DATA_ERROR = 4;
+
+    //离线数据版本号
+    public static final int DATA_VERSION_COURSE = 1;
+    public static final int DATA_VERSION_COURSE_SCORE = 1;
+    public static final int DATA_VERSION_EXAM = 1;
+    public static final int DATA_VERSION_JWC_TOPIC = 1;
+    public static final int DATA_VERSION_JW_TOPIC = 1;
+    public static final int DATA_VERSION_NEXT_COURSE = 1;
+    public static final int DATA_VERSION_SCHOOL_TIME = 1;
+    public static final int DATA_VERSION_STUDENT_INFO = 1;
+    public static final int DATA_VERSION_STUDENT_LEARN_PROCESS = 1;
+    public static final int DATA_VERSION_STUDENT_SCORE = 1;
 }

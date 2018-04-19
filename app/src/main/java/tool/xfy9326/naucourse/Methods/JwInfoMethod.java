@@ -110,7 +110,8 @@ public class JwInfoMethod {
         jwTopic.setPostUrl(postUrl);
         jwTopic.setPostLength(TOPIC_COUNT);
 
-        if (BaseMethod.saveOfflineData(context, jwTopic, FILE_NAME, checkTemp)) {
+        jwTopic.setDataVersionCode(Config.DATA_VERSION_JW_TOPIC);
+        if (DataMethod.saveOfflineData(context, jwTopic, FILE_NAME, checkTemp)) {
             return jwTopic;
         } else {
             return null;

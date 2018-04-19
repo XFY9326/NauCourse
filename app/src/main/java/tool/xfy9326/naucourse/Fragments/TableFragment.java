@@ -34,6 +34,7 @@ import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.CourseMethod;
 import tool.xfy9326.naucourse.Methods.CourseViewMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
+import tool.xfy9326.naucourse.Methods.TimeMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Receivers.UpdateReceiver;
 import tool.xfy9326.naucourse.Utils.Course;
@@ -145,7 +146,7 @@ public class TableFragment extends Fragment {
 
             int weekNum;
             boolean inVacation = false;
-            schoolTime.setWeekNum(BaseMethod.getNowWeekNum(schoolTime));
+            schoolTime.setWeekNum(TimeMethod.getNowWeekNum(schoolTime));
 
             //假期中默认显示第一周
             if (schoolTime.getWeekNum() == 0) {
@@ -169,7 +170,7 @@ public class TableFragment extends Fragment {
 
                 if (spinner_week == null) {
                     spinner_week = view.findViewById(R.id.spinner_table_week_chose);
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, BaseMethod.getWeekArray(context, schoolTime));
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, TimeMethod.getWeekArray(context, schoolTime));
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner_week.setSelection(lastSelect);
                     spinner_week.setAdapter(adapter);
@@ -194,7 +195,7 @@ public class TableFragment extends Fragment {
                     int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK);
                     if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_NEXT_WEEK, Config.DEFAULT_PREFERENCE_SHOW_NEXT_WEEK)) {
                         if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_WEEKEND, Config.DEFAULT_PREFERENCE_SHOW_WEEKEND)) {
-                            if ((weekDayNum == Calendar.SUNDAY || weekDayNum == Calendar.SATURDAY) && weekNum + 1 <= BaseMethod.getMaxWeekNum(schoolTime)) {
+                            if ((weekDayNum == Calendar.SUNDAY || weekDayNum == Calendar.SATURDAY) && weekNum + 1 <= TimeMethod.getMaxWeekNum(schoolTime)) {
                                 weekNum++;
                                 schoolTime.setWeekNum(weekNum);
                             }

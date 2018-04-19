@@ -18,6 +18,7 @@ public class StudentLearnProcess {
     private String scoreSJAim = null;
     private String scoreSJNow = null;
     private String scoreSJStill = null;
+    private int dataVersionCode = 0;
 
     public StudentLearnProcess() {
 
@@ -125,5 +126,13 @@ public class StudentLearnProcess {
 
     public void setScoreSJStill(String scoreSJStill) {
         this.scoreSJStill = scoreSJStill;
+    }
+
+    public int getDataVersionCode() {
+        return dataVersionCode;
+    }
+
+    public void setDataVersionCode(int dataVersionCode) {
+        this.dataVersionCode = dataVersionCode;
     }
 }

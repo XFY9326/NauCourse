@@ -14,6 +14,7 @@ public class InfoDetail implements Serializable {
     private String source;
     private String url;
     private String type;
+    private int dataVersionCode = 0;
 
     public InfoDetail() {
         this.title = null;
@@ -79,5 +80,13 @@ public class InfoDetail implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public int getDataVersionCode() {
+        return dataVersionCode;
+    }
+
+    public void setDataVersionCode(int dataVersionCode) {
+        this.dataVersionCode = dataVersionCode;
     }
 }

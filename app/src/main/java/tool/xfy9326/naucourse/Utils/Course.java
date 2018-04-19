@@ -13,6 +13,7 @@ public class Course {
     private String courseCombinedClass = null;
     private String courseScore = null;
     private String courseType = null;
+    private int dataVersionCode = 0;
 
     private CourseDetail[] courseDetail = null;
 
@@ -81,5 +82,13 @@ public class Course {
 
     public void setCourseDetail(CourseDetail[] courseDetail) {
         this.courseDetail = courseDetail;
+    }
+
+    public int getDataVersionCode() {
+        return dataVersionCode;
+    }
+
+    public void setDataVersionCode(int dataVersionCode) {
+        this.dataVersionCode = dataVersionCode;
     }
 }

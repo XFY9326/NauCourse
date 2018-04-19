@@ -90,7 +90,8 @@ public class PersonMethod {
                 break;
             }
         }
-        if (BaseMethod.saveOfflineData(context, studentLearnProcess, FILE_NAME_PROCESS, checkTemp)) {
+        studentLearnProcess.setDataVersionCode(Config.DATA_VERSION_STUDENT_LEARN_PROCESS);
+        if (DataMethod.saveOfflineData(context, studentLearnProcess, FILE_NAME_PROCESS, checkTemp)) {
             return studentLearnProcess;
         } else {
             return null;
@@ -129,7 +130,8 @@ public class PersonMethod {
                 studentScore.setScoreBP(str.substring(6).trim());
             }
         }
-        if (BaseMethod.saveOfflineData(context, studentScore, FILE_NAME_SCORE, checkTemp)) {
+        studentScore.setDataVersionCode(Config.DATA_VERSION_STUDENT_SCORE);
+        if (DataMethod.saveOfflineData(context, studentScore, FILE_NAME_SCORE, checkTemp)) {
             return studentScore;
         } else {
             return null;
@@ -169,7 +171,8 @@ public class PersonMethod {
                 studentInfo.setStd_class(str.substring(str.indexOf("级", 5) + 1).trim());
             }
         }
-        if (BaseMethod.saveOfflineData(context, studentInfo, FILE_NAME_DATA, checkTemp)) {
+        studentInfo.setDataVersionCode(Config.DATA_VERSION_STUDENT_INFO);
+        if (DataMethod.saveOfflineData(context, studentInfo, FILE_NAME_DATA, checkTemp)) {
             return studentInfo;
         } else {
             return null;

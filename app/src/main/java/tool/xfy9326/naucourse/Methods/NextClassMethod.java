@@ -27,10 +27,10 @@ public class NextClassMethod {
     public static NextCourse getNextClassArray(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
-            SchoolTime schoolTime = (SchoolTime) BaseMethod.getOfflineData(context, SchoolTime.class, TimeMethod.FILE_NAME);
-            ArrayList<Course> courses = BaseMethod.getOfflineTableData(context);
+            SchoolTime schoolTime = (SchoolTime) DataMethod.getOfflineData(context, SchoolTime.class, SchoolTimeMethod.FILE_NAME);
+            ArrayList<Course> courses = DataMethod.getOfflineTableData(context);
 
-            int weekNum = BaseMethod.getNowWeekNum(schoolTime);
+            int weekNum = TimeMethod.getNowWeekNum(schoolTime);
 
             if (schoolTime != null && courses != null && weekNum != 0) {
                 schoolTime.setWeekNum(weekNum);

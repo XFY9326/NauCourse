@@ -13,6 +13,7 @@ public class NextCourse implements Serializable {
     private String courseTeacher;
     private String courseLocation;
     private String courseTime;
+    private int dataVersionCode = 0;
 
     public NextCourse() {
         this.courseId = null;
@@ -60,6 +61,14 @@ public class NextCourse implements Serializable {
 
     public void setCourseTime(String courseTime) {
         this.courseTime = courseTime;
+    }
+
+    public int getDataVersionCode() {
+        return dataVersionCode;
+    }
+
+    public void setDataVersionCode(int dataVersionCode) {
+        this.dataVersionCode = dataVersionCode;
     }
 
 }
