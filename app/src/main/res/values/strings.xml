@@ -131,7 +131,7 @@
     <string name="share">分享</string>
     <string name="connect_nau_wifi">i-NAU-Home 快速连接</string>
     <string name="network_connect_check_error_server">未检测到登录服务器！</string>
-    <string name="network_connect_check_error_ssid">非i-NAU-Home网络！</string>
+    <string name="network_connect_check_error_ssid">请先连接到i-NAU-Home网络！</string>
     <string name="network_connect_error_server">登陆服务器连接失败！</string>
     <string name="network_connect_error_login">网络账户登录失败！</string>
     <string name="i_nau_home_settings">i-NAU-Home连接配置</string>

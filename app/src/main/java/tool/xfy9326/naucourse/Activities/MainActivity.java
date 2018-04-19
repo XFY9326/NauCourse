@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
     private void tempLoad() {
         if (getIntent() != null) {
             if (getIntent().getBooleanExtra(Config.INTENT_JUST_LOGIN, false)) {
+                Toast.makeText(this, R.string.login_success, Toast.LENGTH_SHORT).show();
                 if (NetMethod.isNetworkConnected(this)) {
                     new TempAsync().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, getApplicationContext());
                 }

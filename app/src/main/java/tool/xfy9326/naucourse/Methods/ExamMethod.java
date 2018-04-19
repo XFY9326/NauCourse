@@ -74,8 +74,12 @@ public class ExamMethod {
                 examName.add(data[2]);
                 examScore.add(data[3]);
                 examType.add(data[8]);
-                examTime.add(data[5] + " " + data[6]);
-                examLocation.add(data[7]);
+                String time = data[5];
+                if (data.length > 9) {
+                    time += " " + data[6];
+                }
+                examTime.add(time);
+                examLocation.add(data[data.length - 3]);
             }
         }
 
