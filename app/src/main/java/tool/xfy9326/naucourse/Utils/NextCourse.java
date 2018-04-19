@@ -63,10 +63,12 @@ public class NextCourse implements Serializable {
         this.courseTime = courseTime;
     }
 
+    @SuppressWarnings("unused")
     public int getDataVersionCode() {
         return dataVersionCode;
     }
 
+    @SuppressWarnings("SameParameterValue")
     public void setDataVersionCode(int dataVersionCode) {
         this.dataVersionCode = dataVersionCode;
     }

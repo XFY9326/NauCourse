@@ -74,10 +74,12 @@ public class StudentInfo {
         this.std_class = std_class;
     }
 
+    @SuppressWarnings("unused")
     public int getDataVersionCode() {
         return dataVersionCode;
     }
 
+    @SuppressWarnings("SameParameterValue")
     public void setDataVersionCode(int dataVersionCode) {
         this.dataVersionCode = dataVersionCode;
     }

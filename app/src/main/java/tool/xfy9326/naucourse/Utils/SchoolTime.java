@@ -40,10 +40,12 @@ public class SchoolTime {
         this.weekNum = weekNum;
     }
 
+    @SuppressWarnings("unused")
     public int getDataVersionCode() {
         return dataVersionCode;
     }
 
+    @SuppressWarnings("SameParameterValue")
     public void setDataVersionCode(int dataVersionCode) {
         this.dataVersionCode = dataVersionCode;
     }

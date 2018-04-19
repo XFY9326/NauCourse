@@ -128,10 +128,12 @@ public class StudentLearnProcess {
         this.scoreSJStill = scoreSJStill;
     }
 
+    @SuppressWarnings("unused")
     public int getDataVersionCode() {
         return dataVersionCode;
     }
 
+    @SuppressWarnings("SameParameterValue")
     public void setDataVersionCode(int dataVersionCode) {
         this.dataVersionCode = dataVersionCode;
     }
