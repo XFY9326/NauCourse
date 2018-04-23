@@ -50,6 +50,7 @@ public class PersonMethod {
 
     public void saveScoreTemp() {
         getUserScore(false);
+        getUserProcess(false);
     }
 
     public StudentLearnProcess getUserProcess(boolean checkTemp) {

@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Looper;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -66,6 +65,7 @@ public class SettingsFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if ((boolean) newValue) {
+                    Toast.makeText(getActivity(), R.string.ask_lock_background, Toast.LENGTH_SHORT).show();
                     //初始化自动更新
                     getActivity().sendBroadcast(new Intent(UpdateReceiver.UPDATE_ACTION).putExtra(Config.INTENT_IS_ONLY_INIT, true));
                 }
@@ -87,21 +87,31 @@ public class SettingsFragment extends PreferenceFragment {
                     @Override
                     public void run() {
                         if (LoginMethod.loginOut(getActivity())) {
-                            Looper.prepare();
-                            Toast.makeText(getActivity(), R.string.login_out_error, Toast.LENGTH_SHORT).show();
-                            Looper.loop();
-                        } else {
-                            Looper.prepare();
-                            //小部件清空
-                            getActivity().sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
-                            //重启当前程序
-                            getActivity().startActivity(new Intent(getActivity(), MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP));
-                            MainActivity activity = BaseMethod.getApp(getActivity()).getMainActivity();
-                            if (activity != null) {
-                                activity.finish();
+                            if (isAdded() && getActivity() != null) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getActivity(), R.string.login_out_error, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
-                            getActivity().finish();
-                            Looper.loop();
+                        } else {
+                            if (isAdded() && getActivity() != null) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //小部件清空
+                                        getActivity().sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
+                                        //重启当前程序
+                                        getActivity().startActivity(new Intent(getActivity(), MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP));
+                                        MainActivity activity = BaseMethod.getApp(getActivity()).getMainActivity();
+                                        if (activity != null) {
+                                            activity.finish();
+                                        }
+                                        getActivity().finish();
+                                    }
+                                });
+                            }
                         }
                     }
                 }).start();

@@ -37,7 +37,7 @@ public class UpdateReceiver extends BroadcastReceiver {
         if (sharedPreferences.getLong(Config.PREFERENCE_LAST_NOTIFY_TIME, 0) != time) {
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             if (alarmManager != null) {
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_ON_UPDATE, new Intent(context, UpdateReceiver.class).setAction(UPDATE_ACTION), PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_ON_UPDATE, new Intent(context, UpdateReceiver.class).setAction(UPDATE_ACTION).setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES), PendingIntent.FLAG_UPDATE_CURRENT);
                 AlarmManagerCompat.setExactAndAllowWhileIdle(alarmManager, AlarmManager.RTC_WAKEUP, time, pendingIntent);
                 sharedPreferences.edit().putLong(Config.PREFERENCE_LAST_NOTIFY_TIME, time).apply();
             }

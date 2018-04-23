@@ -221,11 +221,11 @@ public class HomeFragment extends Fragment {
         this.loadTime = loadTime;
     }
 
-    public void InfoSet(JwcTopic jwcTopic, JwTopic jwTopic, Context context) {
+    public void InfoSet(JwcTopic jwcTopic, JwTopic jwTopic) {
         if (isAdded()) {
-            if (context != null && jwcTopic != null && jwTopic != null) {
+            if (jwcTopic != null && jwTopic != null) {
                 if (infoAdapter == null) {
-                    infoAdapter = new InfoAdapter(context, jwcTopic, jwTopic);
+                    infoAdapter = new InfoAdapter(getActivity(), jwcTopic, jwTopic);
                     recyclerView.setAdapter(infoAdapter);
                 } else {
                     infoAdapter.updateJwcTopic(jwcTopic, jwTopic);

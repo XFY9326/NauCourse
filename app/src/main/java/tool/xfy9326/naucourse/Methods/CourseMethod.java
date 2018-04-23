@@ -228,7 +228,9 @@ public class CourseMethod {
                     return true;
                 }
             } else {
-                return weekNum == Integer.valueOf(week);
+                if (weekNum == Integer.valueOf(week)) {
+                    return true;
+                }
             }
         }
         return false;

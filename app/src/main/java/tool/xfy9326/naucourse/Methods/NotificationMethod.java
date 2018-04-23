@@ -23,8 +23,18 @@ import tool.xfy9326.naucourse.Utils.NextCourse;
 
 public class NotificationMethod {
     private static final int ACTIVITY_REQUEST_CODE = 0;
-    private static final int NOTIFICATION_CODE = 1;
-    private static final String CHANNEL_ID = "channel_next_course_notify";
+    private static final int NOTIFICATION_CODE_NEXT_COURSE = 100;
+    private static final int NOTIFICATION_CODE_WIFI_CONNECT = 101;
+    private static final String CHANNEL_ID = "channel_nau_notify";
+
+    /**
+     * 显示i-NAU-Home登陆成功通知
+     *
+     * @param context Context
+     */
+    public static void showWifiConnectSuccess(Context context) {
+        showNotification(context, NOTIFICATION_CODE_WIFI_CONNECT, context.getString(R.string.app_name), context.getString(R.string.i_nau_home_settings_auto_login_success));
+    }
 
     /**
      * 显示下一节课的通知
@@ -37,24 +47,36 @@ public class NotificationMethod {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             String lastNotifyId = sharedPreferences.getString(Config.PREFERENCE_LAST_NOTIFY_ID, null);
             if (lastNotifyId == null || !lastNotifyId.equals(nextCourse.getCourseId())) {
-                NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                if (notificationManager != null) {
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
-
-                    CreateNotificationChannel(context, notificationManager);
-
-                    builder.setSmallIcon(R.mipmap.ic_launcher_foreground);
-                    builder.setContentTitle(nextCourse.getCourseName());
-                    builder.setContentText(nextCourse.getCourseTeacher() + "  " + nextCourse.getCourseLocation() + "  " + nextCourse.getCourseTime());
-                    builder.setAutoCancel(true);
-
-                    PendingIntent pendingIntent = PendingIntent.getActivity(context, ACTIVITY_REQUEST_CODE, new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), PendingIntent.FLAG_UPDATE_CURRENT);
-                    builder.setContentIntent(pendingIntent);
-
-                    notificationManager.notify(NOTIFICATION_CODE, builder.build());
-                    sharedPreferences.edit().putString(Config.PREFERENCE_LAST_NOTIFY_ID, nextCourse.getCourseId()).apply();
-                }
+                showNotification(context, NOTIFICATION_CODE_NEXT_COURSE, nextCourse.getCourseName(), nextCourse.getCourseTeacher() + "  " + nextCourse.getCourseLocation() + "  " + nextCourse.getCourseTime());
+                sharedPreferences.edit().putString(Config.PREFERENCE_LAST_NOTIFY_ID, nextCourse.getCourseId()).apply();
             }
+        }
+    }
+
+    /**
+     * 默认模板显示通知
+     *
+     * @param context Context
+     * @param code    通知Code
+     * @param title   通知标题
+     * @param text    通知内容
+     */
+    private static void showNotification(Context context, int code, String title, String text) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager != null) {
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
+
+            CreateNotificationChannel(context, notificationManager);
+
+            builder.setSmallIcon(R.mipmap.ic_launcher_foreground);
+            builder.setContentTitle(title);
+            builder.setContentText(text);
+            builder.setAutoCancel(true);
+
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, ACTIVITY_REQUEST_CODE, new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), PendingIntent.FLAG_UPDATE_CURRENT);
+            builder.setContentIntent(pendingIntent);
+
+            notificationManager.notify(code, builder.build());
         }
     }
 

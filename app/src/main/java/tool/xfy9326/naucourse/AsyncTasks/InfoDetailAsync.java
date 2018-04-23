@@ -16,7 +16,6 @@ import tool.xfy9326.naucourse.Views.InfoAdapter;
 
 public class InfoDetailAsync extends AsyncTask<Context, Void, Context> {
     private String data;
-    private String[] extraFile;
     private int loadSuccess = -1;
     private int loadCode = Config.NET_WORK_GET_SUCCESS;
     private String info_source;
@@ -24,7 +23,6 @@ public class InfoDetailAsync extends AsyncTask<Context, Void, Context> {
 
     public InfoDetailAsync() {
         this.data = null;
-        this.extraFile = null;
         this.info_source = null;
         this.info_url = null;
     }
@@ -55,7 +53,6 @@ public class InfoDetailAsync extends AsyncTask<Context, Void, Context> {
                     loadSuccess = jwInfoMethod.loadDetail(info_url);
                     if (loadSuccess == Config.NET_WORK_GET_SUCCESS) {
                         data = jwInfoMethod.getDetail();
-                        extraFile = jwInfoMethod.getExtraFileUrl();
                     }
                 }
             }
@@ -71,7 +68,7 @@ public class InfoDetailAsync extends AsyncTask<Context, Void, Context> {
         InfoDetailActivity infoDetailActivity = BaseMethod.getApp(context).getInfoDetailActivity();
         if (infoDetailActivity != null) {
             if (BaseMethod.checkNetWorkCode(context, new int[]{loadSuccess}, loadCode)) {
-                infoDetailActivity.InfoDetailSet(data, extraFile);
+                infoDetailActivity.InfoDetailSet(data);
             }
         }
         System.gc();

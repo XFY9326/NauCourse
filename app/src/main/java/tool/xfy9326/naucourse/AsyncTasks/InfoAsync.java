@@ -74,7 +74,7 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
         HomeFragment homeFragment = BaseMethod.getApp(context).getViewPagerAdapter().getHomeFragment();
         if (homeFragment != null) {
             if (BaseMethod.checkNetWorkCode(context, new int[]{JwLoadSuccess, JwcLoadSuccess}, loadCode)) {
-                homeFragment.InfoSet(jwcTopic, jwTopic, context);
+                homeFragment.InfoSet(jwcTopic, jwTopic);
             }
             homeFragment.lastViewSet(context);
         }

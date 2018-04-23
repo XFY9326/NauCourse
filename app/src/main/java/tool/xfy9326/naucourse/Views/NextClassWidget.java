@@ -70,7 +70,7 @@ public class NextClassWidget extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
         //初始化自动更新
-        context.sendBroadcast(new Intent(context, UpdateReceiver.class).setAction(UpdateReceiver.UPDATE_ACTION).putExtra(Config.INTENT_IS_ONLY_INIT, true));
+        context.sendBroadcast(new Intent(context, UpdateReceiver.class).setAction(UpdateReceiver.UPDATE_ACTION).setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES).putExtra(Config.INTENT_IS_ONLY_INIT, true));
         super.onEnabled(context);
     }
 

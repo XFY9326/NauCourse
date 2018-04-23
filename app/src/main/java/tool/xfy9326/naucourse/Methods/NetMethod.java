@@ -1,9 +1,18 @@
 package tool.xfy9326.naucourse.Methods;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
+import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+
+import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.Tools.AES;
 
 /**
  * Created by 10696 on 2018/4/17.
@@ -106,6 +115,76 @@ public class NetMethod {
                 ((i >> 8) & 0xFF) + "." +
                 ((i >> 16) & 0xFF) + "." +
                 (i >> 24 & 0xFF);
+    }
+
+    /**
+     * 直接登陆i-NAU-Home
+     * 无UI和提示，存在问题直接看日志 WIFI_CONNECT
+     *
+     * @param context Context
+     */
+    public static void loginNAUWifi(final Context context) {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (NetMethod.isNetworkConnected(context) && NetMethod.isWifiNetWork(context)) {
+                if (NetMethod.checkNauWifiSSID(context)) {
+                    if (NetMethod.pingIpAddress("172.26.3.20")) {
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                        String id = sharedPreferences.getString(Config.PREFERENCE_NETWORK_ACCOUNT, Config.DEFAULT_PREFERENCE_USER_ID);
+                        String pw = sharedPreferences.getString(Config.PREFERENCE_NETWORK_PASSWORD, Config.DEFAULT_PREFERENCE_USER_PW);
+                        if (!id.equals(Config.DEFAULT_PREFERENCE_USER_ID) && !pw.equals(Config.DEFAULT_PREFERENCE_USER_PW)) {
+                            pw = AES.decrypt(pw, id);
+                            int provider = sharedPreferences.getInt(Config.PREFERENCE_NETWORK_PROVIDER, Config.DEFAULT_PREFERENCE_NETWORK_PROVIDER);
+                            WifiLoginMethod wifiLoginMethod = new WifiLoginMethod(NetMethod.getLocalIP(context));
+                            wifiLoginMethod.setOnRequestListener(new WifiLoginMethod.OnRequestListener() {
+                                @Override
+                                public void OnRequest(boolean isSuccess, int errorType) {
+                                    if (!isSuccess) {
+                                        if (errorType == WifiLoginMethod.ERROR_TYPE_LOGIN_ERROR) {
+                                            Log.d("WIFI_CONNECT", "Login Error");
+                                        } else if (errorType == WifiLoginMethod.ERROR_TYPE_REQUEST_ERROR) {
+                                            Log.d("WIFI_CONNECT", "Request Error");
+                                        }
+                                    } else {
+                                        Log.d("WIFI_CONNECT", "Login Success");
+                                        NotificationMethod.showWifiConnectSuccess(context);
+                                    }
+                                }
+                            });
+                            String type = null;
+                            switch (provider) {
+                                case 0:
+                                    type = WifiLoginMethod.TYPE_TELECOM;
+                                    break;
+                                case 1:
+                                    type = WifiLoginMethod.TYPE_CMCC;
+                                    break;
+                                case 2:
+                                    type = WifiLoginMethod.TYPE_UNICOM;
+                                    break;
+                                case 3:
+                                    type = WifiLoginMethod.TYPE_SCHOOL;
+                                    break;
+                            }
+                            if (type != null) {
+                                wifiLoginMethod.login(id, pw, type);
+                            } else {
+                                Log.d("WIFI_CONNECT", "Type Error");
+                            }
+                        } else {
+                            Log.d("WIFI_CONNECT", "Info Error");
+                        }
+                    } else {
+                        Log.d("WIFI_CONNECT", "Server Error");
+                    }
+                } else {
+                    Log.d("WIFI_CONNECT", "SSID Error");
+                }
+            } else {
+                Log.d("WIFI_CONNECT", "NetWork Error");
+            }
+        } else {
+            Log.d("WIFI_CONNECT", "Permission Error");
+        }
     }
 
 }

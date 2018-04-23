@@ -105,10 +105,10 @@
     <string name="show_weekend_sum">如果在周六周日没有课不建议开启</string>
     <string name="show_next_week">提前显示下周的课程表</string>
     <string name="show_next_week_sum">在周六周日时提前显示下一周的课程表</string>
-    <string name="notification_channel">上课消息提示</string>
-    <string name="notification_channel_des">用于在上课前提示下一节课的信息</string>
+    <string name="notification_channel">NAU课程表通知渠道</string>
+    <string name="notification_channel_des">用于显示NAU课程表所有的通知</string>
     <string name="notification_manage">通知管理</string>
-    <string name="next_class_notify">提示下一节课的信息（试验性功能）</string>
+    <string name="next_class_notify">提示下一节课的信息</string>
     <string name="next_class_notify_sum">将会在上课前十分钟提示上课信息</string>
     <string name="open_source_license">本应用开源在南京审计大学Git仓库</string>
     <string name="default_show_table_page">默认显示课程表界面</string>
@@ -139,6 +139,8 @@
     <string name="i_nau_home_settings_account">网络账户：</string>
     <string name="i_nau_home_settings_pw">网络密码：</string>
     <string name="i_nau_home_settings_error">网络信息设置错误！</string>
+    <string name="i_nau_home_settings_auto_login">连接到Wifi时自动登录</string>
+    <string name="i_nau_home_settings_auto_login_success">i-NAU-Home自动登录成功！</string>
     <string name="connect_network">连接到网络</string>
     <string name="disconnect_network">注销网络登录</string>
     <string name="login_out_success">注销成功！</string>
@@ -146,4 +148,5 @@
     <string name="edit_after_login_out">注销后方可编辑登录信息！</string>
     <string name="net_testing">正在检测当前网络状态。。。</string>
     <string name="no_available_application">无可用APP</string>
+    <string name="ask_lock_background">在后台锁定本应用以带来更好的使用体验！</string>
 </resources>

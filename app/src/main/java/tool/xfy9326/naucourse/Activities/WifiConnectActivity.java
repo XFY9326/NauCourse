@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Methods.WifiLoginMethod;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.Services.WifiConnectService;
 import tool.xfy9326.naucourse.Tools.AES;
 
 /**
@@ -135,10 +137,39 @@ public class WifiConnectActivity extends AppCompatActivity {
                     Snackbar.make(findViewById(R.id.layout_wifi_connect), R.string.edit_after_login_out, Snackbar.LENGTH_SHORT).show();
                 } else {
                     if (!isChecked) {
-                        editText_password.setText("");
                         sharedPreferences.edit().remove(Config.PREFERENCE_NETWORK_PASSWORD).apply();
                     }
                     sharedPreferences.edit().putBoolean(Config.PREFERENCE_NETWORK_REMEMBER_PASSWORD, isChecked).apply();
+                }
+            }
+        });
+
+        final CheckBox checkBox_autoLogin = findViewById(R.id.checkBox_network_autoLogin);
+        checkBox_autoLogin.setChecked(sharedPreferences.getBoolean(Config.PREFERENCE_NETWORK_AUTO_LOGIN, Config.DEFAULT_PREFERENCE_NETWORK_AUTO_LOGIN));
+        checkBox_autoLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (hasLogin) {
+                    checkBox_autoLogin.setChecked(!isChecked);
+                    Snackbar.make(findViewById(R.id.layout_wifi_connect), R.string.edit_after_login_out, Snackbar.LENGTH_SHORT).show();
+                } else {
+                    if (isChecked) {
+                        String id = editText_account.getText().toString();
+                        String pw = editText_password.getText().toString();
+                        if (!id.isEmpty() && !pw.isEmpty()) {
+                            checkBox_rememberPw.setChecked(true);
+                            sharedPreferences.edit().putString(Config.PREFERENCE_NETWORK_ACCOUNT, id).apply();
+                            sharedPreferences.edit().putString(Config.PREFERENCE_NETWORK_PASSWORD, AES.encrypt(pw, id)).apply();
+                            Snackbar.make(findViewById(R.id.layout_wifi_connect), R.string.ask_lock_background, Snackbar.LENGTH_SHORT).show();
+                            startService(new Intent(WifiConnectActivity.this, WifiConnectService.class).putExtra(Config.INTENT_AUTO_LOGIN, true));
+                        } else {
+                            checkBox_autoLogin.setChecked(false);
+                            Snackbar.make(findViewById(R.id.layout_wifi_connect), R.string.i_nau_home_settings_error, Snackbar.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        startService(new Intent(WifiConnectActivity.this, WifiConnectService.class).putExtra(Config.INTENT_AUTO_LOGIN, false));
+                    }
+                    sharedPreferences.edit().putBoolean(Config.PREFERENCE_NETWORK_AUTO_LOGIN, isChecked).apply();
                 }
             }
         });
@@ -215,14 +246,19 @@ public class WifiConnectActivity extends AppCompatActivity {
                             wifiLoginMethod.loginOut(id, pw);
                         } else {
                             String type = null;
-                            if (provider == 0) {
-                                type = WifiLoginMethod.TYPE_TELECOM;
-                            } else if (provider == 1) {
-                                type = WifiLoginMethod.TYPE_CMCC;
-                            } else if (provider == 2) {
-                                type = WifiLoginMethod.TYPE_UNICOM;
-                            } else if (provider == 3) {
-                                type = WifiLoginMethod.TYPE_SCHOOL;
+                            switch (provider) {
+                                case 0:
+                                    type = WifiLoginMethod.TYPE_TELECOM;
+                                    break;
+                                case 1:
+                                    type = WifiLoginMethod.TYPE_CMCC;
+                                    break;
+                                case 2:
+                                    type = WifiLoginMethod.TYPE_UNICOM;
+                                    break;
+                                case 3:
+                                    type = WifiLoginMethod.TYPE_SCHOOL;
+                                    break;
                             }
                             if (type != null) {
                                 wifiLoginMethod.login(id, pw, type);
@@ -280,7 +316,7 @@ public class WifiConnectActivity extends AppCompatActivity {
                     Snackbar.make(findViewById(R.id.layout_wifi_connect), R.string.network_connect_check_error_ssid, Snackbar.LENGTH_SHORT).show();
                 }
             } else {
-                Snackbar.make(findViewById(R.id.layout_wifi_connect), R.string.network_error, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(findViewById(R.id.layout_wifi_connect), R.string.network_connect_check_error_ssid, Snackbar.LENGTH_SHORT).show();
             }
         } else {
             ActivityCompat.requestPermissions(WifiConnectActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_FINE_LOCATION_COMMANDS_REQUEST_CODE);

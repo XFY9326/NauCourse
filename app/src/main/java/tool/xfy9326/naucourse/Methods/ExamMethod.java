@@ -73,7 +73,7 @@ public class ExamMethod {
                 examId.add(data[1]);
                 examName.add(data[2]);
                 examScore.add(data[3]);
-                examType.add(data[8]);
+                examType.add(data[data.length - 1]);
                 String time = data[5];
                 if (data.length > 9) {
                     time += " " + data[6];
