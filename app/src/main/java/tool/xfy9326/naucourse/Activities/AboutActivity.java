@@ -40,6 +40,7 @@ public class AboutActivity extends AppCompatActivity {
     private void ViewSet() {
         TextView textView_version = findViewById(R.id.textView_about_version);
         TextView textView_open_source = findViewById(R.id.textView_about_open_source);
+        TextView textView_feedback = findViewById(R.id.textView_about_feedback);
 
         String version = BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")";
         textView_version.setText(version);
@@ -48,6 +49,16 @@ public class AboutActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showOpenSourceList();
+            }
+        });
+        textView_feedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(AboutActivity.this);
+                builder.setTitle(R.string.feedback);
+                builder.setMessage(getString(R.string.feedback_by_mail, getString(R.string.mail)));
+                builder.setPositiveButton(android.R.string.yes, null);
+                builder.show();
             }
         });
     }
