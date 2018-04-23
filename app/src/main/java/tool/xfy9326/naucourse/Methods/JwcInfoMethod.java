@@ -76,23 +76,29 @@ public class JwcInfoMethod {
             }
             if (nextTopic) {
                 divideCount++;
-                if (divideCount == 2) {
-                    title[totalTopic] = str.trim();
-                } else if (divideCount == 3) {
-                    date[totalTopic] = str.trim();
-                } else if (divideCount == 4) {
-                    post[totalTopic] = str.trim();
-                } else if (divideCount == 5) {
-                    click[totalTopic] = str.trim();
-                } else if (divideCount == 6) {
-                    String temp = str.trim();
-                    if (temp.contains("教务通知")) {
-                        temp = context.getString(R.string.jw_system_info);
-                    }
-                    type[totalTopic] = temp;
+                switch (divideCount) {
+                    case 2:
+                        title[totalTopic] = str.trim();
+                        break;
+                    case 3:
+                        date[totalTopic] = str.trim();
+                        break;
+                    case 4:
+                        post[totalTopic] = str.trim();
+                        break;
+                    case 5:
+                        click[totalTopic] = str.trim();
+                        break;
+                    case 6:
+                        String temp = str.trim();
+                        if (temp.contains("教务通知")) {
+                            temp = context.getString(R.string.jw_system_info);
+                        }
+                        type[totalTopic] = temp;
 
-                    divideCount = 0;
-                    totalTopic++;
+                        divideCount = 0;
+                        totalTopic++;
+                        break;
                 }
             }
         }

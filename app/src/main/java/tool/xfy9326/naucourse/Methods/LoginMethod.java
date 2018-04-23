@@ -33,16 +33,19 @@ public class LoginMethod {
         String data = BaseMethod.getApp(context).getClient().getUserData(url);
         if (!checkUserLogin(data) && tryReLogin) {
             int reLogin_result = reLogin(context);
-            if (reLogin_result == Config.RE_LOGIN_SUCCESS) {
-                data = BaseMethod.getApp(context).getClient().getUserData(url);
-            } else if (reLogin_result == Config.RE_LOGIN_TRYING) {
-                Log.d("NETWORK", "WAITING LOGIN RESULT");
-                while (isTryingReLogin) {
-                    Thread.sleep(500);
-                }
-                return getData(context, url, false);
-            } else if (reLogin_result == Config.RE_LOGIN_FAILED) {
-                Log.d("NETWORK", "LOGIN ERROR");
+            switch (reLogin_result) {
+                case Config.RE_LOGIN_SUCCESS:
+                    data = BaseMethod.getApp(context).getClient().getUserData(url);
+                    break;
+                case Config.RE_LOGIN_TRYING:
+                    Log.d("NETWORK", "WAITING LOGIN RESULT");
+                    while (isTryingReLogin) {
+                        Thread.sleep(500);
+                    }
+                    return getData(context, url, false);
+                case Config.RE_LOGIN_FAILED:
+                    Log.d("NETWORK", "LOGIN ERROR");
+                    break;
             }
         }
         System.gc();

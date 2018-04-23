@@ -3,6 +3,7 @@ package tool.xfy9326.naucourse.Tools;
 import android.annotation.SuppressLint;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Objects;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -66,7 +67,7 @@ public class AES {
                 e.printStackTrace();
             }
             data = encrypt(data, password);
-            return byte2hex(data);
+            return byte2hex(Objects.requireNonNull(data));
         } else {
             return null;
         }

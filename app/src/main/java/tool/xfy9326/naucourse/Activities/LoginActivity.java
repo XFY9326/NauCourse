@@ -149,14 +149,19 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(new Intent(LoginActivity.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP).putExtra(Config.INTENT_JUST_LOGIN, true));
                     finish();
                 } else {
-                    if (loginErrorCode == NauJwcClient.LOGIN_ERROR) {
-                        Snackbar.make(findViewById(R.id.layout_login_content), R.string.login_error, Snackbar.LENGTH_SHORT).show();
-                    } else if (loginErrorCode == NauJwcClient.LOGIN_ALREADY_LOGIN) {
-                        Snackbar.make(findViewById(R.id.layout_login_content), R.string.already_login_error, Snackbar.LENGTH_SHORT).show();
-                    } else if (loginErrorCode == NauJwcClient.LOGIN_CHECKCODE_WRONG) {
-                        Snackbar.make(findViewById(R.id.layout_login_content), R.string.checkcode_error, Snackbar.LENGTH_SHORT).show();
-                    } else if (loginErrorCode == NauJwcClient.LOGIN_USER_INFO_WRONG) {
-                        Snackbar.make(findViewById(R.id.layout_login_content), R.string.user_info_error, Snackbar.LENGTH_SHORT).show();
+                    switch (loginErrorCode) {
+                        case NauJwcClient.LOGIN_ERROR:
+                            Snackbar.make(findViewById(R.id.layout_login_content), R.string.login_error, Snackbar.LENGTH_SHORT).show();
+                            break;
+                        case NauJwcClient.LOGIN_ALREADY_LOGIN:
+                            Snackbar.make(findViewById(R.id.layout_login_content), R.string.already_login_error, Snackbar.LENGTH_SHORT).show();
+                            break;
+                        case NauJwcClient.LOGIN_CHECKCODE_WRONG:
+                            Snackbar.make(findViewById(R.id.layout_login_content), R.string.checkcode_error, Snackbar.LENGTH_SHORT).show();
+                            break;
+                        case NauJwcClient.LOGIN_USER_INFO_WRONG:
+                            Snackbar.make(findViewById(R.id.layout_login_content), R.string.user_info_error, Snackbar.LENGTH_SHORT).show();
+                            break;
                     }
                 }
             }

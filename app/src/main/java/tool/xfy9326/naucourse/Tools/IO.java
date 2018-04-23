@@ -90,12 +90,7 @@ public class IO {
                 return false;
             }
         } else {
-            if (!createPath(file)) {
-                return true;
-            }
-            if (file.createNewFile()) {
-                return false;
-            }
+            return !createPath(file) || !file.createNewFile();
         }
         return true;
     }
