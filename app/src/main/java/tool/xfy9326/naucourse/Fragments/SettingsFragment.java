@@ -87,11 +87,13 @@ public class SettingsFragment extends PreferenceFragment {
                     @Override
                     public void run() {
                         if (LoginMethod.loginOut(getActivity())) {
-                            if (isAdded() && getActivity() != null) {
+                            if (getActivity() != null) {
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Toast.makeText(getActivity(), R.string.login_out_error, Toast.LENGTH_SHORT).show();
+                                        if (isAdded()) {
+                                            Toast.makeText(getActivity(), R.string.login_out_error, Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                 });
                             }
