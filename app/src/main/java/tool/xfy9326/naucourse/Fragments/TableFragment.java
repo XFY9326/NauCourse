@@ -179,7 +179,7 @@ public class TableFragment extends Fragment {
 
                 if (spinner_week == null) {
                     spinner_week = view.findViewById(R.id.spinner_table_week_chose);
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, TimeMethod.getWeekArray(context, schoolTime));
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()), android.R.layout.simple_list_item_1, TimeMethod.getWeekArray(context, schoolTime));
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     Objects.requireNonNull(spinner_week).setSelection(lastSelect);
                     spinner_week.setAdapter(adapter);
