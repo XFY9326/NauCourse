@@ -90,13 +90,11 @@
 
         <service
             android:name=".Services.WifiConnectService"
-            android:process=":remote"
             tools:ignore="InnerclassSeparator" />
 
         <receiver
             android:name=".Receivers.UpdateReceiver"
             android:exported="false"
-            android:process=":remote"
             tools:ignore="InnerclassSeparator">
             <intent-filter>
                 <action android:name="tool.xfy9326.naucourse.Receivers.UpdateReceiver.Update" />
@@ -105,7 +103,6 @@
 
         <receiver
             android:name=".Views.NextClassWidget"
-            android:process=":widget"
             tools:ignore="InnerclassSeparator">
             <meta-data
                 android:name="android.appwidget.provider"

@@ -4,8 +4,10 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 
+import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Fragments.TableFragment;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
+import tool.xfy9326.naucourse.Methods.NetMethod;
 
 /**
  * Created by 10696 on 2018/3/17.
@@ -21,10 +23,12 @@ public class MainHandler extends Handler {
     @Override
     public void handleMessage(Message msg) {
         switch (msg.what) {
-            //重新加载课程表
-            case 0:
+            case Config.HANDLER_RELOAD_TABLE:
                 TableFragment tableFragment = BaseMethod.getApp(context).getViewPagerAdapter().getTableFragment();
                 tableFragment.reloadTable();
+                break;
+            case Config.HANDLER_AUTO_LOGIN_WIFI:
+                NetMethod.loginNAUWifi(context);
                 break;
         }
         super.handleMessage(msg);

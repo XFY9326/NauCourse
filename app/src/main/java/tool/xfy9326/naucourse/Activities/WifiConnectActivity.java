@@ -161,13 +161,13 @@ public class WifiConnectActivity extends AppCompatActivity {
                             sharedPreferences.edit().putString(Config.PREFERENCE_NETWORK_ACCOUNT, id).apply();
                             sharedPreferences.edit().putString(Config.PREFERENCE_NETWORK_PASSWORD, AES.encrypt(pw, id)).apply();
                             Snackbar.make(findViewById(R.id.layout_wifi_connect), R.string.ask_lock_background, Snackbar.LENGTH_SHORT).show();
-                            startService(new Intent(WifiConnectActivity.this, WifiConnectService.class).putExtra(Config.INTENT_AUTO_LOGIN, true));
+                            getApplicationContext().startService(new Intent(WifiConnectActivity.this, WifiConnectService.class).putExtra(Config.INTENT_AUTO_LOGIN, true));
                         } else {
                             checkBox_autoLogin.setChecked(false);
                             Snackbar.make(findViewById(R.id.layout_wifi_connect), R.string.i_nau_home_settings_error, Snackbar.LENGTH_SHORT).show();
                         }
                     } else {
-                        startService(new Intent(WifiConnectActivity.this, WifiConnectService.class).putExtra(Config.INTENT_AUTO_LOGIN, false));
+                        getApplicationContext().startService(new Intent(WifiConnectActivity.this, WifiConnectService.class).putExtra(Config.INTENT_AUTO_LOGIN, false));
                     }
                     sharedPreferences.edit().putBoolean(Config.PREFERENCE_NETWORK_AUTO_LOGIN, isChecked).apply();
                 }

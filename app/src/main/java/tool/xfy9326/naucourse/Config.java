@@ -21,6 +21,7 @@ public class Config {
     public static final int REQUEST_ACTIVITY_LOGIN = 1;
 
     public static final int HANDLER_RELOAD_TABLE = 0;
+    public static final int HANDLER_AUTO_LOGIN_WIFI = 1;
 
     public static final int VIEWPAGER_TABLE_PAGE = 1;
 

@@ -13,10 +13,10 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import tool.xfy9326.naucourse.Config;
-import tool.xfy9326.naucourse.Methods.NetMethod;
+import tool.xfy9326.naucourse.Handlers.MainHandler;
 
 public class WifiConnectService extends Service {
-    private boolean onLogin = false;
+    private int connectTime = 0;
     private BroadcastReceiver broadcastReceiver;
     private boolean setReceiver = false;
 
@@ -37,6 +37,7 @@ public class WifiConnectService extends Service {
             } else {
                 if (broadcastReceiver != null && setReceiver) {
                     unregisterReceiver(broadcastReceiver);
+                    connectTime = 0;
                     broadcastReceiver = null;
                     setReceiver = false;
                 }
@@ -56,31 +57,19 @@ public class WifiConnectService extends Service {
                     if (action != null && action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
                         NetworkInfo info = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
                         if (info.isConnected()) {
-                            login();
+                            connectTime++;
+                            if (connectTime >= 2) {
+                                MainHandler mainHandler = new MainHandler(WifiConnectService.this);
+                                mainHandler.sendEmptyMessageDelayed(Config.HANDLER_AUTO_LOGIN_WIFI, 500);
+                                connectTime = 0;
+                            }
                         }
                     }
                 }
             };
             registerReceiver(broadcastReceiver, intentFilter);
+            connectTime = 0;
             setReceiver = true;
-        }
-    }
-
-    synchronized private void login() {
-        if (!onLogin) {
-            onLogin = true;
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(500);
-                        NetMethod.loginNAUWifi(WifiConnectService.this);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    onLogin = false;
-                }
-            }).start();
         }
     }
 
@@ -90,6 +79,7 @@ public class WifiConnectService extends Service {
         if (broadcastReceiver != null && setReceiver) {
             unregisterReceiver(broadcastReceiver);
             broadcastReceiver = null;
+            connectTime = 0;
             setReceiver = false;
         }
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Config.PREFERENCE_NETWORK_AUTO_LOGIN, Config.DEFAULT_PREFERENCE_NETWORK_AUTO_LOGIN)) {
