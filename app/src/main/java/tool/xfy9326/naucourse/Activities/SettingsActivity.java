@@ -32,7 +32,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    private void setFragment(Bundle savedInstanceState) {
+    private void setFragment(@Nullable Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             SettingsFragment settingsFragment = new SettingsFragment();
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();

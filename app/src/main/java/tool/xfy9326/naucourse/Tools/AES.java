@@ -1,6 +1,8 @@
 package tool.xfy9326.naucourse.Tools;
 
 import android.annotation.SuppressLint;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Objects;
@@ -16,7 +18,7 @@ import javax.crypto.spec.SecretKeySpec;
 public class AES {
     private static final String CipherMode = "AES";
 
-    private static SecretKeySpec createKey(String password) {
+    private static SecretKeySpec createKey(@Nullable String password) {
         byte[] data = null;
         if (password == null) {
             password = "";
@@ -58,7 +60,8 @@ public class AES {
      * @return 加密后的字符
      */
 
-    public static String encrypt(String content, String password) {
+    @Nullable
+    public static String encrypt(@Nullable String content, String password) {
         if (content != null) {
             byte[] data = null;
             try {
@@ -92,7 +95,8 @@ public class AES {
      * @param password 解密的密码
      * @return 解密完成的内容
      */
-    public static String decrypt(String content, String password) {
+    @Nullable
+    public static String decrypt(@Nullable String content, String password) {
         if (content != null) {
             byte[] data = null;
             try {
@@ -128,7 +132,8 @@ public class AES {
         return sb.toString().toUpperCase();
     }
 
-    private static byte[] hex2byte(String inputString) {
+    @NonNull
+    private static byte[] hex2byte(@Nullable String inputString) {
         if (inputString == null || inputString.length() < 2) {
             return new byte[0];
         }

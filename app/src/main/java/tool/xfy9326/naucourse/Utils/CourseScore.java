@@ -1,5 +1,7 @@
 package tool.xfy9326.naucourse.Utils;
 
+import android.support.annotation.Nullable;
+
 /**
  * Created by 10696 on 2018/3/2.
  * 成绩信息
@@ -7,10 +9,15 @@ package tool.xfy9326.naucourse.Utils;
 
 public class CourseScore {
     private String[] scoreCourseId;
+    @Nullable
     private String[] scoreCourseName;
+    @Nullable
     private String[] scoreCommon;
+    @Nullable
     private String[] scoreMid;
+    @Nullable
     private String[] scoreFinal;
+    @Nullable
     private String[] scoreTotal;
     private String[] scoreCourseXf;
     private int dataVersionCode = 0;
@@ -51,43 +58,48 @@ public class CourseScore {
         this.scoreCourseId = scoreCourseId;
     }
 
+    @Nullable
     public String[] getScoreCourseName() {
         return scoreCourseName;
     }
 
-    public void setScoreCourseName(String[] scoreCourseName) {
+    public void setScoreCourseName(@Nullable String[] scoreCourseName) {
         this.scoreCourseName = scoreCourseName;
     }
 
+    @Nullable
     public String[] getScoreCommon() {
         return scoreCommon;
     }
 
-    public void setScoreCommon(String[] scoreCommon) {
+    public void setScoreCommon(@Nullable String[] scoreCommon) {
         this.scoreCommon = scoreCommon;
     }
 
+    @Nullable
     public String[] getScoreMid() {
         return scoreMid;
     }
 
-    public void setScoreMid(String[] scoreMid) {
+    public void setScoreMid(@Nullable String[] scoreMid) {
         this.scoreMid = scoreMid;
     }
 
+    @Nullable
     public String[] getScoreFinal() {
         return scoreFinal;
     }
 
-    public void setScoreFinal(String[] scoreFinal) {
+    public void setScoreFinal(@Nullable String[] scoreFinal) {
         this.scoreFinal = scoreFinal;
     }
 
+    @Nullable
     public String[] getScoreTotal() {
         return scoreTotal;
     }
 
-    public void setScoreTotal(String[] scoreTotal) {
+    public void setScoreTotal(@Nullable String[] scoreTotal) {
         this.scoreTotal = scoreTotal;
     }
 

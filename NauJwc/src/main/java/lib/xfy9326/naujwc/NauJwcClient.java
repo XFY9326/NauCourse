@@ -1,9 +1,12 @@
 package lib.xfy9326.naujwc;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
@@ -24,12 +27,15 @@ public class NauJwcClient {
     public static final int LOGIN_USER_INFO_WRONG = 4;
     public static final String server_url = "http://jwc.nau.edu.cn";
     private static final int LOGIN_SUCCESS = 0;
+    @NonNull
     private final OkHttpClient client;
+    @NonNull
     private final CookieStore cookieStore;
     private int loginErrorCode = LOGIN_SUCCESS;
+    @Nullable
     private String loginUrl = null;
 
-    public NauJwcClient(Context context) {
+    public NauJwcClient(@NonNull Context context) {
         OkHttpClient.Builder client_builder = new OkHttpClient.Builder();
         cookieStore = new CookieStore(context);
         client_builder.cookieJar(cookieStore);
@@ -40,9 +46,9 @@ public class NauJwcClient {
         client = client_builder.build();
     }
 
-    synchronized public boolean login(String userId, String userPw) throws Exception {
+    synchronized public boolean login(@NonNull String userId, @NonNull String userPw) throws Exception {
         String url = loadUrl();
-        return url != null && userLogin(userId, userPw, getCheckCode(url), false);
+        return url != null && userLogin(userId, userPw, Objects.requireNonNull(getCheckCode(url)), false);
     }
 
     synchronized public void loginOut() throws Exception {
@@ -50,6 +56,7 @@ public class NauJwcClient {
     }
 
     //加载其他网页
+    @Nullable
     public String getUserData(String requestUrl) throws Exception {
         Request.Builder builder = new Request.Builder();
         builder.url(server_url + requestUrl);
@@ -68,6 +75,7 @@ public class NauJwcClient {
         return null;
     }
 
+    @Nullable
     public String getLoginUrl() {
         return "/Students/default.aspx?" + loginUrl;
     }
@@ -77,7 +85,7 @@ public class NauJwcClient {
     }
 
     //登陆
-    private boolean userLogin(String userId, String userPw, String checkcode, boolean reLogin) throws IOException {
+    private boolean userLogin(@NonNull String userId, @NonNull String userPw, @NonNull String checkcode, boolean reLogin) throws IOException {
         Request.Builder builder = new Request.Builder();
         builder.url(server_url + "/Login.aspx");
 
@@ -134,7 +142,8 @@ public class NauJwcClient {
     }
 
     //获取验证码
-    private String getCheckCode(String data) throws IOException {
+    @Nullable
+    private String getCheckCode(@NonNull String data) throws IOException {
         String checkcode = null;
         String CheckCodeUrl = NauNetData.getCheckCodeUrl(server_url, data);
         if (CheckCodeUrl != null) {

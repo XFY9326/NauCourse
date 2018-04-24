@@ -3,6 +3,7 @@ package tool.xfy9326.naucourse.Handlers;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Fragments.TableFragment;
@@ -21,7 +22,7 @@ public class MainHandler extends Handler {
     }
 
     @Override
-    public void handleMessage(Message msg) {
+    public void handleMessage(@NonNull Message msg) {
         switch (msg.what) {
             case Config.HANDLER_RELOAD_TABLE:
                 TableFragment tableFragment = BaseMethod.getApp(context).getViewPagerAdapter().getTableFragment();

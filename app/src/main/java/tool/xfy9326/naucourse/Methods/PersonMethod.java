@@ -3,12 +3,14 @@ package tool.xfy9326.naucourse.Methods;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.util.List;
+import java.util.Objects;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Utils.StudentInfo;
@@ -25,6 +27,7 @@ public class PersonMethod {
     public static final String FILE_NAME_PROCESS = "StudentLearnProcess";
     public static final String FILE_NAME_DATA = "StudentInfo";
     private final Context context;
+    @Nullable
     private Document document;
 
     public PersonMethod(Context context) {
@@ -53,9 +56,10 @@ public class PersonMethod {
         getUserProcess(false);
     }
 
+    @Nullable
     public StudentLearnProcess getUserProcess(boolean checkTemp) {
         StudentLearnProcess studentLearnProcess = new StudentLearnProcess();
-        Elements tags = document.body().getElementsByTag("tr");
+        Elements tags = Objects.requireNonNull(document).body().getElementsByTag("tr");
         List<String> data = tags.eachText();
         for (String str : data) {
             if (str.contains("必修课: 目标学分：")) {
@@ -99,10 +103,11 @@ public class PersonMethod {
         }
     }
 
+    @Nullable
     public StudentScore getUserScore(boolean checkTemp) {
         boolean nextScore = false;
         StudentScore studentScore = new StudentScore();
-        Elements tags = document.body().getElementsByTag("tr");
+        Elements tags = Objects.requireNonNull(document).body().getElementsByTag("tr");
         List<String> data = tags.eachText();
         for (String str : data) {
             if (str.contains("学分绩点") && str.contains("必修学分")) {
@@ -139,9 +144,10 @@ public class PersonMethod {
         }
     }
 
+    @Nullable
     public StudentInfo getUserData(boolean checkTemp) {
         StudentInfo studentInfo = new StudentInfo();
-        Elements tags = document.body().getElementsByTag("tr");
+        Elements tags = Objects.requireNonNull(document).body().getElementsByTag("tr");
         List<String> data = tags.eachText();
         for (String str : data) {
             if (str.contains("学生学号：")) {

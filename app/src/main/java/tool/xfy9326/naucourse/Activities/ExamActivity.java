@@ -27,6 +27,7 @@ import tool.xfy9326.naucourse.Views.ExamAdapter;
 public class ExamActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
+    @Nullable
     private ExamAdapter examAdapter;
     private int loadTime = 0;
 
@@ -85,7 +86,7 @@ public class ExamActivity extends AppCompatActivity {
         }
     }
 
-    public void setExam(Exam exam) {
+    public void setExam(@Nullable Exam exam) {
         if (exam != null) {
             if (exam.getExamMount() > 0) {
                 if (examAdapter == null) {

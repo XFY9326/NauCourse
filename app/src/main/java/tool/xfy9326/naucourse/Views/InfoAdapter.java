@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Locale;
+import java.util.Objects;
 
 import tool.xfy9326.naucourse.Activities.InfoDetailActivity;
 import tool.xfy9326.naucourse.Config;
@@ -32,6 +33,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoViewHolder> {
     public static final String TOPIC_SOURCE_JW = "JW";
 
     private final Context context;
+    @NonNull
     private final ArrayList<InfoDetail> topic_data;
     private JwcTopic jwcTopic;
     private JwTopic jwTopic;
@@ -95,26 +97,26 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoViewHolder> {
         if (jwcTopic != null) {
             for (int i = 0; i < jwcTopic.getTopic_length(); i++) {
                 InfoDetail infoDetail = new InfoDetail();
-                infoDetail.setTitle(jwcTopic.getTopic_title()[i]);
-                infoDetail.setClick(jwcTopic.getTopic_click()[i]);
-                infoDetail.setDate(jwcTopic.getTopic_date()[i]);
-                infoDetail.setPost(jwcTopic.getTopic_post()[i]);
+                infoDetail.setTitle(Objects.requireNonNull(jwcTopic.getTopic_title())[i]);
+                infoDetail.setClick(Objects.requireNonNull(jwcTopic.getTopic_click())[i]);
+                infoDetail.setDate(Objects.requireNonNull(jwcTopic.getTopic_date())[i]);
+                infoDetail.setPost(Objects.requireNonNull(jwcTopic.getTopic_post())[i]);
                 infoDetail.setSource(TOPIC_SOURCE_JWC);
-                infoDetail.setUrl(jwcTopic.getTopic_url()[i]);
-                infoDetail.setType(jwcTopic.getTopic_type()[i]);
+                infoDetail.setUrl(Objects.requireNonNull(jwcTopic.getTopic_url())[i]);
+                infoDetail.setType(Objects.requireNonNull(jwcTopic.getTopic_type())[i]);
                 topic_data.add(infoDetail);
             }
         }
         if (jwTopic != null) {
             for (int i = 0; i < jwTopic.getPostLength(); i++) {
                 InfoDetail infoDetail = new InfoDetail();
-                infoDetail.setTitle(jwTopic.getPostTitle()[i]);
+                infoDetail.setTitle(Objects.requireNonNull(jwTopic.getPostTitle())[i]);
                 infoDetail.setClick(null);
-                infoDetail.setDate(jwTopic.getPostTime()[i]);
+                infoDetail.setDate(Objects.requireNonNull(jwTopic.getPostTime())[i]);
                 infoDetail.setPost(context.getString(R.string.jwc));
                 infoDetail.setSource(TOPIC_SOURCE_JW);
-                infoDetail.setUrl(jwTopic.getPostUrl()[i]);
-                infoDetail.setType(jwTopic.getPostType()[i]);
+                infoDetail.setUrl(Objects.requireNonNull(jwTopic.getPostUrl())[i]);
+                infoDetail.setType(Objects.requireNonNull(jwTopic.getPostType())[i]);
                 topic_data.add(infoDetail);
             }
         }
@@ -127,8 +129,8 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoViewHolder> {
             @Override
             public int compare(InfoDetail o1, InfoDetail o2) {
                 try {
-                    String time1 = o1.getDate().trim();
-                    String time2 = o2.getDate().trim();
+                    String time1 = Objects.requireNonNull(o1.getDate()).trim();
+                    String time2 = Objects.requireNonNull(o2.getDate()).trim();
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
                     long day1 = simpleDateFormat.parse(time1).getTime();
                     long day2 = simpleDateFormat.parse(time2).getTime();

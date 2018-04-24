@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayout;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
@@ -32,8 +35,11 @@ public class CourseViewMethod {
     private final SharedPreferences sharedPreferences;
     private int parent_width = 0;
     private GridLayout course_table_layout;
+    @Nullable
     private String[][] table;
+    @Nullable
     private String[][] id_table;
+    @Nullable
     private OnCourseTableItemClickListener onCourseTableClick;
 
     public CourseViewMethod(Context context, ArrayList<Course> courses) {
@@ -63,7 +69,7 @@ public class CourseViewMethod {
      * @param id_table  课程信息对应的ID的二维数组
      * @param checkSame 是否检查到相同数据就不更新视图
      */
-    public void updateCourseTableView(String[][] table, String[][] id_table, boolean checkSame) {
+    public void updateCourseTableView(@Nullable String[][] table, @Nullable String[][] id_table, boolean checkSame) {
         if (table == null || id_table == null) {
             this.table = table;
             this.id_table = id_table;
@@ -114,7 +120,7 @@ public class CourseViewMethod {
         for (int col = 0; col < col_max; col++) {
             for (int row = 0; row < row_max; row++) {
                 int merge = 1;
-                String text = table[col][row];
+                String text = Objects.requireNonNull(table)[col][row];
 
                 //合并相同数据的单元格（仅限一列）
                 if (col > 0 && row > 0) {
@@ -154,7 +160,8 @@ public class CourseViewMethod {
     }
 
     //获取每个单元格的视图
-    private View getCellView(String text, int bgColor, int textColor, int width, final int col, final int row, boolean showWide) {
+    @NonNull
+    private View getCellView(@Nullable String text, int bgColor, int textColor, int width, final int col, final int row, boolean showWide) {
         LinearLayout linearLayout = new LinearLayout(context);
         //不同显示模式下的适配
         if (showWide) {
@@ -207,7 +214,7 @@ public class CourseViewMethod {
                     @Override
                     public void onClick(View v) {
                         for (Course course : courses) {
-                            if (onCourseTableClick != null && course.getCourseId().equals(id_table[col][row])) {
+                            if (onCourseTableClick != null && Objects.requireNonNull(course.getCourseId()).equals(Objects.requireNonNull(id_table)[col][row])) {
                                 onCourseTableClick.OnItemClick(course);
                                 break;
                             }

@@ -3,6 +3,7 @@ package tool.xfy9326.naucourse.Methods;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,6 +11,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.List;
+import java.util.Objects;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
@@ -22,6 +24,7 @@ import tool.xfy9326.naucourse.Utils.SchoolTime;
 public class SchoolTimeMethod {
     public static final String FILE_NAME = "SchoolTime";
     private final Context context;
+    @Nullable
     private Document document;
 
     public SchoolTimeMethod(Context context) {
@@ -35,7 +38,7 @@ public class SchoolTimeMethod {
             String url = sharedPreferences.getString(Config.PREFERENCE_LOGIN_URL, null);
             if (url != null) {
                 String data = LoginMethod.getData(context, url, true);
-                if (LoginMethod.checkUserLogin(data)) {
+                if (LoginMethod.checkUserLogin(Objects.requireNonNull(data))) {
                     document = Jsoup.parse(data);
                     return Config.NET_WORK_GET_SUCCESS;
                 }
@@ -46,9 +49,10 @@ public class SchoolTimeMethod {
         return Config.NET_WORK_ERROR_CODE_CONNECT_NO_LOGIN;
     }
 
+    @Nullable
     public SchoolTime getSchoolTime() {
         SchoolTime schoolTime = new SchoolTime();
-        Element element = document.getElementById("TermInfo");
+        Element element = Objects.requireNonNull(document).getElementById("TermInfo");
         if (element != null) {
             Elements elements = element.getElementsByTag("span");
             List<String> text = elements.eachText();

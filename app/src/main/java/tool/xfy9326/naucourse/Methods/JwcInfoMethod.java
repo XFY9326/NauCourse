@@ -3,12 +3,15 @@ package tool.xfy9326.naucourse.Methods;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.util.List;
+import java.util.Objects;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
@@ -23,8 +26,11 @@ public class JwcInfoMethod {
     public static final String FILE_NAME = "JwcTopic";
     private static final int TOPIC_COUNT = 15;
     private final Context context;
+    @Nullable
     private JwcTopic jwcTopic;
+    @Nullable
     private Document document;
+    @Nullable
     private Document detailDocument;
 
     public JwcInfoMethod(Context context) {
@@ -51,6 +57,7 @@ public class JwcInfoMethod {
         return Config.NET_WORK_ERROR_CODE_CONNECT_NO_LOGIN;
     }
 
+    @Nullable
     public JwcTopic getJwcTopic(boolean checkTemp) {
         int divideCount = 0;
         int totalTopic = 0;
@@ -64,7 +71,7 @@ public class JwcInfoMethod {
 
         jwcTopic = new JwcTopic();
         jwcTopic.setTopic_length(TOPIC_COUNT);
-        Elements tags = document.body().getElementsByTag("td");
+        Elements tags = Objects.requireNonNull(document).body().getElementsByTag("td");
         List<String> data = tags.eachText();
         for (String str : data) {
             if (str.contains("信息类别")) {
@@ -149,8 +156,9 @@ public class JwcInfoMethod {
         return Config.NET_WORK_ERROR_CODE_CONNECT_NO_LOGIN;
     }
 
+    @NonNull
     public String getDetail() {
-        Elements tags = detailDocument.body().getElementsByTag("tr");
+        Elements tags = Objects.requireNonNull(detailDocument).body().getElementsByTag("tr");
         String[] temp = tags.html().split("</td>");
         StringBuilder result = new StringBuilder();
         boolean nextContent = false;

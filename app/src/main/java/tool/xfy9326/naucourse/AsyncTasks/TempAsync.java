@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.AsyncTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.ExamMethod;
@@ -15,6 +16,7 @@ import tool.xfy9326.naucourse.Methods.ScoreMethod;
 
 public class TempAsync extends AsyncTask<Context, Void, Void> {
 
+    @Nullable
     @Override
     protected Void doInBackground(Context... contexts) {
         try {

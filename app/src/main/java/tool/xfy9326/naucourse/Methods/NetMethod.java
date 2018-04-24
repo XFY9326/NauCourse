@@ -8,8 +8,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+
+import java.util.Objects;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Tools.AES;
@@ -26,7 +30,7 @@ public class NetMethod {
      * @param context Context
      * @return 网络是否联接
      */
-    public static boolean isNetworkConnected(Context context) {
+    public static boolean isNetworkConnected(@Nullable Context context) {
         if (context != null) {
             ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             if (connectivityManager != null) {
@@ -45,7 +49,7 @@ public class NetMethod {
      * @param context Context
      * @return WIFI网络是否联接
      */
-    public static boolean isWifiNetWork(Context context) {
+    public static boolean isWifiNetWork(@Nullable Context context) {
         if (context != null) {
             ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             if (connectivityManager != null) {
@@ -123,7 +127,7 @@ public class NetMethod {
      *
      * @param context Context
      */
-    public static void loginNAUWifi(final Context context) {
+    public static void loginNAUWifi(@NonNull final Context context) {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             if (NetMethod.isNetworkConnected(context) && NetMethod.isWifiNetWork(context)) {
                 if (NetMethod.checkNauWifiSSID(context)) {
@@ -166,7 +170,7 @@ public class NetMethod {
                                     break;
                             }
                             if (type != null) {
-                                wifiLoginMethod.login(id, pw, type);
+                                wifiLoginMethod.login(id, Objects.requireNonNull(pw), type);
                             } else {
                                 Log.d("WIFI_CONNECT", "Type Error");
                             }

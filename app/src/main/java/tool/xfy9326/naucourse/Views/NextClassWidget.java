@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -29,8 +31,10 @@ import tool.xfy9326.naucourse.Utils.NextCourse;
 public class NextClassWidget extends AppWidgetProvider {
     public static final String ACTION_ON_CLICK = "tool.xfy9326.naucourse.Views.NextClassWidget.OnClick";
     private static final int REQUEST_ON_CLICK = 1;
+    @Nullable
     private static NextCourse nextCourse = null;
 
+    @NonNull
     synchronized private static RemoteViews ViewGet(Context context) {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.app_widget_next_class);
 
@@ -46,19 +50,17 @@ public class NextClassWidget extends AppWidgetProvider {
             if (next == null) {
                 next = NextClassMethod.getNextClassArray(context);
             }
-            if (next != null) {
-                if (next.getCourseId() != null) {
-                    remoteViews.setTextViewText(R.id.textView_app_widget_nextClass, next.getCourseName());
-                    remoteViews.setTextViewText(R.id.textView_app_widget_nextLocation, next.getCourseLocation());
-                    remoteViews.setTextViewText(R.id.textView_app_widget_nextTeacher, next.getCourseTeacher());
-                    remoteViews.setTextViewText(R.id.textView_app_widget_nextTime, next.getCourseTime());
+            if (next.getCourseId() != null) {
+                remoteViews.setTextViewText(R.id.textView_app_widget_nextClass, next.getCourseName());
+                remoteViews.setTextViewText(R.id.textView_app_widget_nextLocation, next.getCourseLocation());
+                remoteViews.setTextViewText(R.id.textView_app_widget_nextTeacher, next.getCourseTeacher());
+                remoteViews.setTextViewText(R.id.textView_app_widget_nextTime, next.getCourseTime());
 
-                    remoteViews.setViewVisibility(R.id.textView_app_widget_noNextClass, View.GONE);
-                    remoteViews.setViewVisibility(R.id.layout_app_widget_nextClass, View.VISIBLE);
-                } else {
-                    remoteViews.setViewVisibility(R.id.textView_app_widget_noNextClass, View.VISIBLE);
-                    remoteViews.setViewVisibility(R.id.layout_app_widget_nextClass, View.GONE);
-                }
+                remoteViews.setViewVisibility(R.id.textView_app_widget_noNextClass, View.GONE);
+                remoteViews.setViewVisibility(R.id.layout_app_widget_nextClass, View.VISIBLE);
+            } else {
+                remoteViews.setViewVisibility(R.id.textView_app_widget_noNextClass, View.VISIBLE);
+                remoteViews.setViewVisibility(R.id.layout_app_widget_nextClass, View.GONE);
             }
         } else {
             remoteViews.setViewVisibility(R.id.textView_app_widget_noNextClass, View.VISIBLE);
@@ -68,14 +70,14 @@ public class NextClassWidget extends AppWidgetProvider {
     }
 
     @Override
-    public void onEnabled(Context context) {
+    public void onEnabled(@NonNull Context context) {
         //初始化自动更新
         context.sendBroadcast(new Intent(context, UpdateReceiver.class).setAction(UpdateReceiver.UPDATE_ACTION).setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES).putExtra(Config.INTENT_IS_ONLY_INIT, true));
         super.onEnabled(context);
     }
 
     @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+    public void onUpdate(@NonNull Context context, @NonNull AppWidgetManager appWidgetManager, @NonNull int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
             appWidgetManager.updateAppWidget(appWidgetId, ViewGet(context));
         }
@@ -83,7 +85,7 @@ public class NextClassWidget extends AppWidgetProvider {
     }
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(@NonNull Context context, @NonNull Intent intent) {
         String action = intent.getAction();
         if (action != null) {
             if (action.equals(ACTION_ON_CLICK)) {

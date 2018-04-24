@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourse.Views;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -18,7 +19,7 @@ class ScoreViewHolder extends RecyclerView.ViewHolder {
     final TextView textView_score_final;
     final TextView textView_score_total;
 
-    ScoreViewHolder(View view) {
+    ScoreViewHolder(@NonNull View view) {
         super(view);
         textView_score_course_name = view.findViewById(R.id.textView_score_course_name);
         textView_score_course_xf = view.findViewById(R.id.textView_score_course_xf);

@@ -27,6 +27,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Objects;
 
 import tool.xfy9326.naucourse.AsyncTasks.TableAsync;
 import tool.xfy9326.naucourse.Config;
@@ -48,14 +49,22 @@ import tool.xfy9326.naucourse.Views.NextClassWidget;
  */
 
 public class TableFragment extends Fragment {
+    @Nullable
     private View view;
+    @Nullable
     private Context context;
     private int loadTime = 0;
+    @Nullable
     private GridLayout course_table_layout;
+    @Nullable
     private ArrayList<Course> courses;
+    @Nullable
     private SchoolTime schoolTime;
+    @Nullable
     private CourseMethod courseMethod;
+    @Nullable
     private CourseViewMethod courseViewMethod;
+    @Nullable
     private Spinner spinner_week;
     private int lastSelect;
 
@@ -72,37 +81,15 @@ public class TableFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.menu_table, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_table_refresh) {
-            Toast.makeText(getActivity(), R.string.updating, Toast.LENGTH_SHORT).show();
-            getData();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onAttach(Context context) {
         this.context = context;
         super.onAttach(context);
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        ViewSet();
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -112,8 +99,30 @@ public class TableFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        ViewSet();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_table, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.menu_table_refresh) {
+            Toast.makeText(getActivity(), R.string.updating, Toast.LENGTH_SHORT).show();
+            getData();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void ViewSet() {
-        course_table_layout = view.findViewById(R.id.course_table_layout);
+        course_table_layout = Objects.requireNonNull(view).findViewById(R.id.course_table_layout);
         course_table_layout.setDrawingCacheEnabled(true);
 
         CardView cardView_date = view.findViewById(R.id.cardview_table_date);
@@ -137,7 +146,7 @@ public class TableFragment extends Fragment {
      * @param context    Context
      * @param isReload   是否是刷新本地信息
      */
-    public void CourseSet(ArrayList<Course> courses, SchoolTime schoolTime, final Context context, boolean isReload) {
+    public void CourseSet(@Nullable ArrayList<Course> courses, @Nullable SchoolTime schoolTime, @Nullable final Context context, boolean isReload) {
         if (context != null && courses != null && schoolTime != null) {
             if (!isReload) {
                 this.courses = courses;
@@ -157,7 +166,7 @@ public class TableFragment extends Fragment {
             }
 
             if (isAdded()) {
-                TextView textView_date = view.findViewById(R.id.textView_table_date);
+                TextView textView_date = Objects.requireNonNull(view).findViewById(R.id.textView_table_date);
                 Calendar calendar = Calendar.getInstance(Locale.CHINA);
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH) + 1;
@@ -172,13 +181,13 @@ public class TableFragment extends Fragment {
                     spinner_week = view.findViewById(R.id.spinner_table_week_chose);
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, TimeMethod.getWeekArray(context, schoolTime));
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinner_week.setSelection(lastSelect);
+                    Objects.requireNonNull(spinner_week).setSelection(lastSelect);
                     spinner_week.setAdapter(adapter);
                     spinner_week.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             if (lastSelect != position) {
-                                TableFragment.this.schoolTime.setWeekNum(position + 1);
+                                Objects.requireNonNull(TableFragment.this.schoolTime).setWeekNum(position + 1);
                                 setTableData(TableFragment.this.schoolTime, false);
                                 lastSelect = position;
                             }
@@ -213,7 +222,7 @@ public class TableFragment extends Fragment {
                 //主页面下一节课设置
                 if (!inVacation) {
                     HomeFragment homeFragment = BaseMethod.getApp(context).getViewPagerAdapter().getHomeFragment();
-                    NextCourse nextCourse = courseMethod.getNextClass(weekNum);
+                    NextCourse nextCourse = Objects.requireNonNull(courseMethod).getNextClass(weekNum);
                     homeFragment.setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
                 }
 
@@ -229,14 +238,14 @@ public class TableFragment extends Fragment {
         }
     }
 
-    private void setTableData(SchoolTime schoolTime, boolean isReload) {
+    private void setTableData(@NonNull SchoolTime schoolTime, boolean isReload) {
         if (courseViewMethod == null) {
-            CardView cardView_course = view.findViewById(R.id.cardView_courseTable);
+            CardView cardView_course = Objects.requireNonNull(view).findViewById(R.id.cardView_courseTable);
             courseViewMethod = new CourseViewMethod(context, courses);
             courseViewMethod.setTableView(course_table_layout, cardView_course.getWidth());
             courseViewMethod.setOnCourseTableClickListener(new CourseViewMethod.OnCourseTableItemClickListener() {
                 @Override
-                public void OnItemClick(Course course) {
+                public void OnItemClick(@NonNull Course course) {
                     CourseCardSet(course);
                 }
             });
@@ -250,7 +259,7 @@ public class TableFragment extends Fragment {
     }
 
     //表格中的课程详细信息显示
-    private void CourseCardSet(Course course) {
+    private void CourseCardSet(@NonNull Course course) {
         if (getActivity() != null) {
             LayoutInflater layoutInflater = getLayoutInflater();
             View view_dialog = layoutInflater.inflate(R.layout.dialog_course_card, (ViewGroup) getActivity().findViewById(R.id.layout_course_card));
@@ -268,7 +277,7 @@ public class TableFragment extends Fragment {
 
             textView_name.setText(course.getCourseName());
 
-            textView_id.setText(context.getString(R.string.course_card_id, course.getCourseId()));
+            textView_id.setText(Objects.requireNonNull(context).getString(R.string.course_card_id, course.getCourseId()));
             textView_teacher.setText(context.getString(R.string.course_card_teacher, course.getCourseTeacher()));
             textView_score.setText(context.getString(R.string.course_card_score, course.getCourseScore()));
             textView_type.setText(context.getString(R.string.course_card_type, course.getCourseType()));
@@ -278,7 +287,7 @@ public class TableFragment extends Fragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
             CourseDetail[] details = course.getCourseDetail();
-            for (CourseDetail detail : details) {
+            for (CourseDetail detail : Objects.requireNonNull(details)) {
                 String[] course_weeks = detail.getWeeks();
                 String weekmode = "";
                 if (detail.getWeekMode() == Config.COURSE_DETAIL_WEEKMODE_SINGLE) {
@@ -286,10 +295,10 @@ public class TableFragment extends Fragment {
                 } else if (detail.getWeekMode() == Config.COURSE_DETAIL_WEEKMODE_SINGLE) {
                     weekmode = context.getString(R.string.course_card_time_week_mode, context.getString(R.string.double_week_mode));
                 }
-                for (String course_week : course_weeks) {
+                for (String course_week : Objects.requireNonNull(course_weeks)) {
                     String[] course_times = detail.getCourseTime();
                     String[] week_num = context.getResources().getStringArray(R.array.week_number);
-                    for (String course_time : course_times) {
+                    for (String course_time : Objects.requireNonNull(course_times)) {
                         View view_card = layoutInflater.inflate(R.layout.item_course_card, (ViewGroup) getActivity().findViewById(R.id.layout_course_card_item));
                         String time = context.getString(R.string.course_card_time, course_week, weekmode, week_num[detail.getWeekDay() - 1], course_time);
                         String location = context.getString(R.string.course_card_location, detail.getLocation());
@@ -315,7 +324,7 @@ public class TableFragment extends Fragment {
     }
 
     synchronized private void getData() {
-        new TableAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getApplicationContext());
+        new TableAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, Objects.requireNonNull(context).getApplicationContext());
     }
 
     public void lastViewSet(Context context) {

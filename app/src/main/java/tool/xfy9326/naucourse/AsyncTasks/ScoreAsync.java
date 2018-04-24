@@ -2,6 +2,8 @@ package tool.xfy9326.naucourse.AsyncTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import tool.xfy9326.naucourse.Activities.ScoreActivity;
 import tool.xfy9326.naucourse.Config;
@@ -21,8 +23,11 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
     private int personLoadSuccess = -1;
     private int scoreLoadSuccess = -1;
     private int loadCode = Config.NET_WORK_GET_SUCCESS;
+    @Nullable
     private StudentScore studentScore;
+    @Nullable
     private CourseScore courseScore;
+    @Nullable
     private StudentLearnProcess studentLearnProcess;
 
     public ScoreAsync() {
@@ -75,7 +80,7 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
     }
 
     @Override
-    protected void onPostExecute(Context context) {
+    protected void onPostExecute(@NonNull Context context) {
         ScoreActivity scoreActivity = BaseMethod.getApp(context).getScoreActivity();
         if (scoreActivity != null) {
             if (BaseMethod.checkNetWorkCode(context, new int[]{personLoadSuccess, scoreLoadSuccess}, loadCode)) {

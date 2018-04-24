@@ -2,6 +2,8 @@ package tool.xfy9326.naucourse.AsyncTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import tool.xfy9326.naucourse.Activities.ExamActivity;
 import tool.xfy9326.naucourse.Config;
@@ -17,6 +19,7 @@ import tool.xfy9326.naucourse.Utils.Exam;
 public class ExamAsync extends AsyncTask<Context, Void, Context> {
     private int examLoadSuccess = -1;
     private int loadCode = Config.NET_WORK_GET_SUCCESS;
+    @Nullable
     private Exam exam;
 
     public ExamAsync() {
@@ -57,7 +60,7 @@ public class ExamAsync extends AsyncTask<Context, Void, Context> {
     }
 
     @Override
-    protected void onPostExecute(Context context) {
+    protected void onPostExecute(@NonNull Context context) {
         ExamActivity examActivity = BaseMethod.getApp(context).getExamActivity();
         if (examActivity != null) {
             if (BaseMethod.checkNetWorkCode(context, new int[]{examLoadSuccess}, loadCode)) {

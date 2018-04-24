@@ -1,5 +1,8 @@
 package lib.xfy9326.naujwc;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -8,8 +11,9 @@ import java.util.regex.Pattern;
  */
 
 class NauNetData {
+    @Nullable
     @SuppressWarnings("SameParameterValue")
-    static String getCheckCodeUrl(String server, String data) {
+    static String getCheckCodeUrl(String server, @NonNull String data) {
         String CheckCodeUrl = null;
         Pattern pattern = Pattern.compile("CheckCode.aspx\\?\\d*");
         Matcher matcher = pattern.matcher(data);
@@ -19,7 +23,8 @@ class NauNetData {
         return CheckCodeUrl;
     }
 
-    static String getCheckCode(String data) {
+    @Nullable
+    static String getCheckCode(@NonNull String data) {
         String checkcode = null;
         Pattern pattern = Pattern.compile("CheckCode=\\d*");
         Matcher matcher = pattern.matcher(data);

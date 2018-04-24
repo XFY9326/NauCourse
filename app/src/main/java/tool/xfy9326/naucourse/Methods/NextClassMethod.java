@@ -3,6 +3,7 @@ package tool.xfy9326.naucourse.Methods;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 
@@ -24,7 +25,8 @@ public class NextClassMethod {
      * @param context Context
      * @return 下一节课的信息
      */
-    public static NextCourse getNextClassArray(Context context) {
+    @NonNull
+    public static NextCourse getNextClassArray(@NonNull Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
             SchoolTime schoolTime = (SchoolTime) DataMethod.getOfflineData(context, SchoolTime.class, SchoolTimeMethod.FILE_NAME);

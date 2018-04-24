@@ -39,6 +39,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        BaseMethod.getApp(this).setMainActivity(null);
+        System.gc();
+        super.onDestroy();
+    }
+
+    @Override
     public void onBackPressed() {
         BaseMethod.doubleClickExit(this);
     }
@@ -115,10 +122,4 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    protected void onDestroy() {
-        BaseMethod.getApp(this).setMainActivity(null);
-        System.gc();
-        super.onDestroy();
-    }
 }

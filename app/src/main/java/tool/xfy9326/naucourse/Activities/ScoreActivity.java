@@ -39,7 +39,9 @@ import tool.xfy9326.naucourse.Views.ScoreAdapter;
 public class ScoreActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
+    @Nullable
     private ScoreAdapter scoreAdapter;
+    @Nullable
     private StudentLearnProcess studentLearnProcess = null;
     private int loadTime = 0;
 
@@ -106,7 +108,7 @@ public class ScoreActivity extends AppCompatActivity {
         }
     }
 
-    public void setMainScore(StudentScore studentScore, StudentLearnProcess studentLearnProcess, CourseScore courseScore) {
+    public void setMainScore(@Nullable StudentScore studentScore, @Nullable StudentLearnProcess studentLearnProcess, @Nullable CourseScore courseScore) {
         if (studentScore != null && courseScore != null && studentLearnProcess != null) {
             ((TextView) findViewById(R.id.textView_scoreXF)).setText(getString(R.string.score_XF, studentScore.getScoreXF()));
             ((TextView) findViewById(R.id.textView_scoreJD)).setText(getString(R.string.score_JD, studentScore.getScoreJD()));

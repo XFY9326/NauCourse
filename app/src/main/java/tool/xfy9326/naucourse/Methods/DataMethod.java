@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.Methods;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -12,6 +13,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Tools.AES;
@@ -31,7 +33,7 @@ public class DataMethod {
      * @param FILE_NAME  缓存数据文件名
      * @return JavaBean对象
      */
-    public static Object getOfflineData(Context context, Class file_class, String FILE_NAME) {
+    public static Object getOfflineData(Context context, @NonNull Class file_class, String FILE_NAME) {
         String path = context.getFilesDir() + File.separator + FILE_NAME;
         File file = new File(path);
         if (file.exists()) {
@@ -85,10 +87,10 @@ public class DataMethod {
             String text = IO.readFile(path);
             if (text != null) {
                 text = text.replace("\n", "");
-                return !text.equalsIgnoreCase(content) && IO.writeFile(content, path);
+                return !text.equalsIgnoreCase(content) && IO.writeFile(Objects.requireNonNull(content), path);
             }
         }
-        return IO.writeFile(content, path);
+        return IO.writeFile(Objects.requireNonNull(content), path);
     }
 
     /**

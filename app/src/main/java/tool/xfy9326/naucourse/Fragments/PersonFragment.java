@@ -18,6 +18,7 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import tool.xfy9326.naucourse.Activities.AboutActivity;
 import tool.xfy9326.naucourse.Activities.ExamActivity;
@@ -36,8 +37,11 @@ import tool.xfy9326.naucourse.Utils.StudentInfo;
  */
 
 public class PersonFragment extends Fragment {
+    @Nullable
     private View view;
+    @Nullable
     private Context context;
+    @Nullable
     private SwipeRefreshLayout swipeRefreshLayout;
     private int loadTime = 0;
 
@@ -67,7 +71,7 @@ public class PersonFragment extends Fragment {
     }
 
     private void ViewSet() {
-        swipeRefreshLayout = view.findViewById(R.id.swipeLayout_person);
+        swipeRefreshLayout = Objects.requireNonNull(view).findViewById(R.id.swipeLayout_person);
         swipeRefreshLayout.setDistanceToTriggerSync(200);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -145,10 +149,10 @@ public class PersonFragment extends Fragment {
         });
     }
 
-    public void PersonTextSet(StudentInfo studentInfo, Context context) {
+    public void PersonTextSet(@Nullable StudentInfo studentInfo, @Nullable Context context) {
         if (isAdded()) {
             if (context != null && studentInfo != null) {
-                ((TextView) view.findViewById(R.id.textView_stdId)).setText(context.getString(R.string.std_id, studentInfo.getStd_id()));
+                ((TextView) Objects.requireNonNull(view).findViewById(R.id.textView_stdId)).setText(context.getString(R.string.std_id, studentInfo.getStd_id()));
                 ((TextView) view.findViewById(R.id.textView_stdClass)).setText(context.getString(R.string.std_class, studentInfo.getStd_class()));
                 ((TextView) view.findViewById(R.id.textView_stdCollage)).setText(context.getString(R.string.std_collage, studentInfo.getStd_collage()));
                 ((TextView) view.findViewById(R.id.textView_stdDirection)).setText(context.getString(R.string.std_direction, studentInfo.getStd_direction()));
@@ -159,14 +163,14 @@ public class PersonFragment extends Fragment {
         }
     }
 
-    public void TimeTextSet(SchoolTime schoolTime, Context context) {
+    public void TimeTextSet(@Nullable SchoolTime schoolTime, @Nullable Context context) {
         if (isAdded()) {
             if (context != null && schoolTime != null) {
                 schoolTime.setWeekNum(TimeMethod.getNowWeekNum(schoolTime));
 
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
                 String time = context.getString(R.string.time_now) + simpleDateFormat.format(new Date());
-                ((TextView) view.findViewById(R.id.textView_timeNow)).setText(time);
+                ((TextView) Objects.requireNonNull(view).findViewById(R.id.textView_timeNow)).setText(time);
 
                 String week;
                 if (schoolTime.getWeekNum() == 0) {
@@ -210,7 +214,7 @@ public class PersonFragment extends Fragment {
     }
 
     private void getData() {
-        new StudentAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getApplicationContext());
+        new StudentAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, Objects.requireNonNull(context).getApplicationContext());
     }
 
     public int getLoadTime() {

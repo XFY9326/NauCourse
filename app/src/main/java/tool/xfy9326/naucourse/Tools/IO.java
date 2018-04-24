@@ -1,5 +1,7 @@
 package tool.xfy9326.naucourse.Tools;
 
+import android.support.annotation.NonNull;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,7 +26,7 @@ public class IO {
      * @return 是否写入成功
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean writeFile(String content, String path) {
+    public static boolean writeFile(@NonNull String content, @NonNull String path) {
         File file = new File(path);
         try {
             if (CheckFile(file, true)) {
@@ -48,7 +50,7 @@ public class IO {
      * @param path 文件路径
      * @return 读取的文字
      */
-    public static String readFile(String path) {
+    public static String readFile(@NonNull String path) {
         File file = new File(path);
         try {
             if (CheckFile(file, false)) {

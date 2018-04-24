@@ -2,6 +2,8 @@ package tool.xfy9326.naucourse.Methods;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
@@ -32,9 +35,10 @@ public class CourseMethod {
     // 列 行
     private String[][] table;
     private String[][] id_table;
+    @Nullable
     private List<String> course_time;
 
-    public CourseMethod(Context context, ArrayList<Course> courses, SchoolTime schoolTime) {
+    public CourseMethod(Context context, ArrayList<Course> courses, @NonNull SchoolTime schoolTime) {
         this.context = context;
         this.courses = courses;
         this.course_time = null;
@@ -51,7 +55,8 @@ public class CourseMethod {
      * @param courses            课程信息列表
      * @return NextCourse对象
      */
-    private static NextCourse getNextClass(Context context, String[][] this_week_table, String[][] this_week_id_table, ArrayList<Course> courses) {
+    @NonNull
+    private static NextCourse getNextClass(@NonNull Context context, String[][] this_week_table, String[][] this_week_id_table, @NonNull ArrayList<Course> courses) {
         NextCourse nextCourse = new NextCourse();
         Calendar calendar = Calendar.getInstance(Locale.CHINA);
         int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK) - 1;
@@ -107,7 +112,7 @@ public class CourseMethod {
 
         if (nextCourse.getCourseId() != null) {
             for (Course course : courses) {
-                if (course.getCourseId().equals(nextCourse.getCourseId())) {
+                if (Objects.requireNonNull(course.getCourseId()).equals(nextCourse.getCourseId())) {
                     nextCourse.setCourseTeacher(course.getCourseTeacher());
                     break;
                 }
@@ -124,6 +129,7 @@ public class CourseMethod {
      * @param weekNum 周数
      * @return 下一节课的信息
      */
+    @NonNull
     public NextCourse getNextClass(int weekNum) {
         if (this.weekNum != weekNum || table == null) {
             getTable(weekNum, schoolTime.getStartTime());
@@ -155,7 +161,7 @@ public class CourseMethod {
      * @param schoolTime  SchoolTime对象
      * @param noCheckSame 不在检查到周数相同时放弃计算数据
      */
-    public void updateTableCourse(SchoolTime schoolTime, boolean noCheckSame) {
+    public void updateTableCourse(@NonNull SchoolTime schoolTime, boolean noCheckSame) {
         this.schoolTime = schoolTime;
         //假期中默认显示第一周
         int weekNum = schoolTime.getWeekNum();
@@ -174,7 +180,7 @@ public class CourseMethod {
     }
 
     //设置表格的上课时间列与上课日期行
-    private void setTableTimeLine(List<String> course_time, List<String> course_weekDay) {
+    private void setTableTimeLine(List<String> course_time, @NonNull List<String> course_weekDay) {
         table[0][0] = context.getString(R.string.date);
         for (int i = 0; i < course_time.size(); i++) {
             table[0][i + 1] = course_time.get(i).trim();
@@ -192,7 +198,7 @@ public class CourseMethod {
         id_table = new String[Config.MAX_WEEK_DAY + 1][Config.MAX_DAY_COURSE + 1];
         for (Course course : courses) {
             CourseDetail[] courseDetail = course.getCourseDetail();
-            for (CourseDetail detail : courseDetail) {
+            for (CourseDetail detail : Objects.requireNonNull(courseDetail)) {
                 int mode = detail.getWeekMode();
                 if (isDoubleWeek && mode == Config.COURSE_DETAIL_WEEKMODE_DOUBLE) {
                     if (weekCheck(detail, weekNum)) {
@@ -219,7 +225,7 @@ public class CourseMethod {
     //检查是否在该周上课
     private boolean weekCheck(CourseDetail detail, int weekNum) {
         String[] weeks = detail.getWeeks();
-        for (String week : weeks) {
+        for (String week : Objects.requireNonNull(weeks)) {
             if (week.contains("-")) {
                 String[] weekdays = week.split("-");
                 int start = Integer.valueOf(weekdays[0]);
@@ -237,10 +243,10 @@ public class CourseMethod {
     }
 
     //设置课程到二维数组
-    private void courseSet(Course course, CourseDetail detail, int weekNum, String startSchoolDate) {
+    private void courseSet(@NonNull Course course, CourseDetail detail, int weekNum, String startSchoolDate) {
         String[] courseTimes = detail.getCourseTime();
         int startSchoolWeekDay = getStartSchoolWeekDay(startSchoolDate);
-        for (String courseTime : courseTimes) {
+        for (String courseTime : Objects.requireNonNull(courseTimes)) {
             if (weekNum == 1 && detail.getWeekDay() < startSchoolWeekDay) {
                 continue;
             }
@@ -260,12 +266,12 @@ public class CourseMethod {
     }
 
     //获取需要显示的信息
-    private String getShowDetail(Course course, CourseDetail courseDetail) {
+    private String getShowDetail(@NonNull Course course, @NonNull CourseDetail courseDetail) {
         String mid = "\n";
         if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_WIDE_TABLE, Config.DEFAULT_PREFERENCE_SHOW_WIDE_TABLE)) {
             mid = "\n\n";
         }
-        return course.getCourseName().trim() + mid + "@" + courseDetail.getLocation().trim();
+        return Objects.requireNonNull(course.getCourseName()).trim() + mid + "@" + Objects.requireNonNull(courseDetail.getLocation()).trim();
     }
 
     //获取开学是周几

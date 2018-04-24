@@ -2,6 +2,7 @@
 
     <style name="AppTheme" parent="AppTheme.Base" />
 
+    <!--suppress AndroidDomInspection -->
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:windowFullscreen">false</item>
         <item name="windowActionBar">false</item>
@@ -14,8 +15,10 @@
         <item name="android:textColorTertiary">@color/colorSecondaryText</item>
     </style>
 
+    <!--suppress AndroidDomInspection -->
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
+    <!--suppress AndroidDomInspection -->
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

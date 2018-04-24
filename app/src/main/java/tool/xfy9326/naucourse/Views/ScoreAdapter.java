@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Objects;
+
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.CourseScore;
 
@@ -30,12 +32,12 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ScoreViewHolder holder, int position) {
-        holder.textView_score_course_name.setText(context.getString(R.string.score_course_name, courseScore.getScoreCourseName()[holder.getAdapterPosition()]));
+        holder.textView_score_course_name.setText(context.getString(R.string.score_course_name, Objects.requireNonNull(courseScore.getScoreCourseName())[holder.getAdapterPosition()]));
         holder.textView_score_course_xf.setText(context.getString(R.string.course_card_score, courseScore.getScoreCourseXf()[holder.getAdapterPosition()]));
-        holder.textView_score_common.setText(context.getString(R.string.score_common, courseScore.getScoreCommon()[holder.getAdapterPosition()]));
-        holder.textView_score_mid.setText(context.getString(R.string.score_mid, courseScore.getScoreMid()[holder.getAdapterPosition()]));
-        holder.textView_score_final.setText(context.getString(R.string.score_final, courseScore.getScoreFinal()[holder.getAdapterPosition()]));
-        holder.textView_score_total.setText(context.getString(R.string.score_total, courseScore.getScoreTotal()[holder.getAdapterPosition()]));
+        holder.textView_score_common.setText(context.getString(R.string.score_common, Objects.requireNonNull(courseScore.getScoreCommon())[holder.getAdapterPosition()]));
+        holder.textView_score_mid.setText(context.getString(R.string.score_mid, Objects.requireNonNull(courseScore.getScoreMid())[holder.getAdapterPosition()]));
+        holder.textView_score_final.setText(context.getString(R.string.score_final, Objects.requireNonNull(courseScore.getScoreFinal())[holder.getAdapterPosition()]));
+        holder.textView_score_total.setText(context.getString(R.string.score_total, Objects.requireNonNull(courseScore.getScoreTotal())[holder.getAdapterPosition()]));
     }
 
     @Override

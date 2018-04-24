@@ -1,5 +1,7 @@
 package tool.xfy9326.naucourse.Utils;
 
+import android.support.annotation.Nullable;
+
 /**
  * Created by xfy9326 on 18-2-21.
  * 课程信息详情
@@ -7,29 +9,34 @@ package tool.xfy9326.naucourse.Utils;
 
 public class CourseDetail {
     //Num-Num,Num...
+    @Nullable
     private String weeks[] = null;
     private int weekDay = 0;
     //Num-Num,Num...
+    @Nullable
     private String courseTime[] = null;
     private int weekMode = 0;
+    @Nullable
     private String location = null;
 
     public CourseDetail() {
     }
 
+    @Nullable
     public String[] getCourseTime() {
         return courseTime;
     }
 
-    public void setCourseTime(String[] courseTime) {
+    public void setCourseTime(@Nullable String[] courseTime) {
         this.courseTime = courseTime;
     }
 
+    @Nullable
     public String[] getWeeks() {
         return weeks;
     }
 
-    public void setWeeks(String[] weeks) {
+    public void setWeeks(@Nullable String[] weeks) {
         this.weeks = weeks;
     }
 
@@ -49,11 +56,12 @@ public class CourseDetail {
         this.weekDay = weekDay;
     }
 
+    @Nullable
     public String getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(@Nullable String location) {
         this.location = location;
     }
 }

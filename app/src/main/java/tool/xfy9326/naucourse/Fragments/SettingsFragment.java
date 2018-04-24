@@ -35,6 +35,15 @@ public class SettingsFragment extends PreferenceFragment {
         PreferenceSet();
     }
 
+    @Override
+    public void onDestroy() {
+        if (updateCourseTable) {
+            MainHandler mainHandler = new MainHandler(getActivity());
+            mainHandler.sendEmptyMessage(Config.HANDLER_RELOAD_TABLE);
+        }
+        super.onDestroy();
+    }
+
     private void PreferenceSet() {
         Preference.OnPreferenceChangeListener tableReloadListener = new Preference.OnPreferenceChangeListener() {
             @Override
@@ -123,12 +132,4 @@ public class SettingsFragment extends PreferenceFragment {
         builder.show();
     }
 
-    @Override
-    public void onDestroy() {
-        if (updateCourseTable) {
-            MainHandler mainHandler = new MainHandler(getActivity());
-            mainHandler.sendEmptyMessage(Config.HANDLER_RELOAD_TABLE);
-        }
-        super.onDestroy();
-    }
 }

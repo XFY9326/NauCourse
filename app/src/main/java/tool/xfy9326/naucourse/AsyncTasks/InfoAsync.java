@@ -2,6 +2,8 @@ package tool.xfy9326.naucourse.AsyncTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Fragments.HomeFragment;
@@ -20,7 +22,9 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
     private int JwcLoadSuccess = -1;
     private int JwLoadSuccess = -1;
     private int loadCode = Config.NET_WORK_GET_SUCCESS;
+    @Nullable
     private JwcTopic jwcTopic;
+    @Nullable
     private JwTopic jwTopic;
 
     public InfoAsync() {
@@ -70,7 +74,7 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
     }
 
     @Override
-    protected void onPostExecute(Context context) {
+    protected void onPostExecute(@NonNull Context context) {
         HomeFragment homeFragment = BaseMethod.getApp(context).getViewPagerAdapter().getHomeFragment();
         if (homeFragment != null) {
             if (BaseMethod.checkNetWorkCode(context, new int[]{JwLoadSuccess, JwcLoadSuccess}, loadCode)) {

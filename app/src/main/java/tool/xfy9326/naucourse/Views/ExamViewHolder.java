@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourse.Views;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -17,7 +18,7 @@ class ExamViewHolder extends RecyclerView.ViewHolder {
     final TextView textView_exam_time;
     final TextView textView_exam_location;
 
-    ExamViewHolder(View view) {
+    ExamViewHolder(@NonNull View view) {
         super(view);
         textView_exam_name = view.findViewById(R.id.textView_exam_name);
         textView_exam_type = view.findViewById(R.id.textView_exam_type);

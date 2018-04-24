@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 
 import tool.xfy9326.naucourse.Activities.MainActivity;
@@ -32,7 +33,7 @@ public class NotificationMethod {
      *
      * @param context Context
      */
-    public static void showWifiConnectSuccess(Context context) {
+    public static void showWifiConnectSuccess(@NonNull Context context) {
         showNotification(context, NOTIFICATION_CODE_WIFI_CONNECT, context.getString(R.string.app_name), context.getString(R.string.i_nau_home_settings_auto_login_success));
     }
 
@@ -42,7 +43,7 @@ public class NotificationMethod {
      * @param context    Context
      * @param nextCourse NextCourse对象
      */
-    public static void showNextClassNotification(Context context, NextCourse nextCourse) {
+    public static void showNextClassNotification(@NonNull Context context, NextCourse nextCourse) {
         if (nextCourse.getCourseId() != null) {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             String lastNotifyId = sharedPreferences.getString(Config.PREFERENCE_LAST_NOTIFY_ID, null);
@@ -86,7 +87,7 @@ public class NotificationMethod {
      * @param context             Context
      * @param notificationManager NotificationManager
      */
-    private static void CreateNotificationChannel(Context context, NotificationManager notificationManager) {
+    private static void CreateNotificationChannel(@NonNull Context context, @NonNull NotificationManager notificationManager) {
         if (Build.VERSION.SDK_INT >= 26) {
             NotificationChannel notificationChannel = notificationManager.getNotificationChannel(CHANNEL_ID);
             if (notificationChannel == null) {

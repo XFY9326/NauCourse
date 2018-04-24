@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -17,6 +18,7 @@ import tool.xfy9326.naucourse.Handlers.MainHandler;
 
 public class WifiConnectService extends Service {
     private int connectTime = 0;
+    @Nullable
     private BroadcastReceiver broadcastReceiver;
     private boolean setReceiver = false;
 
@@ -27,7 +29,7 @@ public class WifiConnectService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(@NonNull Intent intent, int flags, int startId) {
         Log.d("WIFI_CONNECT", "Service Set");
         if (intent.hasExtra(Config.INTENT_AUTO_LOGIN)) {
             if (intent.getBooleanExtra(Config.INTENT_AUTO_LOGIN, false)) {
@@ -52,7 +54,7 @@ public class WifiConnectService extends Service {
             intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
             broadcastReceiver = new BroadcastReceiver() {
                 @Override
-                public void onReceive(Context context, Intent intent) {
+                public void onReceive(Context context, @NonNull Intent intent) {
                     String action = intent.getAction();
                     if (action != null && action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
                         NetworkInfo info = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);

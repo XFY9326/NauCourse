@@ -25,6 +25,7 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import tool.xfy9326.naucourse.Activities.WifiConnectActivity;
 import tool.xfy9326.naucourse.AsyncTasks.InfoAsync;
@@ -45,10 +46,15 @@ import tool.xfy9326.naucourse.Views.NextClassWidget;
 
 public class HomeFragment extends Fragment {
     private static final String NEXT_COURSE_FILE_NAME = "NextCourse";
+    @Nullable
     private View view;
+    @Nullable
     private Context context;
+    @Nullable
     private RecyclerView recyclerView;
+    @Nullable
     private SwipeRefreshLayout swipeRefreshLayout;
+    @Nullable
     private InfoAdapter infoAdapter;
     private int loadTime = 0;
     private int lastOffset = 0;
@@ -63,15 +69,22 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        this.context = context;
+        super.onAttach(context);
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
 
+    @Nullable
     @Override
-    public void onAttach(Context context) {
-        this.context = context;
-        super.onAttach(context);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_home, container, false);
+        return view;
     }
 
     @Override
@@ -81,14 +94,14 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.menu_home, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.menu_home_wifi) {
             if (isAdded() && getActivity() != null) {
                 Intent intent = new Intent(context, WifiConnectActivity.class);
@@ -99,21 +112,14 @@ public class HomeFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_home, container, false);
-        return view;
-    }
-
     private void ViewSet() {
-        recyclerView = view.findViewById(R.id.recyclerView_information);
+        recyclerView = Objects.requireNonNull(view).findViewById(R.id.recyclerView_information);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         //保证从其他视图返回时列表位置不变
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (recyclerView.getLayoutManager() != null) {
                     getPositionAndOffset();
@@ -157,7 +163,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setNextCourse();
-                context.sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
+                Objects.requireNonNull(context).sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
             }
         });
 
@@ -165,7 +171,7 @@ public class HomeFragment extends Fragment {
 
     //优先加载缓存中的下一节课
     private void loadTempNextCourse() {
-        NextCourse nextCourse = (NextCourse) DataMethod.getOfflineData(context, NextCourse.class, NEXT_COURSE_FILE_NAME);
+        NextCourse nextCourse = (NextCourse) DataMethod.getOfflineData(Objects.requireNonNull(context), NextCourse.class, NEXT_COURSE_FILE_NAME);
         if (nextCourse != null) {
             setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
         }
@@ -173,8 +179,8 @@ public class HomeFragment extends Fragment {
 
     //内部刷新设置下一节课
     private void setNextCourse() {
-        NextCourse nextCourse = NextClassMethod.getNextClassArray(getActivity());
-        if (DataMethod.saveOfflineData(context, nextCourse, NEXT_COURSE_FILE_NAME, false)) {
+        NextCourse nextCourse = NextClassMethod.getNextClassArray(Objects.requireNonNull(getActivity()));
+        if (DataMethod.saveOfflineData(Objects.requireNonNull(context), nextCourse, NEXT_COURSE_FILE_NAME, false)) {
             setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
         }
     }
@@ -188,14 +194,14 @@ public class HomeFragment extends Fragment {
      * @param teacher  上课老师
      * @param time     上课时间
      */
-    public void setNextCourse(String name, String location, String teacher, String time) {
+    public void setNextCourse(@Nullable String name, String location, String teacher, String time) {
         if (isAdded()) {
-            TextView textView_noNextClass = view.findViewById(R.id.textView_noNextClass);
+            TextView textView_noNextClass = Objects.requireNonNull(view).findViewById(R.id.textView_noNextClass);
             LinearLayout linearLayout_nextClass = view.findViewById(R.id.layout_nextClass);
             if (name == null) {
                 linearLayout_nextClass.setVisibility(View.GONE);
                 textView_noNextClass.setVisibility(View.VISIBLE);
-                DataMethod.deleteOfflineData(context, NEXT_COURSE_FILE_NAME);
+                DataMethod.deleteOfflineData(Objects.requireNonNull(context), NEXT_COURSE_FILE_NAME);
             } else {
                 TextView textView_nextClass = view.findViewById(R.id.textView_nextClass);
                 TextView textView_nextLocation = view.findViewById(R.id.textView_nextLocation);
@@ -221,12 +227,12 @@ public class HomeFragment extends Fragment {
         this.loadTime = loadTime;
     }
 
-    public void InfoSet(JwcTopic jwcTopic, JwTopic jwTopic) {
+    public void InfoSet(@Nullable JwcTopic jwcTopic, @Nullable JwTopic jwTopic) {
         if (isAdded()) {
             if (jwcTopic != null && jwTopic != null) {
                 if (infoAdapter == null) {
                     infoAdapter = new InfoAdapter(getActivity(), jwcTopic, jwTopic);
-                    recyclerView.setAdapter(infoAdapter);
+                    Objects.requireNonNull(recyclerView).setAdapter(infoAdapter);
                 } else {
                     infoAdapter.updateJwcTopic(jwcTopic, jwTopic);
                 }
@@ -263,7 +269,7 @@ public class HomeFragment extends Fragment {
 
     //还原下拉的列表位置
     private void getPositionAndOffset() {
-        LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        LinearLayoutManager layoutManager = (LinearLayoutManager) Objects.requireNonNull(recyclerView).getLayoutManager();
         View topView = layoutManager.getChildAt(0);
         if (topView != null) {
             lastOffset = topView.getTop();
@@ -272,13 +278,13 @@ public class HomeFragment extends Fragment {
     }
 
     private void scrollToPosition() {
-        if (recyclerView.getLayoutManager() != null && lastPosition >= 0) {
+        if (Objects.requireNonNull(recyclerView).getLayoutManager() != null && lastPosition >= 0) {
             ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(lastPosition, lastOffset);
         }
     }
 
     private void getData() {
-        new InfoAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getApplicationContext());
+        new InfoAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, Objects.requireNonNull(context).getApplicationContext());
     }
 
 }

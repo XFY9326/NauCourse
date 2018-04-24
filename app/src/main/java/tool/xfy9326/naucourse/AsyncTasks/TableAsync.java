@@ -2,6 +2,8 @@ package tool.xfy9326.naucourse.AsyncTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 
@@ -22,7 +24,9 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
     private int tableLoadSuccess = -1;
     private int timeLoadSuccess = -1;
     private int loadCode = Config.NET_WORK_GET_SUCCESS;
+    @Nullable
     private ArrayList<Course> course;
+    @Nullable
     private SchoolTime schoolTime;
 
     public TableAsync() {
@@ -72,7 +76,7 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
     }
 
     @Override
-    protected void onPostExecute(Context context) {
+    protected void onPostExecute(@NonNull Context context) {
         TableFragment tableFragment = BaseMethod.getApp(context).getViewPagerAdapter().getTableFragment();
         if (tableFragment != null) {
             if (BaseMethod.checkNetWorkCode(context, new int[]{tableLoadSuccess, timeLoadSuccess}, loadCode)) {

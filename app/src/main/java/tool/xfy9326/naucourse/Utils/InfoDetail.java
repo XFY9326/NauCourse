@@ -1,5 +1,7 @@
 package tool.xfy9326.naucourse.Utils;
 
+import android.support.annotation.Nullable;
+
 import java.io.Serializable;
 
 /**
@@ -7,12 +9,19 @@ import java.io.Serializable;
  */
 
 public class InfoDetail implements Serializable {
+    @Nullable
     private String title;
+    @Nullable
     private String date;
+    @Nullable
     private String click;
+    @Nullable
     private String post;
+    @Nullable
     private String source;
+    @Nullable
     private String url;
+    @Nullable
     private String type;
 
     public InfoDetail() {
@@ -25,59 +34,66 @@ public class InfoDetail implements Serializable {
         this.type = null;
     }
 
+    @Nullable
     public String getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(@Nullable String type) {
         this.type = type;
     }
 
+    @Nullable
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(@Nullable String title) {
         this.title = title;
     }
 
+    @Nullable
     public String getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(@Nullable String date) {
         this.date = date;
     }
 
+    @Nullable
     public String getClick() {
         return click;
     }
 
-    public void setClick(String click) {
+    public void setClick(@Nullable String click) {
         this.click = click;
     }
 
+    @Nullable
     public String getPost() {
         return post;
     }
 
-    public void setPost(String post) {
+    public void setPost(@Nullable String post) {
         this.post = post;
     }
 
+    @Nullable
     public String getSource() {
         return source;
     }
 
-    public void setSource(String source) {
+    public void setSource(@Nullable String source) {
         this.source = source;
     }
 
+    @Nullable
     public String getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(@Nullable String url) {
         this.url = url;
     }
 }

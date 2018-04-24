@@ -7,12 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.AlarmManagerCompat;
 import android.util.Log;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.NextClassMethod;
@@ -32,7 +34,7 @@ public class UpdateReceiver extends BroadcastReceiver {
     private boolean isClassBeforeNotify = false;
     private NextCourse nextCourse;
 
-    private static void setNextAlarm(Context context, long time) {
+    private static void setNextAlarm(@NonNull Context context, long time) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getLong(Config.PREFERENCE_LAST_NOTIFY_TIME, 0) != time) {
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -45,7 +47,7 @@ public class UpdateReceiver extends BroadcastReceiver {
     }
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(@NonNull Context context, @NonNull Intent intent) {
         if (intent.getAction() != null) {
             if (intent.getAction().equals(UPDATE_ACTION)) {
                 nextCourse = NextClassMethod.getNextClassArray(context);
@@ -88,7 +90,7 @@ public class UpdateReceiver extends BroadcastReceiver {
             time = calendar.getTimeInMillis();
             isClassBeforeNotify = false;
         } else {
-            String[] time_temp = nextCourse.getCourseTime().split("~")[0].split(":");
+            String[] time_temp = Objects.requireNonNull(nextCourse.getCourseTime()).split("~")[0].split(":");
             calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time_temp[0]));
             calendar.set(Calendar.MINUTE, Integer.valueOf(time_temp[1]));
             calendar.add(Calendar.MINUTE, -10);

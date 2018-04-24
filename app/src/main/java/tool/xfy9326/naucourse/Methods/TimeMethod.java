@@ -1,6 +1,8 @@
 package tool.xfy9326.naucourse.Methods;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,7 +28,8 @@ public class TimeMethod {
      * @param schoolTime SchoolTime
      * @return 周数列表
      */
-    public static List<String> getWeekArray(Context context, SchoolTime schoolTime) {
+    @NonNull
+    public static List<String> getWeekArray(@NonNull Context context, SchoolTime schoolTime) {
         List<String> week = new ArrayList<>();
         int max_week = getMaxWeekNum(schoolTime);
         if (max_week == 0) {
@@ -44,7 +47,7 @@ public class TimeMethod {
      * @param schoolTime SchoolTime对象
      * @return 最大周数
      */
-    public static int getMaxWeekNum(SchoolTime schoolTime) {
+    public static int getMaxWeekNum(@Nullable SchoolTime schoolTime) {
         int max_week = 0;
         if (schoolTime != null) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
@@ -77,7 +80,7 @@ public class TimeMethod {
      * @param schoolTime SchoolTime对象
      * @return 周数
      */
-    public static int getNowWeekNum(SchoolTime schoolTime) {
+    public static int getNowWeekNum(@Nullable SchoolTime schoolTime) {
         int weekNum = 0;
         if (schoolTime != null) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
@@ -127,6 +130,7 @@ public class TimeMethod {
      * @param startSchoolDate 开学时间（SchoolTime）
      * @return 周数与日期的列表
      */
+    @NonNull
     static List<String> getWeekDayArray(Context context, int week_num, String startSchoolDate) {
         List<String> week = new ArrayList<>();
         String[] num = context.getResources().getStringArray(R.array.week_number);
@@ -137,6 +141,7 @@ public class TimeMethod {
         return week;
     }
 
+    @NonNull
     private static String[] getWeekDayDate(int week_num, String startSchoolDate) {
         String[] weekDayDate = new String[Config.MAX_WEEK_DAY];
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
@@ -167,6 +172,7 @@ public class TimeMethod {
      * @param context Context
      * @return 时间列表
      */
+    @NonNull
     static List<String> getCourseTimeArray(Context context) {
         List<String> day = new ArrayList<>();
         String[] time = context.getResources().getStringArray(R.array.course_start_time);

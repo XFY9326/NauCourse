@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
@@ -18,6 +19,8 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Objects;
 
 import lib.xfy9326.naujwc.NauJwcClient;
 import tool.xfy9326.naucourse.AsyncTasks.InfoDetailAsync;
@@ -34,12 +37,19 @@ import tool.xfy9326.naucourse.Views.InfoAdapter;
  */
 
 public class InfoDetailActivity extends AppCompatActivity {
+    @Nullable
     private String info_title;
+    @Nullable
     private String info_post;
+    @Nullable
     private String info_click;
+    @Nullable
     private String info_date;
+    @Nullable
     private String info_url;
+    @Nullable
     private String info_source;
+    @Nullable
     private String info_type;
 
     @Override
@@ -54,6 +64,13 @@ public class InfoDetailActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.data_get_error, Toast.LENGTH_SHORT).show();
             finish();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        BaseMethod.getApp(this).setInfoDetailActivity(null);
+        System.gc();
+        super.onDestroy();
     }
 
     private void ToolBarSet() {
@@ -73,41 +90,36 @@ public class InfoDetailActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        String url = null;
-        if (info_source.equals(InfoAdapter.TOPIC_SOURCE_JW)) {
-            url = JwInfoMethod.server_url + info_url;
-        } else if (info_source.equals(InfoAdapter.TOPIC_SOURCE_JWC)) {
-            url = NauJwcClient.server_url + info_url;
-        }
-        Intent intent = new Intent();
-        if (url != null) {
-            if (item.getItemId() == R.id.menu_info_detail_open_in_browser) {
-                intent.setAction("android.intent.action.VIEW");
-                Uri content_url = Uri.parse(url);
-                intent.setData(content_url);
-            } else if (item.getItemId() == R.id.menu_info_detail_share) {
-                intent.setAction(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_SUBJECT, info_type);
-                intent.putExtra(Intent.EXTRA_TEXT, info_title + "\n" + url);
-                intent = Intent.createChooser(intent, getString(R.string.share));
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.menu_info_detail_open_in_browser || item.getItemId() == R.id.menu_info_detail_share) {
+            String url = null;
+            if (Objects.equals(info_source, InfoAdapter.TOPIC_SOURCE_JW)) {
+                url = JwInfoMethod.server_url + info_url;
+            } else if (Objects.requireNonNull(info_source).equals(InfoAdapter.TOPIC_SOURCE_JWC)) {
+                url = NauJwcClient.server_url + info_url;
             }
-            try {
-                startActivity(intent);
-            } catch (ActivityNotFoundException e) {
-                Toast.makeText(this, R.string.no_available_application, Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
+            Intent intent = new Intent();
+            if (url != null) {
+                if (item.getItemId() == R.id.menu_info_detail_open_in_browser) {
+                    intent.setAction("android.intent.action.VIEW");
+                    Uri content_url = Uri.parse(url);
+                    intent.setData(content_url);
+                } else if (item.getItemId() == R.id.menu_info_detail_share) {
+                    intent.setAction(Intent.ACTION_SEND);
+                    intent.setType("text/plain");
+                    intent.putExtra(Intent.EXTRA_SUBJECT, info_type);
+                    intent.putExtra(Intent.EXTRA_TEXT, info_title + "\n" + url);
+                    intent = Intent.createChooser(intent, getString(R.string.share));
+                }
+                try {
+                    startActivity(intent);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(this, R.string.no_available_application, Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
             }
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onDestroy() {
-        BaseMethod.getApp(this).setInfoDetailActivity(null);
-        System.gc();
-        super.onDestroy();
     }
 
     private boolean getIntentData() {
@@ -150,16 +162,16 @@ public class InfoDetailActivity extends AppCompatActivity {
         textView_date.setText(getString(R.string.info_date, info_date));
     }
 
-    public void InfoDetailSet(String content) {
+    public void InfoDetailSet(@Nullable String content) {
         if (content != null) {
             TextView textView_content = findViewById(R.id.textView_info_detail_content);
-            if (info_source.equals(InfoAdapter.TOPIC_SOURCE_JWC)) {
+            if (Objects.equals(info_source, InfoAdapter.TOPIC_SOURCE_JWC)) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     textView_content.setText(Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY));
                 } else {
                     textView_content.setText(Html.fromHtml(content));
                 }
-            } else if (info_source.equals(InfoAdapter.TOPIC_SOURCE_JW)) {
+            } else if (Objects.requireNonNull(info_source).equals(InfoAdapter.TOPIC_SOURCE_JW)) {
                 textView_content.setText(content);
             }
 

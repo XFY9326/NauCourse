@@ -1,5 +1,7 @@
 package tool.xfy9326.naucourse.Utils;
 
+import android.support.annotation.Nullable;
+
 import java.io.Serializable;
 
 /**
@@ -8,10 +10,15 @@ import java.io.Serializable;
  */
 
 public class NextCourse implements Serializable {
+    @Nullable
     private String courseId;
+    @Nullable
     private String courseName;
+    @Nullable
     private String courseTeacher;
+    @Nullable
     private String courseLocation;
+    @Nullable
     private String courseTime;
     private int dataVersionCode = 0;
 
@@ -23,43 +30,48 @@ public class NextCourse implements Serializable {
         this.courseTime = null;
     }
 
+    @Nullable
     public String getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(String courseId) {
+    public void setCourseId(@Nullable String courseId) {
         this.courseId = courseId;
     }
 
+    @Nullable
     public String getCourseName() {
         return courseName;
     }
 
-    public void setCourseName(String courseName) {
+    public void setCourseName(@Nullable String courseName) {
         this.courseName = courseName;
     }
 
+    @Nullable
     public String getCourseTeacher() {
         return courseTeacher;
     }
 
-    public void setCourseTeacher(String courseTeacher) {
+    public void setCourseTeacher(@Nullable String courseTeacher) {
         this.courseTeacher = courseTeacher;
     }
 
+    @Nullable
     public String getCourseLocation() {
         return courseLocation;
     }
 
-    public void setCourseLocation(String courseLocation) {
+    public void setCourseLocation(@Nullable String courseLocation) {
         this.courseLocation = courseLocation;
     }
 
+    @Nullable
     public String getCourseTime() {
         return courseTime;
     }
 
-    public void setCourseTime(String courseTime) {
+    public void setCourseTime(@Nullable String courseTime) {
         this.courseTime = courseTime;
     }
 

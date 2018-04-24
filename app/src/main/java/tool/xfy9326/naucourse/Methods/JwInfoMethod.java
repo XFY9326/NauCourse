@@ -1,6 +1,8 @@
 package tool.xfy9326.naucourse.Methods;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -8,6 +10,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -26,7 +29,9 @@ public class JwInfoMethod {
     public static final String server_url = "http://jw.nau.edu.cn";
     private static final int TOPIC_COUNT = 25;
     private final Context context;
+    @Nullable
     private Document document;
+    @Nullable
     private Document document_detail;
 
     public JwInfoMethod(Context context) {
@@ -49,13 +54,14 @@ public class JwInfoMethod {
         return Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR;
     }
 
+    @Nullable
     public JwTopic getJwTopic(boolean checkTemp) {
         JwTopic jwTopic = new JwTopic();
         String[] postTime = new String[TOPIC_COUNT];
         String[] postTitle = new String[TOPIC_COUNT];
         String[] postType = new String[TOPIC_COUNT];
         String[] postUrl = new String[TOPIC_COUNT];
-        Elements elements = document.getElementsByTag("tr");
+        Elements elements = Objects.requireNonNull(document).getElementsByTag("tr");
         List<String> text = elements.eachText();
         for (String str : text) {
             if (str.contains("教务通知")) {
@@ -130,9 +136,10 @@ public class JwInfoMethod {
         return Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR;
     }
 
+    @NonNull
     public String getDetail() {
         StringBuilder result = new StringBuilder();
-        Elements tags = document_detail.body().getElementsByTag("p");
+        Elements tags = Objects.requireNonNull(document_detail).body().getElementsByTag("p");
         List<String> data = tags.eachText();
         for (String str : data) {
             if (str.equals("") || str.equals(" ")) {
@@ -144,7 +151,7 @@ public class JwInfoMethod {
         return result.toString();
     }
 
-    private String loadUrl(String url) throws IOException {
+    private String loadUrl(@NonNull String url) throws IOException {
         OkHttpClient.Builder client_builder = new OkHttpClient.Builder();
         OkHttpClient client = client_builder.build();
         Request.Builder request_builder = new Request.Builder();

@@ -3,6 +3,7 @@ package tool.xfy9326.naucourse.Methods;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,6 +11,7 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Utils.Course;
@@ -23,6 +25,7 @@ import tool.xfy9326.naucourse.Utils.CourseDetail;
 public class TableMethod {
     static final String FILE_NAME = "Course";
     private final Context context;
+    @Nullable
     private Document document;
 
     public TableMethod(Context context) {
@@ -47,9 +50,10 @@ public class TableMethod {
     }
 
     //数据分类方法：课程基本信息——上课周数——上课节数
+    @Nullable
     public ArrayList<Course> getCourseTable(boolean checkTemp) {
         ArrayList<Course> courseList = new ArrayList<>();
-        Elements tags = document.body().getElementsByTag("tr");
+        Elements tags = Objects.requireNonNull(document).body().getElementsByTag("tr");
         List<String> data = tags.eachText();
         for (String str : data) {
             if (str.contains("序号")) {

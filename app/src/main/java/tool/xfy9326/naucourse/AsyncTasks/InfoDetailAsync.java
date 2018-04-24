@@ -2,6 +2,10 @@ package tool.xfy9326.naucourse.AsyncTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import java.util.Objects;
 
 import tool.xfy9326.naucourse.Activities.InfoDetailActivity;
 import tool.xfy9326.naucourse.Config;
@@ -15,10 +19,13 @@ import tool.xfy9326.naucourse.Views.InfoAdapter;
  */
 
 public class InfoDetailAsync extends AsyncTask<Context, Void, Context> {
+    @Nullable
     private String data;
     private int loadSuccess = -1;
     private int loadCode = Config.NET_WORK_GET_SUCCESS;
+    @Nullable
     private String info_source;
+    @Nullable
     private String info_url;
 
     public InfoDetailAsync() {
@@ -42,7 +49,7 @@ public class InfoDetailAsync extends AsyncTask<Context, Void, Context> {
     protected Context doInBackground(Context... context) {
         try {
             if (context[0] != null) {
-                if (info_source.equals(InfoAdapter.TOPIC_SOURCE_JWC)) {
+                if (Objects.requireNonNull(info_source).equals(InfoAdapter.TOPIC_SOURCE_JWC)) {
                     JwcInfoMethod jwcInfoMethod = new JwcInfoMethod(context[0]);
                     loadSuccess = jwcInfoMethod.loadDetail(info_url);
                     if (loadSuccess == Config.NET_WORK_GET_SUCCESS) {
@@ -64,7 +71,7 @@ public class InfoDetailAsync extends AsyncTask<Context, Void, Context> {
     }
 
     @Override
-    protected void onPostExecute(Context context) {
+    protected void onPostExecute(@NonNull Context context) {
         InfoDetailActivity infoDetailActivity = BaseMethod.getApp(context).getInfoDetailActivity();
         if (infoDetailActivity != null) {
             if (BaseMethod.checkNetWorkCode(context, new int[]{loadSuccess}, loadCode)) {

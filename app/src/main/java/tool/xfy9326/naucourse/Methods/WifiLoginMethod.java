@@ -1,5 +1,8 @@
 package tool.xfy9326.naucourse.Methods;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -24,8 +27,10 @@ public class WifiLoginMethod {
     public static final int ERROR_TYPE_REQUEST_ERROR = 1;
     public static final int ERROR_TYPE_LOGIN_ERROR = 2;
 
+    @NonNull
     private final OkHttpClient client;
     private final String ClientIP;
+    @Nullable
     private OnRequestListener onRequestListener = null;
 
     /**
@@ -114,7 +119,7 @@ public class WifiLoginMethod {
      * @param pw   登录的密码
      * @param type 登录的网络服务提供商类型
      */
-    public void login(String id, String pw, String type) {
+    public void login(@NonNull String id, @NonNull String pw, String type) {
         requestURL(buildURL(ClientIP, true), buildLoginForm(id, pw, type));
     }
 
@@ -124,7 +129,7 @@ public class WifiLoginMethod {
      * @param id 账户ID
      * @param pw 账户密码
      */
-    public void loginOut(String id, String pw) {
+    public void loginOut(@NonNull String id, @NonNull String pw) {
         requestURL(buildURL(ClientIP, false), buildLoginOutForm(id, pw));
     }
 
@@ -134,7 +139,7 @@ public class WifiLoginMethod {
      * @param url      网络请求的地址
      * @param formBody 网络请求的数据表格
      */
-    private void requestURL(String url, FormBody formBody) {
+    private void requestURL(@NonNull String url, FormBody formBody) {
         Request.Builder builder = new Request.Builder();
         builder.url(url);
         builder.post(formBody);
@@ -148,7 +153,7 @@ public class WifiLoginMethod {
             }
 
             @Override
-            public void onResponse(Call call, Response response) {
+            public void onResponse(Call call, @Nullable Response response) {
                 if (response != null && response.request() != null) {
                     String url = response.request().url().toString();
                     //登录错误判断
@@ -185,7 +190,7 @@ public class WifiLoginMethod {
      *
      * @param onRequestListener 请求监听
      */
-    public void setOnRequestListener(OnRequestListener onRequestListener) {
+    public void setOnRequestListener(@Nullable OnRequestListener onRequestListener) {
         this.onRequestListener = onRequestListener;
     }
 

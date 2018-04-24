@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourse.Views;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -19,7 +20,7 @@ class InfoViewHolder extends RecyclerView.ViewHolder {
     final TextView textView_post;
     final TextView textView_date;
 
-    InfoViewHolder(View view) {
+    InfoViewHolder(@NonNull View view) {
         super(view);
         cardView_info = view.findViewById(R.id.cardView_info);
         textView_type = view.findViewById(R.id.textView_info_type);

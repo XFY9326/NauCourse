@@ -3,6 +3,7 @@ package tool.xfy9326.naucourse.Methods;
 import android.app.Activity;
 import android.content.Context;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import tool.xfy9326.naucourse.BaseApplication;
@@ -22,7 +23,7 @@ public class BaseMethod {
      *
      * @param activity 需要退出的Activity
      */
-    public static void doubleClickExit(Activity activity) {
+    public static void doubleClickExit(@NonNull Activity activity) {
         long time = System.currentTimeMillis();
         if (time - DoubleClickTime > 1200) {
             DoubleClickTime = time;
@@ -43,7 +44,7 @@ public class BaseMethod {
      * @param contentLoadCode 整体网络请求错误代码
      * @return 网络检查是否通过
      */
-    public static boolean checkNetWorkCode(Context context, int[] dataLoadCode, int contentLoadCode) {
+    public static boolean checkNetWorkCode(@NonNull Context context, @NonNull int[] dataLoadCode, int contentLoadCode) {
         if (contentLoadCode == Config.NET_WORK_ERROR_CODE_CONNECT_ERROR) {
             Toast.makeText(context, R.string.network_get_error, Toast.LENGTH_SHORT).show();
             return false;
@@ -77,6 +78,7 @@ public class BaseMethod {
      * @param context Context
      * @return BaseApplication对象
      */
+    @NonNull
     public static BaseApplication getApp(Context context) {
         return (BaseApplication) context.getApplicationContext();
     }

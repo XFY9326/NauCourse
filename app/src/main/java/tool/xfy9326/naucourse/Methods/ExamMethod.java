@@ -3,6 +3,7 @@ package tool.xfy9326.naucourse.Methods;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,6 +11,7 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Utils.Exam;
@@ -22,6 +24,7 @@ import tool.xfy9326.naucourse.Utils.Exam;
 public class ExamMethod {
     public static final String FILE_NAME = "Exam";
     private final Context context;
+    @Nullable
     private Document document;
 
     public ExamMethod(Context context) {
@@ -50,6 +53,7 @@ public class ExamMethod {
         getExam(false);
     }
 
+    @Nullable
     @SuppressWarnings("SameParameterValue")
     public Exam getExam(boolean checkTemp) {
         ArrayList<String> examId = new ArrayList<>();
@@ -60,7 +64,7 @@ public class ExamMethod {
         ArrayList<String> examLocation = new ArrayList<>();
 
         Exam exam = new Exam();
-        Elements elements = document.body().getElementsByTag("tr");
+        Elements elements = Objects.requireNonNull(document).body().getElementsByTag("tr");
         List<String> text = elements.eachText();
         boolean startData = false;
         for (String str : text) {

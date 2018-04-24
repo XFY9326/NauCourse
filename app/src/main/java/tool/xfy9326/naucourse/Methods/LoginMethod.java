@@ -3,9 +3,12 @@ package tool.xfy9326.naucourse.Methods;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.File;
+import java.util.Objects;
 
 import lib.xfy9326.naujwc.NauJwcClient;
 import tool.xfy9326.naucourse.Config;
@@ -29,9 +32,10 @@ public class LoginMethod {
      * @return 获取的数据字符串
      * @throws Exception 网络连接中的错误
      */
-    static String getData(Context context, String url, boolean tryReLogin) throws Exception {
+    @Nullable
+    static String getData(@NonNull Context context, String url, boolean tryReLogin) throws Exception {
         String data = BaseMethod.getApp(context).getClient().getUserData(url);
-        if (!checkUserLogin(data) && tryReLogin) {
+        if (!checkUserLogin(Objects.requireNonNull(data)) && tryReLogin) {
             int reLogin_result = reLogin(context);
             switch (reLogin_result) {
                 case Config.RE_LOGIN_SUCCESS:
@@ -69,7 +73,7 @@ public class LoginMethod {
      * @return ReLogin状态值
      * @throws Exception 重新登陆时的网络错误
      */
-    private static int reLogin(Context context) throws Exception {
+    private static int reLogin(@NonNull Context context) throws Exception {
         if (!isTryingReLogin) {
             isTryingReLogin = true;
             Log.d("NETWORK", "TRY LOGIN AGAIN");
@@ -80,7 +84,7 @@ public class LoginMethod {
             NauJwcClient nauJwcClient = BaseMethod.getApp(context).getClient();
             nauJwcClient.loginOut();
             Thread.sleep(1000);
-            if (nauJwcClient.login(id, pw)) {
+            if (nauJwcClient.login(id, Objects.requireNonNull(pw))) {
                 String loginURL = nauJwcClient.getLoginUrl();
                 if (loginURL != null) {
                     sharedPreferences.edit().putString(Config.PREFERENCE_LOGIN_URL, loginURL).apply();
@@ -102,7 +106,7 @@ public class LoginMethod {
      * @param context Context
      * @return 是否成功注销登陆
      */
-    public static boolean loginOut(Context context) {
+    public static boolean loginOut(@NonNull Context context) {
         try {
             BaseMethod.getApp(context).getClient().loginOut();
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);

@@ -3,6 +3,8 @@ package lib.xfy9326.naujwc;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -31,6 +33,7 @@ class PersistentCookieStore {
     private static final String LOG_TAG = "PersistentCookieStore";
     private static final String COOKIE_PREFS = "Cookies_Prefs";
 
+    @NonNull
     private final Map<String, ConcurrentHashMap<String, Cookie>> cookies;
     private final SharedPreferences cookiePrefs;
 
@@ -61,7 +64,7 @@ class PersistentCookieStore {
         return cookie.name() + "@" + cookie.domain();
     }
 
-    public void add(HttpUrl url, Cookie cookie) {
+    public void add(@NonNull HttpUrl url, @NonNull Cookie cookie) {
         String name = getCookieToken(cookie);
 
         //将cookies缓存到内存中 如果缓存过期 就重置此cookie
@@ -83,7 +86,8 @@ class PersistentCookieStore {
         prefsWriter.apply();
     }
 
-    List<Cookie> get(HttpUrl url) {
+    @NonNull
+    List<Cookie> get(@NonNull HttpUrl url) {
         ArrayList<Cookie> ret = new ArrayList<>();
         if (cookies.containsKey(url.host()))
             ret.addAll(cookies.get(url.host()).values());
@@ -100,7 +104,7 @@ class PersistentCookieStore {
     }
 
     @SuppressWarnings("unused")
-    public boolean remove(HttpUrl url, Cookie cookie) {
+    public boolean remove(@NonNull HttpUrl url, @NonNull Cookie cookie) {
         String name = getCookieToken(cookie);
 
         if (cookies.containsKey(url.host()) && cookies.get(url.host()).containsKey(name)) {
@@ -119,6 +123,7 @@ class PersistentCookieStore {
         }
     }
 
+    @NonNull
     @SuppressWarnings("unused")
     public List<Cookie> getCookies() {
         ArrayList<Cookie> ret = new ArrayList<>();
@@ -134,7 +139,8 @@ class PersistentCookieStore {
      * @param cookie 要序列化的cookie
      * @return 序列化之后的string
      */
-    private String encodeCookie(SerializableOkHttpCookies cookie) {
+    @Nullable
+    private String encodeCookie(@Nullable SerializableOkHttpCookies cookie) {
         if (cookie == null)
             return null;
         ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -155,7 +161,8 @@ class PersistentCookieStore {
      * @param cookieString cookies string
      * @return cookie object
      */
-    private Cookie decodeCookie(String cookieString) {
+    @Nullable
+    private Cookie decodeCookie(@NonNull String cookieString) {
         byte[] bytes = hexStringToByteArray(cookieString);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
         Cookie cookie = null;
@@ -195,6 +202,7 @@ class PersistentCookieStore {
      * @param hexString string of hex-encoded values
      * @return decoded byte array
      */
+    @NonNull
     private byte[] hexStringToByteArray(String hexString) {
         int len = hexString.length();
         byte[] data = new byte[len / 2];

@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
@@ -280,7 +281,7 @@ public class WifiConnectActivity extends AppCompatActivity {
         }
     }
 
-    private Dialog showLoadingDialog(Context context, final boolean isNetTest) {
+    private Dialog showLoadingDialog(@NonNull Context context, final boolean isNetTest) {
         LayoutInflater layoutInflater = getLayoutInflater();
         View view = layoutInflater.inflate(R.layout.dialog_loading, (ViewGroup) findViewById(R.id.dialog_layout_loading));
         if (isNetTest) {
@@ -303,7 +304,7 @@ public class WifiConnectActivity extends AppCompatActivity {
         return builder.show();
     }
 
-    private boolean checkNet(Context context) {
+    private boolean checkNet(@NonNull Context context) {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             if (NetMethod.isNetworkConnected(context) && NetMethod.isWifiNetWork(context)) {
                 if (NetMethod.checkNauWifiSSID(context)) {
