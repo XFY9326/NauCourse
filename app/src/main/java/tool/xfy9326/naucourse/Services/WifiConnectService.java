@@ -85,7 +85,11 @@ public class WifiConnectService extends Service {
             setReceiver = false;
         }
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Config.PREFERENCE_NETWORK_AUTO_LOGIN, Config.DEFAULT_PREFERENCE_NETWORK_AUTO_LOGIN)) {
-            startService(new Intent(this, WifiConnectService.class).putExtra(Config.INTENT_AUTO_LOGIN, true).setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES));
+            try {
+                getApplicationContext().startService(new Intent(this, WifiConnectService.class).putExtra(Config.INTENT_AUTO_LOGIN, true).setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         super.onDestroy();
     }
