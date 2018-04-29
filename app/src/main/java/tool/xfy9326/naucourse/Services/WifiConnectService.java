@@ -11,7 +11,6 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Handlers.MainHandler;
@@ -30,7 +29,6 @@ public class WifiConnectService extends Service {
 
     @Override
     public int onStartCommand(@NonNull Intent intent, int flags, int startId) {
-        Log.d("WIFI_CONNECT", "Service Set");
         if (intent.hasExtra(Config.INTENT_AUTO_LOGIN)) {
             if (intent.getBooleanExtra(Config.INTENT_AUTO_LOGIN, false)) {
                 if (!setReceiver) {
@@ -77,19 +75,11 @@ public class WifiConnectService extends Service {
 
     @Override
     public void onDestroy() {
-        Log.d("WIFI_CONNECT", "Service Destroy");
         if (broadcastReceiver != null && setReceiver) {
             unregisterReceiver(broadcastReceiver);
             broadcastReceiver = null;
             connectTime = 0;
             setReceiver = false;
-        }
-        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Config.PREFERENCE_NETWORK_AUTO_LOGIN, Config.DEFAULT_PREFERENCE_NETWORK_AUTO_LOGIN)) {
-            try {
-                getApplicationContext().startService(new Intent(this, WifiConnectService.class).putExtra(Config.INTENT_AUTO_LOGIN, true).setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
         super.onDestroy();
     }

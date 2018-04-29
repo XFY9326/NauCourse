@@ -28,6 +28,7 @@ import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.CourseScore;
+import tool.xfy9326.naucourse.Utils.LevelExam;
 import tool.xfy9326.naucourse.Utils.StudentLearnProcess;
 import tool.xfy9326.naucourse.Utils.StudentScore;
 import tool.xfy9326.naucourse.Views.ScoreAdapter;
@@ -43,6 +44,8 @@ public class ScoreActivity extends AppCompatActivity {
     private ScoreAdapter scoreAdapter;
     @Nullable
     private StudentLearnProcess studentLearnProcess = null;
+    @Nullable
+    private LevelExam levelExam = null;
     private int loadTime = 0;
 
     @Override
@@ -95,11 +98,19 @@ public class ScoreActivity extends AppCompatActivity {
             }
         });
 
-        CardView cardView = findViewById(R.id.cardView_learn_process);
-        cardView.setOnClickListener(new View.OnClickListener() {
+        CardView cardView_learn_process = findViewById(R.id.cardView_learn_process);
+        cardView_learn_process.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 learnProcessView();
+            }
+        });
+
+        CardView cardView_level_exam = findViewById(R.id.cardView_level_exam);
+        cardView_level_exam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                levelExamView();
             }
         });
 
@@ -108,8 +119,8 @@ public class ScoreActivity extends AppCompatActivity {
         }
     }
 
-    public void setMainScore(@Nullable StudentScore studentScore, @Nullable StudentLearnProcess studentLearnProcess, @Nullable CourseScore courseScore) {
-        if (studentScore != null && courseScore != null && studentLearnProcess != null) {
+    public void setMainScore(@Nullable StudentScore studentScore, @Nullable StudentLearnProcess studentLearnProcess, @Nullable CourseScore courseScore, @Nullable LevelExam levelExam) {
+        if (studentScore != null && courseScore != null && studentLearnProcess != null && levelExam != null) {
             ((TextView) findViewById(R.id.textView_scoreXF)).setText(getString(R.string.score_XF, studentScore.getScoreXF()));
             ((TextView) findViewById(R.id.textView_scoreJD)).setText(getString(R.string.score_JD, studentScore.getScoreJD()));
             ((TextView) findViewById(R.id.textView_scoreNP)).setText(getString(R.string.score_NP, studentScore.getScoreNP()));
@@ -124,6 +135,46 @@ public class ScoreActivity extends AppCompatActivity {
             }
 
             this.studentLearnProcess = studentLearnProcess;
+            this.levelExam = levelExam;
+        }
+    }
+
+    private void levelExamView() {
+        if (levelExam != null) {
+            if (levelExam.getExamAmount() == 0) {
+                Snackbar.make(findViewById(R.id.layout_score_content), R.string.level_exam_empty, Snackbar.LENGTH_SHORT).show();
+            } else {
+                LayoutInflater layoutInflater = getLayoutInflater();
+                ScrollView scrollView = new ScrollView(ScoreActivity.this);
+                scrollView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                scrollView.setVerticalScrollBarEnabled(false);
+                scrollView.setPadding(15, 50, 15, 5);
+                LinearLayout linearLayout = new LinearLayout(ScoreActivity.this);
+                linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                linearLayout.setOrientation(LinearLayout.VERTICAL);
+                for (int i = 0; i < levelExam.getExamAmount(); i++) {
+                    View view = layoutInflater.inflate(R.layout.item_level_exam, (ViewGroup) findViewById(R.id.layout_level_exam_item));
+
+                    ((TextView) view.findViewById(R.id.textView_level_exam_name)).setText(getString(R.string.level_exam_name, levelExam.getExamName()[i]));
+                    ((TextView) view.findViewById(R.id.textView_level_exam_type)).setText(getString(R.string.level_exam_type, levelExam.getExamType()[i]));
+                    ((TextView) view.findViewById(R.id.textView_level_exam_term)).setText(getString(R.string.level_exam_term, levelExam.getTerm()[i]));
+                    ((TextView) view.findViewById(R.id.textView_level_exam_score_one)).setText(getString(R.string.level_exam_score_one, levelExam.getScore1()[i]));
+                    ((TextView) view.findViewById(R.id.textView_level_exam_score_two)).setText(getString(R.string.level_exam_score_two, levelExam.getScore2()[i]));
+                    ((TextView) view.findViewById(R.id.textView_level_exam_ticket)).setText(getString(R.string.level_exam_ticket, levelExam.getTicketId()[i]));
+                    ((TextView) view.findViewById(R.id.textView_level_exam_certificate)).setText(getString(R.string.level_exam_certificate, levelExam.getCertificateId()[i]));
+
+                    linearLayout.addView(view);
+                }
+
+                scrollView.addView(linearLayout);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(ScoreActivity.this);
+                builder.setTitle(R.string.level_exam);
+                builder.setView(scrollView);
+                builder.show();
+            }
+        } else {
+            Toast.makeText(ScoreActivity.this, R.string.data_is_loading, Toast.LENGTH_SHORT).show();
         }
     }
 

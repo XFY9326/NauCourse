@@ -92,4 +92,5 @@ public class Config {
     public static final int DATA_VERSION_STUDENT_INFO = 1;
     public static final int DATA_VERSION_STUDENT_LEARN_PROCESS = 1;
     public static final int DATA_VERSION_STUDENT_SCORE = 1;
+    public static final int DATA_VERSION_LEVEL_EXAM = 1;
 }

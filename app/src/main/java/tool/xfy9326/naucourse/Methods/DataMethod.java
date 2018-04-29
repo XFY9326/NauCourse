@@ -141,6 +141,9 @@ public class DataMethod {
             case "StudentScore":
                 nowVersionCode = Config.DATA_VERSION_STUDENT_SCORE;
                 break;
+            case "LevelExam":
+                nowVersionCode = Config.DATA_VERSION_LEVEL_EXAM;
+                break;
             default:
                 nowVersionCode = 0;
                 break;

@@ -151,4 +151,13 @@
     <string name="feedback">问题反馈</string>
     <string name="feedback_by_mail">您可以通过发送反馈邮件到作者邮箱的方式反馈您遇到的问题或者提出好的建议,您的所有建议与反馈都会得到认真的查阅。\n\n邮箱：%1$s</string>
     <string name="mail">1069665464@qq.com</string>
+    <string name="level_exam">等级考试</string>
+    <string name="level_exam_type">项目类别：%1$s</string>
+    <string name="level_exam_score_one">成绩一：%1$s</string>
+    <string name="level_exam_score_two">成绩二：%1$s</string>
+    <string name="level_exam_name">项目名称：%1$s</string>
+    <string name="level_exam_term">学期：%1$s</string>
+    <string name="level_exam_ticket">准考证号：%1$s</string>
+    <string name="level_exam_certificate">证书编号：%1$s</string>
+    <string name="level_exam_empty">暂无等级考试信息！</string>
 </resources>

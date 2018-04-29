@@ -9,9 +9,11 @@ import tool.xfy9326.naucourse.Activities.ScoreActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.DataMethod;
+import tool.xfy9326.naucourse.Methods.LevelExamMethod;
 import tool.xfy9326.naucourse.Methods.PersonMethod;
 import tool.xfy9326.naucourse.Methods.ScoreMethod;
 import tool.xfy9326.naucourse.Utils.CourseScore;
+import tool.xfy9326.naucourse.Utils.LevelExam;
 import tool.xfy9326.naucourse.Utils.StudentLearnProcess;
 import tool.xfy9326.naucourse.Utils.StudentScore;
 
@@ -22,6 +24,7 @@ import tool.xfy9326.naucourse.Utils.StudentScore;
 public class ScoreAsync extends AsyncTask<Context, Void, Context> {
     private int personLoadSuccess = -1;
     private int scoreLoadSuccess = -1;
+    private int levelExamLoadSuccess = -1;
     private int loadCode = Config.NET_WORK_GET_SUCCESS;
     @Nullable
     private StudentScore studentScore;
@@ -29,11 +32,14 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
     private CourseScore courseScore;
     @Nullable
     private StudentLearnProcess studentLearnProcess;
+    @Nullable
+    private LevelExam levelExam;
 
     public ScoreAsync() {
         this.studentScore = null;
         this.courseScore = null;
         this.studentLearnProcess = null;
+        this.levelExam = null;
     }
 
     @Override
@@ -49,8 +55,10 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
                 studentScore = (StudentScore) DataMethod.getOfflineData(context[0], StudentScore.class, PersonMethod.FILE_NAME_SCORE);
                 studentLearnProcess = (StudentLearnProcess) DataMethod.getOfflineData(context[0], StudentLearnProcess.class, PersonMethod.FILE_NAME_PROCESS);
                 courseScore = (CourseScore) DataMethod.getOfflineData(context[0], CourseScore.class, ScoreMethod.FILE_NAME);
+                levelExam = (LevelExam) DataMethod.getOfflineData(context[0], LevelExam.class, LevelExamMethod.FILE_NAME);
                 personLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 scoreLoadSuccess = Config.NET_WORK_GET_SUCCESS;
+                levelExamLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 loadTime++;
                 if (scoreActivity != null) {
                     scoreActivity.setLoadTime(loadTime);
@@ -69,6 +77,12 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
                     courseScore = scoreMethod.getCourseScore(loadTime > 1);
                 }
 
+                LevelExamMethod levelExamMethod = new LevelExamMethod(context[0]);
+                levelExamLoadSuccess = levelExamMethod.load();
+                if (levelExamLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
+                    levelExam = levelExamMethod.getLevelExam(loadTime > 1);
+                }
+
                 loadTime++;
                 scoreActivity.setLoadTime(loadTime);
             }
@@ -83,8 +97,8 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
     protected void onPostExecute(@NonNull Context context) {
         ScoreActivity scoreActivity = BaseMethod.getApp(context).getScoreActivity();
         if (scoreActivity != null) {
-            if (BaseMethod.checkNetWorkCode(context, new int[]{personLoadSuccess, scoreLoadSuccess}, loadCode)) {
-                scoreActivity.setMainScore(studentScore, studentLearnProcess, courseScore);
+            if (BaseMethod.checkNetWorkCode(context, new int[]{personLoadSuccess, scoreLoadSuccess, levelExamLoadSuccess}, loadCode)) {
+                scoreActivity.setMainScore(studentScore, studentLearnProcess, courseScore, levelExam);
             }
             scoreActivity.lastViewSet(context);
         }

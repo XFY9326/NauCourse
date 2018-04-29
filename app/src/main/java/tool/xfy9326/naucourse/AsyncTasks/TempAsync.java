@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.ExamMethod;
+import tool.xfy9326.naucourse.Methods.LevelExamMethod;
 import tool.xfy9326.naucourse.Methods.PersonMethod;
 import tool.xfy9326.naucourse.Methods.ScoreMethod;
 
@@ -31,6 +32,10 @@ public class TempAsync extends AsyncTask<Context, Void, Void> {
             PersonMethod personMethod = new PersonMethod(contexts[0]);
             if (personMethod.load() == Config.NET_WORK_GET_SUCCESS) {
                 personMethod.saveScoreTemp();
+            }
+            LevelExamMethod levelExamMethod = new LevelExamMethod(contexts[0]);
+            if (levelExamMethod.load() == Config.NET_WORK_GET_SUCCESS) {
+                levelExamMethod.saveTemp();
             }
         } catch (Exception e) {
             e.printStackTrace();
