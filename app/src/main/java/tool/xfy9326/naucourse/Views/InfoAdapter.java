@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,11 +36,13 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoViewHolder> {
     private final ArrayList<InfoDetail> topic_data;
     private JwcTopic jwcTopic;
     private JwTopic jwTopic;
+    private Comparator<InfoDetail> date_comparator;
 
     public InfoAdapter(Context context, JwcTopic jwcTopic, JwTopic jwTopic) {
         this.context = context;
         this.jwcTopic = jwcTopic;
         this.jwTopic = jwTopic;
+        this.date_comparator = null;
         this.topic_data = new ArrayList<>();
         setData();
     }
@@ -125,27 +126,33 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoViewHolder> {
 
     //数据按照日期排序
     synchronized private void sort() {
-        Comparator<InfoDetail> date_comparator = new Comparator<InfoDetail>() {
-            @Override
-            public int compare(InfoDetail o1, InfoDetail o2) {
-                try {
-                    String time1 = Objects.requireNonNull(o1.getDate()).trim();
-                    String time2 = Objects.requireNonNull(o2.getDate()).trim();
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
-                    long day1 = simpleDateFormat.parse(time1).getTime();
-                    long day2 = simpleDateFormat.parse(time2).getTime();
-                    if (day1 > day2) {
-                        return -1;
-                    } else {
-                        return 1;
+        if (date_comparator == null) {
+            date_comparator = new Comparator<InfoDetail>() {
+                @Override
+                public int compare(InfoDetail o1, InfoDetail o2) {
+                    if (o1.getDate() != null && o2.getDate() != null) {
+                        try {
+                            String time1 = o1.getDate().trim();
+                            String time2 = o2.getDate().trim();
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+                            long day1 = simpleDateFormat.parse(time1).getTime();
+                            long day2 = simpleDateFormat.parse(time2).getTime();
+                            if (day1 > day2) {
+                                return -1;
+                            } else {
+                                return 1;
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                    return 0;
                 }
-                return 0;
-            }
-        };
-        Collections.sort(topic_data, date_comparator);
+            };
+        }
+        if (!topic_data.isEmpty()) {
+            Collections.sort(topic_data, date_comparator);
+        }
     }
 
 }
