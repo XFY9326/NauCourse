@@ -41,10 +41,7 @@
     <string name="info_label">教务通知</string>
     <string name="week">第%1$d周</string>
     <string name="week_day">周%1$s</string>
-    <string name="time_now">当前日期：</string>
-    <string name="time_week">当前周数：</string>
-    <string name="time_school_start">本学期起始日期：%1$s</string>
-    <string name="time_school_end">本学期结束日期：%1$s</string>
+    <string name="time_school">学期：%1$s ~ %2$s</string>
     <string name="time_vacation">放假中</string>
     <string name="double_click_exit">再按一次返回键退出</string>
     <string name="date">日期</string>
@@ -52,9 +49,7 @@
     <string name="application_author">作者：</string>
     <string name="author">XFY9326</string>
     <string name="copyright">Copyright © 2018 XFY9326</string>
-    <string name="user_manage">用户管理</string>
-    <string name="login_out">注销登录</string>
-    <string name="login_out_sum">退出当前登陆的账户并清空缓存</string>
+    <string name="login_out">注销</string>
     <string name="ask_login_out">是否注销当前账户（%1$s）并清空用户缓存？</string>
     <string name="course_card_id">编号：%1$s</string>
     <string name="course_card_teacher">教师：%1$s</string>
@@ -83,8 +78,7 @@
     <string name="course_card_class">教学班：%1$s</string>
     <string name="course_card_combined_class">合班号：%1$s</string>
     <string name="course_card_type">类别：%1$s</string>
-    <string name="student_detail">◈ 学生个人信息</string>
-    <string name="school_time_detail">◈ 学期信息</string>
+    <string name="personal_detail">个人信息</string>
     <string name="main_score_detail">◈ 总体成绩</string>
     <string name="term_score_detail">◈ 本学期课程成绩</string>
     <string name="score_course_name">课程名称：%1$s</string>
@@ -93,7 +87,7 @@
     <string name="score_final">期末：%1$s</string>
     <string name="score_total">总评：%1$s</string>
     <string name="open_in_browser">在浏览器中打开</string>
-    <string name="exam">考试查询</string>
+    <string name="exam">考试日程</string>
     <string name="exam_detail">◈ 本学期考试日程</string>
     <string name="no_exam">当前没有安排的考试</string>
     <string name="exam_time">时间：%1$s</string>
@@ -116,7 +110,7 @@
     <string name="show_wide_course_table_sum">课程表将会显示得更宽而不拥挤</string>
     <string name="course_table_cell_color">课程信息背景色显示</string>
     <string name="course_table_cell_color_sum">课程表的课程信息下将会显示背景色</string>
-    <string name="learn_process">修学进度</string>
+    <string name="learn_process">◈ 修学进度</string>
     <string name="data_is_loading">数据正在加载中，请稍后再试</string>
     <string name="process_bx">必修课</string>
     <string name="process_zx">专选课</string>
@@ -152,6 +146,7 @@
     <string name="feedback_by_mail">您可以通过发送反馈邮件到作者邮箱的方式反馈您遇到的问题或者提出好的建议,您的所有建议与反馈都会得到认真的查阅。\n\n邮箱：%1$s</string>
     <string name="mail">1069665464@qq.com</string>
     <string name="level_exam">等级考试</string>
+    <string name="level_exam_title">◈ 等级考试</string>
     <string name="level_exam_type">项目类别：%1$s</string>
     <string name="level_exam_score_one">成绩一：%1$s</string>
     <string name="level_exam_score_two">成绩二：%1$s</string>
@@ -160,4 +155,5 @@
     <string name="level_exam_ticket">准考证号：%1$s</string>
     <string name="level_exam_certificate">证书编号：%1$s</string>
     <string name="level_exam_empty">暂无等级考试信息！</string>
+    <string name="wifi_connect">Wifi连接</string>
 </resources>

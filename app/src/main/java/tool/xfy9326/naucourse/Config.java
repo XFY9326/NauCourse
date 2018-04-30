@@ -30,6 +30,8 @@ public class Config {
     public static final String INTENT_NEXT_CLASS_DATA = "NEXT_CLASS_DATA";
     public static final String INTENT_JUST_LOGIN = "JUST_LOGIN";
     public static final String INTENT_AUTO_LOGIN = "AUTO_LOGIN";
+    public static final String INTENT_STUDENT_INFO = "STUDENT_INFO";
+    public static final String INTENT_STUDENT_LEARN_PROCESS = "STUDENT_LEARN_PROCESS";
 
     public static final int DEFAULT_MAX_WEEK = 24;
     public static final int MAX_WEEK_DAY = 7;
@@ -40,7 +42,6 @@ public class Config {
     public static final String PREFERENCE_USER_ID = "USER_ID";
     public static final String PREFERENCE_USER_PW = "USER_PW";
     public static final String PREFERENCE_LOGIN_URL = "LOGIN_URL";
-    public static final String PREFERENCE_LOGIN_OUT = "LOGIN_OUT";
     public static final String PREFERENCE_UPDATE_DATA_ON_START = "UPDATE_DATA_ON_START";
     public static final String PREFERENCE_ONLY_UPDATE_UNDER_WIFI = "ONLY_UPDATE_UNDER_WIFI";
     public static final String PREFERENCE_SHOW_NEXT_WEEK = "SHOW_NEXT_WEEK";

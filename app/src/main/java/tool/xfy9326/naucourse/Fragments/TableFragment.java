@@ -174,7 +174,7 @@ public class TableFragment extends Fragment {
                 if (schoolTime.getWeekNum() == 0) {
                     week = context.getString(R.string.time_vacation);
                 }
-                String time = context.getString(R.string.time_now) + context.getString(R.string.table_date, year, month) + " " + week;
+                String time = context.getString(R.string.table_date, year, month) + "  " + week;
                 textView_date.setText(time);
 
                 if (spinner_week == null) {

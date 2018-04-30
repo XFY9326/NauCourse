@@ -2,11 +2,13 @@ package tool.xfy9326.naucourse.Utils;
 
 import android.support.annotation.Nullable;
 
+import java.io.Serializable;
+
 /**
  * Created by 10696 on 2018/4/1.
  */
 
-public class StudentLearnProcess {
+public class StudentLearnProcess implements Serializable {
     @Nullable
     private String scoreBXAim = null;
     @Nullable

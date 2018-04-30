@@ -1,9 +1,7 @@
 package tool.xfy9326.naucourse.Activities;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -16,17 +14,14 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -80,7 +75,7 @@ public class WifiConnectActivity extends AppCompatActivity {
     }
 
     private void testNet() {
-        final Dialog dialog = showLoadingDialog(WifiConnectActivity.this, true);
+        showLoading(true);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -96,7 +91,7 @@ public class WifiConnectActivity extends AppCompatActivity {
                                 Snackbar.make(findViewById(R.id.layout_wifi_connect), R.string.edit_after_login_out, Snackbar.LENGTH_SHORT).show();
                             }
                             ViewSet();
-                            dialog.cancel();
+                            closeLoading();
                         }
                     });
                 }
@@ -185,14 +180,14 @@ public class WifiConnectActivity extends AppCompatActivity {
         button_connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog dialog = showLoadingDialog(WifiConnectActivity.this, false);
+                showLoading(false);
 
                 final String id = editText_account.getText().toString();
                 final String pw = editText_password.getText().toString();
                 final int provider = spinner_netProvider.getSelectedItemPosition();
 
                 if (id.isEmpty() || pw.isEmpty() || provider < 0) {
-                    dialog.cancel();
+                    closeLoading();
                     Snackbar.make(findViewById(R.id.layout_wifi_connect), R.string.i_nau_home_settings_error, Snackbar.LENGTH_SHORT).show();
                 } else {
                     if (checkNet(WifiConnectActivity.this)) {
@@ -200,7 +195,7 @@ public class WifiConnectActivity extends AppCompatActivity {
                         wifiLoginMethod.setOnRequestListener(new WifiLoginMethod.OnRequestListener() {
                             @Override
                             public void OnRequest(boolean isSuccess, int errorType) {
-                                dialog.cancel();
+                                closeLoading();
                                 if (isSuccess && errorType == WifiLoginMethod.ERROR_TYPE_SUCCESS) {
                                     if (hasLogin) {
                                         Snackbar.make(findViewById(R.id.layout_wifi_connect), R.string.login_out_success, Snackbar.LENGTH_SHORT).show();
@@ -268,7 +263,7 @@ public class WifiConnectActivity extends AppCompatActivity {
                             }
                         }
                     } else {
-                        dialog.cancel();
+                        closeLoading();
                     }
                 }
             }
@@ -281,27 +276,21 @@ public class WifiConnectActivity extends AppCompatActivity {
         }
     }
 
-    private Dialog showLoadingDialog(@NonNull Context context, final boolean isNetTest) {
-        LayoutInflater layoutInflater = getLayoutInflater();
-        View view = layoutInflater.inflate(R.layout.dialog_loading, (ViewGroup) findViewById(R.id.dialog_layout_loading));
+    private void showLoading(boolean isNetTest) {
         if (isNetTest) {
-            ((TextView) view.findViewById(R.id.textView_dialog_loading)).setText(R.string.net_testing);
+            ((TextView) findViewById(R.id.textView_network_loading)).setText(R.string.net_testing);
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(false);
-        if (isNetTest) {
-            builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
-                @Override
-                public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                    if (keyCode == KeyEvent.KEYCODE_BACK) {
-                        WifiConnectActivity.this.finish();
-                    }
-                    return false;
-                }
-            });
-        }
-        builder.setView(view);
-        return builder.show();
+        Button button = findViewById(R.id.button_network_connect);
+        LinearLayout linearLayout = findViewById(R.id.layout_network_loading);
+        button.setVisibility(View.GONE);
+        linearLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void closeLoading() {
+        LinearLayout linearLayout = findViewById(R.id.layout_network_loading);
+        Button button = findViewById(R.id.button_network_connect);
+        linearLayout.setVisibility(View.GONE);
+        button.setVisibility(View.VISIBLE);
     }
 
     private boolean checkNet(@NonNull Context context) {

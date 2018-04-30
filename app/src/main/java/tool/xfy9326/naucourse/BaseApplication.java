@@ -7,7 +7,7 @@ import com.tencent.bugly.Bugly;
 import lib.xfy9326.naujwc.NauJwcClient;
 import tool.xfy9326.naucourse.Activities.ExamActivity;
 import tool.xfy9326.naucourse.Activities.InfoDetailActivity;
-import tool.xfy9326.naucourse.Activities.MainActivity;
+import tool.xfy9326.naucourse.Activities.LevelExamActivity;
 import tool.xfy9326.naucourse.Activities.ScoreActivity;
 import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
 
@@ -17,11 +17,12 @@ import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
 
 public class BaseApplication extends Application {
     private NauJwcClient client;
-    private MainActivity mainActivity;
     private ViewPagerAdapter viewPagerAdapter;
     private InfoDetailActivity infoDetailActivity;
     private ScoreActivity scoreActivity;
     private ExamActivity examActivity;
+    private LevelExamActivity levelExamActivity;
+
     private boolean showLoginErrorOnce = false;
 
     @Override
@@ -79,11 +80,11 @@ public class BaseApplication extends Application {
         this.showLoginErrorOnce = true;
     }
 
-    public MainActivity getMainActivity() {
-        return mainActivity;
+    public LevelExamActivity getLevelExamActivity() {
+        return levelExamActivity;
     }
 
-    public void setMainActivity(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
+    public void setLevelExamActivity(LevelExamActivity levelExamActivity) {
+        this.levelExamActivity = levelExamActivity;
     }
 }

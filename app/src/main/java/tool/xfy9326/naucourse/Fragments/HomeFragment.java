@@ -13,9 +13,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -27,7 +24,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
-import tool.xfy9326.naucourse.Activities.WifiConnectActivity;
 import tool.xfy9326.naucourse.AsyncTasks.InfoAsync;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.DataMethod;
@@ -74,12 +70,6 @@ public class HomeFragment extends Fragment {
         super.onAttach(context);
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -91,25 +81,6 @@ public class HomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
         ViewSet();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.menu_home, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.menu_home_wifi) {
-            if (isAdded() && getActivity() != null) {
-                Intent intent = new Intent(context, WifiConnectActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                getActivity().startActivity(intent);
-            }
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void ViewSet() {

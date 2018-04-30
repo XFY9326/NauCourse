@@ -16,15 +16,72 @@
             android:orientation="vertical"
             android:padding="5dp">
 
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardView_stdInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="3dp"
+                app:cardPreventCornerOverlap="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView_timeSchool"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/textView_stdName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginTop="50dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="22sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@android:color/darker_gray" />
+
+                    <TextView
+                        android:id="@+id/textView_stdId"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:drawableEnd="@drawable/ic_info"
+                        android:gravity="center_vertical"
+                        android:padding="1dp"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
 
                 <android.support.v7.widget.CardView
+                    android:id="@+id/cardView_wifi"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
@@ -33,12 +90,15 @@
                     app:cardPreventCornerOverlap="true">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_margin="5dp"
+                        android:drawablePadding="10dp"
+                        android:drawableTop="@drawable/ic_wifi"
+                        android:gravity="center"
                         android:padding="5dp"
-                        android:text="@string/student_detail"
-                        android:textSize="15sp" />
+                        android:text="@string/wifi_connect"
+                        android:textSize="13sp" />
 
                 </android.support.v7.widget.CardView>
 
@@ -59,134 +119,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="5dp"
+                        android:drawablePadding="10dp"
+                        android:drawableTop="@drawable/ic_score"
                         android:gravity="center"
                         android:padding="5dp"
                         android:text="@string/score"
-                        android:textSize="15sp" />
-
-                </android.support.v7.widget.CardView>
-
-            </LinearLayout>
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="3dp"
-                app:cardPreventCornerOverlap="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:baselineAligned="false"
-                    android:orientation="horizontal"
-                    android:padding="10dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/textView_stdId"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:text="@string/std_id"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:id="@+id/textView_stdName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:text="@string/std_name"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:id="@+id/textView_stdCollage"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:text="@string/std_collage"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:id="@+id/textView_stdClass"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:text="@string/std_class"
-                            android:textSize="15sp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="10dp"
-                        android:layout_weight="1.2"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/textView_stdGrade"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:text="@string/std_grade"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:id="@+id/textView_stdMajor"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:text="@string/std_major"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:id="@+id/textView_stdDirection"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:text="@string/std_direction"
-                            android:textSize="15sp" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp">
-
-                <android.support.v7.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:layout_weight="2"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    app:cardCornerRadius="4dp"
-                    app:cardElevation="3dp"
-                    app:cardPreventCornerOverlap="true">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="5dp"
-                        android:padding="5dp"
-                        android:text="@string/school_time_detail"
-                        android:textSize="15sp" />
+                        android:textSize="13sp" />
 
                 </android.support.v7.widget.CardView>
 
@@ -207,16 +145,74 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="5dp"
+                        android:drawablePadding="10dp"
+                        android:drawableTop="@drawable/ic_date"
                         android:gravity="center"
                         android:padding="5dp"
                         android:text="@string/exam"
-                        android:textSize="15sp" />
+                        android:textSize="13sp" />
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cardView_level_exam"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardCornerRadius="4dp"
+                    app:cardElevation="3dp"
+                    app:cardPreventCornerOverlap="true">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:drawablePadding="10dp"
+                        android:drawableTop="@drawable/ic_level_exam"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="@string/level_exam"
+                        android:textSize="13sp" />
 
                 </android.support.v7.widget.CardView>
 
             </LinearLayout>
 
             <android.support.v7.widget.CardView
+                android:id="@+id/cardView_settings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="15dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="2dp"
+                app:cardPreventCornerOverlap="true">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:drawableEnd="@drawable/ic_more"
+                    android:drawablePadding="20dp"
+                    android:drawableStart="@drawable/ic_settings"
+                    android:gravity="center_vertical"
+                    android:padding="10dp"
+                    android:text="@string/settings"
+                    android:textSize="16sp" />
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardView_login_out"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -224,114 +220,51 @@
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 app:cardCornerRadius="4dp"
-                app:cardElevation="3dp"
+                app:cardElevation="2dp"
                 app:cardPreventCornerOverlap="true">
 
-                <LinearLayout
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:layout_marginTop="5dp"
-                    android:baselineAligned="false"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView_timeNow"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/time_now"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/textView_timeWeek"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/time_week"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/textView_timeSchoolStart"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/time_school_start"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/textView_timeSchoolEnd"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/time_school_end"
-                        android:textSize="15sp" />
-
-                </LinearLayout>
+                    android:layout_gravity="center|start"
+                    android:drawableEnd="@drawable/ic_more"
+                    android:drawablePadding="20dp"
+                    android:drawableStart="@drawable/ic_account"
+                    android:gravity="center_vertical"
+                    android:padding="10dp"
+                    android:text="@string/login_out"
+                    android:textSize="16sp" />
 
             </android.support.v7.widget.CardView>
 
-            <LinearLayout
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardView_about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp">
+                android:layout_margin="5dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="2dp"
+                app:cardPreventCornerOverlap="true">
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/cardView_settings"
-                    android:layout_width="0dp"
+                <TextView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    app:cardCornerRadius="4dp"
-                    app:cardElevation="3dp"
-                    app:cardPreventCornerOverlap="true">
+                    android:layout_gravity="center|start"
+                    android:drawableEnd="@drawable/ic_more"
+                    android:drawablePadding="20dp"
+                    android:drawableStart="@drawable/ic_about"
+                    android:gravity="center_vertical"
+                    android:padding="10dp"
+                    android:text="@string/about"
+                    android:textSize="16sp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="10dp"
-                        android:drawablePadding="20dp"
-                        android:drawableStart="@drawable/ic_settings"
-                        android:gravity="center"
-                        android:padding="10dp"
-                        android:text="@string/settings"
-                        android:textSize="16sp" />
-
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/cardView_about"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    app:cardCornerRadius="4dp"
-                    app:cardElevation="3dp"
-                    app:cardPreventCornerOverlap="true">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="10dp"
-                        android:drawablePadding="20dp"
-                        android:drawableStart="@drawable/ic_about"
-                        android:gravity="center"
-                        android:padding="10dp"
-                        android:text="@string/about"
-                        android:textSize="16sp" />
-
-                </android.support.v7.widget.CardView>
-
-            </LinearLayout>
+            </android.support.v7.widget.CardView>
 
         </LinearLayout>
+
     </android.support.v4.widget.NestedScrollView>
 
 </android.support.v4.widget.SwipeRefreshLayout>

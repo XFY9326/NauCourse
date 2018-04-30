@@ -10,9 +10,8 @@ import tool.xfy9326.naucourse.Fragments.PersonFragment;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.PersonMethod;
-import tool.xfy9326.naucourse.Methods.SchoolTimeMethod;
-import tool.xfy9326.naucourse.Utils.SchoolTime;
 import tool.xfy9326.naucourse.Utils.StudentInfo;
+import tool.xfy9326.naucourse.Utils.StudentLearnProcess;
 
 /**
  * Created by 10696 on 2018/3/2.
@@ -20,16 +19,15 @@ import tool.xfy9326.naucourse.Utils.StudentInfo;
 
 public class StudentAsync extends AsyncTask<Context, Void, Context> {
     private int personLoadSuccess = -1;
-    private int timeLoadSuccess = -1;
     private int loadCode = Config.NET_WORK_GET_SUCCESS;
     @Nullable
     private StudentInfo studentInfo;
     @Nullable
-    private SchoolTime schoolTime;
+    private StudentLearnProcess studentLearnProcess;
 
     public StudentAsync() {
         this.studentInfo = null;
-        this.schoolTime = null;
+        this.studentLearnProcess = null;
     }
 
     @Override
@@ -43,9 +41,8 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
             if (loadTime == 0) {
                 //首次只加载离线数据
                 studentInfo = (StudentInfo) DataMethod.getOfflineData(context[0], StudentInfo.class, PersonMethod.FILE_NAME_DATA);
-                schoolTime = (SchoolTime) DataMethod.getOfflineData(context[0], SchoolTime.class, SchoolTimeMethod.FILE_NAME);
+                studentLearnProcess = (StudentLearnProcess) DataMethod.getOfflineData(context[0], StudentLearnProcess.class, PersonMethod.FILE_NAME_PROCESS);
                 personLoadSuccess = Config.NET_WORK_GET_SUCCESS;
-                timeLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 loadTime++;
                 if (personFragment != null) {
                     BaseMethod.getApp(context[0]).getViewPagerAdapter().getPersonFragment().setLoadTime(loadTime);
@@ -55,12 +52,7 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
                 personLoadSuccess = personMethod.load();
                 if (personLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                     studentInfo = personMethod.getUserData(loadTime > 1);
-                }
-
-                SchoolTimeMethod schoolTimeMethod = new SchoolTimeMethod(context[0]);
-                timeLoadSuccess = schoolTimeMethod.load();
-                if (timeLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                    schoolTime = schoolTimeMethod.getSchoolTime();
+                    studentLearnProcess = personMethod.getUserProcess(loadTime > 1);
                 }
 
                 loadTime++;
@@ -77,9 +69,8 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
     protected void onPostExecute(@NonNull Context context) {
         PersonFragment personFragment = BaseMethod.getApp(context).getViewPagerAdapter().getPersonFragment();
         if (personFragment != null) {
-            if (BaseMethod.checkNetWorkCode(context, new int[]{personLoadSuccess, timeLoadSuccess}, loadCode)) {
-                personFragment.PersonTextSet(studentInfo, context);
-                personFragment.TimeTextSet(schoolTime, context);
+            if (BaseMethod.checkNetWorkCode(context, new int[]{personLoadSuccess}, loadCode)) {
+                personFragment.PersonViewSet(studentInfo, studentLearnProcess, context);
             }
             personFragment.lastViewSet(context);
         }

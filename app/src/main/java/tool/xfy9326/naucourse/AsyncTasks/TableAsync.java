@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import java.util.ArrayList;
 
 import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.Fragments.PersonFragment;
 import tool.xfy9326.naucourse.Fragments.TableFragment;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.DataMethod;
@@ -78,11 +79,15 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
     @Override
     protected void onPostExecute(@NonNull Context context) {
         TableFragment tableFragment = BaseMethod.getApp(context).getViewPagerAdapter().getTableFragment();
+        PersonFragment personFragment = BaseMethod.getApp(context).getViewPagerAdapter().getPersonFragment();
         if (tableFragment != null) {
             if (BaseMethod.checkNetWorkCode(context, new int[]{tableLoadSuccess, timeLoadSuccess}, loadCode)) {
                 tableFragment.CourseSet(course, schoolTime, context, false);
             }
             tableFragment.lastViewSet(context);
+        }
+        if (personFragment != null) {
+            personFragment.TimeTextSet(schoolTime, context);
         }
         System.gc();
         super.onPostExecute(context);

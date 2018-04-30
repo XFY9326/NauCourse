@@ -43,13 +43,13 @@
                 android:textSize="15sp" />
 
             <EditText
-                android:hint="@string/user_id"
                 android:id="@+id/editText_userId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="20dp"
                 android:ems="10"
+                android:hint="@string/user_id"
                 android:inputType="number"
                 android:labelFor="@id/editText_userId" />
         </LinearLayout>
@@ -71,13 +71,13 @@
                 android:textSize="15sp" />
 
             <EditText
-                android:hint="@string/user_pw"
                 android:id="@+id/editText_userPw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="20dp"
                 android:ems="10"
+                android:hint="@string/user_pw"
                 android:inputType="textPassword"
                 android:labelFor="@id/editText_userPw" />
         </LinearLayout>
@@ -103,6 +103,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:background="@drawable/selector_button"
                 android:text="@string/login" />
 
             <TextView

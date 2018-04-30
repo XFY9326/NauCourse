@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loginCheck();
-        BaseMethod.getApp(this).setMainActivity(this);
         setContentView(R.layout.activity_main);
         ToolBarSet();
         ViewSet();
@@ -40,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        BaseMethod.getApp(this).setMainActivity(null);
         System.gc();
         super.onDestroy();
     }

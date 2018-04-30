@@ -2,12 +2,14 @@ package tool.xfy9326.naucourse.Utils;
 
 import android.support.annotation.Nullable;
 
+import java.io.Serializable;
+
 /**
  * Created by xfy9326 on 18-2-21.
  * 学生信息
  */
 
-public class StudentInfo {
+public class StudentInfo implements Serializable {
     @Nullable
     private String std_id = null;
     @Nullable

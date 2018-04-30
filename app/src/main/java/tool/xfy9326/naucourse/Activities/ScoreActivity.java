@@ -7,29 +7,18 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import tool.xfy9326.naucourse.AsyncTasks.ScoreAsync;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.CourseScore;
-import tool.xfy9326.naucourse.Utils.LevelExam;
-import tool.xfy9326.naucourse.Utils.StudentLearnProcess;
 import tool.xfy9326.naucourse.Utils.StudentScore;
 import tool.xfy9326.naucourse.Views.ScoreAdapter;
 
@@ -42,10 +31,6 @@ public class ScoreActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     @Nullable
     private ScoreAdapter scoreAdapter;
-    @Nullable
-    private StudentLearnProcess studentLearnProcess = null;
-    @Nullable
-    private LevelExam levelExam = null;
     private int loadTime = 0;
 
     @Override
@@ -97,30 +82,13 @@ public class ScoreActivity extends AppCompatActivity {
                 }
             }
         });
-
-        CardView cardView_learn_process = findViewById(R.id.cardView_learn_process);
-        cardView_learn_process.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                learnProcessView();
-            }
-        });
-
-        CardView cardView_level_exam = findViewById(R.id.cardView_level_exam);
-        cardView_level_exam.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                levelExamView();
-            }
-        });
-
         if (loadTime == 0) {
             getData();
         }
     }
 
-    public void setMainScore(@Nullable StudentScore studentScore, @Nullable StudentLearnProcess studentLearnProcess, @Nullable CourseScore courseScore, @Nullable LevelExam levelExam) {
-        if (studentScore != null && courseScore != null && studentLearnProcess != null && levelExam != null) {
+    public void setMainScore(@Nullable StudentScore studentScore, @Nullable CourseScore courseScore) {
+        if (studentScore != null && courseScore != null) {
             ((TextView) findViewById(R.id.textView_scoreXF)).setText(getString(R.string.score_XF, studentScore.getScoreXF()));
             ((TextView) findViewById(R.id.textView_scoreJD)).setText(getString(R.string.score_JD, studentScore.getScoreJD()));
             ((TextView) findViewById(R.id.textView_scoreNP)).setText(getString(R.string.score_NP, studentScore.getScoreNP()));
@@ -133,123 +101,6 @@ public class ScoreActivity extends AppCompatActivity {
             } else {
                 scoreAdapter.updateData(courseScore);
             }
-
-            this.studentLearnProcess = studentLearnProcess;
-            this.levelExam = levelExam;
-        }
-    }
-
-    private void levelExamView() {
-        if (levelExam != null) {
-            if (levelExam.getExamAmount() == 0) {
-                Snackbar.make(findViewById(R.id.layout_score_content), R.string.level_exam_empty, Snackbar.LENGTH_SHORT).show();
-            } else {
-                LayoutInflater layoutInflater = getLayoutInflater();
-                ScrollView scrollView = new ScrollView(ScoreActivity.this);
-                scrollView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                scrollView.setVerticalScrollBarEnabled(false);
-                scrollView.setPadding(15, 50, 15, 5);
-                LinearLayout linearLayout = new LinearLayout(ScoreActivity.this);
-                linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                linearLayout.setOrientation(LinearLayout.VERTICAL);
-                for (int i = 0; i < levelExam.getExamAmount(); i++) {
-                    View view = layoutInflater.inflate(R.layout.item_level_exam, (ViewGroup) findViewById(R.id.layout_level_exam_item));
-
-                    ((TextView) view.findViewById(R.id.textView_level_exam_name)).setText(getString(R.string.level_exam_name, levelExam.getExamName()[i]));
-                    ((TextView) view.findViewById(R.id.textView_level_exam_type)).setText(getString(R.string.level_exam_type, levelExam.getExamType()[i]));
-                    ((TextView) view.findViewById(R.id.textView_level_exam_term)).setText(getString(R.string.level_exam_term, levelExam.getTerm()[i]));
-                    ((TextView) view.findViewById(R.id.textView_level_exam_score_one)).setText(getString(R.string.level_exam_score_one, levelExam.getScore1()[i]));
-                    ((TextView) view.findViewById(R.id.textView_level_exam_score_two)).setText(getString(R.string.level_exam_score_two, levelExam.getScore2()[i]));
-                    ((TextView) view.findViewById(R.id.textView_level_exam_ticket)).setText(getString(R.string.level_exam_ticket, levelExam.getTicketId()[i]));
-                    ((TextView) view.findViewById(R.id.textView_level_exam_certificate)).setText(getString(R.string.level_exam_certificate, levelExam.getCertificateId()[i]));
-
-                    linearLayout.addView(view);
-                }
-
-                scrollView.addView(linearLayout);
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(ScoreActivity.this);
-                builder.setTitle(R.string.level_exam);
-                builder.setView(scrollView);
-                builder.show();
-            }
-        } else {
-            Toast.makeText(ScoreActivity.this, R.string.data_is_loading, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void learnProcessView() {
-        if (studentLearnProcess != null) {
-            LayoutInflater layoutInflater = getLayoutInflater();
-            ScrollView scrollView = new ScrollView(ScoreActivity.this);
-            scrollView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            scrollView.setVerticalScrollBarEnabled(false);
-            scrollView.setPadding(15, 50, 15, 5);
-            LinearLayout linearLayout = new LinearLayout(ScoreActivity.this);
-            linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            linearLayout.setOrientation(LinearLayout.VERTICAL);
-            for (int i = 0; i < 4; i++) {
-                View view = layoutInflater.inflate(R.layout.item_learn_process, (ViewGroup) findViewById(R.id.layout_learn_process_item));
-                String name = null;
-                String aim = null;
-                String now = null;
-                String still = null;
-                String award = null;
-                int process = 0;
-                switch (i) {
-                    case 0:
-                        name = getString(R.string.process_name, getString(R.string.process_bx));
-                        aim = getString(R.string.process_aim, studentLearnProcess.getScoreBXAim());
-                        now = getString(R.string.process_now, studentLearnProcess.getScoreBXNow());
-                        still = getString(R.string.process_still, studentLearnProcess.getScoreBXStill());
-                        process = (int) (Float.valueOf(studentLearnProcess.getScoreBXNow()) / Float.valueOf(studentLearnProcess.getScoreBXAim()) * 100);
-                        break;
-                    case 1:
-                        name = getString(R.string.process_name, getString(R.string.process_zx));
-                        aim = getString(R.string.process_aim, studentLearnProcess.getScoreZXAim());
-                        now = getString(R.string.process_now, studentLearnProcess.getScoreZXNow());
-                        still = getString(R.string.process_still, studentLearnProcess.getScoreZXStill());
-                        process = (int) (Float.valueOf(studentLearnProcess.getScoreZXNow()) / Float.valueOf(studentLearnProcess.getScoreZXAim()) * 100);
-                        break;
-                    case 2:
-                        name = getString(R.string.process_name, getString(R.string.process_rx));
-                        aim = getString(R.string.process_aim, studentLearnProcess.getScoreRXAim());
-                        now = getString(R.string.process_now, studentLearnProcess.getScoreRXNow());
-                        still = getString(R.string.process_still, studentLearnProcess.getScoreRXStill());
-                        award = getString(R.string.process_award, studentLearnProcess.getScoreRXAward());
-                        process = (int) (Float.valueOf(studentLearnProcess.getScoreRXNow()) / Float.valueOf(studentLearnProcess.getScoreRXAim()) * 100);
-                        break;
-                    case 3:
-                        name = getString(R.string.process_name, getString(R.string.process_sj));
-                        aim = getString(R.string.process_aim, studentLearnProcess.getScoreSJAim());
-                        now = getString(R.string.process_now, studentLearnProcess.getScoreSJNow());
-                        still = getString(R.string.process_still, studentLearnProcess.getScoreSJStill());
-                        process = (int) (Float.valueOf(studentLearnProcess.getScoreSJNow()) / Float.valueOf(studentLearnProcess.getScoreSJAim()) * 100);
-                        break;
-                }
-                ((TextView) view.findViewById(R.id.textView_process_name)).setText(name);
-                ((TextView) view.findViewById(R.id.textView_process_aim)).setText(aim);
-                ((TextView) view.findViewById(R.id.textView_process_now)).setText(now);
-                ((TextView) view.findViewById(R.id.textView_process_still)).setText(still);
-                if (i == 2) {
-                    TextView textView_award = view.findViewById(R.id.textView_process_award);
-                    textView_award.setVisibility(View.VISIBLE);
-                    textView_award.setText(award);
-                }
-                ProgressBar progressBar = view.findViewById(R.id.progressBar_process_learn);
-                progressBar.setMax(100);
-                progressBar.setProgress(process);
-                linearLayout.addView(view);
-            }
-
-            scrollView.addView(linearLayout);
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(ScoreActivity.this);
-            builder.setTitle(R.string.learn_process);
-            builder.setView(scrollView);
-            builder.show();
-        } else {
-            Toast.makeText(ScoreActivity.this, R.string.data_is_loading, Toast.LENGTH_SHORT).show();
         }
     }
 

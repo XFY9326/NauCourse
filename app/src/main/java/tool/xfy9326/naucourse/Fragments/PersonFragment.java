@@ -1,13 +1,17 @@
 package tool.xfy9326.naucourse.Fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,22 +19,26 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Objects;
 
 import tool.xfy9326.naucourse.Activities.AboutActivity;
 import tool.xfy9326.naucourse.Activities.ExamActivity;
+import tool.xfy9326.naucourse.Activities.LevelExamActivity;
+import tool.xfy9326.naucourse.Activities.LoginActivity;
 import tool.xfy9326.naucourse.Activities.ScoreActivity;
 import tool.xfy9326.naucourse.Activities.SettingsActivity;
+import tool.xfy9326.naucourse.Activities.StudentInfoActivity;
+import tool.xfy9326.naucourse.Activities.WifiConnectActivity;
 import tool.xfy9326.naucourse.AsyncTasks.StudentAsync;
+import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
+import tool.xfy9326.naucourse.Methods.LoginMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
-import tool.xfy9326.naucourse.Methods.TimeMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
 import tool.xfy9326.naucourse.Utils.StudentInfo;
+import tool.xfy9326.naucourse.Utils.StudentLearnProcess;
+import tool.xfy9326.naucourse.Views.NextClassWidget;
 
 /**
  * Created by xfy9326 on 18-2-20.
@@ -44,11 +52,17 @@ public class PersonFragment extends Fragment {
     @Nullable
     private SwipeRefreshLayout swipeRefreshLayout;
     private int loadTime = 0;
+    @Nullable
+    private StudentInfo studentInfo;
+    @Nullable
+    private StudentLearnProcess studentLearnProcess;
 
     public PersonFragment() {
         this.view = null;
         this.context = null;
         this.swipeRefreshLayout = null;
+        this.studentInfo = null;
+        this.studentLearnProcess = null;
     }
 
     @Override
@@ -94,17 +108,50 @@ public class PersonFragment extends Fragment {
         if (loadTime == 0) {
             getData();
         }
+        CardView cardView_stdInfo = view.findViewById(R.id.cardView_stdInfo);
 
         CardView cardView_settings = view.findViewById(R.id.cardView_settings);
+        CardView cardView_login_out = view.findViewById(R.id.cardView_login_out);
         CardView cardView_about = view.findViewById(R.id.cardView_about);
+
         CardView cardView_score = view.findViewById(R.id.cardView_score_search);
         CardView cardView_exam = view.findViewById(R.id.cardView_exam);
+        CardView cardView_wifi = view.findViewById(R.id.cardView_wifi);
+        CardView cardView_levelExam = view.findViewById(R.id.cardView_level_exam);
+
+        cardView_stdInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getActivity() != null) {
+                    if (studentInfo != null && studentLearnProcess != null) {
+                        Intent intent = new Intent(getActivity(), StudentInfoActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra(Config.INTENT_STUDENT_LEARN_PROCESS, studentLearnProcess);
+                        intent.putExtra(Config.INTENT_STUDENT_INFO, studentInfo);
+                        getActivity().startActivity(intent);
+                    } else {
+                        Toast.makeText(getActivity(), R.string.data_is_loading, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
+        cardView_wifi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isAdded() && getActivity() != null) {
+                    Intent intent = new Intent(getActivity(), WifiConnectActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    getActivity().startActivity(intent);
+                }
+            }
+        });
         cardView_score.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (getActivity() != null) {
                     if (isAdded()) {
-                        Intent intent = new Intent(context, ScoreActivity.class);
+                        Intent intent = new Intent(getActivity(), ScoreActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         getActivity().startActivity(intent);
                     }
@@ -116,31 +163,60 @@ public class PersonFragment extends Fragment {
             public void onClick(View v) {
                 if (getActivity() != null) {
                     if (isAdded()) {
-                        Intent intent = new Intent(context, ExamActivity.class);
+                        Intent intent = new Intent(getActivity(), ExamActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         getActivity().startActivity(intent);
                     }
                 }
             }
         });
+        cardView_levelExam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getActivity() != null) {
+                    if (isAdded()) {
+                        Intent intent = new Intent(getActivity(), LevelExamActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getActivity().startActivity(intent);
+                    }
+                }
+            }
+        });
+
         cardView_settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (getActivity() != null) {
                     if (isAdded()) {
-                        Intent intent = new Intent(context, SettingsActivity.class);
+                        Intent intent = new Intent(getActivity(), SettingsActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         getActivity().startActivity(intent);
                     }
                 }
             }
         });
-        cardView_about.setOnClickListener(new View.OnClickListener() {
+        cardView_login_out.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (getActivity() != null) {
                     if (isAdded()) {
-                        Intent intent = new Intent(context, AboutActivity.class);
+                        if (NetMethod.isNetworkConnected(getActivity())) {
+                            loginOut(getActivity());
+                        } else {
+                            Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            }
+        });
+        cardView_about.setOnClickListener(new View.OnClickListener()
+
+        {
+            @Override
+            public void onClick(View v) {
+                if (getActivity() != null) {
+                    if (isAdded()) {
+                        Intent intent = new Intent(getActivity(), AboutActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         getActivity().startActivity(intent);
                     }
@@ -149,16 +225,62 @@ public class PersonFragment extends Fragment {
         });
     }
 
-    public void PersonTextSet(@Nullable StudentInfo studentInfo, @Nullable Context context) {
+    private void loginOut(final Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String userId = sharedPreferences.getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(R.string.login_out);
+        builder.setMessage(getString(R.string.ask_login_out, userId));
+        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (LoginMethod.loginOut(context)) {
+                            if (getActivity() != null) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (isAdded()) {
+                                            Toast.makeText(getActivity(), R.string.login_out_error, Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            }
+                        } else {
+                            if (isAdded() && getActivity() != null) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //小部件清空
+                                        getActivity().sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
+                                        //重启当前程序
+                                        Intent intent = new Intent(context, LoginActivity.class);
+                                        startActivityForResult(intent, Config.REQUEST_ACTIVITY_LOGIN);
+                                        getActivity().finish();
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }).start();
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, null);
+        builder.show();
+    }
+
+    public void PersonViewSet(@Nullable StudentInfo studentInfo, @Nullable StudentLearnProcess
+            studentLearnProcess, @Nullable Context context) {
         if (isAdded()) {
             if (context != null && studentInfo != null) {
-                ((TextView) Objects.requireNonNull(view).findViewById(R.id.textView_stdId)).setText(context.getString(R.string.std_id, studentInfo.getStd_id()));
-                ((TextView) view.findViewById(R.id.textView_stdClass)).setText(context.getString(R.string.std_class, studentInfo.getStd_class()));
-                ((TextView) view.findViewById(R.id.textView_stdCollage)).setText(context.getString(R.string.std_collage, studentInfo.getStd_collage()));
-                ((TextView) view.findViewById(R.id.textView_stdDirection)).setText(context.getString(R.string.std_direction, studentInfo.getStd_direction()));
-                ((TextView) view.findViewById(R.id.textView_stdGrade)).setText(context.getString(R.string.std_grade, studentInfo.getStd_grade()));
-                ((TextView) view.findViewById(R.id.textView_stdMajor)).setText(context.getString(R.string.std_major, studentInfo.getStd_major()));
-                ((TextView) view.findViewById(R.id.textView_stdName)).setText(context.getString(R.string.std_name, studentInfo.getStd_name()));
+                ((TextView) Objects.requireNonNull(view).findViewById(R.id.textView_stdId)).setText(studentInfo.getStd_id());
+                ((TextView) view.findViewById(R.id.textView_stdName)).setText(studentInfo.getStd_name());
+                this.studentInfo = studentInfo;
+            }
+            if (studentLearnProcess != null) {
+                this.studentLearnProcess = studentLearnProcess;
             }
         }
     }
@@ -166,22 +288,7 @@ public class PersonFragment extends Fragment {
     public void TimeTextSet(@Nullable SchoolTime schoolTime, @Nullable Context context) {
         if (isAdded()) {
             if (context != null && schoolTime != null) {
-                schoolTime.setWeekNum(TimeMethod.getNowWeekNum(schoolTime));
-
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
-                String time = context.getString(R.string.time_now) + simpleDateFormat.format(new Date());
-                ((TextView) Objects.requireNonNull(view).findViewById(R.id.textView_timeNow)).setText(time);
-
-                String week;
-                if (schoolTime.getWeekNum() == 0) {
-                    week = context.getString(R.string.time_week) + context.getString(R.string.time_vacation);
-                } else {
-                    week = context.getString(R.string.time_week) + context.getString(R.string.week, schoolTime.getWeekNum());
-                }
-                ((TextView) view.findViewById(R.id.textView_timeWeek)).setText(week);
-
-                ((TextView) view.findViewById(R.id.textView_timeSchoolStart)).setText(context.getString(R.string.time_school_start, schoolTime.getStartTime()));
-                ((TextView) view.findViewById(R.id.textView_timeSchoolEnd)).setText(context.getString(R.string.time_school_end, schoolTime.getEndTime()));
+                ((TextView) Objects.requireNonNull(view).findViewById(R.id.textView_timeSchool)).setText(context.getString(R.string.time_school, schoolTime.getStartTime(), schoolTime.getEndTime()));
             }
         }
     }
