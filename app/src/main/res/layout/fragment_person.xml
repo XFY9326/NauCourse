@@ -71,17 +71,17 @@
 
             </android.support.v7.widget.CardView>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:gravity="center">
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/cardView_wifi"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:layout_weight="1"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
@@ -104,10 +104,10 @@
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/cardView_score_search"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:layout_weight="1"
+                    android:layout_toEndOf="@id/cardView_wifi"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
@@ -130,10 +130,10 @@
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/cardView_exam"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:layout_weight="1"
+                    android:layout_toEndOf="@id/cardView_score_search"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
@@ -156,10 +156,10 @@
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/cardView_level_exam"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:layout_weight="1"
+                    android:layout_toEndOf="@id/cardView_exam"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
@@ -180,7 +180,7 @@
 
                 </android.support.v7.widget.CardView>
 
-            </LinearLayout>
+            </RelativeLayout>
 
             <android.support.v7.widget.CardView
                 android:id="@+id/cardView_settings"
@@ -202,12 +202,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|start"
                     android:drawableEnd="@drawable/ic_more"
-                    android:drawablePadding="20dp"
+                    android:drawablePadding="15dp"
                     android:drawableStart="@drawable/ic_settings"
                     android:gravity="center_vertical"
                     android:padding="10dp"
                     android:text="@string/settings"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
             </android.support.v7.widget.CardView>
 
@@ -228,12 +228,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|start"
                     android:drawableEnd="@drawable/ic_more"
-                    android:drawablePadding="20dp"
+                    android:drawablePadding="15dp"
                     android:drawableStart="@drawable/ic_account"
                     android:gravity="center_vertical"
                     android:padding="10dp"
                     android:text="@string/login_out"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
             </android.support.v7.widget.CardView>
 
@@ -254,12 +254,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|start"
                     android:drawableEnd="@drawable/ic_more"
-                    android:drawablePadding="20dp"
+                    android:drawablePadding="15dp"
                     android:drawableStart="@drawable/ic_about"
                     android:gravity="center_vertical"
                     android:padding="10dp"
                     android:text="@string/about"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
             </android.support.v7.widget.CardView>
 

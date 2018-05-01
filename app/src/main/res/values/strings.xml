@@ -47,8 +47,8 @@
     <string name="date">日期</string>
     <string name="application_version">版本：</string>
     <string name="application_author">作者：</string>
-    <string name="author">XFY9326</string>
-    <string name="copyright">Copyright © 2018 XFY9326</string>
+    <string name="author" translatable="false">XFY9326</string>
+    <string name="copyright" translatable="false">Copyright © 2018 XFY9326</string>
     <string name="login_out">注销</string>
     <string name="ask_login_out">是否注销当前账户（%1$s）并清空用户缓存？</string>
     <string name="course_card_id">编号：%1$s</string>
@@ -65,7 +65,7 @@
     <string name="data_get">数据获取</string>
     <string name="on_start_data_get">数据自动更新</string>
     <string name="on_start_data_get_sum">在联网情况下每次开启时自动更新数据</string>
-    <string name="web">https://xfy9326.github.io/NauCourse/</string>
+    <string name="web" translatable="false">https://xfy9326.github.io/NauCourse/</string>
     <string name="jw_system_info">教务系统通知</string>
     <string name="jwc">教务委员会</string>
     <string name="updating">正在更新</string>
@@ -144,7 +144,7 @@
     <string name="ask_lock_background">在后台锁定本应用以带来更好的使用体验！</string>
     <string name="feedback">问题反馈</string>
     <string name="feedback_by_mail">您可以通过发送反馈邮件到作者邮箱的方式反馈您遇到的问题或者提出好的建议,您的所有建议与反馈都会得到认真的查阅。\n\n邮箱：%1$s</string>
-    <string name="mail">1069665464@qq.com</string>
+    <string name="mail" translatable="false">1069665464@qq.com</string>
     <string name="level_exam">等级考试</string>
     <string name="level_exam_title">◈ 等级考试</string>
     <string name="level_exam_type">项目类别：%1$s</string>
