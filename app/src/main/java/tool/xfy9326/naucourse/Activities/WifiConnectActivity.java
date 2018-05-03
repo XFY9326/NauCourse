@@ -17,13 +17,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.NetMethod;
@@ -75,7 +75,8 @@ public class WifiConnectActivity extends AppCompatActivity {
     }
 
     private void testNet() {
-        showLoading(true);
+        ViewSet();
+        showLoading();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -90,13 +91,27 @@ public class WifiConnectActivity extends AppCompatActivity {
                             if (hasLogin) {
                                 Snackbar.make(findViewById(R.id.layout_wifi_connect), R.string.edit_after_login_out, Snackbar.LENGTH_SHORT).show();
                             }
-                            ViewSet();
+                            viewReset(hasLogin);
                             closeLoading();
                         }
                     });
                 }
             }
         }).start();
+    }
+
+    private void viewReset(boolean hasLogin) {
+        TextInputEditText editText_account = findViewById(R.id.editText_network_account);
+        TextInputEditText editText_password = findViewById(R.id.editText_network_pw);
+        Button button_connect = findViewById(R.id.button_network_connect);
+        Spinner spinner_netProvider = findViewById(R.id.spinner_network_provider);
+        if (hasLogin) {
+            button_connect.setText(R.string.disconnect_network);
+        } else {
+            editText_account.setEnabled(true);
+            editText_password.setEnabled(true);
+            spinner_netProvider.setEnabled(true);
+        }
     }
 
     private void ViewSet() {
@@ -173,14 +188,28 @@ public class WifiConnectActivity extends AppCompatActivity {
         final Spinner spinner_netProvider = findViewById(R.id.spinner_network_provider);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.net_provider));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_netProvider.setSelection(sharedPreferences.getInt(Config.PREFERENCE_NETWORK_PROVIDER, Config.DEFAULT_PREFERENCE_NETWORK_PROVIDER));
         spinner_netProvider.setAdapter(adapter);
+        spinner_netProvider.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                sharedPreferences.edit().putInt(Config.PREFERENCE_NETWORK_PROVIDER, position).apply();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+        spinner_netProvider.setSelection(sharedPreferences.getInt(Config.PREFERENCE_NETWORK_PROVIDER, Config.DEFAULT_PREFERENCE_NETWORK_PROVIDER));
+
+        editText_account.setEnabled(false);
+        editText_password.setEnabled(false);
+        spinner_netProvider.setEnabled(false);
 
         final Button button_connect = findViewById(R.id.button_network_connect);
         button_connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLoading(false);
+                showLoading();
 
                 final String id = editText_account.getText().toString();
                 final String pw = editText_password.getText().toString();
@@ -195,12 +224,17 @@ public class WifiConnectActivity extends AppCompatActivity {
                         wifiLoginMethod.setOnRequestListener(new WifiLoginMethod.OnRequestListener() {
                             @Override
                             public void OnRequest(boolean isSuccess, int errorType) {
-                                closeLoading();
+                                WifiConnectActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        closeLoading();
+                                    }
+                                });
                                 if (isSuccess && errorType == WifiLoginMethod.ERROR_TYPE_SUCCESS) {
                                     if (hasLogin) {
                                         Snackbar.make(findViewById(R.id.layout_wifi_connect), R.string.login_out_success, Snackbar.LENGTH_SHORT).show();
+                                        sharedPreferences.edit().putString(Config.PREFERENCE_NETWORK_ACCOUNT, id).apply();
                                         if (checkBox_rememberPw.isChecked()) {
-                                            sharedPreferences.edit().putString(Config.PREFERENCE_NETWORK_ACCOUNT, id).apply();
                                             sharedPreferences.edit().putString(Config.PREFERENCE_NETWORK_PASSWORD, AES.encrypt(pw, id)).apply();
                                         }
                                         hasLogin = false;
@@ -209,15 +243,15 @@ public class WifiConnectActivity extends AppCompatActivity {
                                             public void run() {
                                                 editText_account.setEnabled(true);
                                                 editText_password.setEnabled(true);
+                                                spinner_netProvider.setEnabled(true);
                                                 button_connect.setText(R.string.connect_network);
                                             }
                                         });
                                     } else {
                                         Snackbar.make(findViewById(R.id.layout_wifi_connect), R.string.login_success, Snackbar.LENGTH_SHORT).show();
+                                        sharedPreferences.edit().putString(Config.PREFERENCE_NETWORK_ACCOUNT, id).apply();
                                         if (checkBox_rememberPw.isChecked()) {
-                                            sharedPreferences.edit().putString(Config.PREFERENCE_NETWORK_ACCOUNT, id).apply();
                                             sharedPreferences.edit().putString(Config.PREFERENCE_NETWORK_PASSWORD, AES.encrypt(pw, id)).apply();
-                                            sharedPreferences.edit().putInt(Config.PREFERENCE_NETWORK_PROVIDER, provider).apply();
                                         }
                                         hasLogin = true;
                                         WifiConnectActivity.this.runOnUiThread(new Runnable() {
@@ -225,6 +259,7 @@ public class WifiConnectActivity extends AppCompatActivity {
                                             public void run() {
                                                 editText_account.setEnabled(false);
                                                 editText_password.setEnabled(false);
+                                                spinner_netProvider.setEnabled(false);
                                                 button_connect.setText(R.string.disconnect_network);
                                             }
                                         });
@@ -268,18 +303,9 @@ public class WifiConnectActivity extends AppCompatActivity {
                 }
             }
         });
-
-        if (hasLogin) {
-            editText_account.setEnabled(false);
-            editText_password.setEnabled(false);
-            button_connect.setText(R.string.disconnect_network);
-        }
     }
 
-    private void showLoading(boolean isNetTest) {
-        if (isNetTest) {
-            ((TextView) findViewById(R.id.textView_network_loading)).setText(R.string.net_testing);
-        }
+    private void showLoading() {
         Button button = findViewById(R.id.button_network_connect);
         LinearLayout linearLayout = findViewById(R.id.layout_network_loading);
         button.setVisibility(View.GONE);

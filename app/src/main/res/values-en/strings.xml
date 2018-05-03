@@ -25,7 +25,7 @@
     <string name="std_class">Class: %1$s</string>
     <string name="std_collage">College: %1$s</string> 
     <string name="std_grade">Grade: %1$s</string>
-    <string name="std_major">Professional: %1$s</string>
+    <string name="std_major">Major: %1$s</string>
     <string name="std_direction">Direction: %1$s</string>
     <string name="score">Score query</string>
     <string name="score_XF">Total credits: %1$s</string>
@@ -33,7 +33,7 @@
     <string name="score_NP">Grade rank: %1$s</string>
     <string name="score_ZP">Professional ranking: %1$s</string>
     <string name="score_BP">Class Rank: %1$s</string>
-    <string name="table_date">%1$d\.%2$d</string>
+    <string name="table_date">%1$d/%2$d</string>
     <string name="info_type">Category: %1$s</string>
     <string name="info_click">Click: %1$s</string>
     <string name="info_post">Publish: %1$s</string>
@@ -52,7 +52,7 @@
     <string name="ask_login_out">Whether to log off the current account (%1$s) and clear the user cache?</string>
     <string name="course_card_id">Number:%1$s</string>
     <string name="course_card_teacher">Instructor: %1$s</string>
-    <string name="course_card_time">Class time: %1$s week %2$s week %3$s %4$s section</string>
+    <string name="course_card_time">Class time: %1$s weeks %2$s %3$s %4$s section</string>
     <string name="course_card_time_week_mode">%1$s weeks</string>
     <string name="single_week_mode">Single weeks</string>
     <string name="double_week_mode">Double weeks</string>
@@ -74,7 +74,7 @@
     <string name="time">Time</string>
     <string name="course_card_score">Credits: %1$s</string>
     <string name="course_card_class">Class: %1$s</string>
-    <string name="course_card_combined_class">Combined number: %1$s</string>
+    <string name="course_card_combined_class">Combined class: %1$s</string>
     <string name="course_card_type">Category: %1$s</string>
     <string name="personal_detail">Personal Information</string>
     <string name="main_score_detail">◈ Overall score</string>
@@ -83,7 +83,7 @@
     <string name="score_common">Flat: %1$s</string>
     <string name="score_mid">Midterm: %1$s</string>
     <string name="score_final">Ending: %1$s</string>
-    <string name="score_total">Total Comment: %1$s</string>
+    <string name="score_total">Total: %1$s</string>
     <string name="open_in_browser">Open in Browser</string>
     <string name="exam">Examination</string>
     <string name="exam_detail">◈ This semester exam schedule</string>
@@ -104,11 +104,11 @@
     <string name="open_source_info">This application is open source at Nanjing Audit University Git repository</string>
     <string name="default_show_table_page">Default display curriculum interface</string>
     <string name="default_show_table_page_sum">Directly displays the curriculum when opening the application, reducing user actions</string>
-    <string name="show_wide_course_table">Increase the display width of the course information in the curriculum table</string>
+    <string name="show_wide_course_table">Increase display width of curriculum</string>
     <string name="show_wide_course_table_sum">Curriculum will be displayed wider and not crowded</string>
-    <string name="course_table_cell_color">Course information background color display</string>
+    <string name="course_table_cell_color">Course background color display</string>
     <string name="course_table_cell_color_sum">Background color will be displayed under the curriculum information of course schedule</string>
-    <string name="learn_process">Learning progress</string>
+    <string name="learn_process">◈ Learning progress</string>
     <string name="data_is_loading">Data is loading, please try again later</string>
     <string name="process_bx">Required course</string>
     <string name="process_zx">Special course</string>
@@ -137,7 +137,6 @@
     <string name="login_out_success">Logout success!</string>
     <string name="permission_error">Did not give related permissions!</string>
     <string name="edit_after_login_out">Logout before editing login information!</string>
-    <string name="net_testing">Detecting the current network status\.\.\.</string>
     <string name="no_available_application">No APP available</string>
     <string name="ask_lock_background">Lock this app in the background to bring a better experience! </string>
     <string name="feedback">Feedback</string>

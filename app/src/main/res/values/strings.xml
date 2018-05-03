@@ -139,7 +139,6 @@
     <string name="login_out_success">注销成功！</string>
     <string name="permission_error">未给予相关权限！</string>
     <string name="edit_after_login_out">注销后方可编辑登录信息！</string>
-    <string name="net_testing">正在检测当前网络状态。。。</string>
     <string name="no_available_application">无可用APP</string>
     <string name="ask_lock_background">在后台锁定本应用以带来更好的使用体验！</string>
     <string name="feedback">问题反馈</string>
