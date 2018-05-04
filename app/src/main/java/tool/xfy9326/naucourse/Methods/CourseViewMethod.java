@@ -69,7 +69,7 @@ public class CourseViewMethod {
      * @param id_table  课程信息对应的ID的二维数组
      * @param checkSame 是否检查到相同数据就不更新视图
      */
-    public void updateCourseTableView(@Nullable String[][] table, @Nullable String[][] id_table, boolean checkSame) {
+    public void updateCourseTableView(@Nullable String[][] table, @Nullable String[][] id_table, boolean checkSame, boolean hasCustomBackground) {
         if (table == null || id_table == null) {
             this.table = table;
             this.id_table = id_table;
@@ -82,7 +82,7 @@ public class CourseViewMethod {
             }
         }
         if (checkData()) {
-            loadView();
+            loadView(hasCustomBackground);
         }
     }
 
@@ -99,7 +99,7 @@ public class CourseViewMethod {
         return course_table_layout != null && parent_width != 0 && table != null && id_table != null && courses != null;
     }
 
-    synchronized private void loadView() {
+    synchronized private void loadView(boolean hasCustomBackground) {
         //清空原来的数据
         course_table_layout.removeAllViews();
 
@@ -115,6 +115,9 @@ public class CourseViewMethod {
         course_table_layout.setColumnCount(col_max);
         course_table_layout.setRowCount(row_max);
         course_table_layout.setMinimumWidth(parent_width);
+        if (hasCustomBackground) {
+            course_table_layout.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
+        }
 
         //设置每个单元格
         for (int col = 0; col < col_max; col++) {
@@ -154,14 +157,14 @@ public class CourseViewMethod {
                     }
                 }
 
-                course_table_layout.addView(getCellView(text, bgColor, textColor, width, col, row, showWide), layoutParams);
+                course_table_layout.addView(getCellView(text, bgColor, textColor, width, col, row, showWide, hasCustomBackground), layoutParams);
             }
         }
     }
 
     //获取每个单元格的视图
     @NonNull
-    private View getCellView(@Nullable String text, int bgColor, int textColor, int width, final int col, final int row, boolean showWide) {
+    private View getCellView(@Nullable String text, int bgColor, int textColor, int width, final int col, final int row, boolean showWide, boolean hasCustomBackground) {
         LinearLayout linearLayout = new LinearLayout(context);
         //不同显示模式下的适配
         if (showWide) {
@@ -172,6 +175,9 @@ public class CourseViewMethod {
         if (col == 0 || row == 0) {
             linearLayout.setGravity(Gravity.CENTER);
             linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        }
+        if (hasCustomBackground) {
+            linearLayout.setAlpha(0.8f);
         }
         linearLayout.setBackgroundColor(bgColor);
 

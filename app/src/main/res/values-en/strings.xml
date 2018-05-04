@@ -152,4 +152,7 @@
     <string name="level_exam_certificate">Certificate number: %1$s</string>
     <string name="level_exam_empty">No grade test information!</string>
     <string name="wifi_connect">Wifi Connect</string>
+    <string name="course_table_background">Table Background</string>
+    <string name="show_course_table_background">Show table background</string>
+    <string name="show_course_table_background_sum">Will show custom table background</string>
 </resources>

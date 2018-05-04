@@ -109,7 +109,7 @@
     <string name="show_wide_course_table">增加课程表内课程信息的显示宽度</string>
     <string name="show_wide_course_table_sum">课程表将会显示得更宽而不拥挤</string>
     <string name="course_table_cell_color">课程信息背景色显示</string>
-    <string name="course_table_cell_color_sum">课程表的课程信息下将会显示背景色</string>
+    <string name="course_table_cell_color_sum">课程信息格将会显示背景色</string>
     <string name="learn_process">◈ 修学进度</string>
     <string name="data_is_loading">数据正在加载中，请稍后再试</string>
     <string name="process_bx">必修课</string>
@@ -155,4 +155,7 @@
     <string name="level_exam_certificate">证书编号：%1$s</string>
     <string name="level_exam_empty">暂无等级考试信息！</string>
     <string name="wifi_connect">Wifi连接</string>
+    <string name="course_table_background">课程表背景</string>
+    <string name="show_course_table_background">显示课程表背景图</string>
+    <string name="show_course_table_background_sum">课程表将会显示自定义的背景</string>
 </resources>

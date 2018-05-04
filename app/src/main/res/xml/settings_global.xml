@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/notification_manage">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="NOTIFY_NEXT_CLASS"
+            android:summary="@string/next_class_notify_sum"
+            android:title="@string/next_class_notify" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/data_get">
         <CheckBoxPreference
             android:defaultValue="true"
@@ -26,6 +33,11 @@
             android:title="@string/course_table_cell_color" />
         <CheckBoxPreference
             android:defaultValue="false"
+            android:key="COURSE_TABLE_SHOW_BACKGROUND"
+            android:summary="@string/show_course_table_background_sum"
+            android:title="@string/show_course_table_background" />
+        <CheckBoxPreference
+            android:defaultValue="false"
             android:key="SHOW_WIDE_TABLE"
             android:summary="@string/show_wide_course_table_sum"
             android:title="@string/show_wide_course_table" />
@@ -41,12 +53,5 @@
             android:key="SHOW_NEXT_WEEK"
             android:summary="@string/show_next_week_sum"
             android:title="@string/show_next_week" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="@string/notification_manage">
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="NOTIFY_NEXT_CLASS"
-            android:summary="@string/next_class_notify_sum"
-            android:title="@string/next_class_notify" />
     </PreferenceCategory>
 </PreferenceScreen>

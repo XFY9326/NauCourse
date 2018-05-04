@@ -58,6 +58,7 @@ public class Config {
     public static final String PREFERENCE_NETWORK_REMEMBER_PASSWORD = "NETWORK_REMEMBER_PASSWORD";
     public static final String PREFERENCE_NETWORK_PROVIDER = "NETWORK_PROVIDER";
     public static final String PREFERENCE_NETWORK_AUTO_LOGIN = "NETWORK_AUTO_LOGIN";
+    public static final String PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND = "COURSE_TABLE_SHOW_BACKGROUND";
 
     public static final boolean DEFAULT_PREFERENCE_HAS_LOGIN = false;
     public static final boolean DEFAULT_PREFERENCE_REMEMBER_PW = true;
@@ -74,6 +75,8 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_NETWORK_REMEMBER_PASSWORD = true;
     public static final int DEFAULT_PREFERENCE_NETWORK_PROVIDER = 0;
     public static final boolean DEFAULT_PREFERENCE_NETWORK_AUTO_LOGIN = false;
+    public static final boolean DEFAULT_PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND = false;
+
 
     //网络连接错误代码
     public static final int NET_WORK_GET_SUCCESS = 0;

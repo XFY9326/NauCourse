@@ -56,6 +56,13 @@
         app:cardElevation="3dp"
         app:cardPreventCornerOverlap="true">
 
+        <ImageView
+            android:id="@+id/imageView_table_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:scaleType="centerCrop" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

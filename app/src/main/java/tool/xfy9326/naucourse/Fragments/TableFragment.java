@@ -2,6 +2,8 @@ package tool.xfy9326.naucourse.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -19,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -34,6 +37,7 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.CourseMethod;
 import tool.xfy9326.naucourse.Methods.CourseViewMethod;
+import tool.xfy9326.naucourse.Methods.ImageMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Methods.TimeMethod;
 import tool.xfy9326.naucourse.R;
@@ -157,6 +161,8 @@ public class TableFragment extends Fragment {
             boolean inVacation = false;
             schoolTime.setWeekNum(TimeMethod.getNowWeekNum(schoolTime));
 
+            final boolean hasCustomBackground = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND, Config.DEFAULT_PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND);
+
             //假期中默认显示第一周
             if (schoolTime.getWeekNum() == 0) {
                 weekNum = 1;
@@ -188,7 +194,7 @@ public class TableFragment extends Fragment {
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             if (lastSelect != position) {
                                 Objects.requireNonNull(TableFragment.this.schoolTime).setWeekNum(position + 1);
-                                setTableData(TableFragment.this.schoolTime, false);
+                                setTableData(TableFragment.this.schoolTime, false, hasCustomBackground);
                                 lastSelect = position;
                             }
                         }
@@ -212,7 +218,7 @@ public class TableFragment extends Fragment {
                     }
                 }
 
-                setTableData(schoolTime, isReload);
+                setTableData(schoolTime, isReload, hasCustomBackground);
 
                 if (lastSelect != weekNum - 1) {
                     spinner_week.setSelection(weekNum - 1);
@@ -238,7 +244,7 @@ public class TableFragment extends Fragment {
         }
     }
 
-    private void setTableData(@NonNull SchoolTime schoolTime, boolean isReload) {
+    private void setTableData(@NonNull SchoolTime schoolTime, boolean isReload, boolean hasCustomBackground) {
         if (courseViewMethod == null) {
             CardView cardView_course = Objects.requireNonNull(view).findViewById(R.id.cardView_courseTable);
             courseViewMethod = new CourseViewMethod(context, courses);
@@ -255,7 +261,23 @@ public class TableFragment extends Fragment {
         } else {
             courseMethod.updateTableCourse(schoolTime, isReload);
         }
-        courseViewMethod.updateCourseTableView(courseMethod.getTableData(), courseMethod.getTableIdData(), !isReload);
+        ImageView imageView_table_background = view.findViewById(R.id.imageView_table_background);
+        if (hasCustomBackground) {
+            Bitmap bitmap = ImageMethod.getBitmap(getActivity());
+            if (bitmap != null) {
+                imageView_table_background.refreshDrawableState();
+                imageView_table_background.setImageBitmap(bitmap);
+            } else {
+                hasCustomBackground = false;
+            }
+        } else {
+            imageView_table_background.setImageDrawable(null);
+            imageView_table_background.refreshDrawableState();
+            if (course_table_layout != null) {
+                course_table_layout.setBackgroundColor(Color.LTGRAY);
+            }
+        }
+        courseViewMethod.updateCourseTableView(courseMethod.getTableData(), courseMethod.getTableIdData(), !isReload, hasCustomBackground);
     }
 
     //表格中的课程详细信息显示

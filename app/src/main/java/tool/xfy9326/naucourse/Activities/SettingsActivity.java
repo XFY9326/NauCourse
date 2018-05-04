@@ -1,6 +1,7 @@
 package tool.xfy9326.naucourse.Activities;
 
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -15,6 +16,8 @@ import tool.xfy9326.naucourse.R;
  */
 
 public class SettingsActivity extends AppCompatActivity {
+    private SettingsFragment settingsFragment;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,11 +37,18 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void setFragment(@Nullable Bundle savedInstanceState) {
         if (savedInstanceState == null) {
-            SettingsFragment settingsFragment = new SettingsFragment();
+            settingsFragment = new SettingsFragment();
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.layout_settings_content, settingsFragment);
             fragmentTransaction.commit();
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (settingsFragment != null) {
+            settingsFragment.onActivityResult(requestCode, resultCode, data);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }
