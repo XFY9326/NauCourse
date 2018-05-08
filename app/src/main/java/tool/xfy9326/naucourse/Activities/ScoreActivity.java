@@ -12,6 +12,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.TextView;
 
 import tool.xfy9326.naucourse.AsyncTasks.ScoreAsync;
@@ -95,6 +96,12 @@ public class ScoreActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.textView_scoreZP)).setText(getString(R.string.score_ZP, studentScore.getScoreZP()));
             ((TextView) findViewById(R.id.textView_scoreBP)).setText(getString(R.string.score_BP, studentScore.getScoreBP()));
 
+            if (waitForEvaluate(courseScore)) {
+                findViewById(R.id.textView_wait_for_evaluate).setVisibility(View.VISIBLE);
+            } else {
+                findViewById(R.id.textView_wait_for_evaluate).setVisibility(View.GONE);
+            }
+
             if (scoreAdapter == null) {
                 scoreAdapter = new ScoreAdapter(ScoreActivity.this, courseScore);
                 recyclerView.setAdapter(scoreAdapter);
@@ -137,6 +144,17 @@ public class ScoreActivity extends AppCompatActivity {
             });
             getData();
         }
+    }
+
+    public boolean waitForEvaluate(CourseScore courseScore) {
+        if (courseScore != null && courseScore.getScoreTotal() != null) {
+            for (String score : courseScore.getScoreTotal()) {
+                if (score.contains("测评")) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

@@ -198,6 +198,7 @@
     <string name="show_single_color_sum">不随机设置课程颜色只，显示默认颜色</string>
     <string name="add">添加</string>
     <string name="single_color_warn">请在设置中关闭只显示默认颜色后再设置！</string>
+    <string name="wait_for_evaluate">待测评</string>
 
     <string name="cpv_default_title" translatable="false">选择一种颜色</string>
     <string name="cpv_presets" translatable="false">预设</string>
