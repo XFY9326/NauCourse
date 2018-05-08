@@ -26,7 +26,15 @@ public class MainHandler extends Handler {
         switch (msg.what) {
             case Config.HANDLER_RELOAD_TABLE:
                 TableFragment tableFragment = BaseMethod.getApp(context).getViewPagerAdapter().getTableFragment();
-                tableFragment.reloadTable();
+                if (tableFragment != null) {
+                    tableFragment.reloadTable(false);
+                }
+                break;
+            case Config.HANDLER_RELOAD_TABLE_DATA:
+                tableFragment = BaseMethod.getApp(context).getViewPagerAdapter().getTableFragment();
+                if (tableFragment != null) {
+                    tableFragment.reloadTable(true);
+                }
                 break;
             case Config.HANDLER_AUTO_LOGIN_WIFI:
                 NetMethod.loginNAUWifi(context);

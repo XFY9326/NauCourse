@@ -2,12 +2,14 @@ package tool.xfy9326.naucourse.Utils;
 
 import android.support.annotation.Nullable;
 
+import java.io.Serializable;
+
 /**
  * Created by xfy9326 on 18-2-21.
  * 课程信息详情
  */
 
-public class CourseDetail {
+public class CourseDetail implements Serializable {
     //Num-Num,Num...
     @Nullable
     private String weeks[] = null;

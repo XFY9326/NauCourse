@@ -9,6 +9,7 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Fragments.PersonFragment;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.DataMethod;
+import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Methods.PersonMethod;
 import tool.xfy9326.naucourse.Utils.StudentInfo;
 import tool.xfy9326.naucourse.Utils.StudentLearnProcess;
@@ -69,7 +70,7 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
     protected void onPostExecute(@NonNull Context context) {
         PersonFragment personFragment = BaseMethod.getApp(context).getViewPagerAdapter().getPersonFragment();
         if (personFragment != null) {
-            if (BaseMethod.checkNetWorkCode(context, new int[]{personLoadSuccess}, loadCode)) {
+            if (NetMethod.checkNetWorkCode(context, new int[]{personLoadSuccess}, loadCode)) {
                 personFragment.PersonViewSet(studentInfo, studentLearnProcess, context);
             }
             personFragment.lastViewSet(context);

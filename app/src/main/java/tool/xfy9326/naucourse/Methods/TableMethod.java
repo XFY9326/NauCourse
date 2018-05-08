@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 
+import com.jaredrummler.android.colorpicker.ColorPickerDialog;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -12,6 +14,7 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Utils.Course;
@@ -23,7 +26,7 @@ import tool.xfy9326.naucourse.Utils.CourseDetail;
  */
 
 public class TableMethod {
-    static final String FILE_NAME = "Course";
+    public static final String FILE_NAME = "Course";
     private final Context context;
     @Nullable
     private Document document;
@@ -51,7 +54,7 @@ public class TableMethod {
 
     //数据分类方法：课程基本信息——上课周数——上课节数
     @Nullable
-    public ArrayList<Course> getCourseTable(boolean checkTemp) {
+    public ArrayList<Course> getCourseTable(boolean needSave) {
         ArrayList<Course> courseList = new ArrayList<>();
         Elements tags = Objects.requireNonNull(document).body().getElementsByTag("tr");
         List<String> data = tags.eachText();
@@ -132,14 +135,19 @@ public class TableMethod {
 
             course.setCourseDetail(courseDetail_list);
 
+            //颜色随机
+            Random random = new Random();
+            int num = random.nextInt(ColorPickerDialog.MATERIAL_COLORS.length) % (ColorPickerDialog.MATERIAL_COLORS.length + 1);
+            course.setCourseColor(ColorPickerDialog.MATERIAL_COLORS[num]);
+
             courseList.add(course);
         }
 
-        if (DataMethod.saveOfflineData(context, courseList, FILE_NAME, checkTemp)) {
-            return courseList;
-        } else {
-            return null;
+
+        if (needSave) {
+            DataMethod.saveOfflineData(context, courseList, TableMethod.FILE_NAME, false);
         }
+        return courseList;
     }
 
 }

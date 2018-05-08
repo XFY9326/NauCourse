@@ -28,7 +28,7 @@ import tool.xfy9326.naucourse.Utils.SchoolTime;
 
 public class CourseMethod {
     private final Context context;
-    private final ArrayList<Course> courses;
+    private ArrayList<Course> courses;
     private SchoolTime schoolTime;
     private int weekNum;
 
@@ -42,7 +42,7 @@ public class CourseMethod {
         this.context = context;
         this.courses = courses;
         this.course_time = null;
-        updateTableCourse(schoolTime, false);
+        updateTableCourse(courses, schoolTime, false);
     }
 
     /**
@@ -161,8 +161,9 @@ public class CourseMethod {
      * @param schoolTime  SchoolTime对象
      * @param noCheckSame 不在检查到周数相同时放弃计算数据
      */
-    public void updateTableCourse(@NonNull SchoolTime schoolTime, boolean noCheckSame) {
+    public void updateTableCourse(ArrayList<Course> courses, @NonNull SchoolTime schoolTime, boolean noCheckSame) {
         this.schoolTime = schoolTime;
+        this.courses = courses;
         //假期中默认显示第一周
         int weekNum = schoolTime.getWeekNum();
         if (weekNum == 0) {

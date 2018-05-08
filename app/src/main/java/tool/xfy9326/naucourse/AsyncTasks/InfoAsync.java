@@ -11,6 +11,7 @@ import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.JwInfoMethod;
 import tool.xfy9326.naucourse.Methods.JwcInfoMethod;
+import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Utils.JwTopic;
 import tool.xfy9326.naucourse.Utils.JwcTopic;
 
@@ -77,7 +78,7 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
     protected void onPostExecute(@NonNull Context context) {
         HomeFragment homeFragment = BaseMethod.getApp(context).getViewPagerAdapter().getHomeFragment();
         if (homeFragment != null) {
-            if (BaseMethod.checkNetWorkCode(context, new int[]{JwLoadSuccess, JwcLoadSuccess}, loadCode)) {
+            if (NetMethod.checkNetWorkCode(context, new int[]{JwLoadSuccess, JwcLoadSuccess}, loadCode)) {
                 homeFragment.InfoSet(jwcTopic, jwTopic);
             }
             homeFragment.lastViewSet(context);

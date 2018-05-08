@@ -10,6 +10,7 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.LevelExamMethod;
+import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Utils.LevelExam;
 
 public class LevelExamAsync extends AsyncTask<Context, Void, Context> {
@@ -59,7 +60,7 @@ public class LevelExamAsync extends AsyncTask<Context, Void, Context> {
     protected void onPostExecute(@NonNull Context context) {
         LevelExamActivity levelExamActivity = BaseMethod.getApp(context).getLevelExamActivity();
         if (levelExamActivity != null) {
-            if (BaseMethod.checkNetWorkCode(context, new int[]{levelExamLoadSuccess}, loadCode)) {
+            if (NetMethod.checkNetWorkCode(context, new int[]{levelExamLoadSuccess}, loadCode)) {
                 levelExamActivity.setLevelExam(levelExam);
             }
             levelExamActivity.lastViewSet(context);

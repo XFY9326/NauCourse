@@ -46,6 +46,24 @@
         </activity>
 
         <activity
+            android:name=".Activities.CourseActivity"
+            android:label="@string/course_manage"
+            tools:ignore="InnerclassSeparator">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".Activities.CourseEditActivity"
+            android:label="@string/course_edit"
+            tools:ignore="InnerclassSeparator">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.CourseActivity" />
+        </activity>
+
+        <activity
             android:name=".Activities.ExamActivity"
             android:label="@string/exam"
             tools:ignore="InnerclassSeparator">

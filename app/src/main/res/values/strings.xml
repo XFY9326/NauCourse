@@ -54,9 +54,9 @@
     <string name="course_card_id">编号：%1$s</string>
     <string name="course_card_teacher">教师：%1$s</string>
     <string name="course_card_time">上课时间：第%1$s周%2$s&#160;&#160;周%3$s&#160;&#160;第%4$s节</string>
-    <string name="course_card_time_week_mode">之%1$s周</string>
-    <string name="single_week_mode">单</string>
-    <string name="double_week_mode">双</string>
+    <string name="course_card_time_week_mode">之%1$s</string>
+    <string name="single_week_mode">单周</string>
+    <string name="double_week_mode">双周</string>
     <string name="course_card_location">上课地点：%1$s</string>
     <string name="open_source">开源相关</string>
     <string name="network_get_error">网络连接超时！</string>
@@ -68,8 +68,6 @@
     <string name="web" translatable="false">https://xfy9326.github.io/NauCourse/</string>
     <string name="jw_system_info">教务系统通知</string>
     <string name="jwc">教务委员会</string>
-    <string name="updating">正在更新</string>
-    <string name="update_course_table">更新课程表</string>
     <string name="only_update_under_wifi">仅在Wifi网络下自动更新数据</string>
     <string name="only_update_under_wifi_sum">避免自动更新数据使用移动网络消耗流量</string>
     <string name="user_login_error">当前用户登陆已经失效，请重新登录！</string>
@@ -158,4 +156,52 @@
     <string name="course_table_background">课程表背景</string>
     <string name="show_course_table_background">显示课程表背景图</string>
     <string name="show_course_table_background_sum">课程表将会显示自定义的背景</string>
+    <string name="course_edit">课程编辑</string>
+    <string name="course_manage">课程管理</string>
+    <string name="save">保存</string>
+    <string name="save_attention">是否不保存修改并退出？</string>
+    <string name="import_course_from_jwc">从教务处导入个人课程</string>
+    <string name="create_new_course">新建一个课程</string>
+    <string name="course_edit_error_conflict">当前%1$s与%2$s课程存在冲突！</string>
+    <string name="course_edit_error">当前课程时间设置存在问题！</string>
+    <string name="course_edit_name">课程名</string>
+    <string name="course_edit_teacher">教师</string>
+    <string name="course_edit_score">学分（选填）</string>
+    <string name="course_edit_type">类别（选填）</string>
+    <string name="course_edit_class">教学班（选填）</string>
+    <string name="course_edit_combine_class">合班号（选填）</string>
+    <string name="course_edit_course_time">◈ 上课时间</string>
+    <string name="course_edit_location">上课地点</string>
+    <string name="delete_confirm">真的要删除这个数据吗？</string>
+    <string name="save_success">保存成功！</string>
+    <string name="add_success">添加成功！</string>
+    <string name="course_detail_edit_week_type">周数模式：</string>
+    <string name="course_detail_edit_week">星期：</string>
+    <string name="course_detail_edit_location">地点：</string>
+    <string name="course_detail_edit_week_num">周数：</string>
+    <string name="course_detail_edit_time">时间：</string>
+    <string name="please_input_data">请添加数据</string>
+    <string name="course_detail_edit_time_single_time">设置为独立的时间（只填写开始时间）</string>
+    <string name="course_detail_edit_time_start_time">开始时间：</string>
+    <string name="course_detail_edit_time_end_time">结束时间：</string>
+    <string name="no_item_to_delete">没有可以删除的项目了！</string>
+    <string name="input_less">输入参数过少！</string>
+    <string name="input_error">输入参数错误！</string>
+    <string name="conflict_error">数据存在冲突！</string>
+    <string name="delete_all">全部删除</string>
+    <string name="confirm_delete_all">真的要清空所有列表中的数据吗？</string>
+    <string name="course_color">课程显示颜色</string>
+    <string name="change_table_transparency">更改课程表透明度</string>
+    <string name="change_table_transparency_sum">修改透明度可以使背景显示更加清晰</string>
+    <string name="transparency">透明度</string>
+    <string name="show_single_color">课程格子只显示默认颜色</string>
+    <string name="show_single_color_sum">不随机设置课程颜色只，显示默认颜色</string>
+    <string name="add">添加</string>
+    <string name="single_color_warn">请在设置中关闭只显示默认颜色后再设置！</string>
+
+    <string name="cpv_default_title" translatable="false">选择一种颜色</string>
+    <string name="cpv_presets" translatable="false">预设</string>
+    <string name="cpv_custom" translatable="false">自定义</string>
+    <string name="cpv_select" translatable="false">选择</string>
+    <string name="cpv_transparency" translatable="false">透明度</string>
 </resources>

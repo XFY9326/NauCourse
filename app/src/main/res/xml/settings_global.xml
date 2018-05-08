@@ -33,9 +33,19 @@
             android:title="@string/course_table_cell_color" />
         <CheckBoxPreference
             android:defaultValue="false"
+            android:dependency="COURSE_TABLE_CELL_COLOR"
+            android:key="COURSE_TABLE_SHOW_SINGLE_COLOR"
+            android:summary="@string/show_single_color_sum"
+            android:title="@string/show_single_color" />
+        <CheckBoxPreference
+            android:defaultValue="false"
             android:key="COURSE_TABLE_SHOW_BACKGROUND"
             android:summary="@string/show_course_table_background_sum"
             android:title="@string/show_course_table_background" />
+        <Preference
+            android:key="CHANGE_TABLE_TRANSPARENCY"
+            android:summary="@string/change_table_transparency_sum"
+            android:title="@string/change_table_transparency" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="SHOW_WIDE_TABLE"

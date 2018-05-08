@@ -12,6 +12,7 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.JwInfoMethod;
 import tool.xfy9326.naucourse.Methods.JwcInfoMethod;
+import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Views.InfoAdapter;
 
 /**
@@ -74,7 +75,7 @@ public class InfoDetailAsync extends AsyncTask<Context, Void, Context> {
     protected void onPostExecute(@NonNull Context context) {
         InfoDetailActivity infoDetailActivity = BaseMethod.getApp(context).getInfoDetailActivity();
         if (infoDetailActivity != null) {
-            if (BaseMethod.checkNetWorkCode(context, new int[]{loadSuccess}, loadCode)) {
+            if (NetMethod.checkNetWorkCode(context, new int[]{loadSuccess}, loadCode)) {
                 infoDetailActivity.InfoDetailSet(data);
             }
         }

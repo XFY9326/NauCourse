@@ -2,12 +2,14 @@ package tool.xfy9326.naucourse.Utils;
 
 import android.support.annotation.Nullable;
 
+import java.io.Serializable;
+
 /**
  * Created by xfy9326 on 18-2-21.
  * 课程信息
  */
 
-public class Course {
+public class Course implements Serializable {
     @Nullable
     private String courseId = null;
     @Nullable
@@ -22,6 +24,9 @@ public class Course {
     private String courseScore = null;
     @Nullable
     private String courseType = null;
+
+    private int courseColor = -1;
+
     private int dataVersionCode = 0;
 
     @Nullable
@@ -100,6 +105,14 @@ public class Course {
 
     public void setCourseDetail(@Nullable CourseDetail[] courseDetail) {
         this.courseDetail = courseDetail;
+    }
+
+    public int getCourseColor() {
+        return courseColor;
+    }
+
+    public void setCourseColor(int courseColor) {
+        this.courseColor = courseColor;
     }
 
     @SuppressWarnings("unused")

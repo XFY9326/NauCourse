@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.Fragments;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -11,8 +12,14 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -30,9 +37,10 @@ import tool.xfy9326.naucourse.Receivers.UpdateReceiver;
  */
 
 public class SettingsFragment extends PreferenceFragment {
-    private boolean updateCourseTable = false;
     private final int WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE = 1;
+    private boolean updateCourseTable = false;
     private boolean cropSuccess = false;
+    private float transparency_value;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,6 +71,7 @@ public class SettingsFragment extends PreferenceFragment {
         findPreference(Config.PREFERENCE_SHOW_WEEKEND).setOnPreferenceChangeListener(tableReloadListener);
         findPreference(Config.PREFERENCE_SHOW_WIDE_TABLE).setOnPreferenceChangeListener(tableReloadListener);
         findPreference(Config.PREFERENCE_COURSE_TABLE_CELL_COLOR).setOnPreferenceChangeListener(tableReloadListener);
+        findPreference(Config.PREFERENCE_COURSE_TABLE_SHOW_SINGLE_COLOR).setOnPreferenceChangeListener(tableReloadListener);
 
         findPreference(Config.PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -95,6 +104,14 @@ public class SettingsFragment extends PreferenceFragment {
             }
         });
 
+        findPreference(Config.PREFERENCE_CHANGE_TABLE_TRANSPARENCY).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                changeTransparency();
+                return true;
+            }
+        });
+
         findPreference(Config.PREFERENCE_NOTIFY_NEXT_CLASS).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -106,6 +123,54 @@ public class SettingsFragment extends PreferenceFragment {
                 return true;
             }
         });
+    }
+
+    private void changeTransparency() {
+        if (getActivity() != null) {
+            transparency_value = PreferenceManager.getDefaultSharedPreferences(getActivity()).getFloat(Config.PREFERENCE_CHANGE_TABLE_TRANSPARENCY, Config.DEFAULT_PREFERENCE_CHANGE_TABLE_TRANSPARENCY);
+
+            LayoutInflater layoutInflater = getActivity().getLayoutInflater();
+            View view = layoutInflater.inflate(R.layout.dialog_edit_progress, (ViewGroup) getActivity().findViewById(R.id.layout_dialog_edit_progress));
+
+            final TextInputEditText textInputEditText = view.findViewById(R.id.editText_dialog_edit_progress);
+            textInputEditText.setHint(R.string.transparency);
+            textInputEditText.setText(String.valueOf((transparency_value * 100) / 100.0f));
+            textInputEditText.setEnabled(false);
+
+            SeekBar seekBar = view.findViewById(R.id.seekBar_dialog_edit_progress);
+            seekBar.setMax(100);
+            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    transparency_value = (float) progress / 100.0f;
+                    textInputEditText.setText(String.valueOf(transparency_value));
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            });
+            seekBar.setProgress((int) (transparency_value * 100));
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(R.string.change_table_transparency);
+            builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putFloat(Config.PREFERENCE_CHANGE_TABLE_TRANSPARENCY, transparency_value).apply();
+                    updateCourseTable = true;
+                }
+            });
+            builder.setNegativeButton(android.R.string.cancel, null);
+            builder.setView(view);
+            builder.show();
+        }
     }
 
     @Override

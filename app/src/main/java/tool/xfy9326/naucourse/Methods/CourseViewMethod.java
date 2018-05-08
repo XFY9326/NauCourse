@@ -31,8 +31,8 @@ import tool.xfy9326.naucourse.Utils.Course;
 
 public class CourseViewMethod {
     private final Context context;
-    private final ArrayList<Course> courses;
     private final SharedPreferences sharedPreferences;
+    private ArrayList<Course> courses;
     private int parent_width = 0;
     private GridLayout course_table_layout;
     @Nullable
@@ -69,7 +69,8 @@ public class CourseViewMethod {
      * @param id_table  课程信息对应的ID的二维数组
      * @param checkSame 是否检查到相同数据就不更新视图
      */
-    public void updateCourseTableView(@Nullable String[][] table, @Nullable String[][] id_table, boolean checkSame, boolean hasCustomBackground) {
+    public void updateCourseTableView(ArrayList<Course> courses, @Nullable String[][] table, @Nullable String[][] id_table, boolean checkSame, boolean hasCustomBackground) {
+        this.courses = courses;
         if (table == null || id_table == null) {
             this.table = table;
             this.id_table = id_table;
@@ -104,6 +105,7 @@ public class CourseViewMethod {
         course_table_layout.removeAllViews();
 
         boolean showCellColor = sharedPreferences.getBoolean(Config.PREFERENCE_COURSE_TABLE_CELL_COLOR, Config.DEFAULT_PREFERENCE_COURSE_TABLE_CELL_COLOR);
+        boolean singleColor = sharedPreferences.getBoolean(Config.PREFERENCE_COURSE_TABLE_SHOW_SINGLE_COLOR, Config.DEFAULT_PREFERENCE_COURSE_TABLE_SHOW_SINGLE_COLOR);
 
         //设置行列数量
         boolean showWeekend = sharedPreferences.getBoolean(Config.PREFERENCE_SHOW_WEEKEND, Config.DEFAULT_PREFERENCE_SHOW_WEEKEND);
@@ -111,6 +113,8 @@ public class CourseViewMethod {
 
         int row_max = Config.MAX_DAY_COURSE + 1;
         int col_max = showWeekend ? Config.MAX_WEEK_DAY + 1 : Config.MAX_WEEK_DAY - 1;
+
+        float alpha = sharedPreferences.getFloat(Config.PREFERENCE_CHANGE_TABLE_TRANSPARENCY, Config.DEFAULT_PREFERENCE_CHANGE_TABLE_TRANSPARENCY);
 
         course_table_layout.setColumnCount(col_max);
         course_table_layout.setRowCount(row_max);
@@ -151,20 +155,46 @@ public class CourseViewMethod {
                 int bgColor = Color.WHITE;
                 int textColor = Color.GRAY;
                 if (showCellColor && text != null && row != 0 && col != 0) {
-                    bgColor = context.getResources().getColor(R.color.course_cell_background);
-                    if (bgColor != Color.WHITE) {
+                    bgColor = getCourseColorById(Objects.requireNonNull(id_table)[col][row]);
+                    if (bgColor == -1 || singleColor) {
+                        bgColor = context.getResources().getColor(R.color.course_cell_background);
+                    }
+                    if (!isLightColor(bgColor)) {
                         textColor = Color.WHITE;
                     }
                 }
-
-                course_table_layout.addView(getCellView(text, bgColor, textColor, width, col, row, showWide, hasCustomBackground), layoutParams);
+                course_table_layout.addView(getCellView(text, bgColor, textColor, width, col, row, showWide, hasCustomBackground, alpha), layoutParams);
             }
         }
     }
 
+    /**
+     * 判断是否是明亮的颜色
+     *
+     * @param color 颜色
+     * @return 是否明亮
+     */
+    private boolean isLightColor(int color) {
+        int red = (color & 0xff0000) >> 16;
+        int green = (color & 0x00ff00) >> 8;
+        int blue = (color & 0x0000ff);
+        float total = red * 0.299f + green * 0.587f + blue * 0.114f;
+        return !(total < 200);
+    }
+
+    private int getCourseColorById(String id) {
+        for (Course course : courses) {
+            String courseId = course.getCourseId();
+            if (courseId != null && courseId.equalsIgnoreCase(id)) {
+                return course.getCourseColor();
+            }
+        }
+        return -1;
+    }
+
     //获取每个单元格的视图
     @NonNull
-    private View getCellView(@Nullable String text, int bgColor, int textColor, int width, final int col, final int row, boolean showWide, boolean hasCustomBackground) {
+    private View getCellView(@Nullable String text, int bgColor, int textColor, int width, final int col, final int row, boolean showWide, boolean hasCustomBackground, float alpha) {
         LinearLayout linearLayout = new LinearLayout(context);
         //不同显示模式下的适配
         if (showWide) {
@@ -177,7 +207,7 @@ public class CourseViewMethod {
             linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         }
         if (hasCustomBackground) {
-            linearLayout.setAlpha(0.8f);
+            linearLayout.setAlpha(alpha);
         }
         linearLayout.setBackgroundColor(bgColor);
 

@@ -25,13 +25,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
 
+import tool.xfy9326.naucourse.Activities.CourseActivity;
 import tool.xfy9326.naucourse.AsyncTasks.TableAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
@@ -55,9 +55,9 @@ import tool.xfy9326.naucourse.Views.NextClassWidget;
 public class TableFragment extends Fragment {
     @Nullable
     private View view;
+    private int loadTime = 0;
     @Nullable
     private Context context;
-    private int loadTime = 0;
     @Nullable
     private GridLayout course_table_layout;
     @Nullable
@@ -118,41 +118,42 @@ public class TableFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.menu_table_refresh) {
-            Toast.makeText(getActivity(), R.string.updating, Toast.LENGTH_SHORT).show();
-            getData();
+        if (item.getItemId() == R.id.menu_table_edit && getActivity() != null) {
+            Intent intent = new Intent(getActivity(), CourseActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void ViewSet() {
         course_table_layout = Objects.requireNonNull(view).findViewById(R.id.course_table_layout);
-        course_table_layout.setDrawingCacheEnabled(true);
 
         CardView cardView_date = view.findViewById(R.id.cardview_table_date);
         cardView_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reloadTable();
+                reloadTable(false);
             }
         });
 
-        if (loadTime == 0) {
-            getData();
-        }
+        getData();
+    }
+
+    synchronized private void getData() {
+        new TableAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, Objects.requireNonNull(context).getApplicationContext());
     }
 
     /**
      * 设置课程
      *
-     * @param courses    课程信息列表
-     * @param schoolTime SchoolTime对象
-     * @param context    Context
-     * @param isReload   是否是刷新本地信息
+     * @param courses      课程信息列表
+     * @param schoolTime   SchoolTime对象
+     * @param context      Context
+     * @param isDataReload 是否是刷新本地信息
      */
-    public void CourseSet(@Nullable ArrayList<Course> courses, @Nullable SchoolTime schoolTime, @Nullable final Context context, boolean isReload) {
+    public void CourseSet(@Nullable ArrayList<Course> courses, @Nullable SchoolTime schoolTime, @Nullable final Context context, boolean isDataReload) {
         if (context != null && courses != null && schoolTime != null) {
-            if (!isReload) {
+            if (isDataReload) {
                 this.courses = courses;
                 this.schoolTime = schoolTime;
             }
@@ -218,7 +219,7 @@ public class TableFragment extends Fragment {
                     }
                 }
 
-                setTableData(schoolTime, isReload, hasCustomBackground);
+                setTableData(schoolTime, isDataReload, hasCustomBackground);
 
                 if (lastSelect != weekNum - 1) {
                     spinner_week.setSelection(weekNum - 1);
@@ -232,23 +233,25 @@ public class TableFragment extends Fragment {
                     homeFragment.setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
                 }
 
-                //初始化自动更新
                 if (getActivity() != null) {
-                    getActivity().sendBroadcast(new Intent(context, UpdateReceiver.class).setAction(UpdateReceiver.UPDATE_ACTION).putExtra(Config.INTENT_IS_ONLY_INIT, true));
-                }
-
-                if (loadTime > 0) {
-                    context.sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
+                    if (loadTime == 1) {
+                        //初始化自动更新
+                        getActivity().sendBroadcast(new Intent(context, UpdateReceiver.class).setAction(UpdateReceiver.UPDATE_ACTION).putExtra(Config.INTENT_IS_ONLY_INIT, true));
+                    }
+                    //更新小部件
+                    getActivity().sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
                 }
             }
         }
     }
 
-    private void setTableData(@NonNull SchoolTime schoolTime, boolean isReload, boolean hasCustomBackground) {
+    private void setTableData(@NonNull SchoolTime schoolTime, boolean isDataReload, boolean hasCustomBackground) {
         if (courseViewMethod == null) {
             CardView cardView_course = Objects.requireNonNull(view).findViewById(R.id.cardView_courseTable);
             courseViewMethod = new CourseViewMethod(context, courses);
             courseViewMethod.setTableView(course_table_layout, cardView_course.getWidth());
+        }
+        if (isDataReload) {
             courseViewMethod.setOnCourseTableClickListener(new CourseViewMethod.OnCourseTableItemClickListener() {
                 @Override
                 public void OnItemClick(@NonNull Course course) {
@@ -259,25 +262,27 @@ public class TableFragment extends Fragment {
         if (courseMethod == null) {
             courseMethod = new CourseMethod(context, courses, schoolTime);
         } else {
-            courseMethod.updateTableCourse(schoolTime, isReload);
+            courseMethod.updateTableCourse(courses, schoolTime, isDataReload);
         }
-        ImageView imageView_table_background = view.findViewById(R.id.imageView_table_background);
-        if (hasCustomBackground) {
-            Bitmap bitmap = ImageMethod.getBitmap(getActivity());
-            if (bitmap != null) {
-                imageView_table_background.refreshDrawableState();
-                imageView_table_background.setImageBitmap(bitmap);
+        if (view != null) {
+            ImageView imageView_table_background = view.findViewById(R.id.imageView_table_background);
+            if (hasCustomBackground) {
+                Bitmap bitmap = ImageMethod.getTableBackgroundBitmap(getActivity());
+                if (bitmap != null) {
+                    imageView_table_background.refreshDrawableState();
+                    imageView_table_background.setImageBitmap(bitmap);
+                } else {
+                    hasCustomBackground = false;
+                }
             } else {
-                hasCustomBackground = false;
-            }
-        } else {
-            imageView_table_background.setImageDrawable(null);
-            imageView_table_background.refreshDrawableState();
-            if (course_table_layout != null) {
-                course_table_layout.setBackgroundColor(Color.LTGRAY);
+                imageView_table_background.setImageDrawable(null);
+                imageView_table_background.refreshDrawableState();
+                if (course_table_layout != null) {
+                    course_table_layout.setBackgroundColor(Color.LTGRAY);
+                }
             }
         }
-        courseViewMethod.updateCourseTableView(courseMethod.getTableData(), courseMethod.getTableIdData(), !isReload, hasCustomBackground);
+        courseViewMethod.updateCourseTableView(courses, courseMethod.getTableData(), courseMethod.getTableIdData(), !isDataReload, hasCustomBackground);
     }
 
     //表格中的课程详细信息显示
@@ -296,15 +301,30 @@ public class TableFragment extends Fragment {
             TextView textView_class = view_dialog.findViewById(R.id.textView_course_card_class);
             TextView textView_class_combined = view_dialog.findViewById(R.id.textView_course_card_combined_class);
 
-
             textView_name.setText(course.getCourseName());
 
             textView_id.setText(Objects.requireNonNull(context).getString(R.string.course_card_id, course.getCourseId()));
             textView_teacher.setText(context.getString(R.string.course_card_teacher, course.getCourseTeacher()));
-            textView_score.setText(context.getString(R.string.course_card_score, course.getCourseScore()));
-            textView_type.setText(context.getString(R.string.course_card_type, course.getCourseType()));
-            textView_class.setText(context.getString(R.string.course_card_class, course.getCourseClass()));
-            textView_class_combined.setText(context.getString(R.string.course_card_combined_class, course.getCourseCombinedClass()));
+            if (course.getCourseScore() != null && !course.getCourseScore().isEmpty()) {
+                textView_score.setText(context.getString(R.string.course_card_score, course.getCourseScore()));
+            } else {
+                textView_score.setVisibility(View.GONE);
+            }
+            if (course.getCourseType() != null && !course.getCourseType().isEmpty()) {
+                textView_type.setText(context.getString(R.string.course_card_type, course.getCourseType()));
+            } else {
+                textView_type.setVisibility(View.GONE);
+            }
+            if (course.getCourseClass() != null && !course.getCourseClass().isEmpty()) {
+                textView_class.setText(context.getString(R.string.course_card_class, course.getCourseClass()));
+            } else {
+                textView_class.setVisibility(View.GONE);
+            }
+            if (course.getCourseCombinedClass() != null && !course.getCourseCombinedClass().isEmpty()) {
+                textView_class_combined.setText(context.getString(R.string.course_card_combined_class, course.getCourseCombinedClass()));
+            } else {
+                textView_class_combined.setVisibility(View.GONE);
+            }
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -339,14 +359,14 @@ public class TableFragment extends Fragment {
     /**
      * 重新加载课程表
      */
-    synchronized public void reloadTable() {
-        if (isAdded() && courses != null && schoolTime != null) {
-            CourseSet(courses, schoolTime, context, true);
+    synchronized public void reloadTable(boolean dataReload) {
+        if (isAdded()) {
+            if (dataReload) {
+                getData();
+            } else if (courses != null && schoolTime != null) {
+                CourseSet(courses, schoolTime, getActivity(), false);
+            }
         }
-    }
-
-    synchronized private void getData() {
-        new TableAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, Objects.requireNonNull(context).getApplicationContext());
     }
 
     public void lastViewSet(Context context) {
@@ -365,5 +385,4 @@ public class TableFragment extends Fragment {
     public void setLoadTime(int loadTime) {
         this.loadTime = loadTime;
     }
-
 }

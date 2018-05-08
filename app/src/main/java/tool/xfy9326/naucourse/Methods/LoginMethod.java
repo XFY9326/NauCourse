@@ -137,10 +137,8 @@ public class LoginMethod {
         }
         File data_file = context.getFilesDir();
         for (File file : data_file.listFiles()) {
-            if (file.isFile()) {
-                //noinspection ResultOfMethodCallIgnored
-                file.delete();
-            }
+            //noinspection ResultOfMethodCallIgnored
+            file.delete();
         }
     }
 

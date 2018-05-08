@@ -5,6 +5,7 @@ import android.app.Application;
 import com.tencent.bugly.Bugly;
 
 import lib.xfy9326.naujwc.NauJwcClient;
+import tool.xfy9326.naucourse.Activities.CourseActivity;
 import tool.xfy9326.naucourse.Activities.ExamActivity;
 import tool.xfy9326.naucourse.Activities.InfoDetailActivity;
 import tool.xfy9326.naucourse.Activities.LevelExamActivity;
@@ -22,6 +23,7 @@ public class BaseApplication extends Application {
     private ScoreActivity scoreActivity;
     private ExamActivity examActivity;
     private LevelExamActivity levelExamActivity;
+    private CourseActivity courseActivity;
 
     private boolean showLoginErrorOnce = false;
 
@@ -86,5 +88,13 @@ public class BaseApplication extends Application {
 
     public void setLevelExamActivity(LevelExamActivity levelExamActivity) {
         this.levelExamActivity = levelExamActivity;
+    }
+
+    public CourseActivity getCourseActivity() {
+        return courseActivity;
+    }
+
+    public void setCourseActivity(CourseActivity courseActivity) {
+        this.courseActivity = courseActivity;
     }
 }

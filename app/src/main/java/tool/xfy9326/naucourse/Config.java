@@ -21,7 +21,8 @@ public class Config {
     public static final int REQUEST_ACTIVITY_LOGIN = 1;
 
     public static final int HANDLER_RELOAD_TABLE = 0;
-    public static final int HANDLER_AUTO_LOGIN_WIFI = 1;
+    public static final int HANDLER_RELOAD_TABLE_DATA = 1;
+    public static final int HANDLER_AUTO_LOGIN_WIFI = 2;
 
     public static final int VIEWPAGER_TABLE_PAGE = 1;
 
@@ -32,6 +33,9 @@ public class Config {
     public static final String INTENT_AUTO_LOGIN = "AUTO_LOGIN";
     public static final String INTENT_STUDENT_INFO = "STUDENT_INFO";
     public static final String INTENT_STUDENT_LEARN_PROCESS = "STUDENT_LEARN_PROCESS";
+    public static final String INTENT_EDIT_COURSE_ITEM = "EDIT_COURSE";
+    public static final String INTENT_ADD_COURSE = "ADD_COURSE";
+    public static final String INTENT_EDIT_COURSE = "EDIT_COURSE";
 
     public static final int DEFAULT_MAX_WEEK = 24;
     public static final int MAX_WEEK_DAY = 7;
@@ -59,6 +63,8 @@ public class Config {
     public static final String PREFERENCE_NETWORK_PROVIDER = "NETWORK_PROVIDER";
     public static final String PREFERENCE_NETWORK_AUTO_LOGIN = "NETWORK_AUTO_LOGIN";
     public static final String PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND = "COURSE_TABLE_SHOW_BACKGROUND";
+    public static final String PREFERENCE_CHANGE_TABLE_TRANSPARENCY = "CHANGE_TABLE_TRANSPARENCY";
+    public static final String PREFERENCE_COURSE_TABLE_SHOW_SINGLE_COLOR = "COURSE_TABLE_SHOW_SINGLE_COLOR";
 
     public static final boolean DEFAULT_PREFERENCE_HAS_LOGIN = false;
     public static final boolean DEFAULT_PREFERENCE_REMEMBER_PW = true;
@@ -76,6 +82,8 @@ public class Config {
     public static final int DEFAULT_PREFERENCE_NETWORK_PROVIDER = 0;
     public static final boolean DEFAULT_PREFERENCE_NETWORK_AUTO_LOGIN = false;
     public static final boolean DEFAULT_PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND = false;
+    public static final float DEFAULT_PREFERENCE_CHANGE_TABLE_TRANSPARENCY = 0.8f;
+    public static final boolean DEFAULT_PREFERENCE_COURSE_TABLE_SHOW_SINGLE_COLOR = false;
 
 
     //网络连接错误代码
@@ -86,7 +94,7 @@ public class Config {
     public static final int NET_WORK_ERROR_CODE_GET_DATA_ERROR = 4;
 
     //离线数据版本号
-    public static final int DATA_VERSION_COURSE = 1;
+    public static final int DATA_VERSION_COURSE = 2;
     public static final int DATA_VERSION_COURSE_SCORE = 1;
     public static final int DATA_VERSION_EXAM = 1;
     public static final int DATA_VERSION_JWC_TOPIC = 1;

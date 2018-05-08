@@ -9,6 +9,7 @@ import tool.xfy9326.naucourse.Activities.ScoreActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.DataMethod;
+import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Methods.PersonMethod;
 import tool.xfy9326.naucourse.Methods.ScoreMethod;
 import tool.xfy9326.naucourse.Utils.CourseScore;
@@ -77,7 +78,7 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
     protected void onPostExecute(@NonNull Context context) {
         ScoreActivity scoreActivity = BaseMethod.getApp(context).getScoreActivity();
         if (scoreActivity != null) {
-            if (BaseMethod.checkNetWorkCode(context, new int[]{personLoadSuccess, scoreLoadSuccess}, loadCode)) {
+            if (NetMethod.checkNetWorkCode(context, new int[]{personLoadSuccess, scoreLoadSuccess}, loadCode)) {
                 scoreActivity.setMainScore(studentScore, courseScore);
             }
             scoreActivity.lastViewSet(context);

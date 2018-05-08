@@ -12,10 +12,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.Objects;
 
 import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Tools.AES;
 
 /**
@@ -23,6 +25,42 @@ import tool.xfy9326.naucourse.Tools.AES;
  */
 
 public class NetMethod {
+
+    /**
+     * 网络连接情况检测以及错误提示
+     *
+     * @param context         Context
+     * @param dataLoadCode    单个数据请求错误代码
+     * @param contentLoadCode 整体网络请求错误代码
+     * @return 网络检查是否通过
+     */
+    public static boolean checkNetWorkCode(@NonNull Context context, @NonNull int[] dataLoadCode, int contentLoadCode) {
+        if (contentLoadCode == Config.NET_WORK_ERROR_CODE_CONNECT_ERROR) {
+            Toast.makeText(context, R.string.network_get_error, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        for (int code : dataLoadCode) {
+            if (code == Config.NET_WORK_ERROR_CODE_CONNECT_NO_LOGIN) {
+                if (!BaseMethod.getApp(context).isShowLoginErrorOnce()) {
+                    Toast.makeText(context, R.string.user_login_error, Toast.LENGTH_LONG).show();
+                    BaseMethod.getApp(context).setShowLoginErrorOnce();
+                }
+                return false;
+            }
+            if (code == Config.NET_WORK_ERROR_CODE_CONNECT_USER_DATA) {
+                if (!BaseMethod.getApp(context).isShowLoginErrorOnce()) {
+                    Toast.makeText(context, R.string.user_login_error, Toast.LENGTH_LONG).show();
+                    BaseMethod.getApp(context).setShowLoginErrorOnce();
+                }
+                return false;
+            }
+            if (code == Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR) {
+                Toast.makeText(context, R.string.data_get_error, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+        return true;
+    }
 
     /**
      * 网络是否联接检测

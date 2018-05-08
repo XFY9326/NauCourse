@@ -10,6 +10,7 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.ExamMethod;
+import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Utils.Exam;
 
 /**
@@ -63,7 +64,7 @@ public class ExamAsync extends AsyncTask<Context, Void, Context> {
     protected void onPostExecute(@NonNull Context context) {
         ExamActivity examActivity = BaseMethod.getApp(context).getExamActivity();
         if (examActivity != null) {
-            if (BaseMethod.checkNetWorkCode(context, new int[]{examLoadSuccess}, loadCode)) {
+            if (NetMethod.checkNetWorkCode(context, new int[]{examLoadSuccess}, loadCode)) {
                 examActivity.setExam(exam);
             }
             examActivity.lastViewSet(context);

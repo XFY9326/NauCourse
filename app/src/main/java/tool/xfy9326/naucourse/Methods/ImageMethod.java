@@ -14,7 +14,7 @@ public class ImageMethod {
      * @param context Context
      * @return Bitmap
      */
-    public static Bitmap getBitmap(Context context) {
+    public static Bitmap getTableBackgroundBitmap(Context context) {
         if (context != null && new File(getCourseTableBackgroundImagePath(context)).exists()) {
             return BitmapFactory.decodeFile(getCourseTableBackgroundImagePath(context));
         }
