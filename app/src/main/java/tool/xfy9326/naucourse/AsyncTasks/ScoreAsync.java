@@ -35,9 +35,9 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
 
     @Override
     protected Context doInBackground(Context... context) {
+        int loadTime = 0;
+        ScoreActivity scoreActivity = BaseMethod.getApp(context[0]).getScoreActivity();
         try {
-            int loadTime = 0;
-            ScoreActivity scoreActivity = BaseMethod.getApp(context[0]).getScoreActivity();
             if (scoreActivity != null) {
                 loadTime = scoreActivity.getLoadTime();
             }
@@ -70,6 +70,10 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
         } catch (Exception e) {
             e.printStackTrace();
             loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+            if (scoreActivity != null) {
+                loadTime++;
+                scoreActivity.setLoadTime(loadTime);
+            }
         }
         return context[0];
     }

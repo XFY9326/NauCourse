@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
@@ -61,37 +62,49 @@ public class JwInfoMethod {
         String[] postTitle = new String[TOPIC_COUNT];
         String[] postType = new String[TOPIC_COUNT];
         String[] postUrl = new String[TOPIC_COUNT];
-        Elements elements = Objects.requireNonNull(document).getElementsByTag("tr");
-        List<String> text = elements.eachText();
-        for (String str : text) {
-            if (str.contains("教务通知")) {
-                str = str.substring(5);
-                str = str.substring(0, str.indexOf("教务新闻")).trim();
-                String[] data = str.split(" ");
-                int topicCount = 0;
-                int contentCount = 0;
-                for (String txt : data) {
-                    if (topicCount >= TOPIC_COUNT) {
+        Elements elements = Objects.requireNonNull(document).getElementsByTag("td");
+
+        int contentCount = 0;
+        int topicCount = 0;
+        boolean startText = false;
+        for (Object element : elements) {
+            Element element_child = (Element) element;
+            if (element_child.hasText() && element_child.childNodeSize() == 1) {
+                String text = element_child.text();
+                if (!text.isEmpty()) {
+                    if (text.contains("教务通知")) {
+                        startText = true;
+                        continue;
+                    } else if (text.contains("教务新闻")) {
                         break;
                     }
-                    if (contentCount == 0) {
-                        postType[topicCount] = txt.substring(1, txt.indexOf("】"));
-                        postTitle[topicCount] = txt.substring(txt.indexOf("】") + 1);
+                    if (startText) {
                         contentCount++;
-                    } else if (contentCount == 1) {
-                        postTime[topicCount] = txt;
-                        contentCount = 0;
-                        topicCount++;
+                        switch (contentCount) {
+                            case 1:
+                                continue;
+                            case 2:
+                                postType[topicCount] = text.substring(1, text.indexOf("】"));
+                                postTitle[topicCount] = text.substring(text.indexOf("】") + 1);
+                                break;
+                            case 3:
+                                postTime[topicCount] = text.trim();
+                                topicCount++;
+                                contentCount = 0;
+                                break;
+                        }
+                        if (topicCount >= TOPIC_COUNT) {
+                            break;
+                        }
                     }
                 }
-                break;
             }
         }
 
         Elements elements_url = document.getElementsByTag("a");
         List<String> attr = elements_url.eachAttr("href");
         boolean output = false;
-        int topicCount = 0;
+        topicCount = 0;
         for (String str : attr) {
             if (topicCount >= TOPIC_COUNT) {
                 break;

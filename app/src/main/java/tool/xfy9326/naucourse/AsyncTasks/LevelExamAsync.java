@@ -25,9 +25,9 @@ public class LevelExamAsync extends AsyncTask<Context, Void, Context> {
 
     @Override
     protected Context doInBackground(Context... context) {
+        int loadTime = 0;
+        LevelExamActivity levelExamActivity = BaseMethod.getApp(context[0]).getLevelExamActivity();
         try {
-            int loadTime = 0;
-            LevelExamActivity levelExamActivity = BaseMethod.getApp(context[0]).getLevelExamActivity();
             if (levelExamActivity != null) {
                 loadTime = levelExamActivity.getLoadTime();
             }
@@ -52,6 +52,10 @@ public class LevelExamAsync extends AsyncTask<Context, Void, Context> {
         } catch (Exception e) {
             e.printStackTrace();
             loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+            if (levelExamActivity != null) {
+                loadTime++;
+                levelExamActivity.setLoadTime(loadTime);
+            }
         }
         return context[0];
     }

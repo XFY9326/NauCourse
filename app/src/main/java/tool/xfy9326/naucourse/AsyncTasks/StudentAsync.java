@@ -33,9 +33,9 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
 
     @Override
     protected Context doInBackground(Context... context) {
+        int loadTime = 0;
+        PersonFragment personFragment = BaseMethod.getApp(context[0]).getViewPagerAdapter().getPersonFragment();
         try {
-            int loadTime = 0;
-            PersonFragment personFragment = BaseMethod.getApp(context[0]).getViewPagerAdapter().getPersonFragment();
             if (personFragment != null) {
                 loadTime = personFragment.getLoadTime();
             }
@@ -62,6 +62,10 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
         } catch (Exception e) {
             e.printStackTrace();
             loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+            if (personFragment != null) {
+                loadTime++;
+                personFragment.setLoadTime(loadTime);
+            }
         }
         return context[0];
     }

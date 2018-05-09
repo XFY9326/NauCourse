@@ -35,9 +35,9 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
 
     @Override
     protected Context doInBackground(final Context... context) {
+        int loadTime = 0;
+        HomeFragment homeFragment = BaseMethod.getApp(context[0]).getViewPagerAdapter().getHomeFragment();
         try {
-            int loadTime = 0;
-            HomeFragment homeFragment = BaseMethod.getApp(context[0]).getViewPagerAdapter().getHomeFragment();
             if (homeFragment != null) {
                 loadTime = homeFragment.getLoadTime();
             }
@@ -70,6 +70,10 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
         } catch (Exception e) {
             e.printStackTrace();
             loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+            if (homeFragment != null) {
+                loadTime++;
+                homeFragment.setLoadTime(loadTime);
+            }
         }
         return context[0];
     }

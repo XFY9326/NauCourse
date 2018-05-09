@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ToolBarSet();
         ViewSet();
-        wifiConnectCheck();
         tempLoad();
     }
 
@@ -41,6 +40,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         System.gc();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        wifiConnectCheck();
     }
 
     @Override

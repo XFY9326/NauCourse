@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">NAU课程表</string>
     <string name="login">登录</string>
@@ -181,7 +182,7 @@
     <string name="course_detail_edit_week_num">周数：</string>
     <string name="course_detail_edit_time">时间：</string>
     <string name="please_input_data">请添加数据</string>
-    <string name="course_detail_edit_time_single_time">设置为独立的时间（只填写开始时间）</string>
+    <string name="course_detail_edit_time_single_time">设置为独立的时间\n（只需要填写开始时间）</string>
     <string name="course_detail_edit_time_start_time">开始时间：</string>
     <string name="course_detail_edit_time_end_time">结束时间：</string>
     <string name="no_item_to_delete">没有可以删除的项目了！</string>
@@ -195,7 +196,7 @@
     <string name="change_table_transparency_sum">修改透明度可以使背景显示更加清晰</string>
     <string name="transparency">透明度</string>
     <string name="show_single_color">课程格子只显示默认颜色</string>
-    <string name="show_single_color_sum">不随机设置课程颜色只，显示默认颜色</string>
+    <string name="show_single_color_sum">不随机设置课程颜色，只显示默认颜色</string>
     <string name="add">添加</string>
     <string name="single_color_warn">请在设置中关闭只显示默认颜色后再设置！</string>
     <string name="wait_for_evaluate">待测评</string>

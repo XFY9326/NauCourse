@@ -146,7 +146,7 @@ public class ScoreActivity extends AppCompatActivity {
         }
     }
 
-    public boolean waitForEvaluate(CourseScore courseScore) {
+    private boolean waitForEvaluate(CourseScore courseScore) {
         if (courseScore != null && courseScore.getScoreTotal() != null) {
             for (String score : courseScore.getScoreTotal()) {
                 if (score.contains("测评")) {

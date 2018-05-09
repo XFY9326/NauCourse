@@ -178,7 +178,7 @@
     <string name="course_detail_edit_week_num">Weeks:</string>
     <string name="course_detail_edit_time">Time:</string>
     <string name="please_input_data">Please add data</string>
-    <string name="course_detail_edit_time_single_time">Set to an independent time (Fill only the start time)</string>
+    <string name="course_detail_edit_time_single_time">Set to an independent time\n (Only need fill the start time)</string>
     <string name="course_detail_edit_time_start_time">Start time:</string>
     <string name="course_detail_edit_time_end_time">End time:</string>
     <string name="no_item_to_delete"> There is no item that can be deleted!</string>
@@ -194,4 +194,6 @@
     <string name="show_single_color">Course Grid shows only the default color</string>
     <string name="show_single_color_sum">Does not set the course color randomly, just display the default color</string>
     <string name="add">Add</string>
+    <string name="single_color_warn">Please close only show default color in settings before using!</string>
+    <string name="wait_for_evaluate">Wait For Evaluate</string>
 </resources>

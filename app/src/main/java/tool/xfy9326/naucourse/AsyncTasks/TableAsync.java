@@ -33,9 +33,9 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
 
     @Override
     protected Context doInBackground(Context... context) {
+        int loadTime = 0;
+        TableFragment tableFragment = BaseMethod.getApp(context[0]).getViewPagerAdapter().getTableFragment();
         try {
-            int loadTime = 0;
-            TableFragment tableFragment = BaseMethod.getApp(context[0]).getViewPagerAdapter().getTableFragment();
             if (tableFragment != null) {
                 loadTime = tableFragment.getLoadTime();
             }
@@ -70,6 +70,10 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
         } catch (Exception e) {
             e.printStackTrace();
             loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+            if (tableFragment != null) {
+                loadTime++;
+                tableFragment.setLoadTime(loadTime);
+            }
         }
         return context[0];
     }

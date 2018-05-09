@@ -18,12 +18,17 @@
         android:persistentDrawingCache="animation"
         android:scrollbars="none" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@id/tabLayout_main"
+        android:background="@color/light_light_grey" />
+
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout_main"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="47dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorTab"
         app:tabGravity="fill"
         app:tabIndicatorHeight="0dp"
         app:tabMode="fixed">

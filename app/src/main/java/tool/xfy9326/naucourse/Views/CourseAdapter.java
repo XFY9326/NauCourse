@@ -30,7 +30,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
     private static final int COLOR_PICKER_DIALOG_ID = 1;
     private final CourseActivity activity;
     private ArrayList<Course> courseArrayList;
-    private SharedPreferences sharedPreferences;
+    private final SharedPreferences sharedPreferences;
     private boolean showCellColor;
     private boolean singleColor;
 
