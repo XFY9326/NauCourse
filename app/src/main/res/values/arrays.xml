@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
-    <string-array name="course_start_time" tools:ignore="MissingTranslation">
+    <string-array name="course_start_time">
         <item>08:30</item>
         <item>09:20</item>
         <item>10:20</item>
@@ -17,7 +17,7 @@
         <item>20:10</item>
     </string-array>
 
-    <string-array name="course_finish_time" tools:ignore="MissingTranslation">
+    <string-array name="course_finish_time">
         <item>09:10</item>
         <item>10:00</item>
         <item>11:00</item>
@@ -43,18 +43,24 @@
         <item>日</item>
     </string-array>
 
-    <string-array name="open_source_name" tools:ignore="MissingTranslation">
+    <string-array name="open_source_name">
         <item>Android Support Library</item>
         <item>Jsoup</item>
         <item>Okhttp3</item>
         <item>Gson</item>
+        <item>ColorPicker</item>
+        <item>PhotoView</item>
+        <item>Android-Image-Cropper</item>
     </string-array>
 
-    <string-array name="open_source_web" tools:ignore="MissingTranslation">
+    <string-array name="open_source_web">
         <item>http://source.android.com</item>
         <item>https://jsoup.org</item>
         <item>http://square.github.io/okhttp</item>
         <item>https://github.com/google/gson</item>
+        <item>https://github.com/jaredrummler/ColorPicker</item>
+        <item>https://github.com/chrisbanes/PhotoView</item>
+        <item>https://github.com/ArthurHub/Android-Image-Cropper</item>
     </string-array>
 
     <string-array name="net_provider">

@@ -12,39 +12,28 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 
-import tool.xfy9326.naucourse.AsyncTasks.ExamAsync;
+import tool.xfy9326.naucourse.AsyncTasks.SuspendCourseAsync;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.Utils.Exam;
-import tool.xfy9326.naucourse.Views.ExamAdapter;
+import tool.xfy9326.naucourse.Utils.SuspendCourse;
+import tool.xfy9326.naucourse.Views.SuspendCourseAdapter;
 
-/**
- * Created by 10696 on 2018/3/3.
- */
-
-public class ExamActivity extends AppCompatActivity {
+public class SuspendCourseActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
-    @Nullable
-    private ExamAdapter examAdapter;
+    private SuspendCourseAdapter suspendCourseAdapter;
     private int loadTime = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_exam);
-        BaseMethod.getApp(this).setExamActivity(this);
+        setContentView(R.layout.activity_suspend_course);
+        BaseMethod.getApp(this).setSuspendCourseActivity(this);
         ToolBarSet();
         ViewSet();
-    }
-
-    @Override
-    protected void onDestroy() {
-        BaseMethod.getApp(this).setExamActivity(null);
-        System.gc();
-        super.onDestroy();
     }
 
     private void ToolBarSet() {
@@ -57,21 +46,21 @@ public class ExamActivity extends AppCompatActivity {
     }
 
     private void ViewSet() {
-        recyclerView = findViewById(R.id.recyclerView_exam);
+        recyclerView = findViewById(R.id.recyclerView_suspend_course_list);
         recyclerView.setFocusableInTouchMode(false);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        swipeRefreshLayout = findViewById(R.id.swipeLayout_exam);
+        swipeRefreshLayout = findViewById(R.id.swipeLayout_suspend_course);
         swipeRefreshLayout.setDistanceToTriggerSync(200);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (NetMethod.isNetworkConnected(ExamActivity.this)) {
+                if (NetMethod.isNetworkConnected(SuspendCourseActivity.this)) {
                     getData();
                 } else {
-                    Snackbar.make(findViewById(R.id.layout_exam_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.layout_suspend_course_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
                     swipeRefreshLayout.post(new Runnable() {
                         @Override
                         public void run() {
@@ -81,29 +70,13 @@ public class ExamActivity extends AppCompatActivity {
                 }
             }
         });
-
         if (loadTime == 0) {
             getData();
         }
     }
 
-    public void setExam(@Nullable Exam exam) {
-        if (exam != null) {
-            if (exam.getExamMount() > 0) {
-                if (examAdapter == null) {
-                    examAdapter = new ExamAdapter(ExamActivity.this, exam);
-                    recyclerView.setAdapter(examAdapter);
-                } else {
-                    examAdapter.updateData(exam);
-                }
-            } else if (loadTime > 1 || !NetMethod.isNetworkConnected(this)) {
-                Snackbar.make(findViewById(R.id.layout_exam_content), R.string.no_exam, Snackbar.LENGTH_SHORT).show();
-            }
-        }
-    }
-
     private void getData() {
-        new ExamAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
+        new SuspendCourseAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
     }
 
     public int getLoadTime() {
@@ -112,6 +85,22 @@ public class ExamActivity extends AppCompatActivity {
 
     public void setLoadTime(int loadTime) {
         this.loadTime = loadTime;
+    }
+
+    public void setSuspendCourse(SuspendCourse suspendCourse) {
+        if (suspendCourse != null && suspendCourse.getTerm() != null) {
+            ((TextView) findViewById(R.id.textView_suspend_course_title)).setText(getString(R.string.suspend_course_title, suspendCourse.getTerm()));
+            if (suspendCourse.getCount() > 0) {
+                if (suspendCourseAdapter == null) {
+                    suspendCourseAdapter = new SuspendCourseAdapter(SuspendCourseActivity.this, suspendCourse);
+                    recyclerView.setAdapter(suspendCourseAdapter);
+                } else {
+                    suspendCourseAdapter.updateSuspendCourse(suspendCourse);
+                }
+            } else if (loadTime > 1 || !NetMethod.isNetworkConnected(this)) {
+                Snackbar.make(findViewById(R.id.layout_suspend_course_content), R.string.suspend_course_empty, Snackbar.LENGTH_SHORT).show();
+            }
+        }
     }
 
     public void lastViewSet(Context context) {
@@ -137,4 +126,9 @@ public class ExamActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        BaseMethod.getApp(this).setSuspendCourseActivity(null);
+        super.onDestroy();
+    }
 }

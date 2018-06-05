@@ -65,6 +65,7 @@ public class Config {
     public static final String PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND = "COURSE_TABLE_SHOW_BACKGROUND";
     public static final String PREFERENCE_CHANGE_TABLE_TRANSPARENCY = "CHANGE_TABLE_TRANSPARENCY";
     public static final String PREFERENCE_COURSE_TABLE_SHOW_SINGLE_COLOR = "COURSE_TABLE_SHOW_SINGLE_COLOR";
+    public static final String PREFERENCE_SCHOOL_CALENDAR_URL = "SCHOOL_CALENDAR_URL";
 
     public static final boolean DEFAULT_PREFERENCE_HAS_LOGIN = false;
     public static final boolean DEFAULT_PREFERENCE_REMEMBER_PW = true;
@@ -105,4 +106,6 @@ public class Config {
     public static final int DATA_VERSION_STUDENT_LEARN_PROCESS = 1;
     public static final int DATA_VERSION_STUDENT_SCORE = 1;
     public static final int DATA_VERSION_LEVEL_EXAM = 1;
+    public static final int DATA_VERSION_MOA = 1;
+    public static final int DATA_VERSION_SUSPEND_COURSE = 1;
 }

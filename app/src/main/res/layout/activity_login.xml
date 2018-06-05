@@ -12,8 +12,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?android:attr/actionBarSize"
-        android:orientation="vertical">
+        android:layout_marginTop="?android:attr/actionBarSize">
 
         <ImageView
             android:id="@+id/imageView_logo"

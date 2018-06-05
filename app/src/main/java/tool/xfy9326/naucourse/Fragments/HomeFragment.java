@@ -41,7 +41,7 @@ import tool.xfy9326.naucourse.Views.NextClassWidget;
  */
 
 public class HomeFragment extends Fragment {
-    private static final String NEXT_COURSE_FILE_NAME = "NextCourse";
+    public static final String NEXT_COURSE_FILE_NAME = "NextCourse";
     @Nullable
     private View view;
     @Nullable
@@ -85,6 +85,7 @@ public class HomeFragment extends Fragment {
 
     private void ViewSet() {
         recyclerView = Objects.requireNonNull(view).findViewById(R.id.recyclerView_information);
+        recyclerView.setFocusableInTouchMode(false);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         //保证从其他视图返回时列表位置不变

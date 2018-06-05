@@ -54,6 +54,7 @@ public class LevelExamActivity extends AppCompatActivity {
 
     private void ViewSet() {
         recyclerView = findViewById(R.id.recyclerView_level_exam);
+        recyclerView.setFocusableInTouchMode(false);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

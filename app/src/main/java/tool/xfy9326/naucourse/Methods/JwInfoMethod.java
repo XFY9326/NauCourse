@@ -1,6 +1,8 @@
 package tool.xfy9326.naucourse.Methods;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -9,14 +11,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Utils.JwTopic;
 
@@ -28,6 +25,7 @@ import tool.xfy9326.naucourse.Utils.JwTopic;
 public class JwInfoMethod {
     public static final String FILE_NAME = "JwTopic";
     public static final String server_url = "http://jw.nau.edu.cn";
+    private static final String calendar_server_utl = "http://www.nau.edu.cn";
     private static final int TOPIC_COUNT = 25;
     private final Context context;
     @Nullable
@@ -42,15 +40,11 @@ public class JwInfoMethod {
     }
 
     public int load() throws Exception {
-        String data = loadUrl(server_url);
+        String data = NetMethod.loadUrl(server_url);
         System.gc();
         if (data != null) {
             document = Jsoup.parse(data);
-            if (LoginMethod.checkUserLogin(data)) {
-                document = Jsoup.parse(data);
-                return Config.NET_WORK_GET_SUCCESS;
-            }
-            return Config.NET_WORK_ERROR_CODE_CONNECT_USER_DATA;
+            return Config.NET_WORK_GET_SUCCESS;
         }
         return Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR;
     }
@@ -136,15 +130,58 @@ public class JwInfoMethod {
         }
     }
 
-    public int loadDetail(String url) throws Exception {
-        String data = loadUrl(server_url + url);
-        if (data != null) {
-            data = data.replace("&nbsp;", "\\b");
-            if (LoginMethod.checkUserLogin(data)) {
-                document_detail = Jsoup.parse(data);
+    public int loadSchoolCalendarImage(boolean checkTemp) throws Exception {
+        String Image_Url = null;
+        if (document != null) {
+            String url = null;
+            Elements elements = document.getElementsByTag("a");
+            for (Element element : elements) {
+                if (element.hasText() && element.text().contains("校历") && element.hasAttr("href")) {
+                    url = element.attr("href");
+                    break;
+                }
+            }
+            if (url != null) {
+                String data = NetMethod.loadUrl(url);
+                if (data != null) {
+                    Document document = Jsoup.parse(data);
+                    Elements elements_img = document.getElementsByClass("readinfo");
+                    for (Element element : elements_img) {
+                        Elements elements_img_2 = element.getElementsByTag("img");
+                        for (Element element_2 : elements_img_2) {
+                            if (element_2.hasAttr("src")) {
+                                Image_Url = calendar_server_utl + element_2.attr("src");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (Image_Url != null) {
+            if (checkTemp) {
+                String old_url = PreferenceManager.getDefaultSharedPreferences(context).getString(Config.PREFERENCE_SCHOOL_CALENDAR_URL, null);
+                if (old_url != null && old_url.equalsIgnoreCase(Image_Url)) {
+                    return Config.NET_WORK_GET_SUCCESS;
+                }
+            }
+            PreferenceManager.getDefaultSharedPreferences(context).edit().putString(Config.PREFERENCE_SCHOOL_CALENDAR_URL, Image_Url).apply();
+            if (ImageMethod.downloadImage(Image_Url, ImageMethod.getSchoolCalendarImagePath(context))) {
                 return Config.NET_WORK_GET_SUCCESS;
             }
-            return Config.NET_WORK_ERROR_CODE_CONNECT_USER_DATA;
+        }
+        return Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR;
+    }
+
+    public Bitmap getSchoolCalendarImage() {
+        return ImageMethod.getSchoolCalendarImage(context);
+    }
+
+    public int loadDetail(String url) throws Exception {
+        String data = NetMethod.loadUrl(server_url + url);
+        if (data != null) {
+            data = data.replace("&nbsp;", "\\b");
+            document_detail = Jsoup.parse(data);
+            return Config.NET_WORK_GET_SUCCESS;
         }
         return Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR;
     }
@@ -162,20 +199,5 @@ public class JwInfoMethod {
             }
         }
         return result.toString();
-    }
-
-    private String loadUrl(@NonNull String url) throws IOException {
-        OkHttpClient.Builder client_builder = new OkHttpClient.Builder();
-        OkHttpClient client = client_builder.build();
-        Request.Builder request_builder = new Request.Builder();
-        request_builder.url(url);
-        Response response = client.newCall(request_builder.build()).execute();
-        if (response.isSuccessful()) {
-            ResponseBody responseBody = response.body();
-            if (responseBody != null) {
-                return responseBody.string();
-            }
-        }
-        return null;
     }
 }

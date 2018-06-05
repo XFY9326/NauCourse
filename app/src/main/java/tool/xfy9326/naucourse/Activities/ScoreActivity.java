@@ -61,6 +61,7 @@ public class ScoreActivity extends AppCompatActivity {
 
     private void ViewSet() {
         recyclerView = findViewById(R.id.recyclerView_score_term);
+        recyclerView.setFocusableInTouchMode(false);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

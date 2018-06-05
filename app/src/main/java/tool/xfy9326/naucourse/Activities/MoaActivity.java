@@ -9,42 +9,32 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 
-import tool.xfy9326.naucourse.AsyncTasks.ExamAsync;
+import tool.xfy9326.naucourse.AsyncTasks.MoaAsync;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
+import tool.xfy9326.naucourse.Methods.MoaMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.Utils.Exam;
-import tool.xfy9326.naucourse.Views.ExamAdapter;
+import tool.xfy9326.naucourse.Utils.Moa;
+import tool.xfy9326.naucourse.Views.MoaAdapter;
 
-/**
- * Created by 10696 on 2018/3/3.
- */
-
-public class ExamActivity extends AppCompatActivity {
+public class MoaActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
-    @Nullable
-    private ExamAdapter examAdapter;
+    private MoaAdapter moaAdapter;
     private int loadTime = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_exam);
-        BaseMethod.getApp(this).setExamActivity(this);
+        setContentView(R.layout.activity_moa);
+        BaseMethod.getApp(this).setMoaActivity(this);
         ToolBarSet();
         ViewSet();
-    }
-
-    @Override
-    protected void onDestroy() {
-        BaseMethod.getApp(this).setExamActivity(null);
-        System.gc();
-        super.onDestroy();
     }
 
     private void ToolBarSet() {
@@ -57,21 +47,23 @@ public class ExamActivity extends AppCompatActivity {
     }
 
     private void ViewSet() {
-        recyclerView = findViewById(R.id.recyclerView_exam);
+        ((TextView) findViewById(R.id.textView_moa_section_title)).setText(getString(R.string.moa_title, MoaMethod.MOA_PAST_SHOW_MONTH));
+
+        recyclerView = findViewById(R.id.recyclerView_moa);
         recyclerView.setFocusableInTouchMode(false);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
-        swipeRefreshLayout = findViewById(R.id.swipeLayout_exam);
+        swipeRefreshLayout = findViewById(R.id.swipeLayout_moa);
         swipeRefreshLayout.setDistanceToTriggerSync(200);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (NetMethod.isNetworkConnected(ExamActivity.this)) {
+                if (NetMethod.isNetworkConnected(MoaActivity.this)) {
                     getData();
                 } else {
-                    Snackbar.make(findViewById(R.id.layout_exam_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.layout_moa_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
                     swipeRefreshLayout.post(new Runnable() {
                         @Override
                         public void run() {
@@ -81,29 +73,32 @@ public class ExamActivity extends AppCompatActivity {
                 }
             }
         });
-
         if (loadTime == 0) {
             getData();
         }
     }
 
-    public void setExam(@Nullable Exam exam) {
-        if (exam != null) {
-            if (exam.getExamMount() > 0) {
-                if (examAdapter == null) {
-                    examAdapter = new ExamAdapter(ExamActivity.this, exam);
-                    recyclerView.setAdapter(examAdapter);
-                } else {
-                    examAdapter.updateData(exam);
-                }
-            } else if (loadTime > 1 || !NetMethod.isNetworkConnected(this)) {
-                Snackbar.make(findViewById(R.id.layout_exam_content), R.string.no_exam, Snackbar.LENGTH_SHORT).show();
-            }
-        }
+    private void getData() {
+        new MoaAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
     }
 
-    private void getData() {
-        new ExamAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
+    public void setMoa(Moa moa) {
+        if (moa != null) {
+            if (moa.getCount() > 0) {
+                if (moaAdapter == null) {
+                    moaAdapter = new MoaAdapter(MoaActivity.this, moa);
+                    recyclerView.setAdapter(moaAdapter);
+                } else {
+                    moaAdapter.updateMoa(moa);
+                }
+                if (loadTime == 1) {
+                    recyclerView.scrollToPosition(MoaMethod.getScrollPosition(moa));
+                }
+            } else {
+                Snackbar.make(findViewById(R.id.layout_moa_content), R.string.moa_empty, Snackbar.LENGTH_SHORT).show();
+
+            }
+        }
     }
 
     public int getLoadTime() {
@@ -135,6 +130,12 @@ public class ExamActivity extends AppCompatActivity {
             });
             getData();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        BaseMethod.getApp(this).setMoaActivity(null);
+        super.onDestroy();
     }
 
 }

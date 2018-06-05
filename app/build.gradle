@@ -14,9 +14,9 @@ android {
         applicationId "tool.xfy9326.naucourse"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 25
-        versionName "3.4"
-        resConfigs "zh", "en"
+        versionCode 26
+        versionName "3.5"
+        resConfigs "zh"
     }
 
     buildTypes {
@@ -37,14 +37,21 @@ android {
 
 dependencies {
     implementation project(':NauJwc')
+
     implementation 'org.jsoup:jsoup:1.11.3'
-    implementation 'com.google.code.gson:gson:2.8.2'
-    implementation 'com.jaredrummler:colorpicker:1.0.2'
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+
+    implementation 'com.google.code.gson:gson:2.8.2'
+
+    implementation 'com.jaredrummler:colorpicker:1.0.2'
+
+    implementation 'com.tencent.bugly:crashreport_upgrade:1.3.4'
+
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:cardview-v7:27.1.1'
     implementation 'com.android.support:gridlayout-v7:27.1.1'
-    implementation 'com.tencent.bugly:crashreport_upgrade:1.3.4'
+
+    implementation 'com.github.chrisbanes:PhotoView:2.1.3'
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
 }

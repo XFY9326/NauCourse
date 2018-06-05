@@ -33,7 +33,6 @@ public class LevelExamMethod {
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
             String data = LoginMethod.getData(context, "/Students/MyLevelExam.aspx", true);
             if (data != null) {
-                document = Jsoup.parse(data);
                 if (LoginMethod.checkUserLogin(data)) {
                     document = Jsoup.parse(data);
                     return Config.NET_WORK_GET_SUCCESS;

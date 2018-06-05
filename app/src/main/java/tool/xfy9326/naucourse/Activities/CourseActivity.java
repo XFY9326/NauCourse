@@ -132,6 +132,7 @@ public class CourseActivity extends AppCompatActivity {
 
     private void ViewSet() {
         recyclerView = findViewById(R.id.recyclerView_course_list);
+        recyclerView.setFocusableInTouchMode(false);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         //保证从其他视图返回时列表位置不变

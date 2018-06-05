@@ -25,9 +25,12 @@ import tool.xfy9326.naucourse.Activities.AboutActivity;
 import tool.xfy9326.naucourse.Activities.ExamActivity;
 import tool.xfy9326.naucourse.Activities.LevelExamActivity;
 import tool.xfy9326.naucourse.Activities.LoginActivity;
+import tool.xfy9326.naucourse.Activities.MoaActivity;
+import tool.xfy9326.naucourse.Activities.SchoolCalendarActivity;
 import tool.xfy9326.naucourse.Activities.ScoreActivity;
 import tool.xfy9326.naucourse.Activities.SettingsActivity;
 import tool.xfy9326.naucourse.Activities.StudentInfoActivity;
+import tool.xfy9326.naucourse.Activities.SuspendCourseActivity;
 import tool.xfy9326.naucourse.Activities.WifiConnectActivity;
 import tool.xfy9326.naucourse.AsyncTasks.StudentAsync;
 import tool.xfy9326.naucourse.Config;
@@ -118,6 +121,37 @@ public class PersonFragment extends Fragment {
         CardView cardView_exam = view.findViewById(R.id.cardView_exam);
         CardView cardView_wifi = view.findViewById(R.id.cardView_wifi);
         CardView cardView_levelExam = view.findViewById(R.id.cardView_level_exam);
+
+        CardView cardView_school_calendar = view.findViewById(R.id.cardView_school_calendar);
+        CardView cardView_suspend_course = view.findViewById(R.id.cardView_suspend_course);
+        CardView cardView_moa = view.findViewById(R.id.cardView_moa);
+
+        cardView_suspend_course.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getActivity() != null) {
+                    startActivity(new Intent(getActivity(), SuspendCourseActivity.class));
+                }
+            }
+        });
+
+        cardView_moa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getActivity() != null) {
+                    startActivity(new Intent(getActivity(), MoaActivity.class));
+                }
+            }
+        });
+
+        cardView_school_calendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getActivity() != null) {
+                    startActivity(new Intent(getActivity(), SchoolCalendarActivity.class));
+                }
+            }
+        });
 
         cardView_stdInfo.setOnClickListener(new View.OnClickListener() {
             @Override

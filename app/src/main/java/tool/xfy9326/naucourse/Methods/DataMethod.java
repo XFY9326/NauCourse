@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.Fragments.HomeFragment;
 import tool.xfy9326.naucourse.Tools.AES;
 import tool.xfy9326.naucourse.Tools.IO;
 import tool.xfy9326.naucourse.Utils.Course;
@@ -111,38 +112,44 @@ public class DataMethod {
     private static boolean checkDataVersionCode(String content, Class file_class) {
         int nowVersionCode;
         switch (file_class.getSimpleName()) {
-            case "Course":
+            case TableMethod.FILE_NAME:
                 nowVersionCode = Config.DATA_VERSION_COURSE;
                 break;
-            case "CourseScore":
+            case ScoreMethod.FILE_NAME:
                 nowVersionCode = Config.DATA_VERSION_COURSE_SCORE;
                 break;
-            case "Exam":
+            case ExamMethod.FILE_NAME:
                 nowVersionCode = Config.DATA_VERSION_EXAM;
                 break;
-            case "JwcTopic":
+            case JwcInfoMethod.FILE_NAME:
                 nowVersionCode = Config.DATA_VERSION_JWC_TOPIC;
                 break;
-            case "JwTopic":
+            case JwInfoMethod.FILE_NAME:
                 nowVersionCode = Config.DATA_VERSION_JW_TOPIC;
                 break;
-            case "NextCourse":
+            case HomeFragment.NEXT_COURSE_FILE_NAME:
                 nowVersionCode = Config.DATA_VERSION_NEXT_COURSE;
                 break;
-            case "SchoolTime":
+            case SchoolTimeMethod.FILE_NAME:
                 nowVersionCode = Config.DATA_VERSION_SCHOOL_TIME;
                 break;
-            case "StudentInfo":
+            case PersonMethod.FILE_NAME_DATA:
                 nowVersionCode = Config.DATA_VERSION_STUDENT_INFO;
                 break;
-            case "StudentLearnProcess":
+            case PersonMethod.FILE_NAME_PROCESS:
                 nowVersionCode = Config.DATA_VERSION_STUDENT_LEARN_PROCESS;
                 break;
-            case "StudentScore":
+            case PersonMethod.FILE_NAME_SCORE:
                 nowVersionCode = Config.DATA_VERSION_STUDENT_SCORE;
                 break;
-            case "LevelExam":
+            case LevelExamMethod.FILE_NAME:
                 nowVersionCode = Config.DATA_VERSION_LEVEL_EXAM;
+                break;
+            case MoaMethod.FILE_NAME:
+                nowVersionCode = Config.DATA_VERSION_MOA;
+                break;
+            case SuspendCourseMethod.FILE_NAME:
+                nowVersionCode = Config.DATA_VERSION_SUSPEND_COURSE;
                 break;
             default:
                 nowVersionCode = 0;

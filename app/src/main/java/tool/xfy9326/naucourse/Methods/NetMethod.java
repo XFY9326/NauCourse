@@ -14,8 +14,13 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.Objects;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Tools.AES;
@@ -25,6 +30,28 @@ import tool.xfy9326.naucourse.Tools.AES;
  */
 
 public class NetMethod {
+
+    /**
+     * 加载一个网页
+     *
+     * @param url 网页URL
+     * @return 页面内容
+     * @throws IOException 网页获取错误
+     */
+    public static String loadUrl(@NonNull String url) throws IOException {
+        OkHttpClient.Builder client_builder = new OkHttpClient.Builder();
+        OkHttpClient client = client_builder.build();
+        Request.Builder request_builder = new Request.Builder();
+        request_builder.url(url);
+        Response response = client.newCall(request_builder.build()).execute();
+        if (response.isSuccessful()) {
+            ResponseBody responseBody = response.body();
+            if (responseBody != null) {
+                return responseBody.string();
+            }
+        }
+        return null;
+    }
 
     /**
      * 网络连接情况检测以及错误提示

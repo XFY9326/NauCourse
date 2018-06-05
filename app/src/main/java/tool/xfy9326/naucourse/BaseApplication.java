@@ -9,7 +9,10 @@ import tool.xfy9326.naucourse.Activities.CourseActivity;
 import tool.xfy9326.naucourse.Activities.ExamActivity;
 import tool.xfy9326.naucourse.Activities.InfoDetailActivity;
 import tool.xfy9326.naucourse.Activities.LevelExamActivity;
+import tool.xfy9326.naucourse.Activities.MoaActivity;
+import tool.xfy9326.naucourse.Activities.SchoolCalendarActivity;
 import tool.xfy9326.naucourse.Activities.ScoreActivity;
+import tool.xfy9326.naucourse.Activities.SuspendCourseActivity;
 import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
 
 /**
@@ -24,6 +27,9 @@ public class BaseApplication extends Application {
     private ExamActivity examActivity;
     private LevelExamActivity levelExamActivity;
     private CourseActivity courseActivity;
+    private SchoolCalendarActivity schoolCalendarActivity;
+    private SuspendCourseActivity suspendCourseActivity;
+    private MoaActivity moaActivity;
 
     private boolean showLoginErrorOnce = false;
 
@@ -96,5 +102,29 @@ public class BaseApplication extends Application {
 
     public void setCourseActivity(CourseActivity courseActivity) {
         this.courseActivity = courseActivity;
+    }
+
+    public SchoolCalendarActivity getSchoolCalendarActivity() {
+        return schoolCalendarActivity;
+    }
+
+    public void setSchoolCalendarActivity(SchoolCalendarActivity schoolCalendarActivity) {
+        this.schoolCalendarActivity = schoolCalendarActivity;
+    }
+
+    public SuspendCourseActivity getSuspendCourseActivity() {
+        return suspendCourseActivity;
+    }
+
+    public void setSuspendCourseActivity(SuspendCourseActivity suspendCourseActivity) {
+        this.suspendCourseActivity = suspendCourseActivity;
+    }
+
+    public MoaActivity getMoaActivity() {
+        return moaActivity;
+    }
+
+    public void setMoaActivity(MoaActivity moaActivity) {
+        this.moaActivity = moaActivity;
     }
 }

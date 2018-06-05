@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Objects;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -70,10 +69,11 @@ public class AES {
                 e.printStackTrace();
             }
             data = encrypt(data, password);
-            return byte2hex(Objects.requireNonNull(data));
-        } else {
-            return null;
+            if (data != null) {
+                return byte2hex(data);
+            }
         }
+        return null;
     }
 
     private static byte[] decrypt(byte[] content, String password) {

@@ -100,6 +100,33 @@
         </activity>
 
         <activity
+            android:name=".Activities.SchoolCalendarActivity"
+            android:label="@string/school_calendar"
+            tools:ignore="InnerclassSeparator">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".Activities.SuspendCourseActivity"
+            android:label="@string/suspend_course"
+            tools:ignore="InnerclassSeparator">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".Activities.MoaActivity"
+            android:label="@string/moa"
+            tools:ignore="InnerclassSeparator">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.MainActivity" />
+        </activity>
+
+        <activity
             android:name=".Activities.WifiConnectActivity"
             android:label="@string/connect_nau_wifi"
             tools:ignore="InnerclassSeparator">

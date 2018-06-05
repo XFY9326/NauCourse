@@ -109,6 +109,7 @@ public class CourseEditActivity extends AppCompatActivity {
         }
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView_course_edit_list);
+        recyclerView.setFocusableInTouchMode(false);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         courseEditAdapter = new CourseEditAdapter(this, courseDetailArrayList);

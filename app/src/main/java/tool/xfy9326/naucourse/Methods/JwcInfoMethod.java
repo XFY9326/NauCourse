@@ -45,9 +45,8 @@ public class JwcInfoMethod {
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
             String data = LoginMethod.getData(context, "/Issue/TopicList.aspx?bn=%E6%95%99%E5%8A%A1%E9%80%9A%E7%9F%A5&sn=%E6%95%99%E5%8A%A1%E9%80%9A%E7%9F%A5", true);
             if (data != null) {
-                document = Jsoup.parse(data);
                 if (LoginMethod.checkUserLogin(data)) {
-                    detailDocument = Jsoup.parse(data);
+                    document = Jsoup.parse(data);
                     return Config.NET_WORK_GET_SUCCESS;
                 }
                 return Config.NET_WORK_ERROR_CODE_CONNECT_USER_DATA;

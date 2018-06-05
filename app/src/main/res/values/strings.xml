@@ -200,10 +200,31 @@
     <string name="add">添加</string>
     <string name="single_color_warn">请在设置中关闭只显示默认颜色后再设置！</string>
     <string name="wait_for_evaluate">待测评</string>
+    <string name="academic_report">学术报告会</string>
+    <string name="large_academic_conference">大型学术会议</string>
+    <string name="suspend_course_class_class">教学班：%1$s</string>
+    <string name="suspend_course_class_teacher">教师：%1$s</string>
+    <string name="suspend_course_class_time">节次：%1$s</string>
+    <string name="suspend_course_class_location">地点：%1$s</string>
+    <string name="suspend_course_class_date">日期：%1$s</string>
+    <string name="school_calendar">学校校历</string>
+    <string name="school_calendar_title">◈ 校历</string>
+    <string name="suspend_course_title_short">◈ 调停课程</string>
+    <string name="suspend_course_title">◈ 调停课程&#160;&#160;&#160;学期：%1$s</string>
+    <string name="suspend_course">调停课程</string>
+    <string name="moa">学术日程</string>
+    <string name="suspend_course_empty">暂无调停课信息</string>
+    <string name="moa_title">◈ 学术日程&#160;&#160;&#160;(历史学术活动仅显示过去%1$d个月)</string>
+    <string name="moa_type">类型：%1$s</string>
+    <string name="moa_reporter">报告人：%1$s</string>
+    <string name="moa_time">时间：%1$s</string>
+    <string name="moa_location">地点：%1$s</string>
+    <string name="moa_apply_unit">举办单位：%1$s</string>
+    <string name="moa_empty">暂无学术讲座</string>
 
-    <string name="cpv_default_title" translatable="false">选择一种颜色</string>
-    <string name="cpv_presets" translatable="false">预设</string>
-    <string name="cpv_custom" translatable="false">自定义</string>
-    <string name="cpv_select" translatable="false">选择</string>
-    <string name="cpv_transparency" translatable="false">透明度</string>
+    <string name="cpv_default_title">选择一种颜色</string>
+    <string name="cpv_presets">预设</string>
+    <string name="cpv_custom">自定义</string>
+    <string name="cpv_select">选择</string>
+    <string name="cpv_transparency">透明度</string>
 </resources>

@@ -9,6 +9,7 @@ import tool.xfy9326.naucourse.Methods.ExamMethod;
 import tool.xfy9326.naucourse.Methods.LevelExamMethod;
 import tool.xfy9326.naucourse.Methods.PersonMethod;
 import tool.xfy9326.naucourse.Methods.ScoreMethod;
+import tool.xfy9326.naucourse.Methods.SuspendCourseMethod;
 
 /**
  * Created by 10696 on 2018/3/16.
@@ -36,6 +37,10 @@ public class TempAsync extends AsyncTask<Context, Void, Void> {
             LevelExamMethod levelExamMethod = new LevelExamMethod(contexts[0]);
             if (levelExamMethod.load() == Config.NET_WORK_GET_SUCCESS) {
                 levelExamMethod.saveTemp();
+            }
+            SuspendCourseMethod suspendCourseMethod = new SuspendCourseMethod(contexts[0]);
+            if (suspendCourseMethod.load() == Config.NET_WORK_GET_SUCCESS) {
+                suspendCourseMethod.saveTemp();
             }
         } catch (Exception e) {
             e.printStackTrace();

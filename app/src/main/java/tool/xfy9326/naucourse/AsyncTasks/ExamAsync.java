@@ -51,7 +51,7 @@ public class ExamAsync extends AsyncTask<Context, Void, Context> {
                 }
 
                 loadTime++;
-                BaseMethod.getApp(context[0]).getExamActivity().setLoadTime(loadTime);
+                examActivity.setLoadTime(loadTime);
             }
         } catch (Exception e) {
             e.printStackTrace();
