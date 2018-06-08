@@ -75,6 +75,9 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
                 tableFragment.setLoadTime(loadTime);
             }
         }
+        if (loadTime > 2) {
+            BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);
+        }
         return context[0];
     }
 

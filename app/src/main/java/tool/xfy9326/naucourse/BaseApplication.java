@@ -32,6 +32,7 @@ public class BaseApplication extends Application {
     private MoaActivity moaActivity;
 
     private boolean showLoginErrorOnce = false;
+    private boolean showConnectErrorOnce = false;
 
     @Override
 
@@ -126,5 +127,13 @@ public class BaseApplication extends Application {
 
     public void setMoaActivity(MoaActivity moaActivity) {
         this.moaActivity = moaActivity;
+    }
+
+    public boolean isShowConnectErrorOnce() {
+        return showConnectErrorOnce;
+    }
+
+    public void setShowConnectErrorOnce(boolean showConnectErrorOnce) {
+        this.showConnectErrorOnce = showConnectErrorOnce;
     }
 }

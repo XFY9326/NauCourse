@@ -152,7 +152,7 @@ public class CourseActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(CourseActivity.this);
-                builder.setItems(new String[]{getString(R.string.create_new_course), getString(R.string.import_course_from_jwc)}, new DialogInterface.OnClickListener() {
+                builder.setItems(new String[]{getString(R.string.create_new_course), getString(R.string.import_course_from_jwc_current)}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(CourseActivity.this, CourseEditActivity.class);
@@ -314,7 +314,7 @@ public class CourseActivity extends AppCompatActivity {
             final ArrayList<Course> courses_choose = new ArrayList<>();
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.import_course_from_jwc);
+            builder.setTitle(R.string.import_course_from_jwc_current);
             builder.setMultiChoiceItems(name, checked, new DialogInterface.OnMultiChoiceClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which, boolean isChecked) {

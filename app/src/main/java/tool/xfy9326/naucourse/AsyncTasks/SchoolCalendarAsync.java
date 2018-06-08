@@ -54,6 +54,9 @@ public class SchoolCalendarAsync extends AsyncTask<Context, Void, Context> {
             loadTime++;
             BaseMethod.getApp(context[0]).getSchoolCalendarActivity().setLoadTime(loadTime);
         }
+        if (loadTime > 2) {
+            BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);
+        }
         return context[0];
     }
 

@@ -75,6 +75,9 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
                 scoreActivity.setLoadTime(loadTime);
             }
         }
+        if (loadTime > 2) {
+            BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);
+        }
         return context[0];
     }
 

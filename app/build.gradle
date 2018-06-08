@@ -13,6 +13,7 @@ android {
     defaultConfig {
         applicationId "tool.xfy9326.naucourse"
         minSdkVersion 19
+        //noinspection OldTargetApi
         targetSdkVersion 27
         versionCode 26
         versionName "3.5"

@@ -31,7 +31,6 @@ import tool.xfy9326.naucourse.Activities.ScoreActivity;
 import tool.xfy9326.naucourse.Activities.SettingsActivity;
 import tool.xfy9326.naucourse.Activities.StudentInfoActivity;
 import tool.xfy9326.naucourse.Activities.SuspendCourseActivity;
-import tool.xfy9326.naucourse.Activities.WifiConnectActivity;
 import tool.xfy9326.naucourse.AsyncTasks.StudentAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
@@ -119,7 +118,6 @@ public class PersonFragment extends Fragment {
 
         CardView cardView_score = view.findViewById(R.id.cardView_score_search);
         CardView cardView_exam = view.findViewById(R.id.cardView_exam);
-        CardView cardView_wifi = view.findViewById(R.id.cardView_wifi);
         CardView cardView_levelExam = view.findViewById(R.id.cardView_level_exam);
 
         CardView cardView_school_calendar = view.findViewById(R.id.cardView_school_calendar);
@@ -170,16 +168,6 @@ public class PersonFragment extends Fragment {
             }
         });
 
-        cardView_wifi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isAdded() && getActivity() != null) {
-                    Intent intent = new Intent(getActivity(), WifiConnectActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    getActivity().startActivity(intent);
-                }
-            }
-        });
         cardView_score.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -341,15 +329,28 @@ public class PersonFragment extends Fragment {
                     });
                 }
             }
-            //离线数据加载完成，开始拉取网络数据
+            //离线数据加载完成，开始拉取网络数据，数据每天更新
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             if (loadTime == 1 && NetMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
-                swipeRefreshLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeRefreshLayout.setRefreshing(true);
-                    }
-                });
-                getData();
+                boolean update_day = true;
+
+                if (sharedPreferences.getBoolean(Config.PREFERENCE_ASYNC_PERSONAL_INFO_BY_DAY, Config.DEFAULT_PREFERENCE_ASYNC_PERSONAL_INFO_BY_DAY)) {
+                    long personal_info_load_date = sharedPreferences.getLong(Config.PREFERENCE_PERSONAL_INFO_LOAD_DATE, 0);
+                    long now_time = System.currentTimeMillis() / 1000;
+                    long more = now_time - personal_info_load_date;
+                    update_day = (more == 0 && now_time == 0) || (more / (60 * 60 * 24)) >= 1;
+                    sharedPreferences.edit().putLong(Config.PREFERENCE_PERSONAL_INFO_LOAD_DATE, now_time).apply();
+                }
+
+                if (update_day) {
+                    swipeRefreshLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipeRefreshLayout.setRefreshing(true);
+                        }
+                    });
+                    getData();
+                }
             }
         }
     }

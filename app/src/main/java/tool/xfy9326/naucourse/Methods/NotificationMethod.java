@@ -25,17 +25,7 @@ import tool.xfy9326.naucourse.Utils.NextCourse;
 public class NotificationMethod {
     private static final int ACTIVITY_REQUEST_CODE = 0;
     private static final int NOTIFICATION_CODE_NEXT_COURSE = 100;
-    private static final int NOTIFICATION_CODE_WIFI_CONNECT = 101;
     private static final String CHANNEL_ID = "channel_nau_notify";
-
-    /**
-     * 显示i-NAU-Home登陆成功通知
-     *
-     * @param context Context
-     */
-    public static void showWifiConnectSuccess(@NonNull Context context) {
-        showNotification(context, NOTIFICATION_CODE_WIFI_CONNECT, context.getString(R.string.app_name), context.getString(R.string.i_nau_home_settings_auto_login_success));
-    }
 
     /**
      * 显示下一节课的通知
@@ -62,6 +52,7 @@ public class NotificationMethod {
      * @param title   通知标题
      * @param text    通知内容
      */
+    @SuppressWarnings("SameParameterValue")
     private static void showNotification(Context context, int code, String title, String text) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager != null) {

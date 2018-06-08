@@ -17,7 +17,6 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.Services.WifiConnectService;
 import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
 
 /**
@@ -43,20 +42,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        wifiConnectCheck();
-    }
-
-    @Override
     public void onBackPressed() {
         BaseMethod.doubleClickExit(this);
-    }
-
-    private void wifiConnectCheck() {
-        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Config.PREFERENCE_NETWORK_AUTO_LOGIN, Config.DEFAULT_PREFERENCE_NETWORK_AUTO_LOGIN)) {
-            getApplicationContext().startService(new Intent(this, WifiConnectService.class).putExtra(Config.INTENT_AUTO_LOGIN, true));
-        }
     }
 
     private void loginCheck() {

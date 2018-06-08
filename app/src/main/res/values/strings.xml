@@ -121,23 +121,7 @@
     <string name="process_award">奖励学分：%1$s</string>
     <string name="process_still">学分差额：%1$s</string>
     <string name="share">分享</string>
-    <string name="connect_nau_wifi">i-NAU-Home 快速连接</string>
-    <string name="network_connect_check_error_server">未检测到登录服务器！</string>
-    <string name="network_connect_check_error_ssid">请先连接到i-NAU-Home网络！</string>
-    <string name="network_connect_error_server">登陆服务器连接失败！</string>
-    <string name="network_connect_error_login">网络账户登录失败！</string>
-    <string name="i_nau_home_settings">i-NAU-Home连接配置</string>
-    <string name="i_nau_home_settings_net_provider">网络提供商：</string>
-    <string name="i_nau_home_settings_account">网络账户：</string>
-    <string name="i_nau_home_settings_pw">网络密码：</string>
-    <string name="i_nau_home_settings_error">网络信息设置错误！</string>
-    <string name="i_nau_home_settings_auto_login">连接到Wifi时自动登录</string>
-    <string name="i_nau_home_settings_auto_login_success">i-NAU-Home自动登录成功！</string>
-    <string name="connect_network">连接到网络</string>
-    <string name="disconnect_network">注销网络登录</string>
-    <string name="login_out_success">注销成功！</string>
     <string name="permission_error">未给予相关权限！</string>
-    <string name="edit_after_login_out">注销后方可编辑登录信息！</string>
     <string name="no_available_application">无可用APP</string>
     <string name="ask_lock_background">在后台锁定本应用以带来更好的使用体验！</string>
     <string name="feedback">问题反馈</string>
@@ -153,7 +137,6 @@
     <string name="level_exam_ticket">准考证号：%1$s</string>
     <string name="level_exam_certificate">证书编号：%1$s</string>
     <string name="level_exam_empty">暂无等级考试信息！</string>
-    <string name="wifi_connect">Wifi连接</string>
     <string name="course_table_background">课程表背景</string>
     <string name="show_course_table_background">显示课程表背景图</string>
     <string name="show_course_table_background_sum">课程表将会显示自定义的背景</string>
@@ -161,7 +144,7 @@
     <string name="course_manage">课程管理</string>
     <string name="save">保存</string>
     <string name="save_attention">是否不保存修改并退出？</string>
-    <string name="import_course_from_jwc">从教务处导入个人课程</string>
+    <string name="import_course_from_jwc_current">从教务处导入本学期个人课程</string>
     <string name="create_new_course">新建一个课程</string>
     <string name="course_edit_error_conflict">当前%1$s与%2$s课程存在冲突！</string>
     <string name="course_edit_error">当前课程时间设置存在问题！</string>
@@ -221,6 +204,8 @@
     <string name="moa_location">地点：%1$s</string>
     <string name="moa_apply_unit">举办单位：%1$s</string>
     <string name="moa_empty">暂无学术讲座</string>
+    <string name="async_personal_info_by_day">每天只自动同步个人信息与成绩一次</string>
+    <string name="async_personal_info_by_day_sum">减少个人数据更新频率，节约流量</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>

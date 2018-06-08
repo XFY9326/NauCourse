@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Fragments.TableFragment;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
-import tool.xfy9326.naucourse.Methods.NetMethod;
 
 /**
  * Created by 10696 on 2018/3/17.
@@ -35,9 +34,6 @@ public class MainHandler extends Handler {
                 if (tableFragment != null) {
                     tableFragment.reloadTable(true);
                 }
-                break;
-            case Config.HANDLER_AUTO_LOGIN_WIFI:
-                NetMethod.loginNAUWifi(context);
                 break;
         }
         super.handleMessage(msg);

@@ -22,7 +22,6 @@ public class Config {
 
     public static final int HANDLER_RELOAD_TABLE = 0;
     public static final int HANDLER_RELOAD_TABLE_DATA = 1;
-    public static final int HANDLER_AUTO_LOGIN_WIFI = 2;
 
     public static final int VIEWPAGER_TABLE_PAGE = 1;
 
@@ -30,7 +29,6 @@ public class Config {
     public static final String INTENT_IS_ONLY_INIT = "IS_ONLY_INIT";
     public static final String INTENT_NEXT_CLASS_DATA = "NEXT_CLASS_DATA";
     public static final String INTENT_JUST_LOGIN = "JUST_LOGIN";
-    public static final String INTENT_AUTO_LOGIN = "AUTO_LOGIN";
     public static final String INTENT_STUDENT_INFO = "STUDENT_INFO";
     public static final String INTENT_STUDENT_LEARN_PROCESS = "STUDENT_LEARN_PROCESS";
     public static final String INTENT_EDIT_COURSE_ITEM = "EDIT_COURSE";
@@ -60,12 +58,12 @@ public class Config {
     public static final String PREFERENCE_NETWORK_ACCOUNT = "NETWORK_ACCOUNT";
     public static final String PREFERENCE_NETWORK_PASSWORD = "NETWORK_PASSWORD";
     public static final String PREFERENCE_NETWORK_REMEMBER_PASSWORD = "NETWORK_REMEMBER_PASSWORD";
-    public static final String PREFERENCE_NETWORK_PROVIDER = "NETWORK_PROVIDER";
-    public static final String PREFERENCE_NETWORK_AUTO_LOGIN = "NETWORK_AUTO_LOGIN";
     public static final String PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND = "COURSE_TABLE_SHOW_BACKGROUND";
     public static final String PREFERENCE_CHANGE_TABLE_TRANSPARENCY = "CHANGE_TABLE_TRANSPARENCY";
     public static final String PREFERENCE_COURSE_TABLE_SHOW_SINGLE_COLOR = "COURSE_TABLE_SHOW_SINGLE_COLOR";
     public static final String PREFERENCE_SCHOOL_CALENDAR_URL = "SCHOOL_CALENDAR_URL";
+    public static final String PREFERENCE_PERSONAL_INFO_LOAD_DATE = "PERSONAL_INFO_LOAD_DATE";
+    public static final String PREFERENCE_ASYNC_PERSONAL_INFO_BY_DAY = "ASYNC_PERSONAL_INFO_BY_DAY";
 
     public static final boolean DEFAULT_PREFERENCE_HAS_LOGIN = false;
     public static final boolean DEFAULT_PREFERENCE_REMEMBER_PW = true;
@@ -79,12 +77,10 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_DEFAULT_SHOW_TABLE_PAGE = false;
     public static final boolean DEFAULT_PREFERENCE_SHOW_WIDE_TABLE = false;
     public static final boolean DEFAULT_PREFERENCE_COURSE_TABLE_CELL_COLOR = true;
-    public static final boolean DEFAULT_PREFERENCE_NETWORK_REMEMBER_PASSWORD = true;
-    public static final int DEFAULT_PREFERENCE_NETWORK_PROVIDER = 0;
-    public static final boolean DEFAULT_PREFERENCE_NETWORK_AUTO_LOGIN = false;
     public static final boolean DEFAULT_PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND = false;
     public static final float DEFAULT_PREFERENCE_CHANGE_TABLE_TRANSPARENCY = 0.8f;
     public static final boolean DEFAULT_PREFERENCE_COURSE_TABLE_SHOW_SINGLE_COLOR = false;
+    public static final boolean DEFAULT_PREFERENCE_ASYNC_PERSONAL_INFO_BY_DAY = true;
 
 
     //网络连接错误代码

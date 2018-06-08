@@ -45,6 +45,7 @@ public class CourseListAsync extends AsyncTask<Context, Void, Context> {
 
     @Override
     protected void onPostExecute(@NonNull Context context) {
+        BaseMethod.getApp(context).setShowConnectErrorOnce(false);
         if (NetMethod.checkNetWorkCode(context, new int[]{tableLoadSuccess}, loadCode)) {
             CourseActivity courseActivity = BaseMethod.getApp(context).getCourseActivity();
             if (courseActivity != null) {

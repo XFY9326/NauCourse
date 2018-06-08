@@ -57,6 +57,9 @@ public class LevelExamAsync extends AsyncTask<Context, Void, Context> {
                 levelExamActivity.setLoadTime(loadTime);
             }
         }
+        if (loadTime > 2) {
+            BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);
+        }
         return context[0];
     }
 

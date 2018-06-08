@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.AlarmManagerCompat;
-import android.util.Log;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -108,7 +107,6 @@ public class UpdateReceiver extends BroadcastReceiver {
                 isClassBeforeNotify = true;
             }
         }
-        Log.d("NEXT_ALARM_TIME", String.valueOf(time / 1000));
         return time;
     }
 
