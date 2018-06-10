@@ -112,7 +112,7 @@ public class ScoreActivity extends AppCompatActivity {
         }
     }
 
-    private void getData() {
+    synchronized private void getData() {
         new ScoreAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
     }
 

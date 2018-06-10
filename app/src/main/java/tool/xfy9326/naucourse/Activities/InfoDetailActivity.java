@@ -181,7 +181,7 @@ public class InfoDetailActivity extends AppCompatActivity {
         }
     }
 
-    private void getData() {
+    synchronized private void getData() {
         InfoDetailAsync infoDetailAsync = new InfoDetailAsync();
         infoDetailAsync.setData(info_source, info_url);
         infoDetailAsync.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());

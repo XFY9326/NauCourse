@@ -1,10 +1,8 @@
 package tool.xfy9326.naucourse.Fragments;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -13,8 +11,6 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +25,7 @@ import java.io.File;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Handlers.MainHandler;
 import tool.xfy9326.naucourse.Methods.ImageMethod;
+import tool.xfy9326.naucourse.Methods.PermissionMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Receivers.UpdateReceiver;
 
@@ -77,15 +74,15 @@ public class SettingsFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if ((boolean) newValue && !cropSuccess) {
-                    if (isAdded() && getActivity() != null && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                            || ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE);
-                        Toast.makeText(getActivity(), R.string.permission_error, Toast.LENGTH_SHORT).show();
-                    } else {
-                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                        intent.setType("image/*");
-                        intent.addCategory(Intent.CATEGORY_OPENABLE);
-                        startActivityForResult(intent, CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE);
+                    if (isAdded() && getActivity() != null) {
+                        if (PermissionMethod.checkStoragePermission(getActivity(), WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE)) {
+                            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                            intent.setType("image/*");
+                            intent.addCategory(Intent.CATEGORY_OPENABLE);
+                            startActivityForResult(intent, CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE);
+                        } else {
+                            Toast.makeText(getActivity(), R.string.permission_error, Toast.LENGTH_SHORT).show();
+                        }
                     }
                     updateCourseTable = true;
                     return false;

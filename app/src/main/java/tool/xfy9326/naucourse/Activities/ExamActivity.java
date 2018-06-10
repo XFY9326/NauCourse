@@ -102,7 +102,7 @@ public class ExamActivity extends AppCompatActivity {
         }
     }
 
-    private void getData() {
+    synchronized private void getData() {
         new ExamAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
     }
 

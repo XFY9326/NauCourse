@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayout;
@@ -25,7 +27,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
@@ -39,6 +44,7 @@ import tool.xfy9326.naucourse.Methods.CourseMethod;
 import tool.xfy9326.naucourse.Methods.CourseViewMethod;
 import tool.xfy9326.naucourse.Methods.ImageMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
+import tool.xfy9326.naucourse.Methods.PermissionMethod;
 import tool.xfy9326.naucourse.Methods.TimeMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Receivers.UpdateReceiver;
@@ -118,9 +124,13 @@ public class TableFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.menu_table_edit && getActivity() != null) {
-            Intent intent = new Intent(getActivity(), CourseActivity.class);
-            startActivity(intent);
+        if (getActivity() != null) {
+            if (item.getItemId() == R.id.menu_table_edit) {
+                Intent intent = new Intent(getActivity(), CourseActivity.class);
+                startActivity(intent);
+            } else if (item.getItemId() == R.id.menu_table_share) {
+                shareTable();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -374,6 +384,39 @@ public class TableFragment extends Fragment {
             //离线数据加载完成，开始拉取网络数据
             if (loadTime == 1 && NetMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
                 getData();
+            }
+        }
+    }
+
+    private void shareTable() {
+        if (getActivity() != null && view != null) {
+            if (PermissionMethod.checkStoragePermission(getActivity(), 0)) {
+                LinearLayout linearLayout = view.findViewById(R.id.layout_table);
+                linearLayout.setDrawingCacheEnabled(true);
+                linearLayout.setDrawingCacheBackgroundColor(Color.WHITE);
+                linearLayout.destroyDrawingCache();
+                linearLayout.buildDrawingCache();
+                Bitmap bitmap = linearLayout.getDrawingCache();
+                try {
+                    String path = Config.PICTURE_DICTIONARY_PATH + Config.COURSE_TABLE_FILE_NAME;
+                    if (ImageMethod.saveBitmap(bitmap, path)) {
+                        Uri photoURI = FileProvider.getUriForFile(getActivity(), Config.FILE_PROVIDER_AUTH, new File(path));
+                        Intent intent = new Intent(Intent.ACTION_SEND);
+                        intent.setType("image/*");
+                        intent.putExtra(Intent.EXTRA_STREAM, photoURI);
+                        intent.addCategory(Intent.CATEGORY_DEFAULT);
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        startActivity(Intent.createChooser(intent, getString(R.string.share_course_table)));
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (!bitmap.isRecycled()) {
+                    bitmap.recycle();
+                }
+                linearLayout.setDrawingCacheEnabled(false);
+            } else {
+                Toast.makeText(getActivity(), R.string.permission_error, Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -75,7 +75,7 @@ public class SuspendCourseActivity extends AppCompatActivity {
         }
     }
 
-    private void getData() {
+    synchronized private void getData() {
         new SuspendCourseAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
     }
 

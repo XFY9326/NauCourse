@@ -72,7 +72,7 @@ public class IO {
         return null;
     }
 
-    private static boolean createPath(File file) {
+    public static boolean createPath(File file) {
         if (file.getParent().trim().length() != 1) {
             File filepath = file.getParentFile();
             if (!filepath.exists()) {

@@ -255,7 +255,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void getData() {
+    synchronized private void getData() {
         new InfoAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, Objects.requireNonNull(context).getApplicationContext());
     }
 

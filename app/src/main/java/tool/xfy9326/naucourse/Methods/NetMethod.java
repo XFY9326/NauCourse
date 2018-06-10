@@ -52,7 +52,7 @@ public class NetMethod {
      * @param contentLoadCode 整体网络请求错误代码
      * @return 网络检查是否通过
      */
-    public static boolean checkNetWorkCode(@NonNull Context context, @NonNull int[] dataLoadCode, int contentLoadCode) {
+    synchronized public static boolean checkNetWorkCode(@NonNull Context context, @NonNull int[] dataLoadCode, int contentLoadCode) {
         if (contentLoadCode == Config.NET_WORK_ERROR_CODE_CONNECT_ERROR) {
             if (!BaseMethod.getApp(context).isShowConnectErrorOnce()) {
                 Toast.makeText(context, R.string.network_get_error, Toast.LENGTH_SHORT).show();

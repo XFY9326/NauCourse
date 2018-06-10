@@ -85,7 +85,7 @@ public class BaseApplication extends Application {
         return showLoginErrorOnce;
     }
 
-    public void setShowLoginErrorOnce() {
+    synchronized public void setShowLoginErrorOnce() {
         this.showLoginErrorOnce = true;
     }
 

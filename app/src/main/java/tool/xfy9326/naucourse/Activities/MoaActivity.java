@@ -78,7 +78,7 @@ public class MoaActivity extends AppCompatActivity {
         }
     }
 
-    private void getData() {
+    synchronized private void getData() {
         new MoaAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
     }
 

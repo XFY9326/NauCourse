@@ -355,7 +355,7 @@ public class PersonFragment extends Fragment {
         }
     }
 
-    private void getData() {
+    synchronized private void getData() {
         new StudentAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, Objects.requireNonNull(context).getApplicationContext());
     }
 

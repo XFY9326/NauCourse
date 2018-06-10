@@ -109,7 +109,7 @@ public class CourseActivity extends AppCompatActivity {
         }
     }
 
-    private void getData() {
+    synchronized private void getData() {
         new Thread(new Runnable() {
             @Override
             public void run() {

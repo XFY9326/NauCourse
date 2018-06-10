@@ -6,12 +6,14 @@ import android.graphics.BitmapFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import tool.xfy9326.naucourse.Tools.IO;
 
 public class ImageMethod {
 
@@ -52,19 +54,26 @@ public class ImageMethod {
             if (responseBody != null) {
                 InputStream inputStream = responseBody.byteStream();
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                File file = new File(downloadPath);
-                if (file.exists()) {
-                    //noinspection ResultOfMethodCallIgnored
-                    file.delete();
-                }
-                if (file.createNewFile()) {
-                    FileOutputStream fileOutputStream = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
-                    fileOutputStream.flush();
-                    fileOutputStream.close();
-                    bitmap.recycle();
-                    return true;
-                }
+                return saveBitmap(bitmap, downloadPath);
+            }
+        }
+        return false;
+    }
+
+    public static boolean saveBitmap(Bitmap bitmap, String path) throws IOException {
+        File file = new File(path);
+        if (file.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            file.delete();
+        }
+        if (IO.createPath(file)) {
+            if (file.createNewFile()) {
+                FileOutputStream fileOutputStream = new FileOutputStream(file);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+                fileOutputStream.flush();
+                fileOutputStream.close();
+                bitmap.recycle();
+                return true;
             }
         }
         return false;

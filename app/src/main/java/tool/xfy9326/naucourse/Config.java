@@ -1,5 +1,9 @@
 package tool.xfy9326.naucourse;
 
+import android.os.Environment;
+
+import java.io.File;
+
 /**
  * Created by xfy9326 on 18-2-20.
  */
@@ -24,6 +28,11 @@ public class Config {
     public static final int HANDLER_RELOAD_TABLE_DATA = 1;
 
     public static final int VIEWPAGER_TABLE_PAGE = 1;
+
+    public static final String PICTURE_DICTIONARY_PATH = Environment.getExternalStorageDirectory() + File.separator + Environment.DIRECTORY_PICTURES + File.separator + "NAU_Course" + File.separator;
+    public static final String COURSE_TABLE_FILE_NAME = "CourseTable.jpeg";
+
+    public static final String FILE_PROVIDER_AUTH = "tool.xfy9326.naucourse.provider";
 
     public static final String INTENT_INFO_DETAIL = "INFO_DETAIL";
     public static final String INTENT_IS_ONLY_INIT = "IS_ONLY_INIT";
