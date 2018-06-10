@@ -50,8 +50,10 @@ public class SuspendCourseAsync extends AsyncTask<Context, Void, Context> {
         } catch (Exception e) {
             e.printStackTrace();
             loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
-            loadTime++;
-            BaseMethod.getApp(context[0]).getSuspendCourseActivity().setLoadTime(loadTime);
+            if (suspendCourseActivity != null) {
+                loadTime++;
+                suspendCourseActivity.setLoadTime(loadTime);
+            }
         }
         if (loadTime > 2) {
             BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);

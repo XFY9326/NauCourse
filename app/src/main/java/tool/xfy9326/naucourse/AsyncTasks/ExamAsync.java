@@ -56,8 +56,10 @@ public class ExamAsync extends AsyncTask<Context, Void, Context> {
         } catch (Exception e) {
             e.printStackTrace();
             loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
-            loadTime++;
-            BaseMethod.getApp(context[0]).getExamActivity().setLoadTime(loadTime);
+            if (examActivity != null) {
+                loadTime++;
+                examActivity.setLoadTime(loadTime);
+            }
         }
         if (loadTime > 2) {
             BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);
