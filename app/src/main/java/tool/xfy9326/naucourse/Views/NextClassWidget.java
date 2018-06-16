@@ -54,7 +54,10 @@ public class NextClassWidget extends AppWidgetProvider {
                 remoteViews.setTextViewText(R.id.textView_app_widget_nextClass, next.getCourseName());
                 remoteViews.setTextViewText(R.id.textView_app_widget_nextLocation, next.getCourseLocation());
                 remoteViews.setTextViewText(R.id.textView_app_widget_nextTeacher, next.getCourseTeacher());
-                remoteViews.setTextViewText(R.id.textView_app_widget_nextTime, next.getCourseTime());
+                String time = next.getCourseTime();
+                if (time != null) {
+                    remoteViews.setTextViewText(R.id.textView_app_widget_nextTime, time.replace("~", "\n~\n").trim());
+                }
 
                 remoteViews.setViewVisibility(R.id.textView_app_widget_noNextClass, View.GONE);
                 remoteViews.setViewVisibility(R.id.layout_app_widget_nextClass, View.VISIBLE);

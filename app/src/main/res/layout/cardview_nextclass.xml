@@ -30,7 +30,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:text="@string/course_next"
-                android:textSize="15sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/textView_dateNow"
@@ -38,90 +38,74 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:textSize="15sp" />
+                android:textSize="14sp" />
 
         </LinearLayout>
 
         <TextView
             android:id="@+id/textView_noNextClass"
             android:layout_width="wrap_content"
-            android:layout_height="70dp"
+            android:layout_height="60dp"
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:drawablePadding="30dp"
             android:drawableStart="@drawable/ic_rest"
             android:gravity="center"
-            android:text="@string/no_course"
-            android:visibility="visible" />
+            android:text="@string/no_course" />
 
         <LinearLayout
             android:id="@+id/layout_nextClass"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="70dp"
             android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
             android:visibility="gone">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/course" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="@string/location" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="@string/teacher" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="@string/time" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="25dp"
-                android:baselineAligned="true"
-                android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
                 <TextView
                     android:id="@+id/textView_nextClass"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/textView_nextLocation"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp" />
+                    android:layout_alignParentTop="true"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="17sp" />
 
-                <TextView
-                    android:id="@+id/textView_nextTeacher"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp" />
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="5dp"
+                    android:gravity="center_vertical"
+                    android:padding="2dp">
 
-                <TextView
-                    android:id="@+id/textView_nextTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp" />
+                    <TextView
+                        android:id="@+id/textView_nextLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/textView_nextTeacher"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/textView_nextTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:gravity="center"
+                android:textColor="@android:color/black" />
 
         </LinearLayout>
 

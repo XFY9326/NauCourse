@@ -175,6 +175,8 @@ public class HomeFragment extends Fragment {
                 textView_noNextClass.setVisibility(View.VISIBLE);
                 DataMethod.deleteOfflineData(Objects.requireNonNull(context), NEXT_COURSE_FILE_NAME);
             } else {
+                time = time.replace("~", "\n~\n").trim();
+
                 TextView textView_nextClass = view.findViewById(R.id.textView_nextClass);
                 TextView textView_nextLocation = view.findViewById(R.id.textView_nextLocation);
                 TextView textView_nextTeacher = view.findViewById(R.id.textView_nextTeacher);
