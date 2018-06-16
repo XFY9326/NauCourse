@@ -33,7 +33,6 @@ public class MoaMethod {
     public static int getScrollPosition(Moa moa) {
         String[] time = moa.getTime();
         int result = 0;
-
         try {
             long nowTime = new Date().getTime();
             for (int i = 0; i < time.length; i++) {

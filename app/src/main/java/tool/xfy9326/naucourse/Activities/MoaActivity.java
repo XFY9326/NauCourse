@@ -12,6 +12,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import tool.xfy9326.naucourse.AsyncTasks.MoaAsync;
@@ -23,9 +25,10 @@ import tool.xfy9326.naucourse.Utils.Moa;
 import tool.xfy9326.naucourse.Views.MoaAdapter;
 
 public class MoaActivity extends AppCompatActivity {
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private RecyclerView recyclerView;
-    private MoaAdapter moaAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout = null;
+    private RecyclerView recyclerView = null;
+    private MoaAdapter moaAdapter = null;
+    private Moa moa = null;
     private int loadTime = 0;
 
     @Override
@@ -35,6 +38,22 @@ public class MoaActivity extends AppCompatActivity {
         BaseMethod.getApp(this).setMoaActivity(this);
         ToolBarSet();
         ViewSet();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_moa, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_moa_jump) {
+            if (recyclerView != null && moa != null) {
+                recyclerView.scrollToPosition(MoaMethod.getScrollPosition(moa));
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void ToolBarSet() {
@@ -85,18 +104,15 @@ public class MoaActivity extends AppCompatActivity {
     public void setMoa(Moa moa) {
         if (moa != null) {
             if (moa.getCount() > 0) {
+                this.moa = moa;
                 if (moaAdapter == null) {
                     moaAdapter = new MoaAdapter(MoaActivity.this, moa);
                     recyclerView.setAdapter(moaAdapter);
                 } else {
                     moaAdapter.updateMoa(moa);
                 }
-                if (loadTime == 1) {
-                    recyclerView.scrollToPosition(MoaMethod.getScrollPosition(moa));
-                }
             } else {
                 Snackbar.make(findViewById(R.id.layout_moa_content), R.string.moa_empty, Snackbar.LENGTH_SHORT).show();
-
             }
         }
     }
