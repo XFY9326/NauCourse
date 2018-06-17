@@ -2,7 +2,9 @@ package tool.xfy9326.naucourse.Activities;
 
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +18,7 @@ import tool.xfy9326.naucourse.R;
  */
 
 public class SettingsActivity extends AppCompatActivity {
-    private SettingsFragment settingsFragment;
+    private SettingsFragment settingsFragment = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +44,25 @@ public class SettingsActivity extends AppCompatActivity {
             fragmentTransaction.replace(R.id.layout_settings_content, settingsFragment);
             fragmentTransaction.commit();
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == SettingsFragment.WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE) {
+            boolean requestSuccess = true;
+            for (int grantResult : grantResults) {
+                if (grantResult == PackageManager.PERMISSION_DENIED) {
+                    requestSuccess = false;
+                    break;
+                }
+            }
+            if (requestSuccess) {
+                if (settingsFragment != null) {
+                    settingsFragment.chooseAndCropImage();
+                }
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override

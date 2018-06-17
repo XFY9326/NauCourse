@@ -37,7 +37,7 @@ public class MoaMethod {
             long nowTime = new Date().getTime();
             for (int i = 0; i < time.length; i++) {
                 long t = simpleDateFormat.parse(time[i]).getTime();
-                if (nowTime < t) {
+                if (nowTime > t) {
                     break;
                 } else {
                     result = i;
@@ -107,7 +107,7 @@ public class MoaMethod {
                     for (int j = 1; j < id.size() - i; j++) {
                         long t1 = simpleDateFormat.parse(time.get(j)).getTime();
                         long t2 = simpleDateFormat.parse(time.get(j - 1)).getTime();
-                        if (t1 < t2) {
+                        if (t1 > t2) {
                             Collections.swap(id, j, j - 1);
                             Collections.swap(time, j, j - 1);
                             Collections.swap(applyUnit, j, j - 1);

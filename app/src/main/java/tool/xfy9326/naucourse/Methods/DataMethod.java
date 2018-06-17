@@ -63,10 +63,10 @@ public class DataMethod {
             Type type = new TypeToken<ArrayList<Course>>() {
             }.getType();
             System.gc();
-            return new Gson().fromJson(AES.decrypt(data, id), type);
-        } else {
-            return null;
+            String content = AES.decrypt(data, id);
+            return new Gson().fromJson(content, type);
         }
+        return null;
     }
 
     /**

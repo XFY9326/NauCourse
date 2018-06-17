@@ -34,7 +34,7 @@ import tool.xfy9326.naucourse.Receivers.UpdateReceiver;
  */
 
 public class SettingsFragment extends PreferenceFragment {
-    private final int WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE = 1;
+    public static final int WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE = 1;
     private boolean updateCourseTable = false;
     private boolean cropSuccess = false;
     private float transparency_value;
@@ -76,10 +76,7 @@ public class SettingsFragment extends PreferenceFragment {
                 if ((boolean) newValue && !cropSuccess) {
                     if (isAdded() && getActivity() != null) {
                         if (PermissionMethod.checkStoragePermission(getActivity(), WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE)) {
-                            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                            intent.setType("image/*");
-                            intent.addCategory(Intent.CATEGORY_OPENABLE);
-                            startActivityForResult(intent, CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE);
+                            chooseAndCropImage();
                         } else {
                             Toast.makeText(getActivity(), R.string.permission_error, Toast.LENGTH_SHORT).show();
                         }
@@ -120,6 +117,13 @@ public class SettingsFragment extends PreferenceFragment {
                 return true;
             }
         });
+    }
+
+    public void chooseAndCropImage() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        startActivityForResult(intent, CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE);
     }
 
     private void changeTransparency() {
@@ -165,6 +169,13 @@ public class SettingsFragment extends PreferenceFragment {
                 }
             });
             builder.setNegativeButton(android.R.string.cancel, null);
+            builder.setNeutralButton(R.string.reset, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().remove(Config.PREFERENCE_CHANGE_TABLE_TRANSPARENCY).apply();
+                    updateCourseTable = true;
+                }
+            });
             builder.setView(view);
             builder.show();
         }

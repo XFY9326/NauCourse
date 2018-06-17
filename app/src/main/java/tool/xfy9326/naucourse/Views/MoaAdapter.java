@@ -29,7 +29,13 @@ public class MoaAdapter extends RecyclerView.Adapter<MoaViewHolder> {
     public void onBindViewHolder(@NonNull MoaViewHolder holder, int position) {
         holder.textViewMoaTitle.setText(moa.getTitle()[holder.getAdapterPosition()]);
         holder.textViewMoaType.setText(activity.getString(R.string.moa_type, (moa.getType()[holder.getAdapterPosition()]).equalsIgnoreCase(MoaMethod.Academic_Report) ? activity.getString(R.string.academic_report) : activity.getString(R.string.large_academic_conference)));
-        holder.textViewMoaReporter.setText(activity.getString(R.string.moa_reporter, moa.getReporter()[holder.getAdapterPosition()]));
+        String reporter = moa.getReporter()[holder.getAdapterPosition()];
+        if (reporter != null && !reporter.equalsIgnoreCase("null")) {
+            holder.textViewMoaReporter.setVisibility(View.VISIBLE);
+            holder.textViewMoaReporter.setText(activity.getString(R.string.moa_reporter, reporter));
+        } else {
+            holder.textViewMoaReporter.setVisibility(View.GONE);
+        }
         holder.textViewMoaTime.setText(activity.getString(R.string.moa_time, moa.getTime()[holder.getAdapterPosition()]));
         holder.textViewMoaLocation.setText(activity.getString(R.string.moa_location, moa.getLocation()[holder.getAdapterPosition()]));
         holder.textViewMoaApplyUnit.setText(activity.getString(R.string.moa_apply_unit, moa.getApplyUnit()[holder.getAdapterPosition()]));

@@ -206,8 +206,9 @@
     <string name="moa_empty">暂无学术讲座</string>
     <string name="async_personal_info_by_day">每天只自动同步个人信息与成绩一次</string>
     <string name="async_personal_info_by_day_sum">减少个人数据更新频率，节约流量</string>
-    <string name="share_course_table">分享课程表到</string>
+    <string name="share_course_table">分享本周的课程表到</string>
     <string name="moa_jump">跳转到今天的讲座</string>
+    <string name="reset">重置</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>
