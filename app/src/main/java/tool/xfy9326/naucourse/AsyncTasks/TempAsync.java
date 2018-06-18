@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.ExamMethod;
 import tool.xfy9326.naucourse.Methods.LevelExamMethod;
+import tool.xfy9326.naucourse.Methods.MoaMethod;
 import tool.xfy9326.naucourse.Methods.PersonMethod;
 import tool.xfy9326.naucourse.Methods.ScoreMethod;
 import tool.xfy9326.naucourse.Methods.SuspendCourseMethod;
@@ -41,6 +42,10 @@ public class TempAsync extends AsyncTask<Context, Void, Void> {
             SuspendCourseMethod suspendCourseMethod = new SuspendCourseMethod(contexts[0]);
             if (suspendCourseMethod.load() == Config.NET_WORK_GET_SUCCESS) {
                 suspendCourseMethod.saveTemp();
+            }
+            MoaMethod moaMethod = new MoaMethod(contexts[0]);
+            if (moaMethod.load() == Config.NET_WORK_GET_SUCCESS) {
+                moaMethod.saveTemp();
             }
         } catch (Exception e) {
             e.printStackTrace();

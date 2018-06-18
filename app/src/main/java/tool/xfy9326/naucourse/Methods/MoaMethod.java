@@ -59,6 +59,10 @@ public class MoaMethod {
         return Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR;
     }
 
+    public void saveTemp() {
+        getMoaList(false);
+    }
+
     public Moa getMoaList(boolean checkTemp) {
         Moa moa = new Moa();
         if (Url_Data != null) {
