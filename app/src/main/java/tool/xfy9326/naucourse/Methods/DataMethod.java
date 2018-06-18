@@ -15,6 +15,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import tool.xfy9326.naucourse.BuildConfig;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Fragments.HomeFragment;
 import tool.xfy9326.naucourse.Tools.AES;
@@ -40,7 +41,7 @@ public class DataMethod {
         if (file.exists()) {
             String data = IO.readFile(path);
             String id = PreferenceManager.getDefaultSharedPreferences(context).getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
-            String content = AES.decrypt(data, id);
+            String content = BuildConfig.DEBUG ? data : AES.decrypt(data, id);
             if (checkDataVersionCode(content, file_class)) {
                 return new Gson().fromJson(content, file_class);
             }
@@ -63,7 +64,7 @@ public class DataMethod {
             Type type = new TypeToken<ArrayList<Course>>() {
             }.getType();
             System.gc();
-            String content = AES.decrypt(data, id);
+            String content = BuildConfig.DEBUG ? data : AES.decrypt(data, id);
             return new Gson().fromJson(content, type);
         }
         return null;
@@ -83,7 +84,7 @@ public class DataMethod {
         String path = context.getFilesDir() + File.separator + FILE_NAME;
         String id = PreferenceManager.getDefaultSharedPreferences(context).getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
         String data = new Gson().toJson(o);
-        String content = AES.encrypt(data, id);
+        String content = BuildConfig.DEBUG ? data : AES.encrypt(data, id);
         if (checkTemp) {
             String text = IO.readFile(path);
             if (text != null) {

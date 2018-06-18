@@ -83,24 +83,22 @@ public class MoaMethod {
                     JSONObject jsonObject = (JSONObject) jsonArray.get(i);
 
                     String report_time = jsonObject.getString("REPORTTIME") + " " + jsonObject.getString("REPORTTIMEF");
-                    if (simpleDateFormat.parse(report_time).before(past_date)) {
-                        continue;
-                    }
+                    if (!simpleDateFormat.parse(report_time).before(past_date)) {
+                        id.add(String.valueOf(jsonObject.getInt("ID")));
+                        title.add(jsonObject.getString("TITLE"));
 
-                    id.add(String.valueOf(jsonObject.getInt("ID")));
-                    title.add(jsonObject.getString("TITLE"));
-                    reporter.add(jsonObject.getString("REPORTER"));
+                        String type_temp = jsonObject.getString("LB");
+                        type.add(type_temp);
 
-                    String type_temp = jsonObject.getString("LB");
-                    type.add(type_temp);
-                    if (type_temp.equalsIgnoreCase(Academic_Report)) {
-                        reporter.add(jsonObject.getString("REPORTER") + jsonObject.getString("REPORTERJOB"));
-                    } else {
-                        reporter.add(jsonObject.getString("FIELD1"));
+                        if (type_temp.equalsIgnoreCase(Academic_Report)) {
+                            reporter.add(jsonObject.getString("REPORTER") + " " + jsonObject.getString("REPORTERJOB"));
+                        } else {
+                            reporter.add(jsonObject.getString("FIELD1"));
+                        }
+                        location.add(jsonObject.getString("REPORTROOMNAME"));
+                        time.add(report_time);
+                        applyUnit.add(jsonObject.getString("APPLYUNIT"));
                     }
-                    location.add(jsonObject.getString("REPORTROOMNAME"));
-                    time.add(report_time);
-                    applyUnit.add(jsonObject.getString("APPLYUNIT"));
                 }
 
                 for (int i = 0; i < id.size(); i++) {
