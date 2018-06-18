@@ -73,6 +73,8 @@ public class Config {
     public static final String PREFERENCE_SCHOOL_CALENDAR_URL = "SCHOOL_CALENDAR_URL";
     public static final String PREFERENCE_PERSONAL_INFO_LOAD_DATE = "PERSONAL_INFO_LOAD_DATE";
     public static final String PREFERENCE_ASYNC_PERSONAL_INFO_BY_DAY = "ASYNC_PERSONAL_INFO_BY_DAY";
+    public static final String PREFERENCE_COURSE_TABLE_LOAD_DATE = "COURSE_TABLE_LOAD_DATE";
+    public static final String PREFERENCE_AUTO_UPDATE_COURSE_TABLE = "AUTO_UPDATE_COURSE_TABLE";
 
     public static final boolean DEFAULT_PREFERENCE_HAS_LOGIN = false;
     public static final boolean DEFAULT_PREFERENCE_REMEMBER_PW = true;
@@ -90,7 +92,7 @@ public class Config {
     public static final float DEFAULT_PREFERENCE_CHANGE_TABLE_TRANSPARENCY = 0.8f;
     public static final boolean DEFAULT_PREFERENCE_COURSE_TABLE_SHOW_SINGLE_COLOR = false;
     public static final boolean DEFAULT_PREFERENCE_ASYNC_PERSONAL_INFO_BY_DAY = true;
-
+    public static final boolean DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE = true;
 
     //网络连接错误代码
     public static final int NET_WORK_GET_SUCCESS = 0;

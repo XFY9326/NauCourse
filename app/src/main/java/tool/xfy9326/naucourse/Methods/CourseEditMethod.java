@@ -24,6 +24,7 @@ public class CourseEditMethod {
                 for (int i = 0; i < courseArrayList.size() && !found; i++) {
                     String id = course.getCourseId();
                     if (id != null && id.equalsIgnoreCase(courseArrayList.get(i).getCourseId())) {
+                        course.setCourseColor(courseArrayList.get(i).getCourseColor());
                         courseArrayList.set(i, course);
                         found = true;
                     }

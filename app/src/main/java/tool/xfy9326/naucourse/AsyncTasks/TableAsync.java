@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.AsyncTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Fragments.PersonFragment;
 import tool.xfy9326.naucourse.Fragments.TableFragment;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
+import tool.xfy9326.naucourse.Methods.CourseEditMethod;
 import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Methods.SchoolTimeMethod;
@@ -55,12 +57,27 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
                     schoolTime = schoolTimeMethod.getSchoolTime();
                 }
 
-                //首次加载没有课程数据时自动联网获取
+                //首次加载没有课程数据时或者打开自动更新时自动联网获取
+                boolean auto_update = PreferenceManager.getDefaultSharedPreferences(context[0]).getBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE, Config.DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE);
                 if (course == null) {
                     TableMethod tableMethod = new TableMethod(context[0]);
                     tableLoadSuccess = tableMethod.load();
                     if (tableLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                         course = tableMethod.getCourseTable(true);
+                    }
+                } else if (auto_update) {
+                    TableMethod tableMethod = new TableMethod(context[0]);
+                    if (tableMethod.load() == Config.NET_WORK_GET_SUCCESS) {
+                        ArrayList<Course> update_course = tableMethod.getCourseTable(false);
+                        if (update_course != null) {
+                            ArrayList<Course> now_course = new ArrayList<>(course);
+                            now_course = CourseEditMethod.combineCourseList(update_course, now_course);
+                            if (!CourseEditMethod.checkCourseList(now_course).isHasError()) {
+                                course.clear();
+                                course.addAll(now_course);
+                                DataMethod.saveOfflineData(context[0], course, TableMethod.FILE_NAME, false);
+                            }
+                        }
                     }
                 }
 

@@ -67,7 +67,7 @@ public class CourseMethod {
         String[] today = this_week_table[weekDayNum];
         String[] todayId = this_week_id_table[weekDayNum];
         String[] startTimes = context.getResources().getStringArray(R.array.course_start_time);
-        String[] times = context.getResources().getStringArray(R.array.course_finish_time);
+        String[] finishTimes = context.getResources().getStringArray(R.array.course_finish_time);
         long nowTime = calendar.getTimeInMillis();
         String lastId = "";
         String findCourseId = "";
@@ -78,9 +78,10 @@ public class CourseMethod {
         if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_WIDE_TABLE, Config.DEFAULT_PREFERENCE_SHOW_WIDE_TABLE)) {
             mid = "\n\n";
         }
-        for (int i = 0; i < times.length; i++) {
+
+        for (int i = 0; i < finishTimes.length; i++) {
             if (today[i + 1] != null) {
-                String[] time_temp = times[i].split(":");
+                String[] time_temp = finishTimes[i].split(":");
                 calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time_temp[0]));
                 calendar.set(Calendar.MINUTE, Integer.valueOf(time_temp[1]));
                 long courseTime = calendar.getTimeInMillis();
@@ -91,14 +92,21 @@ public class CourseMethod {
                     nextCourse.setCourseName(today[i + 1].substring(0, today[i + 1].indexOf(mid)));
                     nextCourse.setCourseLocation(today[i + 1].substring(today[i + 1].indexOf("@") + 1));
                     nextCourse.setCourseId(todayId[i + 1]);
-                    course_endTime = times[i];
+                    course_endTime = finishTimes[i];
                     if (!lastId.equals(todayId[i + 1])) {
-                        course_startTime = startTimes[i];
                         findCourseId = todayId[i + 1];
                     }
                     lastId = todayId[i + 1];
                 }
                 todayFinalCourseTime = courseTime;
+            }
+        }
+
+        //课程开始时间回溯
+        for (int i = 0; i < finishTimes.length; i++) {
+            if (todayId[i + 1] != null && todayId[i + 1].equalsIgnoreCase(nextCourse.getCourseId())) {
+                course_startTime = startTimes[i];
+                break;
             }
         }
 

@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -383,7 +384,19 @@ public class TableFragment extends Fragment {
         if (isAdded()) {
             //离线数据加载完成，开始拉取网络数据
             if (loadTime == 1 && NetMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
-                getData();
+                boolean update_day = true;
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                if (sharedPreferences.getBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE, Config.DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE)) {
+                    long course_table_load_date = sharedPreferences.getLong(Config.PREFERENCE_COURSE_TABLE_LOAD_DATE, 0);
+                    long now_time = System.currentTimeMillis() / 1000;
+                    long more = now_time - course_table_load_date;
+                    update_day = (more == 0 && now_time == 0) || (more / (60 * 60 * 24)) >= 1;
+                    sharedPreferences.edit().putLong(Config.PREFERENCE_COURSE_TABLE_LOAD_DATE, now_time).apply();
+                }
+
+                if (update_day) {
+                    getData();
+                }
             }
         }
     }
