@@ -2,7 +2,6 @@ package tool.xfy9326.naucourse.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -94,8 +93,9 @@ public class MainActivity extends AppCompatActivity {
         if (getIntent() != null) {
             if (getIntent().getBooleanExtra(Config.INTENT_JUST_LOGIN, false)) {
                 Toast.makeText(this, R.string.login_success, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.init_data_loading, Toast.LENGTH_SHORT).show();
                 if (NetMethod.isNetworkConnected(this)) {
-                    new TempAsync().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, getApplicationContext());
+                    new TempAsync().execute(getApplicationContext());
                 }
             }
         }

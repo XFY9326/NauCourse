@@ -118,6 +118,7 @@ public class LoginMethod {
                     .remove(Config.PREFERENCE_COURSE_TABLE_LOAD_DATE)
                     .remove(Config.PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND)
                     .remove(Config.PREFERENCE_SCHOOL_CALENDAR_URL)
+                    .remove(Config.PREFERENCE_CLASS_BEFORE_NOTIFY)
                     .putBoolean(Config.PREFERENCE_HAS_LOGIN, false)
                     .apply();
             cleanUserTemp(context);
