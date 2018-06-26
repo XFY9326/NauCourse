@@ -1,6 +1,7 @@
 package tool.xfy9326.naucourse.Activities;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -97,7 +98,11 @@ public class MoaActivity extends AppCompatActivity {
     }
 
     synchronized private void getData() {
-        new MoaAsync().executeOnExecutor(BaseMethod.getAsyncTaskExecutor(loadTime), getApplicationContext());
+        if (loadTime == 0) {
+            new MoaAsync().execute(getApplicationContext());
+        } else {
+            new MoaAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
+        }
     }
 
     public void setMoa(Moa moa) {

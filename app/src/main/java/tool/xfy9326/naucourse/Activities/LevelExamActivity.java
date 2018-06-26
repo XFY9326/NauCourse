@@ -1,6 +1,7 @@
 package tool.xfy9326.naucourse.Activities;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -97,7 +98,11 @@ public class LevelExamActivity extends AppCompatActivity {
     }
 
     synchronized private void getData() {
-        new LevelExamAsync().executeOnExecutor(BaseMethod.getAsyncTaskExecutor(loadTime), getApplicationContext());
+        if (loadTime == 0) {
+            new LevelExamAsync().execute(getApplicationContext());
+        } else {
+            new LevelExamAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
+        }
     }
 
     public int getLoadTime() {

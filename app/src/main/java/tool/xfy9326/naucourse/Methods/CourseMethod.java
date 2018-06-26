@@ -74,10 +74,6 @@ public class CourseMethod {
         String course_startTime = "";
         String course_endTime = "";
         long todayFinalCourseTime = 0;
-        String mid = "\n";
-        if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_WIDE_TABLE, Config.DEFAULT_PREFERENCE_SHOW_WIDE_TABLE)) {
-            mid = "\n\n";
-        }
 
         for (int i = 0; i < finishTimes.length; i++) {
             if (today[i + 1] != null) {
@@ -89,7 +85,6 @@ public class CourseMethod {
                     if (!findCourseId.equals(todayId[i + 1]) && !findCourseId.equals("")) {
                         break;
                     }
-                    nextCourse.setCourseName(today[i + 1].substring(0, today[i + 1].indexOf(mid)));
                     nextCourse.setCourseLocation(today[i + 1].substring(today[i + 1].indexOf("@") + 1));
                     nextCourse.setCourseId(todayId[i + 1]);
                     course_endTime = finishTimes[i];
@@ -122,6 +117,7 @@ public class CourseMethod {
             for (Course course : courses) {
                 if (Objects.requireNonNull(course.getCourseId()).equals(nextCourse.getCourseId())) {
                     nextCourse.setCourseTeacher(course.getCourseTeacher());
+                    nextCourse.setCourseName(course.getCourseName());
                     break;
                 }
             }
@@ -280,7 +276,7 @@ public class CourseMethod {
         if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_WIDE_TABLE, Config.DEFAULT_PREFERENCE_SHOW_WIDE_TABLE)) {
             mid = "\n\n";
         }
-        return Objects.requireNonNull(course.getCourseName()).trim() + mid + "@" + Objects.requireNonNull(courseDetail.getLocation()).trim();
+        return Objects.requireNonNull(course.getCourseName()).replace("@", "").trim() + mid + "@" + Objects.requireNonNull(courseDetail.getLocation()).replace("@", "").trim();
     }
 
     //获取开学是周几

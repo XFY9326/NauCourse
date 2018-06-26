@@ -54,26 +54,30 @@ public class ImageMethod {
             if (responseBody != null) {
                 InputStream inputStream = responseBody.byteStream();
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                response.close();
                 return saveBitmap(bitmap, downloadPath);
             }
         }
+        response.close();
         return false;
     }
 
     public static boolean saveBitmap(Bitmap bitmap, String path) throws IOException {
-        File file = new File(path);
-        if (file.exists()) {
-            //noinspection ResultOfMethodCallIgnored
-            file.delete();
-        }
-        if (IO.createPath(file)) {
-            if (file.createNewFile()) {
-                FileOutputStream fileOutputStream = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
-                fileOutputStream.flush();
-                fileOutputStream.close();
-                bitmap.recycle();
-                return true;
+        if (bitmap != null) {
+            File file = new File(path);
+            if (file.exists()) {
+                //noinspection ResultOfMethodCallIgnored
+                file.delete();
+            }
+            if (IO.createPath(file)) {
+                if (file.createNewFile()) {
+                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+                    fileOutputStream.flush();
+                    fileOutputStream.close();
+                    bitmap.recycle();
+                    return true;
+                }
             }
         }
         return false;

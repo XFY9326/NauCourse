@@ -114,6 +114,10 @@ public class LoginMethod {
                     .remove(Config.PREFERENCE_NETWORK_ACCOUNT)
                     .remove(Config.PREFERENCE_NETWORK_PASSWORD)
                     .remove(Config.PREFERENCE_NETWORK_REMEMBER_PASSWORD)
+                    .remove(Config.PREFERENCE_PERSONAL_INFO_LOAD_DATE)
+                    .remove(Config.PREFERENCE_COURSE_TABLE_LOAD_DATE)
+                    .remove(Config.PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND)
+                    .remove(Config.PREFERENCE_SCHOOL_CALENDAR_URL)
                     .putBoolean(Config.PREFERENCE_HAS_LOGIN, false)
                     .apply();
             cleanUserTemp(context);

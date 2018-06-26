@@ -38,9 +38,12 @@ public class NetMethod {
         if (response.isSuccessful()) {
             ResponseBody responseBody = response.body();
             if (responseBody != null) {
-                return responseBody.string();
+                String result = responseBody.string();
+                response.close();
+                return result;
             }
         }
+        response.close();
         return null;
     }
 

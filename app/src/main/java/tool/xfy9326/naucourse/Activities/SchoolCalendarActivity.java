@@ -3,6 +3,7 @@ package tool.xfy9326.naucourse.Activities;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -58,7 +59,11 @@ public class SchoolCalendarActivity extends AppCompatActivity {
     }
 
     synchronized private void getData() {
-        new SchoolCalendarAsync().executeOnExecutor(BaseMethod.getAsyncTaskExecutor(loadTime), getApplicationContext());
+        if (loadTime == 0) {
+            new SchoolCalendarAsync().execute(getApplicationContext());
+        } else {
+            new SchoolCalendarAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
+        }
     }
 
     public int getLoadTime() {

@@ -2,12 +2,9 @@ package tool.xfy9326.naucourse.Methods;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
-
-import java.util.concurrent.Executor;
 
 import tool.xfy9326.naucourse.BaseApplication;
 import tool.xfy9326.naucourse.Config;
@@ -73,19 +70,5 @@ public class BaseMethod {
      */
     private static boolean isDataWifiAutoUpdate(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_ONLY_UPDATE_UNDER_WIFI, Config.DEFAULT_PREFERENCE_ONLY_UPDATE_UNDER_WIFI);
-    }
-
-    /**
-     * 获取AsyncTask的线程池
-     *
-     * @param loadTime 加载的次数
-     * @return 线程池
-     */
-    public static Executor getAsyncTaskExecutor(int loadTime) {
-        Executor executor = AsyncTask.SERIAL_EXECUTOR;
-        if (loadTime == 0) {
-            executor = AsyncTask.THREAD_POOL_EXECUTOR;
-        }
-        return executor;
     }
 }

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -150,7 +151,13 @@ public class TableFragment extends Fragment {
     }
 
     synchronized private void getData() {
-        new TableAsync().executeOnExecutor(BaseMethod.getAsyncTaskExecutor(loadTime), Objects.requireNonNull(context).getApplicationContext());
+        if (context != null) {
+            if (loadTime == 0) {
+                new TableAsync().execute(context.getApplicationContext());
+            } else {
+                new TableAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getApplicationContext());
+            }
+        }
     }
 
     /**
