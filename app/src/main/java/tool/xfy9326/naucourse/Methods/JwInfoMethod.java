@@ -56,71 +56,41 @@ public class JwInfoMethod {
         String[] postTitle = new String[TOPIC_COUNT];
         String[] postType = new String[TOPIC_COUNT];
         String[] postUrl = new String[TOPIC_COUNT];
-        Elements elements = Objects.requireNonNull(document).getElementsByTag("td");
+        Elements elements = Objects.requireNonNull(document).getElementsByTag("a");
 
-        int contentCount = 0;
-        int topicCount = 0;
-        boolean startText = false;
-        for (Object element : elements) {
-            Element element_child = (Element) element;
-            if (element_child.hasText() && element_child.childNodeSize() == 1) {
-                String text = element_child.text();
-                if (!text.isEmpty()) {
-                    if (text.contains("教务通知")) {
-                        startText = true;
-                        continue;
-                    } else if (text.contains("教务新闻")) {
-                        break;
-                    }
-                    if (startText) {
-                        contentCount++;
-                        switch (contentCount) {
-                            case 1:
-                                continue;
-                            case 2:
-                                postType[topicCount] = text.substring(1, text.indexOf("】"));
-                                postTitle[topicCount] = text.substring(text.indexOf("】") + 1);
+        int topic_count = 0;
+        for (Element element : elements) {
+            if (element.hasText() && element.hasAttr("href") && element.hasAttr("title")) {
+                Element element_td = element.parent();
+                if (element_td != null && element_td.tagName().equalsIgnoreCase("td")) {
+                    Element element_tr = element_td.parent();
+                    if (element_tr != null && element_tr.tagName().equalsIgnoreCase("tr")) {
+                        Elements div = element_tr.getElementsByTag("div");
+                        if (div != null && div.size() == 1) {
+                            String text = element.text();
+                            postType[topic_count] = text.substring(1, text.indexOf("】"));
+                            postTitle[topic_count] = text.substring(text.indexOf("】") + 1);
+                            postTime[topic_count] = div.text().trim();
+                            postUrl[topic_count] = element.attr("href");
+                            topic_count++;
+                            if (topic_count >= TOPIC_COUNT) {
                                 break;
-                            case 3:
-                                postTime[topicCount] = text.trim();
-                                topicCount++;
-                                contentCount = 0;
-                                break;
-                        }
-                        if (topicCount >= TOPIC_COUNT) {
-                            break;
+                            }
                         }
                     }
                 }
             }
         }
 
-        Elements elements_url = document.getElementsByTag("a");
-        List<String> attr = elements_url.eachAttr("href");
-        boolean output = false;
-        topicCount = 0;
-        for (String str : attr) {
-            if (topicCount >= TOPIC_COUNT) {
-                break;
-            }
-            if (str.contains("/s/185/t/404/p/11/list.htm")) {
-                output = true;
-                continue;
-            }
-            if (str.contains("/s/185/t/404/p/12/list.htm")) {
-                output = false;
-            }
-            if (output) {
-                postUrl[topicCount] = str.trim();
-                topicCount++;
-            }
+        if (topic_count == 0) {
+            return null;
         }
 
         jwTopic.setPostType(postType);
         jwTopic.setPostTitle(postTitle);
         jwTopic.setPostTime(postTime);
         jwTopic.setPostUrl(postUrl);
-        jwTopic.setPostLength(TOPIC_COUNT);
+        jwTopic.setPostLength(topic_count);
 
         jwTopic.setDataVersionCode(Config.DATA_VERSION_JW_TOPIC);
         if (DataMethod.saveOfflineData(context, jwTopic, FILE_NAME, checkTemp)) {

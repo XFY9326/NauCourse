@@ -19,6 +19,11 @@ public class SuspendCourseAdapter extends RecyclerView.Adapter<SuspendCourseView
         this.suspendCourse = suspendCourse;
     }
 
+    public void clearAdapter() {
+        this.suspendCourse.setCount(0);
+        notifyDataSetChanged();
+    }
+
     public void updateSuspendCourse(SuspendCourse suspendCourse) {
         this.suspendCourse = suspendCourse;
         notifyDataSetChanged();

@@ -1,7 +1,6 @@
 package tool.xfy9326.naucourse.Activities;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -76,7 +75,7 @@ public class SuspendCourseActivity extends AppCompatActivity {
     }
 
     synchronized private void getData() {
-        new SuspendCourseAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
+        new SuspendCourseAsync().executeOnExecutor(BaseMethod.getAsyncTaskExecutor(loadTime), getApplicationContext());
     }
 
     public int getLoadTime() {
@@ -99,6 +98,9 @@ public class SuspendCourseActivity extends AppCompatActivity {
                 }
             } else if (loadTime > 1 || !NetMethod.isNetworkConnected(this)) {
                 Snackbar.make(findViewById(R.id.layout_suspend_course_content), R.string.suspend_course_empty, Snackbar.LENGTH_SHORT).show();
+                if (suspendCourseAdapter != null && suspendCourseAdapter.getItemCount() != 0) {
+                    suspendCourseAdapter.clearAdapter();
+                }
             }
         }
     }

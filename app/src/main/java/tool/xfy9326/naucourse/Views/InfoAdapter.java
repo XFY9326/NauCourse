@@ -71,26 +71,29 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull final InfoViewHolder holder, int position) {
-        holder.textView_type.setText(context.getString(R.string.info_type, topic_data.get(holder.getAdapterPosition()).getType()));
-        holder.textView_title.setText(topic_data.get(holder.getAdapterPosition()).getTitle());
-        String click = topic_data.get(holder.getAdapterPosition()).getClick();
-        if (click != null) {
-            holder.textView_click.setVisibility(View.VISIBLE);
-            holder.textView_click.setText(context.getString(R.string.info_click, click));
-        } else {
-            holder.textView_click.setVisibility(View.INVISIBLE);
-        }
-        holder.textView_post.setText(context.getString(R.string.info_post, topic_data.get(holder.getAdapterPosition()).getPost()));
-        holder.textView_date.setText(context.getString(R.string.info_date, topic_data.get(holder.getAdapterPosition()).getDate()));
-        holder.cardView_info.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, InfoDetailActivity.class);
-                intent.putExtra(Config.INTENT_INFO_DETAIL, topic_data.get(holder.getAdapterPosition()));
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+        String title = topic_data.get(holder.getAdapterPosition()).getTitle();
+        if (title != null) {
+            holder.textView_type.setText(context.getString(R.string.info_type, topic_data.get(holder.getAdapterPosition()).getType()));
+            holder.textView_title.setText(title);
+            String click = topic_data.get(holder.getAdapterPosition()).getClick();
+            if (click != null) {
+                holder.textView_click.setVisibility(View.VISIBLE);
+                holder.textView_click.setText(context.getString(R.string.info_click, click));
+            } else {
+                holder.textView_click.setVisibility(View.INVISIBLE);
             }
-        });
+            holder.textView_post.setText(context.getString(R.string.info_post, topic_data.get(holder.getAdapterPosition()).getPost()));
+            holder.textView_date.setText(context.getString(R.string.info_date, topic_data.get(holder.getAdapterPosition()).getDate()));
+            holder.cardView_info.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, InfoDetailActivity.class);
+                    intent.putExtra(Config.INTENT_INFO_DETAIL, topic_data.get(holder.getAdapterPosition()));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
+            });
+        }
     }
 
     //设置数据（多来源数据整合）

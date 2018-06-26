@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -356,7 +355,7 @@ public class PersonFragment extends Fragment {
     }
 
     synchronized private void getData() {
-        new StudentAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, Objects.requireNonNull(context).getApplicationContext());
+        new StudentAsync().executeOnExecutor(BaseMethod.getAsyncTaskExecutor(loadTime), Objects.requireNonNull(context).getApplicationContext());
     }
 
     public int getLoadTime() {

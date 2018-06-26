@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -151,7 +150,7 @@ public class TableFragment extends Fragment {
     }
 
     synchronized private void getData() {
-        new TableAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, Objects.requireNonNull(context).getApplicationContext());
+        new TableAsync().executeOnExecutor(BaseMethod.getAsyncTaskExecutor(loadTime), Objects.requireNonNull(context).getApplicationContext());
     }
 
     /**
@@ -223,8 +222,7 @@ public class TableFragment extends Fragment {
                     if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_NEXT_WEEK, Config.DEFAULT_PREFERENCE_SHOW_NEXT_WEEK)) {
                         if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_WEEKEND, Config.DEFAULT_PREFERENCE_SHOW_WEEKEND)) {
                             if ((weekDayNum == Calendar.SUNDAY || weekDayNum == Calendar.SATURDAY) && weekNum + 1 <= TimeMethod.getMaxWeekNum(schoolTime)) {
-                                weekNum++;
-                                schoolTime.setWeekNum(weekNum);
+                                schoolTime.setWeekNum(++weekNum);
                             }
                         }
                     }

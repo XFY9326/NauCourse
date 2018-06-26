@@ -1,7 +1,6 @@
 package tool.xfy9326.naucourse.Activities;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -103,7 +102,7 @@ public class ExamActivity extends AppCompatActivity {
     }
 
     synchronized private void getData() {
-        new ExamAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
+        new ExamAsync().executeOnExecutor(BaseMethod.getAsyncTaskExecutor(loadTime), getApplicationContext());
     }
 
     public int getLoadTime() {

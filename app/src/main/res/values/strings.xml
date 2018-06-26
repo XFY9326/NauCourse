@@ -165,7 +165,7 @@
     <string name="course_detail_edit_week_num">周数：</string>
     <string name="course_detail_edit_time">时间：</string>
     <string name="please_input_data">请添加数据</string>
-    <string name="course_detail_edit_time_single_time">设置为独立的时间\n（只需要填写开始时间）</string>
+    <string name="course_detail_edit_time_single_time">设置为单个时间\n（只需要填写开始时间）</string>
     <string name="course_detail_edit_time_start_time">开始时间：</string>
     <string name="course_detail_edit_time_end_time">结束时间：</string>
     <string name="no_item_to_delete">没有可以删除的项目了！</string>

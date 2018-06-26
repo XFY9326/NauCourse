@@ -2,7 +2,6 @@ package tool.xfy9326.naucourse.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -258,7 +257,7 @@ public class HomeFragment extends Fragment {
     }
 
     synchronized private void getData() {
-        new InfoAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, Objects.requireNonNull(context).getApplicationContext());
+        new InfoAsync().executeOnExecutor(BaseMethod.getAsyncTaskExecutor(loadTime), Objects.requireNonNull(context).getApplicationContext());
     }
 
 }
