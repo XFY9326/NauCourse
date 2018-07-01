@@ -34,7 +34,7 @@ import tool.xfy9326.naucourse.Utils.JwTopic;
 import tool.xfy9326.naucourse.Utils.JwcTopic;
 import tool.xfy9326.naucourse.Utils.NextCourse;
 import tool.xfy9326.naucourse.Views.InfoAdapter;
-import tool.xfy9326.naucourse.Views.NextClassWidget;
+import tool.xfy9326.naucourse.Widget.NextClassWidget;
 
 /**
  * Created by xfy9326 on 18-2-20.

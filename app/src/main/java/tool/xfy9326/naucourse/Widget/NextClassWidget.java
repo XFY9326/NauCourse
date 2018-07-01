@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.Views;
+package tool.xfy9326.naucourse.Widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -29,7 +29,7 @@ import tool.xfy9326.naucourse.Utils.NextCourse;
  */
 
 public class NextClassWidget extends AppWidgetProvider {
-    public static final String ACTION_ON_CLICK = "tool.xfy9326.naucourse.Views.NextClassWidget.OnClick";
+    public static final String ACTION_ON_CLICK = "tool.xfy9326.naucourse.Widget.NextClassWidget.OnClick";
     private static final int REQUEST_ON_CLICK = 1;
     @Nullable
     private static NextCourse nextCourse = null;

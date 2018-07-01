@@ -35,6 +35,7 @@ public class CourseMethod {
     // 列 行
     private String[][] table;
     private String[][] id_table;
+    private boolean[][] this_week_no_show_table;
     @Nullable
     private List<String> course_time;
 
@@ -56,16 +57,14 @@ public class CourseMethod {
      * @return NextCourse对象
      */
     @NonNull
-    private static NextCourse getNextClass(@NonNull Context context, String[][] this_week_table, String[][] this_week_id_table, @NonNull ArrayList<Course> courses) {
+    private static NextCourse getNextClass(@NonNull Context context, String[][] this_week_table, String[][] this_week_id_table, boolean[][] this_week_no_show_table, @NonNull ArrayList<Course> courses) {
         NextCourse nextCourse = new NextCourse();
         Calendar calendar = Calendar.getInstance(Locale.CHINA);
-        int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-        if (weekDayNum == 0) {
-            weekDayNum = 7;
-        }
+        int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK) == 1 ? 7 : calendar.get(Calendar.DAY_OF_WEEK) - 1;
 
         String[] today = this_week_table[weekDayNum];
         String[] todayId = this_week_id_table[weekDayNum];
+        boolean[] todayNoShow = this_week_no_show_table[weekDayNum];
         String[] startTimes = context.getResources().getStringArray(R.array.course_start_time);
         String[] finishTimes = context.getResources().getStringArray(R.array.course_finish_time);
         long nowTime = calendar.getTimeInMillis();
@@ -76,7 +75,7 @@ public class CourseMethod {
         long todayFinalCourseTime = 0;
 
         for (int i = 0; i < finishTimes.length; i++) {
-            if (today[i + 1] != null) {
+            if (today[i + 1] != null && !todayNoShow[i + 1]) {
                 String[] time_temp = finishTimes[i].split(":");
                 calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time_temp[0]));
                 calendar.set(Calendar.MINUTE, Integer.valueOf(time_temp[1]));
@@ -99,7 +98,7 @@ public class CourseMethod {
 
         //课程开始时间回溯
         for (int i = 0; i < finishTimes.length; i++) {
-            if (todayId[i + 1] != null && todayId[i + 1].equalsIgnoreCase(nextCourse.getCourseId())) {
+            if (todayId[i + 1] != null && !todayNoShow[i + 1] && todayId[i + 1].equalsIgnoreCase(nextCourse.getCourseId())) {
                 course_startTime = startTimes[i];
                 break;
             }
@@ -138,7 +137,7 @@ public class CourseMethod {
         if (this.weekNum != weekNum || table == null) {
             getTable(weekNum, schoolTime.getStartTime());
         }
-        return getNextClass(context, table, id_table, courses);
+        return getNextClass(context, table, id_table, this_week_no_show_table, courses);
     }
 
     /**
@@ -157,6 +156,15 @@ public class CourseMethod {
      */
     public String[][] getTableIdData() {
         return id_table;
+    }
+
+    /**
+     * 获取单双周课程信息
+     *
+     * @return 对应的二维数组
+     */
+    public boolean[][] getTableShowData() {
+        return this_week_no_show_table;
     }
 
     /**
@@ -198,28 +206,35 @@ public class CourseMethod {
     //获取该周信息表格
     synchronized private void getTable(int weekNum, String startSchoolDate) {
         boolean isDoubleWeek = weekNum % 2 == 0;
+        boolean showAllWeekMode = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_NO_THIS_WEEK_CLASS, Config.DEFAULT_PREFERENCE_SHOW_NO_THIS_WEEK_CLASS);
 
         table = new String[Config.MAX_WEEK_DAY + 1][Config.MAX_DAY_COURSE + 1];
         id_table = new String[Config.MAX_WEEK_DAY + 1][Config.MAX_DAY_COURSE + 1];
+        this_week_no_show_table = new boolean[Config.MAX_WEEK_DAY + 1][Config.MAX_DAY_COURSE + 1];
         for (Course course : courses) {
             CourseDetail[] courseDetail = course.getCourseDetail();
             for (CourseDetail detail : Objects.requireNonNull(courseDetail)) {
                 int mode = detail.getWeekMode();
+                if (showAllWeekMode) {
+                    boolean defaultNoShow = !weekCheck(detail, weekNum) || isDoubleWeek && mode == Config.COURSE_DETAIL_WEEKMODE_SINGLE || !isDoubleWeek && mode == Config.COURSE_DETAIL_WEEKMODE_DOUBLE;
+                    courseSet(course, detail, weekNum, startSchoolDate, defaultNoShow);
+                    continue;
+                }
                 if (isDoubleWeek && mode == Config.COURSE_DETAIL_WEEKMODE_DOUBLE) {
                     if (weekCheck(detail, weekNum)) {
-                        courseSet(course, detail, weekNum, startSchoolDate);
+                        courseSet(course, detail, weekNum, startSchoolDate, false);
                     }
                     continue;
                 }
                 if (!isDoubleWeek && mode == Config.COURSE_DETAIL_WEEKMODE_SINGLE) {
                     if (weekCheck(detail, weekNum)) {
-                        courseSet(course, detail, weekNum, startSchoolDate);
+                        courseSet(course, detail, weekNum, startSchoolDate, false);
                     }
                     continue;
                 }
                 if (mode == Config.COURSE_DETAIL_WEEKMODE_ONCE_MORE || mode == Config.COURSE_DETAIL_WEEKMODE_ONCE) {
                     if (weekCheck(detail, weekNum)) {
-                        courseSet(course, detail, weekNum, startSchoolDate);
+                        courseSet(course, detail, weekNum, startSchoolDate, false);
                     }
                 }
             }
@@ -248,7 +263,7 @@ public class CourseMethod {
     }
 
     //设置课程到二维数组
-    private void courseSet(@NonNull Course course, CourseDetail detail, int weekNum, String startSchoolDate) {
+    private void courseSet(@NonNull Course course, CourseDetail detail, int weekNum, String startSchoolDate, boolean defaultNoShowClass) {
         String[] courseTimes = detail.getCourseTime();
         int startSchoolWeekDay = getStartSchoolWeekDay(startSchoolDate);
         for (String courseTime : Objects.requireNonNull(courseTimes)) {
@@ -260,12 +275,20 @@ public class CourseMethod {
                 int t_start = Integer.valueOf(time[0]);
                 int t_end = Integer.valueOf(time[1]);
                 for (int t = t_start; t <= t_end; t++) {
+                    if (table[detail.getWeekDay()][t] != null && defaultNoShowClass) {
+                        continue;
+                    }
                     table[detail.getWeekDay()][t] = getShowDetail(course, detail);
                     id_table[detail.getWeekDay()][t] = course.getCourseId();
+                    this_week_no_show_table[detail.getWeekDay()][t] = defaultNoShowClass;
                 }
             } else {
+                if (table[detail.getWeekDay()][Integer.valueOf(courseTime)] != null && defaultNoShowClass) {
+                    continue;
+                }
                 table[detail.getWeekDay()][Integer.valueOf(courseTime)] = getShowDetail(course, detail);
                 id_table[detail.getWeekDay()][Integer.valueOf(courseTime)] = course.getCourseId();
+                this_week_no_show_table[detail.getWeekDay()][Integer.valueOf(courseTime)] = defaultNoShowClass;
             }
         }
     }

@@ -64,6 +64,11 @@
             android:summary="@string/show_wide_course_table_sum"
             android:title="@string/show_wide_course_table" />
         <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="SHOW_NO_THIS_WEEK_CLASS"
+            android:summary="@string/show_no_this_week_class_sum"
+            android:title="@string/show_no_this_week_class" />
+        <CheckBoxPreference
             android:defaultValue="true"
             android:disableDependentsState="true"
             android:key="SHOW_WEEKEND"

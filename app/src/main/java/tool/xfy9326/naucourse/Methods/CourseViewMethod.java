@@ -40,6 +40,8 @@ public class CourseViewMethod {
     @Nullable
     private String[][] id_table;
     @Nullable
+    private boolean[][] this_week_no_show_table;
+    @Nullable
     private OnCourseTableItemClickListener onCourseTableClick;
 
     public CourseViewMethod(Context context, ArrayList<Course> courses) {
@@ -69,17 +71,15 @@ public class CourseViewMethod {
      * @param id_table  课程信息对应的ID的二维数组
      * @param checkSame 是否检查到相同数据就不更新视图
      */
-    public void updateCourseTableView(ArrayList<Course> courses, @Nullable String[][] table, @Nullable String[][] id_table, boolean checkSame, boolean hasCustomBackground) {
+    public void updateCourseTableView(ArrayList<Course> courses, @Nullable String[][] table, @Nullable String[][] id_table, @Nullable boolean[][] this_week_table, boolean checkSame, boolean hasCustomBackground) {
         this.courses = courses;
-        if (table == null || id_table == null) {
-            this.table = table;
-            this.id_table = id_table;
-        } else {
-            if (checkSame && Arrays.equals(table, this.table) && Arrays.equals(id_table, this.id_table)) {
+        if (table != null && id_table != null && this_week_table != null) {
+            if (checkSame && Arrays.equals(table, this.table) && Arrays.equals(id_table, this.id_table) && Arrays.equals(this_week_table, this.this_week_no_show_table)) {
                 return;
             } else {
                 this.table = table;
                 this.id_table = id_table;
+                this.this_week_no_show_table = this_week_table;
             }
         }
         if (checkData()) {
@@ -97,7 +97,7 @@ public class CourseViewMethod {
     }
 
     private boolean checkData() {
-        return course_table_layout != null && parent_width != 0 && table != null && id_table != null && courses != null;
+        return course_table_layout != null && parent_width != 0 && table != null && id_table != null && this_week_no_show_table != null && courses != null;
     }
 
     synchronized private void loadView(boolean hasCustomBackground) {
@@ -162,6 +162,10 @@ public class CourseViewMethod {
                     if (!isLightColor(bgColor)) {
                         textColor = Color.WHITE;
                     }
+                }
+                if (this_week_no_show_table != null && this_week_no_show_table[col][row]) {
+                    bgColor = context.getResources().getColor(R.color.light_light_grey);
+                    textColor = context.getResources().getColor(R.color.light_grey);
                 }
                 course_table_layout.addView(getCellView(text, bgColor, textColor, width, col, row, showWide, hasCustomBackground, alpha), layoutParams);
             }

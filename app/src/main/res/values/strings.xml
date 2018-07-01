@@ -30,7 +30,7 @@
     <string name="score_NP">年级排名：%1$s</string>
     <string name="score_ZP">专业排名：%1$s</string>
     <string name="score_BP">班级排名：%1$s</string>
-    <string name="table_date">%1$d年%2$d月</string>
+    <string name="table_date">%1$d年%2$d月&#160;&#160;周%3$s&#160;&#160;&#160;%4$s</string>
     <string name="info_type">类别：%1$s</string>
     <string name="info_click">点击：%1$s</string>
     <string name="info_post">发布：%1$s</string>
@@ -208,6 +208,8 @@
     <string name="auto_update_course_table">每天自动覆盖更新教务课程表数据</string>
     <string name="auto_update_course_table_sum">如果有其他课程时间重复将不会更新数据</string>
     <string name="init_data_loading">正在从网络初始化所有数据</string>
+    <string name="show_no_this_week_class">显示非本周课程</string>
+    <string name="show_no_this_week_class_sum">不论单双周等限制显示所有课程</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>

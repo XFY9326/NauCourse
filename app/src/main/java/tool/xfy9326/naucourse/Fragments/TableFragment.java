@@ -53,7 +53,7 @@ import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.CourseDetail;
 import tool.xfy9326.naucourse.Utils.NextCourse;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
-import tool.xfy9326.naucourse.Views.NextClassWidget;
+import tool.xfy9326.naucourse.Widget.NextClassWidget;
 
 /**
  * Created by xfy9326 on 18-2-20.
@@ -194,12 +194,12 @@ public class TableFragment extends Fragment {
                 Calendar calendar = Calendar.getInstance(Locale.CHINA);
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH) + 1;
+                String weekDay = getResources().getStringArray(R.array.week_number)[calendar.get(Calendar.DAY_OF_WEEK) == 1 ? 6 : calendar.get(Calendar.DAY_OF_WEEK) - 2];
                 String week = context.getString(R.string.week, weekNum);
                 if (schoolTime.getWeekNum() == 0) {
                     week = context.getString(R.string.time_vacation);
                 }
-                String time = context.getString(R.string.table_date, year, month) + "    " + week;
-                textView_date.setText(time);
+                textView_date.setText(context.getString(R.string.table_date, year, month, weekDay, week));
 
                 if (spinner_week == null) {
                     spinner_week = view.findViewById(R.id.spinner_table_week_chose);
@@ -298,7 +298,7 @@ public class TableFragment extends Fragment {
                 }
             }
         }
-        courseViewMethod.updateCourseTableView(courses, courseMethod.getTableData(), courseMethod.getTableIdData(), !isDataReload, hasCustomBackground);
+        courseViewMethod.updateCourseTableView(courses, courseMethod.getTableData(), courseMethod.getTableIdData(), courseMethod.getTableShowData(), !isDataReload, hasCustomBackground);
     }
 
     //表格中的课程详细信息显示

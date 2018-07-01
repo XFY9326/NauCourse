@@ -69,6 +69,7 @@ public class SettingsFragment extends PreferenceFragment {
         findPreference(Config.PREFERENCE_SHOW_WIDE_TABLE).setOnPreferenceChangeListener(tableReloadListener);
         findPreference(Config.PREFERENCE_COURSE_TABLE_CELL_COLOR).setOnPreferenceChangeListener(tableReloadListener);
         findPreference(Config.PREFERENCE_COURSE_TABLE_SHOW_SINGLE_COLOR).setOnPreferenceChangeListener(tableReloadListener);
+        findPreference(Config.PREFERENCE_SHOW_NO_THIS_WEEK_CLASS).setOnPreferenceChangeListener(tableReloadListener);
 
         findPreference(Config.PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override

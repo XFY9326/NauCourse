@@ -155,14 +155,26 @@
         </receiver>
 
         <receiver
-            android:name=".Views.NextClassWidget"
+            android:name=".Widget.NextClassWidget"
             tools:ignore="InnerclassSeparator">
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/app_widget_next_class_provider" />
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="tool.xfy9326.naucourse.Views.NextClassWidget.OnClick" />
+                <action android:name="tool.xfy9326.naucourse.Widget.NextClassWidget.OnClick" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".Widget.NextClassWidgetLarge"
+            tools:ignore="InnerclassSeparator">
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_widget_next_class_provider_large" />
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="tool.xfy9326.naucourse.Widget.NextClassWidget.OnClick" />
             </intent-filter>
         </receiver>
 

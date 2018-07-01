@@ -20,7 +20,7 @@ import tool.xfy9326.naucourse.Methods.NextClassMethod;
 import tool.xfy9326.naucourse.Methods.NotificationMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.NextCourse;
-import tool.xfy9326.naucourse.Views.NextClassWidget;
+import tool.xfy9326.naucourse.Widget.NextClassWidget;
 
 /**
  * Created by 10696 on 2018/3/8.

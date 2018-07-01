@@ -40,7 +40,7 @@ import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
 import tool.xfy9326.naucourse.Utils.StudentInfo;
 import tool.xfy9326.naucourse.Utils.StudentLearnProcess;
-import tool.xfy9326.naucourse.Views.NextClassWidget;
+import tool.xfy9326.naucourse.Widget.NextClassWidget;
 
 /**
  * Created by xfy9326 on 18-2-20.
