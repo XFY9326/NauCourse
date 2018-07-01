@@ -12,7 +12,6 @@ import java.util.Objects;
 
 import lib.xfy9326.naujwc.NauJwcClient;
 import tool.xfy9326.naucourse.Config;
-import tool.xfy9326.naucourse.Tools.AES;
 
 /**
  * Created by xfy9326 on 18-2-20.
@@ -42,13 +41,12 @@ public class LoginMethod {
                     data = BaseMethod.getApp(context).getClient().getUserData(url);
                     break;
                 case Config.RE_LOGIN_TRYING:
-                    Log.d("NETWORK", "WAITING LOGIN RESULT");
                     while (isTryingReLogin) {
                         Thread.sleep(500);
                     }
                     return getData(context, url, false);
                 case Config.RE_LOGIN_FAILED:
-                    Log.d("NETWORK", "LOGIN ERROR");
+                    Log.d("NETWORK", "RE LOGIN ERROR");
                     break;
             }
         }
@@ -76,11 +74,9 @@ public class LoginMethod {
     private static int reLogin(@NonNull Context context) throws Exception {
         if (!isTryingReLogin) {
             isTryingReLogin = true;
-            Log.d("NETWORK", "TRY LOGIN AGAIN");
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             String id = sharedPreferences.getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
-            String pw = sharedPreferences.getString(Config.PREFERENCE_USER_PW, Config.DEFAULT_PREFERENCE_USER_PW);
-            pw = AES.decrypt(pw, id);
+            String pw = SecurityMethod.getUserPassWord(context);
             NauJwcClient nauJwcClient = BaseMethod.getApp(context).getClient();
             nauJwcClient.loginOut();
             Thread.sleep(1000);

@@ -68,7 +68,7 @@
     <string name="jwc">教务委员会</string>
     <string name="only_update_under_wifi">仅在Wifi网络下自动更新数据</string>
     <string name="only_update_under_wifi_sum">避免自动更新数据使用移动网络消耗流量</string>
-    <string name="user_login_error">当前用户登陆已经失效，请重新登录！</string>
+    <string name="user_login_error">当前用户登陆已经失效，请重新登录！\n（记住密码可自动重试）</string>
     <string name="course_card_score">学分：%1$s</string>
     <string name="course_card_class">教学班：%1$s</string>
     <string name="course_card_combined_class">合班号：%1$s</string>

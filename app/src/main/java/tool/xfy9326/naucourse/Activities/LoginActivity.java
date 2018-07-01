@@ -25,6 +25,7 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.LoginMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
+import tool.xfy9326.naucourse.Methods.SecurityMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Tools.AES;
 
@@ -125,8 +126,8 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }).start();
                     if (checkBox_rememberPw.isChecked()) {
-                        String en_pw = AES.encrypt(String.valueOf(pw), String.valueOf(id));
-                        sharedPreferences.edit().putString(Config.PREFERENCE_USER_ID, id).putString(Config.PREFERENCE_USER_PW, en_pw).putBoolean(Config.PREFERENCE_REMEMBER_PW, true).apply();
+                        SecurityMethod.saveUserInfo(LoginActivity.this, String.valueOf(id), String.valueOf(pw));
+                        sharedPreferences.edit().putBoolean(Config.PREFERENCE_REMEMBER_PW, true).apply();
                     } else {
                         sharedPreferences.edit().putString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID).putString(Config.PREFERENCE_USER_PW, Config.DEFAULT_PREFERENCE_USER_PW).putBoolean(Config.PREFERENCE_REMEMBER_PW, false).apply();
                     }
