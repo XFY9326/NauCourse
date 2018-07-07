@@ -93,9 +93,9 @@ public class ScoreActivity extends AppCompatActivity {
         if (studentScore != null && courseScore != null) {
             ((TextView) findViewById(R.id.textView_scoreXF)).setText(getString(R.string.score_XF, studentScore.getScoreXF()));
             ((TextView) findViewById(R.id.textView_scoreJD)).setText(getString(R.string.score_JD, studentScore.getScoreJD()));
-            ((TextView) findViewById(R.id.textView_scoreNP)).setText(getString(R.string.score_NP, studentScore.getScoreNP()));
-            ((TextView) findViewById(R.id.textView_scoreZP)).setText(getString(R.string.score_ZP, studentScore.getScoreZP()));
-            ((TextView) findViewById(R.id.textView_scoreBP)).setText(getString(R.string.score_BP, studentScore.getScoreBP()));
+            ((TextView) findViewById(R.id.textView_scoreNP)).setText(getString(R.string.score_NP, studentScore.getScoreNP() == null ? getString(R.string.data_loading) : studentScore.getScoreNP()));
+            ((TextView) findViewById(R.id.textView_scoreZP)).setText(getString(R.string.score_ZP, studentScore.getScoreZP() == null ? getString(R.string.data_loading) : studentScore.getScoreZP()));
+            ((TextView) findViewById(R.id.textView_scoreBP)).setText(getString(R.string.score_BP, studentScore.getScoreBP() == null ? getString(R.string.data_loading) : studentScore.getScoreBP()));
 
             if (waitForEvaluate(courseScore)) {
                 findViewById(R.id.textView_wait_for_evaluate).setVisibility(View.VISIBLE);
