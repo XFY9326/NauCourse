@@ -78,6 +78,7 @@ public class TableFragment extends Fragment {
     @Nullable
     private Spinner spinner_week;
     private int lastSelect;
+    private boolean view_set = false;
 
     public TableFragment() {
         this.view = null;
@@ -113,7 +114,16 @@ public class TableFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        ViewSet();
+        if (!view_set) {
+            ViewSet();
+            view_set = true;
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        view_set = false;
+        super.onDestroyView();
     }
 
     @Override
@@ -400,6 +410,7 @@ public class TableFragment extends Fragment {
                 }
 
                 if (update_day) {
+                    Toast.makeText(context, R.string.course_table_auto_update_alert, Toast.LENGTH_SHORT).show();
                     getData();
                 }
             }

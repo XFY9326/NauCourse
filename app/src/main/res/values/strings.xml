@@ -212,6 +212,7 @@
     <string name="show_no_this_week_class">显示非本周课程</string>
     <string name="show_no_this_week_class_sum">不论单双周等限制显示所有课程</string>
     <string name="course_table_share_error">课程表分享失败！</string>
+    <string name="course_table_auto_update_alert">课程表正在自动同步更新数据…</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>
