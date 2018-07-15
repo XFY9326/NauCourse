@@ -76,6 +76,7 @@ public class Config {
     public static final String PREFERENCE_COURSE_TABLE_LOAD_DATE = "COURSE_TABLE_LOAD_DATE";
     public static final String PREFERENCE_AUTO_UPDATE_COURSE_TABLE = "AUTO_UPDATE_COURSE_TABLE";
     public static final String PREFERENCE_SHOW_NO_THIS_WEEK_CLASS = "SHOW_NO_THIS_WEEK_CLASS";
+    public static final String PREFERENCE_AUTO_UPDATE_COURSE_TABLE_ALERT = "AUTO_UPDATE_COURSE_TABLE_ALERT";
 
     public static final boolean DEFAULT_PREFERENCE_HAS_LOGIN = false;
     public static final boolean DEFAULT_PREFERENCE_REMEMBER_PW = true;
@@ -95,6 +96,7 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_ASYNC_PERSONAL_INFO_BY_DAY = true;
     public static final boolean DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE = true;
     public static final boolean DEFAULT_PREFERENCE_SHOW_NO_THIS_WEEK_CLASS = false;
+    public static final boolean DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE_ALERT = false;
 
     //网络连接错误代码
     public static final int NET_WORK_GET_SUCCESS = 0;

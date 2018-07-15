@@ -15,8 +15,8 @@ android {
         minSdkVersion 19
         //noinspection OldTargetApi
         targetSdkVersion 27
-        versionCode 29
-        versionName "3.8"
+        versionCode 30
+        versionName "3.9"
         resConfigs "zh"
     }
 

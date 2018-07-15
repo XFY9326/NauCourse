@@ -26,11 +26,11 @@ import lib.xfy9326.naujwc.NauJwcClient;
 import tool.xfy9326.naucourse.AsyncTasks.InfoDetailAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
-import tool.xfy9326.naucourse.Methods.JwInfoMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethods.JwInfoMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.InfoDetail;
-import tool.xfy9326.naucourse.Views.InfoAdapter;
+import tool.xfy9326.naucourse.Views.RecyclerViews.InfoAdapter;
 
 /**
  * Created by 10696 on 2018/2/25.

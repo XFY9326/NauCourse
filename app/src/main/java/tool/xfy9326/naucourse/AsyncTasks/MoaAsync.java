@@ -8,7 +8,7 @@ import tool.xfy9326.naucourse.Activities.MoaActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.DataMethod;
-import tool.xfy9326.naucourse.Methods.MoaMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethods.MoaMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Utils.Moa;
 

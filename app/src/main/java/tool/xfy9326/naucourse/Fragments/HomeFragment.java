@@ -33,7 +33,7 @@ import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.JwTopic;
 import tool.xfy9326.naucourse.Utils.JwcTopic;
 import tool.xfy9326.naucourse.Utils.NextCourse;
-import tool.xfy9326.naucourse.Views.InfoAdapter;
+import tool.xfy9326.naucourse.Views.RecyclerViews.InfoAdapter;
 import tool.xfy9326.naucourse.Widget.NextClassWidget;
 
 /**

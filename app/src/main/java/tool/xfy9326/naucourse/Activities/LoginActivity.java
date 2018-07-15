@@ -27,7 +27,6 @@ import tool.xfy9326.naucourse.Methods.LoginMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Methods.SecurityMethod;
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.Tools.AES;
 
 /**
  * Created by xfy9326 on 18-2-20.
@@ -64,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         final EditText editText_userPw = findViewById(R.id.editText_userPw);
         String en_userPw = sharedPreferences.getString(Config.PREFERENCE_USER_PW, Config.DEFAULT_PREFERENCE_USER_PW);
         if (!en_userPw.equals(Config.DEFAULT_PREFERENCE_USER_PW)) {
-            editText_userPw.setText(AES.decrypt(en_userPw, userId));
+            editText_userPw.setText(SecurityMethod.getUserPassWord(this));
         }
         final CheckBox checkBox_rememberPw = findViewById(R.id.checkBox_rememberPw);
         checkBox_rememberPw.setChecked(sharedPreferences.getBoolean(Config.PREFERENCE_REMEMBER_PW, Config.DEFAULT_PREFERENCE_REMEMBER_PW));

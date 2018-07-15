@@ -21,7 +21,7 @@ import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.CourseScore;
 import tool.xfy9326.naucourse.Utils.StudentScore;
-import tool.xfy9326.naucourse.Views.ScoreAdapter;
+import tool.xfy9326.naucourse.Views.RecyclerViews.ScoreAdapter;
 
 /**
  * Created by 10696 on 2018/3/2.

@@ -10,10 +10,10 @@ import java.util.Objects;
 import tool.xfy9326.naucourse.Activities.InfoDetailActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
-import tool.xfy9326.naucourse.Methods.JwInfoMethod;
-import tool.xfy9326.naucourse.Methods.JwcInfoMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethods.JwInfoMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethods.JwcInfoMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
-import tool.xfy9326.naucourse.Views.InfoAdapter;
+import tool.xfy9326.naucourse.Views.RecyclerViews.InfoAdapter;
 
 /**
  * Created by 10696 on 2018/3/2.

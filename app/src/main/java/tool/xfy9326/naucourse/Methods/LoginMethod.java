@@ -32,7 +32,7 @@ public class LoginMethod {
      * @throws Exception 网络连接中的错误
      */
     @Nullable
-    static String getData(@NonNull Context context, String url, boolean tryReLogin) throws Exception {
+    public static String getData(@NonNull Context context, String url, boolean tryReLogin) throws Exception {
         String data = BaseMethod.getApp(context).getClient().getUserData(url);
         if (!checkUserLogin(Objects.requireNonNull(data)) && tryReLogin) {
             int reLogin_result = reLogin(context);
@@ -60,7 +60,7 @@ public class LoginMethod {
      * @param data 获取的网络数据
      * @return 是否登陆成功
      */
-    static boolean checkUserLogin(String data) {
+    public static boolean checkUserLogin(String data) {
         return !(data.contains("系统错误提示页") && data.contains("当前程序在执行过程中出现了未知异常，请重试") || data.contains("用户登录_南京审计大学教务管理系统"));
     }
 

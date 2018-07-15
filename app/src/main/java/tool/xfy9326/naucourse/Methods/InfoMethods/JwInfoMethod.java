@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.Methods;
+package tool.xfy9326.naucourse.Methods.InfoMethods;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Objects;
 
 import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.Methods.DataMethod;
+import tool.xfy9326.naucourse.Methods.ImageMethod;
+import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Utils.JwTopic;
 
 /**

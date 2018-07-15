@@ -18,7 +18,7 @@ import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.LevelExam;
-import tool.xfy9326.naucourse.Views.LevelExamAdapter;
+import tool.xfy9326.naucourse.Views.RecyclerViews.LevelExamAdapter;
 
 public class LevelExamActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;

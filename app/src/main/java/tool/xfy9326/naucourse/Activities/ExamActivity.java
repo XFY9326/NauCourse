@@ -18,7 +18,7 @@ import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Exam;
-import tool.xfy9326.naucourse.Views.ExamAdapter;
+import tool.xfy9326.naucourse.Views.RecyclerViews.ExamAdapter;
 
 /**
  * Created by 10696 on 2018/3/3.

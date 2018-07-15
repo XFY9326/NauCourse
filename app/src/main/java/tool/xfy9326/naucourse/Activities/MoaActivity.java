@@ -18,11 +18,11 @@ import android.widget.TextView;
 
 import tool.xfy9326.naucourse.AsyncTasks.MoaAsync;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
-import tool.xfy9326.naucourse.Methods.MoaMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethods.MoaMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Moa;
-import tool.xfy9326.naucourse.Views.MoaAdapter;
+import tool.xfy9326.naucourse.Views.RecyclerViews.MoaAdapter;
 
 public class MoaActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout = null;

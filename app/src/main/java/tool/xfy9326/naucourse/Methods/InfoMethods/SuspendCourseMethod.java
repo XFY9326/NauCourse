@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.Methods;
+package tool.xfy9326.naucourse.Methods.InfoMethods;
 
 import android.content.Context;
 
@@ -10,6 +10,8 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 
 import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.Methods.DataMethod;
+import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Utils.SuspendCourse;
 
 public class SuspendCourseMethod {

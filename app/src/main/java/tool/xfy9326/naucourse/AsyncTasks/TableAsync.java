@@ -13,9 +13,9 @@ import tool.xfy9326.naucourse.Fragments.TableFragment;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.CourseEditMethod;
 import tool.xfy9326.naucourse.Methods.DataMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethods.SchoolTimeMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethods.TableMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
-import tool.xfy9326.naucourse.Methods.SchoolTimeMethod;
-import tool.xfy9326.naucourse.Methods.TableMethod;
 import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
 

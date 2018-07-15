@@ -3,9 +3,11 @@ package tool.xfy9326.naucourse.Activities;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -34,10 +36,10 @@ import tool.xfy9326.naucourse.Handlers.MainHandler;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.CourseEditMethod;
 import tool.xfy9326.naucourse.Methods.DataMethod;
-import tool.xfy9326.naucourse.Methods.TableMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethods.TableMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Course;
-import tool.xfy9326.naucourse.Views.CourseAdapter;
+import tool.xfy9326.naucourse.Views.RecyclerViews.CourseAdapter;
 
 public class CourseActivity extends AppCompatActivity {
     public static final int COURSE_EDIT_REQUEST_CODE = 1;
@@ -72,13 +74,16 @@ public class CourseActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            //保存数据
             case R.id.menu_course_save:
                 saveData();
                 needReload = true;
                 break;
+            //返回
             case android.R.id.home:
                 saveCheck();
                 return true;
+            //清空课程
             case R.id.menu_course_delete_all:
                 Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.confirm_delete_all, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(android.R.string.yes, new View.OnClickListener() {
                     @Override
@@ -167,6 +172,27 @@ public class CourseActivity extends AppCompatActivity {
                 builder.show();
             }
         });
+
+        autoUpdateCourseAlert();
+    }
+
+    private void autoUpdateCourseAlert() {
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sharedPreferences.getBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE, Config.DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE)) {
+            if (!sharedPreferences.getBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE_ALERT, Config.DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE_ALERT)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.attention);
+                builder.setMessage(R.string.auto_update_course_table_alert);
+                builder.setPositiveButton(android.R.string.yes, null);
+                builder.setNeutralButton(R.string.no_alert_again, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        sharedPreferences.edit().putBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE_ALERT, true).apply();
+                    }
+                });
+                builder.show();
+            }
+        }
     }
 
     //还原下拉的列表位置

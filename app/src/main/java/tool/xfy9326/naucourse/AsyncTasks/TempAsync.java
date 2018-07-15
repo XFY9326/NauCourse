@@ -5,12 +5,12 @@ import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 
 import tool.xfy9326.naucourse.Config;
-import tool.xfy9326.naucourse.Methods.ExamMethod;
-import tool.xfy9326.naucourse.Methods.LevelExamMethod;
-import tool.xfy9326.naucourse.Methods.MoaMethod;
-import tool.xfy9326.naucourse.Methods.PersonMethod;
-import tool.xfy9326.naucourse.Methods.ScoreMethod;
-import tool.xfy9326.naucourse.Methods.SuspendCourseMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethods.ExamMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethods.LevelExamMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethods.MoaMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethods.PersonMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethods.ScoreMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethods.SuspendCourseMethod;
 
 /**
  * Created by 10696 on 2018/3/16.

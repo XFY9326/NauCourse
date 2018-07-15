@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.Methods;
+package tool.xfy9326.naucourse.Methods.InfoMethods;
 
 import android.content.Context;
 
@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.Methods.DataMethod;
+import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Utils.Moa;
 
 public class MoaMethod {

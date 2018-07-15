@@ -9,7 +9,7 @@ import tool.xfy9326.naucourse.Activities.LevelExamActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.DataMethod;
-import tool.xfy9326.naucourse.Methods.LevelExamMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethods.LevelExamMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Utils.LevelExam;
 

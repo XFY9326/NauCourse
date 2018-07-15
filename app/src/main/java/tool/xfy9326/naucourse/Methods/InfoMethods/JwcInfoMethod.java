@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.Methods;
+package tool.xfy9326.naucourse.Methods.InfoMethods;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Objects;
 
 import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.Methods.DataMethod;
+import tool.xfy9326.naucourse.Methods.LoginMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.JwcTopic;
 

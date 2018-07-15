@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.Views;
+package tool.xfy9326.naucourse.Views.RecyclerViews;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;

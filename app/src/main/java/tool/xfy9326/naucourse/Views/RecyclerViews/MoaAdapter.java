@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.Views;
+package tool.xfy9326.naucourse.Views.RecyclerViews;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import tool.xfy9326.naucourse.Activities.MoaActivity;
-import tool.xfy9326.naucourse.Methods.MoaMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethods.MoaMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Moa;
 

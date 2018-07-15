@@ -9,8 +9,8 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Fragments.PersonFragment;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.DataMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethods.PersonMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
-import tool.xfy9326.naucourse.Methods.PersonMethod;
 import tool.xfy9326.naucourse.Utils.StudentInfo;
 import tool.xfy9326.naucourse.Utils.StudentLearnProcess;
 

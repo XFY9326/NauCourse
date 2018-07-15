@@ -31,7 +31,7 @@ import tool.xfy9326.naucourse.Methods.CourseEditMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.CourseDetail;
-import tool.xfy9326.naucourse.Views.CourseEditAdapter;
+import tool.xfy9326.naucourse.Views.RecyclerViews.CourseEditAdapter;
 
 public class CourseEditActivity extends AppCompatActivity {
     private boolean needSave = false;

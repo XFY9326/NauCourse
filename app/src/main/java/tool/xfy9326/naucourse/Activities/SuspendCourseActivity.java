@@ -19,7 +19,7 @@ import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.SuspendCourse;
-import tool.xfy9326.naucourse.Views.SuspendCourseAdapter;
+import tool.xfy9326.naucourse.Views.RecyclerViews.SuspendCourseAdapter;
 
 public class SuspendCourseActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;

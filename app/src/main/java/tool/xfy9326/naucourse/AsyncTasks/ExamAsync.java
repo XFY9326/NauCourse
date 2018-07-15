@@ -9,7 +9,7 @@ import tool.xfy9326.naucourse.Activities.ExamActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.DataMethod;
-import tool.xfy9326.naucourse.Methods.ExamMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethods.ExamMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Utils.Exam;
 
