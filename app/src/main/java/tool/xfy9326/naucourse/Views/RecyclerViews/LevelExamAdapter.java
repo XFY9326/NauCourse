@@ -6,11 +6,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.LevelExam;
 
-public class LevelExamAdapter extends RecyclerView.Adapter<LevelExamViewHolder> {
+public class LevelExamAdapter extends RecyclerView.Adapter<LevelExamAdapter.LevelExamViewHolder> {
     private final Context context;
     private LevelExam levelExam;
 
@@ -48,4 +49,25 @@ public class LevelExamAdapter extends RecyclerView.Adapter<LevelExamViewHolder> 
         return levelExam.getExamAmount();
     }
 
+    static class LevelExamViewHolder extends RecyclerView.ViewHolder {
+        final TextView textView_level_exam_name;
+        final TextView textView_level_exam_type;
+        final TextView textView_level_exam_term;
+        final TextView textView_level_exam_score_one;
+        final TextView textView_level_exam_score_two;
+        final TextView textView_level_exam_ticket;
+        final TextView textView_level_exam_certificate;
+
+        LevelExamViewHolder(@NonNull View view) {
+            super(view);
+            textView_level_exam_name = view.findViewById(R.id.textView_level_exam_name);
+            textView_level_exam_type = view.findViewById(R.id.textView_level_exam_type);
+            textView_level_exam_term = view.findViewById(R.id.textView_level_exam_term);
+            textView_level_exam_score_one = view.findViewById(R.id.textView_level_exam_score_one);
+            textView_level_exam_score_two = view.findViewById(R.id.textView_level_exam_score_two);
+            textView_level_exam_ticket = view.findViewById(R.id.textView_level_exam_ticket);
+            textView_level_exam_certificate = view.findViewById(R.id.textView_level_exam_certificate);
+
+        }
+    }
 }

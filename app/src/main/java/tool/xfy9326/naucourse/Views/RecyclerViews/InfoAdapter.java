@@ -3,10 +3,12 @@ package tool.xfy9326.naucourse.Views.RecyclerViews;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ import tool.xfy9326.naucourse.Utils.JwcTopic;
  * 主页信息显示
  */
 
-public class InfoAdapter extends RecyclerView.Adapter<InfoViewHolder> {
+public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder> {
     public static final String TOPIC_SOURCE_JWC = "JWC";
     public static final String TOPIC_SOURCE_JW = "JW";
 
@@ -158,4 +160,26 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoViewHolder> {
         }
     }
 
+    /**
+     * Created by xfy9326 on 18-2-20.
+     */
+
+    static class InfoViewHolder extends RecyclerView.ViewHolder {
+        final CardView cardView_info;
+        final TextView textView_type;
+        final TextView textView_title;
+        final TextView textView_click;
+        final TextView textView_post;
+        final TextView textView_date;
+
+        InfoViewHolder(@NonNull View view) {
+            super(view);
+            cardView_info = view.findViewById(R.id.cardView_info);
+            textView_type = view.findViewById(R.id.textView_info_type);
+            textView_title = view.findViewById(R.id.textView_info_title);
+            textView_click = view.findViewById(R.id.textView_info_click);
+            textView_post = view.findViewById(R.id.textView_info_post);
+            textView_date = view.findViewById(R.id.textView_info_date);
+        }
+    }
 }

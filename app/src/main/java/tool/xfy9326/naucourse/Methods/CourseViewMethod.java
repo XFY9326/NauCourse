@@ -34,6 +34,7 @@ public class CourseViewMethod {
     private final SharedPreferences sharedPreferences;
     private ArrayList<Course> courses;
     private int parent_width = 0;
+    private int parent_height = 0;
     private GridLayout course_table_layout;
     @Nullable
     private String[][] table;
@@ -59,9 +60,10 @@ public class CourseViewMethod {
      * @param gridLayout   GridLayout课程表主视图
      * @param parent_width 父控件的宽度
      */
-    public void setTableView(GridLayout gridLayout, int parent_width) {
+    public void setTableView(GridLayout gridLayout, int parent_width, int parent_height) {
         this.course_table_layout = gridLayout;
         this.parent_width = parent_width;
+        this.parent_height = parent_height;
     }
 
     /**
@@ -167,7 +169,13 @@ public class CourseViewMethod {
                     bgColor = context.getResources().getColor(R.color.light_light_grey);
                     textColor = context.getResources().getColor(R.color.light_grey);
                 }
-                course_table_layout.addView(getCellView(text, bgColor, textColor, width, col, row, showWide, hasCustomBackground, alpha), layoutParams);
+
+                View cellView = getCellView(text, bgColor, textColor, width, col, row, showWide, hasCustomBackground, alpha);
+                cellView.setLayoutParams(layoutParams);
+                if (row != 0) {
+                    cellView.setMinimumHeight(parent_height / row_max);
+                }
+                course_table_layout.addView(cellView);
             }
         }
     }

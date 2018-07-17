@@ -9,10 +9,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.jaredrummler.android.colorpicker.ColorPickerDialog;
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
@@ -25,7 +28,7 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Course;
 
-public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
+public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseViewHolder> {
     private static final String COLOR_PICKER_DIALOG_TAG = "course_color_picker";
     private static final int COLOR_PICKER_DIALOG_ID = 1;
     private final CourseActivity activity;
@@ -167,5 +170,24 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
             }
         });
         colorPickerDialog.show(activity.getFragmentManager(), COLOR_PICKER_DIALOG_TAG);
+    }
+
+    static class CourseViewHolder extends RecyclerView.ViewHolder {
+        final TextView textView_course_name;
+        final Button button_course_edit;
+        final Button button_course_delete;
+        final Button button_course_color;
+        final TextView textView_course_edit_teacher;
+        final CardView cardView_course_edit;
+
+        CourseViewHolder(View view) {
+            super(view);
+            textView_course_name = view.findViewById(R.id.textView_course_edit_name);
+            button_course_edit = view.findViewById(R.id.button_course_edit);
+            button_course_delete = view.findViewById(R.id.button_course_delete);
+            button_course_color = view.findViewById(R.id.button_course_color);
+            textView_course_edit_teacher = view.findViewById(R.id.textView_course_edit_teacher);
+            cardView_course_edit = view.findViewById(R.id.cardView_course_edit_item);
+        }
     }
 }

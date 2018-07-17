@@ -5,13 +5,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import tool.xfy9326.naucourse.Activities.MoaActivity;
 import tool.xfy9326.naucourse.Methods.InfoMethods.MoaMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Moa;
 
-public class MoaAdapter extends RecyclerView.Adapter<MoaViewHolder> {
+public class MoaAdapter extends RecyclerView.Adapter<MoaAdapter.MoaViewHolder> {
     private final MoaActivity activity;
     private Moa moa;
 
@@ -52,5 +53,25 @@ public class MoaAdapter extends RecyclerView.Adapter<MoaViewHolder> {
     @Override
     public int getItemCount() {
         return moa.getCount();
+    }
+
+    static class MoaViewHolder extends RecyclerView.ViewHolder {
+        final TextView textViewMoaTitle;
+        final TextView textViewMoaType;
+        final TextView textViewMoaReporter;
+        final TextView textViewMoaTime;
+        final TextView textViewMoaLocation;
+        final TextView textViewMoaApplyUnit;
+
+        MoaViewHolder(View view) {
+            super(view);
+            textViewMoaTitle = view.findViewById(R.id.textView_moa_title);
+            textViewMoaType = view.findViewById(R.id.textView_moa_type);
+            textViewMoaReporter = view.findViewById(R.id.textView_moa_reporter);
+            textViewMoaTime = view.findViewById(R.id.textView_moa_time);
+            textViewMoaLocation = view.findViewById(R.id.textView_moa_location);
+            textViewMoaApplyUnit = view.findViewById(R.id.textView_moa_apply_unit);
+
+        }
     }
 }

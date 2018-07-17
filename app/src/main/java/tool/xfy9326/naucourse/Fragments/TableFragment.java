@@ -275,7 +275,7 @@ public class TableFragment extends Fragment {
         if (courseViewMethod == null) {
             CardView cardView_course = Objects.requireNonNull(view).findViewById(R.id.cardView_courseTable);
             courseViewMethod = new CourseViewMethod(context, courses);
-            courseViewMethod.setTableView(course_table_layout, cardView_course.getWidth());
+            courseViewMethod.setTableView(course_table_layout, cardView_course.getWidth(), cardView_course.getHeight());
         }
         if (isDataReload) {
             courseViewMethod.setOnCourseTableClickListener(new CourseViewMethod.OnCourseTableItemClickListener() {
@@ -308,7 +308,7 @@ public class TableFragment extends Fragment {
                 }
             }
         }
-        courseViewMethod.updateCourseTableView(courses, courseMethod.getTableData(), courseMethod.getTableIdData(), courseMethod.getTableShowData(), !isDataReload, hasCustomBackground);
+        courseViewMethod.updateCourseTableView(courses, courseMethod.getTableData(), courseMethod.getTableIdData(), courseMethod.getTableShowData(), isDataReload, hasCustomBackground);
     }
 
     //表格中的课程详细信息显示

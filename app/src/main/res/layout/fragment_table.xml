@@ -64,7 +64,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:scrollbars="none">
 
             <HorizontalScrollView
@@ -83,6 +83,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/light_grey"
+                        app:alignmentMode="alignMargins"
                         app:orientation="vertical" />
 
                 </LinearLayout>
