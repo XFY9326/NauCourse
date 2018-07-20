@@ -216,6 +216,7 @@
     <string name="no_alert_again">不再提示</string>
     <string name="attention">提示</string>
     <string name="auto_update_course_table_alert">当前已开启自动更新本学期教务数据功能，你所做的任何修改都有可能会被覆盖更新，如果需要关闭可以前往设置进行更改！</string>
+    <string name="course_empty">当前没有任何可以导入的课程！</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>

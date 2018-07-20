@@ -77,15 +77,17 @@ public class LoginMethod {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             String id = sharedPreferences.getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
             String pw = SecurityMethod.getUserPassWord(context);
-            NauJwcClient nauJwcClient = BaseMethod.getApp(context).getClient();
-            nauJwcClient.loginOut();
-            Thread.sleep(1000);
-            if (nauJwcClient.login(id, Objects.requireNonNull(pw))) {
-                String loginURL = nauJwcClient.getLoginUrl();
-                if (loginURL != null) {
-                    sharedPreferences.edit().putString(Config.PREFERENCE_LOGIN_URL, loginURL).apply();
-                    isTryingReLogin = false;
-                    return Config.RE_LOGIN_SUCCESS;
+            if (!pw.equalsIgnoreCase(Config.DEFAULT_PREFERENCE_USER_PW) && !id.equalsIgnoreCase(Config.DEFAULT_PREFERENCE_USER_ID)) {
+                NauJwcClient nauJwcClient = BaseMethod.getApp(context).getClient();
+                nauJwcClient.loginOut();
+                Thread.sleep(1000);
+                if (nauJwcClient.login(id, Objects.requireNonNull(pw))) {
+                    String loginURL = nauJwcClient.getLoginUrl();
+                    if (loginURL != null) {
+                        sharedPreferences.edit().putString(Config.PREFERENCE_LOGIN_URL, loginURL).apply();
+                        isTryingReLogin = false;
+                        return Config.RE_LOGIN_SUCCESS;
+                    }
                 }
             }
             sharedPreferences.edit().putBoolean(Config.PREFERENCE_HAS_LOGIN, false).apply();

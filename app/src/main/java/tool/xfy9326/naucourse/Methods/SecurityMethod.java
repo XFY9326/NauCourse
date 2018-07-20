@@ -12,6 +12,7 @@ public class SecurityMethod {
 
     public static void saveUserInfo(Context context, String id, String pw) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        sharedPreferences.edit().putString(Config.PREFERENCE_USER_ID, id).apply();
         sharedPreferences.edit().putString(Config.PREFERENCE_USER_PW, AES.encrypt(pw, id)).apply();
     }
 
@@ -19,7 +20,7 @@ public class SecurityMethod {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String id = sharedPreferences.getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
         String pw = sharedPreferences.getString(Config.PREFERENCE_USER_PW, Config.DEFAULT_PREFERENCE_USER_PW);
-        return AES.decrypt(pw, id);
+        return pw.equalsIgnoreCase(Config.DEFAULT_PREFERENCE_USER_PW) ? Config.DEFAULT_PREFERENCE_USER_PW : AES.decrypt(pw, id);
     }
 
     public static String decryptData(Context context, String data) {

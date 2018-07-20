@@ -330,44 +330,49 @@ public class CourseActivity extends AppCompatActivity {
             if (loadingDialog != null) {
                 loadingDialog.cancel();
             }
-            String[] name = new String[courses.size()];
-            final boolean[] checked = new boolean[courses.size()];
-            for (int i = 0; i < courses.size(); i++) {
-                name[i] = courses.get(i).getCourseName();
-                checked[i] = true;
-            }
 
-            final ArrayList<Course> courses_choose = new ArrayList<>();
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.import_course_from_jwc_current);
-            builder.setMultiChoiceItems(name, checked, new DialogInterface.OnMultiChoiceClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                    checked[which] = isChecked;
+            if (courses != null && courses.size() != 0) {
+                String[] name = new String[courses.size()];
+                final boolean[] checked = new boolean[courses.size()];
+                for (int i = 0; i < courses.size(); i++) {
+                    name[i] = courses.get(i).getCourseName();
+                    checked[i] = true;
                 }
-            });
-            builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    for (int i = 0; i < checked.length; i++) {
-                        if (checked[i]) {
-                            courses_choose.add(courses.get(i));
-                        }
+
+                final ArrayList<Course> courses_choose = new ArrayList<>();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.import_course_from_jwc_current);
+                builder.setMultiChoiceItems(name, checked, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                        checked[which] = isChecked;
                     }
-                    courseArrayList = CourseEditMethod.combineCourseList(courses_choose, courseArrayList);
-                    courseAdapter.notifyDataSetChanged();
-                    needSave = true;
-                    Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.add_success, Snackbar.LENGTH_SHORT).show();
-                }
-            });
-            builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    courses.clear();
-                }
-            });
-            builder.show();
+                });
+                builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        for (int i = 0; i < checked.length; i++) {
+                            if (checked[i]) {
+                                courses_choose.add(courses.get(i));
+                            }
+                        }
+                        courseArrayList = CourseEditMethod.combineCourseList(courses_choose, courseArrayList);
+                        courseAdapter.notifyDataSetChanged();
+                        needSave = true;
+                        Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.add_success, Snackbar.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        courses.clear();
+                    }
+                });
+                builder.show();
+            } else {
+                Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.course_empty, Snackbar.LENGTH_SHORT).show();
+            }
         }
     }
 

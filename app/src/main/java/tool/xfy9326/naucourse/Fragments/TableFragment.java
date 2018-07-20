@@ -179,7 +179,7 @@ public class TableFragment extends Fragment {
      * @param isDataReload 是否是刷新本地信息
      */
     public void CourseSet(@Nullable ArrayList<Course> courses, @Nullable SchoolTime schoolTime, @Nullable final Context context, boolean isDataReload) {
-        if (context != null && courses != null && schoolTime != null) {
+        if (context != null && courses != null && schoolTime != null && courses.size() != 0) {
             if (isDataReload) {
                 this.courses = courses;
                 this.schoolTime = schoolTime;

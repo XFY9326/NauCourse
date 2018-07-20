@@ -71,6 +71,8 @@ public class LoginActivity extends AppCompatActivity {
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                editText_userId.clearFocus();
+                editText_userPw.clearFocus();
                 if (NetMethod.isNetworkConnected(LoginActivity.this)) {
                     final String id = editText_userId.getText().toString().trim();
                     final String pw = editText_userPw.getText().toString().trim();
@@ -128,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
                         SecurityMethod.saveUserInfo(LoginActivity.this, String.valueOf(id), String.valueOf(pw));
                         sharedPreferences.edit().putBoolean(Config.PREFERENCE_REMEMBER_PW, true).apply();
                     } else {
-                        sharedPreferences.edit().putString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID).putString(Config.PREFERENCE_USER_PW, Config.DEFAULT_PREFERENCE_USER_PW).putBoolean(Config.PREFERENCE_REMEMBER_PW, false).apply();
+                        sharedPreferences.edit().putString(Config.PREFERENCE_USER_ID, String.valueOf(id)).putString(Config.PREFERENCE_USER_PW, Config.DEFAULT_PREFERENCE_USER_PW).putBoolean(Config.PREFERENCE_REMEMBER_PW, false).apply();
                     }
                 } else {
                     Snackbar.make(findViewById(R.id.layout_login_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
