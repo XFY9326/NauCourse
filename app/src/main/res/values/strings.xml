@@ -231,14 +231,14 @@
     <string name="beta_version_check">检查测试版的应用更新</string>
     <string name="beta_version_check_sum">较不稳定但更快修复错误并体验新功能</string>
     <string name="auto_check_update">自动检查应用更新</string>
-    <string name="auto_check_update_sum">每天自动检查应用更新，不建议关闭</string>
+    <string name="auto_check_update_sum">每次启动应用自动检查应用更新，不建议关闭</string>
     <string name="auto_check_important_update">仅检查重要版本的应用更新</string>
-    <string name="auto_check_important_update_sum">减少更新频率并修复重要错误</string>
+    <string name="auto_check_important_update_sum">减少更新频率仅修复重要错误\n可能会错过普通问题修复</string>
     <string name="update_now">立即检查应用更新</string>
     <string name="global_settings">通用设置</string>
     <string name="check_update_error">应用更新时出现错误！</string>
     <string name="no_update">当前已经是最新的版本！</string>
-    <string name="only_update_application_under_wifi">仅在Wifi下检查应用更新</string>
+    <string name="only_update_application_under_wifi">仅在Wifi网络下检查应用更新</string>
     <string name="only_update_application_under_wifi_sum">减少移动网络消耗的数据流量</string>
     <string name="find_update">检测到应用更新！</string>
     <string name="update_immediately">立即更新</string>

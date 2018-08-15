@@ -30,6 +30,10 @@ public class UpdateMethod {
             if (NetMethod.isNetworkConnected(activity)) {
                 final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
                 String type = sharedPreferences.getBoolean(Config.PREFERENCE_CHECK_BETA_UPDATE, Config.DEFAULT_PREFERENCE_CHECK_BETA_UPDATE) ? Updater.UPDATE_TYPE_BETA : Updater.UPDATE_TYPE_RELEASE;
+                final boolean isImportantUpdate = sharedPreferences.getBoolean(Config.PREFERENCE_AUTO_CHECK_IMPORTANT_UPDATE, Config.DEFAULT_PREFERENCE_AUTO_CHECK_IMPORTANT_UPDATE);
+                if (isImportantUpdate) {
+                    type = Updater.UPDATE_TYPE_RELEASE;
+                }
                 Updater updater = new Updater(SecurityMethod.API_KEY, SecurityMethod.API_IV);
                 updater.checkUpdate(BuildConfig.VERSION_CODE, Config.SUB_VERSION, type, new Updater.OnUpdateListener() {
                     @Override
@@ -60,7 +64,7 @@ public class UpdateMethod {
 
                     @Override
                     public void findUpdate(int versionCode, String versionName, int subVersion, String updateInfo, String updateType, final String updateUrl, boolean forceUpdate, String updateTime) {
-                        if (!sharedPreferences.getBoolean(Config.PREFERENCE_AUTO_CHECK_IMPORTANT_UPDATE, Config.DEFAULT_PREFERENCE_AUTO_CHECK_IMPORTANT_UPDATE) || forceUpdate) {
+                        if (!isImportantUpdate || forceUpdate) {
                             final String versionNew = versionName + "-" + subVersion + "(" + versionCode + ") " + updateType;
                             String lastCheckVersion = sharedPreferences.getString(Config.PREFERENCE_LAST_CHECK_VERSION, null);
                             if (manualCheck || (lastCheckVersion == null || !lastCheckVersion.equalsIgnoreCase(versionNew))) {
