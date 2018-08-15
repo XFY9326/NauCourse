@@ -36,6 +36,7 @@ public class NextClassMethod {
             int weekNum = TimeMethod.getNowWeekNum(schoolTime);
 
             if (schoolTime != null && courses != null && weekNum != 0) {
+                schoolTime = TimeMethod.termSetCheck(context, schoolTime, true);
                 schoolTime.setWeekNum(weekNum);
                 CourseMethod courseMethod = new CourseMethod(context, courses, schoolTime);
                 return courseMethod.getNextClass(weekNum);

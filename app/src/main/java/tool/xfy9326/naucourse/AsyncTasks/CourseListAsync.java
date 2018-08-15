@@ -46,11 +46,13 @@ public class CourseListAsync extends AsyncTask<Context, Void, Context> {
     @Override
     protected void onPostExecute(@NonNull Context context) {
         BaseMethod.getApp(context).setShowConnectErrorOnce(false);
+        CourseActivity courseActivity = BaseMethod.getApp(context).getCourseActivity();
         if (NetMethod.checkNetWorkCode(context, new int[]{tableLoadSuccess}, loadCode)) {
-            CourseActivity courseActivity = BaseMethod.getApp(context).getCourseActivity();
             if (courseActivity != null) {
-                courseActivity.addCourseList(course);
+                courseActivity.addCourseList(course, true, false);
             }
+        } else {
+            courseActivity.closeLoadingDialog();
         }
         System.gc();
         super.onPostExecute(context);

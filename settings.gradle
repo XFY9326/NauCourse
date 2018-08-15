@@ -1,1 +1,1 @@
-include ':app', ':NauJwc'
+include ':app', ':NauJwc', ':AppUpdater', ':NetApi'

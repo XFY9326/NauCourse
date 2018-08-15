@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -67,6 +68,10 @@ public class CourseEditActivity extends AppCompatActivity {
             course = new Course();
             //自定义课程的课程编号
             course.setCourseId("Custom-" + System.currentTimeMillis());
+            //学期设置
+            if (intent.hasExtra(Config.INTENT_ADD_COURSE_TERM)) {
+                course.setCourseTerm(String.valueOf(intent.getLongExtra(Config.INTENT_ADD_COURSE_TERM, 0)));
+            }
         } else if (intent.hasExtra(Config.INTENT_EDIT_COURSE)) {
             course = (Course) intent.getSerializableExtra(Config.INTENT_EDIT_COURSE_ITEM);
             if (course == null) {
@@ -81,7 +86,6 @@ public class CourseEditActivity extends AppCompatActivity {
 
     private void ViewSet() {
         courseDetailArrayList = getCourseDetailArrayList();
-
         TextInputEditText editTextCourseEditName = findViewById(R.id.editText_course_edit_name);
         TextInputEditText editTextCourseEditTeacher = findViewById(R.id.editText_course_edit_teacher);
         TextInputEditText editTextCourseEditType = findViewById(R.id.editText_course_edit_type);
@@ -106,6 +110,12 @@ public class CourseEditActivity extends AppCompatActivity {
         }
         if (course.getCourseCombinedClass() != null) {
             editTextCourseEditCombineClass.setText(course.getCourseCombinedClass());
+        }
+        //仅在学期正确时显示
+        long courseTerm = Long.valueOf(course.getCourseTerm());
+        if (courseTerm > 0) {
+            //仅支持四位数的年份
+            ((TextView) findViewById(R.id.textView_course_edit_term)).setText(getString(R.string.course_edit_course_time_detail, courseTerm / (10L * 10000L), (courseTerm % (10L * 10000L)) / 10L, courseTerm % 10L));
         }
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView_course_edit_list);
@@ -258,6 +268,9 @@ public class CourseEditActivity extends AppCompatActivity {
 
     //获取课程详细信息的列表
     private ArrayList<CourseDetail> getCourseDetailArrayList() {
+        if (course == null) {
+            getData();
+        }
         CourseDetail[] courseDetails = course.getCourseDetail();
         if (courseDetails != null) {
             courseDetailArrayList = new ArrayList<>(Arrays.asList(courseDetails));

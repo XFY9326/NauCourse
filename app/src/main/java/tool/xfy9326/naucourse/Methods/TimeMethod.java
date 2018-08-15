@@ -1,6 +1,8 @@
 package tool.xfy9326.naucourse.Methods;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -21,6 +23,47 @@ import tool.xfy9326.naucourse.Utils.SchoolTime;
  */
 
 public class TimeMethod {
+
+    /**
+     * 手动设置的学期替换检查与自动校准
+     *
+     * @param context     Context
+     * @param schoolTime  SchoolTime
+     * @param forceChange 强制更改替换学期
+     * @return SchoolTime
+     */
+    public static SchoolTime termSetCheck(Context context, SchoolTime schoolTime, boolean forceChange) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String customStart = sharedPreferences.getString(Config.PREFERENCE_CUSTOM_TERM_START_DATE, null);
+        String customEnd = sharedPreferences.getString(Config.PREFERENCE_CUSTOM_TERM_END_DATE, null);
+        String oldStart = sharedPreferences.getString(Config.PREFERENCE_OLD_TERM_START_DATE, null);
+        String oldEnd = sharedPreferences.getString(Config.PREFERENCE_OLD_TERM_END_DATE, null);
+        if (customStart != null && customEnd != null) {
+            if (forceChange) {
+                schoolTime.setStartTime(customStart);
+                schoolTime.setEndTime(customEnd);
+            } else {
+                if (oldStart != null && oldEnd != null) {
+                    if (!oldStart.equals(schoolTime.getStartTime()) || !oldEnd.equals(schoolTime.getEndTime())) {
+                        sharedPreferences.edit().remove(Config.PREFERENCE_CUSTOM_TERM_START_DATE)
+                                .remove(Config.PREFERENCE_CUSTOM_TERM_END_DATE)
+                                .remove(Config.PREFERENCE_OLD_TERM_START_DATE)
+                                .remove(Config.PREFERENCE_OLD_TERM_END_DATE).apply();
+                    } else {
+                        schoolTime.setStartTime(customStart);
+                        schoolTime.setEndTime(customEnd);
+                    }
+                } else {
+                    sharedPreferences.edit().remove(Config.PREFERENCE_CUSTOM_TERM_START_DATE)
+                            .remove(Config.PREFERENCE_CUSTOM_TERM_END_DATE)
+                            .remove(Config.PREFERENCE_OLD_TERM_START_DATE)
+                            .remove(Config.PREFERENCE_OLD_TERM_END_DATE).apply();
+                }
+            }
+        }
+        return schoolTime;
+    }
+
     /**
      * 获取周数数组
      *

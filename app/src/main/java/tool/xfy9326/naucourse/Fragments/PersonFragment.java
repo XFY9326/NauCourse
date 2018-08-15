@@ -24,13 +24,14 @@ import java.util.Locale;
 import java.util.Objects;
 
 import tool.xfy9326.naucourse.Activities.AboutActivity;
+import tool.xfy9326.naucourse.Activities.CourseSettingsActivity;
 import tool.xfy9326.naucourse.Activities.ExamActivity;
+import tool.xfy9326.naucourse.Activities.GlobalSettingsActivity;
 import tool.xfy9326.naucourse.Activities.LevelExamActivity;
 import tool.xfy9326.naucourse.Activities.LoginActivity;
 import tool.xfy9326.naucourse.Activities.MoaActivity;
 import tool.xfy9326.naucourse.Activities.SchoolCalendarActivity;
 import tool.xfy9326.naucourse.Activities.ScoreActivity;
-import tool.xfy9326.naucourse.Activities.SettingsActivity;
 import tool.xfy9326.naucourse.Activities.StudentInfoActivity;
 import tool.xfy9326.naucourse.Activities.SuspendCourseActivity;
 import tool.xfy9326.naucourse.AsyncTasks.StudentAsync;
@@ -114,7 +115,8 @@ public class PersonFragment extends Fragment {
         }
         CardView cardView_stdInfo = view.findViewById(R.id.cardView_stdInfo);
 
-        CardView cardView_settings = view.findViewById(R.id.cardView_settings);
+        CardView cardView_course_settings = view.findViewById(R.id.cardView_course_settings);
+        CardView cardView_global_settings = view.findViewById(R.id.cardView_global_settings);
         CardView cardView_login_out = view.findViewById(R.id.cardView_login_out);
         CardView cardView_about = view.findViewById(R.id.cardView_about);
 
@@ -207,12 +209,24 @@ public class PersonFragment extends Fragment {
             }
         });
 
-        cardView_settings.setOnClickListener(new View.OnClickListener() {
+        cardView_course_settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (getActivity() != null) {
                     if (isAdded()) {
-                        Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                        Intent intent = new Intent(getActivity(), CourseSettingsActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getActivity().startActivity(intent);
+                    }
+                }
+            }
+        });
+        cardView_global_settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getActivity() != null) {
+                    if (isAdded()) {
+                        Intent intent = new Intent(getActivity(), GlobalSettingsActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         getActivity().startActivity(intent);
                     }

@@ -1,11 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/notification_manage">
+    <PreferenceCategory android:title="@string/update_check">
+        <Preference
+            android:key="UPDATE_NOW"
+            android:title="@string/update_now" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="AUTO_CHECK_UPDATE"
+            android:summary="@string/auto_check_update_sum"
+            android:title="@string/auto_check_update" />
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="NOTIFY_NEXT_CLASS"
-            android:summary="@string/next_class_notify_sum"
-            android:title="@string/next_class_notify" />
+            android:dependency="AUTO_CHECK_UPDATE"
+            android:key="ONLY_UPDATE_APPLICATION_UNDER_WIFI"
+            android:summary="@string/only_update_application_under_wifi_sum"
+            android:title="@string/only_update_application_under_wifi" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="AUTO_CHECK_UPDATE"
+            android:key="AUTO_CHECK_IMPORTANT_UPDATE"
+            android:summary="@string/auto_check_important_update_sum"
+            android:title="@string/auto_check_important_update" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="AUTO_CHECK_UPDATE"
+            android:key="CHECK_BETA_UPDATE"
+            android:summary="@string/beta_version_check_sum"
+            android:title="@string/beta_version_check" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/data_get">
         <CheckBoxPreference
@@ -31,54 +52,5 @@
             android:key="AUTO_UPDATE_COURSE_TABLE"
             android:summary="@string/auto_update_course_table_sum"
             android:title="@string/auto_update_course_table" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="@string/course_table_manage">
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="DEFAULT_SHOW_TABLE_PAGE"
-            android:summary="@string/default_show_table_page_sum"
-            android:title="@string/default_show_table_page" />
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="COURSE_TABLE_CELL_COLOR"
-            android:summary="@string/course_table_cell_color_sum"
-            android:title="@string/course_table_cell_color" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:dependency="COURSE_TABLE_CELL_COLOR"
-            android:key="COURSE_TABLE_SHOW_SINGLE_COLOR"
-            android:summary="@string/show_single_color_sum"
-            android:title="@string/show_single_color" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="COURSE_TABLE_SHOW_BACKGROUND"
-            android:summary="@string/show_course_table_background_sum"
-            android:title="@string/show_course_table_background" />
-        <Preference
-            android:key="CHANGE_TABLE_TRANSPARENCY"
-            android:summary="@string/change_table_transparency_sum"
-            android:title="@string/change_table_transparency" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="SHOW_WIDE_TABLE"
-            android:summary="@string/show_wide_course_table_sum"
-            android:title="@string/show_wide_course_table" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="SHOW_NO_THIS_WEEK_CLASS"
-            android:summary="@string/show_no_this_week_class_sum"
-            android:title="@string/show_no_this_week_class" />
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:disableDependentsState="true"
-            android:key="SHOW_WEEKEND"
-            android:summary="@string/show_weekend_sum"
-            android:title="@string/show_weekend" />
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:dependency="SHOW_WEEKEND"
-            android:key="SHOW_NEXT_WEEK"
-            android:summary="@string/show_next_week_sum"
-            android:title="@string/show_next_week" />
     </PreferenceCategory>
 </PreferenceScreen>

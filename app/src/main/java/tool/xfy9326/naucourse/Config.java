@@ -9,6 +9,12 @@ import java.io.File;
  */
 
 public class Config {
+    @SuppressWarnings("unused")
+    public static final int SUB_VERSION = 0;
+    @SuppressWarnings("unused")
+    public static final String VERSION_TYPE = "beta";
+    //public static final String VERSION_TYPE = "release";
+
     //单周
     public static final int COURSE_DETAIL_WEEKMODE_SINGLE = 1;
     //双周
@@ -42,6 +48,7 @@ public class Config {
     public static final String INTENT_STUDENT_LEARN_PROCESS = "STUDENT_LEARN_PROCESS";
     public static final String INTENT_EDIT_COURSE_ITEM = "EDIT_COURSE";
     public static final String INTENT_ADD_COURSE = "ADD_COURSE";
+    public static final String INTENT_ADD_COURSE_TERM = "ADD_COURSE_TERM";
     public static final String INTENT_EDIT_COURSE = "EDIT_COURSE";
 
     public static final int DEFAULT_MAX_WEEK = 24;
@@ -77,6 +84,16 @@ public class Config {
     public static final String PREFERENCE_AUTO_UPDATE_COURSE_TABLE = "AUTO_UPDATE_COURSE_TABLE";
     public static final String PREFERENCE_SHOW_NO_THIS_WEEK_CLASS = "SHOW_NO_THIS_WEEK_CLASS";
     public static final String PREFERENCE_AUTO_UPDATE_COURSE_TABLE_ALERT = "AUTO_UPDATE_COURSE_TABLE_ALERT";
+    public static final String PREFERENCE_AUTO_CHECK_UPDATE = "AUTO_CHECK_UPDATE";
+    public static final String PREFERENCE_AUTO_CHECK_IMPORTANT_UPDATE = "AUTO_CHECK_IMPORTANT_UPDATE";
+    public static final String PREFERENCE_CHECK_BETA_UPDATE = "CHECK_BETA_UPDATE";
+    public static final String PREFERENCE_UPDATE_NOW = "UPDATE_NOW";
+    public static final String PREFERENCE_ONLY_UPDATE_APPLICATION_UNDER_WIFI = "ONLY_UPDATE_APPLICATION_UNDER_WIFI";
+    public static final String PREFERENCE_LAST_CHECK_VERSION = "LAST_CHECK_VERSION";
+    public static final String PREFERENCE_CUSTOM_TERM_START_DATE = "CUSTOM_TERM_START_DATE";
+    public static final String PREFERENCE_CUSTOM_TERM_END_DATE = "CUSTOM_TERM_END_DATE";
+    public static final String PREFERENCE_OLD_TERM_START_DATE = "OLD_TERM_START_DATE";
+    public static final String PREFERENCE_OLD_TERM_END_DATE = "OLD_TERM_END_DATE";
 
     public static final boolean DEFAULT_PREFERENCE_HAS_LOGIN = false;
     public static final boolean DEFAULT_PREFERENCE_REMEMBER_PW = true;
@@ -97,6 +114,10 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE = true;
     public static final boolean DEFAULT_PREFERENCE_SHOW_NO_THIS_WEEK_CLASS = false;
     public static final boolean DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE_ALERT = false;
+    public static final boolean DEFAULT_PREFERENCE_AUTO_CHECK_UPDATE = true;
+    public static final boolean DEFAULT_PREFERENCE_AUTO_CHECK_IMPORTANT_UPDATE = false;
+    public static final boolean DEFAULT_PREFERENCE_CHECK_BETA_UPDATE = false;
+    public static final boolean DEFAULT_PREFERENCE_ONLY_UPDATE_APPLICATION_UNDER_WIFI = false;
 
     //网络连接错误代码
     public static final int NET_WORK_GET_SUCCESS = 0;
@@ -106,7 +127,7 @@ public class Config {
     public static final int NET_WORK_ERROR_CODE_GET_DATA_ERROR = 4;
 
     //离线数据版本号
-    public static final int DATA_VERSION_COURSE = 2;
+    public static final int DATA_VERSION_COURSE = 3;
     public static final int DATA_VERSION_COURSE_SCORE = 1;
     public static final int DATA_VERSION_EXAM = 1;
     public static final int DATA_VERSION_JWC_TOPIC = 1;

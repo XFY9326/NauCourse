@@ -1,6 +1,7 @@
 package tool.xfy9326.naucourse.Methods;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Utils.Course;
@@ -11,30 +12,50 @@ public class CourseEditMethod {
     /**
      * 课程信息列表按照ID拼接
      *
-     * @param courses         需要并入的课表
-     * @param courseArrayList 原课表
+     * @param combineCourses   需要并入的课表
+     * @param combineToCourses 原课表
+     * @param termCheck        新学期的课程强制替换(以需要并入的课表中最新的学期为准，课表中只会存在一种学期的人课程)
      * @return 课程信息列表
      */
-    public static ArrayList<Course> combineCourseList(ArrayList<Course> courses, ArrayList<Course> courseArrayList) {
-        for (Course course : courses) {
-            if (courseArrayList.isEmpty()) {
-                courseArrayList.add(course);
+    public static ArrayList<Course> combineCourseList(ArrayList<Course> combineCourses, ArrayList<Course> combineToCourses, boolean termCheck) {
+        if (termCheck) {
+            //获取最新的学期
+            long newTerm = 0;
+            for (Course course : combineCourses) {
+                long courseTerm = Long.valueOf(course.getCourseTerm());
+                if (courseTerm > newTerm) {
+                    newTerm = courseTerm;
+                }
+            }
+            //迭代器删除旧学期课程
+            Iterator<Course> iterator = combineToCourses.iterator();
+            while (iterator.hasNext()) {
+                long courseTerm = Long.valueOf(iterator.next().getCourseTerm());
+                if (courseTerm == 0L || courseTerm < newTerm) {
+                    iterator.remove();
+                }
+            }
+        }
+        for (Course course : combineCourses) {
+            if (combineToCourses.isEmpty()) {
+                combineToCourses.add(course);
             } else {
                 boolean found = false;
-                for (int i = 0; i < courseArrayList.size() && !found; i++) {
+                for (int i = 0; i < combineToCourses.size() && !found; i++) {
                     String id = course.getCourseId();
-                    if (id != null && id.equalsIgnoreCase(courseArrayList.get(i).getCourseId())) {
-                        course.setCourseColor(courseArrayList.get(i).getCourseColor());
-                        courseArrayList.set(i, course);
+                    if (id != null && id.equalsIgnoreCase(combineToCourses.get(i).getCourseId())) {
+                        course.setCourseColor(combineToCourses.get(i).getCourseColor());
+                        combineToCourses.set(i, course);
                         found = true;
                     }
                 }
                 if (!found) {
-                    courseArrayList.add(course);
+                    combineToCourses.add(course);
                 }
             }
         }
-        return courseArrayList;
+        combineCourses.clear();
+        return combineToCourses;
     }
 
     /**

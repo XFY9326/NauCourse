@@ -15,6 +15,7 @@ import tool.xfy9326.naucourse.AsyncTasks.TempAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
+import tool.xfy9326.naucourse.Methods.UpdateMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
 
@@ -23,15 +24,21 @@ import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
  */
 
 public class MainActivity extends AppCompatActivity {
+    private SharedPreferences sharedPreferences;
+    private boolean hasLogin = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         loginCheck();
-        setContentView(R.layout.activity_main);
-        ToolBarSet();
-        ViewSet();
-        tempLoad();
+        if (hasLogin) {
+            updateCheck();
+            setContentView(R.layout.activity_main);
+            ToolBarSet();
+            ViewSet();
+            tempLoad();
+        }
     }
 
     @Override
@@ -46,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loginCheck() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (!sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivityForResult(intent, Config.REQUEST_ACTIVITY_LOGIN);
@@ -54,6 +60,17 @@ public class MainActivity extends AppCompatActivity {
         } else {
             if (!NetMethod.isNetworkConnected(this)) {
                 Toast.makeText(this, R.string.network_error, Toast.LENGTH_SHORT).show();
+            }
+            hasLogin = true;
+        }
+    }
+
+    synchronized private void updateCheck() {
+        if (NetMethod.isNetworkConnected(this)) {
+            if (sharedPreferences.getBoolean(Config.PREFERENCE_AUTO_CHECK_UPDATE, Config.DEFAULT_PREFERENCE_AUTO_CHECK_UPDATE)) {
+                if (!sharedPreferences.getBoolean(Config.PREFERENCE_ONLY_UPDATE_APPLICATION_UNDER_WIFI, Config.DEFAULT_PREFERENCE_ONLY_UPDATE_APPLICATION_UNDER_WIFI) || NetMethod.isWifiNetWork(this)) {
+                    UpdateMethod.checkUpdate(this, false);
+                }
             }
         }
     }

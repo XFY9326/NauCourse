@@ -25,6 +25,8 @@ public class Course implements Serializable {
     @Nullable
     private String courseType = null;
 
+    private String courseTerm = "0";
+
     private int courseColor = -1;
 
     private int dataVersionCode = 0;
@@ -123,5 +125,13 @@ public class Course implements Serializable {
     @SuppressWarnings("SameParameterValue")
     public void setDataVersionCode(int dataVersionCode) {
         this.dataVersionCode = dataVersionCode;
+    }
+
+    public String getCourseTerm() {
+        return courseTerm;
+    }
+
+    public void setCourseTerm(String courseTerm) {
+        this.courseTerm = courseTerm;
     }
 }

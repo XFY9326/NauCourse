@@ -16,6 +16,7 @@ import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethods.SchoolTimeMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethods.TableMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
+import tool.xfy9326.naucourse.Methods.TimeMethod;
 import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
 
@@ -71,7 +72,7 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
                         ArrayList<Course> update_course = tableMethod.getCourseTable(false);
                         if (update_course != null) {
                             ArrayList<Course> now_course = new ArrayList<>(course);
-                            now_course = CourseEditMethod.combineCourseList(update_course, now_course);
+                            now_course = CourseEditMethod.combineCourseList(update_course, now_course, true);
                             if (!CourseEditMethod.checkCourseList(now_course).isHasError()) {
                                 course.clear();
                                 course.addAll(now_course);
@@ -95,6 +96,7 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
         if (loadTime > 2) {
             BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);
         }
+        schoolTime = TimeMethod.termSetCheck(context[0], schoolTime, loadTime == 1);
         return context[0];
     }
 

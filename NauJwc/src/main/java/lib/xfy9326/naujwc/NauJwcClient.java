@@ -27,6 +27,7 @@ public class NauJwcClient {
     public static final int LOGIN_USER_INFO_WRONG = 4;
     public static final String server_url = "http://jwc.nau.edu.cn";
     private static final int LOGIN_SUCCESS = 0;
+    private static final String LOG_TAG = "NAU_JWC_CLIENT";
     @NonNull
     private final OkHttpClient client;
     @NonNull
@@ -66,10 +67,10 @@ public class NauJwcClient {
             if (responseBody != null) {
                 return responseBody.string();
             } else {
-                Log.d("NAU_JWC_CLIENT", "Get Data Response Null");
+                Log.d(LOG_TAG, "Get Data Response Null");
             }
         } else {
-            Log.d("NAU_JWC_CLIENT", "Get Data Failed");
+            Log.d(LOG_TAG, "Get Data Failed");
         }
         System.gc();
         return null;
@@ -102,6 +103,7 @@ public class NauJwcClient {
             ResponseBody responseBody = response.body();
             if (responseBody != null) {
                 String body = responseBody.string();
+                responseBody.close();
                 if (body.startsWith("当前你已经登录")) {
                     loginErrorCode = LOGIN_ALREADY_LOGIN;
                     return false;

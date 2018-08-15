@@ -389,6 +389,7 @@ public class TableFragment extends Fragment {
         if (isAdded()) {
             if (dataReload) {
                 getData();
+                Toast.makeText(getActivity(), R.string.course_table_reloading, Toast.LENGTH_SHORT).show();
             } else if (courses != null && schoolTime != null) {
                 CourseSet(courses, schoolTime, getActivity(), false);
             }

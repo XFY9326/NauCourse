@@ -10,15 +10,15 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import tool.xfy9326.naucourse.Fragments.SettingsFragment;
+import tool.xfy9326.naucourse.Fragments.CourseSettingsFragment;
 import tool.xfy9326.naucourse.R;
 
 /**
  * Created by xfy9326 on 18-2-20.
  */
 
-public class SettingsActivity extends AppCompatActivity {
-    private SettingsFragment settingsFragment = null;
+public class CourseSettingsActivity extends AppCompatActivity {
+    private CourseSettingsFragment courseSettingsFragment = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,16 +39,16 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void setFragment(@Nullable Bundle savedInstanceState) {
         if (savedInstanceState == null) {
-            settingsFragment = new SettingsFragment();
+            courseSettingsFragment = new CourseSettingsFragment();
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.layout_settings_content, settingsFragment);
+            fragmentTransaction.replace(R.id.layout_settings_content, courseSettingsFragment);
             fragmentTransaction.commit();
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == SettingsFragment.WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE) {
+        if (requestCode == CourseSettingsFragment.WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE) {
             boolean requestSuccess = true;
             for (int grantResult : grantResults) {
                 if (grantResult == PackageManager.PERMISSION_DENIED) {
@@ -57,8 +57,8 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
             if (requestSuccess) {
-                if (settingsFragment != null) {
-                    settingsFragment.chooseAndCropImage();
+                if (courseSettingsFragment != null) {
+                    courseSettingsFragment.chooseAndCropImage();
                 }
             }
         }
@@ -67,8 +67,8 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (settingsFragment != null) {
-            settingsFragment.onActivityResult(requestCode, resultCode, data);
+        if (courseSettingsFragment != null) {
+            courseSettingsFragment.onActivityResult(requestCode, resultCode, data);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

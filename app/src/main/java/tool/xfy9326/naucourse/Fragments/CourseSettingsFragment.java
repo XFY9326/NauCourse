@@ -33,7 +33,7 @@ import tool.xfy9326.naucourse.Receivers.UpdateReceiver;
  * Created by xfy9326 on 18-2-20.
  */
 
-public class SettingsFragment extends PreferenceFragment {
+public class CourseSettingsFragment extends PreferenceFragment {
     public static final int WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE = 1;
     private boolean updateCourseTable = false;
     private boolean cropSuccess = false;
@@ -42,7 +42,7 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.settings_global);
+        addPreferencesFromResource(R.xml.settings_course);
         PreferenceSet();
     }
 
