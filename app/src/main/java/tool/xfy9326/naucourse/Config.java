@@ -10,10 +10,9 @@ import java.io.File;
 
 public class Config {
     @SuppressWarnings("unused")
-    public static final int SUB_VERSION = 0;
+    public static final int SUB_VERSION = BuildConfig.SUB_VERSION;
     @SuppressWarnings("unused")
-    //public static final String VERSION_TYPE = "测试版";
-    public static final String VERSION_TYPE = "稳定版";
+    public static final String VERSION_TYPE = BuildConfig.VERSION_TYPE;
 
     //单周
     public static final int COURSE_DETAIL_WEEKMODE_SINGLE = 1;
