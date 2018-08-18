@@ -43,6 +43,11 @@ public class CourseSettingsFragment extends PreferenceFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings_course);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         PreferenceSet();
     }
 

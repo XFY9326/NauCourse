@@ -255,8 +255,10 @@ public class TableFragment extends Fragment {
                 //主页面下一节课设置
                 if (!inVacation) {
                     HomeFragment homeFragment = BaseMethod.getApp(context).getViewPagerAdapter().getHomeFragment();
-                    NextCourse nextCourse = Objects.requireNonNull(courseMethod).getNextClass(weekNum);
-                    homeFragment.setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
+                    if (homeFragment != null) {
+                        NextCourse nextCourse = Objects.requireNonNull(courseMethod).getNextClass(weekNum);
+                        homeFragment.setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
+                    }
                 }
 
                 if (getActivity() != null) {

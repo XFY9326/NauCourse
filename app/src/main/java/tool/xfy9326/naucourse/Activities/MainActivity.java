@@ -24,7 +24,8 @@ import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
  */
 
 public class MainActivity extends AppCompatActivity {
-    private SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences = null;
+    private ViewPagerAdapter viewPagerAdapter = null;
     private boolean hasLogin = false;
 
     @Override
@@ -33,9 +34,9 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         loginCheck();
         if (hasLogin) {
-            updateCheck();
             setContentView(R.layout.activity_main);
             ToolBarSet();
+            updateCheck();
             ViewSet();
             tempLoad();
         }
@@ -83,9 +84,11 @@ public class MainActivity extends AppCompatActivity {
         ViewPager viewPager = findViewById(R.id.viewPaper_main);
         TabLayout tabLayout = findViewById(R.id.tabLayout_main);
 
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        if (viewPagerAdapter == null) {
+            viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        }
 
-        viewPager.setOffscreenPageLimit(3);
+        viewPager.setOffscreenPageLimit(ViewPagerAdapter.ITEM_COUNT);
         viewPager.setAdapter(viewPagerAdapter);
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Config.PREFERENCE_DEFAULT_SHOW_TABLE_PAGE, Config.DEFAULT_PREFERENCE_DEFAULT_SHOW_TABLE_PAGE)) {
             viewPager.setCurrentItem(Config.VIEWPAGER_TABLE_PAGE, true);

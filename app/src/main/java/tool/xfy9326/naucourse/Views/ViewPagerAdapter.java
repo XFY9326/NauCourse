@@ -14,10 +14,10 @@ import tool.xfy9326.naucourse.Fragments.TableFragment;
  */
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
-    private static final int ITEM_COUNT = 3;
-    private HomeFragment homeFragment;
-    private TableFragment tableFragment;
-    private PersonFragment personFragment;
+    public static final int ITEM_COUNT = 3;
+    private HomeFragment homeFragment = null;
+    private TableFragment tableFragment = null;
+    private PersonFragment personFragment = null;
 
     public ViewPagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
@@ -25,9 +25,15 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     }
 
     private void createFragments() {
-        homeFragment = new HomeFragment();
-        tableFragment = new TableFragment();
-        personFragment = new PersonFragment();
+        if (homeFragment == null) {
+            homeFragment = new HomeFragment();
+        }
+        if (tableFragment == null) {
+            tableFragment = new TableFragment();
+        }
+        if (personFragment == null) {
+            personFragment = new PersonFragment();
+        }
     }
 
     public HomeFragment getHomeFragment() {

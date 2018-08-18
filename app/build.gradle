@@ -23,7 +23,7 @@ android {
 
     buildTypes {
         debug {
-            zipAlignEnabled false
+            zipAlignEnabled true
             minifyEnabled false
             buildConfigField("String", "VERSION_TYPE", "\"测试版\"")
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

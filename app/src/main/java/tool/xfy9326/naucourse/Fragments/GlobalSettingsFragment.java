@@ -14,6 +14,11 @@ public class GlobalSettingsFragment extends PreferenceFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings_global);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         PreferenceSet();
     }
 
