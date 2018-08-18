@@ -9,27 +9,31 @@
 
     <include layout="@layout/widget_toolbar" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?android:attr/actionBarSize">
+        android:layout_marginTop="?android:attr/actionBarSize"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="15dp">
 
         <ImageView
             android:id="@+id/imageView_logo"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="10"
             android:adjustViewBounds="true"
+            android:paddingEnd="35dp"
+            android:paddingStart="35dp"
+            android:scaleType="centerInside"
             app:srcCompat="@drawable/nau_logo" />
 
         <LinearLayout
+            android:layout_marginTop="20dp"
             android:id="@+id/layout_userId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/imageView_logo"
-            android:layout_marginTop="10dp"
+            android:layout_weight="1"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="5dp">
@@ -50,14 +54,15 @@
                 android:ems="10"
                 android:hint="@string/user_id"
                 android:inputType="number"
-                android:labelFor="@id/editText_userId" />
+                android:labelFor="@id/editText_userId"
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
+            android:layout_weight="1"
             android:id="@+id/layout_userPw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/layout_userId"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="5dp">
@@ -78,13 +83,14 @@
                 android:ems="10"
                 android:hint="@string/user_pw"
                 android:inputType="textPassword"
-                android:labelFor="@id/editText_userPw" />
+                android:labelFor="@id/editText_userPw"
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
+            android:layout_weight="2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/layout_userPw"
             android:layout_marginTop="15dp"
             android:orientation="vertical">
 
@@ -113,6 +119,6 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

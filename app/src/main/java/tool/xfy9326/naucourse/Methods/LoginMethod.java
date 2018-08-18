@@ -117,6 +117,10 @@ public class LoginMethod {
                     .remove(Config.PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND)
                     .remove(Config.PREFERENCE_SCHOOL_CALENDAR_URL)
                     .remove(Config.PREFERENCE_CLASS_BEFORE_NOTIFY)
+                    .remove(Config.PREFERENCE_CUSTOM_TERM_START_DATE)
+                    .remove(Config.PREFERENCE_CUSTOM_TERM_END_DATE)
+                    .remove(Config.PREFERENCE_OLD_TERM_START_DATE)
+                    .remove(Config.PREFERENCE_OLD_TERM_END_DATE)
                     .putBoolean(Config.PREFERENCE_HAS_LOGIN, false)
                     .apply();
             cleanUserTemp(context);
