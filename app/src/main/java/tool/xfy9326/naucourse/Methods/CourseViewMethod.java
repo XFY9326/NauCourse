@@ -191,7 +191,8 @@ public class CourseViewMethod {
         int green = (color & 0x00ff00) >> 8;
         int blue = (color & 0x0000ff);
         float total = red * 0.299f + green * 0.587f + blue * 0.114f;
-        return !(total < 200);
+        //DEFAULT 200
+        return !(total < 220);
     }
 
     private int getCourseColorById(String id) {

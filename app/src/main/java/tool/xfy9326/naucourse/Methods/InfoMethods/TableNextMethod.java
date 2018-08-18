@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 
-import com.jaredrummler.android.colorpicker.ColorPickerDialog;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -16,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 
 import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.LoginMethod;
 import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.CourseDetail;
@@ -80,9 +79,10 @@ public class TableNextMethod {
                         course.setCourseDetail(courseDetail_list);
 
                         //颜色随机
+                        int[] colorList = BaseMethod.getColorArray(context);
                         Random random = new Random();
-                        int num = random.nextInt(ColorPickerDialog.MATERIAL_COLORS.length) % (ColorPickerDialog.MATERIAL_COLORS.length + 1);
-                        course.setCourseColor(ColorPickerDialog.MATERIAL_COLORS[num]);
+                        int num = random.nextInt(colorList.length) % (colorList.length + 1);
+                        course.setCourseColor(colorList[num]);
 
                         if (courseList != null) {
                             courseList.add(course);

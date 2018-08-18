@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import tool.xfy9326.naucourse.Activities.CourseActivity;
 import tool.xfy9326.naucourse.Activities.CourseEditActivity;
 import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Course;
 
@@ -144,7 +145,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         if (default_color == -1) {
             default_color = activity.getResources().getColor(R.color.course_cell_background);
         }
-        int[] preset = ColorPickerDialog.MATERIAL_COLORS;
+        int[] preset = BaseMethod.getColorArray(activity);
         preset[preset.length - 1] = activity.getResources().getColor(R.color.course_cell_background);
         ColorPickerDialog colorPickerDialog = ColorPickerDialog.newBuilder()
                 .setColor(default_color)

@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.Methods;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
@@ -70,5 +71,20 @@ public class BaseMethod {
      */
     private static boolean isDataWifiAutoUpdate(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_ONLY_UPDATE_UNDER_WIFI, Config.DEFAULT_PREFERENCE_ONLY_UPDATE_UNDER_WIFI);
+    }
+
+    /**
+     * 获取默认课程颜色数组
+     *
+     * @param context Context
+     * @return 颜色数组
+     */
+    public static int[] getColorArray(Context context) {
+        String[] colorStrList = context.getResources().getStringArray(R.array.default_course_color);
+        int[] colorList = new int[colorStrList.length];
+        for (int i = 0; i < colorStrList.length; i++) {
+            colorList[i] = Color.parseColor(colorStrList[i]);
+        }
+        return colorList;
     }
 }

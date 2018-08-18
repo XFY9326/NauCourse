@@ -27,6 +27,7 @@ import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.LoginMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Methods.SecurityMethod;
+import tool.xfy9326.naucourse.Methods.UpdateMethod;
 import tool.xfy9326.naucourse.R;
 
 /**
@@ -40,15 +41,18 @@ public class LoginActivity extends AppCompatActivity {
     @Nullable
     private String loginURL;
     private int loginErrorCode;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         loginURL = null;
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         ToolBarSet();
         ViewSet();
         netCheck();
+        updateCheck();
     }
 
     private void ToolBarSet() {
@@ -56,7 +60,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void ViewSet() {
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         final EditText editText_userId = findViewById(R.id.editText_userId);
         String userId = sharedPreferences.getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
         if (!userId.equals(Config.DEFAULT_PREFERENCE_USER_ID)) {
@@ -197,6 +200,12 @@ public class LoginActivity extends AppCompatActivity {
             sharedPreferences.edit().putBoolean(Config.PREFERENCE_SSO_LOGIN, false).apply();
         } else if (loginErrorCode == NauJwcClient.LOGIN_SUCCESS_SSO) {
             sharedPreferences.edit().putBoolean(Config.PREFERENCE_SSO_LOGIN, true).apply();
+        }
+    }
+
+    synchronized private void updateCheck() {
+        if (NetMethod.isNetworkConnected(this)) {
+            UpdateMethod.checkUpdate(this, false);
         }
     }
 
