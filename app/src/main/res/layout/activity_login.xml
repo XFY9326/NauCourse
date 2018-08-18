@@ -29,10 +29,10 @@
             app:srcCompat="@drawable/nau_logo" />
 
         <LinearLayout
-            android:layout_marginTop="20dp"
             android:id="@+id/layout_userId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -59,10 +59,10 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_weight="1"
             android:id="@+id/layout_userPw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="5dp">
@@ -88,10 +88,10 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_weight="2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
+            android:layout_weight="2"
             android:orientation="vertical">
 
             <CheckBox

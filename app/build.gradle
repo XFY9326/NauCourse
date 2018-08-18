@@ -22,7 +22,8 @@ android {
     }
 
     buildTypes {
-        debug {
+        beta.initWith(release)
+        beta {
             zipAlignEnabled true
             minifyEnabled false
             buildConfigField("String", "VERSION_TYPE", "\"测试版\"")
