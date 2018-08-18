@@ -19,6 +19,13 @@ android {
         versionName rootProject.ext.versionName
         buildConfigField("int", "SUB_VERSION", "${rootProject.ext.subVersion}")
         resConfigs "zh"
+        applicationVariants.all {
+            variant ->
+                variant.outputs.all {
+                    outputFileName = "${variant.buildType.name}_${defaultConfig.versionCode}_${defaultConfig.versionName}_${rootProject.ext.subVersion}.apk"
+                }
+        }
+
     }
 
     buildTypes {
@@ -28,12 +35,6 @@ android {
             minifyEnabled false
             buildConfigField("String", "VERSION_TYPE", "\"测试版\"")
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            applicationVariants.all {
-                variant ->
-                    variant.outputs.all {
-                        outputFileName = "beta_${defaultConfig.versionCode}_${defaultConfig.versionName}_${rootProject.ext.subVersion}.apk"
-                    }
-            }
         }
 
         release {
@@ -41,12 +42,6 @@ android {
             minifyEnabled false
             buildConfigField("String", "VERSION_TYPE", "\"稳定版\"")
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            applicationVariants.all {
-                variant ->
-                    variant.outputs.all {
-                        outputFileName = "release_${defaultConfig.versionCode}_${defaultConfig.versionName}_${rootProject.ext.subVersion}.apk"
-                    }
-            }
         }
     }
 
