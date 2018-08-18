@@ -33,13 +33,14 @@ public class NextClassMethod {
             SchoolTime schoolTime = (SchoolTime) DataMethod.getOfflineData(context, SchoolTime.class, SchoolTimeMethod.FILE_NAME);
             ArrayList<Course> courses = DataMethod.getOfflineTableData(context);
 
-            int weekNum = TimeMethod.getNowWeekNum(schoolTime);
-
-            if (schoolTime != null && courses != null && weekNum != 0) {
+            if (schoolTime != null && courses != null) {
                 schoolTime = TimeMethod.termSetCheck(context, schoolTime, true);
-                schoolTime.setWeekNum(weekNum);
-                CourseMethod courseMethod = new CourseMethod(context, courses, schoolTime);
-                return courseMethod.getNextClass(weekNum);
+                int weekNum = TimeMethod.getNowWeekNum(schoolTime);
+                if (weekNum != 0) {
+                    schoolTime.setWeekNum(weekNum);
+                    CourseMethod courseMethod = new CourseMethod(context, courses, schoolTime);
+                    return courseMethod.getNextClass(weekNum);
+                }
             }
         }
         return new NextCourse();
