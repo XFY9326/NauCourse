@@ -26,7 +26,9 @@ public class NauJwcClient {
     public static final int LOGIN_CHECKCODE_WRONG = 3;
     public static final int LOGIN_USER_INFO_WRONG = 4;
     public static final String server_url = "http://jwc.nau.edu.cn";
-    private static final int LOGIN_SUCCESS = 0;
+    public static final int LOGIN_SUCCESS = 0;
+    public static final int LOGIN_SUCCESS_SSO = -1;
+    private static final String single_server_url = "http://sso.nau.edu.cn/sso/login?service=http%3a%2f%2fjwc.nau.edu.cn%2fLogin_Single.aspx";
     private static final String LOG_TAG = "NAU_JWC_CLIENT";
     @NonNull
     private final OkHttpClient client;
@@ -48,8 +50,8 @@ public class NauJwcClient {
     }
 
     synchronized public boolean login(@NonNull String userId, @NonNull String userPw) throws Exception {
-        String url = loadUrl();
-        return url != null && userLogin(userId, userPw, Objects.requireNonNull(getCheckCode(url)), false);
+        String loginContent = loadUrl(server_url);
+        return loginContent != null && userLogin(userId, userPw, Objects.requireNonNull(getCheckCode(loginContent)), false);
     }
 
     synchronized public void loginOut() throws Exception {
@@ -116,11 +118,56 @@ public class NauJwcClient {
                 } else if (body.contains("请勿输入非法字符")) {
                     loginErrorCode = LOGIN_ERROR;
                 } else if (body.contains("my.nau.edu.cn/bmportal/index.portal")) {
-                    loginErrorCode = LOGIN_USER_INFO_WRONG;
+                    //SSO单点登陆，重新处理
+                    return singleLogin(userId, userPw);
                 } else {
                     loginErrorCode = LOGIN_SUCCESS;
                     loginUrl = response.request().url().query();
                     return true;
+                }
+            } else {
+                loginErrorCode = LOGIN_ERROR;
+            }
+        } else {
+            loginErrorCode = LOGIN_ERROR;
+        }
+        return false;
+    }
+
+    private boolean singleLogin(@NonNull String userId, @NonNull String userPw) throws IOException {
+        //清空旧的Cookies
+        cookieStore.clearCookies();
+        //缓存SSO的Cookies
+        String ssoContent = loadUrl(single_server_url);
+        if (ssoContent != null) {
+            FormBody formBody = NauNetData.getSSOPostForm(userId, userPw, ssoContent);
+            if (formBody != null) {
+                Request.Builder builder = new Request.Builder();
+                builder.url(single_server_url);
+                builder.post(formBody);
+
+                Response response = client.newCall(builder.build()).execute();
+                if (response.isSuccessful()) {
+                    ResponseBody responseBody = response.body();
+                    if (responseBody != null) {
+                        String body = responseBody.string();
+                        responseBody.close();
+                        if (body.contains("密码错误")) {
+                            loginErrorCode = LOGIN_USER_INFO_WRONG;
+                        } else if (body.startsWith("当前你已经登录")) {
+                            loginErrorCode = LOGIN_ALREADY_LOGIN;
+                        } else if (body.contains("请勿输入非法字符")) {
+                            loginErrorCode = LOGIN_ERROR;
+                        } else {
+                            loginErrorCode = LOGIN_SUCCESS_SSO;
+                            loginUrl = response.request().url().query();
+                            return true;
+                        }
+                    } else {
+                        loginErrorCode = LOGIN_ERROR;
+                    }
+                } else {
+                    loginErrorCode = LOGIN_ERROR;
                 }
             } else {
                 loginErrorCode = LOGIN_ERROR;
@@ -157,9 +204,9 @@ public class NauJwcClient {
         return checkcode;
     }
 
-    private String loadUrl() throws IOException {
+    private String loadUrl(String url) throws IOException {
         Request.Builder request_builder = new Request.Builder();
-        request_builder.url(server_url);
+        request_builder.url(url);
 
         Response response = client.newCall(request_builder.build()).execute();
         if (response.isSuccessful()) {

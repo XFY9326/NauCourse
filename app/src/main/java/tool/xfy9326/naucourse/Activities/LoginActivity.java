@@ -88,6 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                                 if (nauJwcClient.login(id, pw)) {
                                     loginURL = nauJwcClient.getLoginUrl();
                                     if (loginURL != null) {
+                                        loginTypeSave(sharedPreferences, nauJwcClient.getLoginErrorCode());
                                         loginSuccess = true;
                                     }
                                 }
@@ -98,6 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                                     if (nauJwcClient.login(id, pw)) {
                                         loginURL = nauJwcClient.getLoginUrl();
                                         if (loginURL != null) {
+                                            loginTypeSave(sharedPreferences, nauJwcClient.getLoginErrorCode());
                                             loginSuccess = true;
                                         }
                                     }
@@ -188,6 +190,14 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    private void loginTypeSave(SharedPreferences sharedPreferences, int loginErrorCode) {
+        if (loginErrorCode == NauJwcClient.LOGIN_SUCCESS) {
+            sharedPreferences.edit().putBoolean(Config.PREFERENCE_SSO_LOGIN, false).apply();
+        } else if (loginErrorCode == NauJwcClient.LOGIN_SUCCESS_SSO) {
+            sharedPreferences.edit().putBoolean(Config.PREFERENCE_SSO_LOGIN, true).apply();
+        }
     }
 
 }
