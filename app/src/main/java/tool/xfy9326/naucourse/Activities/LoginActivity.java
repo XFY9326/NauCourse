@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import lib.xfy9326.naujwc.NauJwcClient;
 import tool.xfy9326.naucourse.Config;
@@ -47,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         loginURL = null;
         ToolBarSet();
         ViewSet();
+        netCheck();
     }
 
     private void ToolBarSet() {
@@ -172,6 +174,20 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         loadingDialog = builder.show();
+    }
+
+    private void netCheck() {
+        NetMethod.isJwcAvailable(new NetMethod.OnAvailableListener() {
+            @Override
+            public void OnError() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(LoginActivity.this, R.string.jwc_net_no_connection, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 
 }

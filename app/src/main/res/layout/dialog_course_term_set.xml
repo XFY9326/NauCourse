@@ -60,7 +60,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/term_two"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                tools:ignore="UnusedIds" />
 
         </RadioGroup>
 

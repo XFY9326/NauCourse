@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.activity_main);
             ToolBarSet();
             updateCheck();
+            netCheck();
             ViewSet();
             tempLoad();
         }
@@ -51,6 +52,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         BaseMethod.doubleClickExit(this);
+    }
+
+    private void netCheck() {
+        NetMethod.isJwcAvailable(new NetMethod.OnAvailableListener() {
+            @Override
+            public void OnError() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this, R.string.jwc_net_no_connection, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 
     private void loginCheck() {

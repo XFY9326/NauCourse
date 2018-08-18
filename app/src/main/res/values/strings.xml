@@ -257,6 +257,7 @@
     <string name="term_set_success">学期修改成功！</string>
     <string name="term_set_failed">学期数错误或者过短！</string>
     <string name="course_table_reloading">正在重新加载课表中。。。</string>
+    <string name="jwc_net_no_connection">教务处网络连接失败！</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>

@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -122,5 +124,32 @@ public class NetMethod {
             }
         }
         return false;
+    }
+
+    /**
+     * 教务处网络联通判断
+     *
+     * @param availableListener 联通接口
+     */
+    public static void isJwcAvailable(final OnAvailableListener availableListener) {
+        Request.Builder request_builder = new Request.Builder();
+        request_builder.url("http://jwc.nau.edu.cn");
+        new OkHttpClient().newCall(request_builder.build()).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                availableListener.OnError();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) {
+                if (response.code() != 200) {
+                    availableListener.OnError();
+                }
+            }
+        });
+    }
+
+    public interface OnAvailableListener {
+        void OnError();
     }
 }
