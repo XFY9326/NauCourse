@@ -144,4 +144,8 @@ public class Config {
     public static final int DATA_VERSION_LEVEL_EXAM = 1;
     public static final int DATA_VERSION_MOA = 1;
     public static final int DATA_VERSION_SUSPEND_COURSE = 1;
+
+    public static final String DONATE_URL_ALIPAY = "https://www.xfy9326.top/api/donate/alipay.jpg";
+    public static final String DONATE_URL_WECHAT = "https://www.xfy9326.top/api/donate/wechat.png";
+    public static final String DONATE_URL_QQ_WALLET = "https://www.xfy9326.top/api/donate/qq_wallet.png";
 }

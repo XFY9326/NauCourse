@@ -1,5 +1,8 @@
 package tool.xfy9326.naucourse.Activities;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -43,6 +46,7 @@ public class AboutActivity extends AppCompatActivity {
         TextView textView_version = findViewById(R.id.textView_about_version);
         TextView textView_open_source = findViewById(R.id.textView_about_open_source);
         TextView textView_feedback = findViewById(R.id.textView_about_feedback);
+        TextView textView_donate = findViewById(R.id.textView_about_donate);
 
         String version = "v" + BuildConfig.VERSION_NAME + "-" + Config.SUB_VERSION + " (" + BuildConfig.VERSION_CODE + ") " + Config.VERSION_TYPE;
         version = version.replace(Updater.UPDATE_TYPE_BETA, getString(R.string.beta)).replace(Updater.UPDATE_TYPE_RELEASE, getString(R.string.release)).replace(Config.DEBUG, getString(R.string.debug));
@@ -62,6 +66,39 @@ public class AboutActivity extends AppCompatActivity {
                 builder.setTitle(R.string.feedback);
                 builder.setMessage(getString(R.string.feedback_by_mail, getString(R.string.mail)));
                 builder.setPositiveButton(android.R.string.yes, null);
+                builder.show();
+            }
+        });
+        textView_donate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(AboutActivity.this);
+                builder.setTitle(R.string.donate);
+                builder.setMessage(R.string.donate_content);
+                builder.setPositiveButton(R.string.alipay, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Uri uri = Uri.parse(Config.DONATE_URL_ALIPAY);
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                    }
+                });
+                builder.setNegativeButton(R.string.wechat, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Uri uri = Uri.parse(Config.DONATE_URL_WECHAT);
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                    }
+                });
+                builder.setNeutralButton(R.string.qq_wallet, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Uri uri = Uri.parse(Config.DONATE_URL_QQ_WALLET);
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                    }
+                });
                 builder.show();
             }
         });

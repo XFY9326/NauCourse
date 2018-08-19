@@ -46,7 +46,7 @@
     <string name="date">日期</string>
     <string name="application_version">版本：</string>
     <string name="application_author">作者：</string>
-    <string name="author" translatable="false">XFY9326</string>
+    <string name="author" translatable="false">XFY9326（逸雪飞扬）</string>
     <string name="copyright" translatable="false">Copyright © 2018 XFY9326</string>
     <string name="login_out">注销</string>
     <string name="ask_login_out">是否注销当前账户（%1$s）并清空用户缓存？</string>
@@ -262,6 +262,11 @@
     <string name="release">稳定版</string>
     <string name="debug">内测版</string>
     <string name="enlarge_alert">注：可使用手势放大查看图片</string>
+    <string name="donate">请开发者喝一杯咖啡</string>
+    <string name="donate_content">开发软件不易，如果你希望能够给开发者一些赞助，可以通过如下渠道：\n\n注：所有的赞助者会被记录进本APP中</string>
+    <string name="alipay">支付宝</string>
+    <string name="wechat">微信</string>
+    <string name="qq_wallet">QQ钱包</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>
