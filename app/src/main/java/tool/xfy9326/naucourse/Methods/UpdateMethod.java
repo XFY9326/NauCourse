@@ -65,11 +65,12 @@ public class UpdateMethod {
                     @Override
                     public void findUpdate(int versionCode, String versionName, int subVersion, String updateInfo, String updateType, final String updateUrl, boolean forceUpdate, String updateTime) {
                         if (!isImportantUpdate || forceUpdate) {
-                            final String versionNew = versionName + "-" + subVersion + "(" + versionCode + ") " + (updateType.equals(Updater.UPDATE_TYPE_BETA) ? activity.getString(R.string.beta) : activity.getString(R.string.release));
+                            final String versionNew = versionName + "-" + subVersion + "(" + versionCode + ") " + Updater.UPDATE_TYPE_BETA;
                             String lastCheckVersion = sharedPreferences.getString(Config.PREFERENCE_LAST_CHECK_VERSION, null);
                             if (manualCheck || (lastCheckVersion == null || !lastCheckVersion.equalsIgnoreCase(versionNew))) {
                                 String versionNow = BuildConfig.VERSION_NAME + "-" + Config.SUB_VERSION + "(" + BuildConfig.VERSION_CODE + ") " + Config.VERSION_TYPE;
                                 String showVersion = activity.getString(R.string.application_version) + "v" + versionNow + " -> v" + versionNew;
+                                showVersion = showVersion.replace(Updater.UPDATE_TYPE_BETA, activity.getString(R.string.beta)).replace(Updater.UPDATE_TYPE_RELEASE, activity.getString(R.string.release)).replace(Config.DEBUG, activity.getString(R.string.debug));
 
                                 LayoutInflater layoutInflater = activity.getLayoutInflater();
                                 View view = layoutInflater.inflate(R.layout.dialog_application_update, (ViewGroup) activity.findViewById(R.id.layout_dialog_application_update));

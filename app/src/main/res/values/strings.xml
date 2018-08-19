@@ -261,6 +261,7 @@
     <string name="beta">测试版</string>
     <string name="release">稳定版</string>
     <string name="debug">内测版</string>
+    <string name="enlarge_alert">注：可使用手势放大查看图片</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>

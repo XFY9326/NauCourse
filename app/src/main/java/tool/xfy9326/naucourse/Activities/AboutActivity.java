@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import lib.xfy9326.updater.Updater;
 import tool.xfy9326.naucourse.BuildConfig;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
@@ -44,6 +45,8 @@ public class AboutActivity extends AppCompatActivity {
         TextView textView_feedback = findViewById(R.id.textView_about_feedback);
 
         String version = "v" + BuildConfig.VERSION_NAME + "-" + Config.SUB_VERSION + " (" + BuildConfig.VERSION_CODE + ") " + Config.VERSION_TYPE;
+        version = version.replace(Updater.UPDATE_TYPE_BETA, getString(R.string.beta)).replace(Updater.UPDATE_TYPE_RELEASE, getString(R.string.release)).replace(Config.DEBUG, getString(R.string.debug));
+
         textView_version.setText(version);
 
         textView_open_source.setOnClickListener(new View.OnClickListener() {

@@ -30,21 +30,24 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "VERSION_TYPE", "\"内测版\"")
+            zipAlignEnabled false
+            minifyEnabled false
+            buildConfigField("String", "VERSION_TYPE", "\"debug\"")
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
         beta.initWith(release)
         beta {
             zipAlignEnabled true
             minifyEnabled false
-            buildConfigField("String", "VERSION_TYPE", "\"测试版\"")
+            buildConfigField("String", "VERSION_TYPE", "\"beta\"")
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
         release {
             zipAlignEnabled true
             minifyEnabled false
-            buildConfigField("String", "VERSION_TYPE", "\"稳定版\"")
+            buildConfigField("String", "VERSION_TYPE", "\"release\"")
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

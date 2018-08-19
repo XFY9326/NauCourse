@@ -1,10 +1,12 @@
 package tool.xfy9326.naucourse.Activities;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
@@ -15,6 +17,7 @@ import android.view.View;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import tool.xfy9326.naucourse.AsyncTasks.SchoolCalendarAsync;
+import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
@@ -29,6 +32,7 @@ public class SchoolCalendarActivity extends AppCompatActivity {
         BaseMethod.getApp(this).setSchoolCalendarActivity(this);
         ToolBarSet();
         getData();
+        showAlert();
     }
 
     private void ToolBarSet() {
@@ -37,6 +41,18 @@ public class SchoolCalendarActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    private void showAlert() {
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sharedPreferences.getBoolean(Config.PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT, Config.DEFAULT_PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT)) {
+            Snackbar.make(findViewById(R.id.layout_school_calendar_content), R.string.enlarge_alert, Snackbar.LENGTH_SHORT).setAction(R.string.no_alert_again, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    sharedPreferences.edit().putBoolean(Config.PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT, false).apply();
+                }
+            }).setActionTextColor(getResources().getColor(android.R.color.holo_red_light)).show();
         }
     }
 

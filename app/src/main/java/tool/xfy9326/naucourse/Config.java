@@ -39,6 +39,8 @@ public class Config {
 
     public static final String FILE_PROVIDER_AUTH = "tool.xfy9326.naucourse.provider";
 
+    public static final String DEBUG = "debug";
+
     public static final String INTENT_INFO_DETAIL = "INFO_DETAIL";
     public static final String INTENT_IS_ONLY_INIT = "IS_ONLY_INIT";
     public static final String INTENT_NEXT_CLASS_DATA = "NEXT_CLASS_DATA";
@@ -94,6 +96,7 @@ public class Config {
     public static final String PREFERENCE_CUSTOM_TERM_END_DATE = "CUSTOM_TERM_END_DATE";
     public static final String PREFERENCE_OLD_TERM_START_DATE = "OLD_TERM_START_DATE";
     public static final String PREFERENCE_OLD_TERM_END_DATE = "OLD_TERM_END_DATE";
+    public static final String PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT = "SCHOOL_CALENDAR_ENLARGE_ALERT";
 
     public static final boolean DEFAULT_PREFERENCE_HAS_LOGIN = false;
     public static final boolean DEFAULT_PREFERENCE_REMEMBER_PW = true;
@@ -118,6 +121,7 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_AUTO_CHECK_IMPORTANT_UPDATE = false;
     public static final boolean DEFAULT_PREFERENCE_CHECK_BETA_UPDATE = false;
     public static final boolean DEFAULT_PREFERENCE_ONLY_UPDATE_APPLICATION_UNDER_WIFI = false;
+    public static final boolean DEFAULT_PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT = true;
 
     //网络连接错误代码
     public static final int NET_WORK_GET_SUCCESS = 0;
