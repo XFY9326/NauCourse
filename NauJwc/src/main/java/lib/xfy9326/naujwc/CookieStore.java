@@ -44,7 +44,7 @@ class CookieStore implements CookieJar {
     }
 
     @NonNull
-    @SuppressWarnings("SameParameterValue")
+    @SuppressWarnings({"SameParameterValue", "unused"})
     List<Cookie> getCookies(@NonNull String url) {
         HttpUrl httpUrl = HttpUrl.parse(url);
         return cookieStore.get(Objects.requireNonNull(httpUrl));

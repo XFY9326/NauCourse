@@ -1,15 +1,9 @@
 package lib.xfy9326.naujwc;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import okhttp3.FormBody;
 
@@ -18,7 +12,7 @@ import okhttp3.FormBody;
  */
 
 class NauNetData {
-    @Nullable
+    /*@Nullable
     @SuppressWarnings("SameParameterValue")
     static String getCheckCodeUrl(String server, @NonNull String data) {
         String CheckCodeUrl = null;
@@ -28,9 +22,9 @@ class NauNetData {
             CheckCodeUrl = server + "/" + matcher.group().trim();
         }
         return CheckCodeUrl;
-    }
+    }*/
 
-    @Nullable
+    /*@Nullable
     static String getCheckCode(@NonNull String data) {
         String checkcode = null;
         Pattern pattern = Pattern.compile("CheckCode=\\d*");
@@ -40,7 +34,7 @@ class NauNetData {
             checkcode = data.substring(data.indexOf("=") + 1);
         }
         return checkcode;
-    }
+    }*/
 
     static FormBody getSSOPostForm(String userId, String userPw, String ssoContent) {
         String lt = null, execution = null, eventId = null, useVCode = null, isUseVCode = null, sessionVcode = null, errorCount = null;

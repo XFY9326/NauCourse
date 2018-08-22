@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.IOException;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
@@ -23,11 +22,11 @@ import okhttp3.ResponseBody;
 public class NauJwcClient {
     public static final int LOGIN_ERROR = 1;
     public static final int LOGIN_ALREADY_LOGIN = 2;
-    public static final int LOGIN_CHECKCODE_WRONG = 3;
+    //public static final int LOGIN_CHECKCODE_WRONG = 3;
     public static final int LOGIN_USER_INFO_WRONG = 4;
     public static final String server_url = "http://jwc.nau.edu.cn";
-    public static final int LOGIN_SUCCESS = 0;
-    public static final int LOGIN_SUCCESS_SSO = -1;
+    private static final int LOGIN_SUCCESS = 0;
+    //public static final int LOGIN_SUCCESS_SSO = -1;
     private static final String single_server_url = "http://sso.nau.edu.cn/sso/login?service=http%3a%2f%2fjwc.nau.edu.cn%2fLogin_Single.aspx";
     private static final String LOG_TAG = "NAU_JWC_CLIENT";
     @NonNull
@@ -50,8 +49,10 @@ public class NauJwcClient {
     }
 
     synchronized public boolean login(@NonNull String userId, @NonNull String userPw) throws Exception {
-        String loginContent = loadUrl(server_url);
-        return loginContent != null && userLogin(userId, userPw, Objects.requireNonNull(getCheckCode(loginContent)), false);
+        return singleLogin(userId, userPw);
+        //教务自带的登陆，由于验证码不再储存在Cookies里面所以停用
+        //String loginContent = loadUrl(server_url);
+        //return loginContent != null && userLogin(userId, userPw, Objects.requireNonNull(getCheckCode(loginContent)), false);
     }
 
     synchronized public void loginOut() throws Exception {
@@ -87,8 +88,8 @@ public class NauJwcClient {
         return loginErrorCode;
     }
 
-    //登陆
-    private boolean userLogin(@NonNull String userId, @NonNull String userPw, @NonNull String checkcode, boolean reLogin) throws IOException {
+    //站点登陆
+    /*private boolean userLogin(@NonNull String userId, @NonNull String userPw, @NonNull String checkcode, boolean reLogin) throws IOException {
         Request.Builder builder = new Request.Builder();
         builder.url(server_url + "/Login.aspx");
 
@@ -132,8 +133,9 @@ public class NauJwcClient {
             loginErrorCode = LOGIN_ERROR;
         }
         return false;
-    }
+    }*/
 
+    //SSO单点登录
     private boolean singleLogin(@NonNull String userId, @NonNull String userPw) throws IOException {
         //清空旧的Cookies
         cookieStore.clearCookies();
@@ -159,7 +161,8 @@ public class NauJwcClient {
                         } else if (body.contains("请勿输入非法字符")) {
                             loginErrorCode = LOGIN_ERROR;
                         } else {
-                            loginErrorCode = LOGIN_SUCCESS_SSO;
+                            loginErrorCode = LOGIN_SUCCESS;
+                            //loginErrorCode = LOGIN_SUCCESS_SSO;
                             loginUrl = response.request().url().query();
                             return true;
                         }
@@ -191,7 +194,7 @@ public class NauJwcClient {
     }
 
     //获取验证码
-    @Nullable
+    /*@Nullable
     private String getCheckCode(@NonNull String data) throws IOException {
         String checkcode = null;
         String CheckCodeUrl = NauNetData.getCheckCodeUrl(server_url, data);
@@ -202,8 +205,9 @@ public class NauJwcClient {
             checkcode = NauNetData.getCheckCode(cookieStore.getCookies(server_url).toString());
         }
         return checkcode;
-    }
+    }*/
 
+    @SuppressWarnings("SameParameterValue")
     private String loadUrl(String url) throws IOException {
         Request.Builder request_builder = new Request.Builder();
         request_builder.url(url);

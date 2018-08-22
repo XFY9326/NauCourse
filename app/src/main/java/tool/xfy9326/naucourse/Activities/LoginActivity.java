@@ -91,7 +91,6 @@ public class LoginActivity extends AppCompatActivity {
                                 if (nauJwcClient.login(id, pw)) {
                                     loginURL = nauJwcClient.getLoginUrl();
                                     if (loginURL != null) {
-                                        loginTypeSave(sharedPreferences, nauJwcClient.getLoginErrorCode());
                                         loginSuccess = true;
                                     }
                                 }
@@ -102,7 +101,6 @@ public class LoginActivity extends AppCompatActivity {
                                     if (nauJwcClient.login(id, pw)) {
                                         loginURL = nauJwcClient.getLoginUrl();
                                         if (loginURL != null) {
-                                            loginTypeSave(sharedPreferences, nauJwcClient.getLoginErrorCode());
                                             loginSuccess = true;
                                         }
                                     }
@@ -168,9 +166,6 @@ public class LoginActivity extends AppCompatActivity {
                         case NauJwcClient.LOGIN_ALREADY_LOGIN:
                             Snackbar.make(findViewById(R.id.layout_login_content), R.string.already_login_error, Snackbar.LENGTH_SHORT).show();
                             break;
-                        case NauJwcClient.LOGIN_CHECKCODE_WRONG:
-                            Snackbar.make(findViewById(R.id.layout_login_content), R.string.checkcode_error, Snackbar.LENGTH_SHORT).show();
-                            break;
                         case NauJwcClient.LOGIN_USER_INFO_WRONG:
                             Snackbar.make(findViewById(R.id.layout_login_content), R.string.user_info_error, Snackbar.LENGTH_SHORT).show();
                             break;
@@ -193,14 +188,6 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
-    }
-
-    private void loginTypeSave(SharedPreferences sharedPreferences, int loginErrorCode) {
-        if (loginErrorCode == NauJwcClient.LOGIN_SUCCESS) {
-            sharedPreferences.edit().putBoolean(Config.PREFERENCE_SSO_LOGIN, false).apply();
-        } else if (loginErrorCode == NauJwcClient.LOGIN_SUCCESS_SSO) {
-            sharedPreferences.edit().putBoolean(Config.PREFERENCE_SSO_LOGIN, true).apply();
-        }
     }
 
     synchronized private void updateCheck() {

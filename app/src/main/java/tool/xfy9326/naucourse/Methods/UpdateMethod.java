@@ -65,7 +65,7 @@ public class UpdateMethod {
                     @Override
                     public void findUpdate(int versionCode, String versionName, int subVersion, String updateInfo, String updateType, final String updateUrl, boolean forceUpdate, String updateTime) {
                         if (!isImportantUpdate || forceUpdate) {
-                            final String versionNew = versionName + "-" + subVersion + "(" + versionCode + ") " + Updater.UPDATE_TYPE_BETA;
+                            final String versionNew = versionName + "-" + subVersion + "(" + versionCode + ") " + updateType;
                             String lastCheckVersion = sharedPreferences.getString(Config.PREFERENCE_LAST_CHECK_VERSION, null);
                             if (manualCheck || (lastCheckVersion == null || !lastCheckVersion.equalsIgnoreCase(versionNew))) {
                                 String versionNow = BuildConfig.VERSION_NAME + "-" + Config.SUB_VERSION + "(" + BuildConfig.VERSION_CODE + ") " + Config.VERSION_TYPE;

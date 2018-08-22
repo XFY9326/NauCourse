@@ -121,7 +121,6 @@ public class LoginMethod {
                     .remove(Config.PREFERENCE_CUSTOM_TERM_END_DATE)
                     .remove(Config.PREFERENCE_OLD_TERM_START_DATE)
                     .remove(Config.PREFERENCE_OLD_TERM_END_DATE)
-                    .remove(Config.PREFERENCE_SSO_LOGIN)
                     .putBoolean(Config.PREFERENCE_HAS_LOGIN, false)
                     .apply();
             cleanUserTemp(context);
