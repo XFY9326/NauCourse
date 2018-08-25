@@ -84,60 +84,62 @@ public class HomeFragment extends Fragment {
     }
 
     private void ViewSet() {
-        recyclerView = Objects.requireNonNull(view).findViewById(R.id.recyclerView_information);
-        recyclerView.setFocusableInTouchMode(false);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        //保证从其他视图返回时列表位置不变
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (recyclerView.getLayoutManager() != null) {
-                    getPositionAndOffset();
+        if (view != null) {
+            recyclerView = view.findViewById(R.id.recyclerView_information);
+            recyclerView.setFocusableInTouchMode(false);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            //保证从其他视图返回时列表位置不变
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    if (recyclerView.getLayoutManager() != null) {
+                        getPositionAndOffset();
+                    }
                 }
-            }
-        });
-        scrollToPosition();
+            });
+            scrollToPosition();
 
-        swipeRefreshLayout = view.findViewById(R.id.swipeLayout_home);
-        swipeRefreshLayout.setDistanceToTriggerSync(200);
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (NetMethod.isNetworkConnected(context)) {
-                    getData();
-                } else {
-                    Toast.makeText(context, R.string.network_error, Toast.LENGTH_SHORT).show();
-                    swipeRefreshLayout.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    });
+            swipeRefreshLayout = view.findViewById(R.id.swipeLayout_home);
+            swipeRefreshLayout.setDistanceToTriggerSync(200);
+            swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    if (NetMethod.isNetworkConnected(context)) {
+                        getData();
+                    } else {
+                        Toast.makeText(context, R.string.network_error, Toast.LENGTH_SHORT).show();
+                        swipeRefreshLayout.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                        });
+                    }
                 }
-            }
-        });
+            });
 
-        if (loadTime == 0) {
-            getData();
+            if (loadTime == 0) {
+                getData();
+            }
+
+            TextView textView_dateNow = view.findViewById(R.id.textView_dateNow);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+            textView_dateNow.setText(simpleDateFormat.format(new Date()));
+
+            loadTempNextCourse();
+
+            CardView cardView_nextClass = view.findViewById(R.id.cardView_local_next_course);
+            cardView_nextClass.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setNextCourse();
+                    Objects.requireNonNull(context).sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
+                }
+            });
         }
-
-        TextView textView_dateNow = view.findViewById(R.id.textView_dateNow);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
-        textView_dateNow.setText(simpleDateFormat.format(new Date()));
-
-        loadTempNextCourse();
-
-        CardView cardView_nextClass = view.findViewById(R.id.cardView_local_next_course);
-        cardView_nextClass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setNextCourse();
-                Objects.requireNonNull(context).sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
-            }
-        });
 
     }
 

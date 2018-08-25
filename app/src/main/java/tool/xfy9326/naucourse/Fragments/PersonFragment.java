@@ -90,177 +90,179 @@ public class PersonFragment extends Fragment {
     }
 
     private void ViewSet() {
-        swipeRefreshLayout = Objects.requireNonNull(view).findViewById(R.id.swipeLayout_person);
-        swipeRefreshLayout.setDistanceToTriggerSync(200);
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (NetMethod.isNetworkConnected(context)) {
-                    getData();
-                } else {
-                    Toast.makeText(context, R.string.network_error, Toast.LENGTH_SHORT).show();
-                    swipeRefreshLayout.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    });
-                }
-            }
-        });
-
-        if (loadTime == 0) {
-            getData();
-        }
-        CardView cardView_stdInfo = view.findViewById(R.id.cardView_stdInfo);
-
-        CardView cardView_course_settings = view.findViewById(R.id.cardView_course_settings);
-        CardView cardView_global_settings = view.findViewById(R.id.cardView_global_settings);
-        CardView cardView_login_out = view.findViewById(R.id.cardView_login_out);
-        CardView cardView_about = view.findViewById(R.id.cardView_about);
-
-        CardView cardView_score = view.findViewById(R.id.cardView_score_search);
-        CardView cardView_exam = view.findViewById(R.id.cardView_exam);
-        CardView cardView_levelExam = view.findViewById(R.id.cardView_level_exam);
-
-        CardView cardView_school_calendar = view.findViewById(R.id.cardView_school_calendar);
-        CardView cardView_suspend_course = view.findViewById(R.id.cardView_suspend_course);
-        CardView cardView_moa = view.findViewById(R.id.cardView_moa);
-
-        cardView_suspend_course.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getActivity() != null) {
-                    startActivity(new Intent(getActivity(), SuspendCourseActivity.class));
-                }
-            }
-        });
-
-        cardView_moa.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getActivity() != null) {
-                    startActivity(new Intent(getActivity(), MoaActivity.class));
-                }
-            }
-        });
-
-        cardView_school_calendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getActivity() != null) {
-                    startActivity(new Intent(getActivity(), SchoolCalendarActivity.class));
-                }
-            }
-        });
-
-        cardView_stdInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getActivity() != null) {
-                    if (studentInfo != null && studentLearnProcess != null) {
-                        Intent intent = new Intent(getActivity(), StudentInfoActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra(Config.INTENT_STUDENT_LEARN_PROCESS, studentLearnProcess);
-                        intent.putExtra(Config.INTENT_STUDENT_INFO, studentInfo);
-                        getActivity().startActivity(intent);
+        if (view != null) {
+            swipeRefreshLayout = view.findViewById(R.id.swipeLayout_person);
+            swipeRefreshLayout.setDistanceToTriggerSync(200);
+            swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    if (NetMethod.isNetworkConnected(context)) {
+                        getData();
                     } else {
-                        Toast.makeText(getActivity(), R.string.data_is_loading, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, R.string.network_error, Toast.LENGTH_SHORT).show();
+                        swipeRefreshLayout.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                        });
                     }
                 }
-            }
-        });
+            });
 
-        cardView_score.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getActivity() != null) {
-                    if (isAdded()) {
-                        Intent intent = new Intent(getActivity(), ScoreActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        getActivity().startActivity(intent);
-                    }
-                }
+            if (loadTime == 0) {
+                getData();
             }
-        });
-        cardView_exam.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getActivity() != null) {
-                    if (isAdded()) {
-                        Intent intent = new Intent(getActivity(), ExamActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        getActivity().startActivity(intent);
-                    }
-                }
-            }
-        });
-        cardView_levelExam.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getActivity() != null) {
-                    if (isAdded()) {
-                        Intent intent = new Intent(getActivity(), LevelExamActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        getActivity().startActivity(intent);
-                    }
-                }
-            }
-        });
+            CardView cardView_stdInfo = view.findViewById(R.id.cardView_stdInfo);
 
-        cardView_course_settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getActivity() != null) {
-                    if (isAdded()) {
-                        Intent intent = new Intent(getActivity(), CourseSettingsActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        getActivity().startActivity(intent);
+            CardView cardView_course_settings = view.findViewById(R.id.cardView_course_settings);
+            CardView cardView_global_settings = view.findViewById(R.id.cardView_global_settings);
+            CardView cardView_login_out = view.findViewById(R.id.cardView_login_out);
+            CardView cardView_about = view.findViewById(R.id.cardView_about);
+
+            CardView cardView_score = view.findViewById(R.id.cardView_score_search);
+            CardView cardView_exam = view.findViewById(R.id.cardView_exam);
+            CardView cardView_levelExam = view.findViewById(R.id.cardView_level_exam);
+
+            CardView cardView_school_calendar = view.findViewById(R.id.cardView_school_calendar);
+            CardView cardView_suspend_course = view.findViewById(R.id.cardView_suspend_course);
+            CardView cardView_moa = view.findViewById(R.id.cardView_moa);
+
+            cardView_suspend_course.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getActivity() != null) {
+                        startActivity(new Intent(getActivity(), SuspendCourseActivity.class));
                     }
                 }
-            }
-        });
-        cardView_global_settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getActivity() != null) {
-                    if (isAdded()) {
-                        Intent intent = new Intent(getActivity(), GlobalSettingsActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        getActivity().startActivity(intent);
+            });
+
+            cardView_moa.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getActivity() != null) {
+                        startActivity(new Intent(getActivity(), MoaActivity.class));
                     }
                 }
-            }
-        });
-        cardView_login_out.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getActivity() != null) {
-                    if (isAdded()) {
-                        if (NetMethod.isNetworkConnected(getActivity())) {
-                            loginOut(getActivity());
+            });
+
+            cardView_school_calendar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getActivity() != null) {
+                        startActivity(new Intent(getActivity(), SchoolCalendarActivity.class));
+                    }
+                }
+            });
+
+            cardView_stdInfo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getActivity() != null) {
+                        if (studentInfo != null && studentLearnProcess != null) {
+                            Intent intent = new Intent(getActivity(), StudentInfoActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra(Config.INTENT_STUDENT_LEARN_PROCESS, studentLearnProcess);
+                            intent.putExtra(Config.INTENT_STUDENT_INFO, studentInfo);
+                            getActivity().startActivity(intent);
                         } else {
-                            Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), R.string.data_is_loading, Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
-            }
-        });
-        cardView_about.setOnClickListener(new View.OnClickListener()
+            });
 
-        {
-            @Override
-            public void onClick(View v) {
-                if (getActivity() != null) {
-                    if (isAdded()) {
-                        Intent intent = new Intent(getActivity(), AboutActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        getActivity().startActivity(intent);
+            cardView_score.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getActivity() != null) {
+                        if (isAdded()) {
+                            Intent intent = new Intent(getActivity(), ScoreActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getActivity().startActivity(intent);
+                        }
                     }
                 }
-            }
-        });
+            });
+            cardView_exam.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getActivity() != null) {
+                        if (isAdded()) {
+                            Intent intent = new Intent(getActivity(), ExamActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getActivity().startActivity(intent);
+                        }
+                    }
+                }
+            });
+            cardView_levelExam.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getActivity() != null) {
+                        if (isAdded()) {
+                            Intent intent = new Intent(getActivity(), LevelExamActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getActivity().startActivity(intent);
+                        }
+                    }
+                }
+            });
+
+            cardView_course_settings.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getActivity() != null) {
+                        if (isAdded()) {
+                            Intent intent = new Intent(getActivity(), CourseSettingsActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getActivity().startActivity(intent);
+                        }
+                    }
+                }
+            });
+            cardView_global_settings.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getActivity() != null) {
+                        if (isAdded()) {
+                            Intent intent = new Intent(getActivity(), GlobalSettingsActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getActivity().startActivity(intent);
+                        }
+                    }
+                }
+            });
+            cardView_login_out.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getActivity() != null) {
+                        if (isAdded()) {
+                            if (NetMethod.isNetworkConnected(getActivity())) {
+                                loginOut(getActivity());
+                            } else {
+                                Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                }
+            });
+            cardView_about.setOnClickListener(new View.OnClickListener()
+
+            {
+                @Override
+                public void onClick(View v) {
+                    if (getActivity() != null) {
+                        if (isAdded()) {
+                            Intent intent = new Intent(getActivity(), AboutActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getActivity().startActivity(intent);
+                        }
+                    }
+                }
+            });
+        }
     }
 
     private void loginOut(final Context context) {

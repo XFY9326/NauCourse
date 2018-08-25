@@ -147,17 +147,19 @@ public class TableFragment extends Fragment {
     }
 
     private void ViewSet() {
-        course_table_layout = Objects.requireNonNull(view).findViewById(R.id.course_table_layout);
+        if (view != null) {
+            course_table_layout = view.findViewById(R.id.course_table_layout);
 
-        CardView cardView_date = view.findViewById(R.id.cardview_table_date);
-        cardView_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                reloadTable(false);
-            }
-        });
+            CardView cardView_date = view.findViewById(R.id.cardview_table_date);
+            cardView_date.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    reloadTable(false);
+                }
+            });
 
-        getData();
+            getData();
+        }
     }
 
     synchronized private void getData() {

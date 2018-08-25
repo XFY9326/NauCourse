@@ -64,7 +64,7 @@ public class UpdateMethod {
 
                     @Override
                     public void findUpdate(int versionCode, String versionName, int subVersion, String updateInfo, String updateType, final String updateUrl, boolean forceUpdate, String updateTime) {
-                        if (!isImportantUpdate || forceUpdate) {
+                        if (!activity.isDestroyed() && (!isImportantUpdate || forceUpdate)) {
                             final String versionNew = versionName + "-" + subVersion + "(" + versionCode + ") " + updateType;
                             String lastCheckVersion = sharedPreferences.getString(Config.PREFERENCE_LAST_CHECK_VERSION, null);
                             if (manualCheck || (lastCheckVersion == null || !lastCheckVersion.equalsIgnoreCase(versionNew))) {
@@ -110,13 +110,15 @@ public class UpdateMethod {
                                 }
 
                                 builder.setView(view);
-                                activity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(activity, R.string.find_update, Toast.LENGTH_SHORT).show();
-                                        builder.show();
-                                    }
-                                });
+                                if (!activity.isDestroyed()) {
+                                    activity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(activity, R.string.find_update, Toast.LENGTH_SHORT).show();
+                                            builder.show();
+                                        }
+                                    });
+                                }
                             }
                         }
                         isCheckingUpdate = false;
