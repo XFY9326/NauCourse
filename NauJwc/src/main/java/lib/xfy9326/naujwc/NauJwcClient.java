@@ -143,31 +143,27 @@ public class NauJwcClient {
         String ssoContent = loadUrl(single_server_url);
         if (ssoContent != null) {
             FormBody formBody = NauNetData.getSSOPostForm(userId, userPw, ssoContent);
-            if (formBody != null) {
-                Request.Builder builder = new Request.Builder();
-                builder.url(single_server_url);
-                builder.post(formBody);
+            Request.Builder builder = new Request.Builder();
+            builder.url(single_server_url);
+            builder.post(formBody);
 
-                Response response = client.newCall(builder.build()).execute();
-                if (response.isSuccessful()) {
-                    ResponseBody responseBody = response.body();
-                    if (responseBody != null) {
-                        String body = responseBody.string();
-                        responseBody.close();
-                        if (body.contains("密码错误")) {
-                            loginErrorCode = LOGIN_USER_INFO_WRONG;
-                        } else if (body.startsWith("当前你已经登录")) {
-                            loginErrorCode = LOGIN_ALREADY_LOGIN;
-                        } else if (body.contains("请勿输入非法字符")) {
-                            loginErrorCode = LOGIN_ERROR;
-                        } else {
-                            loginErrorCode = LOGIN_SUCCESS;
-                            //loginErrorCode = LOGIN_SUCCESS_SSO;
-                            loginUrl = response.request().url().query();
-                            return true;
-                        }
-                    } else {
+            Response response = client.newCall(builder.build()).execute();
+            if (response.isSuccessful()) {
+                ResponseBody responseBody = response.body();
+                if (responseBody != null) {
+                    String body = responseBody.string();
+                    responseBody.close();
+                    if (body.contains("密码错误")) {
+                        loginErrorCode = LOGIN_USER_INFO_WRONG;
+                    } else if (body.startsWith("当前你已经登录")) {
+                        loginErrorCode = LOGIN_ALREADY_LOGIN;
+                    } else if (body.contains("请勿输入非法字符")) {
                         loginErrorCode = LOGIN_ERROR;
+                    } else {
+                        loginErrorCode = LOGIN_SUCCESS;
+                        //loginErrorCode = LOGIN_SUCCESS_SSO;
+                        loginUrl = response.request().url().query();
+                        return true;
                     }
                 } else {
                     loginErrorCode = LOGIN_ERROR;
@@ -189,7 +185,7 @@ public class NauJwcClient {
     private void userLoginOut() throws IOException {
         Request.Builder builder = new Request.Builder();
         builder.url(server_url + "/LoginOut.aspx");
-        client.newCall(builder.build()).execute();
+        client.newCall(builder.build()).execute().close();
         cookieStore.clearCookies();
     }
 
@@ -216,7 +212,9 @@ public class NauJwcClient {
         if (response.isSuccessful()) {
             ResponseBody responseBody = response.body();
             if (responseBody != null) {
-                return responseBody.string();
+                String result = responseBody.string();
+                response.close();
+                return result;
             }
         }
         return null;

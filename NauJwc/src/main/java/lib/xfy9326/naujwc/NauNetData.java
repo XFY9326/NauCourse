@@ -37,52 +37,20 @@ class NauNetData {
     }*/
 
     static FormBody getSSOPostForm(String userId, String userPw, String ssoContent) {
-        String lt = null, execution = null, eventId = null, useVCode = null, isUseVCode = null, sessionVcode = null, errorCount = null;
+        FormBody.Builder form_builder = new FormBody.Builder();
+        form_builder.add("username", userId);
+        form_builder.add("password", userPw);
+
         Document document = Jsoup.parse(ssoContent);
         Elements nameList = document.select("input[name]");
         for (Element element : nameList) {
             String value = element.attr("value");
-            switch (element.attr("name")) {
-                case "lt":
-                    lt = value;
-                    break;
-                case "execution":
-                    execution = value;
-                    break;
-                case "_eventId":
-                    eventId = value;
-                    break;
-                case "useVCode":
-                    useVCode = value;
-                    break;
-                case "isUseVCode":
-                    isUseVCode = value;
-                    break;
-                case "sessionVcode":
-                    sessionVcode = value;
-                    break;
-                case "errorCount":
-                    errorCount = value;
-                    break;
+            String name = element.attr("name");
+            if ("lt".equals(name) || "execution".equals(name) || "_eventId".equals(name) || "useVCode".equals(name) || "isUseVCode".equals(name) || "sessionVcode".equals(name) || "errorCount".equals(name)) {
+                form_builder.add(name, value);
             }
         }
 
-        if (lt != null && execution != null && eventId != null && useVCode != null && isUseVCode != null && sessionVcode != null && errorCount != null) {
-            FormBody.Builder form_builder = new FormBody.Builder();
-            form_builder.add("username", userId);
-            form_builder.add("password", userPw);
-
-            form_builder.add("lt", lt);
-            form_builder.add("execution", execution);
-            form_builder.add("_eventId", eventId);
-            form_builder.add("useVCode", userId);
-            form_builder.add("isUseVCode", isUseVCode);
-            form_builder.add("sessionVcode", sessionVcode);
-            form_builder.add("errorCount", errorCount);
-
-            return form_builder.build();
-        } else {
-            return null;
-        }
+        return form_builder.build();
     }
 }
