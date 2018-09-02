@@ -113,7 +113,7 @@ public class LoginMethod {
                     .remove(Config.PREFERENCE_NETWORK_PASSWORD)
                     .remove(Config.PREFERENCE_NETWORK_REMEMBER_PASSWORD)
                     .remove(Config.PREFERENCE_PERSONAL_INFO_LOAD_DATE)
-                    .remove(Config.PREFERENCE_COURSE_TABLE_LOAD_DATE)
+                    .remove(Config.PREFERENCE_COURSE_TABLE_AUTO_LOAD_DATE)
                     .remove(Config.PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND)
                     .remove(Config.PREFERENCE_SCHOOL_CALENDAR_URL)
                     .remove(Config.PREFERENCE_CLASS_BEFORE_NOTIFY)

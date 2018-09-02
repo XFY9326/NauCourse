@@ -408,15 +408,23 @@ public class TableFragment extends Fragment {
                 boolean update_day = true;
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
                 if (sharedPreferences.getBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE, Config.DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE)) {
-                    long course_table_load_date = sharedPreferences.getLong(Config.PREFERENCE_COURSE_TABLE_LOAD_DATE, 0);
-                    long now_time = System.currentTimeMillis() / 1000;
-                    long more = now_time - course_table_load_date;
-                    update_day = (more == 0 && now_time == 0) || (more / (60 * 60 * 24)) >= 1;
-                    sharedPreferences.edit().putLong(Config.PREFERENCE_COURSE_TABLE_LOAD_DATE, now_time).apply();
+                    Calendar calendar = Calendar.getInstance(Locale.CHINA);
+                    long course_table_load_date = sharedPreferences.getLong(Config.PREFERENCE_COURSE_TABLE_AUTO_LOAD_DATE, 0);
+                    calendar.setTimeInMillis(course_table_load_date);
+                    int load_day = calendar.get(Calendar.DAY_OF_YEAR);
+                    int load_year = calendar.get(Calendar.YEAR);
+                    calendar.setTimeInMillis(System.currentTimeMillis());
+                    int now_day = calendar.get(Calendar.DAY_OF_YEAR);
+                    int now_year = calendar.get(Calendar.YEAR);
+
+                    if (load_year == now_year && now_day == load_day) {
+                        update_day = false;
+                    } else {
+                        sharedPreferences.edit().putLong(Config.PREFERENCE_COURSE_TABLE_AUTO_LOAD_DATE, System.currentTimeMillis()).apply();
+                    }
                 }
 
                 if (update_day) {
-                    Toast.makeText(context, R.string.course_table_auto_update_alert, Toast.LENGTH_SHORT).show();
                     getData();
                 }
             }

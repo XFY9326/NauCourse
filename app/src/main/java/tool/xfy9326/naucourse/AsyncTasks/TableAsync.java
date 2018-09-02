@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -17,6 +18,7 @@ import tool.xfy9326.naucourse.Methods.InfoMethods.SchoolTimeMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethods.TableMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Methods.TimeMethod;
+import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
 
@@ -28,6 +30,7 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
     private ArrayList<Course> course;
     @Nullable
     private SchoolTime schoolTime;
+    private boolean hasAutoUpdate = false;
 
     public TableAsync() {
         this.course = null;
@@ -61,12 +64,14 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
                 //首次加载没有课程数据时或者打开自动更新时自动联网获取
                 boolean auto_update = PreferenceManager.getDefaultSharedPreferences(context[0]).getBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE, Config.DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE);
                 if (course == null) {
+                    hasAutoUpdate = true;
                     TableMethod tableMethod = new TableMethod(context[0]);
                     tableLoadSuccess = tableMethod.load();
                     if (tableLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                         course = tableMethod.getCourseTable(true);
                     }
                 } else if (auto_update) {
+                    hasAutoUpdate = true;
                     TableMethod tableMethod = new TableMethod(context[0]);
                     if (tableMethod.load() == Config.NET_WORK_GET_SUCCESS) {
                         ArrayList<Course> update_course = tableMethod.getCourseTable(false);
@@ -106,6 +111,9 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
         PersonFragment personFragment = BaseMethod.getApp(context).getViewPagerAdapter().getPersonFragment();
         if (tableFragment != null) {
             if (NetMethod.checkNetWorkCode(context, new int[]{timeLoadSuccess, tableLoadSuccess}, loadCode)) {
+                if (hasAutoUpdate) {
+                    Toast.makeText(context, R.string.course_table_auto_update_alert, Toast.LENGTH_SHORT).show();
+                }
                 tableFragment.CourseSet(course, schoolTime, context, true);
             }
             tableFragment.lastViewSet(context);
