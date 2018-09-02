@@ -215,14 +215,19 @@ public class CourseActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 EditText editText_year = view.findViewById(R.id.editText_course_school_year);
                 RadioButton radioButton_term_one = view.findViewById(R.id.radioButton_term_one);
-                long year = Long.valueOf(editText_year.getText().toString());
-                if (year >= 1983L) {
-                    //仅支持四位数的年份，仅支持一年两学期制
-                    long term = (year * 10000L + year + 1L) * 10L + (radioButton_term_one.isChecked() ? 1L : 2L);
-                    Intent intent = new Intent(CourseActivity.this, CourseEditActivity.class);
-                    intent.putExtra(Config.INTENT_ADD_COURSE, true);
-                    intent.putExtra(Config.INTENT_ADD_COURSE_TERM, term);
-                    startActivityForResult(intent, COURSE_ADD_REQUEST_CODE);
+                String str_year = editText_year.getText().toString();
+                if (!str_year.isEmpty()) {
+                    long year = Long.valueOf(str_year);
+                    if (year >= 1983L) {
+                        //仅支持四位数的年份，仅支持一年两学期制
+                        long term = (year * 10000L + year + 1L) * 10L + (radioButton_term_one.isChecked() ? 1L : 2L);
+                        Intent intent = new Intent(CourseActivity.this, CourseEditActivity.class);
+                        intent.putExtra(Config.INTENT_ADD_COURSE, true);
+                        intent.putExtra(Config.INTENT_ADD_COURSE_TERM, term);
+                        startActivityForResult(intent, COURSE_ADD_REQUEST_CODE);
+                    } else {
+                        Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.input_error, Snackbar.LENGTH_LONG).show();
+                    }
                 } else {
                     Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.input_error, Snackbar.LENGTH_LONG).show();
                 }
@@ -538,7 +543,7 @@ public class CourseActivity extends AppCompatActivity {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
                     try {
                         long termDay = simpleDateFormat.parse(customEndTermDate).getTime() - simpleDateFormat.parse(customStartTermDate).getTime();
-                        if (termDay <= 0 || termDay / (1000 * 60 * 60 * 24) < 30) {
+                        if (termDay <= 0 || termDay / (1000 * 60 * 60 * 24) < 30 || termDay / (1000 * 60 * 60 * 24) > (7 * 24)) {
                             Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.term_set_failed, Snackbar.LENGTH_SHORT).show();
                         } else {
                             needReload = true;

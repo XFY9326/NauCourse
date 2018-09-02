@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -426,31 +427,34 @@ public class TableFragment extends Fragment {
         if (getActivity() != null && view != null) {
             if (PermissionMethod.checkStoragePermission(getActivity(), 0)) {
                 LinearLayout linearLayout = view.findViewById(R.id.layout_table);
+
+                linearLayout.destroyDrawingCache();
                 linearLayout.setDrawingCacheEnabled(true);
                 linearLayout.setDrawingCacheBackgroundColor(Color.WHITE);
-                linearLayout.destroyDrawingCache();
+
                 linearLayout.buildDrawingCache();
                 Bitmap bitmap = linearLayout.getDrawingCache();
-                if (bitmap != null) {
-                    try {
-                        String path = Config.PICTURE_DICTIONARY_PATH + Config.COURSE_TABLE_FILE_NAME;
-                        if (ImageMethod.saveBitmap(bitmap, path)) {
-                            Uri photoURI = FileProvider.getUriForFile(getActivity(), Config.FILE_PROVIDER_AUTH, new File(path));
-                            Intent intent = new Intent(Intent.ACTION_SEND);
-                            intent.setType("image/*");
-                            intent.putExtra(Intent.EXTRA_STREAM, photoURI);
-                            intent.addCategory(Intent.CATEGORY_DEFAULT);
-                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                            startActivity(Intent.createChooser(intent, getString(R.string.share_course_table)));
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                if (bitmap == null) {
+                    bitmap = Bitmap.createBitmap(linearLayout.getWidth(), linearLayout.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(bitmap);
+                    linearLayout.draw(canvas);
+                }
+                try {
+                    String path = Config.PICTURE_DICTIONARY_PATH + Config.COURSE_TABLE_FILE_NAME;
+                    if (ImageMethod.saveBitmap(bitmap, path)) {
+                        Uri photoURI = FileProvider.getUriForFile(getActivity(), Config.FILE_PROVIDER_AUTH, new File(path));
+                        Intent intent = new Intent(Intent.ACTION_SEND);
+                        intent.setType("image/*");
+                        intent.putExtra(Intent.EXTRA_STREAM, photoURI);
+                        intent.addCategory(Intent.CATEGORY_DEFAULT);
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        startActivity(Intent.createChooser(intent, getString(R.string.share_course_table)));
                     }
-                    if (!bitmap.isRecycled()) {
-                        bitmap.recycle();
-                    }
-                } else {
-                    Toast.makeText(getActivity(), R.string.course_table_share_error, Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (!bitmap.isRecycled()) {
+                    bitmap.recycle();
                 }
                 linearLayout.destroyDrawingCache();
                 linearLayout.setDrawingCacheEnabled(false);

@@ -48,6 +48,11 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ExamViewHolder
         return new ExamViewHolder(view);
     }
 
+    public void clearAdapter() {
+        this.exam.setExamMount(0);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return exam.getExamMount();

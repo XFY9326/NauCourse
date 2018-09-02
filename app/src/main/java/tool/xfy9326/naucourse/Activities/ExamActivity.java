@@ -98,6 +98,9 @@ public class ExamActivity extends AppCompatActivity {
                 }
             } else if (loadTime > 1 || !NetMethod.isNetworkConnected(this)) {
                 Snackbar.make(findViewById(R.id.layout_exam_content), R.string.no_exam, Snackbar.LENGTH_SHORT).show();
+                if (examAdapter != null && examAdapter.getItemCount() != 0) {
+                    examAdapter.clearAdapter();
+                }
             }
         }
     }
