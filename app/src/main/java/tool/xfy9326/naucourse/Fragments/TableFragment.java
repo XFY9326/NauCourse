@@ -365,7 +365,7 @@ public class TableFragment extends Fragment {
                 String weekmode = "";
                 if (detail.getWeekMode() == Config.COURSE_DETAIL_WEEKMODE_SINGLE) {
                     weekmode = context.getString(R.string.course_card_time_week_mode, context.getString(R.string.single_week_mode));
-                } else if (detail.getWeekMode() == Config.COURSE_DETAIL_WEEKMODE_SINGLE) {
+                } else if (detail.getWeekMode() == Config.COURSE_DETAIL_WEEKMODE_DOUBLE) {
                     weekmode = context.getString(R.string.course_card_time_week_mode, context.getString(R.string.double_week_mode));
                 }
                 for (String course_week : Objects.requireNonNull(course_weeks)) {
