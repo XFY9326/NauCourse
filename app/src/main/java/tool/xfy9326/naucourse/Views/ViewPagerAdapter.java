@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import java.util.List;
+
 import tool.xfy9326.naucourse.Fragments.HomeFragment;
 import tool.xfy9326.naucourse.Fragments.PersonFragment;
 import tool.xfy9326.naucourse.Fragments.TableFragment;
@@ -21,10 +23,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     public ViewPagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
-        createFragments();
+        setOldFragments(fragmentManager);
+        createNewFragments();
     }
 
-    private void createFragments() {
+    private void createNewFragments() {
         if (homeFragment == null) {
             homeFragment = new HomeFragment();
         }
@@ -33,6 +36,19 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         }
         if (personFragment == null) {
             personFragment = new PersonFragment();
+        }
+    }
+
+    private void setOldFragments(FragmentManager fragmentManager) {
+        List<Fragment> fragmentList = fragmentManager.getFragments();
+        for (Fragment fragment : fragmentList) {
+            if (fragment instanceof HomeFragment) {
+                homeFragment = (HomeFragment) fragment;
+            } else if (fragment instanceof TableFragment) {
+                tableFragment = (TableFragment) fragment;
+            } else if (fragment instanceof PersonFragment) {
+                personFragment = (PersonFragment) fragment;
+            }
         }
     }
 

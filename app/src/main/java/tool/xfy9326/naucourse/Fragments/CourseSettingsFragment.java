@@ -36,6 +36,7 @@ import tool.xfy9326.naucourse.Receivers.UpdateReceiver;
 public class CourseSettingsFragment extends PreferenceFragment {
     public static final int WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE = 1;
     private boolean updateCourseTable = false;
+    private boolean reloadTableData = false;
     private boolean cropSuccess = false;
     private float transparency_value;
 
@@ -53,9 +54,13 @@ public class CourseSettingsFragment extends PreferenceFragment {
 
     @Override
     public void onDestroy() {
-        if (updateCourseTable) {
+        if (updateCourseTable && getActivity() != null) {
             MainHandler mainHandler = new MainHandler(getActivity());
-            mainHandler.sendEmptyMessage(Config.HANDLER_RELOAD_TABLE);
+            if (reloadTableData) {
+                mainHandler.sendEmptyMessage(Config.HANDLER_RELOAD_TABLE_DATA);
+            } else {
+                mainHandler.sendEmptyMessage(Config.HANDLER_RELOAD_TABLE);
+            }
         }
         super.onDestroy();
     }
@@ -68,13 +73,21 @@ public class CourseSettingsFragment extends PreferenceFragment {
                 return true;
             }
         };
+        Preference.OnPreferenceChangeListener tableDataReloadListener = new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                updateCourseTable = true;
+                reloadTableData = true;
+                return true;
+            }
+        };
 
         findPreference(Config.PREFERENCE_SHOW_NEXT_WEEK).setOnPreferenceChangeListener(tableReloadListener);
         findPreference(Config.PREFERENCE_SHOW_WEEKEND).setOnPreferenceChangeListener(tableReloadListener);
         findPreference(Config.PREFERENCE_SHOW_WIDE_TABLE).setOnPreferenceChangeListener(tableReloadListener);
         findPreference(Config.PREFERENCE_COURSE_TABLE_CELL_COLOR).setOnPreferenceChangeListener(tableReloadListener);
         findPreference(Config.PREFERENCE_COURSE_TABLE_SHOW_SINGLE_COLOR).setOnPreferenceChangeListener(tableReloadListener);
-        findPreference(Config.PREFERENCE_SHOW_NO_THIS_WEEK_CLASS).setOnPreferenceChangeListener(tableReloadListener);
+        findPreference(Config.PREFERENCE_SHOW_NO_THIS_WEEK_CLASS).setOnPreferenceChangeListener(tableDataReloadListener);
 
         findPreference(Config.PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override

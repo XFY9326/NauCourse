@@ -71,9 +71,32 @@ public class PersonFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    @Override
     public void onAttach(Context context) {
         this.context = context;
         super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        this.context = null;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        this.view = null;
+        this.context = null;
+        this.swipeRefreshLayout = null;
+        this.studentInfo = null;
+        this.studentLearnProcess = null;
+        this.loadTime = 0;
     }
 
     @Nullable

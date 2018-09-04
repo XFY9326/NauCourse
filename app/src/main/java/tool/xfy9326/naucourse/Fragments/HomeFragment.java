@@ -65,9 +65,32 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    @Override
     public void onAttach(Context context) {
         this.context = context;
         super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        this.context = null;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        this.loadTime = 0;
+        this.view = null;
+        this.context = null;
+        this.recyclerView = null;
+        this.swipeRefreshLayout = null;
+        this.infoAdapter = null;
     }
 
     @Nullable
@@ -85,41 +108,45 @@ public class HomeFragment extends Fragment {
 
     private void ViewSet() {
         if (view != null) {
-            recyclerView = view.findViewById(R.id.recyclerView_information);
-            recyclerView.setFocusableInTouchMode(false);
-            recyclerView.setItemAnimator(new DefaultItemAnimator());
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            //保证从其他视图返回时列表位置不变
-            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-                    if (recyclerView.getLayoutManager() != null) {
-                        getPositionAndOffset();
+            if (recyclerView == null) {
+                recyclerView = view.findViewById(R.id.recyclerView_information);
+                recyclerView.setFocusableInTouchMode(false);
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
+                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                //保证从其他视图返回时列表位置不变
+                recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                        super.onScrollStateChanged(recyclerView, newState);
+                        if (recyclerView.getLayoutManager() != null) {
+                            getPositionAndOffset();
+                        }
                     }
-                }
-            });
+                });
+            }
             scrollToPosition();
 
-            swipeRefreshLayout = view.findViewById(R.id.swipeLayout_home);
-            swipeRefreshLayout.setDistanceToTriggerSync(200);
-            swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
-            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    if (NetMethod.isNetworkConnected(context)) {
-                        getData();
-                    } else {
-                        Toast.makeText(context, R.string.network_error, Toast.LENGTH_SHORT).show();
-                        swipeRefreshLayout.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                swipeRefreshLayout.setRefreshing(false);
-                            }
-                        });
+            if (swipeRefreshLayout == null) {
+                swipeRefreshLayout = view.findViewById(R.id.swipeLayout_home);
+                swipeRefreshLayout.setDistanceToTriggerSync(200);
+                swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
+                swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        if (NetMethod.isNetworkConnected(context)) {
+                            getData();
+                        } else {
+                            Toast.makeText(context, R.string.network_error, Toast.LENGTH_SHORT).show();
+                            swipeRefreshLayout.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    swipeRefreshLayout.setRefreshing(false);
+                                }
+                            });
+                        }
                     }
-                }
-            });
+                });
+            }
 
             if (loadTime == 0) {
                 getData();

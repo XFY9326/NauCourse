@@ -100,8 +100,15 @@ public class TableFragment extends Fragment {
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+        this.context = null;
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         setHasOptionsMenu(true);
     }
 
@@ -123,8 +130,17 @@ public class TableFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        view_set = false;
         super.onDestroyView();
+        this.view_set = false;
+        this.view = null;
+        this.context = null;
+        this.courses = null;
+        this.schoolTime = null;
+        this.course_table_layout = null;
+        this.courseMethod = null;
+        this.courseViewMethod = null;
+        this.spinner_week = null;
+        this.loadTime = 0;
     }
 
     @Override
@@ -181,7 +197,7 @@ public class TableFragment extends Fragment {
      * @param context      Context
      * @param isDataReload 是否是刷新本地信息
      */
-    public void CourseSet(@Nullable ArrayList<Course> courses, @Nullable SchoolTime schoolTime, @Nullable final Context context, boolean isDataReload) {
+    public void CourseSet(@Nullable ArrayList<Course> courses, @Nullable final SchoolTime schoolTime, @Nullable final Context context, boolean isDataReload) {
         if (context != null && courses != null && schoolTime != null && courses.size() != 0) {
             if (isDataReload) {
                 this.courses = courses;
@@ -202,8 +218,8 @@ public class TableFragment extends Fragment {
                 weekNum = schoolTime.getWeekNum();
             }
 
-            if (isAdded()) {
-                TextView textView_date = Objects.requireNonNull(view).findViewById(R.id.textView_table_date);
+            if (isAdded() && view != null && getActivity() != null) {
+                TextView textView_date = view.findViewById(R.id.textView_table_date);
                 Calendar calendar = Calendar.getInstance(Locale.CHINA);
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH) + 1;
@@ -215,17 +231,17 @@ public class TableFragment extends Fragment {
                 textView_date.setText(context.getString(R.string.table_date, year, month, weekDay, week));
 
                 if (spinner_week == null) {
-                    spinner_week = view.findViewById(R.id.spinner_table_week_chose);
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()), android.R.layout.simple_list_item_1, TimeMethod.getWeekArray(context, schoolTime));
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, TimeMethod.getWeekArray(context, schoolTime));
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    Objects.requireNonNull(spinner_week).setSelection(lastSelect);
+                    spinner_week = view.findViewById(R.id.spinner_table_week_chose);
+                    spinner_week.setSelection(lastSelect);
                     spinner_week.setAdapter(adapter);
                     spinner_week.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             if (lastSelect != position) {
-                                Objects.requireNonNull(TableFragment.this.schoolTime).setWeekNum(position + 1);
-                                setTableData(TableFragment.this.schoolTime, false, hasCustomBackground);
+                                schoolTime.setWeekNum(position + 1);
+                                setTableData(schoolTime, false, hasCustomBackground);
                                 lastSelect = position;
                             }
                         }
@@ -258,8 +274,8 @@ public class TableFragment extends Fragment {
                 //主页面下一节课设置
                 if (!inVacation) {
                     HomeFragment homeFragment = BaseMethod.getApp(context).getViewPagerAdapter().getHomeFragment();
-                    if (homeFragment != null) {
-                        NextCourse nextCourse = Objects.requireNonNull(courseMethod).getNextClass(weekNum);
+                    if (homeFragment != null && courseMethod != null) {
+                        NextCourse nextCourse = courseMethod.getNextClass(weekNum);
                         homeFragment.setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
                     }
                 }
@@ -277,43 +293,45 @@ public class TableFragment extends Fragment {
     }
 
     private void setTableData(@NonNull SchoolTime schoolTime, boolean isDataReload, boolean hasCustomBackground) {
-        if (courseViewMethod == null) {
-            CardView cardView_course = Objects.requireNonNull(view).findViewById(R.id.cardView_courseTable);
-            courseViewMethod = new CourseViewMethod(context, courses);
-            courseViewMethod.setTableView(course_table_layout, cardView_course.getWidth(), cardView_course.getHeight());
-        }
-        if (isDataReload) {
-            courseViewMethod.setOnCourseTableClickListener(new CourseViewMethod.OnCourseTableItemClickListener() {
-                @Override
-                public void OnItemClick(@NonNull Course course) {
-                    CourseCardSet(course);
-                }
-            });
-        }
-        if (courseMethod == null) {
-            courseMethod = new CourseMethod(context, courses, schoolTime);
-        } else {
-            courseMethod.updateTableCourse(courses, schoolTime, isDataReload);
-        }
         if (view != null) {
-            ImageView imageView_table_background = view.findViewById(R.id.imageView_table_background);
-            if (hasCustomBackground) {
-                Bitmap bitmap = ImageMethod.getTableBackgroundBitmap(getActivity());
-                if (bitmap != null) {
-                    imageView_table_background.refreshDrawableState();
-                    imageView_table_background.setImageBitmap(bitmap);
-                } else {
-                    hasCustomBackground = false;
-                }
+            if (courseViewMethod == null) {
+                CardView cardView_course = view.findViewById(R.id.cardView_courseTable);
+                courseViewMethod = new CourseViewMethod(context, courses);
+                courseViewMethod.setTableView(course_table_layout, cardView_course.getWidth(), cardView_course.getHeight());
+            }
+            if (isDataReload) {
+                courseViewMethod.setOnCourseTableClickListener(new CourseViewMethod.OnCourseTableItemClickListener() {
+                    @Override
+                    public void OnItemClick(@NonNull Course course) {
+                        CourseCardSet(course);
+                    }
+                });
+            }
+            if (courseMethod == null) {
+                courseMethod = new CourseMethod(context, courses, schoolTime);
             } else {
-                imageView_table_background.setImageDrawable(null);
-                imageView_table_background.refreshDrawableState();
-                if (course_table_layout != null) {
-                    course_table_layout.setBackgroundColor(Color.LTGRAY);
+                courseMethod.updateTableCourse(courses, schoolTime, isDataReload);
+            }
+            if (view != null) {
+                ImageView imageView_table_background = view.findViewById(R.id.imageView_table_background);
+                if (hasCustomBackground) {
+                    Bitmap bitmap = ImageMethod.getTableBackgroundBitmap(getActivity());
+                    if (bitmap != null) {
+                        imageView_table_background.refreshDrawableState();
+                        imageView_table_background.setImageBitmap(bitmap);
+                    } else {
+                        hasCustomBackground = false;
+                    }
+                } else {
+                    imageView_table_background.setImageDrawable(null);
+                    imageView_table_background.refreshDrawableState();
+                    if (course_table_layout != null) {
+                        course_table_layout.setBackgroundColor(Color.LTGRAY);
+                    }
                 }
             }
+            courseViewMethod.updateCourseTableView(courses, courseMethod.getTableData(), courseMethod.getTableIdData(), courseMethod.getTableShowData(), isDataReload, hasCustomBackground);
         }
-        courseViewMethod.updateCourseTableView(courses, courseMethod.getTableData(), courseMethod.getTableIdData(), courseMethod.getTableShowData(), isDataReload, hasCustomBackground);
     }
 
     //表格中的课程详细信息显示
@@ -432,7 +450,7 @@ public class TableFragment extends Fragment {
     }
 
     private void shareTable() {
-        if (getActivity() != null && view != null) {
+        if (getActivity() != null && view != null && isAdded()) {
             if (PermissionMethod.checkStoragePermission(getActivity(), 0)) {
                 LinearLayout linearLayout = view.findViewById(R.id.layout_table);
 
@@ -460,6 +478,7 @@ public class TableFragment extends Fragment {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+                    Toast.makeText(getActivity(), R.string.course_table_share_error, Toast.LENGTH_SHORT).show();
                 }
                 if (!bitmap.isRecycled()) {
                     bitmap.recycle();

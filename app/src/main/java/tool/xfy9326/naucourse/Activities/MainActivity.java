@@ -24,8 +24,10 @@ import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
  */
 
 public class MainActivity extends AppCompatActivity {
+    private final static String CURRENT_FRAGMENT_INDEX = "CURRENT_FRAGMENT_INDEX";
     private SharedPreferences sharedPreferences = null;
     private ViewPagerAdapter viewPagerAdapter = null;
+    private ViewPager viewPager = null;
     private boolean hasLogin = false;
 
     @Override
@@ -38,13 +40,24 @@ public class MainActivity extends AppCompatActivity {
             ToolBarSet();
             updateCheck();
             netCheck();
-            ViewSet();
+            if (savedInstanceState != null) {
+                ViewSet(savedInstanceState.getInt(CURRENT_FRAGMENT_INDEX, -1));
+            } else {
+                ViewSet(-1);
+            }
             tempLoad();
         }
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_FRAGMENT_INDEX, viewPager.getCurrentItem());
+    }
+
+    @Override
     protected void onDestroy() {
+        BaseMethod.getApp(this).setViewPagerAdapter(null);
         System.gc();
         super.onDestroy();
     }
@@ -95,18 +108,21 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
     }
 
-    private void ViewSet() {
-        ViewPager viewPager = findViewById(R.id.viewPaper_main);
+    private void ViewSet(int fragment_current_index) {
+        viewPager = findViewById(R.id.viewPaper_main);
         TabLayout tabLayout = findViewById(R.id.tabLayout_main);
-
         if (viewPagerAdapter == null) {
             viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         }
 
         viewPager.setOffscreenPageLimit(ViewPagerAdapter.ITEM_COUNT);
         viewPager.setAdapter(viewPagerAdapter);
-        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Config.PREFERENCE_DEFAULT_SHOW_TABLE_PAGE, Config.DEFAULT_PREFERENCE_DEFAULT_SHOW_TABLE_PAGE)) {
-            viewPager.setCurrentItem(Config.VIEWPAGER_TABLE_PAGE, true);
+        if (fragment_current_index < 0) {
+            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Config.PREFERENCE_DEFAULT_SHOW_TABLE_PAGE, Config.DEFAULT_PREFERENCE_DEFAULT_SHOW_TABLE_PAGE)) {
+                viewPager.setCurrentItem(Config.VIEWPAGER_TABLE_PAGE, true);
+            }
+        } else {
+            viewPager.setCurrentItem(fragment_current_index, true);
         }
 
         tabLayout.setupWithViewPager(viewPager);
