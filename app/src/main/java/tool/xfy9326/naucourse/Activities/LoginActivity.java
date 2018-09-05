@@ -55,6 +55,12 @@ public class LoginActivity extends AppCompatActivity {
         updateCheck();
     }
 
+    @Override
+    protected void onDestroy() {
+        loadingDialog = null;
+        super.onDestroy();
+    }
+
     private void ToolBarSet() {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
     }
@@ -109,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if (loadingDialog != null) {
+                                        if (loadingDialog != null && loadingDialog.isShowing()) {
                                             loadingDialog.cancel();
                                             loadingDialog = null;
                                         }
@@ -122,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if (loadingDialog != null) {
+                                        if (loadingDialog != null && loadingDialog.isShowing()) {
                                             loadingDialog.cancel();
                                             loadingDialog = null;
                                         }

@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.Objects;
 
 import tool.xfy9326.naucourse.Activities.AboutActivity;
 import tool.xfy9326.naucourse.Activities.CourseSettingsActivity;
@@ -336,9 +335,9 @@ public class PersonFragment extends Fragment {
 
     public void PersonViewSet(@Nullable StudentInfo studentInfo, @Nullable StudentLearnProcess
             studentLearnProcess, @Nullable Context context) {
-        if (isAdded()) {
+        if (isAdded() && view != null) {
             if (context != null && studentInfo != null) {
-                ((TextView) Objects.requireNonNull(view).findViewById(R.id.textView_stdId)).setText(studentInfo.getStd_id());
+                ((TextView) view.findViewById(R.id.textView_stdId)).setText(studentInfo.getStd_id());
                 ((TextView) view.findViewById(R.id.textView_stdName)).setText(studentInfo.getStd_name());
                 this.studentInfo = studentInfo;
             }
@@ -349,9 +348,9 @@ public class PersonFragment extends Fragment {
     }
 
     public void TimeTextSet(@Nullable SchoolTime schoolTime, @Nullable Context context) {
-        if (isAdded()) {
+        if (isAdded() && view != null) {
             if (context != null && schoolTime != null) {
-                ((TextView) Objects.requireNonNull(view).findViewById(R.id.textView_timeSchool)).setText(context.getString(R.string.time_school, schoolTime.getStartTime(), schoolTime.getEndTime()));
+                ((TextView) view.findViewById(R.id.textView_timeSchool)).setText(context.getString(R.string.time_school, schoolTime.getStartTime(), schoolTime.getEndTime()));
             }
         }
     }

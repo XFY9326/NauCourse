@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -54,6 +53,7 @@ import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.CourseDetail;
 import tool.xfy9326.naucourse.Utils.NextCourse;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
+import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
 import tool.xfy9326.naucourse.Widget.NextClassWidget;
 
 /**
@@ -273,10 +273,13 @@ public class TableFragment extends Fragment {
 
                 //主页面下一节课设置
                 if (!inVacation) {
-                    HomeFragment homeFragment = BaseMethod.getApp(context).getViewPagerAdapter().getHomeFragment();
-                    if (homeFragment != null && courseMethod != null) {
-                        NextCourse nextCourse = courseMethod.getNextClass(weekNum);
-                        homeFragment.setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
+                    ViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(context).getViewPagerAdapter();
+                    if (viewPagerAdapter != null) {
+                        HomeFragment homeFragment = viewPagerAdapter.getHomeFragment();
+                        if (homeFragment != null && courseMethod != null) {
+                            NextCourse nextCourse = courseMethod.getNextClass(weekNum);
+                            homeFragment.setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
+                        }
                     }
                 }
 
@@ -378,28 +381,29 @@ public class TableFragment extends Fragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
             CourseDetail[] details = course.getCourseDetail();
-            for (CourseDetail detail : Objects.requireNonNull(details)) {
-                String[] course_weeks = detail.getWeeks();
-                String weekmode = "";
-                if (detail.getWeekMode() == Config.COURSE_DETAIL_WEEKMODE_SINGLE) {
-                    weekmode = context.getString(R.string.course_card_time_week_mode, context.getString(R.string.single_week_mode));
-                } else if (detail.getWeekMode() == Config.COURSE_DETAIL_WEEKMODE_DOUBLE) {
-                    weekmode = context.getString(R.string.course_card_time_week_mode, context.getString(R.string.double_week_mode));
-                }
-                for (String course_week : Objects.requireNonNull(course_weeks)) {
-                    String[] course_times = detail.getCourseTime();
-                    String[] week_num = context.getResources().getStringArray(R.array.week_number);
-                    for (String course_time : Objects.requireNonNull(course_times)) {
-                        View view_card = layoutInflater.inflate(R.layout.item_course_card, (ViewGroup) getActivity().findViewById(R.id.layout_course_card_item));
-                        String time = context.getString(R.string.course_card_time, course_week, weekmode, week_num[detail.getWeekDay() - 1], course_time);
-                        String location = context.getString(R.string.course_card_location, detail.getLocation());
-                        ((TextView) view_card.findViewById(R.id.textView_course_card_time)).setText(time);
-                        ((TextView) view_card.findViewById(R.id.textView_course_card_location)).setText(location);
-                        linearLayout_content.addView(view_card);
+            if (details != null) {
+                for (CourseDetail detail : details) {
+                    String[] course_weeks = detail.getWeeks();
+                    String weekmode = "";
+                    if (detail.getWeekMode() == Config.COURSE_DETAIL_WEEKMODE_SINGLE) {
+                        weekmode = context.getString(R.string.course_card_time_week_mode, context.getString(R.string.single_week_mode));
+                    } else if (detail.getWeekMode() == Config.COURSE_DETAIL_WEEKMODE_DOUBLE) {
+                        weekmode = context.getString(R.string.course_card_time_week_mode, context.getString(R.string.double_week_mode));
+                    }
+                    for (String course_week : Objects.requireNonNull(course_weeks)) {
+                        String[] course_times = detail.getCourseTime();
+                        String[] week_num = context.getResources().getStringArray(R.array.week_number);
+                        for (String course_time : Objects.requireNonNull(course_times)) {
+                            View view_card = layoutInflater.inflate(R.layout.item_course_card, (ViewGroup) getActivity().findViewById(R.id.layout_course_card_item));
+                            String time = context.getString(R.string.course_card_time, course_week, weekmode, week_num[detail.getWeekDay() - 1], course_time);
+                            String location = context.getString(R.string.course_card_location, detail.getLocation());
+                            ((TextView) view_card.findViewById(R.id.textView_course_card_time)).setText(time);
+                            ((TextView) view_card.findViewById(R.id.textView_course_card_location)).setText(location);
+                            linearLayout_content.addView(view_card);
+                        }
                     }
                 }
             }
-
             builder.setView(view_dialog);
             builder.show();
         }
@@ -452,39 +456,44 @@ public class TableFragment extends Fragment {
     private void shareTable() {
         if (getActivity() != null && view != null && isAdded()) {
             if (PermissionMethod.checkStoragePermission(getActivity(), 0)) {
-                LinearLayout linearLayout = view.findViewById(R.id.layout_table);
+                View tableView = view.findViewById(R.id.course_table_layout);
 
-                linearLayout.destroyDrawingCache();
-                linearLayout.setDrawingCacheEnabled(true);
-                linearLayout.setDrawingCacheBackgroundColor(Color.WHITE);
+                tableView.destroyDrawingCache();
+                tableView.setDrawingCacheEnabled(false);
 
-                linearLayout.buildDrawingCache();
-                Bitmap bitmap = linearLayout.getDrawingCache();
+                tableView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                tableView.layout(0, 0, tableView.getMeasuredWidth(), tableView.getMeasuredHeight());
+
+                tableView.setDrawingCacheEnabled(true);
+                tableView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+                tableView.setDrawingCacheBackgroundColor(Color.WHITE);
+                tableView.buildDrawingCache();
+
+                Bitmap bitmap = tableView.getDrawingCache();
                 if (bitmap == null) {
-                    bitmap = Bitmap.createBitmap(linearLayout.getWidth(), linearLayout.getHeight(), Bitmap.Config.ARGB_8888);
-                    Canvas canvas = new Canvas(bitmap);
-                    linearLayout.draw(canvas);
-                }
-                try {
-                    String path = Config.PICTURE_DICTIONARY_PATH + Config.COURSE_TABLE_FILE_NAME;
-                    if (ImageMethod.saveBitmap(bitmap, path)) {
-                        Uri photoURI = FileProvider.getUriForFile(getActivity(), Config.FILE_PROVIDER_AUTH, new File(path));
-                        Intent intent = new Intent(Intent.ACTION_SEND);
-                        intent.setType("image/*");
-                        intent.putExtra(Intent.EXTRA_STREAM, photoURI);
-                        intent.addCategory(Intent.CATEGORY_DEFAULT);
-                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        startActivity(Intent.createChooser(intent, getString(R.string.share_course_table)));
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
                     Toast.makeText(getActivity(), R.string.course_table_share_error, Toast.LENGTH_SHORT).show();
+                } else {
+                    try {
+                        String path = Config.PICTURE_DICTIONARY_PATH + Config.COURSE_TABLE_FILE_NAME;
+                        if (ImageMethod.saveBitmap(bitmap, path)) {
+                            Uri photoURI = FileProvider.getUriForFile(getActivity(), Config.FILE_PROVIDER_AUTH, new File(path));
+                            Intent intent = new Intent(Intent.ACTION_SEND);
+                            intent.setType("image/*");
+                            intent.putExtra(Intent.EXTRA_STREAM, photoURI);
+                            intent.addCategory(Intent.CATEGORY_DEFAULT);
+                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            startActivity(Intent.createChooser(intent, getString(R.string.share_course_table)));
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getActivity(), R.string.course_table_share_error, Toast.LENGTH_SHORT).show();
+                    }
+                    if (!bitmap.isRecycled()) {
+                        bitmap.recycle();
+                    }
                 }
-                if (!bitmap.isRecycled()) {
-                    bitmap.recycle();
-                }
-                linearLayout.destroyDrawingCache();
-                linearLayout.setDrawingCacheEnabled(false);
+                tableView.destroyDrawingCache();
+                tableView.setDrawingCacheEnabled(false);
             } else {
                 Toast.makeText(getActivity(), R.string.permission_error, Toast.LENGTH_SHORT).show();
             }

@@ -281,8 +281,10 @@ public class HomeFragment extends Fragment {
     }
 
     private void scrollToPosition() {
-        if (Objects.requireNonNull(recyclerView).getLayoutManager() != null && lastPosition >= 0) {
-            ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(lastPosition, lastOffset);
+        if (recyclerView != null) {
+            if (recyclerView.getLayoutManager() != null && lastPosition >= 0) {
+                ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(lastPosition, lastOffset);
+            }
         }
     }
 

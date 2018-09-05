@@ -37,6 +37,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     private ArrayList<Course> courseArrayList;
     private boolean showCellColor;
     private boolean singleColor;
+    private ColorPickerDialog colorPickerDialog;
 
     public CourseAdapter(CourseActivity activity, ArrayList<Course> courseArrayList) {
         this.activity = activity;
@@ -147,7 +148,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         }
         int[] preset = BaseMethod.getColorArray(activity);
         preset[preset.length - 1] = activity.getResources().getColor(R.color.course_cell_background);
-        ColorPickerDialog colorPickerDialog = ColorPickerDialog.newBuilder()
+        colorPickerDialog = ColorPickerDialog.newBuilder()
                 .setColor(default_color)
                 .setDialogTitle(R.string.course_color)
                 .setDialogId(COLOR_PICKER_DIALOG_ID)
@@ -167,10 +168,19 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
                 if (dialogId == COLOR_PICKER_DIALOG_ID) {
                     notifyItemChanged(position);
                     activity.setArrayChanged();
+                    colorPickerDialog = null;
                 }
             }
         });
         colorPickerDialog.show(activity.getFragmentManager(), COLOR_PICKER_DIALOG_TAG);
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull CourseViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        if (colorPickerDialog != null && colorPickerDialog.isVisible()) {
+            colorPickerDialog.dismissAllowingStateLoss();
+        }
     }
 
     static class CourseViewHolder extends RecyclerView.ViewHolder {

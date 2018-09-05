@@ -325,7 +325,7 @@ public class CourseActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (!activityDestroy) {
-                            if (loadingDialog != null) {
+                            if (loadingDialog != null && loadingDialog.isShowing()) {
                                 loadingDialog.cancel();
                                 loadingDialog = null;
                             }
@@ -626,6 +626,7 @@ public class CourseActivity extends AppCompatActivity {
             mainHandler.sendEmptyMessage(Config.HANDLER_RELOAD_TABLE_DATA);
         }
         activityDestroy = true;
+        loadingDialog = null;
         BaseMethod.getApp(this).setCourseActivity(null);
         super.onDestroy();
     }

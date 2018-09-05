@@ -230,7 +230,7 @@ public class CourseEditActivity extends AppCompatActivity {
                                 Snackbar.make(findViewById(R.id.layout_course_edit_content), R.string.input_less, Snackbar.LENGTH_SHORT).show();
                             }
 
-                            if (loadingDialog != null) {
+                            if (loadingDialog != null && loadingDialog.isShowing()) {
                                 loadingDialog.cancel();
                                 loadingDialog = null;
                             }
@@ -293,6 +293,7 @@ public class CourseEditActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         activityDestroy = true;
+        loadingDialog = null;
         super.onDestroy();
     }
 }
