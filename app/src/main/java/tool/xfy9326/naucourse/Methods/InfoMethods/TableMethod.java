@@ -100,13 +100,20 @@ public class TableMethod {
                 String[] info = course_Info.split(" ");
                 String[] detail = course_Detail.split("上课地点：");
 
-                course.setCourseId(info[0]);
-                course.setCourseName(info[1]);
-                course.setCourseClass(info[2]);
-                course.setCourseScore(info[3]);
-                course.setCourseCombinedClass(info[4]);
-                course.setCourseType(info[5]);
-                course.setCourseTeacher(info[6]);
+                if (info.length >= 7) {
+                    course.setCourseId(info[0]);
+                    for (int i = 2; i < info.length - 5; i++) {
+                        info[1] += info[i];
+                    }
+                    course.setCourseName(info[1]);
+                    course.setCourseClass(info[info.length - 5]);
+                    course.setCourseScore(info[info.length - 4]);
+                    course.setCourseCombinedClass(info[info.length - 3]);
+                    course.setCourseType(info[info.length - 2]);
+                    course.setCourseTeacher(info[info.length - 1]);
+                } else {
+                    return courseList;
+                }
                 course.setDataVersionCode(Config.DATA_VERSION_COURSE);
 
                 CourseDetail[] courseDetail_list = new CourseDetail[detail.length];
