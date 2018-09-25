@@ -213,7 +213,6 @@
     <string name="show_no_this_week_class">显示非本周课程</string>
     <string name="show_no_this_week_class_sum">不论单双周等限制显示所有课程</string>
     <string name="course_table_share_error">课程表分享失败！</string>
-    <string name="course_table_auto_update_alert">课程表正在自动同步更新数据… …</string>
     <string name="no_alert_again">不再提示</string>
     <string name="attention">提示</string>
     <string name="auto_update_course_table_alert">当前已开启自动更新本学期教务数据功能\n非最新学期的教务系统中的课程有可能会被自动覆盖更新\n\n如果需要关闭可以前往设置进行更改！</string>

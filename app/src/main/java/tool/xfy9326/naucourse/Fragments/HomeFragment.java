@@ -162,8 +162,10 @@ public class HomeFragment extends Fragment {
             cardView_nextClass.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setNextCourse();
-                    Objects.requireNonNull(context).sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
+                    if (context != null) {
+                        setNextCourse();
+                        context.sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
+                    }
                 }
             });
         }
@@ -196,8 +198,8 @@ public class HomeFragment extends Fragment {
      * @param time     上课时间
      */
     public void setNextCourse(@Nullable String name, String location, String teacher, String time) {
-        if (isAdded()) {
-            TextView textView_noNextClass = Objects.requireNonNull(view).findViewById(R.id.textView_noNextClass);
+        if (isAdded() && view != null) {
+            TextView textView_noNextClass = view.findViewById(R.id.textView_noNextClass);
             LinearLayout linearLayout_nextClass = view.findViewById(R.id.layout_nextClass);
             if (name == null) {
                 linearLayout_nextClass.setVisibility(View.GONE);
@@ -231,11 +233,11 @@ public class HomeFragment extends Fragment {
     }
 
     public void InfoSet(@Nullable JwcTopic jwcTopic, @Nullable JwTopic jwTopic) {
-        if (isAdded()) {
+        if (isAdded() && recyclerView != null) {
             if (jwcTopic != null && jwTopic != null) {
                 if (infoAdapter == null) {
                     infoAdapter = new InfoAdapter(getActivity(), jwcTopic, jwTopic);
-                    Objects.requireNonNull(recyclerView).setAdapter(infoAdapter);
+                    recyclerView.setAdapter(infoAdapter);
                 } else {
                     infoAdapter.updateJwcTopic(jwcTopic, jwTopic);
                 }
@@ -272,11 +274,13 @@ public class HomeFragment extends Fragment {
 
     //还原下拉的列表位置
     private void getPositionAndOffset() {
-        LinearLayoutManager layoutManager = (LinearLayoutManager) Objects.requireNonNull(recyclerView).getLayoutManager();
-        View topView = layoutManager.getChildAt(0);
-        if (topView != null) {
-            lastOffset = topView.getTop();
-            lastPosition = layoutManager.getPosition(topView);
+        if (recyclerView != null) {
+            LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+            View topView = layoutManager.getChildAt(0);
+            if (topView != null) {
+                lastOffset = topView.getTop();
+                lastPosition = layoutManager.getPosition(topView);
+            }
         }
     }
 

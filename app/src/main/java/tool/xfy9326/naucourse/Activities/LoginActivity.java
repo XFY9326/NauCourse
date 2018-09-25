@@ -112,15 +112,17 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                     loginErrorCode = nauJwcClient.getLoginErrorCode();
                                 }
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (loadingDialog != null && loadingDialog.isShowing()) {
-                                            loadingDialog.cancel();
-                                            loadingDialog = null;
+                                if (!LoginActivity.this.isDestroyed() && !LoginActivity.this.isFinishing()) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (loadingDialog != null && loadingDialog.isShowing()) {
+                                                loadingDialog.cancel();
+                                                loadingDialog = null;
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 loginSuccess = false;

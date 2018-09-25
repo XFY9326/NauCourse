@@ -7,6 +7,8 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
+import java.util.regex.Pattern;
+
 import tool.xfy9326.naucourse.BaseApplication;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
@@ -18,6 +20,17 @@ import tool.xfy9326.naucourse.R;
 
 public class BaseMethod {
     private static long DoubleClickTime = 0;
+
+    /**
+     * 判断字符串是否是数字
+     *
+     * @param str 字符串
+     * @return 是否是数字
+     */
+    public static boolean isInteger(String str) {
+        Pattern pattern = Pattern.compile("^[-+]?[\\d]*$");
+        return pattern.matcher(str).matches();
+    }
 
     /**
      * 双击退出

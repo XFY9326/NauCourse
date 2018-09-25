@@ -216,7 +216,7 @@ public class CourseActivity extends AppCompatActivity {
                 EditText editText_year = view.findViewById(R.id.editText_course_school_year);
                 RadioButton radioButton_term_one = view.findViewById(R.id.radioButton_term_one);
                 String str_year = editText_year.getText().toString();
-                if (!str_year.isEmpty()) {
+                if (!str_year.isEmpty() && BaseMethod.isInteger(str_year)) {
                     long year = Long.valueOf(str_year);
                     if (year >= 1983L) {
                         //仅支持四位数的年份，仅支持一年两学期制
