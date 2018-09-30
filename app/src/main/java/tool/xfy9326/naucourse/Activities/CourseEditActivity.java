@@ -209,6 +209,7 @@ public class CourseEditActivity extends AppCompatActivity {
         course.setCourseCombinedClass(editTextCourseEditCombineClass.getText().toString());
 
         new Thread(new Runnable() {
+            @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument")
             @Override
             public void run() {
                 course.setCourseDetail(courseDetailArrayList.toArray(new CourseDetail[courseDetailArrayList.size()]));

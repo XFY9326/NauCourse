@@ -38,6 +38,7 @@ public class SuspendCourseMethod {
         getSuspendCourse(false);
     }
 
+    @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument")
     public SuspendCourse getSuspendCourse(boolean checkTemp) {
         SuspendCourse suspendCourse = new SuspendCourse();
 

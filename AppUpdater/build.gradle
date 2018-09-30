@@ -31,5 +31,6 @@ android {
 
 dependencies {
     implementation project(':NetApi')
+    //noinspection GradleDependency
     implementation 'com.android.support:support-annotations:27.1.1'
 }

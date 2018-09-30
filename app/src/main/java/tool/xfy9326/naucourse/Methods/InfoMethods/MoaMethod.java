@@ -65,6 +65,7 @@ public class MoaMethod {
         getMoaList(false);
     }
 
+    @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument")
     public Moa getMoaList(boolean checkTemp) {
         Moa moa = new Moa();
         if (Url_Data != null) {
