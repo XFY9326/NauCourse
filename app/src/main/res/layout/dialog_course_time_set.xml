@@ -58,7 +58,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/course_detail_edit_time_start_time"
-                        android:inputType="numberDecimal"
+                        android:inputType="number"
                         android:singleLine="true"
                         android:textSize="13sp" />
                 </android.support.design.widget.TextInputLayout>
@@ -74,7 +74,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/course_detail_edit_time_end_time"
-                        android:inputType="numberDecimal"
+                        android:inputType="number"
                         android:singleLine="true"
                         android:textSize="13sp" />
                 </android.support.design.widget.TextInputLayout>
