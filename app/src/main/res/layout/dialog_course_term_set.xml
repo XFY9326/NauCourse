@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:ems="8"
             android:inputType="numberSigned"
-            tools:ignore="LabelFor" />
+            tools:ignore="Autofill,LabelFor" />
 
     </LinearLayout>
 

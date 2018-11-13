@@ -1,12 +1,11 @@
 package tool.xfy9326.naucourse.Views;
 
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import tool.xfy9326.naucourse.Fragments.HomeFragment;
 import tool.xfy9326.naucourse.Fragments.PersonFragment;
 import tool.xfy9326.naucourse.Fragments.TableFragment;
@@ -64,7 +63,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         return personFragment;
     }
 
-    @Nullable
+    @NonNull
     @Override
     public Fragment getItem(int position) {
         Fragment fragment;
@@ -79,7 +78,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
                 fragment = personFragment;
                 break;
             default:
-                fragment = null;
+                fragment = homeFragment;
                 break;
         }
         return fragment;

@@ -2,13 +2,14 @@ package tool.xfy9326.naucourse.Methods;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import java.io.IOException;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -100,7 +101,7 @@ public class NetMethod {
             if (connectivityManager != null) {
                 NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
                 if (networkInfo != null) {
-                    return networkInfo.isAvailable();
+                    return networkInfo.isConnected();
                 }
             }
         }
@@ -117,9 +118,17 @@ public class NetMethod {
         if (context != null) {
             ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             if (connectivityManager != null) {
-                NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-                if (networkInfo != null) {
-                    return networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                    NetworkCapabilities networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
+                    if (networkCapabilities != null) {
+                        return networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
+                    }
+                } else {
+                    NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+                    if (networkInfo != null) {
+                        //noinspection deprecation
+                        return networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
+                    }
                 }
             }
         }

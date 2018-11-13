@@ -9,7 +9,7 @@
 
     <include layout="@layout/widget_toolbar" />
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPaper_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
         android:layout_above="@id/tabLayout_main"
         android:background="@color/light_light_grey" />
 
-    <android.support.design.widget.TabLayout
+    <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout_main"
         android:layout_width="match_parent"
         android:layout_height="47dp"
@@ -33,19 +33,19 @@
         app:tabIndicatorHeight="0dp"
         app:tabMode="fixed">
 
-        <android.support.design.widget.TabItem
+        <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <android.support.design.widget.TabItem
+        <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <android.support.design.widget.TabItem
+        <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-    </android.support.design.widget.TabLayout>
+    </com.google.android.material.tabs.TabLayout>
 
 </RelativeLayout>
 

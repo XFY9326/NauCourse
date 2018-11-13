@@ -3,8 +3,6 @@ package lib.xfy9326.naujwc;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -20,6 +18,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import okhttp3.Cookie;
 import okhttp3.HttpUrl;
 
@@ -53,7 +53,10 @@ class PersistentCookieStore {
                         if (!cookies.containsKey(entry.getKey())) {
                             cookies.put(entry.getKey(), new ConcurrentHashMap<String, Cookie>());
                         }
-                        cookies.get(entry.getKey()).put(name, decodedCookie);
+                        ConcurrentHashMap<String, Cookie> concurrentHashMap = cookies.get(entry.getKey());
+                        if (concurrentHashMap != null) {
+                            concurrentHashMap.put(name, decodedCookie);
+                        }
                     }
                 }
             }
@@ -72,16 +75,25 @@ class PersistentCookieStore {
             if (!cookies.containsKey(url.host())) {
                 cookies.put(url.host(), new ConcurrentHashMap<String, Cookie>());
             }
-            cookies.get(url.host()).put(name, cookie);
+            ConcurrentHashMap<String, Cookie> concurrentHashMap = cookies.get(url.host());
+            if (concurrentHashMap != null) {
+                concurrentHashMap.put(name, cookie);
+            }
         } else {
             if (cookies.containsKey(url.host())) {
-                cookies.get(url.host()).remove(name);
+                ConcurrentHashMap<String, Cookie> concurrentHashMap = cookies.get(url.host());
+                if (concurrentHashMap != null) {
+                    concurrentHashMap.remove(name);
+                }
             }
         }
 
-        //讲cookies持久化到本地
+        //cookies持久化到本地
         SharedPreferences.Editor prefsWriter = cookiePrefs.edit();
-        prefsWriter.putString(url.host(), TextUtils.join(",", cookies.get(url.host()).keySet()));
+        ConcurrentHashMap<String, Cookie> concurrentHashMap = cookies.get(url.host());
+        if (concurrentHashMap != null) {
+            prefsWriter.putString(url.host(), TextUtils.join(",", concurrentHashMap.keySet()));
+        }
         prefsWriter.putString(name, encodeCookie(new SerializableOkHttpCookies(cookie)));
         prefsWriter.apply();
     }
@@ -89,8 +101,12 @@ class PersistentCookieStore {
     @NonNull
     List<Cookie> get(@NonNull HttpUrl url) {
         ArrayList<Cookie> ret = new ArrayList<>();
-        if (cookies.containsKey(url.host()))
-            ret.addAll(cookies.get(url.host()).values());
+        if (cookies.containsKey(url.host())) {
+            ConcurrentHashMap<String, Cookie> concurrentHashMap = cookies.get(url.host());
+            if (concurrentHashMap != null) {
+                ret.addAll(concurrentHashMap.values());
+            }
+        }
         return ret;
     }
 
@@ -106,30 +122,37 @@ class PersistentCookieStore {
     @SuppressWarnings("unused")
     public boolean remove(@NonNull HttpUrl url, @NonNull Cookie cookie) {
         String name = getCookieToken(cookie);
-
-        if (cookies.containsKey(url.host()) && cookies.get(url.host()).containsKey(name)) {
-            cookies.get(url.host()).remove(name);
-
-            SharedPreferences.Editor prefsWriter = cookiePrefs.edit();
-            if (cookiePrefs.contains(name)) {
-                prefsWriter.remove(name);
+        ConcurrentHashMap<String, Cookie> concurrentHashMap = cookies.get(url.host());
+        if (cookies.containsKey(url.host()) && concurrentHashMap != null && concurrentHashMap.containsKey(name)) {
+            concurrentHashMap = cookies.get(url.host());
+            if (concurrentHashMap != null) {
+                concurrentHashMap.remove(name);
+                SharedPreferences.Editor prefsWriter = cookiePrefs.edit();
+                if (cookiePrefs.contains(name)) {
+                    prefsWriter.remove(name);
+                }
+                concurrentHashMap = cookies.get(url.host());
+                if (concurrentHashMap != null) {
+                    prefsWriter.putString(url.host(), TextUtils.join(",", concurrentHashMap.keySet()));
+                }
+                prefsWriter.apply();
+                return true;
             }
-            prefsWriter.putString(url.host(), TextUtils.join(",", cookies.get(url.host()).keySet()));
-            prefsWriter.apply();
-
-            return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     @NonNull
     @SuppressWarnings("unused")
     public List<Cookie> getCookies() {
         ArrayList<Cookie> ret = new ArrayList<>();
-        for (String key : cookies.keySet())
-            ret.addAll(cookies.get(key).values());
-
+        ConcurrentHashMap<String, Cookie> concurrentHashMap;
+        for (String key : cookies.keySet()) {
+            concurrentHashMap = cookies.get(key);
+            if (concurrentHashMap != null) {
+                ret.addAll(concurrentHashMap.values());
+            }
+        }
         return ret;
     }
 

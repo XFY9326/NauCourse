@@ -2,9 +2,9 @@ package tool.xfy9326.naucourse.AsyncTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Fragments.PersonFragment;
 import tool.xfy9326.naucourse.Methods.BaseMethod;

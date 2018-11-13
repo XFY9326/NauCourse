@@ -3,8 +3,8 @@ package tool.xfy9326.naucourse.Handlers;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
 
+import androidx.annotation.NonNull;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Fragments.TableFragment;
 import tool.xfy9326.naucourse.Methods.BaseMethod;

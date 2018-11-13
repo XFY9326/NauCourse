@@ -2,10 +2,6 @@ package tool.xfy9326.naucourse.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +9,10 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.StudentInfo;
@@ -82,14 +82,22 @@ public class StudentInfoActivity extends AppCompatActivity {
                         aim = getString(R.string.process_aim, studentLearnProcess.getScoreBXAim());
                         now = getString(R.string.process_now, studentLearnProcess.getScoreBXNow());
                         still = getString(R.string.process_still, studentLearnProcess.getScoreBXStill());
-                        process = (int) (Float.valueOf(studentLearnProcess.getScoreBXNow()) / Float.valueOf(studentLearnProcess.getScoreBXAim()) * 100);
+                        if (studentLearnProcess.getScoreBXNow() != null && studentLearnProcess.getScoreBXAim() != null) {
+                            process = (int) (Float.valueOf(studentLearnProcess.getScoreBXNow()) / Float.valueOf(studentLearnProcess.getScoreBXAim()) * 100);
+                        } else {
+                            process = 0;
+                        }
                         break;
                     case 1:
                         name = getString(R.string.process_name, getString(R.string.process_zx));
                         aim = getString(R.string.process_aim, studentLearnProcess.getScoreZXAim());
                         now = getString(R.string.process_now, studentLearnProcess.getScoreZXNow());
                         still = getString(R.string.process_still, studentLearnProcess.getScoreZXStill());
-                        process = (int) (Float.valueOf(studentLearnProcess.getScoreZXNow()) / Float.valueOf(studentLearnProcess.getScoreZXAim()) * 100);
+                        if (studentLearnProcess.getScoreZXNow() != null && studentLearnProcess.getScoreZXAim() != null) {
+                            process = (int) (Float.valueOf(studentLearnProcess.getScoreZXNow()) / Float.valueOf(studentLearnProcess.getScoreZXAim()) * 100);
+                        } else {
+                            process = 0;
+                        }
                         break;
                     case 2:
                         name = getString(R.string.process_name, getString(R.string.process_rx));
@@ -97,14 +105,22 @@ public class StudentInfoActivity extends AppCompatActivity {
                         now = getString(R.string.process_now, studentLearnProcess.getScoreRXNow());
                         still = getString(R.string.process_still, studentLearnProcess.getScoreRXStill());
                         award = getString(R.string.process_award, studentLearnProcess.getScoreRXAward());
-                        process = (int) (Float.valueOf(studentLearnProcess.getScoreRXNow()) / Float.valueOf(studentLearnProcess.getScoreRXAim()) * 100);
+                        if (studentLearnProcess.getScoreRXNow() != null && studentLearnProcess.getScoreRXAim() != null) {
+                            process = (int) (Float.valueOf(studentLearnProcess.getScoreRXNow()) / Float.valueOf(studentLearnProcess.getScoreRXAim()) * 100);
+                        } else {
+                            process = 0;
+                        }
                         break;
                     case 3:
                         name = getString(R.string.process_name, getString(R.string.process_sj));
                         aim = getString(R.string.process_aim, studentLearnProcess.getScoreSJAim());
                         now = getString(R.string.process_now, studentLearnProcess.getScoreSJNow());
                         still = getString(R.string.process_still, studentLearnProcess.getScoreSJStill());
-                        process = (int) (Float.valueOf(studentLearnProcess.getScoreSJNow()) / Float.valueOf(studentLearnProcess.getScoreSJAim()) * 100);
+                        if (studentLearnProcess.getScoreSJNow() != null && studentLearnProcess.getScoreSJAim() != null) {
+                            process = (int) (Float.valueOf(studentLearnProcess.getScoreSJNow()) / Float.valueOf(studentLearnProcess.getScoreSJAim()) * 100);
+                        } else {
+                            process = 0;
+                        }
                         break;
                 }
                 ((TextView) view.findViewById(R.id.textView_process_name)).setText(name);

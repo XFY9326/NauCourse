@@ -3,7 +3,6 @@ package tool.xfy9326.naucourse.Methods.InfoMethods;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -13,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import androidx.annotation.Nullable;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.LoginMethod;

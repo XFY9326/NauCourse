@@ -9,9 +9,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 import tool.xfy9326.naucourse.Activities.MainActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;

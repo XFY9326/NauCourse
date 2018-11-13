@@ -2,11 +2,11 @@ package tool.xfy9326.naucourse.AsyncTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import tool.xfy9326.naucourse.Activities.CourseActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;

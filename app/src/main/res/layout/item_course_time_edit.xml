@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -80,7 +81,8 @@
                         android:enabled="false"
                         android:hint="@string/please_input_data"
                         android:inputType="none"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"
+                        tools:ignore="Autofill" />
 
                     <Button
                         android:id="@+id/button_course_edit_week_num"
@@ -112,7 +114,8 @@
                         android:enabled="false"
                         android:hint="@string/please_input_data"
                         android:inputType="none"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"
+                        tools:ignore="Autofill" />
 
                     <Button
                         android:id="@+id/button_course_edit_time"
@@ -144,7 +147,8 @@
                         android:enabled="false"
                         android:hint="@string/please_input_data"
                         android:inputType="none"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"
+                        tools:ignore="Autofill" />
 
                     <Button
                         android:id="@+id/button_course_edit_location"
@@ -189,6 +193,6 @@
 
         </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

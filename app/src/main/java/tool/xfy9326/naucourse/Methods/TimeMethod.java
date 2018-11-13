@@ -3,8 +3,6 @@ package tool.xfy9326.naucourse.Methods;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,6 +12,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.SchoolTime;

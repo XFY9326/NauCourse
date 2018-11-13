@@ -1,22 +1,11 @@
 package tool.xfy9326.naucourse.Activities;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputEditText;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,9 +13,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.ViewCompat;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.CourseEditMethod;
 import tool.xfy9326.naucourse.R;
@@ -154,6 +157,7 @@ public class CourseEditActivity extends AppCompatActivity {
                 return true;
             case R.id.menu_course_delete_all:
                 Snackbar.make(findViewById(R.id.layout_course_edit_content), R.string.confirm_delete_all, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(android.R.string.yes, new View.OnClickListener() {
+                    @SuppressLint("RestrictedApi")
                     @Override
                     public void onClick(View v) {
                         courseDetailArrayList.clear();
@@ -201,45 +205,54 @@ public class CourseEditActivity extends AppCompatActivity {
         TextInputEditText editTextCourseEditClass = findViewById(R.id.editText_course_edit_class);
         TextInputEditText editTextCourseEditCombineClass = findViewById(R.id.editText_course_edit_combine_class);
 
-        course.setCourseName(editTextCourseEditName.getText().toString());
-        course.setCourseTeacher(editTextCourseEditTeacher.getText().toString());
-        course.setCourseType(editTextCourseEditType.getText().toString());
-        course.setCourseScore(editTextCourseEditScore.getText().toString());
-        course.setCourseClass(editTextCourseEditClass.getText().toString());
-        course.setCourseCombinedClass(editTextCourseEditCombineClass.getText().toString());
+        Editable editable_name = editTextCourseEditName.getText();
+        Editable editable_teacher = editTextCourseEditTeacher.getText();
+        Editable editable_type = editTextCourseEditType.getText();
+        Editable editable_score = editTextCourseEditScore.getText();
+        Editable editable_class = editTextCourseEditClass.getText();
+        Editable editable_combineClass = editTextCourseEditCombineClass.getText();
 
-        new Thread(new Runnable() {
-            @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument")
-            @Override
-            public void run() {
-                course.setCourseDetail(courseDetailArrayList.toArray(new CourseDetail[courseDetailArrayList.size()]));
+        if (editable_name != null && editable_teacher != null && editable_type != null && editable_score != null && editable_class != null && editable_combineClass != null) {
+            course.setCourseName(editable_name.toString());
+            course.setCourseTeacher(editable_teacher.toString());
+            course.setCourseType(editable_type.toString());
+            course.setCourseScore(editable_score.toString());
+            course.setCourseClass(editable_class.toString());
+            course.setCourseCombinedClass(editable_combineClass.toString());
 
-                final boolean checkDataCorrect = CourseEditMethod.checkCourseDetail(course.getCourseDetail());
-                final boolean checkDataExist = checkAllSet();
+            new Thread(new Runnable() {
+                @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument")
+                @Override
+                public void run() {
+                    course.setCourseDetail(courseDetailArrayList.toArray(new CourseDetail[courseDetailArrayList.size()]));
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!activityDestroy) {
-                            if (checkDataCorrect && checkDataExist) {
-                                setResult(RESULT_OK, new Intent().putExtra(Config.INTENT_EDIT_COURSE_ITEM, course));
-                                needSave = false;
-                                Snackbar.make(findViewById(R.id.layout_course_edit_content), R.string.save_success, Snackbar.LENGTH_SHORT).show();
-                            } else if (!checkDataCorrect) {
-                                Snackbar.make(findViewById(R.id.layout_course_edit_content), R.string.conflict_error, Snackbar.LENGTH_SHORT).show();
-                            } else {
-                                Snackbar.make(findViewById(R.id.layout_course_edit_content), R.string.input_less, Snackbar.LENGTH_SHORT).show();
-                            }
+                    final boolean checkDataCorrect = CourseEditMethod.checkCourseDetail(course.getCourseDetail());
+                    final boolean checkDataExist = checkAllSet();
 
-                            if (loadingDialog != null && loadingDialog.isShowing()) {
-                                loadingDialog.cancel();
-                                loadingDialog = null;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!activityDestroy) {
+                                if (checkDataCorrect && checkDataExist) {
+                                    setResult(RESULT_OK, new Intent().putExtra(Config.INTENT_EDIT_COURSE_ITEM, course));
+                                    needSave = false;
+                                    Snackbar.make(findViewById(R.id.layout_course_edit_content), R.string.save_success, Snackbar.LENGTH_SHORT).show();
+                                } else if (!checkDataCorrect) {
+                                    Snackbar.make(findViewById(R.id.layout_course_edit_content), R.string.conflict_error, Snackbar.LENGTH_SHORT).show();
+                                } else {
+                                    Snackbar.make(findViewById(R.id.layout_course_edit_content), R.string.input_less, Snackbar.LENGTH_SHORT).show();
+                                }
+
+                                if (loadingDialog != null && loadingDialog.isShowing()) {
+                                    loadingDialog.cancel();
+                                    loadingDialog = null;
+                                }
                             }
                         }
-                    }
-                });
-            }
-        }).start();
+                    });
+                }
+            }).start();
+        }
     }
 
     //检查必要项目是否已经全部设置

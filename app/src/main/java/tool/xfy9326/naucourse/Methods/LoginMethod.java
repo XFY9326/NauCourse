@@ -3,13 +3,13 @@ package tool.xfy9326.naucourse.Methods;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.File;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import lib.xfy9326.naujwc.NauJwcClient;
 import tool.xfy9326.naucourse.Config;
 

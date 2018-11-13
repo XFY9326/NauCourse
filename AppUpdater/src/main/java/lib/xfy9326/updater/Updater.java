@@ -1,12 +1,12 @@
 package lib.xfy9326.updater;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import lib.xfy9326.net.api.API;
 
 public class Updater {

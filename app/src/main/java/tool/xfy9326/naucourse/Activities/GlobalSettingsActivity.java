@@ -1,12 +1,12 @@
 package tool.xfy9326.naucourse.Activities;
 
-import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
 import tool.xfy9326.naucourse.Fragments.GlobalSettingsFragment;
 import tool.xfy9326.naucourse.R;
 
@@ -31,7 +31,7 @@ public class GlobalSettingsActivity extends AppCompatActivity {
     private void setFragment(@Nullable Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             GlobalSettingsFragment globalSettingsFragment = new GlobalSettingsFragment();
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.layout_settings_content, globalSettingsFragment);
             fragmentTransaction.commit();
         }

@@ -1,7 +1,6 @@
 package tool.xfy9326.naucourse.Methods;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -14,6 +13,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Fragments.HomeFragment;
 import tool.xfy9326.naucourse.Methods.InfoMethods.ExamMethod;

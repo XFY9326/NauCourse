@@ -3,8 +3,8 @@ package tool.xfy9326.naucourse.AsyncTasks;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.support.annotation.Nullable;
 
+import androidx.annotation.Nullable;
 import tool.xfy9326.naucourse.Activities.SchoolCalendarActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;

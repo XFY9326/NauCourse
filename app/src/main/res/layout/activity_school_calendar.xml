@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_school_calendar_content"
@@ -15,7 +15,7 @@
         android:layout_marginTop="?android:attr/actionBarSize"
         android:orientation="vertical">
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -33,7 +33,7 @@
                 android:padding="5dp"
                 android:text="@string/school_calendar_title" />
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
         <LinearLayout
             android:id="@+id/layout_loading_school_calendar"
@@ -56,4 +56,4 @@
 
     </LinearLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

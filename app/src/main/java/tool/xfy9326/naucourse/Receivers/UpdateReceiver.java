@@ -7,14 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.v4.app.AlarmManagerCompat;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.AlarmManagerCompat;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.NextClassMethod;
 import tool.xfy9326.naucourse.Methods.NotificationMethod;

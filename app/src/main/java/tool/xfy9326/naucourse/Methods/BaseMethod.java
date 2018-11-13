@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import java.util.regex.Pattern;
 
+import androidx.annotation.NonNull;
 import tool.xfy9326.naucourse.BaseApplication;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;

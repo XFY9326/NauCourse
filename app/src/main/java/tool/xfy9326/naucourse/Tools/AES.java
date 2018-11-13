@@ -1,13 +1,14 @@
 package tool.xfy9326.naucourse.Tools;
 
 import android.annotation.SuppressLint;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.io.UnsupportedEncodingException;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Created by xfy9326 on 18-2-20.

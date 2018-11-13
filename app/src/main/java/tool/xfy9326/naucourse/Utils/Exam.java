@@ -1,6 +1,6 @@
 package tool.xfy9326.naucourse.Utils;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 /**
  * Created by 10696 on 2018/3/3.

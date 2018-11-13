@@ -7,15 +7,15 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.github.chrisbanes.photoview.PhotoView;
+import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import tool.xfy9326.naucourse.AsyncTasks.SchoolCalendarAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
@@ -92,11 +92,8 @@ public class SchoolCalendarActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        PhotoView photoView = findViewById(R.id.photoView_school_calendar);
-        if (photoView.getVisibility() == View.VISIBLE) {
-            photoView.destroyDrawingCache();
-        }
         BaseMethod.getApp(this).setSchoolCalendarActivity(null);
+        System.gc();
         super.onDestroy();
     }
 }

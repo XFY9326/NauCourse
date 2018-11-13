@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourse.Activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -10,19 +11,6 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,6 +23,9 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,6 +34,17 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.ViewCompat;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import tool.xfy9326.naucourse.AsyncTasks.CourseListAsync;
 import tool.xfy9326.naucourse.AsyncTasks.CourseNextListAsync;
 import tool.xfy9326.naucourse.Config;
@@ -106,6 +108,7 @@ public class CourseActivity extends AppCompatActivity {
             //清空课程
             case R.id.menu_course_delete_all:
                 Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.confirm_delete_all, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(android.R.string.yes, new View.OnClickListener() {
+                    @SuppressLint("RestrictedApi")
                     @Override
                     public void onClick(View v) {
                         courseArrayList.clear();
@@ -260,7 +263,10 @@ public class CourseActivity extends AppCompatActivity {
     //还原下拉的列表位置
     private void getPositionAndOffset() {
         LinearLayoutManager layoutManager = (LinearLayoutManager) Objects.requireNonNull(recyclerView).getLayoutManager();
-        View topView = layoutManager.getChildAt(0);
+        View topView = null;
+        if (layoutManager != null) {
+            topView = layoutManager.getChildAt(0);
+        }
         if (topView != null) {
             lastOffset = topView.getTop();
             lastPosition = layoutManager.getPosition(topView);
@@ -268,8 +274,10 @@ public class CourseActivity extends AppCompatActivity {
     }
 
     private void scrollToPosition() {
-        if (Objects.requireNonNull(recyclerView).getLayoutManager() != null && lastPosition >= 0) {
-            ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(lastPosition, lastOffset);
+        if (recyclerView != null) {
+            if (recyclerView.getLayoutManager() != null && lastPosition >= 0) {
+                ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(lastPosition, lastOffset);
+            }
         }
     }
 

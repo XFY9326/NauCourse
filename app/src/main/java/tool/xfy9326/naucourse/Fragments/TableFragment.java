@@ -4,18 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.GridLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,6 +31,13 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+import androidx.gridlayout.widget.GridLayout;
 import tool.xfy9326.naucourse.Activities.CourseActivity;
 import tool.xfy9326.naucourse.AsyncTasks.TableAsync;
 import tool.xfy9326.naucourse.Config;
@@ -94,7 +95,7 @@ public class TableFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         this.context = context;
         super.onAttach(context);
     }
@@ -458,42 +459,35 @@ public class TableFragment extends Fragment {
             if (PermissionMethod.checkStoragePermission(getActivity(), 0)) {
                 View tableView = view.findViewById(R.id.course_table_layout);
 
-                tableView.destroyDrawingCache();
-                tableView.setDrawingCacheEnabled(false);
+                int width = tableView.getWidth();
+                int height = tableView.getHeight();
 
-                tableView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-                tableView.layout(0, 0, tableView.getMeasuredWidth(), tableView.getMeasuredHeight());
+                Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(bitmap);
 
-                tableView.setDrawingCacheEnabled(true);
-                tableView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
-                tableView.setDrawingCacheBackgroundColor(Color.WHITE);
-                tableView.buildDrawingCache();
+                canvas.drawColor(Color.WHITE);
 
-                Bitmap bitmap = tableView.getDrawingCache();
-                if (bitmap == null) {
+                tableView.layout(0, 0, width, height);
+                tableView.draw(canvas);
+
+                try {
+                    String path = Config.PICTURE_DICTIONARY_PATH + Config.COURSE_TABLE_FILE_NAME;
+                    if (ImageMethod.saveBitmap(bitmap, path)) {
+                        Uri photoURI = FileProvider.getUriForFile(getActivity(), Config.FILE_PROVIDER_AUTH, new File(path));
+                        Intent intent = new Intent(Intent.ACTION_SEND);
+                        intent.setType("image/*");
+                        intent.putExtra(Intent.EXTRA_STREAM, photoURI);
+                        intent.addCategory(Intent.CATEGORY_DEFAULT);
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        startActivity(Intent.createChooser(intent, getString(R.string.share_course_table)));
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                     Toast.makeText(getActivity(), R.string.course_table_share_error, Toast.LENGTH_SHORT).show();
-                } else {
-                    try {
-                        String path = Config.PICTURE_DICTIONARY_PATH + Config.COURSE_TABLE_FILE_NAME;
-                        if (ImageMethod.saveBitmap(bitmap, path)) {
-                            Uri photoURI = FileProvider.getUriForFile(getActivity(), Config.FILE_PROVIDER_AUTH, new File(path));
-                            Intent intent = new Intent(Intent.ACTION_SEND);
-                            intent.setType("image/*");
-                            intent.putExtra(Intent.EXTRA_STREAM, photoURI);
-                            intent.addCategory(Intent.CATEGORY_DEFAULT);
-                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                            startActivity(Intent.createChooser(intent, getString(R.string.share_course_table)));
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        Toast.makeText(getActivity(), R.string.course_table_share_error, Toast.LENGTH_SHORT).show();
-                    }
-                    if (!bitmap.isRecycled()) {
-                        bitmap.recycle();
-                    }
                 }
-                tableView.destroyDrawingCache();
-                tableView.setDrawingCacheEnabled(false);
+                if (!bitmap.isRecycled()) {
+                    bitmap.recycle();
+                }
             } else {
                 Toast.makeText(getActivity(), R.string.permission_error, Toast.LENGTH_SHORT).show();
             }

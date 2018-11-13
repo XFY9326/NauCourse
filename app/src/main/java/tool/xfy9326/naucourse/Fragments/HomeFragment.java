@@ -4,14 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +16,14 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import tool.xfy9326.naucourse.AsyncTasks.InfoAsync;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.DataMethod;
@@ -71,7 +71,7 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         this.context = context;
         super.onAttach(context);
     }
@@ -197,7 +197,7 @@ public class HomeFragment extends Fragment {
      * @param teacher  上课老师
      * @param time     上课时间
      */
-    public void setNextCourse(@Nullable String name, String location, String teacher, String time) {
+    void setNextCourse(@Nullable String name, String location, String teacher, String time) {
         if (isAdded() && view != null) {
             TextView textView_noNextClass = view.findViewById(R.id.textView_noNextClass);
             LinearLayout linearLayout_nextClass = view.findViewById(R.id.layout_nextClass);
@@ -276,7 +276,10 @@ public class HomeFragment extends Fragment {
     private void getPositionAndOffset() {
         if (recyclerView != null) {
             LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-            View topView = layoutManager.getChildAt(0);
+            View topView = null;
+            if (layoutManager != null) {
+                topView = layoutManager.getChildAt(0);
+            }
             if (topView != null) {
                 lastOffset = topView.getTop();
                 lastPosition = layoutManager.getPosition(topView);

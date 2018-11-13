@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_dialog_course_time_set"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,7 +20,8 @@
             android:enabled="false"
             android:hint="@string/please_input_data"
             android:inputType="none"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            tools:ignore="Autofill" />
 
         <Button
             android:id="@+id/button_course_edit_time_backspace"
@@ -47,13 +49,13 @@
                 android:layout_height="wrap_content"
                 android:baselineAligned="false">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_weight="1">
 
-                    <android.support.design.widget.TextInputEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editText_course_edit_time_start_time"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -61,15 +63,15 @@
                         android:inputType="number"
                         android:singleLine="true"
                         android:textSize="13sp" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_weight="1">
 
-                    <android.support.design.widget.TextInputEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editText_course_edit_time_end_time"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -77,7 +79,7 @@
                         android:inputType="number"
                         android:singleLine="true"
                         android:textSize="13sp" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 

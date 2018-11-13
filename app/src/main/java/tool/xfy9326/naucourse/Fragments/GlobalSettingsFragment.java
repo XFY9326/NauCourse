@@ -1,18 +1,17 @@
 package tool.xfy9326.naucourse.Fragments;
 
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.support.annotation.Nullable;
 
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.UpdateMethod;
 import tool.xfy9326.naucourse.R;
 
-public class GlobalSettingsFragment extends PreferenceFragment {
+public class GlobalSettingsFragment extends PreferenceFragmentCompat {
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.settings_global);
     }
 

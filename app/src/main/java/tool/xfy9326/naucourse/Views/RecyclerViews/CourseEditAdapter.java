@@ -1,15 +1,9 @@
 package tool.xfy9326.naucourse.Views.RecyclerViews;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputEditText;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +16,18 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.view.ViewCompat;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import androidx.recyclerview.widget.RecyclerView;
 import tool.xfy9326.naucourse.Activities.CourseEditActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.CourseEditMethod;
@@ -160,6 +163,7 @@ public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.Co
             @Override
             public void onClick(View v) {
                 Snackbar.make(activity.findViewById(R.id.layout_course_edit_content), R.string.delete_confirm, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(android.R.string.yes, new View.OnClickListener() {
+                    @SuppressLint("RestrictedApi")
                     @Override
                     public void onClick(View v) {
                         courseDetails.remove(holder.getAdapterPosition());
@@ -223,10 +227,13 @@ public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.Co
         builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String str = editText.getText().toString();
-                courseDetails.get(position).setLocation(str);
-                activity.setArrayChanged();
-                notifyItemChanged(position);
+                Editable editable = editText.getText();
+                if (editable != null) {
+                    String str = editable.toString();
+                    courseDetails.get(position).setLocation(str);
+                    activity.setArrayChanged();
+                    notifyItemChanged(position);
+                }
             }
         });
         builder.setNegativeButton(android.R.string.cancel, null);
@@ -290,39 +297,43 @@ public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.Co
         button_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String start = editText_start.getText().toString();
-                String end = editText_end.getText().toString();
-                boolean isSingle = checkBox_single.isChecked();
-                if (isSingle) {
-                    if (start.isEmpty()) {
-                        Toast.makeText(activity, R.string.input_less, Toast.LENGTH_SHORT).show();
-                    } else {
-                        String str = editText_show.getText().toString();
-                        if (str.isEmpty()) {
-                            editText_show.setText(start);
-                        } else {
-                            String output = str + ", " + start;
-                            editText_show.setText(output);
-                        }
-                    }
-                } else {
-                    if (start.isEmpty() || end.isEmpty()) {
-                        Toast.makeText(activity, R.string.input_less, Toast.LENGTH_SHORT).show();
-                    } else {
-                        if (Integer.valueOf(start) >= Integer.valueOf(end)
-                                || Integer.valueOf(start) <= 0
-                                || Integer.valueOf(end) <= 0
-                                || ((isWeekNumber && Integer.valueOf(end) > Config.DEFAULT_MAX_WEEK)
-                                || (!isWeekNumber && Integer.valueOf(end) > Config.MAX_DAY_COURSE))) {
-                            Toast.makeText(activity, R.string.input_error, Toast.LENGTH_SHORT).show();
+                Editable editable_start = editText_start.getText();
+                Editable editable_end = editText_end.getText();
+                if (editable_start != null && editable_end != null) {
+                    String start = editable_start.toString();
+                    String end = editable_end.toString();
+                    boolean isSingle = checkBox_single.isChecked();
+                    if (isSingle) {
+                        if (start.isEmpty()) {
+                            Toast.makeText(activity, R.string.input_less, Toast.LENGTH_SHORT).show();
                         } else {
                             String str = editText_show.getText().toString();
                             if (str.isEmpty()) {
-                                String output = start + "-" + end;
-                                editText_show.setText(output);
+                                editText_show.setText(start);
                             } else {
-                                String output = str + ", " + start + "-" + end;
+                                String output = str + ", " + start;
                                 editText_show.setText(output);
+                            }
+                        }
+                    } else {
+                        if (start.isEmpty() || end.isEmpty()) {
+                            Toast.makeText(activity, R.string.input_less, Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (Integer.valueOf(start) >= Integer.valueOf(end)
+                                    || Integer.valueOf(start) <= 0
+                                    || Integer.valueOf(end) <= 0
+                                    || ((isWeekNumber && Integer.valueOf(end) > Config.DEFAULT_MAX_WEEK)
+                                    || (!isWeekNumber && Integer.valueOf(end) > Config.MAX_DAY_COURSE))) {
+                                Toast.makeText(activity, R.string.input_error, Toast.LENGTH_SHORT).show();
+                            } else {
+                                String str = editText_show.getText().toString();
+                                if (str.isEmpty()) {
+                                    String output = start + "-" + end;
+                                    editText_show.setText(output);
+                                } else {
+                                    String output = str + ", " + start + "-" + end;
+                                    editText_show.setText(output);
+                                }
                             }
                         }
                     }

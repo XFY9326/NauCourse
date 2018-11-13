@@ -1,14 +1,13 @@
 package lib.xfy9326.net.api;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;

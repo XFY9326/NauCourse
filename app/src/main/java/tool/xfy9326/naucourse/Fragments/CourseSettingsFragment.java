@@ -5,23 +5,22 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.preference.CheckBoxPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Handlers.MainHandler;
 import tool.xfy9326.naucourse.Methods.ImageMethod;
@@ -33,7 +32,7 @@ import tool.xfy9326.naucourse.Receivers.UpdateReceiver;
  * Created by xfy9326 on 18-2-20.
  */
 
-public class CourseSettingsFragment extends PreferenceFragment {
+public class CourseSettingsFragment extends PreferenceFragmentCompat {
     public static final int WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE = 1;
     private boolean updateCourseTable = false;
     private boolean reloadTableData = false;
@@ -41,8 +40,7 @@ public class CourseSettingsFragment extends PreferenceFragment {
     private float transparency_value;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.settings_course);
     }
 
@@ -128,7 +126,7 @@ public class CourseSettingsFragment extends PreferenceFragment {
         findPreference(Config.PREFERENCE_NOTIFY_NEXT_CLASS).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if ((boolean) newValue) {
+                if ((boolean) newValue && getActivity() != null) {
                     Toast.makeText(getActivity(), R.string.ask_lock_background, Toast.LENGTH_SHORT).show();
                     //初始化自动更新
                     getActivity().sendBroadcast(new Intent(UpdateReceiver.UPDATE_ACTION).putExtra(Config.INTENT_IS_ONLY_INIT, true));
