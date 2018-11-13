@@ -126,16 +126,9 @@ public class PersonMethod {
         tags = document.body().getElementsByTag("span");
         data = tags.eachText();
         for (String str : data) {
-            if (str.contains("同年级排名：")) {
-                studentScore.setScoreNP(str.substring(6).trim());
-                continue;
-            }
             if (str.contains("同专业排名：")) {
                 studentScore.setScoreZP(str.substring(6).trim());
-                continue;
-            }
-            if (str.contains("同班级排名：")) {
-                studentScore.setScoreBP(str.substring(6).trim());
+                break;
             }
         }
         studentScore.setDataVersionCode(Config.DATA_VERSION_STUDENT_SCORE);

@@ -118,6 +118,9 @@ public class MoaActivity extends AppCompatActivity {
                 }
             } else {
                 Snackbar.make(findViewById(R.id.layout_moa_content), R.string.moa_empty, Snackbar.LENGTH_SHORT).show();
+                if (moaAdapter != null && moaAdapter.getItemCount() != 0) {
+                    moaAdapter.clearAdapter();
+                }
             }
         }
     }

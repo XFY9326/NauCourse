@@ -25,6 +25,11 @@ public class LevelExamAdapter extends RecyclerView.Adapter<LevelExamAdapter.Leve
         notifyDataSetChanged();
     }
 
+    public void clearAdapter() {
+        this.levelExam.setExamAmount(0);
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(@NonNull LevelExamViewHolder holder, int position) {
         holder.textView_level_exam_name.setText(context.getString(R.string.level_exam_name, levelExam.getExamName()[holder.getAdapterPosition()]));

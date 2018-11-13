@@ -94,6 +94,9 @@ public class LevelExamActivity extends AppCompatActivity {
                 }
             } else if (loadTime > 1 || !NetMethod.isNetworkConnected(this)) {
                 Snackbar.make(findViewById(R.id.layout_level_exam_content), R.string.level_exam_empty, Snackbar.LENGTH_SHORT).show();
+                if (levelExamAdapter != null && levelExamAdapter.getItemCount() != 0) {
+                    levelExamAdapter.clearAdapter();
+                }
             }
         }
     }

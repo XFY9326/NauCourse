@@ -26,6 +26,11 @@ public class MoaAdapter extends RecyclerView.Adapter<MoaAdapter.MoaViewHolder> {
         notifyDataSetChanged();
     }
 
+    public void clearAdapter() {
+        this.moa.setCount(0);
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(@NonNull MoaViewHolder holder, int position) {
         holder.textViewMoaTitle.setText(moa.getTitle()[holder.getAdapterPosition()]);

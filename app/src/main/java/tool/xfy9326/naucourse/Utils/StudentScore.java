@@ -13,12 +13,8 @@ public class StudentScore {
     @Nullable
     private String scoreJD = null;
     @Nullable
-    private String scoreNP = null;
-    @Nullable
     private String scoreZP = null;
-    @Nullable
-    private String scoreBP = null;
-    private int dataVersionCode = 0;
+    private int dataVersionCode = 1;
 
     public StudentScore() {
 
@@ -43,30 +39,12 @@ public class StudentScore {
     }
 
     @Nullable
-    public String getScoreNP() {
-        return scoreNP;
-    }
-
-    public void setScoreNP(@Nullable String scoreNP) {
-        this.scoreNP = scoreNP;
-    }
-
-    @Nullable
     public String getScoreZP() {
         return scoreZP;
     }
 
     public void setScoreZP(@Nullable String scoreZP) {
         this.scoreZP = scoreZP;
-    }
-
-    @Nullable
-    public String getScoreBP() {
-        return scoreBP;
-    }
-
-    public void setScoreBP(@Nullable String scoreBP) {
-        this.scoreBP = scoreBP;
     }
 
     @SuppressWarnings("unused")
