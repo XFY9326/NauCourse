@@ -10,8 +10,8 @@ import androidx.annotation.Nullable;
 import tool.xfy9326.naucourse.Activities.InfoDetailActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
-import tool.xfy9326.naucourse.Methods.InfoMethods.JwInfoMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethods.JwcInfoMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethods.RSSInfoMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Views.RecyclerViews.InfoAdapter;
 
@@ -56,11 +56,10 @@ public class InfoDetailAsync extends AsyncTask<Context, Void, Context> {
                     if (loadSuccess == Config.NET_WORK_GET_SUCCESS) {
                         data = jwcInfoMethod.getDetail();
                     }
-                } else if (info_source.equals(InfoAdapter.TOPIC_SOURCE_JW)) {
-                    JwInfoMethod jwInfoMethod = new JwInfoMethod(context[0]);
-                    loadSuccess = jwInfoMethod.loadDetail(info_url);
+                } else if (info_source.equals(InfoAdapter.TOPIC_SOURCE_RSS)) {
+                    loadSuccess = RSSInfoMethod.loadDetail(info_url);
                     if (loadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                        data = jwInfoMethod.getDetail();
+                        data = RSSInfoMethod.getDetail();
                     }
                 }
             }

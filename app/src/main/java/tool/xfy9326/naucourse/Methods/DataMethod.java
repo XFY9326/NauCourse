@@ -1,6 +1,7 @@
 package tool.xfy9326.naucourse.Methods;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -14,10 +15,10 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Fragments.HomeFragment;
 import tool.xfy9326.naucourse.Methods.InfoMethods.ExamMethod;
-import tool.xfy9326.naucourse.Methods.InfoMethods.JwInfoMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethods.JwcInfoMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethods.LevelExamMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethods.MoaMethod;
@@ -55,6 +56,16 @@ public class DataMethod {
         return null;
     }
 
+    public static String getOfflineData(Context context, String FILE_NAME) {
+        String path = context.getFilesDir() + File.separator + FILE_NAME;
+        File file = new File(path);
+        if (file.exists()) {
+            String data = IO.readFile(path);
+            return SecurityMethod.decryptData(context, data);
+        }
+        return null;
+    }
+
     /**
      * 获取离线课表数据
      *
@@ -84,10 +95,23 @@ public class DataMethod {
      * @param checkTemp 是否检测缓存与要储存的数据相同
      * @return 是否保存成功
      */
-    @SuppressWarnings("UnusedReturnValue")
     public static boolean saveOfflineData(final Context context, final Object o, final String FILE_NAME, boolean checkTemp) {
         String path = context.getFilesDir() + File.separator + FILE_NAME;
         String data = new Gson().toJson(o);
+        String content = SecurityMethod.encryptData(context, data);
+        if (checkTemp) {
+            String text = IO.readFile(path);
+            if (text != null) {
+                text = text.replace("\n", "");
+                return !text.equalsIgnoreCase(content) && IO.writeFile(Objects.requireNonNull(content), path);
+            }
+        }
+        return IO.writeFile(Objects.requireNonNull(content), path);
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    public static boolean saveOfflineData(final Context context, final String data, final String FILE_NAME, boolean checkTemp) {
+        String path = context.getFilesDir() + File.separator + FILE_NAME;
         String content = SecurityMethod.encryptData(context, data);
         if (checkTemp) {
             String text = IO.readFile(path);
@@ -117,9 +141,6 @@ public class DataMethod {
     private static boolean checkDataVersionCode(String content, Class file_class) {
         int nowVersionCode;
         switch (file_class.getSimpleName()) {
-            case TableMethod.FILE_NAME:
-                nowVersionCode = Config.DATA_VERSION_COURSE;
-                break;
             case ScoreMethod.FILE_NAME:
                 nowVersionCode = Config.DATA_VERSION_COURSE_SCORE;
                 break;
@@ -128,9 +149,6 @@ public class DataMethod {
                 break;
             case JwcInfoMethod.FILE_NAME:
                 nowVersionCode = Config.DATA_VERSION_JWC_TOPIC;
-                break;
-            case JwInfoMethod.FILE_NAME:
-                nowVersionCode = Config.DATA_VERSION_JW_TOPIC;
                 break;
             case HomeFragment.NEXT_COURSE_FILE_NAME:
                 nowVersionCode = Config.DATA_VERSION_NEXT_COURSE;
@@ -175,5 +193,27 @@ public class DataMethod {
             }
         }
         return false;
+    }
+
+    public static class InfoData {
+        public static boolean[] getInfoChannel(Context context) {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            return new boolean[]{
+                    sharedPreferences.getBoolean(Config.PREFERENCE_INFO_CHANNEL_SELECTED_JWC_SYSTEM, Config.DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_JWC_SYSTEM),
+                    sharedPreferences.getBoolean(Config.PREFERENCE_INFO_CHANNEL_SELECTED_JW, Config.DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_JW),
+                    sharedPreferences.getBoolean(Config.PREFERENCE_INFO_CHANNEL_SELECTED_XW, Config.DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_XW),
+                    sharedPreferences.getBoolean(Config.PREFERENCE_INFO_CHANNEL_SELECTED_TW, Config.DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_TW),
+                    sharedPreferences.getBoolean(Config.PREFERENCE_INFO_CHANNEL_SELECTED_XXB, Config.DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_XXB),
+            };
+        }
+
+        public static void setInfoChannel(Context context, boolean[] channel) {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            sharedPreferences.edit().putBoolean(Config.PREFERENCE_INFO_CHANNEL_SELECTED_JWC_SYSTEM, channel[0])
+                    .putBoolean(Config.PREFERENCE_INFO_CHANNEL_SELECTED_JW, channel[1])
+                    .putBoolean(Config.PREFERENCE_INFO_CHANNEL_SELECTED_XW, channel[2])
+                    .putBoolean(Config.PREFERENCE_INFO_CHANNEL_SELECTED_TW, channel[3])
+                    .putBoolean(Config.PREFERENCE_INFO_CHANNEL_SELECTED_XXB, channel[4]).apply();
+        }
     }
 }

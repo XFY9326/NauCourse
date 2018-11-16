@@ -1,9 +1,11 @@
 package tool.xfy9326.naucourse.Fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -30,7 +33,7 @@ import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Methods.NextClassMethod;
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.Utils.JwTopic;
+import tool.xfy9326.naucourse.Tools.RSSReader;
 import tool.xfy9326.naucourse.Utils.JwcTopic;
 import tool.xfy9326.naucourse.Utils.NextCourse;
 import tool.xfy9326.naucourse.Views.RecyclerViews.InfoAdapter;
@@ -55,6 +58,7 @@ public class HomeFragment extends Fragment {
     private int loadTime = 0;
     private int lastOffset = 0;
     private int lastPosition = 0;
+    private boolean[] infoSelectList;
 
     public HomeFragment() {
         this.view = null;
@@ -168,8 +172,79 @@ public class HomeFragment extends Fragment {
                     }
                 }
             });
-        }
 
+            view.findViewById(R.id.button_info_select).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setShowInfo();
+                }
+            });
+        }
+    }
+
+    private void swipeAndGetInfo() {
+        if (context != null && swipeRefreshLayout != null) {
+            if (NetMethod.isNetworkConnected(context)) {
+                swipeRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(true);
+                    }
+                });
+                getData();
+            } else {
+                Toast.makeText(context, R.string.network_error, Toast.LENGTH_SHORT).show();
+                swipeRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+            }
+        }
+    }
+
+    private void setShowInfo() {
+        if (context != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle(R.string.info_channel_select);
+            String[] infoList = new String[]{
+                    context.getString(R.string.jw_system_info),
+                    context.getString(R.string.jwc),
+                    context.getString(R.string.xw),
+                    context.getString(R.string.tw),
+                    context.getString(R.string.xxb)
+            };
+            infoSelectList = DataMethod.InfoData.getInfoChannel(context);
+            builder.setMultiChoiceItems(infoList, infoSelectList, new DialogInterface.OnMultiChoiceClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                    infoSelectList[which] = isChecked;
+                }
+            });
+            builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    boolean allFalse = true;
+                    for (boolean checked : infoSelectList) {
+                        if (checked) {
+                            allFalse = false;
+                            break;
+                        }
+                    }
+                    if (context != null && isAdded()) {
+                        if (allFalse) {
+                            Toast.makeText(context, R.string.info_channel_select_warn, Toast.LENGTH_SHORT).show();
+                        } else {
+                            DataMethod.InfoData.setInfoChannel(context, infoSelectList);
+                            swipeAndGetInfo();
+                        }
+                    }
+                }
+            });
+            builder.setNegativeButton(android.R.string.cancel, null);
+            builder.show();
+        }
     }
 
     //优先加载缓存中的下一节课
@@ -232,14 +307,14 @@ public class HomeFragment extends Fragment {
         this.loadTime = loadTime;
     }
 
-    public void InfoSet(@Nullable JwcTopic jwcTopic, @Nullable JwTopic jwTopic) {
+    public void InfoSet(@Nullable JwcTopic jwcTopic, @Nullable SparseArray<RSSReader.RSSObject> rssObjects) {
         if (isAdded() && recyclerView != null) {
-            if (jwcTopic != null && jwTopic != null) {
+            if (!(jwcTopic == null && rssObjects == null)) {
                 if (infoAdapter == null) {
-                    infoAdapter = new InfoAdapter(getActivity(), jwcTopic, jwTopic);
+                    infoAdapter = new InfoAdapter(getActivity(), jwcTopic, rssObjects);
                     recyclerView.setAdapter(infoAdapter);
                 } else {
-                    infoAdapter.updateJwcTopic(jwcTopic, jwTopic);
+                    infoAdapter.updateJwcTopic(jwcTopic, rssObjects);
                 }
             }
         }

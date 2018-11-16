@@ -1,7 +1,7 @@
 ext {
-    versionCode = 37
+    versionCode = 38
     subVersion = 0
-    versionName = "4.6"
+    versionName = "4.7"
 
     projectCompileSdkVersion = 28
     projectMinSdkVersion = 19

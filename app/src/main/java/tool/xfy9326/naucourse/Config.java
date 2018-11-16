@@ -96,6 +96,11 @@ public class Config {
     public static final String PREFERENCE_OLD_TERM_START_DATE = "OLD_TERM_START_DATE";
     public static final String PREFERENCE_OLD_TERM_END_DATE = "OLD_TERM_END_DATE";
     public static final String PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT = "SCHOOL_CALENDAR_ENLARGE_ALERT";
+    public static final String PREFERENCE_INFO_CHANNEL_SELECTED_JWC_SYSTEM = "INFO_CHANNEL_SELECTED_JWC_SYSTEM";
+    public static final String PREFERENCE_INFO_CHANNEL_SELECTED_JW = "INFO_CHANNEL_SELECTED_JW";
+    public static final String PREFERENCE_INFO_CHANNEL_SELECTED_XW = "INFO_CHANNEL_SELECTED_XW";
+    public static final String PREFERENCE_INFO_CHANNEL_SELECTED_TW = "INFO_CHANNEL_SELECTED_TW";
+    public static final String PREFERENCE_INFO_CHANNEL_SELECTED_XXB = "INFO_CHANNEL_SELECTED_XXB";
 
     public static final boolean DEFAULT_PREFERENCE_HAS_LOGIN = false;
     public static final boolean DEFAULT_PREFERENCE_REMEMBER_PW = true;
@@ -121,6 +126,11 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_CHECK_BETA_UPDATE = false;
     public static final boolean DEFAULT_PREFERENCE_ONLY_UPDATE_APPLICATION_UNDER_WIFI = false;
     public static final boolean DEFAULT_PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT = true;
+    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_JWC_SYSTEM = true;
+    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_JW = true;
+    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_XW = false;
+    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_TW = false;
+    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_XXB = false;
 
     //网络连接错误代码
     public static final int NET_WORK_GET_SUCCESS = 0;
@@ -130,11 +140,9 @@ public class Config {
     public static final int NET_WORK_ERROR_CODE_GET_DATA_ERROR = 4;
 
     //离线数据版本号
-    public static final int DATA_VERSION_COURSE = 3;
     public static final int DATA_VERSION_COURSE_SCORE = 1;
     public static final int DATA_VERSION_EXAM = 1;
     public static final int DATA_VERSION_JWC_TOPIC = 1;
-    public static final int DATA_VERSION_JW_TOPIC = 1;
     public static final int DATA_VERSION_NEXT_COURSE = 1;
     public static final int DATA_VERSION_SCHOOL_TIME = 1;
     public static final int DATA_VERSION_STUDENT_INFO = 1;

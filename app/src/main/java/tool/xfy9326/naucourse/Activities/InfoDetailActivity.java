@@ -27,7 +27,6 @@ import lib.xfy9326.naujwc.NauJwcClient;
 import tool.xfy9326.naucourse.AsyncTasks.InfoDetailAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
-import tool.xfy9326.naucourse.Methods.InfoMethods.JwInfoMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.InfoDetail;
@@ -94,8 +93,8 @@ public class InfoDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.menu_info_detail_open_in_browser || item.getItemId() == R.id.menu_info_detail_share) {
             String url = null;
-            if (Objects.equals(info_source, InfoAdapter.TOPIC_SOURCE_JW)) {
-                url = JwInfoMethod.server_url + info_url;
+            if (Objects.equals(info_source, InfoAdapter.TOPIC_SOURCE_RSS)) {
+                url = info_url;
             } else if (Objects.requireNonNull(info_source).equals(InfoAdapter.TOPIC_SOURCE_JWC)) {
                 url = NauJwcClient.server_url + info_url;
             }
@@ -172,7 +171,7 @@ public class InfoDetailActivity extends AppCompatActivity {
                 } else {
                     textView_content.setText(Html.fromHtml(content));
                 }
-            } else if (Objects.requireNonNull(info_source).equals(InfoAdapter.TOPIC_SOURCE_JW)) {
+            } else if (Objects.requireNonNull(info_source).equals(InfoAdapter.TOPIC_SOURCE_RSS)) {
                 textView_content.setText(content);
             }
 

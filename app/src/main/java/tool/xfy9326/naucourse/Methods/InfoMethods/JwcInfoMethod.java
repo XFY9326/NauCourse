@@ -27,6 +27,7 @@ import tool.xfy9326.naucourse.Utils.JwcTopic;
 public class JwcInfoMethod {
     public static final String FILE_NAME = "JwcTopic";
     private static final int TOPIC_COUNT = 15;
+    public static final int TYPE_JWC = 0;
     private final Context context;
     @Nullable
     private JwcTopic jwcTopic;
@@ -59,7 +60,7 @@ public class JwcInfoMethod {
     }
 
     @Nullable
-    public JwcTopic getJwcTopic(boolean checkTemp) {
+    public JwcTopic getJwcTopic() {
         int divideCount = 0;
         int totalTopic = 0;
         boolean nextTopic = false;
@@ -134,11 +135,8 @@ public class JwcInfoMethod {
 
         jwcTopic.setTopic_url(url);
         jwcTopic.setDataVersionCode(Config.DATA_VERSION_JWC_TOPIC);
-        if (DataMethod.saveOfflineData(context, jwcTopic, FILE_NAME, checkTemp)) {
-            return jwcTopic;
-        } else {
-            return null;
-        }
+        DataMethod.saveOfflineData(context, jwcTopic, FILE_NAME, false);
+        return jwcTopic;
     }
 
     public int loadDetail(String url) throws Exception {

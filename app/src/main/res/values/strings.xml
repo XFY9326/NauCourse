@@ -27,16 +27,14 @@
     <string name="score">成绩查询</string>
     <string name="score_XF">总学分：%1$s</string>
     <string name="score_JD">总绩点：%1$s</string>
-    <string name="score_NP">年级排名：%1$s</string>
     <string name="score_ZP">专业排名：%1$s</string>
-    <string name="score_BP">班级排名：%1$s</string>
     <string name="table_date">%1$d年%2$d月&#160;&#160;周%3$s&#160;&#160;&#160;%4$s</string>
     <string name="info_type">类别：%1$s</string>
     <string name="info_click">点击：%1$s</string>
     <string name="info_post">发布：%1$s</string>
     <string name="info_date">日期：%1$s</string>
-    <string name="info">◈ 教务消息通知</string>
-    <string name="info_label">教务通知</string>
+    <string name="info">◈ 消息通知</string>
+    <string name="info_label">消息通知</string>
     <string name="week">第%1$d周</string>
     <string name="week_day">周%1$s</string>
     <string name="time_school">学期：%1$s ~ %2$s</string>
@@ -66,6 +64,15 @@
     <string name="web" translatable="false">https://xfy9326.github.io/NauCourse/</string>
     <string name="jw_system_info">教务系统通知</string>
     <string name="jwc">教务委员会</string>
+    <string name="xw">学务委员会</string>
+    <string name="tw">团务委员会</string>
+    <string name="xxb">信息化办公室</string>
+    <string name="unknown_post">未知渠道</string>
+    <string name="jwc_type">教务通知</string>
+    <string name="xw_type">学务通知</string>
+    <string name="tw_type">团委通知</string>
+    <string name="xxb_type">信息办通知</string>
+    <string name="unknown_post_type">未知通知</string>
     <string name="only_update_under_wifi">仅在Wifi网络下自动更新数据</string>
     <string name="only_update_under_wifi_sum">避免自动更新数据使用移动网络消耗流量</string>
     <string name="user_login_error">当前用户登陆已经失效，请重新登录！\n（记住密码可自动重试）</string>
@@ -265,6 +272,8 @@
     <string name="alipay">支付宝</string>
     <string name="wechat">微信</string>
     <string name="qq_wallet">QQ钱包</string>
+    <string name="info_channel_select">显示的通知类别</string>
+    <string name="info_channel_select_warn">至少有一项通知类别必须被选中！</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>

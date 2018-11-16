@@ -114,7 +114,6 @@ public class TableMethod {
                 } else {
                     return courseList;
                 }
-                course.setDataVersionCode(Config.DATA_VERSION_COURSE);
 
                 CourseDetail[] courseDetail_list = new CourseDetail[detail.length];
 

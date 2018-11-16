@@ -71,7 +71,6 @@ public class TableNextMethod {
                         course.setCourseCombinedClass(data[4]);
                         course.setCourseType(data[6]);
                         course.setCourseTeacher(data[7]);
-                        course.setDataVersionCode(Config.DATA_VERSION_COURSE);
 
                         int detail_length = (data.length - 1 - 8) / 2;
                         CourseDetail[] courseDetail_list = new CourseDetail[detail_length];
