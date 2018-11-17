@@ -65,12 +65,17 @@ public class TableNextMethod {
                         course.setCourseTerm(data[data.length - 1]);
 
                         course.setCourseId(data[1]);
+                        //可能会出问题的解决课程名称空格的方式
+                        int i = 3;
+                        for (; !data[i].contains("."); i++) {
+                            data[2] += data[i];
+                        }
                         course.setCourseName(data[2]);
                         //无教学班信息
-                        course.setCourseScore(data[3]);
-                        course.setCourseCombinedClass(data[4]);
-                        course.setCourseType(data[6]);
-                        course.setCourseTeacher(data[7]);
+                        course.setCourseScore(data[i]);
+                        course.setCourseCombinedClass(data[i + 1]);
+                        course.setCourseType(data[i + 3]);
+                        course.setCourseTeacher(data[i + 4]);
 
                         int detail_length = (data.length - 1 - 8) / 2;
                         CourseDetail[] courseDetail_list = new CourseDetail[detail_length];

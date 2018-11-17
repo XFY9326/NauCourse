@@ -272,7 +272,7 @@
     <string name="alipay">支付宝</string>
     <string name="wechat">微信</string>
     <string name="qq_wallet">QQ钱包</string>
-    <string name="info_channel_select">显示的通知类别</string>
+    <string name="info_channel_select">显示的通知类别（近半年）</string>
     <string name="info_channel_select_warn">至少有一项通知类别必须被选中！</string>
 
     <string name="cpv_default_title">选择一种颜色</string>

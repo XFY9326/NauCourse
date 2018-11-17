@@ -76,12 +76,17 @@ public class ExamMethod {
             if (startData) {
                 String[] data = str.trim().split(" ");
                 examId.add(data[1]);
+                //可能会出问题的解决课程名称空格的方式
+                int i = 3;
+                for (; !data[i].contains("."); i++) {
+                    data[2] += data[i];
+                }
                 examName.add(data[2]);
-                examScore.add(data[3]);
+                examScore.add(data[i]);
                 examType.add(data[data.length - 1]);
-                String time = data[5];
+                String time = data[i + 2];
                 if (data.length > 9) {
-                    time += " " + data[6];
+                    time += " " + data[i + 3];
                 }
                 examTime.add(time);
                 examLocation.add(data[data.length - 3]);

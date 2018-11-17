@@ -79,12 +79,17 @@ public class ScoreMethod {
             if (startData) {
                 String[] data = str.trim().split(" ");
                 scoreCourseId.add(data[1]);
+                //可能会出问题的解决课程名称空格的方式
+                int i = 3;
+                for (; !data[i].contains("."); i++) {
+                    data[2] += data[i];
+                }
                 scoreCourseName.add(data[2]);
-                scoreXf.add(data[3]);
-                scoreCommon.add(data[5]);
-                scoreMid.add(data[6]);
-                scoreFinal.add(data[7]);
-                scoreTotal.add(data[8]);
+                scoreXf.add(data[i]);
+                scoreCommon.add(data[i + 2]);
+                scoreMid.add(data[i + 3]);
+                scoreFinal.add(data[i + 4]);
+                scoreTotal.add(data[i + 5]);
 
             }
         }
