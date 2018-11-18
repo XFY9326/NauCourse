@@ -27,7 +27,9 @@
     <string name="score">成绩查询</string>
     <string name="score_XF">总学分：%1$s</string>
     <string name="score_JD">总绩点：%1$s</string>
+    <string name="score_NP">年级排名：%1$s</string>
     <string name="score_ZP">专业排名：%1$s</string>
+    <string name="score_BP">班级排名：%1$s</string>
     <string name="table_date">%1$d年%2$d月&#160;&#160;周%3$s&#160;&#160;&#160;%4$s</string>
     <string name="info_type">类别：%1$s</string>
     <string name="info_click">点击：%1$s</string>

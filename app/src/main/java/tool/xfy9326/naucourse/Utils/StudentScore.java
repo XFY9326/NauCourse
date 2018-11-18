@@ -13,8 +13,12 @@ public class StudentScore {
     @Nullable
     private String scoreJD = null;
     @Nullable
+    private String scoreNP = null;
+    @Nullable
     private String scoreZP = null;
-    private int dataVersionCode = 1;
+    @Nullable
+    private String scoreBP = null;
+    private int dataVersionCode = 0;
 
     public StudentScore() {
 
@@ -55,5 +59,23 @@ public class StudentScore {
     @SuppressWarnings("SameParameterValue")
     public void setDataVersionCode(int dataVersionCode) {
         this.dataVersionCode = dataVersionCode;
+    }
+
+    @Nullable
+    public String getScoreNP() {
+        return scoreNP;
+    }
+
+    public void setScoreNP(@Nullable String scoreNP) {
+        this.scoreNP = scoreNP;
+    }
+
+    @Nullable
+    public String getScoreBP() {
+        return scoreBP;
+    }
+
+    public void setScoreBP(@Nullable String scoreBP) {
+        this.scoreBP = scoreBP;
     }
 }

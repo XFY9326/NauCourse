@@ -96,6 +96,24 @@
                             android:text="@string/score_ZP"
                             android:textSize="15sp" />
 
+                        <TextView
+                            android:id="@+id/textView_scoreBP"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/score_BP"
+                            android:textSize="15sp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/textView_scoreNP"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/score_NP"
+                            android:textSize="15sp"
+                            android:visibility="gone" />
+
                     </LinearLayout>
 
                 </LinearLayout>

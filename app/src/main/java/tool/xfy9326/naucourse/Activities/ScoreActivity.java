@@ -95,6 +95,22 @@ public class ScoreActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.textView_scoreXF)).setText(getString(R.string.score_XF, studentScore.getScoreXF()));
             ((TextView) findViewById(R.id.textView_scoreJD)).setText(getString(R.string.score_JD, studentScore.getScoreJD()));
             ((TextView) findViewById(R.id.textView_scoreZP)).setText(getString(R.string.score_ZP, studentScore.getScoreZP() == null ? getString(R.string.data_loading) : studentScore.getScoreZP()));
+            TextView textView_scoreNP = findViewById(R.id.textView_scoreNP);
+            TextView textView_scoreBP = findViewById(R.id.textView_scoreBP);
+
+            if (studentScore.getScoreNP() != null) {
+                textView_scoreNP.setText(getString(R.string.score_NP, studentScore.getScoreNP()));
+                textView_scoreNP.setVisibility(View.VISIBLE);
+            } else {
+                textView_scoreNP.setVisibility(View.GONE);
+            }
+
+            if (studentScore.getScoreBP() != null) {
+                textView_scoreBP.setText(getString(R.string.score_BP, studentScore.getScoreBP()));
+                textView_scoreNP.setVisibility(View.VISIBLE);
+            } else {
+                textView_scoreBP.setVisibility(View.GONE);
+            }
 
             if (waitForEvaluate(courseScore)) {
                 findViewById(R.id.textView_wait_for_evaluate).setVisibility(View.VISIBLE);
