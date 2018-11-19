@@ -1,11 +1,13 @@
 package tool.xfy9326.naucourse.Fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,6 +25,8 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.github.chrisbanes.photoview.PhotoView;
 
 import java.io.File;
 import java.io.IOException;
@@ -455,38 +459,61 @@ public class TableFragment extends Fragment {
     }
 
     private void shareTable() {
-        if (getActivity() != null && view != null && isAdded()) {
+        if (view != null && getActivity() != null) {
             if (PermissionMethod.checkStoragePermission(getActivity(), 0)) {
                 View tableView = view.findViewById(R.id.course_table_layout);
 
                 int width = tableView.getWidth();
                 int height = tableView.getHeight();
+                if (width > 0 && height > 0 && view_set) {
+                    final Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(bitmap);
 
-                Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-                Canvas canvas = new Canvas(bitmap);
+                    canvas.drawColor(Color.WHITE);
 
-                canvas.drawColor(Color.WHITE);
+                    tableView.layout(0, 0, width, height);
+                    tableView.draw(canvas);
 
-                tableView.layout(0, 0, width, height);
-                tableView.draw(canvas);
+                    try {
+                        final String path = Config.PICTURE_DICTIONARY_PATH + Config.COURSE_TABLE_FILE_NAME;
+                        if (ImageMethod.saveBitmap(bitmap, path, false) && context != null && isAdded() && getActivity() != null) {
+                            LayoutInflater layoutInflater = getLayoutInflater();
+                            View view = layoutInflater.inflate(R.layout.dialog_share_table, (ViewGroup) getActivity().findViewById(R.id.layout_dialog_share_table));
+                            PhotoView photoView = view.findViewById(R.id.photoView_share_table);
+                            photoView.setImageDrawable(new BitmapDrawable(getResources(), bitmap));
 
-                try {
-                    String path = Config.PICTURE_DICTIONARY_PATH + Config.COURSE_TABLE_FILE_NAME;
-                    if (ImageMethod.saveBitmap(bitmap, path)) {
-                        Uri photoURI = FileProvider.getUriForFile(getActivity(), Config.FILE_PROVIDER_AUTH, new File(path));
-                        Intent intent = new Intent(Intent.ACTION_SEND);
-                        intent.setType("image/*");
-                        intent.putExtra(Intent.EXTRA_STREAM, photoURI);
-                        intent.addCategory(Intent.CATEGORY_DEFAULT);
-                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        startActivity(Intent.createChooser(intent, getString(R.string.share_course_table)));
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                            builder.setView(view);
+                            builder.setTitle(R.string.share_course_table);
+                            builder.setPositiveButton(R.string.share, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Uri photoURI = FileProvider.getUriForFile(getActivity(), Config.FILE_PROVIDER_AUTH, new File(path));
+                                    Intent intent = new Intent(Intent.ACTION_SEND);
+                                    intent.setType("image/*");
+                                    intent.putExtra(Intent.EXTRA_STREAM, photoURI);
+                                    intent.addCategory(Intent.CATEGORY_DEFAULT);
+                                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                    startActivity(Intent.createChooser(intent, getString(R.string.share_course_table)));
+                                }
+                            });
+                            builder.setNegativeButton(android.R.string.cancel, null);
+                            builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    if (!bitmap.isRecycled()) {
+                                        bitmap.recycle();
+                                    }
+                                }
+                            });
+                            builder.show();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getActivity(), R.string.course_table_share_error, Toast.LENGTH_SHORT).show();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } else {
                     Toast.makeText(getActivity(), R.string.course_table_share_error, Toast.LENGTH_SHORT).show();
-                }
-                if (!bitmap.isRecycled()) {
-                    bitmap.recycle();
                 }
             } else {
                 Toast.makeText(getActivity(), R.string.permission_error, Toast.LENGTH_SHORT).show();

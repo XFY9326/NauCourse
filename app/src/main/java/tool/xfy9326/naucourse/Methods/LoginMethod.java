@@ -109,6 +109,7 @@ public class LoginMethod {
             BaseMethod.getApp(context).getClient().loginOut();
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             sharedPreferences.edit().remove(Config.PREFERENCE_LOGIN_URL)
+                    .remove(Config.PREFERENCE_LOGIN_URL)
                     .remove(Config.PREFERENCE_NETWORK_ACCOUNT)
                     .remove(Config.PREFERENCE_NETWORK_PASSWORD)
                     .remove(Config.PREFERENCE_NETWORK_REMEMBER_PASSWORD)
@@ -121,6 +122,12 @@ public class LoginMethod {
                     .remove(Config.PREFERENCE_CUSTOM_TERM_END_DATE)
                     .remove(Config.PREFERENCE_OLD_TERM_START_DATE)
                     .remove(Config.PREFERENCE_OLD_TERM_END_DATE)
+                    .remove(Config.PREFERENCE_AUTO_CHECK_UPDATE)
+                    .remove(Config.PREFERENCE_INFO_CHANNEL_SELECTED_JW)
+                    .remove(Config.PREFERENCE_INFO_CHANNEL_SELECTED_JWC_SYSTEM)
+                    .remove(Config.PREFERENCE_INFO_CHANNEL_SELECTED_XW)
+                    .remove(Config.PREFERENCE_INFO_CHANNEL_SELECTED_TW)
+                    .remove(Config.PREFERENCE_INFO_CHANNEL_SELECTED_XXB)
                     .putBoolean(Config.PREFERENCE_HAS_LOGIN, false)
                     .apply();
             cleanUserTemp(context);

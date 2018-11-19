@@ -55,15 +55,15 @@ public class ImageMethod {
                 InputStream inputStream = responseBody.byteStream();
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                 response.close();
-                return saveBitmap(bitmap, downloadPath);
+                return saveBitmap(bitmap, downloadPath, true);
             }
         }
         response.close();
         return false;
     }
 
-    public static boolean saveBitmap(Bitmap bitmap, String path) throws IOException {
-        if (bitmap != null) {
+    public static boolean saveBitmap(Bitmap bitmap, String path, boolean recycle) throws IOException {
+        if (bitmap != null && !bitmap.isRecycled()) {
             File file = new File(path);
             if (file.exists()) {
                 //noinspection ResultOfMethodCallIgnored
@@ -75,7 +75,9 @@ public class ImageMethod {
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
                     fileOutputStream.flush();
                     fileOutputStream.close();
-                    bitmap.recycle();
+                    if (recycle) {
+                        bitmap.recycle();
+                    }
                     return true;
                 }
             }
