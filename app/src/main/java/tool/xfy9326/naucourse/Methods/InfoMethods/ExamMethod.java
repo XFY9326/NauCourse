@@ -6,16 +6,17 @@ import android.preference.PreferenceManager;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.Nullable;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.LoginMethod;
+import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Exam;
 
 /**
@@ -65,31 +66,47 @@ public class ExamMethod {
         ArrayList<String> examLocation = new ArrayList<>();
 
         Exam exam = new Exam();
-        Elements elements = Objects.requireNonNull(document).body().getElementsByTag("tr");
-        List<String> text = elements.eachText();
+        Elements elements = Objects.requireNonNull(document).body().getElementsByTag("td");
         boolean startData = false;
-        for (String str : text) {
-            if (str.contains("序号")) {
+        int count = 0;
+        for (Element element : elements) {
+            String str = element.text().replace(" ", "");
+            if (str.contains("考试日程列表")) {
                 startData = true;
                 continue;
             }
             if (startData) {
-                String[] data = str.trim().split(" ");
-                examId.add(data[1]);
-                //可能会出问题的解决课程名称空格的方式
-                int i = 3;
-                for (; !data[i].contains("."); i++) {
-                    data[2] += data[i];
+                if (str.isEmpty()) {
+                    str = context.getString(R.string.not_publish);
                 }
-                examName.add(data[2]);
-                examScore.add(data[i]);
-                examType.add(data[data.length - 1]);
-                String time = data[i + 2];
-                if (data.length > 9) {
-                    time += " " + data[i + 3];
+                switch (count) {
+                    case 1:
+                        examId.add(str);
+                        break;
+                    case 2:
+                        examName.add(str);
+                        break;
+                    case 3:
+                        examScore.add(str);
+                        break;
+                    case 5:
+                        if (str.contains("日")) {
+                            str = str.replace("日", "日 ");
+                        }
+                        examTime.add(str);
+                        break;
+                    case 6:
+                        examLocation.add(str);
+                        break;
+                    case 8:
+                        examType.add(str);
+                        break;
                 }
-                examTime.add(time);
-                examLocation.add(data[data.length - 3]);
+                if (count == 8) {
+                    count = 0;
+                } else {
+                    count++;
+                }
             }
         }
 

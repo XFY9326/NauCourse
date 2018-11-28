@@ -9,7 +9,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.Nullable;
@@ -65,11 +64,12 @@ public class ScoreMethod {
         ArrayList<String> scoreXf = new ArrayList<>();
 
         CourseScore courseScore = new CourseScore();
-        Elements elements = Objects.requireNonNull(document).body().getElementsByTag("tr");
-        List<String> text = elements.eachText();
+        Elements elements = Objects.requireNonNull(document).body().getElementsByTag("td");
+        int count = 0;
         boolean startData = false;
-        for (String str : text) {
-            if (str.contains("序号")) {
+        for (int i = 0; i < elements.size(); i++) {
+            String str = elements.get(i).text();
+            if (str.contains("在修课程列表")) {
                 startData = true;
                 continue;
             }
@@ -77,20 +77,35 @@ public class ScoreMethod {
                 break;
             }
             if (startData) {
-                String[] data = str.trim().split(" ");
-                scoreCourseId.add(data[1]);
-                //可能会出问题的解决课程名称空格的方式
-                int i = 3;
-                for (; !data[i].contains("."); i++) {
-                    data[2] += data[i];
+                switch (count) {
+                    case 1:
+                        scoreCourseId.add(str);
+                        break;
+                    case 2:
+                        scoreCourseName.add(str);
+                        break;
+                    case 3:
+                        scoreXf.add(str);
+                        break;
+                    case 5:
+                        scoreCommon.add(str);
+                        break;
+                    case 6:
+                        scoreMid.add(str);
+                        break;
+                    case 7:
+                        scoreFinal.add(str);
+                        break;
+                    case 8:
+                        scoreTotal.add(str);
+                        break;
                 }
-                scoreCourseName.add(data[2]);
-                scoreXf.add(data[i]);
-                scoreCommon.add(data[i + 2]);
-                scoreMid.add(data[i + 3]);
-                scoreFinal.add(data[i + 4]);
-                scoreTotal.add(data[i + 5]);
-
+                if (count == 8) {
+                    count = 0;
+                    i += 3;
+                } else {
+                    count++;
+                }
             }
         }
         courseScore.setCourseAmount(scoreCourseId.size());
