@@ -129,6 +129,14 @@ public class HomeFragment extends Fragment {
                 });
             }
             scrollToPosition();
+            view.findViewById(R.id.cardView_info_title).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (recyclerView != null && isAdded()) {
+                        recyclerView.smoothScrollToPosition(0);
+                    }
+                }
+            });
 
             if (swipeRefreshLayout == null) {
                 swipeRefreshLayout = view.findViewById(R.id.swipeLayout_home);

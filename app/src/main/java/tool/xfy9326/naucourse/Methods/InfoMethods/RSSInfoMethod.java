@@ -9,6 +9,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -42,6 +43,7 @@ public class RSSInfoMethod {
     private final SparseArray<RSSReader.RSSObject> rssObjectSparseArray;
     private final Integer[] typeList;
     private final Context context;
+    private boolean hasFailedLoad = false;
 
     public RSSInfoMethod(@NonNull Context context) {
         this.context = context;
@@ -184,24 +186,43 @@ public class RSSInfoMethod {
     }
 
     public int load() throws Exception {
-        boolean failedLoad = false;
+        hasFailedLoad = false;
         rssObjectSparseArray.clear();
-        for (int typeCode : typeList) {
-            String rssUrl = getRSSUrl(typeCode);
-            if (rssUrl != null) {
-                String data = NetMethod.loadUrl(rssUrl);
-                System.gc();
-                if (data != null) {
-                    RSSReader.RSSObject rssObject = RSSReader.getRSSObject(data);
-                    if (rssObject != null) {
-                        rssObjectSparseArray.put(typeCode, rssObject);
-                        continue;
+        Thread[] threads = new Thread[typeList.length];
+        for (int i = 0; i < typeList.length; i++) {
+            final int type = typeList[i];
+            threads[i] = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    String rssUrl = getRSSUrl(type);
+                    if (rssUrl != null) {
+                        try {
+                            String data = NetMethod.loadUrl(rssUrl);
+                            if (data != null) {
+                                RSSReader.RSSObject rssObject = RSSReader.getRSSObject(data);
+                                if (rssObject != null) {
+                                    rssObjectSparseArray.put(type, rssObject);
+                                } else {
+                                    hasFailedLoad = true;
+                                }
+                            } else {
+                                hasFailedLoad = true;
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        hasFailedLoad = true;
                     }
                 }
-            }
-            failedLoad = true;
+            });
+            threads[i].start();
         }
-        if (typeList.length != 0 && failedLoad) {
+        for (Thread thread : threads) {
+            thread.join();
+        }
+        System.gc();
+        if (typeList.length != 0 && hasFailedLoad) {
             return Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR;
         }
         return Config.NET_WORK_GET_SUCCESS;
