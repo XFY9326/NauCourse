@@ -102,6 +102,7 @@ public class LevelExamActivity extends AppCompatActivity {
     }
 
     synchronized private void getData() {
+        BaseMethod.setRefreshing(swipeRefreshLayout, true);
         if (loadTime == 0) {
             new LevelExamAsync().execute(getApplicationContext());
         } else {
@@ -118,25 +119,11 @@ public class LevelExamActivity extends AppCompatActivity {
     }
 
     public void lastViewSet(Context context) {
-        if (swipeRefreshLayout != null) {
-            if (swipeRefreshLayout.isRefreshing()) {
-                swipeRefreshLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                });
-            }
-        }
         //离线数据加载完成，开始拉取网络数据
         if (loadTime == 1 && NetMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
-            swipeRefreshLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    swipeRefreshLayout.setRefreshing(true);
-                }
-            });
             getData();
+        } else {
+            BaseMethod.setRefreshing(swipeRefreshLayout, false);
         }
     }
 

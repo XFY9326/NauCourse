@@ -9,7 +9,7 @@ import tool.xfy9326.naucourse.Activities.SchoolCalendarActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.ImageMethod;
-import tool.xfy9326.naucourse.Methods.InfoMethods.JwInfoMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethods.SchoolCalendarMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 
 public class SchoolCalendarAsync extends AsyncTask<Context, Void, Context> {
@@ -37,12 +37,12 @@ public class SchoolCalendarAsync extends AsyncTask<Context, Void, Context> {
                     schoolCalendarActivity.setLoadTime(loadTime);
                 }
             } else {
-                JwInfoMethod jwInfoMethod = new JwInfoMethod(context[0]);
-                jwLoadSuccess = jwInfoMethod.load();
+                SchoolCalendarMethod schoolCalendarMethod = new SchoolCalendarMethod(context[0]);
+                jwLoadSuccess = schoolCalendarMethod.load();
                 if (jwLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                    imageLoadSuccess = jwInfoMethod.loadSchoolCalendarImage(true);
+                    imageLoadSuccess = schoolCalendarMethod.loadSchoolCalendarImage(true);
                     if (imageLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                        bitmap = jwInfoMethod.getSchoolCalendarImage();
+                        bitmap = schoolCalendarMethod.getSchoolCalendarImage();
                     }
                 }
                 loadTime++;

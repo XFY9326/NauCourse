@@ -357,18 +357,6 @@ public class PersonFragment extends Fragment {
 
     public void lastViewSet(Context context) {
         if (isAdded()) {
-            if (swipeRefreshLayout != null) {
-                if (swipeRefreshLayout.isRefreshing()) {
-                    swipeRefreshLayout.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (isAdded()) {
-                                swipeRefreshLayout.setRefreshing(false);
-                            }
-                        }
-                    });
-                }
-            }
             //离线数据加载完成，开始拉取网络数据，数据每天更新
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             if (loadTime == 1 && NetMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
@@ -392,19 +380,18 @@ public class PersonFragment extends Fragment {
                 }
 
                 if (update_day) {
-                    swipeRefreshLayout.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(true);
-                        }
-                    });
                     getData();
+                } else {
+                    BaseMethod.setRefreshing(swipeRefreshLayout, false);
                 }
+            } else {
+                BaseMethod.setRefreshing(swipeRefreshLayout, false);
             }
         }
     }
 
     synchronized private void getData() {
+        BaseMethod.setRefreshing(swipeRefreshLayout, true);
         if (context != null) {
             if (loadTime == 0) {
                 new StudentAsync().execute(context.getApplicationContext());

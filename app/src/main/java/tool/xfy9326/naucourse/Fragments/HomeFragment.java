@@ -330,27 +330,11 @@ public class HomeFragment extends Fragment {
 
     public void lastViewSet(Context context) {
         if (isAdded()) {
-            if (swipeRefreshLayout != null) {
-                if (swipeRefreshLayout.isRefreshing()) {
-                    swipeRefreshLayout.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (isAdded()) {
-                                swipeRefreshLayout.setRefreshing(false);
-                            }
-                        }
-                    });
-                }
-            }
             //离线数据加载完成，开始拉取网络数据
             if (loadTime == 1 && NetMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
-                swipeRefreshLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeRefreshLayout.setRefreshing(true);
-                    }
-                });
                 getData();
+            } else {
+                BaseMethod.setRefreshing(swipeRefreshLayout, false);
             }
         }
     }
@@ -379,6 +363,7 @@ public class HomeFragment extends Fragment {
     }
 
     synchronized private void getData() {
+        BaseMethod.setRefreshing(swipeRefreshLayout, true);
         if (context != null) {
             if (loadTime == 0) {
                 new InfoAsync().execute(context.getApplicationContext());

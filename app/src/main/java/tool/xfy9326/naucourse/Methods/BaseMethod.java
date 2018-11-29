@@ -9,6 +9,7 @@ import android.widget.Toast;
 import java.util.regex.Pattern;
 
 import androidx.annotation.NonNull;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import tool.xfy9326.naucourse.BaseApplication;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
@@ -99,5 +100,16 @@ public class BaseMethod {
             colorList[i] = Color.parseColor(colorStrList[i]);
         }
         return colorList;
+    }
+
+    public static void setRefreshing(final SwipeRefreshLayout swipeRefreshLayout, final boolean refreshing) {
+        if (swipeRefreshLayout != null && (refreshing && !swipeRefreshLayout.isRefreshing() || !refreshing && swipeRefreshLayout.isRefreshing())) {
+            swipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeRefreshLayout.setRefreshing(refreshing);
+                }
+            });
+        }
     }
 }

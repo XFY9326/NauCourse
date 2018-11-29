@@ -19,14 +19,14 @@ import tool.xfy9326.naucourse.Methods.NetMethod;
  * 获取教务信息
  */
 
-public class JwInfoMethod {
+public class SchoolCalendarMethod {
     private static final String server_url = "http://jw.nau.edu.cn";
     private static final String calendar_server_utl = "http://www.nau.edu.cn";
     private final Context context;
     @Nullable
     private Document document;
 
-    public JwInfoMethod(Context context) {
+    public SchoolCalendarMethod(Context context) {
         this.context = context;
         this.document = null;
     }
