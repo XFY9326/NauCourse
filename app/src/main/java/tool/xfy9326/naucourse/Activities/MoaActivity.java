@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -51,7 +52,7 @@ public class MoaActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_moa_jump) {
             if (recyclerView != null && moa != null) {
-                recyclerView.scrollToPosition(MoaMethod.getScrollPosition(moa));
+                recyclerView.smoothScrollToPosition(MoaMethod.getScrollPosition(moa));
             }
         }
         return super.onOptionsItemSelected(item);
@@ -90,6 +91,15 @@ public class MoaActivity extends AppCompatActivity {
                             swipeRefreshLayout.setRefreshing(false);
                         }
                     });
+                }
+            }
+        });
+
+        findViewById(R.id.cardView_moa_title).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (recyclerView != null) {
+                    recyclerView.smoothScrollToPosition(0);
                 }
             }
         });
