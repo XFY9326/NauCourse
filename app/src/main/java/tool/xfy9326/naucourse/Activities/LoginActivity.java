@@ -22,7 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import lib.xfy9326.naujwc.NauJwcClient;
+import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.LoginMethod;
@@ -88,30 +88,30 @@ public class LoginActivity extends AppCompatActivity {
                 if (NetMethod.isNetworkConnected(LoginActivity.this)) {
                     final String id = editText_userId.getText().toString().trim();
                     final String pw = editText_userPw.getText().toString().trim();
-                    final NauJwcClient nauJwcClient = BaseMethod.getApp(LoginActivity.this).getClient();
+                    final NauSSOClient nauSSOClient = BaseMethod.getApp(LoginActivity.this).getClient();
                     showLoadingDialog(LoginActivity.this);
                     LoginMethod.cleanUserTemp(LoginActivity.this);
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
                             try {
-                                if (nauJwcClient.login(id, pw)) {
-                                    loginURL = nauJwcClient.getLoginUrl();
+                                if (nauSSOClient.login(id, pw)) {
+                                    loginURL = nauSSOClient.getJwcLoginUrl();
                                     if (loginURL != null) {
                                         loginSuccess = true;
                                     }
                                 }
-                                loginErrorCode = nauJwcClient.getLoginErrorCode();
-                                if (loginErrorCode == NauJwcClient.LOGIN_ALREADY_LOGIN) {
+                                loginErrorCode = nauSSOClient.getLoginErrorCode();
+                                if (loginErrorCode == NauSSOClient.LOGIN_ALREADY_LOGIN) {
                                     LoginMethod.loginOut(LoginActivity.this);
                                     Thread.sleep(1000);
-                                    if (nauJwcClient.login(id, pw)) {
-                                        loginURL = nauJwcClient.getLoginUrl();
+                                    if (nauSSOClient.login(id, pw)) {
+                                        loginURL = nauSSOClient.getJwcLoginUrl();
                                         if (loginURL != null) {
                                             loginSuccess = true;
                                         }
                                     }
-                                    loginErrorCode = nauJwcClient.getLoginErrorCode();
+                                    loginErrorCode = nauSSOClient.getLoginErrorCode();
                                 }
                                 if (!LoginActivity.this.isDestroyed() && !LoginActivity.this.isFinishing()) {
                                     runOnUiThread(new Runnable() {
@@ -127,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 loginSuccess = false;
-                                loginErrorCode = NauJwcClient.LOGIN_ERROR;
+                                loginErrorCode = NauSSOClient.LOGIN_ERROR;
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -169,13 +169,13 @@ public class LoginActivity extends AppCompatActivity {
                     finish();
                 } else {
                     switch (loginErrorCode) {
-                        case NauJwcClient.LOGIN_ERROR:
+                        case NauSSOClient.LOGIN_ERROR:
                             Snackbar.make(findViewById(R.id.layout_login_content), R.string.login_error, Snackbar.LENGTH_SHORT).show();
                             break;
-                        case NauJwcClient.LOGIN_ALREADY_LOGIN:
+                        case NauSSOClient.LOGIN_ALREADY_LOGIN:
                             Snackbar.make(findViewById(R.id.layout_login_content), R.string.already_login_error, Snackbar.LENGTH_SHORT).show();
                             break;
-                        case NauJwcClient.LOGIN_USER_INFO_WRONG:
+                        case NauSSOClient.LOGIN_USER_INFO_WRONG:
                             Snackbar.make(findViewById(R.id.layout_login_content), R.string.user_info_error, Snackbar.LENGTH_SHORT).show();
                             break;
                     }

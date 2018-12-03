@@ -4,7 +4,7 @@ import android.app.Application;
 
 import com.tencent.bugly.Bugly;
 
-import lib.xfy9326.naujwc.NauJwcClient;
+import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Activities.CourseActivity;
 import tool.xfy9326.naucourse.Activities.ExamActivity;
 import tool.xfy9326.naucourse.Activities.InfoDetailActivity;
@@ -20,7 +20,7 @@ import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
  */
 
 public class BaseApplication extends Application {
-    private NauJwcClient client;
+    private NauSSOClient client;
     private ViewPagerAdapter viewPagerAdapter;
     private InfoDetailActivity infoDetailActivity;
     private ScoreActivity scoreActivity;
@@ -41,10 +41,10 @@ public class BaseApplication extends Application {
         if (!BuildConfig.DEBUG) {
             Bugly.init(this, "7b78d5ccdc", false);
         }
-        client = new NauJwcClient(this);
+        client = new NauSSOClient(this);
     }
 
-    public NauJwcClient getClient() {
+    public NauSSOClient getClient() {
         return client;
     }
 

@@ -23,7 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import lib.xfy9326.naujwc.NauJwcClient;
+import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.AsyncTasks.InfoDetailAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
@@ -96,7 +96,7 @@ public class InfoDetailActivity extends AppCompatActivity {
             if (Objects.equals(info_source, InfoAdapter.TOPIC_SOURCE_RSS)) {
                 url = info_url;
             } else if (Objects.requireNonNull(info_source).equals(InfoAdapter.TOPIC_SOURCE_JWC)) {
-                url = NauJwcClient.server_url + info_url;
+                url = NauSSOClient.JWC_SERVER_URL + info_url;
             }
             Intent intent = new Intent();
             if (url != null) {

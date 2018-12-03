@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.LoginMethod;
+import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
 
 /**
@@ -39,7 +40,7 @@ public class SchoolTimeMethod {
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
             String url = sharedPreferences.getString(Config.PREFERENCE_LOGIN_URL, null);
             if (url != null) {
-                String data = LoginMethod.getData(context, url, true);
+                String data = NetMethod.loadJwcUrlFromLoginClient(context, url, true);
                 if (LoginMethod.checkUserLogin(Objects.requireNonNull(data))) {
                     document = Jsoup.parse(data);
                     return Config.NET_WORK_GET_SUCCESS;

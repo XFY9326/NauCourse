@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.LoginMethod;
+import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Utils.CourseScore;
 
 /**
@@ -36,7 +37,7 @@ public class ScoreMethod {
     public int load() throws Exception {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
-            String data = LoginMethod.getData(context, "/Students/MyCourse.aspx", true);
+            String data = NetMethod.loadJwcUrlFromLoginClient(context, "/Students/MyCourse.aspx", true);
             if (data != null) {
                 if (LoginMethod.checkUserLogin(data)) {
                     document = Jsoup.parse(data);

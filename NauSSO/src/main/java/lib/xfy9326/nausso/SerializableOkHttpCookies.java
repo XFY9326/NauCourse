@@ -1,4 +1,4 @@
-package lib.xfy9326.naujwc;
+package lib.xfy9326.nausso;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

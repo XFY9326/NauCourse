@@ -1,4 +1,4 @@
-package lib.xfy9326.naujwc;
+package lib.xfy9326.nausso;
 
 import android.content.Context;
 

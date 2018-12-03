@@ -128,9 +128,9 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT = true;
     public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_JWC_SYSTEM = true;
     public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_JW = true;
-    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_XW = false;
-    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_TW = false;
-    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_XXB = false;
+    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_XW = true;
+    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_TW = true;
+    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_XXB = true;
 
     //网络连接错误代码
     public static final int NET_WORK_GET_SUCCESS = 0;

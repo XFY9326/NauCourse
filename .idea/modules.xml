@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AppUpdater/AppUpdater.iml" filepath="$PROJECT_DIR$/AppUpdater/AppUpdater.iml" />
       <module fileurl="file://$PROJECT_DIR$/NauCourse.iml" filepath="$PROJECT_DIR$/NauCourse.iml" />
-      <module fileurl="file://$PROJECT_DIR$/NauJwc/NauJwc.iml" filepath="$PROJECT_DIR$/NauJwc/NauJwc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/NauSSO/NauSSO.iml" filepath="$PROJECT_DIR$/NauSSO/NauSSO.iml" />
       <module fileurl="file://$PROJECT_DIR$/NetApi/NetApi.iml" filepath="$PROJECT_DIR$/NetApi/NetApi.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

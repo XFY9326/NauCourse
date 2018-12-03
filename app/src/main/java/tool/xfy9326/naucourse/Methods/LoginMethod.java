@@ -3,14 +3,12 @@ package tool.xfy9326.naucourse.Methods;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import java.io.File;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import lib.xfy9326.naujwc.NauJwcClient;
+import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 
 /**
@@ -19,40 +17,7 @@ import tool.xfy9326.naucourse.Config;
  */
 
 public class LoginMethod {
-    private static boolean isTryingReLogin = false;
-
-    /**
-     * 获取教务系统详情数据
-     * 必须在非UI线程运行
-     *
-     * @param context    Context
-     * @param url        需要获取的url
-     * @param tryReLogin 检测到登陆错误后是否尝试重新登陆
-     * @return 获取的数据字符串
-     * @throws Exception 网络连接中的错误
-     */
-    @Nullable
-    public static String getData(@NonNull Context context, String url, boolean tryReLogin) throws Exception {
-        String data = BaseMethod.getApp(context).getClient().getUserData(url);
-        if (!checkUserLogin(Objects.requireNonNull(data)) && tryReLogin) {
-            int reLogin_result = reLogin(context);
-            switch (reLogin_result) {
-                case Config.RE_LOGIN_SUCCESS:
-                    data = BaseMethod.getApp(context).getClient().getUserData(url);
-                    break;
-                case Config.RE_LOGIN_TRYING:
-                    while (isTryingReLogin) {
-                        Thread.sleep(500);
-                    }
-                    return getData(context, url, false);
-                case Config.RE_LOGIN_FAILED:
-                    Log.d("NETWORK", "RE LOGIN ERROR");
-                    break;
-            }
-        }
-        System.gc();
-        return data;
-    }
+    static boolean isTryingReLogin = false;
 
     /**
      * 检测用用户是否登陆成功
@@ -71,18 +36,18 @@ public class LoginMethod {
      * @return ReLogin状态值
      * @throws Exception 重新登陆时的网络错误
      */
-    private static int reLogin(@NonNull Context context) throws Exception {
+    synchronized static int reLogin(@NonNull Context context) throws Exception {
         if (!isTryingReLogin) {
             isTryingReLogin = true;
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             String id = sharedPreferences.getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
             String pw = SecurityMethod.getUserPassWord(context);
             if (!pw.equalsIgnoreCase(Config.DEFAULT_PREFERENCE_USER_PW) && !id.equalsIgnoreCase(Config.DEFAULT_PREFERENCE_USER_ID)) {
-                NauJwcClient nauJwcClient = BaseMethod.getApp(context).getClient();
-                nauJwcClient.loginOut();
+                NauSSOClient nauSSOClient = BaseMethod.getApp(context).getClient();
+                nauSSOClient.jwcLoginOut();
                 Thread.sleep(1000);
-                if (nauJwcClient.login(id, Objects.requireNonNull(pw))) {
-                    String loginURL = nauJwcClient.getLoginUrl();
+                if (nauSSOClient.login(id, Objects.requireNonNull(pw))) {
+                    String loginURL = nauSSOClient.getJwcLoginUrl();
                     if (loginURL != null) {
                         sharedPreferences.edit().putString(Config.PREFERENCE_LOGIN_URL, loginURL).apply();
                         isTryingReLogin = false;
@@ -106,6 +71,7 @@ public class LoginMethod {
      */
     public static boolean loginOut(@NonNull Context context) {
         try {
+            BaseMethod.getApp(context).getClient().jwcLoginOut();
             BaseMethod.getApp(context).getClient().loginOut();
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             sharedPreferences.edit().remove(Config.PREFERENCE_LOGIN_URL)

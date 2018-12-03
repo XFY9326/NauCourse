@@ -4,12 +4,15 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import lib.xfy9326.nausso.NauSSOClient;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -48,6 +51,52 @@ public class NetMethod {
         }
         response.close();
         return null;
+    }
+
+    /**
+     * 获取教务系统详情数据
+     * 必须在非UI线程运行
+     *
+     * @param context    Context
+     * @param url        需要获取的url
+     * @param tryReLogin 检测到登陆错误后是否尝试重新登陆
+     * @return 获取的数据字符串
+     * @throws Exception 网络连接中的错误
+     */
+    public static String loadJwcUrlFromLoginClient(@NonNull Context context, String url, boolean tryReLogin) throws Exception {
+        return loadUrlFromLoginClient(context, NauSSOClient.JWC_SERVER_URL + url, tryReLogin);
+    }
+
+    /**
+     * 通过登陆的客户端获取数据
+     * 必须在非UI线程运行
+     *
+     * @param context    Context
+     * @param url        需要获取的url
+     * @param tryReLogin 检测到登陆错误后是否尝试重新登陆
+     * @return 获取的数据字符串
+     * @throws Exception 网络连接中的错误
+     */
+    public static String loadUrlFromLoginClient(@NonNull Context context, String url, boolean tryReLogin) throws Exception {
+        String data = BaseMethod.getApp(context).getClient().getData(url);
+        if (!LoginMethod.checkUserLogin(Objects.requireNonNull(data)) && tryReLogin) {
+            int reLogin_result = LoginMethod.reLogin(context);
+            switch (reLogin_result) {
+                case Config.RE_LOGIN_SUCCESS:
+                    data = BaseMethod.getApp(context).getClient().getData(url);
+                    break;
+                case Config.RE_LOGIN_TRYING:
+                    while (LoginMethod.isTryingReLogin) {
+                        Thread.sleep(500);
+                    }
+                    return loadUrlFromLoginClient(context, url, false);
+                case Config.RE_LOGIN_FAILED:
+                    Log.d("NETWORK", "RE LOGIN ERROR");
+                    break;
+            }
+        }
+        System.gc();
+        return data;
     }
 
     /**
