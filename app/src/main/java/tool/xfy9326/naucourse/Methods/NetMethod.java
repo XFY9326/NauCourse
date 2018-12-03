@@ -12,7 +12,6 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import lib.xfy9326.nausso.NauSSOClient;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -51,20 +50,6 @@ public class NetMethod {
         }
         response.close();
         return null;
-    }
-
-    /**
-     * 获取教务系统详情数据
-     * 必须在非UI线程运行
-     *
-     * @param context    Context
-     * @param url        需要获取的url
-     * @param tryReLogin 检测到登陆错误后是否尝试重新登陆
-     * @return 获取的数据字符串
-     * @throws Exception 网络连接中的错误
-     */
-    public static String loadJwcUrlFromLoginClient(@NonNull Context context, String url, boolean tryReLogin) throws Exception {
-        return loadUrlFromLoginClient(context, NauSSOClient.JWC_SERVER_URL + url, tryReLogin);
     }
 
     /**

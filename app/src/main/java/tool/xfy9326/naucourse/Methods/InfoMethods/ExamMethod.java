@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import androidx.annotation.Nullable;
+import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.LoginMethod;
@@ -39,7 +40,7 @@ public class ExamMethod {
     public int load() throws Exception {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
-            String data = NetMethod.loadJwcUrlFromLoginClient(context, "/Students/MyExamArrangeList.aspx", true);
+            String data = NetMethod.loadUrlFromLoginClient(context, NauSSOClient.JWC_SERVER_URL + "/Students/MyExamArrangeList.aspx", true);
             if (data != null) {
                 if (LoginMethod.checkUserLogin(data)) {
                     document = Jsoup.parse(data);

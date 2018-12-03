@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.Nullable;
+import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.LoginMethod;
@@ -40,7 +41,7 @@ public class SchoolTimeMethod {
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
             String url = sharedPreferences.getString(Config.PREFERENCE_LOGIN_URL, null);
             if (url != null) {
-                String data = NetMethod.loadJwcUrlFromLoginClient(context, url, true);
+                String data = NetMethod.loadUrlFromLoginClient(context, NauSSOClient.JWC_SERVER_URL + url, true);
                 if (LoginMethod.checkUserLogin(Objects.requireNonNull(data))) {
                     document = Jsoup.parse(data);
                     return Config.NET_WORK_GET_SUCCESS;
