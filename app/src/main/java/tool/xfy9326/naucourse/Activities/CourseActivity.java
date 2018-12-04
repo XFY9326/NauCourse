@@ -212,7 +212,7 @@ public class CourseActivity extends AppCompatActivity {
         final View view = layoutInflater.inflate(R.layout.dialog_course_term_set, (ViewGroup) findViewById(R.id.layout_dialog_course_term_set));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(CourseActivity.this);
-        builder.setTitle(R.string.add_course_term);
+        builder.setTitle(R.string.course_term);
         builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

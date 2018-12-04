@@ -211,7 +211,12 @@ public class CourseMethod {
         table = new String[Config.MAX_WEEK_DAY + 1][Config.MAX_DAY_COURSE + 1];
         id_table = new String[Config.MAX_WEEK_DAY + 1][Config.MAX_DAY_COURSE + 1];
         this_week_no_show_table = new boolean[Config.MAX_WEEK_DAY + 1][Config.MAX_DAY_COURSE + 1];
+        String termCode = TimeMethod.getNowShowTerm(context, schoolTime);
         for (Course course : courses) {
+            //过滤非显示的学期的课程
+            if (termCode != null && !termCode.equals(course.getCourseTerm())) {
+                continue;
+            }
             CourseDetail[] courseDetail = course.getCourseDetail();
             for (CourseDetail detail : Objects.requireNonNull(courseDetail)) {
                 int mode = detail.getWeekMode();

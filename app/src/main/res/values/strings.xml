@@ -226,12 +226,12 @@
     <string name="attention">提示</string>
     <string name="auto_update_course_table_alert">当前已开启自动更新本学期教务数据功能\n非最新学期的教务系统中的课程有可能会被自动覆盖更新\n\n如果需要关闭可以前往设置进行更改！</string>
     <string name="course_empty">当前没有任何可以导入的课程！</string>
-    <string name="add_course_term">新增课程学期设定</string>
+    <string name="course_term">课程学期设定</string>
     <string name="school_year">学年：</string>
     <string name="term">学期：</string>
     <string name="term_one">第一学期</string>
     <string name="term_two">第二学期</string>
-    <string name="add_course_term_alert">注：学年指第一学期开始的年份\n&#160;&#160;&#160;&#160;必须进行学期设置且一旦设定就无法更改！\n&#160;&#160;&#160;&#160;旧学期的课程可能会在自动更新时自动删除！</string>
+    <string name="add_course_term_alert">注：学年指第一学期开始的年份\n&#160;&#160;&#160;&#160;旧学期的课程可能会在自动更新时自动删除！</string>
     <string name="add_course_only">仅添加</string>
     <string name="add_course_and_clean">添加并清空旧学期的课程</string>
     <string name="update_check">应用更新检查</string>

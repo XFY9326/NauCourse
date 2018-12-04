@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.Activities;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -31,6 +34,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.CourseEditMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Course;
@@ -173,6 +177,10 @@ public class CourseEditActivity extends AppCompatActivity {
                     }
                 }).show();
                 break;
+            //学期设定
+            case R.id.menu_course_term_date:
+                setTerm();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -193,6 +201,52 @@ public class CourseEditActivity extends AppCompatActivity {
         } else {
             finish();
         }
+    }
+
+    public void setTerm() {
+        LayoutInflater layoutInflater = getLayoutInflater();
+        final View view = layoutInflater.inflate(R.layout.dialog_course_term_set, (ViewGroup) findViewById(R.id.layout_dialog_course_term_set));
+
+        final EditText editText_year = view.findViewById(R.id.editText_course_school_year);
+        final RadioButton radioButton_term_one = view.findViewById(R.id.radioButton_term_one);
+        final RadioButton radioButton_term_two = view.findViewById(R.id.radioButton_term_two);
+        long courseTerm = Long.valueOf(course.getCourseTerm());
+        if (courseTerm > 0) {
+            editText_year.setText(String.valueOf(courseTerm / (10 * 10000)));
+            if (courseTerm % 10 == 1) {
+                radioButton_term_one.setChecked(true);
+                radioButton_term_two.setChecked(false);
+            } else if (courseTerm % 10 == 2) {
+                radioButton_term_one.setChecked(false);
+                radioButton_term_two.setChecked(true);
+            }
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(CourseEditActivity.this);
+        builder.setTitle(R.string.course_term);
+        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String str_year = editText_year.getText().toString();
+                if (!str_year.isEmpty() && BaseMethod.isInteger(str_year)) {
+                    long year = Long.valueOf(str_year);
+                    if (year >= 1983L) {
+                        //仅支持四位数的年份，仅支持一年两学期制
+                        long term = (year * 10000L + year + 1L) * 10L + (radioButton_term_one.isChecked() ? 1L : 2L);
+                        course.setCourseTerm(String.valueOf(term));
+                        ((TextView) findViewById(R.id.textView_course_edit_term)).setText(getString(R.string.course_edit_course_time_detail, year, year + 1, (radioButton_term_one.isChecked() ? 1 : 2)));
+                        needSave = true;
+                    } else {
+                        Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.input_error, Snackbar.LENGTH_LONG).show();
+                    }
+                } else {
+                    Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.input_error, Snackbar.LENGTH_LONG).show();
+                }
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, null);
+        builder.setView(view);
+        builder.show();
     }
 
     //保存编辑的数据

@@ -54,7 +54,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
     }
 
     //更新列表
-    public void updateJwcTopic(JwcTopic jwcTopic, SparseArray<RSSReader.RSSObject> rssObjects) {
+    synchronized public void updateJwcTopic(JwcTopic jwcTopic, SparseArray<RSSReader.RSSObject> rssObjects) {
         this.jwcTopic = jwcTopic;
         this.rssObjects = rssObjects;
         topic_data.clear();
@@ -103,7 +103,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
     }
 
     //设置数据（多来源数据整合）
-    private void setData() {
+    synchronized private void setData() {
         if (jwcTopic != null) {
             for (int i = 0; i < jwcTopic.getTopic_length(); i++) {
                 InfoDetail infoDetail = new InfoDetail();
@@ -123,17 +123,19 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
                 String defaultType = RSSInfoMethod.getTypeName(context, rssObjects.keyAt(i));
 
                 RSSReader.RSSObject rssObject = rssObjects.valueAt(i);
-                for (RSSReader.RSSChannel rssChannel : rssObject.getChannels()) {
-                    for (RSSReader.RSSItem rssItem : rssChannel.getItems()) {
-                        InfoDetail infoDetail = new InfoDetail();
-                        infoDetail.setTitle(rssItem.getTitle());
-                        infoDetail.setClick(null);
-                        infoDetail.setDate(rssItem.getDate());
-                        infoDetail.setPost(post);
-                        infoDetail.setSource(TOPIC_SOURCE_RSS);
-                        infoDetail.setUrl(rssItem.getLink());
-                        infoDetail.setType(rssItem.getType() == null ? defaultType : rssItem.getType());
-                        topic_data.add(infoDetail);
+                if (rssObject != null) {
+                    for (RSSReader.RSSChannel rssChannel : rssObject.getChannels()) {
+                        for (RSSReader.RSSItem rssItem : rssChannel.getItems()) {
+                            InfoDetail infoDetail = new InfoDetail();
+                            infoDetail.setTitle(rssItem.getTitle());
+                            infoDetail.setClick(null);
+                            infoDetail.setDate(rssItem.getDate());
+                            infoDetail.setPost(post);
+                            infoDetail.setSource(TOPIC_SOURCE_RSS);
+                            infoDetail.setUrl(rssItem.getLink());
+                            infoDetail.setType(rssItem.getType() == null ? defaultType : rssItem.getType());
+                            topic_data.add(infoDetail);
+                        }
                     }
                 }
             }

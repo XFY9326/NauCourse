@@ -69,6 +69,9 @@ public class CourseEditMethod {
         for (int i = 0; i < courses.size(); i++) {
             for (int j = 0; j < courses.size(); j++) {
                 if (i != j) {
+                    if (courses.get(i).getCourseTerm() != null && !courses.get(i).getCourseTerm().equals(courses.get(j).getCourseTerm())) {
+                        continue;
+                    }
                     CourseDetail[] courseDetail_list_check = courses.get(i).getCourseDetail();
                     if (courseDetail_list_check != null) {
                         for (CourseDetail courseDetail_check : courseDetail_list_check) {

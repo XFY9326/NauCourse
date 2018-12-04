@@ -67,6 +67,45 @@ public class TimeMethod {
     }
 
     /**
+     * 获取当前显示课程的学期代码
+     * 注：通过学期开始日期获取
+     *
+     * @param context    Context
+     * @param schoolTime SchoolTime
+     * @return 学期代码
+     */
+    static String getNowShowTerm(Context context, SchoolTime schoolTime) {
+        String useTermStr;
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String customStart = sharedPreferences.getString(Config.PREFERENCE_CUSTOM_TERM_START_DATE, null);
+        if (customStart == null && schoolTime == null) {
+            return null;
+        } else if (customStart != null) {
+            useTermStr = customStart;
+        } else {
+            useTermStr = schoolTime.getStartTime();
+        }
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+            Date date = simpleDateFormat.parse(useTermStr);
+            Calendar calendar = Calendar.getInstance(Locale.CHINA);
+            calendar.setTime(date);
+            StringBuilder result = new StringBuilder();
+            int year = calendar.get(Calendar.YEAR);
+            result.append(year).append(year + 1);
+            if (calendar.get(Calendar.MONTH) + 1 > 6) {
+                result.append(1);
+            } else {
+                result.append(2);
+            }
+            return result.toString();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
      * 获取周数数组
      *
      * @param context    Context
