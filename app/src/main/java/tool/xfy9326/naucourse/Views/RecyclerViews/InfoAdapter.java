@@ -144,7 +144,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
         sort();
     }
 
-    //删除超过半年的消息
+    //删除超过三个月的消息
     synchronized private void deleteOutOfDateMsg() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
         long now = System.currentTimeMillis();
@@ -155,7 +155,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
                 long topic = simpleDateFormat.parse(detail.getDate()).getTime();
                 if (now > topic) {
                     int day = (int) ((now - topic) / (1000 * 3600 * 24));
-                    if (day > (30 * 6)) {
+                    if (day > (31 * 3)) {
                         iterator.remove();
                     }
                 }
