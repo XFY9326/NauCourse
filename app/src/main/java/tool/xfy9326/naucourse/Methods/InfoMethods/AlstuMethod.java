@@ -123,9 +123,7 @@ public class AlstuMethod {
                 if (!jumpTitle) {
                     jumpTitle = true;
                 } else {
-                    String text = element_text.text();
-                    text = text.replace("&nbsp;", " ");
-                    result.append(text).append("\n");
+                    result.append(element_text.html());
                 }
             }
         }

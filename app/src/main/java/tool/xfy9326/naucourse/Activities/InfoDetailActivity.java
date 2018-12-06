@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -175,16 +176,12 @@ public class InfoDetailActivity extends AppCompatActivity {
     public void InfoDetailSet(@Nullable String content) {
         if (content != null) {
             TextView textView_content = findViewById(R.id.textView_info_detail_content);
-            if (Objects.equals(info_source, InfoAdapter.TOPIC_SOURCE_JWC)) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    textView_content.setText(Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY));
-                } else {
-                    textView_content.setText(Html.fromHtml(content));
-                }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                textView_content.setText(Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY));
             } else {
-                textView_content.setText(content);
+                textView_content.setText(Html.fromHtml(content));
             }
-
+            textView_content.setMovementMethod(LinkMovementMethod.getInstance());
             textView_content.setVisibility(View.VISIBLE);
             ProgressBar progressBar_loading = findViewById(R.id.progressBar_info_detail_loading);
             progressBar_loading.setVisibility(View.GONE);

@@ -174,6 +174,6 @@ public class JwcInfoMethod {
                 }
             }
         }
-        return result.toString().trim();
+        return result.toString();
     }
 }

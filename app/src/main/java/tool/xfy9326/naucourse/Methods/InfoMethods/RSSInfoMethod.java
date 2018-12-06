@@ -11,7 +11,6 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -44,6 +43,7 @@ public class RSSInfoMethod {
     private final Integer[] typeList;
     private final Context context;
     private boolean hasFailedLoad = false;
+    private static String lastLoadInfoDetailHost;
 
     public RSSInfoMethod(@NonNull Context context) {
         this.context = context;
@@ -161,8 +161,8 @@ public class RSSInfoMethod {
 
     public static int loadDetail(String url) throws Exception {
         String data = NetMethod.loadUrl(url);
+        lastLoadInfoDetailHost = url.substring(0, url.indexOf("/", 9));
         if (data != null) {
-            data = data.replace("&nbsp;", "\\b");
             document_detail = Jsoup.parse(data);
             return Config.NET_WORK_GET_SUCCESS;
         }
@@ -171,18 +171,12 @@ public class RSSInfoMethod {
 
     @NonNull
     public static String getDetail() {
-        StringBuilder result = new StringBuilder();
         Elements tags = Objects.requireNonNull(document_detail).body().getElementsByClass("Article_Content");
-        tags = tags.first().getElementsByTag("p");
-        List<String> data = tags.eachText();
-        for (String str : data) {
-            if (str.equals("") || str.equals(" ")) {
-                result.append("\n");
-            } else {
-                result.append(str.replace("\\b", " ")).append("\n");
-            }
+        String html = tags.html();
+        if (lastLoadInfoDetailHost != null) {
+            html = html.replace("href=\"", "href=\"" + lastLoadInfoDetailHost).replaceAll("<img.*?/?>", "");
         }
-        return result.toString();
+        return html;
     }
 
     public int load() throws Exception {
