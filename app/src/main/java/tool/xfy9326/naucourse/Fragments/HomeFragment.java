@@ -34,6 +34,7 @@ import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Methods.NextClassMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Tools.RSSReader;
+import tool.xfy9326.naucourse.Utils.AlstuTopic;
 import tool.xfy9326.naucourse.Utils.JwcTopic;
 import tool.xfy9326.naucourse.Utils.NextCourse;
 import tool.xfy9326.naucourse.Views.RecyclerViews.InfoAdapter;
@@ -221,7 +222,8 @@ public class HomeFragment extends Fragment {
                     context.getString(R.string.jwc),
                     context.getString(R.string.xw),
                     context.getString(R.string.tw),
-                    context.getString(R.string.xxb)
+                    context.getString(R.string.xxb),
+                    context.getString(R.string.alstu_system)
             };
             infoSelectList = DataMethod.InfoData.getInfoChannel(context);
             builder.setMultiChoiceItems(infoList, infoSelectList, new DialogInterface.OnMultiChoiceClickListener() {
@@ -315,14 +317,14 @@ public class HomeFragment extends Fragment {
         this.loadTime = loadTime;
     }
 
-    public void InfoSet(@Nullable JwcTopic jwcTopic, @Nullable SparseArray<RSSReader.RSSObject> rssObjects) {
+    public void InfoSet(@Nullable JwcTopic jwcTopic, @Nullable AlstuTopic alstuTopic, @Nullable SparseArray<RSSReader.RSSObject> rssObjects) {
         if (isAdded() && recyclerView != null) {
             if (!(jwcTopic == null && rssObjects == null)) {
                 if (infoAdapter == null) {
-                    infoAdapter = new InfoAdapter(getActivity(), jwcTopic, rssObjects);
+                    infoAdapter = new InfoAdapter(getActivity(), jwcTopic, alstuTopic, rssObjects);
                     recyclerView.setAdapter(infoAdapter);
                 } else {
-                    infoAdapter.updateJwcTopic(jwcTopic, rssObjects);
+                    infoAdapter.updateJwcTopic(jwcTopic, alstuTopic, rssObjects);
                 }
             }
         }

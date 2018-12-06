@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Fragments.HomeFragment;
+import tool.xfy9326.naucourse.Methods.InfoMethods.AlstuMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethods.ExamMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethods.JwcInfoMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethods.LevelExamMethod;
@@ -174,6 +175,9 @@ public class DataMethod {
             case SuspendCourseMethod.FILE_NAME:
                 nowVersionCode = Config.DATA_VERSION_SUSPEND_COURSE;
                 break;
+            case AlstuMethod.FILE_NAME:
+                nowVersionCode = Config.DATA_VERSION_ALSTU_TOPIC;
+                break;
             default:
                 nowVersionCode = 0;
                 break;
@@ -204,6 +208,7 @@ public class DataMethod {
                     sharedPreferences.getBoolean(Config.PREFERENCE_INFO_CHANNEL_SELECTED_XW, Config.DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_XW),
                     sharedPreferences.getBoolean(Config.PREFERENCE_INFO_CHANNEL_SELECTED_TW, Config.DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_TW),
                     sharedPreferences.getBoolean(Config.PREFERENCE_INFO_CHANNEL_SELECTED_XXB, Config.DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_XXB),
+                    sharedPreferences.getBoolean(Config.PREFERENCE_INFO_CHANNEL_SELECTED_ALSTU, Config.DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_ALSTU)
             };
         }
 
@@ -213,7 +218,8 @@ public class DataMethod {
                     .putBoolean(Config.PREFERENCE_INFO_CHANNEL_SELECTED_JW, channel[1])
                     .putBoolean(Config.PREFERENCE_INFO_CHANNEL_SELECTED_XW, channel[2])
                     .putBoolean(Config.PREFERENCE_INFO_CHANNEL_SELECTED_TW, channel[3])
-                    .putBoolean(Config.PREFERENCE_INFO_CHANNEL_SELECTED_XXB, channel[4]).apply();
+                    .putBoolean(Config.PREFERENCE_INFO_CHANNEL_SELECTED_XXB, channel[4])
+                    .putBoolean(Config.PREFERENCE_INFO_CHANNEL_SELECTED_ALSTU, channel[5]).apply();
         }
     }
 }

@@ -159,17 +159,19 @@ public class JwcInfoMethod {
 
     @NonNull
     public String getDetail() {
-        Elements tags = Objects.requireNonNull(detailDocument).body().getElementsByTag("tr");
-        String[] temp = tags.html().split("</td>");
         StringBuilder result = new StringBuilder();
-        boolean nextContent = false;
-        for (String str : temp) {
-            if (str.contains("发布者：")) {
-                nextContent = true;
-                continue;
-            }
-            if (nextContent) {
-                result.append(str);
+        if (detailDocument != null) {
+            Elements tags = detailDocument.body().getElementsByTag("tr");
+            String[] temp = tags.html().split("</td>");
+            boolean nextContent = false;
+            for (String str : temp) {
+                if (str.contains("发布者：")) {
+                    nextContent = true;
+                    continue;
+                }
+                if (nextContent) {
+                    result.append(str);
+                }
             }
         }
         return result.toString().trim();

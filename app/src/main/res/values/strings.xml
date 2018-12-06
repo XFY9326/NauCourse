@@ -266,6 +266,9 @@
     <string name="course_table_reloading">正在重新加载课表中… …</string>
     <string name="jwc_net_no_connection">教务处网络连接失败！</string>
     <string name="not_publish">未发布</string>
+    <string name="alstu_system">奥兰系统</string>
+    <string name="alstu_msg">奥兰通知</string>
+    <string name="please_login_shared_url">（请登录后查看本消息）</string>
     <string name="beta">测试版</string>
     <string name="release">稳定版</string>
     <string name="debug">内测版</string>

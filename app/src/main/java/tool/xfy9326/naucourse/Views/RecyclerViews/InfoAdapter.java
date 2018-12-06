@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Objects;
@@ -25,6 +26,7 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.InfoMethods.RSSInfoMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Tools.RSSReader;
+import tool.xfy9326.naucourse.Utils.AlstuTopic;
 import tool.xfy9326.naucourse.Utils.InfoDetail;
 import tool.xfy9326.naucourse.Utils.JwcTopic;
 
@@ -36,17 +38,20 @@ import tool.xfy9326.naucourse.Utils.JwcTopic;
 public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder> {
     public static final String TOPIC_SOURCE_JWC = "JWC";
     public static final String TOPIC_SOURCE_RSS = "RSS";
+    public static final String TOPIC_SOURCE_ALSTU = "ALSTU";
 
     private final Context context;
     @NonNull
     private final ArrayList<InfoDetail> topic_data;
     private JwcTopic jwcTopic;
+    private AlstuTopic alstuTopic;
     private SparseArray<RSSReader.RSSObject> rssObjects;
     private Comparator<InfoDetail> date_comparator;
 
-    public InfoAdapter(Context context, JwcTopic jwcTopic, SparseArray<RSSReader.RSSObject> rssObjects) {
+    public InfoAdapter(Context context, JwcTopic jwcTopic, AlstuTopic alstuTopic, SparseArray<RSSReader.RSSObject> rssObjects) {
         this.context = context;
         this.jwcTopic = jwcTopic;
+        this.alstuTopic = alstuTopic;
         this.rssObjects = rssObjects;
         this.date_comparator = null;
         this.topic_data = new ArrayList<>();
@@ -54,8 +59,9 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
     }
 
     //更新列表
-    synchronized public void updateJwcTopic(JwcTopic jwcTopic, SparseArray<RSSReader.RSSObject> rssObjects) {
+    synchronized public void updateJwcTopic(JwcTopic jwcTopic, AlstuTopic alstuTopic, SparseArray<RSSReader.RSSObject> rssObjects) {
         this.jwcTopic = jwcTopic;
+        this.alstuTopic = alstuTopic;
         this.rssObjects = rssObjects;
         topic_data.clear();
         setData();
@@ -117,6 +123,19 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
                 topic_data.add(infoDetail);
             }
         }
+        if (alstuTopic != null) {
+            for (int i = 0; i < alstuTopic.getTopic_length(); i++) {
+                InfoDetail infoDetail = new InfoDetail();
+                infoDetail.setTitle(Objects.requireNonNull(alstuTopic.getTopicTitle())[i]);
+                infoDetail.setClick(null);
+                infoDetail.setDate(Objects.requireNonNull(alstuTopic.getTopicDate())[i]);
+                infoDetail.setPost(context.getString(R.string.alstu_system));
+                infoDetail.setSource(TOPIC_SOURCE_ALSTU);
+                infoDetail.setUrl(Objects.requireNonNull(alstuTopic.getTopicUrl())[i]);
+                infoDetail.setType(context.getString(R.string.alstu_msg));
+                topic_data.add(infoDetail);
+            }
+        }
         if (rssObjects != null) {
             for (int i = 0; i < rssObjects.size(); i++) {
                 String post = RSSInfoMethod.getTypePostName(context, rssObjects.keyAt(i));
@@ -151,16 +170,18 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
         Iterator<InfoDetail> iterator = topic_data.iterator();
         while (iterator.hasNext()) {
             InfoDetail detail = iterator.next();
-            try {
-                long topic = simpleDateFormat.parse(detail.getDate()).getTime();
-                if (now > topic) {
-                    int day = (int) ((now - topic) / (1000 * 3600 * 24));
-                    if (day > (31 * 3)) {
-                        iterator.remove();
+            if (detail != null) {
+                try {
+                    long topic = simpleDateFormat.parse(detail.getDate()).getTime();
+                    if (now > topic) {
+                        int day = (int) ((now - topic) / (1000 * 3600 * 24));
+                        if (day > (31 * 3)) {
+                            iterator.remove();
+                        }
                     }
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -176,8 +197,15 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
                         try {
                             String time1 = o1.getDate().trim();
                             String time2 = o2.getDate().trim();
-                            long day1 = simpleDateFormat.parse(time1).getTime();
-                            long day2 = simpleDateFormat.parse(time2).getTime();
+
+                            //格式化日期显示
+                            Date date1 = simpleDateFormat.parse(time1);
+                            Date date2 = simpleDateFormat.parse(time2);
+                            o1.setDate(simpleDateFormat.format(date1));
+                            o2.setDate(simpleDateFormat.format(date2));
+
+                            long day1 = date1.getTime();
+                            long day2 = date2.getTime();
                             if (day1 > day2) {
                                 return -1;
                             } else {

@@ -101,6 +101,7 @@ public class Config {
     public static final String PREFERENCE_INFO_CHANNEL_SELECTED_XW = "INFO_CHANNEL_SELECTED_XW";
     public static final String PREFERENCE_INFO_CHANNEL_SELECTED_TW = "INFO_CHANNEL_SELECTED_TW";
     public static final String PREFERENCE_INFO_CHANNEL_SELECTED_XXB = "INFO_CHANNEL_SELECTED_XXB";
+    public static final String PREFERENCE_INFO_CHANNEL_SELECTED_ALSTU = "INFO_CHANNEL_SELECTED_ALSTU";
 
     public static final boolean DEFAULT_PREFERENCE_HAS_LOGIN = false;
     public static final boolean DEFAULT_PREFERENCE_REMEMBER_PW = true;
@@ -131,6 +132,7 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_XW = true;
     public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_TW = true;
     public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_XXB = true;
+    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_ALSTU = true;
 
     //网络连接错误代码
     public static final int NET_WORK_GET_SUCCESS = 0;
@@ -150,6 +152,7 @@ public class Config {
     public static final int DATA_VERSION_STUDENT_SCORE = 1;
     public static final int DATA_VERSION_LEVEL_EXAM = 1;
     public static final int DATA_VERSION_MOA = 1;
+    public static final int DATA_VERSION_ALSTU_TOPIC = 1;
     public static final int DATA_VERSION_SUSPEND_COURSE = 1;
 
     public static final String DONATE_URL_ALIPAY = "https://www.xfy9326.top/api/donate/alipay.jpg";

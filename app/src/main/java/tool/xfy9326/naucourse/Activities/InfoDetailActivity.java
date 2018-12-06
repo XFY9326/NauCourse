@@ -27,6 +27,7 @@ import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.AsyncTasks.InfoDetailAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethods.AlstuMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.InfoDetail;
@@ -97,7 +98,10 @@ public class InfoDetailActivity extends AppCompatActivity {
                 url = info_url;
             } else if (Objects.requireNonNull(info_source).equals(InfoAdapter.TOPIC_SOURCE_JWC)) {
                 url = NauSSOClient.JWC_SERVER_URL + info_url;
+            } else if (Objects.requireNonNull(info_source).equals(InfoAdapter.TOPIC_SOURCE_ALSTU)) {
+                url = AlstuMethod.ALSTU_SERVER_URL + info_url;
             }
+
             Intent intent = new Intent();
             if (url != null) {
                 if (item.getItemId() == R.id.menu_info_detail_open_in_browser) {
@@ -105,10 +109,16 @@ public class InfoDetailActivity extends AppCompatActivity {
                     Uri content_url = Uri.parse(url);
                     intent.setData(content_url);
                 } else if (item.getItemId() == R.id.menu_info_detail_share) {
+                    String shareText;
+                    if (Objects.requireNonNull(info_source).equals(InfoAdapter.TOPIC_SOURCE_ALSTU)) {
+                        shareText = info_title + " " + getString(R.string.please_login_shared_url) + "\n" + url;
+                    } else {
+                        shareText = info_title + "\n" + url;
+                    }
                     intent.setAction(Intent.ACTION_SEND);
                     intent.setType("text/plain");
                     intent.putExtra(Intent.EXTRA_SUBJECT, info_type);
-                    intent.putExtra(Intent.EXTRA_TEXT, info_title + "\n" + url);
+                    intent.putExtra(Intent.EXTRA_TEXT, shareText);
                     intent = Intent.createChooser(intent, getString(R.string.share));
                 }
                 try {
@@ -171,7 +181,7 @@ public class InfoDetailActivity extends AppCompatActivity {
                 } else {
                     textView_content.setText(Html.fromHtml(content));
                 }
-            } else if (Objects.requireNonNull(info_source).equals(InfoAdapter.TOPIC_SOURCE_RSS)) {
+            } else {
                 textView_content.setText(content);
             }
 

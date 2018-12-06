@@ -96,6 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                         public void run() {
                             try {
                                 if (nauSSOClient.login(id, pw)) {
+                                    nauSSOClient.alstuLogin();
                                     loginURL = nauSSOClient.getJwcLoginUrl();
                                     if (loginURL != null) {
                                         loginSuccess = true;

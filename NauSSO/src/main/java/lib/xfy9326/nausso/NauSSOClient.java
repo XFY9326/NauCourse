@@ -27,6 +27,8 @@ public class NauSSOClient {
     private static final int LOGIN_SUCCESS = 0;
     //只是登陆SSO可能获取教务登陆URL会更加繁琐
     private static final String single_server_url = "http://sso.nau.edu.cn/sso/login?service=http%3a%2f%2fjwc.nau.edu.cn%2fLogin_Single.aspx";
+    private static final String ALSTU_LOGIN_SSO_URL = "http://sso.nau.edu.cn/sso/login?service=http%3a%2f%2falstu.nau.edu.cn%2flogin.aspx";
+    private static final String ALSTU_TICKET_URL = "http://alstu.nau.edu.cn/login.aspx?ticket=";
     private static final String single_login_out_url = "http://sso.nau.edu.cn/sso/logout";
     private static final String LOG_TAG = "NAU_SSO_CLIENT";
     @NonNull
@@ -63,6 +65,19 @@ public class NauSSOClient {
     synchronized public void jwcLoginOut() throws Exception {
         Request.Builder builder = new Request.Builder();
         builder.url(JWC_SERVER_URL + "/LoginOut.aspx");
+        client.newCall(builder.build()).execute().close();
+    }
+
+    synchronized public void alstuLogin() throws Exception {
+        Request.Builder builder = new Request.Builder();
+        builder.url(ALSTU_LOGIN_SSO_URL);
+        Response response = client.newCall(builder.build()).execute();
+
+        String ssoTicket = response.request().url().queryParameter("ticket");
+        response.close();
+
+        builder = new Request.Builder();
+        builder.url(ALSTU_TICKET_URL + ssoTicket);
         client.newCall(builder.build()).execute().close();
     }
 

@@ -26,7 +26,7 @@ public class LoginMethod {
      * @return 是否登陆成功
      */
     public static boolean checkUserLogin(String data) {
-        return !(data.contains("系统错误提示页") && data.contains("当前程序在执行过程中出现了未知异常，请重试") || data.contains("用户登录_南京审计大学教务管理系统"));
+        return !(data.contains("系统错误提示页") && data.contains("当前程序在执行过程中出现了未知异常，请重试") || data.contains("用户登录_南京审计大学教务管理系统") || data.contains("南京审计大学统一身份认证登录") || data.contains("location=\"LOGIN.ASPX\";"));
     }
 
     /**
@@ -47,6 +47,7 @@ public class LoginMethod {
                 nauSSOClient.jwcLoginOut();
                 Thread.sleep(1000);
                 if (nauSSOClient.login(id, Objects.requireNonNull(pw))) {
+                    nauSSOClient.alstuLogin();
                     String loginURL = nauSSOClient.getJwcLoginUrl();
                     if (loginURL != null) {
                         sharedPreferences.edit().putString(Config.PREFERENCE_LOGIN_URL, loginURL).apply();
