@@ -274,7 +274,7 @@
     <string name="debug">内测版</string>
     <string name="enlarge_alert">注：可使用手势放大查看图片</string>
     <string name="donate">请开发者喝一杯咖啡</string>
-    <string name="donate_content">开发软件不易，如果你希望能够给开发者一些赞助，可以通过如下渠道：\n\n注：所有的赞助者会被记录进本APP中</string>
+    <string name="donate_content">开发软件不易，如果你希望能够给开发者一些赞助，可以通过如下渠道：</string>
     <string name="alipay">支付宝</string>
     <string name="wechat">微信</string>
     <string name="qq_wallet">QQ钱包</string>

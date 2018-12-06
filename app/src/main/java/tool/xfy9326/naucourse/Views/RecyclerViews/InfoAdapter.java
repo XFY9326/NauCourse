@@ -43,6 +43,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
     private final Context context;
     @NonNull
     private final ArrayList<InfoDetail> topic_data;
+    private final ArrayList<InfoDetail> topic_data_new;
     private JwcTopic jwcTopic;
     private AlstuTopic alstuTopic;
     private SparseArray<RSSReader.RSSObject> rssObjects;
@@ -55,17 +56,31 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
         this.rssObjects = rssObjects;
         this.date_comparator = null;
         this.topic_data = new ArrayList<>();
-        setData();
+        this.topic_data_new = new ArrayList<>();
+        setData(topic_data);
     }
 
-    //更新列表
-    synchronized public void updateJwcTopic(JwcTopic jwcTopic, AlstuTopic alstuTopic, SparseArray<RSSReader.RSSObject> rssObjects) {
-        this.jwcTopic = jwcTopic;
-        this.alstuTopic = alstuTopic;
-        this.rssObjects = rssObjects;
-        topic_data.clear();
-        setData();
-        notifyDataSetChanged();
+    //删除超过三个月的消息
+    synchronized private static void deleteOutOfDateMsg(ArrayList<InfoDetail> topic_data) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+        long now = System.currentTimeMillis();
+        Iterator<InfoDetail> iterator = topic_data.iterator();
+        while (iterator.hasNext()) {
+            InfoDetail detail = iterator.next();
+            if (detail != null) {
+                try {
+                    long topic = simpleDateFormat.parse(detail.getDate()).getTime();
+                    if (now > topic) {
+                        int day = (int) ((now - topic) / (1000 * 3600 * 24));
+                        if (day > (31 * 3)) {
+                            iterator.remove();
+                        }
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @NonNull
@@ -108,8 +123,24 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
         }
     }
 
+    //更新列表
+    synchronized public void updateJwcTopic(JwcTopic jwcTopic, AlstuTopic alstuTopic, SparseArray<RSSReader.RSSObject> rssObjects) {
+        this.jwcTopic = jwcTopic;
+        this.alstuTopic = alstuTopic;
+        this.rssObjects = rssObjects;
+        if (this.topic_data.isEmpty()) {
+            setData(this.topic_data);
+        } else {
+            this.topic_data.clear();
+            setData(topic_data_new);
+            this.topic_data.addAll(topic_data_new);
+            this.topic_data_new.clear();
+        }
+        notifyDataSetChanged();
+    }
+
     //设置数据（多来源数据整合）
-    synchronized private void setData() {
+    synchronized private void setData(ArrayList<InfoDetail> topic_data) {
         if (jwcTopic != null) {
             for (int i = 0; i < jwcTopic.getTopic_length(); i++) {
                 InfoDetail infoDetail = new InfoDetail();
@@ -159,35 +190,12 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
                 }
             }
         }
-        deleteOutOfDateMsg();
-        sort();
-    }
-
-    //删除超过三个月的消息
-    synchronized private void deleteOutOfDateMsg() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
-        long now = System.currentTimeMillis();
-        Iterator<InfoDetail> iterator = topic_data.iterator();
-        while (iterator.hasNext()) {
-            InfoDetail detail = iterator.next();
-            if (detail != null) {
-                try {
-                    long topic = simpleDateFormat.parse(detail.getDate()).getTime();
-                    if (now > topic) {
-                        int day = (int) ((now - topic) / (1000 * 3600 * 24));
-                        if (day > (31 * 3)) {
-                            iterator.remove();
-                        }
-                    }
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        deleteOutOfDateMsg(topic_data);
+        sort(topic_data);
     }
 
     //数据按照日期排序
-    synchronized private void sort() {
+    synchronized private void sort(ArrayList<InfoDetail> topic_data) {
         if (date_comparator == null) {
             final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
             date_comparator = new Comparator<InfoDetail>() {
