@@ -113,23 +113,25 @@ public class AlstuMethod {
 
     private static String getDownloadFileText(Document detailDocument) {
         StringBuilder result = new StringBuilder();
-        result.append("<br/><br/><br/><p>附件：</p>");
-
-        Element element_tjsj = Objects.requireNonNull(detailDocument).body().getElementById("tjsj");
-        String year = element_tjsj.text().substring(0, 4);
-
         Element element_data = Objects.requireNonNull(detailDocument).body().getElementById("MyDataList");
-        Elements elements_td = element_data.getElementsByTag("td");
-        for (Element elementChild : elements_td) {
-            Element a = elementChild.getElementsByTag("a").first();
-            if (a.hasAttr("onclick")) {
-                String fileDownloadName = a.attr("onclick");
-                fileDownloadName = fileDownloadName.substring(fileDownloadName.indexOf("\'") + 1, fileDownloadName.lastIndexOf("\'"));
-                result.append(combineDownloadText(year, fileDownloadName, a.text()));
+        if (element_data != null) {
+            Elements elements_td = element_data.getElementsByTag("td");
+
+            result.append("<br/><br/><br/><p>附件：</p>");
+
+            Element element_tjsj = Objects.requireNonNull(detailDocument).body().getElementById("tjsj");
+            String year = element_tjsj.text().substring(0, 4);
+
+            for (Element elementChild : elements_td) {
+                Element a = elementChild.getElementsByTag("a").first();
+                if (a.hasAttr("onclick")) {
+                    String fileDownloadName = a.attr("onclick");
+                    fileDownloadName = fileDownloadName.substring(fileDownloadName.indexOf("\'") + 1, fileDownloadName.lastIndexOf("\'"));
+                    result.append(combineDownloadText(year, fileDownloadName, a.text()));
+                }
+
             }
-
         }
-
         return result.toString();
     }
 
