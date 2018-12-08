@@ -111,22 +111,40 @@ public class AlstuMethod {
         return Config.NET_WORK_ERROR_CODE_CONNECT_NO_LOGIN;
     }
 
+    private static String getDownloadFileText(Document detailDocument) {
+        StringBuilder result = new StringBuilder();
+        result.append("<br/><br/><br/><p>附件：</p>");
+
+        Element element_tjsj = Objects.requireNonNull(detailDocument).body().getElementById("tjsj");
+        String year = element_tjsj.text().substring(0, 4);
+
+        Element element_data = Objects.requireNonNull(detailDocument).body().getElementById("MyDataList");
+        Elements elements_td = element_data.getElementsByTag("td");
+        for (Element elementChild : elements_td) {
+            Element a = elementChild.getElementsByTag("a").first();
+            if (a.hasAttr("onclick")) {
+                String fileDownloadName = a.attr("onclick");
+                fileDownloadName = fileDownloadName.substring(fileDownloadName.indexOf("\'") + 1, fileDownloadName.lastIndexOf("\'"));
+                result.append(combineDownloadText(year, fileDownloadName, a.text()));
+            }
+
+        }
+
+        return result.toString();
+    }
+
+    private static String combineDownloadText(String year, String fileDownloadName, String fileName) {
+        return "<p><a href=\"" + ALSTU_SERVER_URL + "aldfdnf.aspx?lx=st&ylx=" + year + "&file=" + fileDownloadName + "\">" + fileName + "</a></p>";
+    }
+
     @NonNull
     public String getDetail() {
-        StringBuilder result = new StringBuilder();
-        if (detailDocument != null) {
-            Element element = detailDocument.body().getElementById("nr");
-            Elements elements_p = element.getElementsByTag("P");
-
-            boolean jumpTitle = false;
-            for (Element element_text : elements_p) {
-                if (!jumpTitle) {
-                    jumpTitle = true;
-                } else {
-                    result.append(element_text.html());
-                }
-            }
-        }
-        return result.toString().trim();
+        Element element = Objects.requireNonNull(detailDocument).body().getElementById("nr");
+        Elements elements_p = element.getElementsByTag("p");
+        elements_p.remove(0);
+        String result = elements_p.html();
+        result = result.replaceAll("<img.*?/?>", "");
+        result += getDownloadFileText(detailDocument);
+        return result;
     }
 }

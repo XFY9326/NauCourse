@@ -118,10 +118,23 @@
                 android:textSize="15sp" />
 
             <TextView
+                android:id="@+id/textView_about_donate_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="@string/donate_list"
+                android:textColor="@android:color/black"
+                android:textSize="15sp" />
+
+            <TextView
                 android:id="@+id/textView_about_donate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="10dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"
@@ -133,7 +146,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="8dp"
                 android:gravity="center"
                 android:text="@string/copyright"
                 android:textSize="16sp" />
@@ -150,8 +163,7 @@
                 android:layout_height="wrap_content"
                 android:autoLink="web"
                 android:gravity="center"
-                android:text="@string/web"
-                android:textIsSelectable="true" />
+                android:text="@string/web" />
 
         </LinearLayout>
 

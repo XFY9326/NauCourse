@@ -47,6 +47,7 @@ public class AboutActivity extends AppCompatActivity {
         TextView textView_open_source = findViewById(R.id.textView_about_open_source);
         TextView textView_feedback = findViewById(R.id.textView_about_feedback);
         TextView textView_donate = findViewById(R.id.textView_about_donate);
+        TextView textView_donate_list = findViewById(R.id.textView_about_donate_list);
 
         String version = "v" + BuildConfig.VERSION_NAME + "-" + Config.SUB_VERSION + " (" + BuildConfig.VERSION_CODE + ") " + Config.VERSION_TYPE;
         version = version.replace(Updater.UPDATE_TYPE_BETA, getString(R.string.beta)).replace(Updater.UPDATE_TYPE_RELEASE, getString(R.string.release)).replace(Config.DEBUG, getString(R.string.debug));
@@ -67,6 +68,17 @@ public class AboutActivity extends AppCompatActivity {
                 builder.setMessage(getString(R.string.feedback_by_mail, getString(R.string.mail)));
                 builder.setPositiveButton(android.R.string.yes, null);
                 builder.show();
+            }
+        });
+        textView_donate_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://www.xfy9326.top/api/donate/naucourse/personList.php";
+                Intent intent = new Intent();
+                intent.setAction("android.intent.action.VIEW");
+                Uri content_url = Uri.parse(url);
+                intent.setData(content_url);
+                startActivity(intent);
             }
         });
         textView_donate.setOnClickListener(new View.OnClickListener() {

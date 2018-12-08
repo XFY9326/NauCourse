@@ -269,6 +269,7 @@
     <string name="alstu_system">奥兰系统</string>
     <string name="alstu_msg">奥兰通知</string>
     <string name="please_login_shared_url">（请登录后查看本消息）</string>
+    <string name="donate_list">捐赠列表</string>
     <string name="beta">测试版</string>
     <string name="release">稳定版</string>
     <string name="debug">内测版</string>
