@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -151,6 +152,9 @@ public class PersonFragment extends Fragment {
             CardView cardView_suspend_course = view.findViewById(R.id.cardView_suspend_course);
             CardView cardView_moa = view.findViewById(R.id.cardView_moa);
 
+            CardView cardView_jw_link = view.findViewById(R.id.cardView_jw_link);
+            CardView cardView_alstu_link = view.findViewById(R.id.cardView_alstu_link);
+
             cardView_suspend_course.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -279,6 +283,38 @@ public class PersonFragment extends Fragment {
                         if (isAdded()) {
                             Intent intent = new Intent(getActivity(), AboutActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getActivity().startActivity(intent);
+                        }
+                    }
+                }
+            });
+            cardView_jw_link.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getActivity() != null) {
+                        if (isAdded()) {
+                            String url = "http://jwc.nau.edu.cn/login.aspx";
+                            Intent intent = new Intent();
+                            intent.setAction("android.intent.action.VIEW");
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            Uri content_url = Uri.parse(url);
+                            intent.setData(content_url);
+                            getActivity().startActivity(intent);
+                        }
+                    }
+                }
+            });
+            cardView_alstu_link.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getActivity() != null) {
+                        if (isAdded()) {
+                            String url = "http://alstu.nau.edu.cn/default.aspx";
+                            Intent intent = new Intent();
+                            intent.setAction("android.intent.action.VIEW");
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            Uri content_url = Uri.parse(url);
+                            intent.setData(content_url);
                             getActivity().startActivity(intent);
                         }
                     }
