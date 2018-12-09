@@ -311,7 +311,8 @@ public class CourseEditActivity extends AppCompatActivity {
 
     //检查必要项目是否已经全部设置
     private boolean checkAllSet() {
-        if (course.getCourseId() != null
+        if (course != null
+                && course.getCourseId() != null
                 && course.getCourseName() != null
                 && course.getCourseTeacher() != null
                 && course.getCourseDetail() != null
@@ -339,12 +340,14 @@ public class CourseEditActivity extends AppCompatActivity {
         if (course == null) {
             getData();
         }
-        CourseDetail[] courseDetails = course.getCourseDetail();
-        if (courseDetails != null) {
-            courseDetailArrayList = new ArrayList<>(Arrays.asList(courseDetails));
-        } else {
-            courseDetailArrayList = new ArrayList<>();
-            courseDetailArrayList.add(new CourseDetail());
+        if (course != null) {
+            CourseDetail[] courseDetails = course.getCourseDetail();
+            if (courseDetails != null) {
+                courseDetailArrayList = new ArrayList<>(Arrays.asList(courseDetails));
+            } else {
+                courseDetailArrayList = new ArrayList<>();
+                courseDetailArrayList.add(new CourseDetail());
+            }
         }
         return courseDetailArrayList;
     }
