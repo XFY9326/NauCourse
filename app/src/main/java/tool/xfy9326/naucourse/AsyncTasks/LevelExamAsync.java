@@ -67,7 +67,7 @@ public class LevelExamAsync extends AsyncTask<Context, Void, Context> {
     protected void onPostExecute(@NonNull Context context) {
         LevelExamActivity levelExamActivity = BaseMethod.getApp(context).getLevelExamActivity();
         if (levelExamActivity != null) {
-            if (NetMethod.checkNetWorkCode(context, new int[]{levelExamLoadSuccess}, loadCode)) {
+            if (NetMethod.checkNetWorkCode(context, new int[]{levelExamLoadSuccess}, loadCode, false)) {
                 levelExamActivity.setLevelExam(levelExam);
             }
             levelExamActivity.lastViewSet(context);

@@ -63,7 +63,7 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
                         jwcTopic = new JwcTopic();
                     }
 
-                    if (showJwcTopic) {
+                    if (showAlstuTopic) {
                         alstuTopic = (AlstuTopic) DataMethod.getOfflineData(context[0], AlstuTopic.class, AlstuMethod.FILE_NAME);
                     } else {
                         alstuTopic = new AlstuTopic();
@@ -131,7 +131,7 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
         if (viewPagerAdapter != null) {
             HomeFragment homeFragment = viewPagerAdapter.getHomeFragment();
             if (homeFragment != null) {
-                if (NetMethod.checkNetWorkCode(context, new int[]{rssLoadSuccess, alstuLoadSuccess, JwcLoadSuccess}, loadCode)) {
+                if (NetMethod.checkNetWorkCode(context, new int[]{rssLoadSuccess, alstuLoadSuccess, JwcLoadSuccess}, loadCode, true)) {
                     homeFragment.InfoSet(jwcTopic, alstuTopic, rssObjects);
                 }
                 homeFragment.lastViewSet(context);

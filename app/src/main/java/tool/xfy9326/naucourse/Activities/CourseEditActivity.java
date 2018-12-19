@@ -203,7 +203,7 @@ public class CourseEditActivity extends AppCompatActivity {
         }
     }
 
-    public void setTerm() {
+    private void setTerm() {
         LayoutInflater layoutInflater = getLayoutInflater();
         final View view = layoutInflater.inflate(R.layout.dialog_course_term_set, (ViewGroup) findViewById(R.id.layout_dialog_course_term_set));
 

@@ -42,6 +42,7 @@ public class AlstuTopic {
         this.topic_length = topic_length;
     }
 
+    @SuppressWarnings("unused")
     public int getDataVersionCode() {
         return dataVersionCode;
     }

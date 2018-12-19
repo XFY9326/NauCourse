@@ -17,6 +17,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okhttp3.internal.annotations.EverythingIsNonNull;
 
 public class API {
     @SuppressWarnings("WeakerAccess")
@@ -75,11 +76,13 @@ public class API {
 
             client.newCall(builder.build()).enqueue(new Callback() {
                 @Override
+                @EverythingIsNonNull
                 public void onFailure(Call call, IOException e) {
                     requestListener.OnError(ERROR_TYPE_REQUEST_FAILED, e.getMessage());
                 }
 
                 @Override
+                @EverythingIsNonNull
                 public void onResponse(Call call, Response response) throws IOException {
                     ResponseBody responseBody = response.body();
                     if (responseBody != null) {

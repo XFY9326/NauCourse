@@ -66,7 +66,7 @@ public class SchoolCalendarAsync extends AsyncTask<Context, Void, Context> {
     protected void onPostExecute(Context context) {
         SchoolCalendarActivity schoolCalendarActivity = BaseMethod.getApp(context).getSchoolCalendarActivity();
         if (schoolCalendarActivity != null) {
-            if (NetMethod.checkNetWorkCode(context, new int[]{jwLoadSuccess, imageLoadSuccess}, loadCode)) {
+            if (NetMethod.checkNetWorkCode(context, new int[]{jwLoadSuccess, imageLoadSuccess}, loadCode, false)) {
                 schoolCalendarActivity.setCalendarView(bitmap);
             }
             schoolCalendarActivity.lastViewSet(context);

@@ -65,7 +65,7 @@ public class SuspendCourseAsync extends AsyncTask<Context, Void, Context> {
     protected void onPostExecute(Context context) {
         SuspendCourseActivity suspendCourseActivity = BaseMethod.getApp(context).getSuspendCourseActivity();
         if (suspendCourseActivity != null) {
-            if (NetMethod.checkNetWorkCode(context, new int[]{loadSuccess}, loadCode)) {
+            if (NetMethod.checkNetWorkCode(context, new int[]{loadSuccess}, loadCode, false)) {
                 suspendCourseActivity.setSuspendCourse(suspendCourse);
             }
             suspendCourseActivity.lastViewSet(context);

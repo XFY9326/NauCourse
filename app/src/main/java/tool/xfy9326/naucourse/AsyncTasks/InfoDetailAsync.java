@@ -81,7 +81,7 @@ public class InfoDetailAsync extends AsyncTask<Context, Void, Context> {
     protected void onPostExecute(@NonNull Context context) {
         InfoDetailActivity infoDetailActivity = BaseMethod.getApp(context).getInfoDetailActivity();
         if (infoDetailActivity != null) {
-            if (NetMethod.checkNetWorkCode(context, new int[]{loadSuccess}, loadCode)) {
+            if (NetMethod.checkNetWorkCode(context, new int[]{loadSuccess}, loadCode, false)) {
                 infoDetailActivity.InfoDetailSet(data);
             }
         }

@@ -83,7 +83,7 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
         if (viewPagerAdapter != null) {
             PersonFragment personFragment = viewPagerAdapter.getPersonFragment();
             if (personFragment != null) {
-                if (NetMethod.checkNetWorkCode(context, new int[]{personLoadSuccess}, loadCode)) {
+                if (NetMethod.checkNetWorkCode(context, new int[]{personLoadSuccess}, loadCode, false)) {
                     personFragment.PersonViewSet(studentInfo, studentLearnProcess, context);
                 }
                 personFragment.lastViewSet(context);

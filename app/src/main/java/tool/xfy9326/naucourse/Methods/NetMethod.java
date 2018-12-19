@@ -18,6 +18,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okhttp3.internal.annotations.EverythingIsNonNull;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 
@@ -87,12 +88,13 @@ public class NetMethod {
     /**
      * 网络连接情况检测以及错误提示
      *
-     * @param context         Context
-     * @param dataLoadCode    单个数据请求错误代码
-     * @param contentLoadCode 整体网络请求错误代码
+     * @param context                  Context
+     * @param dataLoadCode             单个数据请求错误代码
+     * @param contentLoadCode          整体网络请求错误代码
+     * @param ignoreSingleGetDataError 忽略多个加载结果中单个网络数据获取失败
      * @return 网络检查是否通过
      */
-    synchronized public static boolean checkNetWorkCode(@NonNull Context context, @NonNull int[] dataLoadCode, int contentLoadCode) {
+    synchronized public static boolean checkNetWorkCode(@NonNull Context context, @NonNull int[] dataLoadCode, int contentLoadCode, boolean ignoreSingleGetDataError) {
         if (contentLoadCode == Config.NET_WORK_ERROR_CODE_CONNECT_ERROR) {
             if (!BaseMethod.getApp(context).isShowConnectErrorOnce()) {
                 Toast.makeText(context, R.string.network_get_error, Toast.LENGTH_SHORT).show();
@@ -100,6 +102,7 @@ public class NetMethod {
             }
             return false;
         }
+        int getDataErrorCount = 0;
         for (int code : dataLoadCode) {
             if (code == Config.NET_WORK_ERROR_CODE_CONNECT_NO_LOGIN) {
                 if (!BaseMethod.getApp(context).isShowLoginErrorOnce()) {
@@ -116,8 +119,12 @@ public class NetMethod {
                 return false;
             }
             if (code == Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR) {
-                Toast.makeText(context, R.string.data_get_error, Toast.LENGTH_SHORT).show();
-                return false;
+                if (dataLoadCode.length > 1 && ignoreSingleGetDataError && getDataErrorCount + 1 < dataLoadCode.length) {
+                    getDataErrorCount++;
+                } else {
+                    Toast.makeText(context, R.string.data_get_error, Toast.LENGTH_SHORT).show();
+                    return false;
+                }
             }
         }
         return true;
@@ -179,11 +186,13 @@ public class NetMethod {
         request_builder.url("http://jwc.nau.edu.cn");
         new OkHttpClient().newCall(request_builder.build()).enqueue(new Callback() {
             @Override
+            @EverythingIsNonNull
             public void onFailure(Call call, IOException e) {
                 availableListener.OnError();
             }
 
             @Override
+            @EverythingIsNonNull
             public void onResponse(Call call, Response response) {
                 if (response.code() != 200) {
                     availableListener.OnError();

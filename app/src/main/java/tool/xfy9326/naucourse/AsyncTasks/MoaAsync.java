@@ -65,7 +65,7 @@ public class MoaAsync extends AsyncTask<Context, Void, Context> {
     protected void onPostExecute(Context context) {
         MoaActivity moaActivity = BaseMethod.getApp(context).getMoaActivity();
         if (moaActivity != null) {
-            if (NetMethod.checkNetWorkCode(context, new int[]{loadSuccess}, loadCode)) {
+            if (NetMethod.checkNetWorkCode(context, new int[]{loadSuccess}, loadCode, false)) {
                 moaActivity.setMoa(moa);
             }
             moaActivity.lastViewSet(context);

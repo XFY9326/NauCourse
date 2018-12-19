@@ -71,7 +71,7 @@ public class ExamAsync extends AsyncTask<Context, Void, Context> {
     protected void onPostExecute(@NonNull Context context) {
         ExamActivity examActivity = BaseMethod.getApp(context).getExamActivity();
         if (examActivity != null) {
-            if (NetMethod.checkNetWorkCode(context, new int[]{examLoadSuccess}, loadCode)) {
+            if (NetMethod.checkNetWorkCode(context, new int[]{examLoadSuccess}, loadCode, false)) {
                 examActivity.setExam(exam);
             }
             examActivity.lastViewSet(context);
