@@ -50,10 +50,6 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
                 if (loadTime == 0) {
                     schoolTime = (SchoolTime) DataMethod.getOfflineData(context[0], SchoolTime.class, SchoolTimeMethod.FILE_NAME);
                     timeLoadSuccess = Config.NET_WORK_GET_SUCCESS;
-                    loadTime++;
-                    if (tableFragment != null) {
-                        tableFragment.setLoadTime(loadTime);
-                    }
                 } else {
                     SchoolTimeMethod schoolTimeMethod = new SchoolTimeMethod(context[0]);
                     timeLoadSuccess = schoolTimeMethod.load();
@@ -84,17 +80,13 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
                             }
                         }
                     }
-
-                    loadTime++;
-                    tableFragment.setLoadTime(loadTime);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
-                if (tableFragment != null) {
-                    loadTime++;
-                    tableFragment.setLoadTime(loadTime);
-                }
+            }
+            if (tableFragment != null) {
+                tableFragment.setLoadTime(++loadTime);
             }
             if (loadTime > 2) {
                 BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);

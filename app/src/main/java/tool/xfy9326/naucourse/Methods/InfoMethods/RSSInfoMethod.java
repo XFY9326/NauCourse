@@ -39,11 +39,11 @@ public class RSSInfoMethod {
     private static final String RSS_TW_FILE_NAME = "RssTwTopic";
     private static final String RSS_XXB_FILE_NAME = "RssXxbTopic";
     private static Document document_detail;
+    private static String lastLoadInfoDetailHost;
     private final SparseArray<RSSReader.RSSObject> rssObjectSparseArray;
     private final Integer[] typeList;
     private final Context context;
     private boolean hasFailedLoad = false;
-    private static String lastLoadInfoDetailHost;
 
     public RSSInfoMethod(@NonNull Context context) {
         this.context = context;
@@ -204,6 +204,7 @@ public class RSSInfoMethod {
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
+                            hasFailedLoad = true;
                         }
                     } else {
                         hasFailedLoad = true;

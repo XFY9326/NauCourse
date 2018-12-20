@@ -47,38 +47,34 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
         ViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(context[0]).getViewPagerAdapter();
         if (viewPagerAdapter != null) {
             HomeFragment homeFragment = viewPagerAdapter.getHomeFragment();
-            try {
-                if (homeFragment != null) {
-                    loadTime = homeFragment.getLoadTime();
-                }
-                boolean[] infoChannel = DataMethod.InfoData.getInfoChannel(context[0]);
-                boolean showJwcTopic = infoChannel[JwcInfoMethod.TYPE_JWC];
-                boolean showAlstuTopic = infoChannel[AlstuMethod.TYPE_ALSTU];
+            if (homeFragment != null) {
+                loadTime = homeFragment.getLoadTime();
+            }
+            boolean[] infoChannel = DataMethod.InfoData.getInfoChannel(context[0]);
+            boolean showJwcTopic = infoChannel[JwcInfoMethod.TYPE_JWC];
+            boolean showAlstuTopic = infoChannel[AlstuMethod.TYPE_ALSTU];
 
-                if (loadTime == 0) {
-                    //首次只加载离线数据
-                    if (showJwcTopic) {
-                        jwcTopic = (JwcTopic) DataMethod.getOfflineData(context[0], JwcTopic.class, JwcInfoMethod.FILE_NAME);
-                    } else {
-                        jwcTopic = new JwcTopic();
-                    }
-
-                    if (showAlstuTopic) {
-                        alstuTopic = (AlstuTopic) DataMethod.getOfflineData(context[0], AlstuTopic.class, AlstuMethod.FILE_NAME);
-                    } else {
-                        alstuTopic = new AlstuTopic();
-                    }
-
-                    rssObjects = RSSInfoMethod.getOfflineRSSObject(context[0]);
-
-                    JwcLoadSuccess = Config.NET_WORK_GET_SUCCESS;
-                    alstuLoadSuccess = Config.NET_WORK_GET_SUCCESS;
-                    rssLoadSuccess = Config.NET_WORK_GET_SUCCESS;
-                    loadTime++;
-                    if (homeFragment != null) {
-                        homeFragment.setLoadTime(loadTime);
-                    }
+            if (loadTime == 0) {
+                //首次只加载离线数据
+                if (showJwcTopic) {
+                    jwcTopic = (JwcTopic) DataMethod.getOfflineData(context[0], JwcTopic.class, JwcInfoMethod.FILE_NAME);
                 } else {
+                    jwcTopic = new JwcTopic();
+                }
+
+                if (showAlstuTopic) {
+                    alstuTopic = (AlstuTopic) DataMethod.getOfflineData(context[0], AlstuTopic.class, AlstuMethod.FILE_NAME);
+                } else {
+                    alstuTopic = new AlstuTopic();
+                }
+
+                rssObjects = RSSInfoMethod.getOfflineRSSObject(context[0]);
+
+                JwcLoadSuccess = Config.NET_WORK_GET_SUCCESS;
+                alstuLoadSuccess = Config.NET_WORK_GET_SUCCESS;
+                rssLoadSuccess = Config.NET_WORK_GET_SUCCESS;
+            } else {
+                try {
                     if (showJwcTopic) {
                         JwcInfoMethod jwcInfoMethod = new JwcInfoMethod(context[0]);
                         JwcLoadSuccess = jwcInfoMethod.load();
@@ -89,7 +85,12 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
                         jwcTopic = new JwcTopic();
                         JwcLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                     }
+                } catch (Exception e) {
+                    JwcLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+                    e.printStackTrace();
+                }
 
+                try {
                     if (showAlstuTopic) {
                         AlstuMethod alstuMethod = new AlstuMethod(context[0]);
                         alstuLoadSuccess = alstuMethod.load();
@@ -100,23 +101,30 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
                         alstuTopic = new AlstuTopic();
                         alstuLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    alstuLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+                }
 
+                try {
                     RSSInfoMethod rssInfoMethod = new RSSInfoMethod(context[0]);
                     rssLoadSuccess = rssInfoMethod.load();
                     if (rssLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                         rssObjects = rssInfoMethod.getRSSObject();
                     }
-
-                    loadTime++;
-                    homeFragment.setLoadTime(loadTime);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    rssLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+            }
+            if (homeFragment != null) {
+                homeFragment.setLoadTime(++loadTime);
+            }
+            if ((rssLoadSuccess == -1 || rssLoadSuccess == Config.NET_WORK_ERROR_CODE_CONNECT_ERROR) &&
+                    (alstuLoadSuccess == -1 || alstuLoadSuccess == Config.NET_WORK_ERROR_CODE_CONNECT_ERROR) &&
+                    (JwcLoadSuccess == -1 || JwcLoadSuccess == Config.NET_WORK_ERROR_CODE_CONNECT_ERROR) &&
+                    (rssLoadSuccess != -1 && alstuLoadSuccess != -1 && JwcLoadSuccess != -1)) {
                 loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
-                if (homeFragment != null) {
-                    loadTime++;
-                    homeFragment.setLoadTime(loadTime);
-                }
             }
             if (loadTime > 2) {
                 BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);

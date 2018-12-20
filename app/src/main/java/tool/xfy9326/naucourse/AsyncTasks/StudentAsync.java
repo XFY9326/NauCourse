@@ -47,10 +47,6 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
                     studentInfo = (StudentInfo) DataMethod.getOfflineData(context[0], StudentInfo.class, PersonMethod.FILE_NAME_DATA);
                     studentLearnProcess = (StudentLearnProcess) DataMethod.getOfflineData(context[0], StudentLearnProcess.class, PersonMethod.FILE_NAME_PROCESS);
                     personLoadSuccess = Config.NET_WORK_GET_SUCCESS;
-                    loadTime++;
-                    if (personFragment != null) {
-                        BaseMethod.getApp(context[0]).getViewPagerAdapter().getPersonFragment().setLoadTime(loadTime);
-                    }
                 } else {
                     PersonMethod personMethod = new PersonMethod(context[0]);
                     personLoadSuccess = personMethod.load();
@@ -58,17 +54,13 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
                         studentInfo = personMethod.getUserData(loadTime > 1);
                         studentLearnProcess = personMethod.getUserProcess(loadTime > 1);
                     }
-
-                    loadTime++;
-                    personFragment.setLoadTime(loadTime);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
-                if (personFragment != null) {
-                    loadTime++;
-                    personFragment.setLoadTime(loadTime);
-                }
+            }
+            if (personFragment != null) {
+                personFragment.setLoadTime(++loadTime);
             }
             if (loadTime > 2) {
                 BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);

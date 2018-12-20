@@ -34,26 +34,19 @@ public class MoaAsync extends AsyncTask<Context, Void, Context> {
                 //首次只加载离线数据
                 moa = (Moa) DataMethod.getOfflineData(context[0], Moa.class, MoaMethod.FILE_NAME);
                 loadSuccess = Config.NET_WORK_GET_SUCCESS;
-                loadTime++;
-                if (moaActivity != null) {
-                    moaActivity.setLoadTime(loadTime);
-                }
             } else {
                 MoaMethod moaMethod = new MoaMethod(context[0]);
                 loadSuccess = moaMethod.load();
                 if (loadSuccess == Config.NET_WORK_GET_SUCCESS) {
                     moa = moaMethod.getMoaList(loadTime > 1);
                 }
-                loadTime++;
-                moaActivity.setLoadTime(loadTime);
             }
         } catch (Exception e) {
             e.printStackTrace();
             loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
-            if (moaActivity != null) {
-                loadTime++;
-                moaActivity.setLoadTime(loadTime);
-            }
+        }
+        if (moaActivity != null) {
+            moaActivity.setLoadTime(++loadTime);
         }
         if (loadTime > 2) {
             BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);

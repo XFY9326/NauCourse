@@ -39,27 +39,19 @@ public class ExamAsync extends AsyncTask<Context, Void, Context> {
                 //首次只加载离线数据
                 exam = (Exam) DataMethod.getOfflineData(context[0], Exam.class, ExamMethod.FILE_NAME);
                 examLoadSuccess = Config.NET_WORK_GET_SUCCESS;
-                loadTime++;
-                if (examActivity != null) {
-                    examActivity.setLoadTime(loadTime);
-                }
             } else {
                 ExamMethod examMethod = new ExamMethod(context[0]);
                 examLoadSuccess = examMethod.load();
                 if (examLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                     exam = examMethod.getExam(false);
                 }
-
-                loadTime++;
-                examActivity.setLoadTime(loadTime);
             }
         } catch (Exception e) {
             e.printStackTrace();
             loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
-            if (examActivity != null) {
-                loadTime++;
-                examActivity.setLoadTime(loadTime);
-            }
+        }
+        if (examActivity != null) {
+            examActivity.setLoadTime(++loadTime);
         }
         if (loadTime > 2) {
             BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);

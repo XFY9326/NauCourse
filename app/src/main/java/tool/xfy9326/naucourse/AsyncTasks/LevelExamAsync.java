@@ -35,27 +35,19 @@ public class LevelExamAsync extends AsyncTask<Context, Void, Context> {
                 //首次只加载离线数据
                 levelExam = (LevelExam) DataMethod.getOfflineData(context[0], LevelExam.class, LevelExamMethod.FILE_NAME);
                 levelExamLoadSuccess = Config.NET_WORK_GET_SUCCESS;
-                loadTime++;
-                if (levelExamActivity != null) {
-                    levelExamActivity.setLoadTime(loadTime);
-                }
             } else {
                 LevelExamMethod levelExamMethod = new LevelExamMethod(context[0]);
                 levelExamLoadSuccess = levelExamMethod.load();
                 if (levelExamLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                     levelExam = levelExamMethod.getLevelExam(loadTime > 1);
                 }
-
-                loadTime++;
-                levelExamActivity.setLoadTime(loadTime);
             }
         } catch (Exception e) {
             e.printStackTrace();
             loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
-            if (levelExamActivity != null) {
-                loadTime++;
-                levelExamActivity.setLoadTime(loadTime);
-            }
+        }
+        if (levelExamActivity != null) {
+            levelExamActivity.setLoadTime(++loadTime);
         }
         if (loadTime > 2) {
             BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);

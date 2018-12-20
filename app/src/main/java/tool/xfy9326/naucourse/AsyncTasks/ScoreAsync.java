@@ -47,10 +47,6 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
                 courseScore = (CourseScore) DataMethod.getOfflineData(context[0], CourseScore.class, ScoreMethod.FILE_NAME);
                 personLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 scoreLoadSuccess = Config.NET_WORK_GET_SUCCESS;
-                loadTime++;
-                if (scoreActivity != null) {
-                    scoreActivity.setLoadTime(loadTime);
-                }
             } else {
                 PersonMethod personMethod = new PersonMethod(context[0]);
                 personLoadSuccess = personMethod.load();
@@ -63,17 +59,13 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
                 if (scoreLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                     courseScore = scoreMethod.getCourseScore(loadTime > 1);
                 }
-
-                loadTime++;
-                scoreActivity.setLoadTime(loadTime);
             }
         } catch (Exception e) {
             e.printStackTrace();
             loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
-            if (scoreActivity != null) {
-                loadTime++;
-                scoreActivity.setLoadTime(loadTime);
-            }
+        }
+        if (scoreActivity != null) {
+            scoreActivity.setLoadTime(++loadTime);
         }
         if (loadTime > 2) {
             BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);

@@ -34,26 +34,19 @@ public class SuspendCourseAsync extends AsyncTask<Context, Void, Context> {
                 //首次只加载离线数据
                 suspendCourse = (SuspendCourse) DataMethod.getOfflineData(context[0], SuspendCourse.class, SuspendCourseMethod.FILE_NAME);
                 loadSuccess = Config.NET_WORK_GET_SUCCESS;
-                loadTime++;
-                if (suspendCourseActivity != null) {
-                    suspendCourseActivity.setLoadTime(loadTime);
-                }
             } else {
                 SuspendCourseMethod suspendCourseMethod = new SuspendCourseMethod(context[0]);
                 loadSuccess = suspendCourseMethod.load();
                 if (loadSuccess == Config.NET_WORK_GET_SUCCESS) {
                     suspendCourse = suspendCourseMethod.getSuspendCourse(loadTime > 1);
                 }
-                loadTime++;
-                suspendCourseActivity.setLoadTime(loadTime);
             }
         } catch (Exception e) {
             e.printStackTrace();
             loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
-            if (suspendCourseActivity != null) {
-                loadTime++;
-                suspendCourseActivity.setLoadTime(loadTime);
-            }
+        }
+        if (suspendCourseActivity != null) {
+            suspendCourseActivity.setLoadTime(++loadTime);
         }
         if (loadTime > 2) {
             BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);

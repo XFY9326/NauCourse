@@ -32,10 +32,6 @@ public class SchoolCalendarAsync extends AsyncTask<Context, Void, Context> {
                 bitmap = ImageMethod.getSchoolCalendarImage(context[0]);
                 jwLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 imageLoadSuccess = Config.NET_WORK_GET_SUCCESS;
-                loadTime++;
-                if (schoolCalendarActivity != null) {
-                    schoolCalendarActivity.setLoadTime(loadTime);
-                }
             } else {
                 SchoolCalendarMethod schoolCalendarMethod = new SchoolCalendarMethod(context[0]);
                 jwLoadSuccess = schoolCalendarMethod.load();
@@ -45,16 +41,13 @@ public class SchoolCalendarAsync extends AsyncTask<Context, Void, Context> {
                         bitmap = schoolCalendarMethod.getSchoolCalendarImage();
                     }
                 }
-                loadTime++;
-                schoolCalendarActivity.setLoadTime(loadTime);
             }
         } catch (Exception e) {
             e.printStackTrace();
             loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
-            if (schoolCalendarActivity != null) {
-                loadTime++;
-                schoolCalendarActivity.setLoadTime(loadTime);
-            }
+        }
+        if (schoolCalendarActivity != null) {
+            schoolCalendarActivity.setLoadTime(++loadTime);
         }
         if (loadTime > 2) {
             BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);
