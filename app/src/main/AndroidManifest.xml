@@ -148,6 +148,7 @@
         <activity
             android:name=".Activities.AboutActivity"
             android:label="@string/about"
+            android:screenOrientation="portrait"
             tools:ignore="InnerclassSeparator">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

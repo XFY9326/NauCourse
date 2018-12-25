@@ -268,9 +268,9 @@ public class HomeFragment extends Fragment {
     //内部刷新设置下一节课
     private void setNextCourse() {
         NextCourse nextCourse = NextClassMethod.getNextClassArray(Objects.requireNonNull(getActivity()));
-        if (DataMethod.saveOfflineData(Objects.requireNonNull(context), nextCourse, NEXT_COURSE_FILE_NAME, false)) {
-            setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
-        }
+        DataMethod.saveOfflineData(Objects.requireNonNull(context), nextCourse, NEXT_COURSE_FILE_NAME, false);
+        setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
+        System.gc();
     }
 
     /**

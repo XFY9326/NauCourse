@@ -84,7 +84,9 @@ public class TableFragment extends Fragment {
     @Nullable
     private Spinner spinner_week;
     private int lastSelect;
+    private int lastSetWeekNumber;
     private boolean view_set = false;
+    private boolean inVacation;
 
     public TableFragment() {
         this.view = null;
@@ -96,6 +98,8 @@ public class TableFragment extends Fragment {
         this.courseViewMethod = null;
         this.spinner_week = null;
         this.lastSelect = 0;
+        this.lastSetWeekNumber = 0;
+        this.inVacation = false;
     }
 
     @Override
@@ -130,6 +134,9 @@ public class TableFragment extends Fragment {
         if (!view_set) {
             ViewSet();
             view_set = true;
+        }
+        if (context != null && lastSetWeekNumber > 0) {
+            updateAllNextCourseView(context);
         }
     }
 
@@ -210,7 +217,6 @@ public class TableFragment extends Fragment {
             }
 
             int weekNum;
-            boolean inVacation = false;
             schoolTime.setWeekNum(TimeMethod.getNowWeekNum(schoolTime));
 
             final boolean hasCustomBackground = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND, Config.DEFAULT_PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND);
@@ -220,8 +226,10 @@ public class TableFragment extends Fragment {
                 weekNum = 1;
                 inVacation = true;
             } else {
+                inVacation = false;
                 weekNum = schoolTime.getWeekNum();
             }
+            this.lastSetWeekNumber = weekNum;
 
             if (isAdded() && view != null && getActivity() != null) {
                 TextView textView_date = view.findViewById(R.id.textView_table_date);
@@ -276,27 +284,30 @@ public class TableFragment extends Fragment {
                     lastSelect = weekNum - 1;
                 }
 
-                //主页面下一节课设置
-                if (!inVacation) {
-                    ViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(context).getViewPagerAdapter();
-                    if (viewPagerAdapter != null) {
-                        HomeFragment homeFragment = viewPagerAdapter.getHomeFragment();
-                        if (homeFragment != null && courseMethod != null) {
-                            NextCourse nextCourse = courseMethod.getNextClass(weekNum);
-                            homeFragment.setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
-                        }
-                    }
-                }
+                updateAllNextCourseView(context);
+            }
+        }
+    }
 
-                if (getActivity() != null) {
-                    if (loadTime == 1) {
-                        //初始化自动更新
-                        getActivity().sendBroadcast(new Intent(context, UpdateReceiver.class).setAction(UpdateReceiver.UPDATE_ACTION).putExtra(Config.INTENT_IS_ONLY_INIT, true));
-                    }
-                    //更新小部件
-                    getActivity().sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
+    private void updateAllNextCourseView(@NonNull Context context) {
+        //主页面下一节课设置
+        if (!inVacation) {
+            ViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(context).getViewPagerAdapter();
+            if (viewPagerAdapter != null) {
+                HomeFragment homeFragment = viewPagerAdapter.getHomeFragment();
+                if (homeFragment != null && courseMethod != null) {
+                    NextCourse nextCourse = courseMethod.getNextClass(lastSetWeekNumber);
+                    homeFragment.setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
                 }
             }
+        }
+
+        if (loadTime == 1) {
+            //初始化自动更新
+            context.sendBroadcast(new Intent(context, UpdateReceiver.class).setAction(UpdateReceiver.UPDATE_ACTION).putExtra(Config.INTENT_IS_ONLY_INIT, true));
+        } else {
+            //更新小部件
+            context.sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
         }
     }
 
