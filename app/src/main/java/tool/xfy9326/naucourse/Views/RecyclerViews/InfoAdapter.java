@@ -202,10 +202,9 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
                 @Override
                 public int compare(InfoDetail o1, InfoDetail o2) {
                     if (o1.getDate() != null && o2.getDate() != null) {
+                        String time1 = o1.getDate().trim();
+                        String time2 = o2.getDate().trim();
                         try {
-                            String time1 = o1.getDate().trim();
-                            String time2 = o2.getDate().trim();
-
                             //格式化日期显示
                             Date date1 = simpleDateFormat.parse(time1);
                             Date date2 = simpleDateFormat.parse(time2);
@@ -214,11 +213,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
 
                             long day1 = date1.getTime();
                             long day2 = date2.getTime();
-                            if (day1 > day2) {
-                                return -1;
-                            } else {
-                                return 1;
-                            }
+                            return Long.compare(day2, day1);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -228,7 +223,11 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
             };
         }
         if (!topic_data.isEmpty()) {
-            Collections.sort(topic_data, date_comparator);
+            try {
+                Collections.sort(topic_data, date_comparator);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

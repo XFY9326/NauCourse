@@ -18,6 +18,7 @@ import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
 
 import java.util.ArrayList;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.view.ViewCompat;
@@ -159,7 +160,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
                 .create();
         colorPickerDialog.setColorPickerDialogListener(new ColorPickerDialogListener() {
             @Override
-            public void onColorSelected(int dialogId, int color) {
+            public void onColorSelected(int dialogId, @ColorInt int color) {
                 if (dialogId == COLOR_PICKER_DIALOG_ID) {
                     courseArrayList.get(position).setCourseColor(color);
                 }

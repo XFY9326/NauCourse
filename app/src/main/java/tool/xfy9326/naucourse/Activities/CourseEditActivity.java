@@ -92,56 +92,61 @@ public class CourseEditActivity extends AppCompatActivity {
     }
 
     private void ViewSet() {
-        courseDetailArrayList = getCourseDetailArrayList();
-        TextInputEditText editTextCourseEditName = findViewById(R.id.editText_course_edit_name);
-        TextInputEditText editTextCourseEditTeacher = findViewById(R.id.editText_course_edit_teacher);
-        TextInputEditText editTextCourseEditType = findViewById(R.id.editText_course_edit_type);
-        TextInputEditText editTextCourseEditScore = findViewById(R.id.editText_course_edit_score);
-        TextInputEditText editTextCourseEditClass = findViewById(R.id.editText_course_edit_class);
-        TextInputEditText editTextCourseEditCombineClass = findViewById(R.id.editText_course_edit_combine_class);
+        if (course != null) {
+            courseDetailArrayList = getCourseDetailArrayList();
+            TextInputEditText editTextCourseEditName = findViewById(R.id.editText_course_edit_name);
+            TextInputEditText editTextCourseEditTeacher = findViewById(R.id.editText_course_edit_teacher);
+            TextInputEditText editTextCourseEditType = findViewById(R.id.editText_course_edit_type);
+            TextInputEditText editTextCourseEditScore = findViewById(R.id.editText_course_edit_score);
+            TextInputEditText editTextCourseEditClass = findViewById(R.id.editText_course_edit_class);
+            TextInputEditText editTextCourseEditCombineClass = findViewById(R.id.editText_course_edit_combine_class);
 
-        if (course.getCourseName() != null) {
-            editTextCourseEditName.setText(course.getCourseName());
-        }
-        if (course.getCourseTeacher() != null) {
-            editTextCourseEditTeacher.setText(course.getCourseTeacher());
-        }
-        if (course.getCourseType() != null) {
-            editTextCourseEditType.setText(course.getCourseType());
-        }
-        if (course.getCourseScore() != null) {
-            editTextCourseEditScore.setText(course.getCourseScore());
-        }
-        if (course.getCourseClass() != null) {
-            editTextCourseEditClass.setText(course.getCourseClass());
-        }
-        if (course.getCourseCombinedClass() != null) {
-            editTextCourseEditCombineClass.setText(course.getCourseCombinedClass());
-        }
-        //仅在学期正确时显示
-        long courseTerm = Long.valueOf(course.getCourseTerm());
-        if (courseTerm > 0) {
-            //仅支持四位数的年份
-            ((TextView) findViewById(R.id.textView_course_edit_term)).setText(getString(R.string.course_edit_course_time_detail, courseTerm / (10L * 10000L), (courseTerm % (10L * 10000L)) / 10L, courseTerm % 10L));
-        }
-
-        RecyclerView recyclerView = findViewById(R.id.recyclerView_course_edit_list);
-        recyclerView.setFocusableInTouchMode(false);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        courseEditAdapter = new CourseEditAdapter(this, courseDetailArrayList);
-        recyclerView.setAdapter(courseEditAdapter);
-
-        FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton_course_edit_add);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                courseDetailArrayList.add(new CourseDetail());
-                courseEditAdapter.setData(courseDetailArrayList);
-                courseEditAdapter.notifyItemRangeInserted(courseDetailArrayList.size() - 1, 1);
-                needSave = true;
+            if (course.getCourseName() != null) {
+                editTextCourseEditName.setText(course.getCourseName());
             }
-        });
+            if (course.getCourseTeacher() != null) {
+                editTextCourseEditTeacher.setText(course.getCourseTeacher());
+            }
+            if (course.getCourseType() != null) {
+                editTextCourseEditType.setText(course.getCourseType());
+            }
+            if (course.getCourseScore() != null) {
+                editTextCourseEditScore.setText(course.getCourseScore());
+            }
+            if (course.getCourseClass() != null) {
+                editTextCourseEditClass.setText(course.getCourseClass());
+            }
+            if (course.getCourseCombinedClass() != null) {
+                editTextCourseEditCombineClass.setText(course.getCourseCombinedClass());
+            }
+            //仅在学期正确时显示
+            long courseTerm = Long.valueOf(course.getCourseTerm());
+            if (courseTerm > 0) {
+                //仅支持四位数的年份
+                ((TextView) findViewById(R.id.textView_course_edit_term)).setText(getString(R.string.course_edit_course_time_detail, courseTerm / (10L * 10000L), (courseTerm % (10L * 10000L)) / 10L, courseTerm % 10L));
+            }
+
+            RecyclerView recyclerView = findViewById(R.id.recyclerView_course_edit_list);
+            recyclerView.setFocusableInTouchMode(false);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            courseEditAdapter = new CourseEditAdapter(this, courseDetailArrayList);
+            recyclerView.setAdapter(courseEditAdapter);
+
+            FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton_course_edit_add);
+            floatingActionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    courseDetailArrayList.add(new CourseDetail());
+                    courseEditAdapter.setData(courseDetailArrayList);
+                    courseEditAdapter.notifyItemRangeInserted(courseDetailArrayList.size() - 1, 1);
+                    needSave = true;
+                }
+            });
+        } else {
+            setResult(RESULT_CANCELED);
+            finish();
+        }
     }
 
     @Override

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.gridlayout.widget.GridLayout;
@@ -207,7 +208,7 @@ public class CourseViewMethod {
 
     //获取每个单元格的视图
     @NonNull
-    private View getCellView(@Nullable String text, int bgColor, int textColor, int width, final int col, final int row, boolean showWide, boolean hasCustomBackground, float alpha) {
+    private View getCellView(@Nullable String text, @ColorInt int bgColor, @ColorInt int textColor, int width, final int col, final int row, boolean showWide, boolean hasCustomBackground, float alpha) {
         LinearLayout linearLayout = new LinearLayout(context);
         //不同显示模式下的适配
         if (showWide) {

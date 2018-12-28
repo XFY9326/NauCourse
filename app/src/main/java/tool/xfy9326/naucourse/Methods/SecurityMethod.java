@@ -9,8 +9,8 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Tools.AES;
 
 public class SecurityMethod {
-    public static final String API_KEY = "4B885B0EDE2EF94F";
-    public static final String API_IV = "163D738C67E431B3";
+    static final String API_KEY = "4B885B0EDE2EF94F";
+    static final String API_IV = "163D738C67E431B3";
 
     public static void saveUserInfo(Context context, String id, String pw) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -25,13 +25,13 @@ public class SecurityMethod {
         return pw.equalsIgnoreCase(Config.DEFAULT_PREFERENCE_USER_PW) ? Config.DEFAULT_PREFERENCE_USER_PW : AES.decrypt(pw, id);
     }
 
-    public static String decryptData(Context context, String data) {
+    static String decryptData(Context context, String data) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String id = sharedPreferences.getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
         return BuildConfig.DEBUG ? data : AES.decrypt(data, id);
     }
 
-    public static String encryptData(Context context, String data) {
+    static String encryptData(Context context, String data) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String id = sharedPreferences.getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
         return BuildConfig.DEBUG ? data : AES.encrypt(data, id);
