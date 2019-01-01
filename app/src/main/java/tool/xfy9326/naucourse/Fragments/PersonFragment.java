@@ -293,9 +293,9 @@ public class PersonFragment extends Fragment {
                 public void onClick(View v) {
                     if (getActivity() != null) {
                         if (isAdded()) {
-                            String url = "http://jwc.nau.edu.cn/login.aspx";
+                            String url = "http://jwc.nau.edu.cn/Students/default.aspx";
                             Intent intent = new Intent();
-                            intent.setAction("android.intent.action.VIEW");
+                            intent.setAction(Intent.ACTION_VIEW);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             Uri content_url = Uri.parse(url);
                             intent.setData(content_url);
@@ -311,7 +311,7 @@ public class PersonFragment extends Fragment {
                         if (isAdded()) {
                             String url = "http://alstu.nau.edu.cn/default.aspx";
                             Intent intent = new Intent();
-                            intent.setAction("android.intent.action.VIEW");
+                            intent.setAction(Intent.ACTION_VIEW);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             Uri content_url = Uri.parse(url);
                             intent.setData(content_url);
