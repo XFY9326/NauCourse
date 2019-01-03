@@ -14,21 +14,55 @@ public class CourseEditMethod {
      *
      * @param combineCourses   需要并入的课表
      * @param combineToCourses 原课表
-     * @param termCheck        新学期的课程强制替换(以需要并入的课表中最新的学期为准，课表中只会存在一种学期的人课程)
+     * @param termCheck        新学期的课程强制替换(以最新的学期为准，课表中只会存在一种学期的课程)
      * @return 课程信息列表
      */
     public static ArrayList<Course> combineCourseList(ArrayList<Course> combineCourses, ArrayList<Course> combineToCourses, boolean termCheck) {
+        long newTerm = 0;
         if (termCheck) {
             //获取最新的学期
-            long newTerm = 0;
+            long newTerm1 = 0;
+            long newTerm2 = 0;
             for (Course course : combineCourses) {
                 long courseTerm = Long.valueOf(course.getCourseTerm());
-                if (courseTerm > newTerm) {
-                    newTerm = courseTerm;
+                if (courseTerm > newTerm1) {
+                    newTerm1 = courseTerm;
                 }
             }
-            //迭代器删除旧学期课程
-            Iterator<Course> iterator = combineToCourses.iterator();
+            for (Course course : combineToCourses) {
+                long courseTerm = Long.valueOf(course.getCourseTerm());
+                if (courseTerm > newTerm2) {
+                    newTerm2 = courseTerm;
+                }
+            }
+            if (newTerm1 < newTerm2) {
+                return null;
+            }
+        }
+
+        ArrayList<Course> result = new ArrayList<>(combineToCourses);
+        for (Course course : combineCourses) {
+            if (result.isEmpty()) {
+                result.add(course);
+            } else {
+                boolean found = false;
+                for (int i = 0; i < result.size() && !found; i++) {
+                    String id = course.getCourseId();
+                    if (id != null && id.equalsIgnoreCase(result.get(i).getCourseId())) {
+                        course.setCourseColor(result.get(i).getCourseColor());
+                        result.set(i, course);
+                        found = true;
+                    }
+                }
+                if (!found) {
+                    result.add(course);
+                }
+            }
+        }
+        combineCourses.clear();
+
+        if (termCheck) {
+            Iterator<Course> iterator = result.iterator();
             while (iterator.hasNext()) {
                 long courseTerm = Long.valueOf(iterator.next().getCourseTerm());
                 if (courseTerm == 0L || courseTerm < newTerm) {
@@ -36,26 +70,7 @@ public class CourseEditMethod {
                 }
             }
         }
-        for (Course course : combineCourses) {
-            if (combineToCourses.isEmpty()) {
-                combineToCourses.add(course);
-            } else {
-                boolean found = false;
-                for (int i = 0; i < combineToCourses.size() && !found; i++) {
-                    String id = course.getCourseId();
-                    if (id != null && id.equalsIgnoreCase(combineToCourses.get(i).getCourseId())) {
-                        course.setCourseColor(combineToCourses.get(i).getCourseColor());
-                        combineToCourses.set(i, course);
-                        found = true;
-                    }
-                }
-                if (!found) {
-                    combineToCourses.add(course);
-                }
-            }
-        }
-        combineCourses.clear();
-        return combineToCourses;
+        return result;
     }
 
     /**

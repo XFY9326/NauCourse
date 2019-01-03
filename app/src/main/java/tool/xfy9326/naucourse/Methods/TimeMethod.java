@@ -90,13 +90,14 @@ public class TimeMethod {
             Date date = simpleDateFormat.parse(useTermStr);
             Calendar calendar = Calendar.getInstance(Locale.CHINA);
             calendar.setTime(date);
+
             StringBuilder result = new StringBuilder();
             int year = calendar.get(Calendar.YEAR);
-            result.append(year).append(year + 1);
+
             if (calendar.get(Calendar.MONTH) + 1 > 6) {
-                result.append(1);
+                result.append(year).append(year + 1).append(1);
             } else {
-                result.append(2);
+                result.append(year - 1).append(year).append(2);
             }
             return result.toString();
         } catch (ParseException e) {

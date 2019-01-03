@@ -328,6 +328,12 @@ public class CourseActivity extends AppCompatActivity {
                 } else {
                     DataMethod.saveOfflineData(CourseActivity.this, courseArrayList, TableMethod.FILE_NAME, false);
                     needSave = false;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.save_success, Snackbar.LENGTH_SHORT).show();
+                        }
+                    });
                 }
                 runOnUiThread(new Runnable() {
                     @Override
@@ -336,9 +342,6 @@ public class CourseActivity extends AppCompatActivity {
                             if (loadingDialog != null && loadingDialog.isShowing()) {
                                 loadingDialog.cancel();
                                 loadingDialog = null;
-                            }
-                            if (!checkResult.isHasError()) {
-                                Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.save_success, Snackbar.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -466,9 +469,15 @@ public class CourseActivity extends AppCompatActivity {
                 courses_choose.add(courses.get(i));
             }
         }
-        courseArrayList = CourseEditMethod.combineCourseList(courses_choose, courseArrayList, termCheck);
-        courseAdapter.notifyDataSetChanged();
-        needSave = true;
+        ArrayList<Course> list = CourseEditMethod.combineCourseList(courses_choose, courseArrayList, termCheck);
+        if (list != null) {
+            courseArrayList.clear();
+            courseArrayList.addAll(list);
+
+            courseAdapter.updateList(courseArrayList);
+            courseAdapter.notifyDataSetChanged();
+            needSave = true;
+        }
         Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.add_success, Snackbar.LENGTH_SHORT).show();
     }
 

@@ -50,11 +50,13 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
                 if (loadTime == 0) {
                     schoolTime = (SchoolTime) DataMethod.getOfflineData(context[0], SchoolTime.class, SchoolTimeMethod.FILE_NAME);
                     timeLoadSuccess = Config.NET_WORK_GET_SUCCESS;
+                    schoolTime = TimeMethod.termSetCheck(context[0], schoolTime, false);
                 } else {
                     SchoolTimeMethod schoolTimeMethod = new SchoolTimeMethod(context[0]);
                     timeLoadSuccess = schoolTimeMethod.load();
                     if (timeLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                         schoolTime = schoolTimeMethod.getSchoolTime();
+                        schoolTime = TimeMethod.termSetCheck(context[0], schoolTime, loadTime == 1);
                     }
 
                     //首次加载没有课程数据时或者打开自动更新时自动联网获取
@@ -70,9 +72,8 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
                         if (tableMethod.load() == Config.NET_WORK_GET_SUCCESS) {
                             ArrayList<Course> update_course = tableMethod.getCourseTable(false);
                             if (update_course != null) {
-                                ArrayList<Course> now_course = new ArrayList<>(course);
-                                now_course = CourseEditMethod.combineCourseList(update_course, now_course, true);
-                                if (!CourseEditMethod.checkCourseList(now_course).isHasError()) {
+                                ArrayList<Course> now_course = CourseEditMethod.combineCourseList(update_course, course, true);
+                                if (now_course != null && !CourseEditMethod.checkCourseList(now_course).isHasError()) {
                                     course.clear();
                                     course.addAll(now_course);
                                     DataMethod.saveOfflineData(context[0], course, TableMethod.FILE_NAME, false);
@@ -91,7 +92,6 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
             if (loadTime > 2) {
                 BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);
             }
-            schoolTime = TimeMethod.termSetCheck(context[0], schoolTime, loadTime == 1);
         }
         return context[0];
     }
