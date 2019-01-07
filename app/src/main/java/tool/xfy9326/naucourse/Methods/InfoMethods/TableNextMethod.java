@@ -79,10 +79,7 @@ public class TableNextMethod {
                         course.setCourseType(data[i + 3]);
                         course.setCourseTeacher(data[i + 4]);
 
-                        int detail_length = (data.length - 1 - 8) / 2;
-                        CourseDetail[] courseDetail_list = new CourseDetail[detail_length];
-                        getCourseDetailList(data, courseDetail_list);
-                        course.setCourseDetail(courseDetail_list);
+                        course.setCourseDetail(getCourseDetailList(data, (data.length - 1 - 8) / 2));
 
                         //颜色随机
                         int[] colorList = BaseMethod.getColorArray(context);
@@ -105,8 +102,9 @@ public class TableNextMethod {
         return courseList;
     }
 
-    private void getCourseDetailList(String[] data, CourseDetail[] courseDetail_list) {
+    private CourseDetail[] getCourseDetailList(String[] data, int detail_length) {
         int detail_count = 0;
+        CourseDetail[] courseDetail_list = new CourseDetail[detail_length];
         CourseDetail courseDetail = null;
         for (int i = 8; i < data.length - 1; i++) {
             if (courseDetail == null) {
@@ -159,5 +157,6 @@ public class TableNextMethod {
                 break;
             }
         }
+        return courseDetail_list;
     }
 }

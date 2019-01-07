@@ -35,8 +35,10 @@ public class CourseEditMethod {
                     newTerm2 = courseTerm;
                 }
             }
-            if (newTerm1 < newTerm2) {
-                return null;
+            if (newTerm1 > newTerm2) {
+                newTerm = newTerm1;
+            } else {
+                newTerm = newTerm2;
             }
         }
 
@@ -60,7 +62,6 @@ public class CourseEditMethod {
             }
         }
         combineCourses.clear();
-
         if (termCheck) {
             Iterator<Course> iterator = result.iterator();
             while (iterator.hasNext()) {
@@ -90,9 +91,15 @@ public class CourseEditMethod {
                     CourseDetail[] courseDetail_list_check = courses.get(i).getCourseDetail();
                     if (courseDetail_list_check != null) {
                         for (CourseDetail courseDetail_check : courseDetail_list_check) {
+                            if (courseDetail_check == null) {
+                                continue;
+                            }
                             CourseDetail[] courseDetail_list = courses.get(j).getCourseDetail();
                             if (courseDetail_list != null) {
                                 for (CourseDetail courseDetail : courseDetail_list) {
+                                    if (courseDetail == null) {
+                                        continue;
+                                    }
                                     if (!((courseDetail_check.getWeekMode() == Config.COURSE_DETAIL_WEEKMODE_SINGLE
                                             && courseDetail.getWeekMode() == Config.COURSE_DETAIL_WEEKMODE_DOUBLE)
                                             || (courseDetail_check.getWeekMode() == Config.COURSE_DETAIL_WEEKMODE_DOUBLE
