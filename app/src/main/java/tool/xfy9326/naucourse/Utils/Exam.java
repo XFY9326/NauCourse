@@ -20,6 +20,10 @@ public class Exam {
     private String[] examLocation;
     @Nullable
     private String[] examScore;
+    @Nullable
+    private String[] last_time;
+    @Nullable
+    private String[] last_time_unit;
     private int examMount;
     private int dataVersionCode = 0;
 
@@ -30,6 +34,8 @@ public class Exam {
         this.examTime = null;
         this.examScore = null;
         this.examLocation = null;
+        this.last_time = null;
+        this.last_time_unit = null;
         this.examMount = 0;
     }
 
@@ -104,5 +110,23 @@ public class Exam {
     @SuppressWarnings("SameParameterValue")
     public void setDataVersionCode(int dataVersionCode) {
         this.dataVersionCode = dataVersionCode;
+    }
+
+    @Nullable
+    public String[] getLast_time() {
+        return last_time;
+    }
+
+    public void setLast_time(@Nullable String[] last_time) {
+        this.last_time = last_time;
+    }
+
+    @Nullable
+    public String[] getLast_time_unit() {
+        return last_time_unit;
+    }
+
+    public void setLast_time_unit(@Nullable String[] last_time_unit) {
+        this.last_time_unit = last_time_unit;
     }
 }

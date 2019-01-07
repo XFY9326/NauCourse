@@ -23,6 +23,7 @@ import tool.xfy9326.naucourse.Utils.SchoolTime;
  */
 
 public class TimeMethod {
+    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
 
     /**
      * 手动设置的学期替换检查与自动校准
@@ -86,7 +87,6 @@ public class TimeMethod {
             useTermStr = schoolTime.getStartTime();
         }
         try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
             Date date = simpleDateFormat.parse(useTermStr);
             Calendar calendar = Calendar.getInstance(Locale.CHINA);
             calendar.setTime(date);
@@ -135,7 +135,6 @@ public class TimeMethod {
     public static int getMaxWeekNum(@Nullable SchoolTime schoolTime) {
         int max_week = 0;
         if (schoolTime != null) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
             try {
                 Date startDate = simpleDateFormat.parse(schoolTime.getStartTime());
                 long startDay = startDate.getTime();
@@ -168,7 +167,6 @@ public class TimeMethod {
     public static int getNowWeekNum(@Nullable SchoolTime schoolTime) {
         int weekNum = 0;
         if (schoolTime != null) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
             try {
                 Date startDate = simpleDateFormat.parse(schoolTime.getStartTime());
                 Date endDate = simpleDateFormat.parse(schoolTime.getEndTime());
@@ -229,7 +227,6 @@ public class TimeMethod {
     @NonNull
     private static String[] getWeekDayDate(int week_num, String startSchoolDate) {
         String[] weekDayDate = new String[Config.MAX_WEEK_DAY];
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
         try {
             Date startDate = simpleDateFormat.parse(startSchoolDate);
 

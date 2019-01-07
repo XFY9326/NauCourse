@@ -44,9 +44,9 @@ public class NauSSOClient {
         cookieStore = new CookieStore(context);
         client_builder.cookieJar(cookieStore);
         client_builder.cache(getCache(context));
-        client_builder.connectTimeout(8, TimeUnit.SECONDS);
-        client_builder.writeTimeout(4, TimeUnit.SECONDS);
-        client_builder.readTimeout(4, TimeUnit.SECONDS);
+        client_builder.connectTimeout(10, TimeUnit.SECONDS);
+        client_builder.writeTimeout(5, TimeUnit.SECONDS);
+        client_builder.readTimeout(5, TimeUnit.SECONDS);
         client_builder.retryOnConnectionFailure(true);
         client = client_builder.build();
     }

@@ -53,6 +53,7 @@ public class SchoolTimeMethod {
         return Config.NET_WORK_ERROR_CODE_CONNECT_NO_LOGIN;
     }
 
+    //调用该方法的同时，需要调用TimeMethod中的termSetCheck方法获取真实的日期
     @Nullable
     public SchoolTime getSchoolTime() {
         SchoolTime schoolTime = new SchoolTime();
