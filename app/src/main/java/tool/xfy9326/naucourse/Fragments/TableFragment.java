@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -243,11 +244,14 @@ public class TableFragment extends Fragment {
                 }
                 textView_date.setText(context.getString(R.string.table_date, year, month, weekDay, week));
 
-                if (spinner_week == null) {
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, TimeMethod.getWeekArray(context, schoolTime));
+                if (spinner_week == null || isDataReload) {
+                    List<String> weekArr = TimeMethod.getWeekArray(context, schoolTime);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, weekArr);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner_week = view.findViewById(R.id.spinner_table_week_chose);
-                    spinner_week.setSelection(lastSelect);
+                    if (lastSelect < weekArr.size()) {
+                        spinner_week.setSelection(lastSelect);
+                    }
                     spinner_week.setAdapter(adapter);
                     spinner_week.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override

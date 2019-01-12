@@ -560,7 +560,7 @@ public class CourseActivity extends AppCompatActivity {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
                     try {
                         long termDay = simpleDateFormat.parse(customEndTermDate).getTime() - simpleDateFormat.parse(customStartTermDate).getTime();
-                        if (termDay <= 0 || termDay / (1000 * 60 * 60 * 24) < 30 || termDay / (1000 * 60 * 60 * 24) > (7 * 24)) {
+                        if (termDay <= 0 || termDay / (1000 * 60 * 60 * 24) < 30 || termDay / (1000 * 60 * 60 * 24) > (7 * Config.DEFAULT_MAX_WEEK)) {
                             Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.term_set_failed, Snackbar.LENGTH_SHORT).show();
                         } else {
                             needReload = true;

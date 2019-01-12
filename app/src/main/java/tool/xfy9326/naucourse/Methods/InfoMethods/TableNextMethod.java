@@ -6,10 +6,10 @@ import android.preference.PreferenceManager;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import androidx.annotation.Nullable;
@@ -52,44 +52,49 @@ public class TableNextMethod {
         if (document != null) {
             boolean startCourse = false;
             Elements tags = document.body().getElementsByTag("tr");
-            List<String> strList = tags.eachText();
-            for (String courseStr : strList) {
+            for (Element element : tags) {
+                String courseStr = element.text();
+                Elements detailElements = element.getElementsByTag("td");
+                //详细信息不足
+                if (detailElements != null && detailElements.size() > 2 && detailElements.size() < 10) {
+                    courseList = null;
+                    break;
+                }
                 if (courseStr.contains("序号")) {
                     startCourse = true;
                 } else if (startCourse && courseStr.contains(" ") && courseStr.contains("上课地点") && courseStr.contains("上课时间")) {
                     String[] data = courseStr.split(" ");
-                    if (data.length <= 9) {
-                        //数据不全
+                    Course course = new Course();
+                    course.setCourseTerm(data[data.length - 1]);
+
+                    course.setCourseId(data[1]);
+                    //可能会出问题的解决课程名称空格的方式
+                    int i = 3;
+                    for (; !data[i].contains("."); i++) {
+                        data[2] += data[i];
+                    }
+                    course.setCourseName(data[2]);
+                    //无教学班信息
+                    course.setCourseScore(data[i]);
+                    course.setCourseCombinedClass(data[i + 1]);
+                    course.setCourseType(data[i + 3]);
+                    course.setCourseTeacher(data[i + 4]);
+
+                    CourseDetail[] courseDetails = getCourseDetailList(data, (data.length - 1 - 8) / 2);
+                    if (courseDetails == null) {
                         courseList = null;
-                        break;
-                    } else {
-                        Course course = new Course();
-                        course.setCourseTerm(data[data.length - 1]);
+                        continue;
+                    }
+                    course.setCourseDetail(courseDetails);
 
-                        course.setCourseId(data[1]);
-                        //可能会出问题的解决课程名称空格的方式
-                        int i = 3;
-                        for (; !data[i].contains("."); i++) {
-                            data[2] += data[i];
-                        }
-                        course.setCourseName(data[2]);
-                        //无教学班信息
-                        course.setCourseScore(data[i]);
-                        course.setCourseCombinedClass(data[i + 1]);
-                        course.setCourseType(data[i + 3]);
-                        course.setCourseTeacher(data[i + 4]);
+                    //颜色随机
+                    int[] colorList = BaseMethod.getColorArray(context);
+                    Random random = new Random();
+                    int num = random.nextInt(colorList.length) % (colorList.length + 1);
+                    course.setCourseColor(colorList[num]);
 
-                        course.setCourseDetail(getCourseDetailList(data, (data.length - 1 - 8) / 2));
-
-                        //颜色随机
-                        int[] colorList = BaseMethod.getColorArray(context);
-                        Random random = new Random();
-                        int num = random.nextInt(colorList.length) % (colorList.length + 1);
-                        course.setCourseColor(colorList[num]);
-
-                        if (courseList != null) {
-                            courseList.add(course);
-                        }
+                    if (courseList != null) {
+                        courseList.add(course);
                     }
                 } else if (!courseStr.contains("上课地点") && !courseStr.contains("上课时间") && !courseStr.contains("在修课程") && !courseStr.contains("序号")) {
                     if (courseList != null && courseList.size() == 0) {

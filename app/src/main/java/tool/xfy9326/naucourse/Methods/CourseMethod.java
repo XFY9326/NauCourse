@@ -218,28 +218,32 @@ public class CourseMethod {
                 continue;
             }
             CourseDetail[] courseDetail = course.getCourseDetail();
-            for (CourseDetail detail : Objects.requireNonNull(courseDetail)) {
-                int mode = detail.getWeekMode();
-                if (showAllWeekMode) {
-                    boolean defaultNoShow = !weekCheck(detail, weekNum) || isDoubleWeek && mode == Config.COURSE_DETAIL_WEEKMODE_SINGLE || !isDoubleWeek && mode == Config.COURSE_DETAIL_WEEKMODE_DOUBLE;
-                    courseSet(course, detail, weekNum, startSchoolDate, defaultNoShow);
-                    continue;
-                }
-                if (isDoubleWeek && mode == Config.COURSE_DETAIL_WEEKMODE_DOUBLE) {
-                    if (weekCheck(detail, weekNum)) {
-                        courseSet(course, detail, weekNum, startSchoolDate, false);
-                    }
-                    continue;
-                }
-                if (!isDoubleWeek && mode == Config.COURSE_DETAIL_WEEKMODE_SINGLE) {
-                    if (weekCheck(detail, weekNum)) {
-                        courseSet(course, detail, weekNum, startSchoolDate, false);
-                    }
-                    continue;
-                }
-                if (mode == Config.COURSE_DETAIL_WEEKMODE_ONCE_MORE || mode == Config.COURSE_DETAIL_WEEKMODE_ONCE) {
-                    if (weekCheck(detail, weekNum)) {
-                        courseSet(course, detail, weekNum, startSchoolDate, false);
+            if (courseDetail != null) {
+                for (CourseDetail detail : courseDetail) {
+                    if (detail != null) {
+                        int mode = detail.getWeekMode();
+                        if (showAllWeekMode) {
+                            boolean defaultNoShow = !weekCheck(detail, weekNum) || isDoubleWeek && mode == Config.COURSE_DETAIL_WEEKMODE_SINGLE || !isDoubleWeek && mode == Config.COURSE_DETAIL_WEEKMODE_DOUBLE;
+                            courseSet(course, detail, weekNum, startSchoolDate, defaultNoShow);
+                            continue;
+                        }
+                        if (isDoubleWeek && mode == Config.COURSE_DETAIL_WEEKMODE_DOUBLE) {
+                            if (weekCheck(detail, weekNum)) {
+                                courseSet(course, detail, weekNum, startSchoolDate, false);
+                            }
+                            continue;
+                        }
+                        if (!isDoubleWeek && mode == Config.COURSE_DETAIL_WEEKMODE_SINGLE) {
+                            if (weekCheck(detail, weekNum)) {
+                                courseSet(course, detail, weekNum, startSchoolDate, false);
+                            }
+                            continue;
+                        }
+                        if (mode == Config.COURSE_DETAIL_WEEKMODE_ONCE_MORE || mode == Config.COURSE_DETAIL_WEEKMODE_ONCE) {
+                            if (weekCheck(detail, weekNum)) {
+                                courseSet(course, detail, weekNum, startSchoolDate, false);
+                            }
+                        }
                     }
                 }
             }
