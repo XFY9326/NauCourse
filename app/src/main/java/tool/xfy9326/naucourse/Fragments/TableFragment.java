@@ -503,13 +503,15 @@ public class TableFragment extends Fragment {
                             builder.setPositiveButton(R.string.share, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Uri photoURI = FileProvider.getUriForFile(getActivity(), Config.FILE_PROVIDER_AUTH, new File(path));
-                                    Intent intent = new Intent(Intent.ACTION_SEND);
-                                    intent.setType("image/*");
-                                    intent.putExtra(Intent.EXTRA_STREAM, photoURI);
-                                    intent.addCategory(Intent.CATEGORY_DEFAULT);
-                                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                    startActivity(Intent.createChooser(intent, getString(R.string.share_course_table)));
+                                    if (getActivity() != null) {
+                                        Uri photoURI = FileProvider.getUriForFile(getActivity(), Config.FILE_PROVIDER_AUTH, new File(path));
+                                        Intent intent = new Intent(Intent.ACTION_SEND);
+                                        intent.setType("image/*");
+                                        intent.putExtra(Intent.EXTRA_STREAM, photoURI);
+                                        intent.addCategory(Intent.CATEGORY_DEFAULT);
+                                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                        startActivity(Intent.createChooser(intent, getString(R.string.share_course_table)));
+                                    }
                                 }
                             });
                             builder.setNegativeButton(android.R.string.cancel, null);

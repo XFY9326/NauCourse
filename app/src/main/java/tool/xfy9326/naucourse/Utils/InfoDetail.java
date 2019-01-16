@@ -1,14 +1,12 @@
 package tool.xfy9326.naucourse.Utils;
 
-import java.io.Serializable;
-
 import androidx.annotation.Nullable;
 
 /**
  * Created by 10696 on 2018/3/22.
  */
 
-public class InfoDetail implements Serializable {
+public class InfoDetail extends BaseUtils {
     @Nullable
     private String title;
     @Nullable

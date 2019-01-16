@@ -69,33 +69,33 @@ public class PersonMethod {
             if (str.contains("必修课: 目标学分：")) {
                 str = str.replace("必修课: ", "");
                 studentLearnProcess.setScoreBXAim(str.substring(str.indexOf("：") + 1, str.indexOf("，")).trim());
-                str = str.substring(str.indexOf("，") + 1, str.length());
+                str = str.substring(str.indexOf("，") + 1);
                 studentLearnProcess.setScoreBXNow(str.substring(str.indexOf("：") + 1, str.indexOf("，")).trim());
-                str = str.substring(str.indexOf("，") + 1, str.length());
-                studentLearnProcess.setScoreBXStill(str.substring(str.indexOf("：") + 1, str.length()).trim());
+                str = str.substring(str.indexOf("，") + 1);
+                studentLearnProcess.setScoreBXStill(str.substring(str.indexOf("：") + 1).trim());
             } else if (str.contains("专选课: 目标学分：")) {
                 str = str.replace("专选课: ", "");
                 studentLearnProcess.setScoreZXAim(str.substring(str.indexOf("：") + 1, str.indexOf("，")).trim());
-                str = str.substring(str.indexOf("，") + 1, str.length());
+                str = str.substring(str.indexOf("，") + 1);
                 studentLearnProcess.setScoreZXNow(str.substring(str.indexOf("：") + 1, str.indexOf("，")).trim());
-                str = str.substring(str.indexOf("，") + 1, str.length());
-                studentLearnProcess.setScoreZXStill(str.substring(str.indexOf("：") + 1, str.length()).trim());
+                str = str.substring(str.indexOf("，") + 1);
+                studentLearnProcess.setScoreZXStill(str.substring(str.indexOf("：") + 1).trim());
             } else if (str.contains("任选课: 目标学分：")) {
                 str = str.replace("任选课: ", "");
                 studentLearnProcess.setScoreRXAim(str.substring(str.indexOf("：") + 1, str.indexOf("，")).trim());
-                str = str.substring(str.indexOf("，") + 1, str.length());
+                str = str.substring(str.indexOf("，") + 1);
                 studentLearnProcess.setScoreRXNow(str.substring(str.indexOf("：") + 1, str.indexOf("，")).trim());
-                str = str.substring(str.indexOf("，") + 1, str.length());
+                str = str.substring(str.indexOf("，") + 1);
                 studentLearnProcess.setScoreRXAward(str.substring(str.indexOf("：") + 1, str.indexOf("，")).trim());
-                str = str.substring(str.indexOf("，") + 1, str.length());
-                studentLearnProcess.setScoreRXStill(str.substring(str.indexOf("：") + 1, str.length()).trim());
+                str = str.substring(str.indexOf("，") + 1);
+                studentLearnProcess.setScoreRXStill(str.substring(str.indexOf("：") + 1).trim());
             } else if (str.contains("实践课: 目标学分：")) {
                 str = str.replace("实践课: ", "");
                 studentLearnProcess.setScoreSJAim(str.substring(str.indexOf("：") + 1, str.indexOf("，")).trim());
-                str = str.substring(str.indexOf("，") + 1, str.length());
+                str = str.substring(str.indexOf("，") + 1);
                 studentLearnProcess.setScoreSJNow(str.substring(str.indexOf("：") + 1, str.indexOf("，")).trim());
-                str = str.substring(str.indexOf("，") + 1, str.length());
-                studentLearnProcess.setScoreSJStill(str.substring(str.indexOf("：") + 1, str.length()).trim());
+                str = str.substring(str.indexOf("，") + 1);
+                studentLearnProcess.setScoreSJStill(str.substring(str.indexOf("：") + 1).trim());
                 break;
             }
         }

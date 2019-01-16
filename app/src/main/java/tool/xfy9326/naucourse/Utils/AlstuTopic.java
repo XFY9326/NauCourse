@@ -1,11 +1,10 @@
 package tool.xfy9326.naucourse.Utils;
 
-public class AlstuTopic {
+public class AlstuTopic extends BaseUtils {
     private String[] topicTitle;
     private String[] topicDate;
     private String[] topicUrl;
     private int topic_length = 0;
-    private int dataVersionCode = 0;
 
     public AlstuTopic() {
     }
@@ -40,14 +39,5 @@ public class AlstuTopic {
 
     public void setTopic_length(int topic_length) {
         this.topic_length = topic_length;
-    }
-
-    @SuppressWarnings("unused")
-    public int getDataVersionCode() {
-        return dataVersionCode;
-    }
-
-    public void setDataVersionCode(int dataVersionCode) {
-        this.dataVersionCode = dataVersionCode;
     }
 }

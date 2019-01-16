@@ -1,6 +1,6 @@
 package tool.xfy9326.naucourse.Utils;
 
-public class Moa {
+public class Moa extends BaseUtils {
     private String[] id;
     private String[] title;
     private String[] reporter;
@@ -10,8 +10,6 @@ public class Moa {
     private String[] applyUnit;
 
     private int count = 0;
-
-    private int dataVersionCode = 0;
 
     public Moa() {
 
@@ -72,16 +70,6 @@ public class Moa {
 
     public void setApplyUnit(String[] applyUnit) {
         this.applyUnit = applyUnit;
-    }
-
-    @SuppressWarnings("unused")
-    public int getDataVersionCode() {
-        return dataVersionCode;
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    public void setDataVersionCode(int dataVersionCode) {
-        this.dataVersionCode = dataVersionCode;
     }
 
     public int getCount() {

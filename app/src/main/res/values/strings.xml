@@ -285,7 +285,8 @@
     <string name="day">天</string>
     <string name="hour">小时</string>
     <string name="minute">分钟</string>
-    <string name="exam_last_time">距离考试还有：</string>
+    <string name="exam_last_time">距离考试:</string>
+    <string name="hide_out_of_date_exam">隐藏过时的考试</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>

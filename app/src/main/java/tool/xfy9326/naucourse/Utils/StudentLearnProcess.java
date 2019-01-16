@@ -1,14 +1,12 @@
 package tool.xfy9326.naucourse.Utils;
 
-import java.io.Serializable;
-
 import androidx.annotation.Nullable;
 
 /**
  * Created by 10696 on 2018/4/1.
  */
 
-public class StudentLearnProcess implements Serializable {
+public class StudentLearnProcess extends BaseUtils {
     @Nullable
     private String scoreBXAim = null;
     @Nullable
@@ -35,7 +33,6 @@ public class StudentLearnProcess implements Serializable {
     private String scoreSJNow = null;
     @Nullable
     private String scoreSJStill = null;
-    private int dataVersionCode = 0;
 
     public StudentLearnProcess() {
 
@@ -156,15 +153,5 @@ public class StudentLearnProcess implements Serializable {
 
     public void setScoreSJStill(@Nullable String scoreSJStill) {
         this.scoreSJStill = scoreSJStill;
-    }
-
-    @SuppressWarnings("unused")
-    public int getDataVersionCode() {
-        return dataVersionCode;
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    public void setDataVersionCode(int dataVersionCode) {
-        this.dataVersionCode = dataVersionCode;
     }
 }

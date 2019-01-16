@@ -1,7 +1,5 @@
 package tool.xfy9326.naucourse.Utils;
 
-import java.io.Serializable;
-
 import androidx.annotation.Nullable;
 
 /**
@@ -9,7 +7,7 @@ import androidx.annotation.Nullable;
  * 学生信息
  */
 
-public class StudentInfo implements Serializable {
+public class StudentInfo extends BaseUtils {
     @Nullable
     private String std_id = null;
     @Nullable
@@ -24,7 +22,6 @@ public class StudentInfo implements Serializable {
     private String std_direction = null;
     @Nullable
     private String std_class = null;
-    private int dataVersionCode = 0;
 
     public StudentInfo() {
     }
@@ -90,16 +87,6 @@ public class StudentInfo implements Serializable {
 
     public void setStd_class(@Nullable String std_class) {
         this.std_class = std_class;
-    }
-
-    @SuppressWarnings("unused")
-    public int getDataVersionCode() {
-        return dataVersionCode;
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    public void setDataVersionCode(int dataVersionCode) {
-        this.dataVersionCode = dataVersionCode;
     }
 
 }

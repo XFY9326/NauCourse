@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Activities.ExamActivity">
+
+    <item
+        android:id="@+id/menu_exam_hide_out_of_date"
+        android:icon="@drawable/ic_visible"
+        android:orderInCategory="0"
+        android:title="@string/hide_out_of_date_exam"
+        app:showAsAction="always" />
+
+</menu>

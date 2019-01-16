@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
  * 学分信息
  */
 
-public class StudentScore {
+public class StudentScore extends BaseUtils {
     @Nullable
     private String scoreXF = null;
     @Nullable
@@ -18,7 +18,6 @@ public class StudentScore {
     private String scoreZP = null;
     @Nullable
     private String scoreBP = null;
-    private int dataVersionCode = 0;
 
     public StudentScore() {
 
@@ -49,16 +48,6 @@ public class StudentScore {
 
     public void setScoreZP(@Nullable String scoreZP) {
         this.scoreZP = scoreZP;
-    }
-
-    @SuppressWarnings("unused")
-    public int getDataVersionCode() {
-        return dataVersionCode;
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    public void setDataVersionCode(int dataVersionCode) {
-        this.dataVersionCode = dataVersionCode;
     }
 
     @Nullable

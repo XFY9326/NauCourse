@@ -1,7 +1,5 @@
 package tool.xfy9326.naucourse.Utils;
 
-import java.io.Serializable;
-
 import androidx.annotation.Nullable;
 
 /**
@@ -9,7 +7,7 @@ import androidx.annotation.Nullable;
  * 储存下一节课的信息
  */
 
-public class NextCourse implements Serializable {
+public class NextCourse extends BaseUtils {
     @Nullable
     private String courseId;
     @Nullable
@@ -20,7 +18,6 @@ public class NextCourse implements Serializable {
     private String courseLocation;
     @Nullable
     private String courseTime;
-    private int dataVersionCode = 0;
 
     public NextCourse() {
         this.courseId = null;
@@ -73,16 +70,6 @@ public class NextCourse implements Serializable {
 
     public void setCourseTime(@Nullable String courseTime) {
         this.courseTime = courseTime;
-    }
-
-    @SuppressWarnings("unused")
-    public int getDataVersionCode() {
-        return dataVersionCode;
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    public void setDataVersionCode(int dataVersionCode) {
-        this.dataVersionCode = dataVersionCode;
     }
 
 }

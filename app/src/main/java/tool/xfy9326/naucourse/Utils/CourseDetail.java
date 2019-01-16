@@ -1,7 +1,5 @@
 package tool.xfy9326.naucourse.Utils;
 
-import java.io.Serializable;
-
 import androidx.annotation.Nullable;
 
 /**
@@ -9,7 +7,7 @@ import androidx.annotation.Nullable;
  * 课程信息详情
  */
 
-public class CourseDetail implements Serializable {
+public class CourseDetail extends BaseUtils {
     //Num-Num,Num...
     @Nullable
     private String weeks[] = null;

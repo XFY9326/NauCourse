@@ -55,6 +55,7 @@ public class ScoreMethod {
         getCourseScore(false);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Nullable
     public CourseScore getCourseScore(boolean checkTemp) {
         ArrayList<String> scoreCourseId = new ArrayList<>();

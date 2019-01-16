@@ -56,131 +56,133 @@ public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.Co
         holder.spinner_course_edit_week.setAdapter(adapter);
 
         final CourseDetail courseDetail = courseDetails.get(holder.getAdapterPosition());
-        if (courseDetail.getWeekDay() != 0) {
-            holder.spinner_course_edit_week.setSelection(courseDetail.getWeekDay() - 1);
-        } else {
-            courseDetail.setWeekDay(1);
-        }
-        if (courseDetail.getWeeks() != null) {
-            String week_num = Arrays.toString(courseDetail.getWeeks());
-            holder.editText_course_edit_week_num.setText(week_num.substring(1, week_num.length() - 1));
-        }
-        if (courseDetail.getCourseTime() != null) {
-            String course_time = Arrays.toString(courseDetail.getCourseTime());
-            holder.editText_course_edit_time.setText(course_time.substring(1, course_time.length() - 1));
-        }
-        if (courseDetail.getLocation() != null) {
-            holder.editText_course_edit_location.setText(courseDetail.getLocation());
-        }
-        switch (courseDetail.getWeekMode()) {
-            case Config.COURSE_DETAIL_WEEKMODE_SINGLE:
-                holder.checkBox_course_edit_single_week.setChecked(true);
-                holder.checkBox_course_edit_double_week.setChecked(false);
-                break;
-            case Config.COURSE_DETAIL_WEEKMODE_DOUBLE:
-                holder.checkBox_course_edit_single_week.setChecked(false);
-                holder.checkBox_course_edit_double_week.setChecked(true);
-                break;
-            case Config.COURSE_DETAIL_WEEKMODE_ONCE_MORE:
-                holder.checkBox_course_edit_single_week.setChecked(true);
-                holder.checkBox_course_edit_double_week.setChecked(true);
-                break;
-            default:
-                holder.checkBox_course_edit_single_week.setChecked(false);
-                holder.checkBox_course_edit_double_week.setChecked(false);
-                courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_ONCE);
-                break;
-        }
-
-        holder.checkBox_course_edit_single_week.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    if (holder.checkBox_course_edit_double_week.isChecked()) {
-                        courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_ONCE_MORE);
-                    } else {
-                        courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_SINGLE);
-                    }
-                } else {
-                    if (holder.checkBox_course_edit_double_week.isChecked()) {
-                        courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_DOUBLE);
-                    } else {
-                        courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_ONCE);
-                    }
-                }
-                activity.setArrayChanged();
+        if (courseDetail != null) {
+            if (courseDetail.getWeekDay() != 0) {
+                holder.spinner_course_edit_week.setSelection(courseDetail.getWeekDay() - 1);
+            } else {
+                courseDetail.setWeekDay(1);
             }
-        });
-        holder.checkBox_course_edit_double_week.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    if (holder.checkBox_course_edit_single_week.isChecked()) {
-                        courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_ONCE_MORE);
-                    } else {
-                        courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_DOUBLE);
-                    }
-                } else {
-                    if (holder.checkBox_course_edit_single_week.isChecked()) {
-                        courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_SINGLE);
-                    } else {
-                        courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_ONCE);
-                    }
-                }
-                activity.setArrayChanged();
+            if (courseDetail.getWeeks() != null) {
+                String week_num = Arrays.toString(courseDetail.getWeeks());
+                holder.editText_course_edit_week_num.setText(week_num.substring(1, week_num.length() - 1));
             }
-        });
-
-        holder.spinner_course_edit_week.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                courseDetail.setWeekDay(position + 1);
+            if (courseDetail.getCourseTime() != null) {
+                String course_time = Arrays.toString(courseDetail.getCourseTime());
+                holder.editText_course_edit_time.setText(course_time.substring(1, course_time.length() - 1));
+            }
+            if (courseDetail.getLocation() != null) {
+                holder.editText_course_edit_location.setText(courseDetail.getLocation());
+            }
+            switch (courseDetail.getWeekMode()) {
+                case Config.COURSE_DETAIL_WEEKMODE_SINGLE:
+                    holder.checkBox_course_edit_single_week.setChecked(true);
+                    holder.checkBox_course_edit_double_week.setChecked(false);
+                    break;
+                case Config.COURSE_DETAIL_WEEKMODE_DOUBLE:
+                    holder.checkBox_course_edit_single_week.setChecked(false);
+                    holder.checkBox_course_edit_double_week.setChecked(true);
+                    break;
+                case Config.COURSE_DETAIL_WEEKMODE_ONCE_MORE:
+                    holder.checkBox_course_edit_single_week.setChecked(true);
+                    holder.checkBox_course_edit_double_week.setChecked(true);
+                    break;
+                default:
+                    holder.checkBox_course_edit_single_week.setChecked(false);
+                    holder.checkBox_course_edit_double_week.setChecked(false);
+                    courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_ONCE);
+                    break;
             }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-        holder.button_course_edit_week_num.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editNumberItem(holder.getAdapterPosition(), true);
-            }
-        });
-        holder.button_course_edit_time.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editNumberItem(holder.getAdapterPosition(), false);
-            }
-        });
-        holder.button_course_edit_location.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editLocation(holder.getAdapterPosition());
-            }
-        });
-        holder.button_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snackbar.make(activity.findViewById(R.id.layout_course_edit_content), R.string.delete_confirm, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(android.R.string.yes, new View.OnClickListener() {
-                    @SuppressLint("RestrictedApi")
-                    @Override
-                    public void onClick(View v) {
-                        courseDetails.remove(holder.getAdapterPosition());
-                        notifyItemRemoved(holder.getAdapterPosition());
-                        activity.setArrayChanged();
-
-                        FloatingActionButton floatingActionButton = activity.findViewById(R.id.floatingActionButton_course_edit_add);
-                        if (floatingActionButton.getVisibility() != View.VISIBLE) {
-                            floatingActionButton.setVisibility(View.VISIBLE);
-                            ViewCompat.animate(floatingActionButton).scaleX(1.0F).scaleY(1.0F).alpha(1.0F)
-                                    .setInterpolator(new FastOutSlowInInterpolator()).withLayer().setListener(null)
-                                    .start();
+            holder.checkBox_course_edit_single_week.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        if (holder.checkBox_course_edit_double_week.isChecked()) {
+                            courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_ONCE_MORE);
+                        } else {
+                            courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_SINGLE);
+                        }
+                    } else {
+                        if (holder.checkBox_course_edit_double_week.isChecked()) {
+                            courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_DOUBLE);
+                        } else {
+                            courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_ONCE);
                         }
                     }
-                }).show();
-            }
-        });
+                    activity.setArrayChanged();
+                }
+            });
+            holder.checkBox_course_edit_double_week.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        if (holder.checkBox_course_edit_single_week.isChecked()) {
+                            courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_ONCE_MORE);
+                        } else {
+                            courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_DOUBLE);
+                        }
+                    } else {
+                        if (holder.checkBox_course_edit_single_week.isChecked()) {
+                            courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_SINGLE);
+                        } else {
+                            courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_ONCE);
+                        }
+                    }
+                    activity.setArrayChanged();
+                }
+            });
+
+            holder.spinner_course_edit_week.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    courseDetail.setWeekDay(position + 1);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+            holder.button_course_edit_week_num.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editNumberItem(holder.getAdapterPosition(), true);
+                }
+            });
+            holder.button_course_edit_time.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editNumberItem(holder.getAdapterPosition(), false);
+                }
+            });
+            holder.button_course_edit_location.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editLocation(holder.getAdapterPosition());
+                }
+            });
+            holder.button_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Snackbar.make(activity.findViewById(R.id.layout_course_edit_content), R.string.delete_confirm, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(android.R.string.yes, new View.OnClickListener() {
+                        @SuppressLint("RestrictedApi")
+                        @Override
+                        public void onClick(View v) {
+                            courseDetails.remove(holder.getAdapterPosition());
+                            notifyItemRemoved(holder.getAdapterPosition());
+                            activity.setArrayChanged();
+
+                            FloatingActionButton floatingActionButton = activity.findViewById(R.id.floatingActionButton_course_edit_add);
+                            if (floatingActionButton.getVisibility() != View.VISIBLE) {
+                                floatingActionButton.setVisibility(View.VISIBLE);
+                                ViewCompat.animate(floatingActionButton).scaleX(1.0F).scaleY(1.0F).alpha(1.0F)
+                                        .setInterpolator(new FastOutSlowInInterpolator()).withLayer().setListener(null)
+                                        .start();
+                            }
+                        }
+                    }).show();
+                }
+            });
+        }
     }
 
     @Override

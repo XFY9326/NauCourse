@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
  * 考试信息
  */
 
-public class Exam {
+public class Exam extends BaseUtils {
     @Nullable
     private String[] examId;
     @Nullable
@@ -25,7 +25,6 @@ public class Exam {
     @Nullable
     private String[] last_time_unit;
     private int examMount;
-    private int dataVersionCode = 0;
 
     public Exam() {
         this.examId = null;
@@ -100,16 +99,6 @@ public class Exam {
 
     public void setExamScore(@Nullable String[] examScore) {
         this.examScore = examScore;
-    }
-
-    @SuppressWarnings("unused")
-    public int getDataVersionCode() {
-        return dataVersionCode;
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    public void setDataVersionCode(int dataVersionCode) {
-        this.dataVersionCode = dataVersionCode;
     }
 
     @Nullable

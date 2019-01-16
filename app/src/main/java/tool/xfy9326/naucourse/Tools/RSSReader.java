@@ -68,6 +68,9 @@ public class RSSReader {
                                 if (title.startsWith("【")) {
                                     type = title.substring(1, title.indexOf("】"));
                                     title = title.substring(title.indexOf("】") + 1);
+                                } else if (title.startsWith("[")) {
+                                    type = title.substring(1, title.indexOf("]"));
+                                    title = title.substring(title.indexOf("]") + 1);
                                 }
                             }
                             break;

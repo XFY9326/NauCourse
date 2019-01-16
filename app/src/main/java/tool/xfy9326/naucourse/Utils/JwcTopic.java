@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
  * 教务系统信息
  */
 
-public class JwcTopic {
+public class JwcTopic extends BaseUtils {
     @Nullable
     private String[] topic_type = null;
     @Nullable
@@ -21,7 +21,6 @@ public class JwcTopic {
     @Nullable
     private String[] topic_url = null;
     private int topic_length = 0;
-    private int dataVersionCode = 0;
 
     public JwcTopic() {
     }
@@ -89,13 +88,4 @@ public class JwcTopic {
         this.topic_url = topic_url;
     }
 
-    @SuppressWarnings("unused")
-    public int getDataVersionCode() {
-        return dataVersionCode;
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    public void setDataVersionCode(int dataVersionCode) {
-        this.dataVersionCode = dataVersionCode;
-    }
 }

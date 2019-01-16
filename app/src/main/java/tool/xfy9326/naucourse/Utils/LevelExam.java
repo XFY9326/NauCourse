@@ -1,6 +1,6 @@
 package tool.xfy9326.naucourse.Utils;
 
-public class LevelExam {
+public class LevelExam extends BaseUtils {
     private String[] examType;
     private String[] examName;
     private String[] score1;
@@ -9,8 +9,6 @@ public class LevelExam {
     private String[] ticketId;
     private String[] certificateId;
     private int examAmount;
-
-    private int dataVersionCode = 0;
 
     public LevelExam() {
         this.examType = null;
@@ -85,15 +83,5 @@ public class LevelExam {
 
     public void setCertificateId(String[] certificateId) {
         this.certificateId = certificateId;
-    }
-
-    @SuppressWarnings("unused")
-    public int getDataVersionCode() {
-        return dataVersionCode;
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    public void setDataVersionCode(int dataVersionCode) {
-        this.dataVersionCode = dataVersionCode;
     }
 }

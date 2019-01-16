@@ -7,12 +7,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import tool.xfy9326.naucourse.Methods.InfoMethods.ExamMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Exam;
 
@@ -21,7 +20,6 @@ import tool.xfy9326.naucourse.Utils.Exam;
  */
 
 public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ExamViewHolder> {
-    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.CHINA);
     private final Context context;
     private Exam exam;
 
@@ -47,7 +45,7 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ExamViewHolder
                 if (time.contains("-")) {
                     time = time.substring(0, time.indexOf("-"));
                     try {
-                        long examTime = simpleDateFormat.parse(time).getTime() / 1000L;
+                        long examTime = ExamMethod.simpleDateFormat.parse(time).getTime() / 1000L;
                         if (examTime > now) {
                             long day = (examTime - now) / (3600 * 24);
                             if (day > 0) {
@@ -70,8 +68,8 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ExamViewHolder
                                 }
                             }
                         } else {
-                            lastTime[i] = String.valueOf(0);
-                            lastTimeUnit[i] = context.getString(R.string.minute);
+                            lastTime[i] = null;
+                            lastTimeUnit[i] = null;
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

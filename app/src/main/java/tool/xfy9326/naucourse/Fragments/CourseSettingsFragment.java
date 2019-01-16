@@ -181,16 +181,20 @@ public class CourseSettingsFragment extends PreferenceFragmentCompat {
             builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putFloat(Config.PREFERENCE_CHANGE_TABLE_TRANSPARENCY, transparency_value).apply();
-                    updateCourseTable = true;
+                    if (getActivity() != null) {
+                        PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putFloat(Config.PREFERENCE_CHANGE_TABLE_TRANSPARENCY, transparency_value).apply();
+                        updateCourseTable = true;
+                    }
                 }
             });
             builder.setNegativeButton(android.R.string.cancel, null);
             builder.setNeutralButton(R.string.reset, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().remove(Config.PREFERENCE_CHANGE_TABLE_TRANSPARENCY).apply();
-                    updateCourseTable = true;
+                    if (getActivity() != null) {
+                        PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().remove(Config.PREFERENCE_CHANGE_TABLE_TRANSPARENCY).apply();
+                        updateCourseTable = true;
+                    }
                 }
             });
             builder.setView(view);

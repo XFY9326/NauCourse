@@ -1,7 +1,5 @@
 package tool.xfy9326.naucourse.Utils;
 
-import java.io.Serializable;
-
 import androidx.annotation.Nullable;
 
 /**
@@ -9,7 +7,7 @@ import androidx.annotation.Nullable;
  * 课程信息
  */
 
-public class Course implements Serializable {
+public class Course extends BaseUtils {
     @Nullable
     private String courseId = null;
     @Nullable

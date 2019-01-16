@@ -52,7 +52,7 @@ public class LevelExamMethod {
         getLevelExam(false);
     }
 
-    @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument")
+    @SuppressWarnings({"ToArrayCallWithZeroLengthArrayArgument", "ConstantConditions"})
     @Nullable
     public LevelExam getLevelExam(boolean checkTemp) {
         ArrayList<String> examType = new ArrayList<>();

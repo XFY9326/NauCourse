@@ -1,7 +1,7 @@
 package tool.xfy9326.naucourse.Utils;
 
 @SuppressWarnings("unused")
-public class SuspendCourse {
+public class SuspendCourse extends BaseUtils {
     private String term;
     private String termStart;
     private String termEnd;
@@ -14,8 +14,6 @@ public class SuspendCourse {
     private String[][] detail_class;
     private String[][] detail_location;
     private String[][] detail_date;
-
-    private int dataVersionCode = 0;
 
     public SuspendCourse() {
 
@@ -107,15 +105,5 @@ public class SuspendCourse {
 
     public void setTeacher(String[] teacher) {
         this.teacher = teacher;
-    }
-
-    @SuppressWarnings("unused")
-    public int getDataVersionCode() {
-        return dataVersionCode;
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    public void setDataVersionCode(int dataVersionCode) {
-        this.dataVersionCode = dataVersionCode;
     }
 }

@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
  * 学期信息
  */
 
-public class SchoolTime {
+public class SchoolTime extends BaseUtils {
     //yyyy-MM-dd
     @Nullable
     private String startTime = null;
@@ -15,7 +15,6 @@ public class SchoolTime {
     @Nullable
     private String endTime = null;
     private int weekNum = 0;
-    private int dataVersionCode = 0;
 
     public SchoolTime() {
     }
@@ -44,15 +43,5 @@ public class SchoolTime {
 
     public void setWeekNum(int weekNum) {
         this.weekNum = weekNum;
-    }
-
-    @SuppressWarnings("unused")
-    public int getDataVersionCode() {
-        return dataVersionCode;
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    public void setDataVersionCode(int dataVersionCode) {
-        this.dataVersionCode = dataVersionCode;
     }
 }

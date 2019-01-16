@@ -102,6 +102,7 @@ public class Config {
     public static final String PREFERENCE_INFO_CHANNEL_SELECTED_TW = "INFO_CHANNEL_SELECTED_TW";
     public static final String PREFERENCE_INFO_CHANNEL_SELECTED_XXB = "INFO_CHANNEL_SELECTED_XXB";
     public static final String PREFERENCE_INFO_CHANNEL_SELECTED_ALSTU = "INFO_CHANNEL_SELECTED_ALSTU";
+    public static final String PREFERENCE_HIDE_OUT_OF_DATE_EXAM = "HIDE_OUT_OF_DATE_EXAM";
 
     public static final boolean DEFAULT_PREFERENCE_HAS_LOGIN = false;
     public static final boolean DEFAULT_PREFERENCE_REMEMBER_PW = true;
@@ -133,6 +134,7 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_TW = true;
     public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_XXB = true;
     public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_ALSTU = true;
+    public static final boolean DEFAULT_PREFERENCE_HIDE_OUT_OF_DATE_EXAM = false;
 
     //网络连接错误代码
     public static final int NET_WORK_GET_SUCCESS = 0;

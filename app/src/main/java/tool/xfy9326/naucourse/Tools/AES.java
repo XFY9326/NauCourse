@@ -2,7 +2,7 @@ package tool.xfy9326.naucourse.Tools;
 
 import android.annotation.SuppressLint;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -19,7 +19,7 @@ public class AES {
     private static final String CipherMode = "AES";
 
     private static SecretKeySpec createKey(@Nullable String password) {
-        byte[] data = null;
+        byte[] data;
         if (password == null) {
             password = "";
         }
@@ -32,11 +32,7 @@ public class AES {
             sb.setLength(32);
         }
 
-        try {
-            data = sb.toString().getBytes("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        data = sb.toString().getBytes(StandardCharsets.UTF_8);
         return new SecretKeySpec(data, "AES");
     }
 
@@ -65,7 +61,7 @@ public class AES {
         if (content != null) {
             byte[] data = null;
             try {
-                data = content.getBytes("UTF-8");
+                data = content.getBytes(StandardCharsets.UTF_8);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -108,13 +104,7 @@ public class AES {
             data = decrypt(data, password);
             if (data == null)
                 return null;
-            String result = null;
-            try {
-                result = new String(data, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            return result;
+            return new String(data, StandardCharsets.UTF_8);
         } else {
             return null;
         }

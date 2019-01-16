@@ -9,7 +9,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Locale;
 import java.util.Objects;
 
 import androidx.annotation.Nullable;
@@ -28,6 +32,7 @@ import tool.xfy9326.naucourse.Utils.Exam;
 
 public class ExamMethod {
     public static final String FILE_NAME = "Exam";
+    public static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.CHINA);
     private final Context context;
     @Nullable
     private Document document;
@@ -58,7 +63,7 @@ public class ExamMethod {
     }
 
     @Nullable
-    @SuppressWarnings("SameParameterValue")
+    @SuppressWarnings({"SameParameterValue", "ConstantConditions"})
     public Exam getExam(boolean checkTemp) {
         ArrayList<String> examId = new ArrayList<>();
         ArrayList<String> examName = new ArrayList<>();
@@ -109,6 +114,45 @@ public class ExamMethod {
                 } else {
                     count++;
                 }
+            }
+        }
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        if (sharedPreferences.getBoolean(Config.PREFERENCE_HIDE_OUT_OF_DATE_EXAM, Config.DEFAULT_PREFERENCE_HIDE_OUT_OF_DATE_EXAM)) {
+            int index = 0;
+            long now = System.currentTimeMillis() / 1000L;
+            Iterator<String> iterator = examId.iterator();
+            while (iterator.hasNext()) {
+                iterator.next();
+                String time = examTime.get(index);
+                if (time.contains("-") && time.contains(" ")) {
+                    time = time.substring(0, time.indexOf(" ") + 1) + time.substring(time.indexOf("-") + 1);
+                    long examEnd;
+                    try {
+                        examEnd = simpleDateFormat.parse(time).getTime() / 1000L;
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        examEnd = 0;
+                    }
+                    if (examEnd == 0 || examEnd < now) {
+                        iterator.remove();
+                        examTime.remove(index);
+                        examName.remove(index);
+                        examType.remove(index);
+                        examScore.remove(index);
+                        examLocation.remove(index);
+                        index--;
+                    }
+                } else {
+                    iterator.remove();
+                    examTime.remove(index);
+                    examName.remove(index);
+                    examType.remove(index);
+                    examScore.remove(index);
+                    examLocation.remove(index);
+                    index--;
+                }
+                index++;
             }
         }
 
