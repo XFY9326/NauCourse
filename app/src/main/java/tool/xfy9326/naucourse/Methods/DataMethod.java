@@ -16,7 +16,6 @@ import java.util.Objects;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import tool.xfy9326.naucourse.Config;
-import tool.xfy9326.naucourse.Fragments.HomeFragment;
 import tool.xfy9326.naucourse.Methods.InfoMethods.AlstuMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethods.ExamMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethods.JwcInfoMethod;
@@ -44,11 +43,8 @@ public class DataMethod {
      * @return JavaBean对象
      */
     public static Object getOfflineData(Context context, @NonNull Class file_class, String FILE_NAME) {
-        String path = context.getFilesDir() + File.separator + FILE_NAME;
-        File file = new File(path);
-        if (file.exists()) {
-            String data = IO.readFile(path);
-            String content = SecurityMethod.decryptData(context, data);
+        String content = getOfflineData(context, FILE_NAME);
+        if (content != null) {
             if (checkDataVersionCode(content, file_class)) {
                 return new Gson().fromJson(content, file_class);
             }
@@ -73,14 +69,10 @@ public class DataMethod {
      * @return 课表信息列表
      */
     public static ArrayList<Course> getOfflineTableData(Context context) {
-        String path = context.getFilesDir() + File.separator + TableMethod.FILE_NAME;
-        File file = new File(path);
-        if (file.exists()) {
-            String data = IO.readFile(path);
+        String content = getOfflineData(context, TableMethod.FILE_NAME);
+        if (content != null) {
             Type type = new TypeToken<ArrayList<Course>>() {
             }.getType();
-            System.gc();
-            String content = SecurityMethod.decryptData(context, data);
             return new Gson().fromJson(content, type);
         }
         return null;
@@ -96,17 +88,9 @@ public class DataMethod {
      * @return 是否保存成功
      */
     public static boolean saveOfflineData(final Context context, final Object o, final String FILE_NAME, boolean checkTemp) {
-        String path = context.getFilesDir() + File.separator + FILE_NAME;
         String data = new Gson().toJson(o);
         String content = SecurityMethod.encryptData(context, data);
-        if (checkTemp) {
-            String text = IO.readFile(path);
-            if (text != null) {
-                text = text.replace("\n", "");
-                return !text.equalsIgnoreCase(content) && IO.writeFile(Objects.requireNonNull(content), path);
-            }
-        }
-        return IO.writeFile(Objects.requireNonNull(content), path);
+        return saveOfflineData(context, content, FILE_NAME, checkTemp);
     }
 
     @SuppressWarnings("UnusedReturnValue")
@@ -150,7 +134,7 @@ public class DataMethod {
             case JwcInfoMethod.FILE_NAME:
                 nowVersionCode = Config.DATA_VERSION_JWC_TOPIC;
                 break;
-            case HomeFragment.NEXT_COURSE_FILE_NAME:
+            case NextClassMethod.NEXT_COURSE_FILE_NAME:
                 nowVersionCode = Config.DATA_VERSION_NEXT_COURSE;
                 break;
             case SchoolTimeMethod.FILE_NAME:

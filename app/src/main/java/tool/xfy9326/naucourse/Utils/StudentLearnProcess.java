@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
  * Created by 10696 on 2018/4/1.
  */
 
-public class StudentLearnProcess extends BaseUtils {
+public class StudentLearnProcess extends BaseData {
     @Nullable
     private String scoreBXAim = null;
     @Nullable

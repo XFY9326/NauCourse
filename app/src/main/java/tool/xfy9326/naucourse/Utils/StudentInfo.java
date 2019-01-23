@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
  * 学生信息
  */
 
-public class StudentInfo extends BaseUtils {
+public class StudentInfo extends BaseData {
     @Nullable
     private String std_id = null;
     @Nullable

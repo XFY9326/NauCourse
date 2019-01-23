@@ -26,7 +26,7 @@ import tool.xfy9326.naucourse.Handlers.MainHandler;
 import tool.xfy9326.naucourse.Methods.ImageMethod;
 import tool.xfy9326.naucourse.Methods.PermissionMethod;
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.Receivers.UpdateReceiver;
+import tool.xfy9326.naucourse.Receivers.CourseUpdateReceiver;
 
 /**
  * Created by xfy9326 on 18-2-20.
@@ -129,7 +129,7 @@ public class CourseSettingsFragment extends PreferenceFragmentCompat {
                 if ((boolean) newValue && getActivity() != null) {
                     Toast.makeText(getActivity(), R.string.ask_lock_background, Toast.LENGTH_SHORT).show();
                     //初始化自动更新
-                    getActivity().sendBroadcast(new Intent(UpdateReceiver.UPDATE_ACTION).putExtra(Config.INTENT_IS_ONLY_INIT, true));
+                    getActivity().sendBroadcast(new Intent(CourseUpdateReceiver.UPDATE_ACTION).putExtra(Config.INTENT_IS_ONLY_INIT, true));
                 }
                 return true;
             }

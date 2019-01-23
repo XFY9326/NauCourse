@@ -28,11 +28,11 @@ import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.AsyncTasks.InfoDetailAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethods.AlstuMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.Utils.InfoDetail;
-import tool.xfy9326.naucourse.Views.RecyclerViews.InfoAdapter;
+import tool.xfy9326.naucourse.Utils.TopicInfo;
 
 /**
  * Created by 10696 on 2018/2/25.
@@ -95,23 +95,23 @@ public class InfoDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.menu_info_detail_open_in_browser || item.getItemId() == R.id.menu_info_detail_share) {
             String url = null;
-            if (Objects.equals(info_source, InfoAdapter.TOPIC_SOURCE_RSS)) {
+            if (Objects.equals(info_source, InfoMethod.TOPIC_SOURCE_RSS)) {
                 url = info_url;
-            } else if (Objects.requireNonNull(info_source).equals(InfoAdapter.TOPIC_SOURCE_JWC)) {
+            } else if (Objects.requireNonNull(info_source).equals(InfoMethod.TOPIC_SOURCE_JWC)) {
                 url = NauSSOClient.JWC_SERVER_URL + info_url;
-            } else if (Objects.requireNonNull(info_source).equals(InfoAdapter.TOPIC_SOURCE_ALSTU)) {
+            } else if (Objects.requireNonNull(info_source).equals(InfoMethod.TOPIC_SOURCE_ALSTU)) {
                 url = AlstuMethod.ALSTU_SERVER_URL + info_url;
             }
 
             Intent intent = new Intent();
             if (url != null) {
                 if (item.getItemId() == R.id.menu_info_detail_open_in_browser) {
-                    intent.setAction("android.intent.action.VIEW");
+                    intent.setAction(Intent.ACTION_VIEW);
                     Uri content_url = Uri.parse(url);
                     intent.setData(content_url);
                 } else if (item.getItemId() == R.id.menu_info_detail_share) {
                     String shareText;
-                    if (Objects.requireNonNull(info_source).equals(InfoAdapter.TOPIC_SOURCE_ALSTU)) {
+                    if (Objects.requireNonNull(info_source).equals(InfoMethod.TOPIC_SOURCE_ALSTU)) {
                         shareText = info_title + " " + getString(R.string.please_login_shared_url) + "\n" + url;
                     } else {
                         shareText = info_title + "\n" + url;
@@ -136,7 +136,7 @@ public class InfoDetailActivity extends AppCompatActivity {
     private boolean getIntentData() {
         Intent intent = getIntent();
         if (intent != null) {
-            InfoDetail infoDetail = (InfoDetail) intent.getSerializableExtra(Config.INTENT_INFO_DETAIL);
+            TopicInfo infoDetail = (TopicInfo) intent.getSerializableExtra(Config.INTENT_INFO_DETAIL);
             if (infoDetail != null) {
                 info_url = infoDetail.getUrl();
                 info_title = infoDetail.getTitle();
@@ -173,7 +173,7 @@ public class InfoDetailActivity extends AppCompatActivity {
         textView_date.setText(getString(R.string.info_date, info_date));
     }
 
-    public void InfoDetailSet(@Nullable String content) {
+    public void InfoDetailSet(@Nullable final String content) {
         if (content != null) {
             TextView textView_content = findViewById(R.id.textView_info_detail_content);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

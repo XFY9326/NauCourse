@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
  * 学分信息
  */
 
-public class StudentScore extends BaseUtils {
+public class StudentScore extends BaseData {
     @Nullable
     private String scoreXF = null;
     @Nullable

@@ -46,6 +46,14 @@ public class ImageMethod {
     }
 
     public static boolean downloadImage(String URL, String downloadPath) throws Exception {
+        Bitmap bitmap = getBitmapFromUrl(URL);
+        if (bitmap != null) {
+            return saveBitmap(bitmap, downloadPath, true);
+        }
+        return false;
+    }
+
+    private static Bitmap getBitmapFromUrl(String URL) throws Exception {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder().get().url(URL).build();
         Response response = okHttpClient.newCall(request).execute();
@@ -55,11 +63,11 @@ public class ImageMethod {
                 InputStream inputStream = responseBody.byteStream();
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                 response.close();
-                return saveBitmap(bitmap, downloadPath, true);
+                return bitmap;
             }
         }
         response.close();
-        return false;
+        return null;
     }
 
     public static boolean saveBitmap(Bitmap bitmap, String path, boolean recycle) throws IOException {

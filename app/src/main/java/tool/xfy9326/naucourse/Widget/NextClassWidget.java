@@ -20,7 +20,7 @@ import androidx.annotation.Nullable;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.NextClassMethod;
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.Receivers.UpdateReceiver;
+import tool.xfy9326.naucourse.Receivers.CourseUpdateReceiver;
 import tool.xfy9326.naucourse.Utils.NextCourse;
 
 /**
@@ -50,6 +50,11 @@ public class NextClassWidget extends AppWidgetProvider {
             if (next == null) {
                 next = NextClassMethod.getNextClassArray(context);
             }
+            if (next.isInVacation()) {
+                remoteViews.setTextViewText(R.id.textView_app_widget_noNextClass, context.getString(R.string.in_vacation));
+            } else {
+                remoteViews.setTextViewText(R.id.textView_app_widget_noNextClass, context.getString(R.string.no_course));
+            }
             if (next.getCourseId() != null) {
                 remoteViews.setTextViewText(R.id.textView_app_widget_nextClass, next.getCourseName());
                 remoteViews.setTextViewText(R.id.textView_app_widget_nextLocation, next.getCourseLocation());
@@ -75,7 +80,7 @@ public class NextClassWidget extends AppWidgetProvider {
     @Override
     public void onEnabled(@NonNull Context context) {
         //初始化自动更新
-        context.sendBroadcast(new Intent(context, UpdateReceiver.class).setAction(UpdateReceiver.UPDATE_ACTION).setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES).putExtra(Config.INTENT_IS_ONLY_INIT, true));
+        context.sendBroadcast(new Intent(context, CourseUpdateReceiver.class).setAction(CourseUpdateReceiver.UPDATE_ACTION).setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES).putExtra(Config.INTENT_IS_ONLY_INIT, true));
         super.onEnabled(context);
     }
 

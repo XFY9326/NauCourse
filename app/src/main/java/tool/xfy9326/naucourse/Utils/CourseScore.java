@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
  * 成绩信息
  */
 
-public class CourseScore extends BaseUtils {
+public class CourseScore extends BaseData {
     private String[] scoreCourseId;
     @Nullable
     private String[] scoreCourseName;

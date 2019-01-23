@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -158,7 +157,7 @@ public class PersonFragment extends Fragment {
             cardView_suspend_course.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getActivity() != null) {
+                    if (getActivity() != null && isAdded()) {
                         startActivity(new Intent(getActivity(), SuspendCourseActivity.class));
                     }
                 }
@@ -167,7 +166,7 @@ public class PersonFragment extends Fragment {
             cardView_moa.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getActivity() != null) {
+                    if (getActivity() != null && isAdded()) {
                         startActivity(new Intent(getActivity(), MoaActivity.class));
                     }
                 }
@@ -176,7 +175,7 @@ public class PersonFragment extends Fragment {
             cardView_school_calendar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getActivity() != null) {
+                    if (getActivity() != null && isAdded()) {
                         startActivity(new Intent(getActivity(), SchoolCalendarActivity.class));
                     }
                 }
@@ -185,7 +184,7 @@ public class PersonFragment extends Fragment {
             cardView_stdInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getActivity() != null) {
+                    if (getActivity() != null && isAdded()) {
                         if (studentInfo != null && studentLearnProcess != null) {
                             Intent intent = new Intent(getActivity(), StudentInfoActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -202,36 +201,30 @@ public class PersonFragment extends Fragment {
             cardView_score.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getActivity() != null) {
-                        if (isAdded()) {
-                            Intent intent = new Intent(getActivity(), ScoreActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            getActivity().startActivity(intent);
-                        }
+                    if (getActivity() != null && isAdded()) {
+                        Intent intent = new Intent(getActivity(), ScoreActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getActivity().startActivity(intent);
                     }
                 }
             });
             cardView_exam.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getActivity() != null) {
-                        if (isAdded()) {
-                            Intent intent = new Intent(getActivity(), ExamActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            getActivity().startActivity(intent);
-                        }
+                    if (getActivity() != null && isAdded()) {
+                        Intent intent = new Intent(getActivity(), ExamActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getActivity().startActivity(intent);
                     }
                 }
             });
             cardView_levelExam.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getActivity() != null) {
-                        if (isAdded()) {
-                            Intent intent = new Intent(getActivity(), LevelExamActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            getActivity().startActivity(intent);
-                        }
+                    if (getActivity() != null && isAdded()) {
+                        Intent intent = new Intent(getActivity(), LevelExamActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getActivity().startActivity(intent);
                     }
                 }
             });
@@ -239,84 +232,58 @@ public class PersonFragment extends Fragment {
             cardView_course_settings.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getActivity() != null) {
-                        if (isAdded()) {
-                            Intent intent = new Intent(getActivity(), CourseSettingsActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            getActivity().startActivity(intent);
-                        }
+                    if (getActivity() != null && isAdded()) {
+                        Intent intent = new Intent(getActivity(), CourseSettingsActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getActivity().startActivity(intent);
                     }
                 }
             });
             cardView_global_settings.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getActivity() != null) {
-                        if (isAdded()) {
-                            Intent intent = new Intent(getActivity(), GlobalSettingsActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            getActivity().startActivity(intent);
-                        }
+                    if (getActivity() != null && isAdded()) {
+                        Intent intent = new Intent(getActivity(), GlobalSettingsActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getActivity().startActivity(intent);
                     }
                 }
             });
             cardView_login_out.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getActivity() != null) {
-                        if (isAdded()) {
-                            if (NetMethod.isNetworkConnected(getActivity())) {
-                                loginOut(getActivity());
-                            } else {
-                                Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_SHORT).show();
-                            }
+                    if (getActivity() != null && isAdded()) {
+                        if (NetMethod.isNetworkConnected(getActivity())) {
+                            loginOut(getActivity());
+                        } else {
+                            Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
             });
-            cardView_about.setOnClickListener(new View.OnClickListener()
-
-            {
+            cardView_about.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getActivity() != null) {
-                        if (isAdded()) {
-                            Intent intent = new Intent(getActivity(), AboutActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            getActivity().startActivity(intent);
-                        }
+                    if (getActivity() != null && isAdded()) {
+                        Intent intent = new Intent(getActivity(), AboutActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getActivity().startActivity(intent);
                     }
                 }
             });
             cardView_jw_link.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getActivity() != null) {
-                        if (isAdded()) {
-                            String url = "http://jwc.nau.edu.cn/Students/default.aspx";
-                            Intent intent = new Intent();
-                            intent.setAction(Intent.ACTION_VIEW);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            Uri content_url = Uri.parse(url);
-                            intent.setData(content_url);
-                            getActivity().startActivity(intent);
-                        }
+                    if (getActivity() != null && isAdded()) {
+                        NetMethod.viewUrlInBrowser(getActivity(), "http://jwc.nau.edu.cn/Students/default.aspx");
                     }
                 }
             });
             cardView_alstu_link.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getActivity() != null) {
-                        if (isAdded()) {
-                            String url = "http://alstu.nau.edu.cn/default.aspx";
-                            Intent intent = new Intent();
-                            intent.setAction(Intent.ACTION_VIEW);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            Uri content_url = Uri.parse(url);
-                            intent.setData(content_url);
-                            getActivity().startActivity(intent);
-                        }
+                    if (getActivity() != null && isAdded()) {
+                        NetMethod.viewUrlInBrowser(getActivity(), "http://alstu.nau.edu.cn/default.aspx");
                     }
                 }
             });

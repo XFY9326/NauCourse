@@ -45,7 +45,6 @@ import tool.xfy9326.naucourse.Widget.NextClassWidget;
  */
 
 public class HomeFragment extends Fragment {
-    public static final String NEXT_COURSE_FILE_NAME = "NextCourse";
     @Nullable
     private View view;
     @Nullable
@@ -259,17 +258,17 @@ public class HomeFragment extends Fragment {
 
     //优先加载缓存中的下一节课
     private void loadTempNextCourse() {
-        NextCourse nextCourse = (NextCourse) DataMethod.getOfflineData(Objects.requireNonNull(context), NextCourse.class, NEXT_COURSE_FILE_NAME);
+        NextCourse nextCourse = (NextCourse) DataMethod.getOfflineData(Objects.requireNonNull(context), NextCourse.class, NextClassMethod.NEXT_COURSE_FILE_NAME);
         if (nextCourse != null) {
-            setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
+            setNextCourse(nextCourse);
         }
     }
 
     //内部刷新设置下一节课
     private void setNextCourse() {
         NextCourse nextCourse = NextClassMethod.getNextClassArray(Objects.requireNonNull(getActivity()));
-        DataMethod.saveOfflineData(Objects.requireNonNull(context), nextCourse, NEXT_COURSE_FILE_NAME, false);
-        setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
+        DataMethod.saveOfflineData(Objects.requireNonNull(context), nextCourse, NextClassMethod.NEXT_COURSE_FILE_NAME, false);
+        setNextCourse(nextCourse);
         System.gc();
     }
 
@@ -277,30 +276,33 @@ public class HomeFragment extends Fragment {
      * 设置下一节课
      * 主要用于外部调用更新UI
      *
-     * @param name     课程名称
-     * @param location 上课地点
-     * @param teacher  上课老师
-     * @param time     上课时间
+     * @param nextCourse NextCourse
      */
-    void setNextCourse(@Nullable String name, String location, String teacher, String time) {
+    void setNextCourse(NextCourse nextCourse) {
         if (isAdded() && view != null) {
             TextView textView_noNextClass = view.findViewById(R.id.textView_noNextClass);
             LinearLayout linearLayout_nextClass = view.findViewById(R.id.layout_nextClass);
-            if (name == null) {
+            if (nextCourse.getCourseTime() == null) {
+                if (nextCourse.isInVacation()) {
+                    textView_noNextClass.setText(R.string.in_vacation);
+                } else {
+                    textView_noNextClass.setText(R.string.no_course);
+                }
                 linearLayout_nextClass.setVisibility(View.GONE);
                 textView_noNextClass.setVisibility(View.VISIBLE);
-                DataMethod.deleteOfflineData(Objects.requireNonNull(context), NEXT_COURSE_FILE_NAME);
+
+                DataMethod.deleteOfflineData(Objects.requireNonNull(context), NextClassMethod.NEXT_COURSE_FILE_NAME);
             } else {
-                time = time.replace("~", "\n~\n").trim();
+                String time = nextCourse.getCourseTime().replace("~", "\n~\n").trim();
 
                 TextView textView_nextClass = view.findViewById(R.id.textView_nextClass);
                 TextView textView_nextLocation = view.findViewById(R.id.textView_nextLocation);
                 TextView textView_nextTeacher = view.findViewById(R.id.textView_nextTeacher);
                 TextView textView_nextTime = view.findViewById(R.id.textView_nextTime);
 
-                textView_nextClass.setText(name);
-                textView_nextLocation.setText(location);
-                textView_nextTeacher.setText(teacher);
+                textView_nextClass.setText(nextCourse.getCourseName());
+                textView_nextLocation.setText(nextCourse.getCourseLocation());
+                textView_nextTeacher.setText(nextCourse.getCourseTeacher());
                 textView_nextTime.setText(time);
 
                 textView_noNextClass.setVisibility(View.GONE);

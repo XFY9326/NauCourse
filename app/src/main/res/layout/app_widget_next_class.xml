@@ -48,7 +48,7 @@
         android:drawableStart="@drawable/ic_rest"
         android:drawablePadding="30dp"
         android:gravity="center"
-        android:text="@string/no_course"
+        android:text="@string/in_vacation"
         android:textColor="@color/colorSecondaryText"
         android:textSize="12sp" />
 

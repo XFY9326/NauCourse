@@ -1,6 +1,6 @@
 package tool.xfy9326.naucourse.Utils;
 
-public class LevelExam extends BaseUtils {
+public class LevelExam extends BaseData {
     private String[] examType;
     private String[] examName;
     private String[] score1;

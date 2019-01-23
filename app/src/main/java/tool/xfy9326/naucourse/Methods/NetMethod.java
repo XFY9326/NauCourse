@@ -1,9 +1,11 @@
 package tool.xfy9326.naucourse.Methods;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -174,6 +176,21 @@ public class NetMethod {
             }
         }
         return false;
+    }
+
+    /**
+     * 通过浏览器打开Url的网页
+     *
+     * @param context Context
+     * @param url     地址
+     */
+    public static void viewUrlInBrowser(Context context, String url) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Uri content_url = Uri.parse(url);
+        intent.setData(content_url);
+        context.startActivity(intent);
     }
 
     /**

@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
  * 储存下一节课的信息
  */
 
-public class NextCourse extends BaseUtils {
+public class NextCourse extends BaseData {
     @Nullable
     private String courseId;
     @Nullable
@@ -18,6 +18,7 @@ public class NextCourse extends BaseUtils {
     private String courseLocation;
     @Nullable
     private String courseTime;
+    private boolean inVacation;
 
     public NextCourse() {
         this.courseId = null;
@@ -25,6 +26,7 @@ public class NextCourse extends BaseUtils {
         this.courseTeacher = null;
         this.courseLocation = null;
         this.courseTime = null;
+        this.inVacation = true;
     }
 
     @Nullable
@@ -72,4 +74,11 @@ public class NextCourse extends BaseUtils {
         this.courseTime = courseTime;
     }
 
+    public boolean isInVacation() {
+        return inVacation;
+    }
+
+    public void setInVacation(boolean inVacation) {
+        this.inVacation = inVacation;
+    }
 }

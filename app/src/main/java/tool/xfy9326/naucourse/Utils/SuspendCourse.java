@@ -1,7 +1,7 @@
 package tool.xfy9326.naucourse.Utils;
 
 @SuppressWarnings("unused")
-public class SuspendCourse extends BaseUtils {
+public class SuspendCourse extends BaseData {
     private String term;
     private String termStart;
     private String termEnd;

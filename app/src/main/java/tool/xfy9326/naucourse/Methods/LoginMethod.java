@@ -95,6 +95,7 @@ public class LoginMethod {
                     .remove(Config.PREFERENCE_INFO_CHANNEL_SELECTED_XW)
                     .remove(Config.PREFERENCE_INFO_CHANNEL_SELECTED_TW)
                     .remove(Config.PREFERENCE_INFO_CHANNEL_SELECTED_XXB)
+                    .remove(Config.PREFERENCE_HIDE_OUT_OF_DATE_EXAM)
                     .putBoolean(Config.PREFERENCE_HAS_LOGIN, false)
                     .apply();
             cleanUserTemp(context);

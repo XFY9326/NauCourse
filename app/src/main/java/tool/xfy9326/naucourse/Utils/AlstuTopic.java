@@ -1,6 +1,6 @@
 package tool.xfy9326.naucourse.Utils;
 
-public class AlstuTopic extends BaseUtils {
+public class AlstuTopic extends BaseData {
     private String[] topicTitle;
     private String[] topicDate;
     private String[] topicUrl;

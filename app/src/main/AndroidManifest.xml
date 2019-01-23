@@ -161,7 +161,7 @@
             android:theme="@style/AppTheme.Base" />
 
         <receiver
-            android:name=".Receivers.UpdateReceiver"
+            android:name=".Receivers.CourseUpdateReceiver"
             android:exported="false"
             tools:ignore="InnerclassSeparator">
             <intent-filter>

@@ -144,8 +144,7 @@ public class AlstuMethod {
         Element element = Objects.requireNonNull(detailDocument).body().getElementById("nr");
         Elements elements_p = element.getElementsByTag("p");
         elements_p.remove(0);
-        String result = elements_p.html();
-        result = result.replaceAll("<img.*?/?>", "");
+        String result = elements_p.html().replaceAll("<img.*?/?>", "");
         result += getDownloadFileText(detailDocument);
         return result;
     }

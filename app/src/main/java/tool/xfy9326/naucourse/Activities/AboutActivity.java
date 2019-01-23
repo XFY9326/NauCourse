@@ -1,8 +1,6 @@
 package tool.xfy9326.naucourse.Activities;
 
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 import lib.xfy9326.updater.Updater;
 import tool.xfy9326.naucourse.BuildConfig;
 import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
 
 /**
@@ -73,13 +72,7 @@ public class AboutActivity extends AppCompatActivity {
         textView_donate_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "https://www.xfy9326.top/api/donate/naucourse/personList.php";
-                Intent intent = new Intent();
-                intent.setAction("android.intent.action.VIEW");
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                Uri content_url = Uri.parse(url);
-                intent.setData(content_url);
-                startActivity(intent);
+                NetMethod.viewUrlInBrowser(AboutActivity.this, "https://www.xfy9326.top/api/donate/naucourse/personList.php");
             }
         });
         textView_donate.setOnClickListener(new View.OnClickListener() {
@@ -91,25 +84,19 @@ public class AboutActivity extends AppCompatActivity {
                 builder.setPositiveButton(R.string.alipay, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Uri uri = Uri.parse(Config.DONATE_URL_ALIPAY);
-                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                        startActivity(intent);
+                        NetMethod.viewUrlInBrowser(AboutActivity.this, Config.DONATE_URL_ALIPAY);
                     }
                 });
                 builder.setNegativeButton(R.string.wechat, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Uri uri = Uri.parse(Config.DONATE_URL_WECHAT);
-                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                        startActivity(intent);
+                        NetMethod.viewUrlInBrowser(AboutActivity.this, Config.DONATE_URL_WECHAT);
                     }
                 });
                 builder.setNeutralButton(R.string.qq_wallet, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Uri uri = Uri.parse(Config.DONATE_URL_QQ_WALLET);
-                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                        startActivity(intent);
+                        NetMethod.viewUrlInBrowser(AboutActivity.this, Config.DONATE_URL_QQ_WALLET);
                     }
                 });
                 builder.show();

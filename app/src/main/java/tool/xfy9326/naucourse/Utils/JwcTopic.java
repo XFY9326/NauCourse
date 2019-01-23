@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
  * 教务系统信息
  */
 
-public class JwcTopic extends BaseUtils {
+public class JwcTopic extends BaseData {
     @Nullable
     private String[] topic_type = null;
     @Nullable

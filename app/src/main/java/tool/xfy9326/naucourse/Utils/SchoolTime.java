@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
  * 学期信息
  */
 
-public class SchoolTime extends BaseUtils {
+public class SchoolTime extends BaseData {
     //yyyy-MM-dd
     @Nullable
     private String startTime = null;

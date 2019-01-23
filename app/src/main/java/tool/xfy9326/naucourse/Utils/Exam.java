@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
  * 考试信息
  */
 
-public class Exam extends BaseUtils {
+public class Exam extends BaseData {
     @Nullable
     private String[] examId;
     @Nullable

@@ -19,6 +19,7 @@ import tool.xfy9326.naucourse.Utils.SchoolTime;
  */
 
 public class NextClassMethod {
+    public static final String NEXT_COURSE_FILE_NAME = "NextCourse";
 
     /**
      * 获取下一节课的信息
@@ -28,6 +29,7 @@ public class NextClassMethod {
      */
     @NonNull
     public static NextCourse getNextClassArray(@NonNull Context context) {
+        NextCourse nextCourse = null;
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
             SchoolTime schoolTime = (SchoolTime) DataMethod.getOfflineData(context, SchoolTime.class, SchoolTimeMethod.FILE_NAME);
@@ -39,11 +41,17 @@ public class NextClassMethod {
                 if (weekNum != 0) {
                     schoolTime.setWeekNum(weekNum);
                     CourseMethod courseMethod = new CourseMethod(context, courses, schoolTime);
-                    return courseMethod.getNextClass(weekNum);
+                    nextCourse = courseMethod.getNextClass(weekNum);
+                } else {
+                    nextCourse = new NextCourse();
+                    nextCourse.setInVacation(true);
                 }
             }
         }
-        return new NextCourse();
+        if (nextCourse == null) {
+            nextCourse = new NextCourse();
+        }
+        return nextCourse;
     }
 
 }

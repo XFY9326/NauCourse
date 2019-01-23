@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
  * 课程信息详情
  */
 
-public class CourseDetail extends BaseUtils {
+public class CourseDetail extends BaseData {
     //Num-Num,Num...
     @Nullable
     private String weeks[] = null;

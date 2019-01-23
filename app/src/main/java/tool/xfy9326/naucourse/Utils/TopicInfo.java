@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
  * Created by 10696 on 2018/3/22.
  */
 
-public class InfoDetail extends BaseUtils {
+public class TopicInfo extends BaseData {
     @Nullable
     private String title;
     @Nullable
@@ -22,7 +22,7 @@ public class InfoDetail extends BaseUtils {
     @Nullable
     private String type;
 
-    public InfoDetail() {
+    public TopicInfo() {
         this.title = null;
         this.date = null;
         this.click = null;

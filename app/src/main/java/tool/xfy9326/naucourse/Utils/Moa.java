@@ -1,6 +1,6 @@
 package tool.xfy9326.naucourse.Utils;
 
-public class Moa extends BaseUtils {
+public class Moa extends BaseData {
     private String[] id;
     private String[] title;
     private String[] reporter;

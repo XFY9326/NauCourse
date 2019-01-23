@@ -54,7 +54,7 @@ import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Methods.PermissionMethod;
 import tool.xfy9326.naucourse.Methods.TimeMethod;
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.Receivers.UpdateReceiver;
+import tool.xfy9326.naucourse.Receivers.CourseUpdateReceiver;
 import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.CourseDetail;
 import tool.xfy9326.naucourse.Utils.NextCourse;
@@ -295,20 +295,24 @@ public class TableFragment extends Fragment {
 
     private void updateAllNextCourseView(@NonNull Context context) {
         //主页面下一节课设置
-        if (!inVacation) {
-            ViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(context).getViewPagerAdapter();
-            if (viewPagerAdapter != null) {
-                HomeFragment homeFragment = viewPagerAdapter.getHomeFragment();
-                if (homeFragment != null && courseMethod != null) {
+        ViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(context).getViewPagerAdapter();
+        if (viewPagerAdapter != null) {
+            HomeFragment homeFragment = viewPagerAdapter.getHomeFragment();
+            if (homeFragment != null) {
+                if (inVacation) {
+                    NextCourse nextCourse = new NextCourse();
+                    nextCourse.setInVacation(true);
+                    homeFragment.setNextCourse(nextCourse);
+                } else if (courseMethod != null) {
                     NextCourse nextCourse = courseMethod.getNextClass(lastSetWeekNumber);
-                    homeFragment.setNextCourse(nextCourse.getCourseName(), nextCourse.getCourseLocation(), nextCourse.getCourseTeacher(), nextCourse.getCourseTime());
+                    homeFragment.setNextCourse(nextCourse);
                 }
             }
         }
 
         if (loadTime == 1) {
             //初始化自动更新
-            context.sendBroadcast(new Intent(context, UpdateReceiver.class).setAction(UpdateReceiver.UPDATE_ACTION).putExtra(Config.INTENT_IS_ONLY_INIT, true));
+            context.sendBroadcast(new Intent(context, CourseUpdateReceiver.class).setAction(CourseUpdateReceiver.UPDATE_ACTION).putExtra(Config.INTENT_IS_ONLY_INIT, true));
         } else {
             //更新小部件
             context.sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));

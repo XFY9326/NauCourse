@@ -10,11 +10,11 @@ import androidx.annotation.Nullable;
 import tool.xfy9326.naucourse.Activities.InfoDetailActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethods.AlstuMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethods.JwcInfoMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethods.RSSInfoMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
-import tool.xfy9326.naucourse.Views.RecyclerViews.InfoAdapter;
 
 /**
  * Created by 10696 on 2018/3/2.
@@ -51,18 +51,18 @@ public class InfoDetailAsync extends AsyncTask<Context, Void, Context> {
     protected Context doInBackground(Context... context) {
         try {
             if (context[0] != null) {
-                if (Objects.requireNonNull(info_source).equals(InfoAdapter.TOPIC_SOURCE_JWC)) {
+                if (Objects.requireNonNull(info_source).equals(InfoMethod.TOPIC_SOURCE_JWC)) {
                     JwcInfoMethod jwcInfoMethod = new JwcInfoMethod(context[0]);
                     loadSuccess = jwcInfoMethod.loadDetail(info_url);
                     if (loadSuccess == Config.NET_WORK_GET_SUCCESS) {
                         data = jwcInfoMethod.getDetail();
                     }
-                } else if (info_source.equals(InfoAdapter.TOPIC_SOURCE_RSS)) {
+                } else if (info_source.equals(InfoMethod.TOPIC_SOURCE_RSS)) {
                     loadSuccess = RSSInfoMethod.loadDetail(info_url);
                     if (loadSuccess == Config.NET_WORK_GET_SUCCESS) {
                         data = RSSInfoMethod.getDetail();
                     }
-                } else if (info_source.equals(InfoAdapter.TOPIC_SOURCE_ALSTU)) {
+                } else if (info_source.equals(InfoMethod.TOPIC_SOURCE_ALSTU)) {
                     AlstuMethod alstuMethod = new AlstuMethod(context[0]);
                     loadSuccess = alstuMethod.loadDetail(info_url);
                     if (loadSuccess == Config.NET_WORK_GET_SUCCESS) {
