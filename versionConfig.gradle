@@ -1,5 +1,5 @@
 ext {
-    versionCode = 43
+    versionCode = 44
     subVersion = 0
     versionName = "5.2.1"
 
