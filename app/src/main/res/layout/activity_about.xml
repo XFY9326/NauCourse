@@ -144,11 +144,11 @@
                 android:textSize="15sp" />
 
             <TextView
+                android:id="@+id/textView_about_copy_right"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:gravity="center"
-                android:text="@string/copyright"
                 android:textSize="16sp" />
 
             <TextView

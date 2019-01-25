@@ -160,4 +160,6 @@ public class Config {
     public static final String DONATE_URL_ALIPAY = "https://www.xfy9326.top/api/donate/alipay.jpg";
     public static final String DONATE_URL_WECHAT = "https://www.xfy9326.top/api/donate/wechat.png";
     public static final String DONATE_URL_QQ_WALLET = "https://www.xfy9326.top/api/donate/qq_wallet.png";
+
+    public static final String DONATE_PERSON_URL = "https://www.xfy9326.top/api/donate/naucourse/personList.php";
 }

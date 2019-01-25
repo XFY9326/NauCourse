@@ -44,7 +44,7 @@
     </string-array>
 
     <string-array name="open_source_name">
-        <item>Android Support Library</item>
+        <item>AndroidX</item>
         <item>Jsoup</item>
         <item>Okhttp3</item>
         <item>Gson</item>
@@ -91,8 +91,6 @@
         <item>#d7ccc8</item>
         <item>#e1bee7</item>
         <item>#c5cae9</item>
-        <item>#b2dfdb</item>
-        <item>#fff9c4</item>
     </string-array>
 
 </resources>

@@ -48,10 +48,10 @@
             android:layout_height="60dp"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:drawablePadding="30dp"
             android:drawableStart="@drawable/ic_rest"
+            android:drawablePadding="30dp"
             android:gravity="center"
-            android:text="@string/no_course" />
+            android:text="@string/in_vacation" />
 
         <LinearLayout
             android:id="@+id/layout_nextClass"

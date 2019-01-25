@@ -1,12 +1,17 @@
 package tool.xfy9326.naucourse.Activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Calendar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -43,39 +48,53 @@ public class AboutActivity extends AppCompatActivity {
 
     private void ViewSet() {
         TextView textView_version = findViewById(R.id.textView_about_version);
-        TextView textView_open_source = findViewById(R.id.textView_about_open_source);
-        TextView textView_feedback = findViewById(R.id.textView_about_feedback);
-        TextView textView_donate = findViewById(R.id.textView_about_donate);
-        TextView textView_donate_list = findViewById(R.id.textView_about_donate_list);
+        TextView textView_copy_right = findViewById(R.id.textView_about_copy_right);
 
-        String version = "v" + BuildConfig.VERSION_NAME + "-" + Config.SUB_VERSION + " (" + BuildConfig.VERSION_CODE + ") " + Config.VERSION_TYPE;
+        textView_copy_right.setText(getString(R.string.copyright, Calendar.getInstance().get(Calendar.YEAR)));
+
+        String version = "v" + BuildConfig.VERSION_NAME + "." + Config.SUB_VERSION + " (" + BuildConfig.VERSION_CODE + ") " + Config.VERSION_TYPE;
         version = version.replace(Updater.UPDATE_TYPE_BETA, getString(R.string.beta)).replace(Updater.UPDATE_TYPE_RELEASE, getString(R.string.release)).replace(Config.DEBUG, getString(R.string.debug));
 
         textView_version.setText(version);
 
-        textView_open_source.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.textView_about_open_source).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showOpenSourceList();
             }
         });
-        textView_feedback.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.textView_about_feedback).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(AboutActivity.this);
                 builder.setTitle(R.string.feedback);
                 builder.setMessage(getString(R.string.feedback_by_mail, getString(R.string.mail)));
                 builder.setPositiveButton(android.R.string.yes, null);
+                builder.setNeutralButton(R.string.send_email, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Intent.ACTION_SENDTO);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.feedback_mail_title));
+                        intent.setData(Uri.parse("mailto:" + getString(R.string.mail)));
+                        try {
+                            startActivity(intent);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(AboutActivity.this, R.string.launch_failed, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
                 builder.show();
             }
         });
-        textView_donate_list.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.textView_about_donate_list).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NetMethod.viewUrlInBrowser(AboutActivity.this, "https://www.xfy9326.top/api/donate/naucourse/personList.php");
+                NetMethod.viewUrlInBrowser(AboutActivity.this, Config.DONATE_PERSON_URL);
             }
         });
-        textView_donate.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.textView_about_donate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(AboutActivity.this);

@@ -47,7 +47,7 @@
     <string name="application_version">版本：</string>
     <string name="application_author">作者：</string>
     <string name="author" translatable="false">XFY9326（逸雪飞扬）</string>
-    <string name="copyright" translatable="false">Copyright © 2018 XFY9326</string>
+    <string name="copyright" translatable="false">Copyright © %1$d XFY9326</string>
     <string name="login_out">注销</string>
     <string name="ask_login_out">是否注销当前账户（%1$s）并清空用户所有本地保存的数据？</string>
     <string name="course_card_id">编号：%1$s</string>
@@ -108,7 +108,7 @@
     <string name="notification_manage">通知管理</string>
     <string name="next_class_notify">提示下一节课的信息</string>
     <string name="next_class_notify_sum">将会在上课前十分钟提示上课信息</string>
-    <string name="open_source_info">本应用开源在南京审计大学Git仓库</string>
+    <string name="open_source_info">本应用开源在南审Git与Github</string>
     <string name="default_show_table_page">默认显示课程表界面</string>
     <string name="default_show_table_page_sum">打开应用时直接显示课程表，减少用用户操作</string>
     <string name="show_wide_course_table">增加课程表内课程信息的显示宽度</string>
@@ -288,6 +288,9 @@
     <string name="minute">分钟</string>
     <string name="exam_last_time">距离考试:</string>
     <string name="hide_out_of_date_exam">隐藏过时的考试</string>
+    <string name="send_email">发送邮件</string>
+    <string name="launch_failed">相关应用启动失败！</string>
+    <string name="feedback_mail_title">NauCourse 问题反馈</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>

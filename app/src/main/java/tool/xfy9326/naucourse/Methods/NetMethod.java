@@ -188,9 +188,13 @@ public class NetMethod {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Uri content_url = Uri.parse(url);
-        intent.setData(content_url);
-        context.startActivity(intent);
+        intent.setData(Uri.parse(url));
+        try {
+            context.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(context, R.string.launch_failed, Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**

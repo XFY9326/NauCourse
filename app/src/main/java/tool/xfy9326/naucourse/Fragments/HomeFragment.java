@@ -258,18 +258,22 @@ public class HomeFragment extends Fragment {
 
     //优先加载缓存中的下一节课
     private void loadTempNextCourse() {
-        NextCourse nextCourse = (NextCourse) DataMethod.getOfflineData(Objects.requireNonNull(context), NextCourse.class, NextClassMethod.NEXT_COURSE_FILE_NAME);
-        if (nextCourse != null) {
-            setNextCourse(nextCourse);
+        if (context != null) {
+            NextCourse nextCourse = (NextCourse) DataMethod.getOfflineData(context, NextCourse.class, NextClassMethod.NEXT_COURSE_FILE_NAME);
+            if (nextCourse != null) {
+                setNextCourse(nextCourse);
+            }
         }
     }
 
     //内部刷新设置下一节课
     private void setNextCourse() {
-        NextCourse nextCourse = NextClassMethod.getNextClassArray(Objects.requireNonNull(getActivity()));
-        DataMethod.saveOfflineData(Objects.requireNonNull(context), nextCourse, NextClassMethod.NEXT_COURSE_FILE_NAME, false);
-        setNextCourse(nextCourse);
-        System.gc();
+        if (context != null) {
+            NextCourse nextCourse = NextClassMethod.getNextClassArray(Objects.requireNonNull(getActivity()));
+            DataMethod.saveOfflineData(context, nextCourse, NextClassMethod.NEXT_COURSE_FILE_NAME, false);
+            setNextCourse(nextCourse);
+            System.gc();
+        }
     }
 
     /**
@@ -279,7 +283,7 @@ public class HomeFragment extends Fragment {
      * @param nextCourse NextCourse
      */
     void setNextCourse(NextCourse nextCourse) {
-        if (isAdded() && view != null) {
+        if (isAdded() && context != null && view != null) {
             TextView textView_noNextClass = view.findViewById(R.id.textView_noNextClass);
             LinearLayout linearLayout_nextClass = view.findViewById(R.id.layout_nextClass);
             if (nextCourse.getCourseTime() == null) {
@@ -291,7 +295,7 @@ public class HomeFragment extends Fragment {
                 linearLayout_nextClass.setVisibility(View.GONE);
                 textView_noNextClass.setVisibility(View.VISIBLE);
 
-                DataMethod.deleteOfflineData(Objects.requireNonNull(context), NextClassMethod.NEXT_COURSE_FILE_NAME);
+                DataMethod.deleteOfflineData(context, NextClassMethod.NEXT_COURSE_FILE_NAME);
             } else {
                 String time = nextCourse.getCourseTime().replace("~", "\n~\n").trim();
 
