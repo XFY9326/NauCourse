@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONObject;
@@ -43,10 +44,16 @@ public class DataMethod {
      * @return JavaBean对象
      */
     public static Object getOfflineData(Context context, @NonNull Class file_class, String FILE_NAME) {
+        Object object = null;
         String content = getOfflineData(context, FILE_NAME);
         if (content != null) {
             if (checkDataVersionCode(content, file_class)) {
-                return new Gson().fromJson(content, file_class);
+                try {
+                    object = new Gson().fromJson(content, file_class);
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                }
+                return object;
             }
         }
         return null;
@@ -69,11 +76,17 @@ public class DataMethod {
      * @return 课表信息列表
      */
     public static ArrayList<Course> getOfflineTableData(Context context) {
+        ArrayList<Course> result = null;
         String content = getOfflineData(context, TableMethod.FILE_NAME);
-        if (content != null) {
+        if (content != null && !content.isEmpty()) {
             Type type = new TypeToken<ArrayList<Course>>() {
             }.getType();
-            return new Gson().fromJson(content, type);
+            try {
+                result = new Gson().fromJson(content, type);
+            } catch (JsonSyntaxException e) {
+                e.printStackTrace();
+            }
+            return result;
         }
         return null;
     }

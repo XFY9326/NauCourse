@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/bnv_item_home"
+        android:icon="@drawable/selector_bnv_home"
+        tools:ignore="MenuTitle" />
+
+    <item
+        android:id="@+id/bnv_item_table"
+        android:icon="@drawable/selector_bnv_table"
+        tools:ignore="MenuTitle" />
+
+    <item
+        android:id="@+id/bnv_item_person"
+        android:icon="@drawable/selector_bnv_person"
+        tools:ignore="MenuTitle" />
+</menu>

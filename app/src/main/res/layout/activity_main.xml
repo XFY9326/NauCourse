@@ -13,39 +13,20 @@
         android:id="@+id/viewPaper_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp"
         android:layout_marginTop="?android:attr/actionBarSize"
+        android:layout_marginBottom="48dp"
         android:persistentDrawingCache="animation"
         android:scrollbars="none" />
 
-    <View
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bnv_main"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_above="@id/tabLayout_main"
-        android:background="@color/light_light_grey" />
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout_main"
-        android:layout_width="match_parent"
-        android:layout_height="47dp"
+        android:layout_height="48dp"
         android:layout_alignParentBottom="true"
-        app:tabGravity="fill"
-        app:tabIndicatorHeight="0dp"
-        app:tabMode="fixed">
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </com.google.android.material.tabs.TabLayout>
+        android:background="@android:color/white"
+        app:itemHorizontalTranslationEnabled="false"
+        app:labelVisibilityMode="unlabeled"
+        app:menu="@menu/menu_bnv" />
 
 </RelativeLayout>
 

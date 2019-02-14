@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(CURRENT_FRAGMENT_INDEX, viewPager.getCurrentItem());
     }
@@ -111,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void ViewSet(int fragment_current_index) {
         viewPager = findViewById(R.id.viewPaper_main);
-        TabLayout tabLayout = findViewById(R.id.tabLayout_main);
+        final BottomNavigationView bnv = findViewById(R.id.bnv_main);
         if (viewPagerAdapter == null) {
             viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         }
@@ -126,18 +128,42 @@ public class MainActivity extends AppCompatActivity {
             viewPager.setCurrentItem(fragment_current_index, true);
         }
 
-        tabLayout.setupWithViewPager(viewPager);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                bnv.getMenu().getItem(position).setChecked(true);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.bnv_item_home:
+                        viewPager.setCurrentItem(0);
+                        return true;
+                    case R.id.bnv_item_table:
+                        viewPager.setCurrentItem(1);
+                        return true;
+                    case R.id.bnv_item_person:
+                        viewPager.setCurrentItem(2);
+                        return true;
+                }
+                return false;
+            }
+        });
 
         BaseMethod.getApp(this).setViewPagerAdapter(viewPagerAdapter);
-
-        TabLayout.Tab tab_home = tabLayout.getTabAt(0);
-        TabLayout.Tab tab_table = tabLayout.getTabAt(1);
-        TabLayout.Tab tab_person = tabLayout.getTabAt(2);
-        if (tab_home != null && tab_table != null && tab_person != null) {
-            tab_home.setIcon(R.drawable.selector_tab_home);
-            tab_table.setIcon(R.drawable.selector_tab_table);
-            tab_person.setIcon(R.drawable.selector_tab_person);
-        }
     }
 
     //首次登陆提前加载考试与成绩的数据
