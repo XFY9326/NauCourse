@@ -367,7 +367,7 @@ public class PersonFragment extends Fragment {
 
                 if (sharedPreferences.getBoolean(Config.PREFERENCE_ASYNC_PERSONAL_INFO_BY_DAY, Config.DEFAULT_PREFERENCE_ASYNC_PERSONAL_INFO_BY_DAY)) {
                     Calendar calendar = Calendar.getInstance(Locale.CHINA);
-                    long personal_info_load_date = sharedPreferences.getLong(Config.PREFERENCE_PERSONAL_INFO_LOAD_DATE, 0);
+                    long personal_info_load_date = sharedPreferences.getLong(Config.PREFERENCE_PERSONAL_INFO_LOAD_DATE_TIME, 0);
                     calendar.setTimeInMillis(personal_info_load_date);
                     int load_day = calendar.get(Calendar.DAY_OF_YEAR);
                     int load_year = calendar.get(Calendar.YEAR);
@@ -378,7 +378,7 @@ public class PersonFragment extends Fragment {
                     if (load_year == now_year && now_day == load_day) {
                         update_day = false;
                     } else {
-                        sharedPreferences.edit().putLong(Config.PREFERENCE_PERSONAL_INFO_LOAD_DATE, System.currentTimeMillis()).apply();
+                        sharedPreferences.edit().putLong(Config.PREFERENCE_PERSONAL_INFO_LOAD_DATE_TIME, System.currentTimeMillis()).apply();
                     }
                 }
 

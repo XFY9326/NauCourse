@@ -4,7 +4,10 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 
+import java.lang.ref.WeakReference;
+
 import androidx.annotation.NonNull;
+import tool.xfy9326.naucourse.BaseApplication;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Fragments.TableFragment;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
@@ -15,17 +18,17 @@ import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
  */
 
 public class MainHandler extends Handler {
-    private final Context context;
+    private final WeakReference<BaseApplication> baseApplicationWeakReference;
 
     public MainHandler(Context context) {
-        this.context = context;
+        this.baseApplicationWeakReference = new WeakReference<>(BaseMethod.getApp(context));
     }
 
     @Override
     public void handleMessage(@NonNull Message msg) {
         switch (msg.what) {
             case Config.HANDLER_RELOAD_TABLE:
-                ViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(context).getViewPagerAdapter();
+                ViewPagerAdapter viewPagerAdapter = baseApplicationWeakReference.get().getViewPagerAdapter();
                 if (viewPagerAdapter != null) {
                     TableFragment tableFragment = viewPagerAdapter.getTableFragment();
                     if (tableFragment != null) {
@@ -34,7 +37,7 @@ public class MainHandler extends Handler {
                 }
                 break;
             case Config.HANDLER_RELOAD_TABLE_DATA:
-                viewPagerAdapter = BaseMethod.getApp(context).getViewPagerAdapter();
+                viewPagerAdapter = baseApplicationWeakReference.get().getViewPagerAdapter();
                 if (viewPagerAdapter != null) {
                     TableFragment tableFragment = viewPagerAdapter.getTableFragment();
                     if (tableFragment != null) {

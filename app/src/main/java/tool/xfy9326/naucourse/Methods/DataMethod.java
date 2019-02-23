@@ -53,14 +53,13 @@ public class DataMethod {
                 } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                 }
-                return object;
             }
         }
-        return null;
+        return object;
     }
 
     public static String getOfflineData(Context context, String FILE_NAME) {
-        String path = context.getFilesDir() + File.separator + FILE_NAME;
+        String path = getOfflineDataFilePath(context, FILE_NAME);
         File file = new File(path);
         if (file.exists()) {
             String data = IO.readFile(path);
@@ -86,9 +85,8 @@ public class DataMethod {
             } catch (JsonSyntaxException e) {
                 e.printStackTrace();
             }
-            return result;
         }
-        return null;
+        return result;
     }
 
     /**
@@ -101,14 +99,12 @@ public class DataMethod {
      * @return 是否保存成功
      */
     public static boolean saveOfflineData(final Context context, final Object o, final String FILE_NAME, boolean checkTemp) {
-        String data = new Gson().toJson(o);
-        String content = SecurityMethod.encryptData(context, data);
-        return saveOfflineData(context, content, FILE_NAME, checkTemp);
+        return saveOfflineData(context, new Gson().toJson(o), FILE_NAME, checkTemp);
     }
 
     @SuppressWarnings("UnusedReturnValue")
     public static boolean saveOfflineData(final Context context, final String data, final String FILE_NAME, boolean checkTemp) {
-        String path = context.getFilesDir() + File.separator + FILE_NAME;
+        String path = getOfflineDataFilePath(context, FILE_NAME);
         String content = SecurityMethod.encryptData(context, data);
         if (checkTemp) {
             String text = IO.readFile(path);
@@ -128,7 +124,7 @@ public class DataMethod {
      */
     @SuppressWarnings("SameParameterValue")
     public static void deleteOfflineData(final Context context, final String FILE_NAME) {
-        File file = new File(context.getFilesDir() + File.separator + FILE_NAME);
+        File file = new File(getOfflineDataFilePath(context, FILE_NAME));
         if (file.exists()) {
             //noinspection ResultOfMethodCallIgnored
             file.delete();
@@ -193,6 +189,10 @@ public class DataMethod {
             }
         }
         return false;
+    }
+
+    private static String getOfflineDataFilePath(Context context, String FILE_NAME) {
+        return context.getFilesDir() + File.separator + FILE_NAME + ".txn";
     }
 
     public static class InfoData {

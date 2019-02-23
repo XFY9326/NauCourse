@@ -59,12 +59,7 @@ public class AES {
     @Nullable
     public static String encrypt(@Nullable String content, String password) {
         if (content != null) {
-            byte[] data = null;
-            try {
-                data = content.getBytes(StandardCharsets.UTF_8);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            byte[] data = content.getBytes(StandardCharsets.UTF_8);
             data = encrypt(data, password);
             if (data != null) {
                 return byte2hex(data);

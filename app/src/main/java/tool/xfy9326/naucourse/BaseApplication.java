@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.tencent.bugly.Bugly;
 
+import java.lang.ref.WeakReference;
+
 import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Activities.CourseActivity;
 import tool.xfy9326.naucourse.Activities.ExamActivity;
@@ -21,21 +23,20 @@ import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
 
 public class BaseApplication extends Application {
     private NauSSOClient client;
-    private ViewPagerAdapter viewPagerAdapter;
-    private InfoDetailActivity infoDetailActivity;
-    private ScoreActivity scoreActivity;
-    private ExamActivity examActivity;
-    private LevelExamActivity levelExamActivity;
-    private CourseActivity courseActivity;
-    private SchoolCalendarActivity schoolCalendarActivity;
-    private SuspendCourseActivity suspendCourseActivity;
-    private MoaActivity moaActivity;
+    private WeakReference<ViewPagerAdapter> viewPagerAdapter;
+    private WeakReference<InfoDetailActivity> infoDetailActivity;
+    private WeakReference<ScoreActivity> scoreActivity;
+    private WeakReference<ExamActivity> examActivity;
+    private WeakReference<LevelExamActivity> levelExamActivity;
+    private WeakReference<CourseActivity> courseActivity;
+    private WeakReference<SchoolCalendarActivity> schoolCalendarActivity;
+    private WeakReference<SuspendCourseActivity> suspendCourseActivity;
+    private WeakReference<MoaActivity> moaActivity;
 
     private boolean showLoginErrorOnce = false;
     private boolean showConnectErrorOnce = false;
 
     @Override
-
     public void onCreate() {
         super.onCreate();
         if (!BuildConfig.DEBUG) {
@@ -49,35 +50,35 @@ public class BaseApplication extends Application {
     }
 
     public ViewPagerAdapter getViewPagerAdapter() {
-        return viewPagerAdapter;
+        return viewPagerAdapter.get();
     }
 
     public void setViewPagerAdapter(ViewPagerAdapter viewPagerAdapter) {
-        this.viewPagerAdapter = viewPagerAdapter;
+        this.viewPagerAdapter = new WeakReference<>(viewPagerAdapter);
     }
 
     public InfoDetailActivity getInfoDetailActivity() {
-        return infoDetailActivity;
+        return infoDetailActivity.get();
     }
 
     public void setInfoDetailActivity(InfoDetailActivity infoDetailActivity) {
-        this.infoDetailActivity = infoDetailActivity;
+        this.infoDetailActivity = new WeakReference<>(infoDetailActivity);
     }
 
     public ScoreActivity getScoreActivity() {
-        return scoreActivity;
+        return scoreActivity.get();
     }
 
     public void setScoreActivity(ScoreActivity scoreActivity) {
-        this.scoreActivity = scoreActivity;
+        this.scoreActivity = new WeakReference<>(scoreActivity);
     }
 
     public ExamActivity getExamActivity() {
-        return examActivity;
+        return examActivity.get();
     }
 
     public void setExamActivity(ExamActivity examActivity) {
-        this.examActivity = examActivity;
+        this.examActivity = new WeakReference<>(examActivity);
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
@@ -90,43 +91,43 @@ public class BaseApplication extends Application {
     }
 
     public LevelExamActivity getLevelExamActivity() {
-        return levelExamActivity;
+        return levelExamActivity.get();
     }
 
     public void setLevelExamActivity(LevelExamActivity levelExamActivity) {
-        this.levelExamActivity = levelExamActivity;
+        this.levelExamActivity = new WeakReference<>(levelExamActivity);
     }
 
     public CourseActivity getCourseActivity() {
-        return courseActivity;
+        return courseActivity.get();
     }
 
     public void setCourseActivity(CourseActivity courseActivity) {
-        this.courseActivity = courseActivity;
+        this.courseActivity = new WeakReference<>(courseActivity);
     }
 
     public SchoolCalendarActivity getSchoolCalendarActivity() {
-        return schoolCalendarActivity;
+        return schoolCalendarActivity.get();
     }
 
     public void setSchoolCalendarActivity(SchoolCalendarActivity schoolCalendarActivity) {
-        this.schoolCalendarActivity = schoolCalendarActivity;
+        this.schoolCalendarActivity = new WeakReference<>(schoolCalendarActivity);
     }
 
     public SuspendCourseActivity getSuspendCourseActivity() {
-        return suspendCourseActivity;
+        return suspendCourseActivity.get();
     }
 
     public void setSuspendCourseActivity(SuspendCourseActivity suspendCourseActivity) {
-        this.suspendCourseActivity = suspendCourseActivity;
+        this.suspendCourseActivity = new WeakReference<>(suspendCourseActivity);
     }
 
     public MoaActivity getMoaActivity() {
-        return moaActivity;
+        return moaActivity.get();
     }
 
     public void setMoaActivity(MoaActivity moaActivity) {
-        this.moaActivity = moaActivity;
+        this.moaActivity = new WeakReference<>(moaActivity);
     }
 
     public boolean isShowConnectErrorOnce() {
@@ -135,5 +136,11 @@ public class BaseApplication extends Application {
 
     public void setShowConnectErrorOnce(boolean showConnectErrorOnce) {
         this.showConnectErrorOnce = showConnectErrorOnce;
+    }
+
+    @Override
+    public void onTerminate() {
+        client = null;
+        super.onTerminate();
     }
 }

@@ -455,7 +455,7 @@ public class TableFragment extends Fragment {
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
                 if (sharedPreferences.getBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE, Config.DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE)) {
                     Calendar calendar = Calendar.getInstance(Locale.CHINA);
-                    long course_table_load_date = sharedPreferences.getLong(Config.PREFERENCE_COURSE_TABLE_AUTO_LOAD_DATE, 0);
+                    long course_table_load_date = sharedPreferences.getLong(Config.PREFERENCE_COURSE_TABLE_AUTO_LOAD_DATE_TIME, 0);
                     calendar.setTimeInMillis(course_table_load_date);
                     int load_day = calendar.get(Calendar.DAY_OF_YEAR);
                     int load_year = calendar.get(Calendar.YEAR);
@@ -466,7 +466,7 @@ public class TableFragment extends Fragment {
                     if (load_year == now_year && now_day == load_day) {
                         update_day = false;
                     } else {
-                        sharedPreferences.edit().putLong(Config.PREFERENCE_COURSE_TABLE_AUTO_LOAD_DATE, System.currentTimeMillis()).apply();
+                        sharedPreferences.edit().putLong(Config.PREFERENCE_COURSE_TABLE_AUTO_LOAD_DATE_TIME, System.currentTimeMillis()).apply();
                     }
                 }
 
