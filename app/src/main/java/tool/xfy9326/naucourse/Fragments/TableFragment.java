@@ -88,6 +88,7 @@ public class TableFragment extends Fragment {
     private int lastSetWeekNumber;
     private boolean view_set = false;
     private boolean inVacation;
+    private SharedPreferences sharedPreferences = null;
 
     public TableFragment() {
         this.view = null;
@@ -106,13 +107,15 @@ public class TableFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         this.context = context;
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         super.onAttach(context);
     }
 
     @Override
     public void onDetach() {
-        super.onDetach();
+        this.sharedPreferences = null;
         this.context = null;
+        super.onDetach();
     }
 
     @Override
@@ -272,8 +275,8 @@ public class TableFragment extends Fragment {
                 //提前显示下一周的课表
                 if (schoolTime.getWeekNum() != 0) {
                     int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK);
-                    if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_NEXT_WEEK, Config.DEFAULT_PREFERENCE_SHOW_NEXT_WEEK)) {
-                        if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_WEEKEND, Config.DEFAULT_PREFERENCE_SHOW_WEEKEND)) {
+                    if (sharedPreferences != null && sharedPreferences.getBoolean(Config.PREFERENCE_SHOW_NEXT_WEEK, Config.DEFAULT_PREFERENCE_SHOW_NEXT_WEEK)) {
+                        if (!sharedPreferences.getBoolean(Config.PREFERENCE_SHOW_WEEKEND, Config.DEFAULT_PREFERENCE_SHOW_WEEKEND)) {
                             if ((weekDayNum == Calendar.SUNDAY || weekDayNum == Calendar.SATURDAY) && weekNum + 1 <= TimeMethod.getMaxWeekNum(schoolTime)) {
                                 schoolTime.setWeekNum(++weekNum);
                             }
@@ -452,8 +455,7 @@ public class TableFragment extends Fragment {
             //离线数据加载完成，开始拉取网络数据
             if (loadTime == 1 && NetMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
                 boolean update_day = true;
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-                if (sharedPreferences.getBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE, Config.DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE)) {
+                if (sharedPreferences != null && sharedPreferences.getBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE, Config.DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE)) {
                     Calendar calendar = Calendar.getInstance(Locale.CHINA);
                     long course_table_load_date = sharedPreferences.getLong(Config.PREFERENCE_COURSE_TABLE_AUTO_LOAD_DATE_TIME, 0);
                     calendar.setTimeInMillis(course_table_load_date);

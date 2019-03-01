@@ -114,8 +114,12 @@ public class UpdateMethod {
                                     activity.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Toast.makeText(activity, R.string.find_update, Toast.LENGTH_SHORT).show();
-                                            builder.show();
+                                            try {
+                                                Toast.makeText(activity, R.string.find_update, Toast.LENGTH_SHORT).show();
+                                                builder.show();
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
                                         }
                                     });
                                 }

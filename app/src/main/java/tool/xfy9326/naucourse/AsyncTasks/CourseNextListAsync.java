@@ -47,7 +47,9 @@ public class CourseNextListAsync extends AsyncTask<Context, Void, Context> {
                 courseActivity.addCourseList(course, false, course == null);
             }
         } else {
-            courseActivity.closeLoadingDialog();
+            if (courseActivity != null) {
+                courseActivity.closeLoadingDialog();
+            }
         }
         System.gc();
         super.onPostExecute(context);

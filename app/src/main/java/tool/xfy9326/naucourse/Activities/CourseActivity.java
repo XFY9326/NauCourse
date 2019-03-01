@@ -307,7 +307,7 @@ public class CourseActivity extends AppCompatActivity {
 
     //保存数据
     synchronized private void saveData() {
-        showLoadingDialog();
+        loadingDialog = BaseMethod.showLoadingDialog(CourseActivity.this, null);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -389,13 +389,13 @@ public class CourseActivity extends AppCompatActivity {
 
     //从教务处导入本学期课程数据
     private void importDataFromJwc() {
-        showLoadingDialog();
+        loadingDialog = BaseMethod.showLoadingDialog(CourseActivity.this, null);
         new CourseListAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
     }
 
     //从教务处导入下学期课程数据
     private void importDataFromJwcNext() {
-        showLoadingDialog();
+        loadingDialog = BaseMethod.showLoadingDialog(CourseActivity.this, null);
         Toast.makeText(this, R.string.need_custom_term_alert, Toast.LENGTH_LONG).show();
         new CourseNextListAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
     }
@@ -624,16 +624,6 @@ public class CourseActivity extends AppCompatActivity {
             }
         });
         pickerDialog.show();
-    }
-
-    //显示加载中提示
-    private void showLoadingDialog() {
-        LayoutInflater layoutInflater = getLayoutInflater();
-        View view = layoutInflater.inflate(R.layout.dialog_loading, (ViewGroup) findViewById(R.id.dialog_layout_loading));
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(false);
-        builder.setView(view);
-        loadingDialog = builder.show();
     }
 
     @Override

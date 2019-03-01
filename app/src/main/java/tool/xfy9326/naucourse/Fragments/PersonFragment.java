@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourse.Fragments;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -60,6 +61,7 @@ public class PersonFragment extends Fragment {
     private StudentInfo studentInfo;
     @Nullable
     private StudentLearnProcess studentLearnProcess;
+    private Dialog loadingDialog;
 
     public PersonFragment() {
         this.view = null;
@@ -291,49 +293,65 @@ public class PersonFragment extends Fragment {
     }
 
     private void loginOut(final Context context) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String userId = sharedPreferences.getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(R.string.login_out);
-        builder.setMessage(getString(R.string.ask_login_out, userId));
-        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (LoginMethod.loginOut(context)) {
-                            if (getActivity() != null) {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (isAdded()) {
-                                            Toast.makeText(getActivity(), R.string.login_out_error, Toast.LENGTH_SHORT).show();
+        if (getActivity() != null) {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String userId = sharedPreferences.getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle(R.string.login_out);
+            builder.setMessage(getString(R.string.ask_login_out, userId));
+            builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (getActivity() != null) {
+                        loadingDialog = BaseMethod.showLoadingDialog(getActivity(), null);
+                    }
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (LoginMethod.loginOut(context)) {
+                                if (getActivity() != null) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (isAdded()) {
+                                                Toast.makeText(getActivity(), R.string.login_out_error, Toast.LENGTH_SHORT).show();
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                                }
+                            } else {
+                                if (isAdded() && getActivity() != null) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            //小部件清空
+                                            getActivity().sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
+                                            //重启当前程序
+                                            Intent intent = new Intent(context, LoginActivity.class);
+                                            startActivityForResult(intent, Config.REQUEST_ACTIVITY_LOGIN);
+                                            getActivity().finish();
+                                        }
+                                    });
+                                }
                             }
-                        } else {
                             if (isAdded() && getActivity() != null) {
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        //小部件清空
-                                        getActivity().sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
-                                        //重启当前程序
-                                        Intent intent = new Intent(context, LoginActivity.class);
-                                        startActivityForResult(intent, Config.REQUEST_ACTIVITY_LOGIN);
-                                        getActivity().finish();
+                                        if (loadingDialog != null && loadingDialog.isShowing()) {
+                                            loadingDialog.cancel();
+                                            loadingDialog = null;
+                                        }
                                     }
                                 });
                             }
                         }
-                    }
-                }).start();
-            }
-        });
-        builder.setNegativeButton(android.R.string.cancel, null);
-        builder.show();
+                    }).start();
+                }
+            });
+            builder.setNegativeButton(android.R.string.cancel, null);
+            builder.show();
+        }
     }
 
     public void PersonViewSet(@Nullable StudentInfo studentInfo, @Nullable StudentLearnProcess

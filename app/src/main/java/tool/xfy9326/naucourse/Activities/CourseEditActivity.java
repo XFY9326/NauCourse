@@ -256,7 +256,7 @@ public class CourseEditActivity extends AppCompatActivity {
 
     //保存编辑的数据
     synchronized private void saveData() {
-        showLoadingDialog();
+        loadingDialog = BaseMethod.showLoadingDialog(this, null);
         TextInputEditText editTextCourseEditName = findViewById(R.id.editText_course_edit_name);
         TextInputEditText editTextCourseEditTeacher = findViewById(R.id.editText_course_edit_teacher);
         TextInputEditText editTextCourseEditType = findViewById(R.id.editText_course_edit_type);
@@ -355,15 +355,6 @@ public class CourseEditActivity extends AppCompatActivity {
             }
         }
         return courseDetailArrayList;
-    }
-
-    private void showLoadingDialog() {
-        LayoutInflater layoutInflater = getLayoutInflater();
-        View view = layoutInflater.inflate(R.layout.dialog_loading, (ViewGroup) findViewById(R.id.dialog_layout_loading));
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(false);
-        builder.setView(view);
-        loadingDialog = builder.show();
     }
 
     @Override

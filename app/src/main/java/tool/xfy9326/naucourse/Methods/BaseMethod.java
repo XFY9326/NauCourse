@@ -1,14 +1,21 @@
 package tool.xfy9326.naucourse.Methods;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.regex.Pattern;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import tool.xfy9326.naucourse.BaseApplication;
 import tool.xfy9326.naucourse.Config;
@@ -111,5 +118,22 @@ public class BaseMethod {
                 }
             });
         }
+    }
+
+    /**
+     * 显示加载中的提示
+     *
+     * @param activity       Activity
+     * @param cancelListener 对取消显示的监听
+     * @return show方法返回的Dialog
+     */
+    public static Dialog showLoadingDialog(@NonNull Activity activity, @Nullable DialogInterface.OnCancelListener cancelListener) {
+        LayoutInflater layoutInflater = activity.getLayoutInflater();
+        View view = layoutInflater.inflate(R.layout.dialog_loading, (ViewGroup) activity.findViewById(R.id.dialog_layout_loading));
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setCancelable(false);
+        builder.setOnCancelListener(cancelListener);
+        builder.setView(view);
+        return builder.show();
     }
 }

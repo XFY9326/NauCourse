@@ -7,9 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -19,7 +17,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import lib.xfy9326.nausso.NauSSOClient;
@@ -155,12 +152,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showLoadingDialog(@NonNull final Context context) {
-        LayoutInflater layoutInflater = getLayoutInflater();
-        View view = layoutInflater.inflate(R.layout.dialog_loading, (ViewGroup) findViewById(R.id.dialog_layout_loading));
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(false);
-        builder.setView(view);
-        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+        DialogInterface.OnCancelListener cancelListener = new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
                 System.gc();
@@ -182,8 +174,8 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
             }
-        });
-        loadingDialog = builder.show();
+        };
+        loadingDialog = BaseMethod.showLoadingDialog(LoginActivity.this, cancelListener);
     }
 
     private void netCheck() {
