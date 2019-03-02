@@ -42,15 +42,17 @@ public class NextClassMethod {
                     schoolTime.setWeekNum(weekNum);
                     CourseMethod courseMethod = new CourseMethod(context, courses, schoolTime);
                     nextCourse = courseMethod.getNextClass(weekNum);
+                    nextCourse.setInVacation(false);
                 } else {
                     nextCourse = new NextCourse();
-                    nextCourse.setInVacation(true);
                 }
             }
         }
         if (nextCourse == null) {
             nextCourse = new NextCourse();
         }
+
+        DataMethod.saveOfflineData(context, nextCourse, NEXT_COURSE_FILE_NAME, false);
         return nextCourse;
     }
 

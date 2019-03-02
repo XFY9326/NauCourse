@@ -225,7 +225,7 @@
     <string name="course_table_share_error">课程表分享失败！</string>
     <string name="no_alert_again">不再提示</string>
     <string name="attention">提示</string>
-    <string name="auto_update_course_table_alert">当前已开启只能覆盖更新教务课程表数据功能\n非最新学期的教务系统中的课程有可能会被自动覆盖更新\n\n对导入的本学期课表所做的所有修改都会失效\n\n如果需要关闭可以前往设置进行更改！</string>
+    <string name="auto_update_course_table_alert">当前已开启智能覆盖更新教务课程表数据功能，非最新学期的教务系统中的课程有可能会被自动覆盖更新\n\n对导入的本学期课表所做的所有修改都会失效！\n\n如果需要关闭可以前往设置进行更改！</string>
     <string name="course_empty">当前没有任何可以导入的课程！</string>
     <string name="course_term">课程学期设定</string>
     <string name="school_year">学年：</string>

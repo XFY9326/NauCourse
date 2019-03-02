@@ -56,6 +56,8 @@ public class Config {
     public static final int MAX_WEEK_DAY = 7;
     public static final int MAX_DAY_COURSE = 13;
 
+    public static final String CUSTOM_COURSE_PREFIX = "Custom";
+
     public static final String PREFERENCE_HAS_LOGIN = "HAS_LOGIN";
     public static final String PREFERENCE_REMEMBER_PW = "REMEMBER_PW";
     public static final String PREFERENCE_USER_ID = "USER_ID";

@@ -99,7 +99,11 @@ public class DataMethod {
      * @return 是否保存成功
      */
     public static boolean saveOfflineData(final Context context, final Object o, final String FILE_NAME, boolean checkTemp) {
-        return saveOfflineData(context, new Gson().toJson(o), FILE_NAME, checkTemp);
+        if (o == null) {
+            return false;
+        } else {
+            return saveOfflineData(context, new Gson().toJson(o), FILE_NAME, checkTemp);
+        }
     }
 
     @SuppressWarnings("UnusedReturnValue")

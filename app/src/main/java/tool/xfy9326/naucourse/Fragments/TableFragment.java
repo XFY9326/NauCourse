@@ -49,8 +49,10 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.CourseMethod;
 import tool.xfy9326.naucourse.Methods.CourseViewMethod;
+import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.ImageMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
+import tool.xfy9326.naucourse.Methods.NextClassMethod;
 import tool.xfy9326.naucourse.Methods.PermissionMethod;
 import tool.xfy9326.naucourse.Methods.TimeMethod;
 import tool.xfy9326.naucourse.R;
@@ -310,14 +312,16 @@ public class TableFragment extends Fragment {
         if (viewPagerAdapter != null) {
             HomeFragment homeFragment = viewPagerAdapter.getHomeFragment();
             if (homeFragment != null) {
+                NextCourse nextCourse = null;
                 if (inVacation) {
-                    NextCourse nextCourse = new NextCourse();
-                    nextCourse.setInVacation(true);
+                    nextCourse = new NextCourse();
                     homeFragment.setNextCourse(nextCourse);
                 } else if (courseMethod != null) {
-                    NextCourse nextCourse = courseMethod.getNextClass(lastSetWeekNumber);
+                    nextCourse = courseMethod.getNextClass(lastSetWeekNumber);
+                    nextCourse.setInVacation(false);
                     homeFragment.setNextCourse(nextCourse);
                 }
+                DataMethod.saveOfflineData(context, nextCourse, NextClassMethod.NEXT_COURSE_FILE_NAME, false);
             }
         }
 

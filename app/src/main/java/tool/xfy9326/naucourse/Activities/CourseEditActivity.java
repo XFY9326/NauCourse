@@ -74,7 +74,7 @@ public class CourseEditActivity extends AppCompatActivity {
         if (intent.hasExtra(Config.INTENT_ADD_COURSE)) {
             course = new Course();
             //自定义课程的课程编号
-            course.setCourseId("Custom-" + System.currentTimeMillis());
+            course.setCourseId(Config.CUSTOM_COURSE_PREFIX + "-" + System.currentTimeMillis());
             //学期设置
             if (intent.hasExtra(Config.INTENT_ADD_COURSE_TERM)) {
                 course.setCourseTerm(String.valueOf(intent.getLongExtra(Config.INTENT_ADD_COURSE_TERM, 0)));
