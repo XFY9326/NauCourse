@@ -170,10 +170,10 @@ public class CourseMethod {
     /**
      * 设置需要计算的周数并计算全部课程
      *
-     * @param schoolTime  SchoolTime对象
-     * @param noCheckSame 不在检查到周数相同时放弃计算数据
+     * @param schoolTime SchoolTime对象
+     * @param checkSame  检查到周数相同时放弃计算数据
      */
-    public void updateTableCourse(ArrayList<Course> courses, @NonNull SchoolTime schoolTime, boolean noCheckSame) {
+    public void updateTableCourse(ArrayList<Course> courses, @NonNull SchoolTime schoolTime, boolean checkSame) {
         this.schoolTime = schoolTime;
         this.courses = courses;
         //假期中默认显示第一周
@@ -181,15 +181,18 @@ public class CourseMethod {
         if (weekNum == 0) {
             weekNum = 1;
         }
-        if (weekNum != this.weekNum || noCheckSame) {
-            if (course_time == null) {
-                course_time = TimeMethod.getCourseTimeArray(context);
+        if (checkSame) {
+            if (weekNum != this.weekNum) {
+                return;
             }
-            List<String> week_day = TimeMethod.getWeekDayArray(context, weekNum, schoolTime.getStartTime());
-            getTable(weekNum, schoolTime.getStartTime());
-            setTableTimeLine(course_time, week_day);
-            this.weekNum = weekNum;
         }
+        if (course_time == null) {
+            course_time = TimeMethod.getCourseTimeArray(context);
+        }
+        List<String> week_day = TimeMethod.getWeekDayArray(context, weekNum, schoolTime.getStartTime());
+        getTable(weekNum, schoolTime.getStartTime());
+        setTableTimeLine(course_time, week_day);
+        this.weekNum = weekNum;
     }
 
     //设置表格的上课时间列与上课日期行

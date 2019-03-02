@@ -256,7 +256,7 @@ public class CourseEditActivity extends AppCompatActivity {
 
     //保存编辑的数据
     synchronized private void saveData() {
-        loadingDialog = BaseMethod.showLoadingDialog(this, null);
+        loadingDialog = BaseMethod.showLoadingDialog(this, false, null);
         TextInputEditText editTextCourseEditName = findViewById(R.id.editText_course_edit_name);
         TextInputEditText editTextCourseEditTeacher = findViewById(R.id.editText_course_edit_teacher);
         TextInputEditText editTextCourseEditType = findViewById(R.id.editText_course_edit_type);

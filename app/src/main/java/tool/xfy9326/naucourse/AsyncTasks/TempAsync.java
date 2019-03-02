@@ -23,29 +23,92 @@ public class TempAsync extends AsyncTask<Context, Void, Void> {
     @Override
     protected Void doInBackground(Context... contexts) {
         try {
-            ExamMethod examMethod = new ExamMethod(contexts[0]);
-            if (examMethod.load() == Config.NET_WORK_GET_SUCCESS) {
-                examMethod.saveTemp();
+            final Context context = contexts[0];
+            Thread[] threads = new Thread[6];
+            threads[0] = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        ExamMethod examMethod = new ExamMethod(context);
+                        if (examMethod.load() == Config.NET_WORK_GET_SUCCESS) {
+                            examMethod.saveTemp();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            threads[1] = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        ScoreMethod scoreMethod = new ScoreMethod(context);
+                        if (scoreMethod.load() == Config.NET_WORK_GET_SUCCESS) {
+                            scoreMethod.saveTemp();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            threads[2] = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        PersonMethod personMethod = new PersonMethod(context);
+                        if (personMethod.load() == Config.NET_WORK_GET_SUCCESS) {
+                            personMethod.saveScoreTemp();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            threads[3] = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        LevelExamMethod levelExamMethod = new LevelExamMethod(context);
+                        if (levelExamMethod.load() == Config.NET_WORK_GET_SUCCESS) {
+                            levelExamMethod.saveTemp();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            threads[4] = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        SuspendCourseMethod suspendCourseMethod = new SuspendCourseMethod(context);
+                        if (suspendCourseMethod.load() == Config.NET_WORK_GET_SUCCESS) {
+                            suspendCourseMethod.saveTemp();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            threads[5] = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        MoaMethod moaMethod = new MoaMethod(context);
+                        if (moaMethod.load() == Config.NET_WORK_GET_SUCCESS) {
+                            moaMethod.saveTemp();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            for (Thread thread : threads) {
+                thread.start();
             }
-            ScoreMethod scoreMethod = new ScoreMethod(contexts[0]);
-            if (scoreMethod.load() == Config.NET_WORK_GET_SUCCESS) {
-                scoreMethod.saveTemp();
-            }
-            PersonMethod personMethod = new PersonMethod(contexts[0]);
-            if (personMethod.load() == Config.NET_WORK_GET_SUCCESS) {
-                personMethod.saveScoreTemp();
-            }
-            LevelExamMethod levelExamMethod = new LevelExamMethod(contexts[0]);
-            if (levelExamMethod.load() == Config.NET_WORK_GET_SUCCESS) {
-                levelExamMethod.saveTemp();
-            }
-            SuspendCourseMethod suspendCourseMethod = new SuspendCourseMethod(contexts[0]);
-            if (suspendCourseMethod.load() == Config.NET_WORK_GET_SUCCESS) {
-                suspendCourseMethod.saveTemp();
-            }
-            MoaMethod moaMethod = new MoaMethod(contexts[0]);
-            if (moaMethod.load() == Config.NET_WORK_GET_SUCCESS) {
-                moaMethod.saveTemp();
+            for (Thread thread : threads) {
+                thread.join();
             }
         } catch (Exception e) {
             e.printStackTrace();

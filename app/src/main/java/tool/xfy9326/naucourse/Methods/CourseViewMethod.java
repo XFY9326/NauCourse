@@ -74,15 +74,15 @@ public class CourseViewMethod {
      * @param id_table  课程信息对应的ID的二维数组
      * @param checkSame 是否检查到相同数据就不更新视图
      */
-    public void updateCourseTableView(ArrayList<Course> courses, @Nullable String[][] table, @Nullable String[][] id_table, @Nullable boolean[][] this_week_table, boolean checkSame, boolean hasCustomBackground) {
+    public void updateCourseTableView(ArrayList<Course> courses, @Nullable String[][] table, @Nullable String[][] id_table, @Nullable boolean[][] this_week_no_show_table, boolean checkSame, boolean hasCustomBackground) {
         this.courses = courses;
-        if (table != null && id_table != null && this_week_table != null) {
-            if (checkSame && Arrays.equals(table, this.table) && Arrays.equals(id_table, this.id_table) && Arrays.equals(this_week_table, this.this_week_no_show_table)) {
+        if (table != null && id_table != null && this_week_no_show_table != null) {
+            if (checkSame && Arrays.equals(table, this.table) && Arrays.equals(id_table, this.id_table) && Arrays.equals(this_week_no_show_table, this.this_week_no_show_table)) {
                 return;
             } else {
                 this.table = table;
                 this.id_table = id_table;
-                this.this_week_no_show_table = this_week_table;
+                this.this_week_no_show_table = this_week_no_show_table;
             }
         }
         if (checkData()) {
@@ -144,7 +144,7 @@ public class CourseViewMethod {
                     row += merge - 1;
                 }
 
-                int weight_col = col == 0 ? 1 : 2;
+                int weight_col = ((col == 0) ? 1 : 2);
                 GridLayout.Spec col_merge = GridLayout.spec(GridLayout.UNDEFINED, 1, weight_col);
                 GridLayout.Spec row_merge = GridLayout.spec(GridLayout.UNDEFINED, merge, 1);
                 GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams(row_merge, col_merge);
@@ -152,7 +152,7 @@ public class CourseViewMethod {
                 layoutParams.setMargins(1, 1, 1, 1);
 
                 //添加单元格视图到表格
-                int width = col == 0 ? 0 : parent_width / col_max;
+                int width = ((col == 0) ? 0 : (parent_width / col_max));
 
                 //设置单元格与文字的颜色
                 int bgColor = Color.WHITE;

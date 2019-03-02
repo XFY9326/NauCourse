@@ -142,6 +142,12 @@ public class CourseActivity extends AppCompatActivity {
     }
 
     synchronized private void getData() {
+        loadingDialog = BaseMethod.showLoadingDialog(CourseActivity.this, true, new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                finish();
+            }
+        });
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -152,6 +158,9 @@ public class CourseActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        if (loadingDialog != null && loadingDialog.isShowing()) {
+                            loadingDialog.dismiss();
+                        }
                         if (!activityDestroy) {
                             courseAdapter = new CourseAdapter(CourseActivity.this, courseArrayList);
                             recyclerView.setAdapter(courseAdapter);
@@ -307,7 +316,7 @@ public class CourseActivity extends AppCompatActivity {
 
     //保存数据
     synchronized private void saveData() {
-        loadingDialog = BaseMethod.showLoadingDialog(CourseActivity.this, null);
+        loadingDialog = BaseMethod.showLoadingDialog(CourseActivity.this, false, null);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -376,9 +385,9 @@ public class CourseActivity extends AppCompatActivity {
                             courseAdapter.updateList(courseArrayList);
                         }
                         if (!found) {
-                            courseAdapter.notifyItemRangeInserted(i, 1);
+                            courseAdapter.notifyItemRangeInserted(courseArrayList.size() - 1, 1);
                         } else {
-                            courseAdapter.notifyItemChanged(i);
+                            courseAdapter.notifyItemChanged(i - 1);
                         }
                     }
                 }
@@ -389,13 +398,13 @@ public class CourseActivity extends AppCompatActivity {
 
     //从教务处导入本学期课程数据
     private void importDataFromJwc() {
-        loadingDialog = BaseMethod.showLoadingDialog(CourseActivity.this, null);
+        loadingDialog = BaseMethod.showLoadingDialog(CourseActivity.this, false, null);
         new CourseListAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
     }
 
     //从教务处导入下学期课程数据
     private void importDataFromJwcNext() {
-        loadingDialog = BaseMethod.showLoadingDialog(CourseActivity.this, null);
+        loadingDialog = BaseMethod.showLoadingDialog(CourseActivity.this, false, null);
         Toast.makeText(this, R.string.need_custom_term_alert, Toast.LENGTH_LONG).show();
         new CourseNextListAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
     }

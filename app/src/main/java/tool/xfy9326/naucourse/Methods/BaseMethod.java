@@ -124,14 +124,15 @@ public class BaseMethod {
      * 显示加载中的提示
      *
      * @param activity       Activity
+     * @param cancelable     是否可以取消显示
      * @param cancelListener 对取消显示的监听
      * @return show方法返回的Dialog
      */
-    public static Dialog showLoadingDialog(@NonNull Activity activity, @Nullable DialogInterface.OnCancelListener cancelListener) {
+    public static Dialog showLoadingDialog(@NonNull Activity activity, boolean cancelable, @Nullable DialogInterface.OnCancelListener cancelListener) {
         LayoutInflater layoutInflater = activity.getLayoutInflater();
         View view = layoutInflater.inflate(R.layout.dialog_loading, (ViewGroup) activity.findViewById(R.id.dialog_layout_loading));
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setCancelable(false);
+        builder.setCancelable(cancelable);
         builder.setOnCancelListener(cancelListener);
         builder.setView(view);
         return builder.show();

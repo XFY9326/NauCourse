@@ -180,10 +180,10 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
 
     @Override
     public void onViewDetachedFromWindow(@NonNull CourseViewHolder holder) {
-        super.onViewDetachedFromWindow(holder);
         if (colorPickerDialog != null && colorPickerDialog.isVisible()) {
             colorPickerDialog.dismissAllowingStateLoss();
         }
+        super.onViewDetachedFromWindow(holder);
     }
 
     static class CourseViewHolder extends RecyclerView.ViewHolder {

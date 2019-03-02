@@ -175,7 +175,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         };
-        loadingDialog = BaseMethod.showLoadingDialog(LoginActivity.this, cancelListener);
+        loadingDialog = BaseMethod.showLoadingDialog(LoginActivity.this, true, cancelListener);
     }
 
     private void netCheck() {

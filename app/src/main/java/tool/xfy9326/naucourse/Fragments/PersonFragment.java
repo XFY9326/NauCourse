@@ -303,7 +303,7 @@ public class PersonFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (getActivity() != null) {
-                        loadingDialog = BaseMethod.showLoadingDialog(getActivity(), null);
+                        loadingDialog = BaseMethod.showLoadingDialog(getActivity(), false, null);
                     }
                     new Thread(new Runnable() {
                         @Override

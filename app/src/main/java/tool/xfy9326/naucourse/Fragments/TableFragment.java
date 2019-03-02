@@ -88,6 +88,7 @@ public class TableFragment extends Fragment {
     private int lastSetWeekNumber;
     private boolean view_set = false;
     private boolean inVacation;
+    private int nowWeekNum = 0;
     private SharedPreferences sharedPreferences = null;
 
     public TableFragment() {
@@ -187,7 +188,9 @@ public class TableFragment extends Fragment {
             cardView_date.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    reloadTable(false);
+                    if (nowWeekNum != 0 && nowWeekNum - 1 != lastSelect) {
+                        reloadTable(false);
+                    }
                 }
             });
 
@@ -247,15 +250,37 @@ public class TableFragment extends Fragment {
                 }
                 textView_date.setText(context.getString(R.string.table_date, year, month, weekDay, week));
 
+                //提前显示下一周的课表
+                if (schoolTime.getWeekNum() != 0) {
+                    int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK);
+                    if (sharedPreferences != null && sharedPreferences.getBoolean(Config.PREFERENCE_SHOW_NEXT_WEEK, Config.DEFAULT_PREFERENCE_SHOW_NEXT_WEEK)) {
+                        if (!sharedPreferences.getBoolean(Config.PREFERENCE_SHOW_WEEKEND, Config.DEFAULT_PREFERENCE_SHOW_WEEKEND)) {
+                            if ((weekDayNum == Calendar.SUNDAY || weekDayNum == Calendar.SATURDAY) && weekNum + 1 <= TimeMethod.getMaxWeekNum(schoolTime)) {
+                                schoolTime.setWeekNum(++weekNum);
+                            }
+                        }
+                    }
+                }
+
+                this.nowWeekNum = weekNum;
+
+                if (lastSelect != weekNum - 1) {
+                    lastSelect = weekNum - 1;
+                    lastSetWeekNumber = lastSelect;
+                    if (spinner_week != null) {
+                        spinner_week.setSelection(lastSelect);
+                    }
+                }
+
                 if (spinner_week == null || isDataReload) {
                     List<String> weekArr = TimeMethod.getWeekArray(context, schoolTime);
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, weekArr);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner_week = view.findViewById(R.id.spinner_table_week_chose);
+                    spinner_week.setAdapter(adapter);
                     if (lastSelect < weekArr.size()) {
                         spinner_week.setSelection(lastSelect);
                     }
-                    spinner_week.setAdapter(adapter);
                     spinner_week.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -272,24 +297,7 @@ public class TableFragment extends Fragment {
                     });
                 }
 
-                //提前显示下一周的课表
-                if (schoolTime.getWeekNum() != 0) {
-                    int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK);
-                    if (sharedPreferences != null && sharedPreferences.getBoolean(Config.PREFERENCE_SHOW_NEXT_WEEK, Config.DEFAULT_PREFERENCE_SHOW_NEXT_WEEK)) {
-                        if (!sharedPreferences.getBoolean(Config.PREFERENCE_SHOW_WEEKEND, Config.DEFAULT_PREFERENCE_SHOW_WEEKEND)) {
-                            if ((weekDayNum == Calendar.SUNDAY || weekDayNum == Calendar.SATURDAY) && weekNum + 1 <= TimeMethod.getMaxWeekNum(schoolTime)) {
-                                schoolTime.setWeekNum(++weekNum);
-                            }
-                        }
-                    }
-                }
-
                 setTableData(schoolTime, isDataReload, hasCustomBackground);
-
-                if (lastSelect != weekNum - 1) {
-                    spinner_week.setSelection(weekNum - 1);
-                    lastSelect = weekNum - 1;
-                }
 
                 updateAllNextCourseView(context);
             }
