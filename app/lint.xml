@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
     <issue id="IconLocation">
+        <ignore path="src/main/res/drawable/app_widget_next_class_preview.png" />
         <ignore path="src/main/res/drawable/nau_logo.png" />
     </issue>
 </lint>

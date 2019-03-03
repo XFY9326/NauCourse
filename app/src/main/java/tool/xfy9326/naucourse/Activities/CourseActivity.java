@@ -7,7 +7,9 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -49,12 +51,16 @@ import tool.xfy9326.naucourse.AsyncTasks.CourseListAsync;
 import tool.xfy9326.naucourse.AsyncTasks.CourseNextListAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Handlers.MainHandler;
+import tool.xfy9326.naucourse.Methods.BackupMethod;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.CourseEditMethod;
 import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethods.SchoolTimeMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethods.TableMethod;
+import tool.xfy9326.naucourse.Methods.PermissionMethod;
+import tool.xfy9326.naucourse.Methods.TimeMethod;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.Tools.URI;
 import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
 import tool.xfy9326.naucourse.Views.RecyclerViews.CourseAdapter;
@@ -62,6 +68,10 @@ import tool.xfy9326.naucourse.Views.RecyclerViews.CourseAdapter;
 public class CourseActivity extends AppCompatActivity {
     public static final int COURSE_EDIT_REQUEST_CODE = 1;
     private static final int COURSE_ADD_REQUEST_CODE = 2;
+    private static final int BACKUP_WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE = 3;
+    private static final int RECOVER_WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE = 4;
+    private static final int CHOOSE_RECOVER_WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE = 5;
+    private static final int CHOOSE_RECOVER_FILE_REQUEST_CODE = 6;
     public boolean activityDestroy = true;
     private RecyclerView recyclerView;
     private CourseAdapter courseAdapter;
@@ -127,6 +137,21 @@ public class CourseActivity extends AppCompatActivity {
             //学期设定
             case R.id.menu_course_term_date:
                 setTermDate();
+                break;
+            case R.id.menu_course_backup:
+                if (PermissionMethod.checkStoragePermission(this, BACKUP_WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE)) {
+                    backupCourse();
+                }
+                break;
+            case R.id.menu_course_recover:
+                if (PermissionMethod.checkStoragePermission(this, RECOVER_WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE)) {
+                    recoverCourse();
+                }
+                break;
+            case R.id.menu_course_choose_recover:
+                if (PermissionMethod.checkStoragePermission(this, CHOOSE_RECOVER_WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE)) {
+                    chooseRecoverCourse();
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -240,6 +265,21 @@ public class CourseActivity extends AppCompatActivity {
                     } else {
                         Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.input_error, Snackbar.LENGTH_LONG).show();
                     }
+                } else {
+                    Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.input_error, Snackbar.LENGTH_LONG).show();
+                }
+            }
+        });
+        builder.setNeutralButton(R.string.use_now_term, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String term = TimeMethod.getNowShowTerm(CourseActivity.this);
+                if (term != null) {
+                    long termLong = Long.valueOf(term);
+                    Intent intent = new Intent(CourseActivity.this, CourseEditActivity.class);
+                    intent.putExtra(Config.INTENT_ADD_COURSE, true);
+                    intent.putExtra(Config.INTENT_ADD_COURSE_TERM, termLong);
+                    startActivityForResult(intent, COURSE_ADD_REQUEST_CODE);
                 } else {
                     Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.input_error, Snackbar.LENGTH_LONG).show();
                 }
@@ -391,6 +431,22 @@ public class CourseActivity extends AppCompatActivity {
                         }
                     }
                 }
+            } else if (requestCode == CHOOSE_RECOVER_FILE_REQUEST_CODE) {
+                if (data != null) {
+                    Uri uri = data.getData();
+                    if (uri != null) {
+                        String path = URI.getAbsolutePath(this, uri);
+                        if (path != null) {
+                            ArrayList<Course> courses = BackupMethod.restoreCourse(path);
+                            if (courses != null) {
+                                addCourseList(courses, false, true, false);
+                                super.onActivityResult(requestCode, resultCode, data);
+                                return;
+                            }
+                        }
+                    }
+                }
+                Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.recover_failed, Snackbar.LENGTH_SHORT).show();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -410,12 +466,14 @@ public class CourseActivity extends AppCompatActivity {
     }
 
     /**
-     * 接受网络导入的数据并显示
+     * 接收导入的数据并显示
      *
-     * @param courses       课程数据列表
-     * @param isCurrentTerm 是否是当前学期的课程表
+     * @param courses                   课程数据列表
+     * @param isCurrentTerm             是否是当前学期的课程表
+     * @param isBackup                  是否是备份导入
+     * @param nextTermCourseImportError 下学期课表是否导入失败
      */
-    public void addCourseList(final ArrayList<Course> courses, boolean isCurrentTerm, boolean nextTermCourseImportError) {
+    public void addCourseList(final ArrayList<Course> courses, boolean isCurrentTerm, final boolean isBackup, boolean nextTermCourseImportError) {
         if (!activityDestroy) {
             closeLoadingDialog();
             if (nextTermCourseImportError) {
@@ -430,7 +488,7 @@ public class CourseActivity extends AppCompatActivity {
                     }
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle(isCurrentTerm ? R.string.import_course_from_jwc_current : R.string.import_course_from_jwc_next);
+                    builder.setTitle(isBackup ? R.string.backup_course : isCurrentTerm ? R.string.import_course_from_jwc_current : R.string.import_course_from_jwc_next);
                     builder.setMultiChoiceItems(name, checked, new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -440,13 +498,13 @@ public class CourseActivity extends AppCompatActivity {
                     builder.setPositiveButton(R.string.add_course_and_clean, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            chooseCourseAdd(checked, courses, true);
+                            chooseCourseAdd(checked, courses, true, isBackup);
                         }
                     });
                     builder.setNeutralButton(R.string.add_course_only, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            chooseCourseAdd(checked, courses, false);
+                            chooseCourseAdd(checked, courses, false, isBackup);
                         }
                     });
                     builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -471,7 +529,7 @@ public class CourseActivity extends AppCompatActivity {
         }
     }
 
-    private void chooseCourseAdd(boolean[] checked, ArrayList<Course> courses, boolean termCheck) {
+    private void chooseCourseAdd(boolean[] checked, ArrayList<Course> courses, boolean termCheck, boolean isBackup) {
         ArrayList<Course> courses_choose = new ArrayList<>();
         for (int i = 0; i < checked.length; i++) {
             if (checked[i]) {
@@ -487,7 +545,11 @@ public class CourseActivity extends AppCompatActivity {
             courseAdapter.notifyDataSetChanged();
             needSave = true;
         }
-        Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.add_success, Snackbar.LENGTH_SHORT).show();
+        if (isBackup) {
+            Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.recover_success, Snackbar.LENGTH_SHORT).show();
+        } else {
+            Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.add_success, Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     private void setTermDate() {
@@ -633,6 +695,56 @@ public class CourseActivity extends AppCompatActivity {
             }
         });
         pickerDialog.show();
+    }
+
+    private void backupCourse() {
+        if (BackupMethod.backupCourse(courseArrayList)) {
+            Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.backup_success, Snackbar.LENGTH_SHORT).show();
+        } else {
+            Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.backup_failed, Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    private void chooseRecoverCourse() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        startActivityForResult(intent, CHOOSE_RECOVER_FILE_REQUEST_CODE);
+    }
+
+    private void recoverCourse() {
+        ArrayList<Course> courses = BackupMethod.restoreCourse();
+        if (courses == null) {
+            Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.recover_failed, Snackbar.LENGTH_SHORT).show();
+        } else {
+            addCourseList(courses, false, true, false);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == BACKUP_WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE || requestCode == RECOVER_WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE || requestCode == CHOOSE_RECOVER_WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE) {
+            boolean requestSuccess = true;
+            for (int grantResult : grantResults) {
+                if (grantResult == PackageManager.PERMISSION_DENIED) {
+                    requestSuccess = false;
+                    break;
+                }
+            }
+            if (requestSuccess) {
+                if (requestCode == BACKUP_WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE) {
+                    backupCourse();
+                } else if (requestCode == RECOVER_WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE) {
+                    recoverCourse();
+                } else {
+                    chooseRecoverCourse();
+                }
+            } else {
+                Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.permission_error, Snackbar.LENGTH_SHORT).show();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override

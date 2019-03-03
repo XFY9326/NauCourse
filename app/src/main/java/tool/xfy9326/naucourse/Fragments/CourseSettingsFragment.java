@@ -255,7 +255,14 @@ public class CourseSettingsFragment extends PreferenceFragmentCompat {
                                     imageTempPath = ImageMethod.getCourseTableBackgroundImageTempPath(getActivity());
                                     intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.parse("file:///" + imageTempPath));
 
-                                    startActivityForResult(intent, CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+                                    try {
+                                        startActivityForResult(intent, CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        if (getContext() != null) {
+                                            Toast.makeText(getContext(), R.string.image_crop_no_found, Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
 
                                     super.onActivityResult(requestCode, resultCode, data);
                                     return;

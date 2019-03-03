@@ -15,6 +15,7 @@ import java.util.Locale;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.Methods.InfoMethods.SchoolTimeMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
 
@@ -65,6 +66,12 @@ public class TimeMethod {
             }
         }
         return schoolTime;
+    }
+
+    public static String getNowShowTerm(Context context) {
+        SchoolTime schoolTime = (SchoolTime) DataMethod.getOfflineData(context, SchoolTime.class, SchoolTimeMethod.FILE_NAME);
+        schoolTime = TimeMethod.termSetCheck(context, schoolTime, false);
+        return getNowShowTerm(context, schoolTime);
     }
 
     /**

@@ -120,6 +120,44 @@ public class DataMethod {
         return IO.writeFile(Objects.requireNonNull(content), path);
     }
 
+    static boolean saveExtraData(Object o, String path) {
+        if (o != null) {
+            String content = new Gson().toJson(o);
+            if (content != null) {
+                return IO.writeFile(content, path);
+            }
+        }
+        return false;
+    }
+
+    static ArrayList<Course> readExtraTableData(String path) {
+        ArrayList<Course> o = null;
+        String content = IO.readFile(path);
+        Type type = new TypeToken<ArrayList<Course>>() {
+        }.getType();
+        if (content != null) {
+            try {
+                o = new Gson().fromJson(content, type);
+            } catch (JsonSyntaxException e) {
+                e.printStackTrace();
+            }
+        }
+        return o;
+    }
+
+//    public static Object readExtraData(@NonNull Class file_class, String path) {
+//        Object o = null;
+//        String content = IO.readFile(path);
+//        if (content != null) {
+//            try {
+//                o = new Gson().fromJson(content, file_class);
+//            } catch (JsonSyntaxException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return o;
+//    }
+
     /**
      * 删除离线数据
      *

@@ -5,10 +5,10 @@
     tools:context=".Activities.CourseActivity">
 
     <item
-        android:id="@+id/menu_course_term_date"
-        android:icon="@drawable/ic_date_range"
+        android:id="@+id/menu_course_save"
+        android:icon="@drawable/ic_save"
         android:orderInCategory="0"
-        android:title="@string/custom_term"
+        android:title="@string/save"
         app:showAsAction="always" />
 
     <item
@@ -16,13 +16,31 @@
         android:icon="@drawable/ic_delete_all"
         android:orderInCategory="1"
         android:title="@string/delete_all"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_course_term_date"
+        android:icon="@drawable/ic_date_range"
+        android:orderInCategory="2"
+        android:title="@string/custom_term"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/menu_course_save"
-        android:icon="@drawable/ic_save"
-        android:orderInCategory="2"
-        android:title="@string/save"
-        app:showAsAction="always" />
+        android:id="@+id/menu_course_backup"
+        android:orderInCategory="3"
+        android:title="@string/backup_course"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_course_recover"
+        android:orderInCategory="4"
+        android:title="@string/recover_course"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_course_choose_recover"
+        android:orderInCategory="5"
+        android:title="@string/recover_choose_course"
+        app:showAsAction="never" />
 
 </menu>

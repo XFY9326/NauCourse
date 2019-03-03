@@ -34,7 +34,8 @@ public class Config {
 
     public static final int VIEWPAGER_TABLE_PAGE = 1;
 
-    public static final String PICTURE_DICTIONARY_PATH = Environment.getExternalStorageDirectory() + File.separator + Environment.DIRECTORY_PICTURES + File.separator + "NAU_Course" + File.separator;
+    public static final String DATA_DIR_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "NauCourse" + File.separator;
+    public static final String PICTURE_DICTIONARY_PATH = DATA_DIR_PATH + "picture" + File.separator;
     public static final String COURSE_TABLE_FILE_NAME = "CourseTable.jpeg";
 
     public static final String FILE_PROVIDER_AUTH = "tool.xfy9326.naucourse.provider";

@@ -143,7 +143,6 @@
     <string name="level_exam_ticket">准考证号：%1$s</string>
     <string name="level_exam_certificate">证书编号：%1$s</string>
     <string name="level_exam_empty">暂无等级考试信息！</string>
-    <string name="course_table_background">课程表背景</string>
     <string name="show_course_table_background">显示课程表背景图</string>
     <string name="show_course_table_background_sum">课程表将会显示自定义的背景</string>
     <string name="course_edit">课程编辑</string>
@@ -294,6 +293,14 @@
     <string name="image_chooser_no_found">没有找到可用的图片选择器！</string>
     <string name="image_crop_no_found">没有找到可用的图片裁剪器！</string>
     <string name="image_get_error">图片获取错误！</string>
+    <string name="use_now_term">使用当前设置学期</string>
+    <string name="backup_course">备份当前编辑的课表</string>
+    <string name="recover_course">从备份恢复到当前课表</string>
+    <string name="recover_choose_course">选择文件恢复到当前课表</string>
+    <string name="backup_success">备份成功！</string>
+    <string name="recover_success">恢复成功！</string>
+    <string name="backup_failed">备份失败！</string>
+    <string name="recover_failed">恢复失败！</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>
