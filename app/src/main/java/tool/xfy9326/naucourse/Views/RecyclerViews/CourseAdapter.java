@@ -33,7 +33,7 @@ import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Course;
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseViewHolder> {
-    private static final String COLOR_PICKER_DIALOG_TAG = "course_color_picker";
+    private static final String COLOR_PICKER_DIALOG_TAG = "COLOR_PICKER_DIALOG";
     private static final int COLOR_PICKER_DIALOG_ID = 1;
     private final CourseActivity activity;
     private final SharedPreferences sharedPreferences;
@@ -106,7 +106,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
                         @SuppressLint("RestrictedApi")
                         @Override
                         public void onClick(View v) {
-                            if (!activity.activityDestroy) {
+                            if (!activity.activityDestroy && holder.getAdapterPosition() > -1) {
                                 courseArrayList.remove(holder.getAdapterPosition());
                                 notifyItemRemoved(holder.getAdapterPosition());
                                 activity.setArrayChanged();

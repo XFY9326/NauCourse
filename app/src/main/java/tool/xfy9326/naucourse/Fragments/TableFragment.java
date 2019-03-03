@@ -334,6 +334,22 @@ public class TableFragment extends Fragment {
         }
     }
 
+    int getTableWidth() {
+        if (view != null && isAdded()) {
+            CardView cardView_course = view.findViewById(R.id.cardView_courseTable);
+            return cardView_course.getWidth();
+        }
+        return -1;
+    }
+
+    int getTableHeight() {
+        if (view != null && isAdded()) {
+            CardView cardView_course = view.findViewById(R.id.cardView_courseTable);
+            return cardView_course.getHeight();
+        }
+        return -1;
+    }
+
     private void setTableData(@NonNull SchoolTime schoolTime, boolean isDataReload, boolean hasCustomBackground) {
         if (view != null) {
             if (courseViewMethod == null) {

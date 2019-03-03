@@ -3,6 +3,7 @@ package tool.xfy9326.naucourse.Methods;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Environment;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,6 +33,15 @@ public class ImageMethod {
 
     public static String getCourseTableBackgroundImagePath(Context context) {
         return context.getFilesDir() + File.separator + "CourseTableBackgroundImage";
+    }
+
+    public static String getCourseTableBackgroundImageTempPath(Context context) {
+        File path = context.getExternalCacheDir();
+        if (path != null) {
+            return path.getAbsolutePath() + File.separator + "CourseTableBackgroundImage";
+        } else {
+            return Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CourseTableBackgroundImage";
+        }
     }
 
     public static Bitmap getSchoolCalendarImage(Context context) {
@@ -80,7 +90,7 @@ public class ImageMethod {
             if (IO.createPath(file)) {
                 if (file.createNewFile()) {
                     FileOutputStream fileOutputStream = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fileOutputStream);
                     fileOutputStream.flush();
                     fileOutputStream.close();
                     if (recycle) {

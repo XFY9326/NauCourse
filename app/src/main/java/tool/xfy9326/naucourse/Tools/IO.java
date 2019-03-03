@@ -96,4 +96,33 @@ public class IO {
         }
         return true;
     }
+
+    public static boolean copyFile(String oldPath, String newPath, boolean deleteOldFile) {
+        try {
+            File oldFile = new File(oldPath);
+
+            if (!oldFile.exists() || !oldFile.isFile() || !oldFile.canRead()) {
+                return false;
+            }
+
+            FileInputStream fileInputStream = new FileInputStream(oldPath);
+            FileOutputStream fileOutputStream = new FileOutputStream(newPath);
+            byte[] buffer = new byte[1024];
+            int byteRead;
+            while (-1 != (byteRead = fileInputStream.read(buffer))) {
+                fileOutputStream.write(buffer, 0, byteRead);
+            }
+            fileInputStream.close();
+            fileOutputStream.flush();
+            fileOutputStream.close();
+            if (deleteOldFile) {
+                return oldFile.delete();
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }
