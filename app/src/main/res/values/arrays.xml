@@ -50,7 +50,6 @@
         <item>Gson</item>
         <item>ColorPicker</item>
         <item>PhotoView</item>
-        <item>Android-Image-Cropper</item>
     </string-array>
 
     <string-array name="open_source_web">
@@ -60,7 +59,6 @@
         <item>https://github.com/google/gson</item>
         <item>https://github.com/jaredrummler/ColorPicker</item>
         <item>https://github.com/chrisbanes/PhotoView</item>
-        <item>https://github.com/ArthurHub/Android-Image-Cropper</item>
     </string-array>
 
     <string-array name="default_course_color">
