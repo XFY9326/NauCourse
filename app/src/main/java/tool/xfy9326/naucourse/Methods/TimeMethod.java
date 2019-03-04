@@ -24,7 +24,16 @@ import tool.xfy9326.naucourse.Utils.SchoolTime;
  */
 
 public class TimeMethod {
-    static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+
+    static long getInfoDateLong(String date) {
+        try {
+            return simpleDateFormat.parse(date).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
 
     /**
      * 手动设置的学期替换检查与自动校准

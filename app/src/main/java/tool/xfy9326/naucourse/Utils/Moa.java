@@ -8,12 +8,9 @@ public class Moa extends BaseData {
     private String[] location;
     private String[] time;
     private String[] applyUnit;
+    private Long[] timeLong;
 
     private int count = 0;
-
-    public Moa() {
-
-    }
 
     @SuppressWarnings("unused")
     public String[] getId() {
@@ -78,5 +75,13 @@ public class Moa extends BaseData {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public Long[] getTimeLong() {
+        return timeLong;
+    }
+
+    public void setTimeLong(Long[] timeLong) {
+        this.timeLong = timeLong;
     }
 }

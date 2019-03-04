@@ -5,7 +5,6 @@ import android.content.Context;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,20 +32,17 @@ public class MoaMethod {
     }
 
     public static int getScrollPosition(Moa moa) {
-        String[] time = moa.getTime();
+        Long[] time = moa.getTimeLong();
         int result = 0;
-        try {
-            long nowTime = new Date().getTime();
-            for (int i = 0; i < time.length; i++) {
-                long t = simpleDateFormat.parse(time[i]).getTime();
-                if (nowTime > t) {
+        long nowTime = System.currentTimeMillis();
+        for (int i = 0; i < time.length; i++) {
+            if (time[i] > 0) {
+                if (nowTime > time[i]) {
                     break;
                 } else {
                     result = i;
                 }
             }
-        } catch (ParseException e) {
-            e.printStackTrace();
         }
         return result;
     }
@@ -79,18 +75,21 @@ public class MoaMethod {
                 ArrayList<String> type = new ArrayList<>();
                 ArrayList<String> location = new ArrayList<>();
                 ArrayList<String> time = new ArrayList<>();
+                ArrayList<Long> timeLong = new ArrayList<>();
                 ArrayList<String> applyUnit = new ArrayList<>();
 
                 Calendar calendar = Calendar.getInstance(Locale.CHINA);
                 calendar.setTime(new Date());
                 calendar.add(Calendar.MONTH, -MOA_PAST_SHOW_MONTH);
-                Date past_date = calendar.getTime();
+                long past_date = calendar.getTimeInMillis();
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = (JSONObject) jsonArray.get(i);
 
                     String report_time = jsonObject.getString("REPORTTIME") + " " + jsonObject.getString("REPORTTIMEF");
-                    if (!simpleDateFormat.parse(report_time).before(past_date)) {
+                    long report_time_long = simpleDateFormat.parse(report_time).getTime();
+                    if (report_time_long > past_date) {
+                        timeLong.add(report_time_long);
                         id.add(String.valueOf(jsonObject.getInt("ID")));
                         title.add(jsonObject.getString("TITLE"));
 
@@ -110,11 +109,10 @@ public class MoaMethod {
 
                 for (int i = 0; i < id.size(); i++) {
                     for (int j = 1; j < id.size() - i; j++) {
-                        long t1 = simpleDateFormat.parse(time.get(j)).getTime();
-                        long t2 = simpleDateFormat.parse(time.get(j - 1)).getTime();
-                        if (t1 > t2) {
+                        if (timeLong.get(j) > timeLong.get(j - 1)) {
                             Collections.swap(id, j, j - 1);
                             Collections.swap(time, j, j - 1);
+                            Collections.swap(timeLong, j, j - 1);
                             Collections.swap(applyUnit, j, j - 1);
                             Collections.swap(location, j, j - 1);
                             Collections.swap(title, j, j - 1);
@@ -126,6 +124,7 @@ public class MoaMethod {
 
                 moa.setId(id.toArray(new String[id.size()]));
                 moa.setTime(time.toArray(new String[time.size()]));
+                moa.setTimeLong(timeLong.toArray(new Long[timeLong.size()]));
                 moa.setApplyUnit(applyUnit.toArray(new String[applyUnit.size()]));
                 moa.setLocation(location.toArray(new String[location.size()]));
                 moa.setTitle(title.toArray(new String[title.size()]));

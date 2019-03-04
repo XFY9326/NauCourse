@@ -295,12 +295,15 @@ public class CourseMethod {
                     this_week_no_show_table[detail.getWeekDay()][t] = defaultNoShowClass;
                 }
             } else {
-                if (table[detail.getWeekDay()][Integer.valueOf(courseTime)] != null && defaultNoShowClass) {
-                    continue;
+                int courseTimeInt = Integer.valueOf(courseTime);
+                if (courseTimeInt > 0 && courseTimeInt <= Config.MAX_DAY_COURSE) {
+                    if (table[detail.getWeekDay()][courseTimeInt] != null && defaultNoShowClass) {
+                        continue;
+                    }
+                    table[detail.getWeekDay()][courseTimeInt] = getShowDetail(course, detail);
+                    id_table[detail.getWeekDay()][courseTimeInt] = course.getCourseId();
+                    this_week_no_show_table[detail.getWeekDay()][courseTimeInt] = defaultNoShowClass;
                 }
-                table[detail.getWeekDay()][Integer.valueOf(courseTime)] = getShowDetail(course, detail);
-                id_table[detail.getWeekDay()][Integer.valueOf(courseTime)] = course.getCourseId();
-                this_week_no_show_table[detail.getWeekDay()][Integer.valueOf(courseTime)] = defaultNoShowClass;
             }
         }
     }

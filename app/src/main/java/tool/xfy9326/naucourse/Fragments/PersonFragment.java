@@ -325,11 +325,15 @@ public class PersonFragment extends Fragment {
                                         @Override
                                         public void run() {
                                             //小部件清空
-                                            getActivity().sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
+                                            if (getActivity() != null) {
+                                                getActivity().sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
+                                            }
                                             //重启当前程序
                                             Intent intent = new Intent(context, LoginActivity.class);
                                             startActivityForResult(intent, Config.REQUEST_ACTIVITY_LOGIN);
-                                            getActivity().finish();
+                                            if (getActivity() != null) {
+                                                getActivity().finish();
+                                            }
                                         }
                                     });
                                 }

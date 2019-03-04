@@ -6,8 +6,6 @@ import android.util.SparseArray;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.Objects;
 
 import tool.xfy9326.naucourse.Methods.InfoMethods.RSSInfoMethod;
@@ -24,33 +22,45 @@ public class InfoMethod {
     private static Comparator<TopicInfo> date_comparator;
 
     //设置数据（多来源数据整合）
-    public static void combineData(Context context, ArrayList<TopicInfo> topic_data, JwcTopic jwcTopic, AlstuTopic alstuTopic, SparseArray<RSSReader.RSSObject> rssObjects) {
+    public static void combineData(final Context context, final ArrayList<TopicInfo> topic_data, final JwcTopic jwcTopic, final AlstuTopic alstuTopic, final SparseArray<RSSReader.RSSObject> rssObjects) {
         if (jwcTopic != null) {
             for (int i = 0; i < jwcTopic.getTopic_length(); i++) {
-                TopicInfo infoDetail = new TopicInfo();
-                infoDetail.setTitle(Objects.requireNonNull(jwcTopic.getTopic_title())[i]);
-                infoDetail.setClick(Objects.requireNonNull(jwcTopic.getTopic_click())[i]);
-                infoDetail.setDate(Objects.requireNonNull(jwcTopic.getTopic_date())[i]);
-                infoDetail.setPost(Objects.requireNonNull(jwcTopic.getTopic_post())[i]);
-                infoDetail.setSource(TOPIC_SOURCE_JWC);
-                infoDetail.setUrl(Objects.requireNonNull(jwcTopic.getTopic_url())[i]);
-                infoDetail.setType(Objects.requireNonNull(jwcTopic.getTopic_type())[i]);
-                topic_data.add(infoDetail);
+                long date = TimeMethod.getInfoDateLong(Objects.requireNonNull(jwcTopic.getTopic_date())[i]);
+                if (isKeepMsgDate(date)) {
+                    TopicInfo infoDetail = new TopicInfo();
+                    infoDetail.setTitle(Objects.requireNonNull(jwcTopic.getTopic_title())[i]);
+                    infoDetail.setClick(Objects.requireNonNull(jwcTopic.getTopic_click())[i]);
+                    infoDetail.setDate(jwcTopic.getTopic_date()[i]);
+                    infoDetail.setDateLong(date);
+                    infoDetail.setPost(Objects.requireNonNull(jwcTopic.getTopic_post())[i]);
+                    infoDetail.setSource(TOPIC_SOURCE_JWC);
+                    infoDetail.setUrl(Objects.requireNonNull(jwcTopic.getTopic_url())[i]);
+                    infoDetail.setType(Objects.requireNonNull(jwcTopic.getTopic_type())[i]);
+
+                    topic_data.add(infoDetail);
+                }
             }
         }
+
         if (alstuTopic != null) {
             for (int i = 0; i < alstuTopic.getTopic_length(); i++) {
-                TopicInfo infoDetail = new TopicInfo();
-                infoDetail.setTitle(Objects.requireNonNull(alstuTopic.getTopicTitle())[i]);
-                infoDetail.setClick(null);
-                infoDetail.setDate(Objects.requireNonNull(alstuTopic.getTopicDate())[i]);
-                infoDetail.setPost(context.getString(R.string.alstu_system));
-                infoDetail.setSource(TOPIC_SOURCE_ALSTU);
-                infoDetail.setUrl(Objects.requireNonNull(alstuTopic.getTopicUrl())[i]);
-                infoDetail.setType(context.getString(R.string.alstu_msg));
-                topic_data.add(infoDetail);
+                long date = TimeMethod.getInfoDateLong(Objects.requireNonNull(alstuTopic.getTopicDate())[i]);
+                if (isKeepMsgDate(date)) {
+                    TopicInfo infoDetail = new TopicInfo();
+                    infoDetail.setTitle(Objects.requireNonNull(alstuTopic.getTopicTitle())[i]);
+                    infoDetail.setClick(null);
+                    infoDetail.setDate(alstuTopic.getTopicDate()[i]);
+                    infoDetail.setDateLong(date);
+                    infoDetail.setPost(context.getString(R.string.alstu_system));
+                    infoDetail.setSource(TOPIC_SOURCE_ALSTU);
+                    infoDetail.setUrl(Objects.requireNonNull(alstuTopic.getTopicUrl())[i]);
+                    infoDetail.setType(context.getString(R.string.alstu_msg));
+
+                    topic_data.add(infoDetail);
+                }
             }
         }
+
         if (rssObjects != null) {
             for (int i = 0; i < rssObjects.size(); i++) {
                 String post = RSSInfoMethod.getTypePostName(context, rssObjects.keyAt(i));
@@ -60,44 +70,46 @@ public class InfoMethod {
                 if (rssObject != null) {
                     for (RSSReader.RSSChannel rssChannel : rssObject.getChannels()) {
                         for (RSSReader.RSSItem rssItem : rssChannel.getItems()) {
-                            TopicInfo infoDetail = new TopicInfo();
-                            infoDetail.setTitle(rssItem.getTitle());
-                            infoDetail.setClick(null);
-                            infoDetail.setDate(rssItem.getDate());
-                            infoDetail.setPost(post);
-                            infoDetail.setSource(TOPIC_SOURCE_RSS);
-                            infoDetail.setUrl(rssItem.getLink());
-                            infoDetail.setType(rssItem.getType() == null ? defaultType : rssItem.getType());
-                            topic_data.add(infoDetail);
+                            long date = TimeMethod.getInfoDateLong(rssItem.getDate());
+                            if (isKeepMsgDate(date)) {
+                                TopicInfo infoDetail = new TopicInfo();
+                                infoDetail.setTitle(rssItem.getTitle());
+                                infoDetail.setClick(null);
+                                infoDetail.setDate(rssItem.getDate());
+                                infoDetail.setDateLong(date);
+                                infoDetail.setPost(post);
+                                infoDetail.setSource(TOPIC_SOURCE_RSS);
+                                infoDetail.setUrl(rssItem.getLink());
+                                infoDetail.setType(rssItem.getType() == null ? defaultType : rssItem.getType());
+
+                                topic_data.add(infoDetail);
+                            }
                         }
                     }
                 }
             }
         }
-        deleteOutOfDateMsg(topic_data);
+
         sort(topic_data);
+        System.gc();
     }
 
     //删除超过三个月的消息
-    private static void deleteOutOfDateMsg(ArrayList<TopicInfo> topic_data) {
+    private static boolean isKeepMsgDate(long topic) {
         long now = System.currentTimeMillis();
-        Iterator<TopicInfo> iterator = topic_data.iterator();
-        while (iterator.hasNext()) {
-            TopicInfo detail = iterator.next();
-            if (detail != null) {
-                try {
-                    long topic = TimeMethod.simpleDateFormat.parse(detail.getDate()).getTime();
-                    if (now > topic) {
-                        int day = (int) ((now - topic) / (1000 * 3600 * 24));
-                        if (day > (31 * 3)) {
-                            iterator.remove();
-                        }
+        if (topic > 0) {
+            try {
+                if (now > topic) {
+                    int day = (int) ((now - topic) / (1000 * 3600 * 24));
+                    if (day > (31 * 3)) {
+                        return false;
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
+        return true;
     }
 
     private static void sort(ArrayList<TopicInfo> topic_data) {
@@ -105,22 +117,15 @@ public class InfoMethod {
             date_comparator = new Comparator<TopicInfo>() {
                 @Override
                 public int compare(TopicInfo o1, TopicInfo o2) {
-                    if (o1.getDate() != null && o2.getDate() != null) {
-                        String time1 = o1.getDate().trim();
-                        String time2 = o2.getDate().trim();
-                        try {
-                            //格式化日期显示
-                            Date date1 = TimeMethod.simpleDateFormat.parse(time1);
-                            Date date2 = TimeMethod.simpleDateFormat.parse(time2);
-                            o1.setDate(TimeMethod.simpleDateFormat.format(date1));
-                            o2.setDate(TimeMethod.simpleDateFormat.format(date2));
-
-                            long day1 = date1.getTime();
-                            long day2 = date2.getTime();
-                            return Long.compare(day2, day1);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                    if (o1.getDateLong() > 0 && o2.getDateLong() > 0) {
+                        return Long.compare(o2.getDateLong(), o1.getDateLong());
+                    }
+                    if (TOPIC_SOURCE_JWC.equals(o1.getType())) {
+                        return 1;
+                    } else if (TOPIC_SOURCE_ALSTU.equals(o1.getType())) {
+                        return 0;
+                    } else if (TOPIC_SOURCE_RSS.equals(o1.getType())) {
+                        return -1;
                     }
                     return 0;
                 }

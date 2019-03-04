@@ -483,20 +483,22 @@ public class TableFragment extends Fragment {
             //离线数据加载完成，开始拉取网络数据
             if (loadTime == 1 && NetMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
                 boolean update_day = true;
-                if (sharedPreferences != null && sharedPreferences.getBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE, Config.DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE)) {
-                    Calendar calendar = Calendar.getInstance(Locale.CHINA);
-                    long course_table_load_date = sharedPreferences.getLong(Config.PREFERENCE_COURSE_TABLE_AUTO_LOAD_DATE_TIME, 0);
-                    calendar.setTimeInMillis(course_table_load_date);
-                    int load_day = calendar.get(Calendar.DAY_OF_YEAR);
-                    int load_year = calendar.get(Calendar.YEAR);
-                    calendar.setTimeInMillis(System.currentTimeMillis());
-                    int now_day = calendar.get(Calendar.DAY_OF_YEAR);
-                    int now_year = calendar.get(Calendar.YEAR);
+                if (sharedPreferences != null) {
+                    if (!sharedPreferences.getBoolean(Config.PREFERENCE_UPDATE_TABLE_EVERY_TIME, Config.DEFAULT_PREFERENCE_UPDATE_TABLE_EVERY_TIME) && sharedPreferences.getBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE, Config.DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE)) {
+                        Calendar calendar = Calendar.getInstance(Locale.CHINA);
+                        long course_table_load_date = sharedPreferences.getLong(Config.PREFERENCE_COURSE_TABLE_AUTO_LOAD_DATE_TIME, 0);
+                        calendar.setTimeInMillis(course_table_load_date);
+                        int load_day = calendar.get(Calendar.DAY_OF_YEAR);
+                        int load_year = calendar.get(Calendar.YEAR);
+                        calendar.setTimeInMillis(System.currentTimeMillis());
+                        int now_day = calendar.get(Calendar.DAY_OF_YEAR);
+                        int now_year = calendar.get(Calendar.YEAR);
 
-                    if (load_year == now_year && now_day == load_day) {
-                        update_day = false;
-                    } else {
-                        sharedPreferences.edit().putLong(Config.PREFERENCE_COURSE_TABLE_AUTO_LOAD_DATE_TIME, System.currentTimeMillis()).apply();
+                        if (load_year == now_year && now_day == load_day) {
+                            update_day = false;
+                        } else {
+                            sharedPreferences.edit().putLong(Config.PREFERENCE_COURSE_TABLE_AUTO_LOAD_DATE_TIME, System.currentTimeMillis()).apply();
+                        }
                     }
                 }
 
@@ -527,8 +529,8 @@ public class TableFragment extends Fragment {
                         final String path = Config.PICTURE_DICTIONARY_PATH + Config.COURSE_TABLE_FILE_NAME;
                         if (ImageMethod.saveBitmap(bitmap, path, false) && context != null && isAdded() && getActivity() != null) {
                             LayoutInflater layoutInflater = getLayoutInflater();
-                            View view = layoutInflater.inflate(R.layout.dialog_share_table, (ViewGroup) getActivity().findViewById(R.id.layout_dialog_share_table));
-                            PhotoView photoView = view.findViewById(R.id.photoView_share_table);
+                            View view = layoutInflater.inflate(R.layout.dialog_share_image, (ViewGroup) getActivity().findViewById(R.id.layout_dialog_share_image));
+                            PhotoView photoView = view.findViewById(R.id.photoView_share_image);
                             photoView.setImageDrawable(new BitmapDrawable(getResources(), bitmap));
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(context);

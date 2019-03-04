@@ -53,5 +53,11 @@
             android:key="AUTO_UPDATE_COURSE_TABLE"
             android:summary="@string/auto_update_course_table_sum"
             android:title="@string/auto_update_course_table" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="AUTO_UPDATE_COURSE_TABLE"
+            android:key="UPDATE_TABLE_EVERY_TIME"
+            android:summary="@string/update_table_every_time_sum"
+            android:title="@string/update_table_every_time" />
     </PreferenceCategory>
 </PreferenceScreen>

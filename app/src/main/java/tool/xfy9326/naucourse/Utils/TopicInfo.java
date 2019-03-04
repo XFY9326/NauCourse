@@ -21,6 +21,7 @@ public class TopicInfo extends BaseData {
     private String url;
     @Nullable
     private String type;
+    private long dateLong;
 
     public TopicInfo() {
         this.title = null;
@@ -30,6 +31,7 @@ public class TopicInfo extends BaseData {
         this.source = null;
         this.url = null;
         this.type = null;
+        this.dateLong = -1;
     }
 
     @Nullable
@@ -93,5 +95,13 @@ public class TopicInfo extends BaseData {
 
     public void setUrl(@Nullable String url) {
         this.url = url;
+    }
+
+    public long getDateLong() {
+        return dateLong;
+    }
+
+    public void setDateLong(long dateLong) {
+        this.dateLong = dateLong;
     }
 }

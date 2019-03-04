@@ -37,6 +37,7 @@ public class Config {
     public static final String DATA_DIR_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "NauCourse" + File.separator;
     public static final String PICTURE_DICTIONARY_PATH = DATA_DIR_PATH + "picture" + File.separator;
     public static final String COURSE_TABLE_FILE_NAME = "CourseTable.jpeg";
+    public static final String SCHOOL_CALENDAR_FILE_NAME = "SchoolCalendar.jpeg";
 
     public static final String FILE_PROVIDER_AUTH = "tool.xfy9326.naucourse.provider";
 
@@ -106,6 +107,7 @@ public class Config {
     public static final String PREFERENCE_INFO_CHANNEL_SELECTED_XXB = "INFO_CHANNEL_SELECTED_XXB";
     public static final String PREFERENCE_INFO_CHANNEL_SELECTED_ALSTU = "INFO_CHANNEL_SELECTED_ALSTU";
     public static final String PREFERENCE_HIDE_OUT_OF_DATE_EXAM = "HIDE_OUT_OF_DATE_EXAM";
+    public static final String PREFERENCE_UPDATE_TABLE_EVERY_TIME = "UPDATE_TABLE_EVERY_TIME";
 
     public static final boolean DEFAULT_PREFERENCE_HAS_LOGIN = false;
     public static final boolean DEFAULT_PREFERENCE_REMEMBER_PW = true;
@@ -138,6 +140,7 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_XXB = true;
     public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_ALSTU = true;
     public static final boolean DEFAULT_PREFERENCE_HIDE_OUT_OF_DATE_EXAM = false;
+    public static final boolean DEFAULT_PREFERENCE_UPDATE_TABLE_EVERY_TIME = false;
 
     //网络连接错误代码
     public static final int NET_WORK_GET_SUCCESS = 0;
