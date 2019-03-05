@@ -268,7 +268,7 @@ public class TableFragment extends Fragment {
 
                 if (lastSelect != weekNum - 1) {
                     lastSelect = weekNum - 1;
-                    lastSetWeekNumber = lastSelect;
+                    lastSetWeekNumber = lastSelect + 1;
                     if (spinner_week != null) {
                         spinner_week.setSelection(lastSelect);
                     }
