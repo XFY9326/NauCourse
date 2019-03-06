@@ -124,6 +124,19 @@ public class CourseMethod {
         return nextCourse;
     }
 
+    public static boolean hasWeekendCourse(ArrayList<Course> courses) {
+        for (Course course : courses) {
+            if (course != null && course.getCourseDetail() != null) {
+                for (CourseDetail courseDetail : course.getCourseDetail()) {
+                    if (courseDetail.getWeekDay() == 6 || courseDetail.getWeekDay() == 7) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * 获取下一节课的信息
      * 对外接口

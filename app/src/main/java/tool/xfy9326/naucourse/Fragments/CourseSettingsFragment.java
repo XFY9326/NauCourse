@@ -93,7 +93,6 @@ public class CourseSettingsFragment extends PreferenceFragmentCompat {
         };
 
         findPreference(Config.PREFERENCE_SHOW_NEXT_WEEK).setOnPreferenceChangeListener(tableReloadListener);
-        findPreference(Config.PREFERENCE_SHOW_WEEKEND).setOnPreferenceChangeListener(tableReloadListener);
         findPreference(Config.PREFERENCE_SHOW_WIDE_TABLE).setOnPreferenceChangeListener(tableReloadListener);
         findPreference(Config.PREFERENCE_COURSE_TABLE_CELL_COLOR).setOnPreferenceChangeListener(tableReloadListener);
         findPreference(Config.PREFERENCE_COURSE_TABLE_SHOW_SINGLE_COLOR).setOnPreferenceChangeListener(tableReloadListener);

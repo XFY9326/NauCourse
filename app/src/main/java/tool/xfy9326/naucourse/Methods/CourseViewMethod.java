@@ -104,79 +104,89 @@ public class CourseViewMethod {
     }
 
     synchronized private void loadView(boolean hasCustomBackground) {
-        //清空原来的数据
-        course_table_layout.removeAllViews();
+        if (table != null) {
+            //清空原来的数据
+            course_table_layout.removeAllViews();
 
-        boolean showCellColor = sharedPreferences.getBoolean(Config.PREFERENCE_COURSE_TABLE_CELL_COLOR, Config.DEFAULT_PREFERENCE_COURSE_TABLE_CELL_COLOR);
-        boolean singleColor = sharedPreferences.getBoolean(Config.PREFERENCE_COURSE_TABLE_SHOW_SINGLE_COLOR, Config.DEFAULT_PREFERENCE_COURSE_TABLE_SHOW_SINGLE_COLOR);
+            boolean showCellColor = sharedPreferences.getBoolean(Config.PREFERENCE_COURSE_TABLE_CELL_COLOR, Config.DEFAULT_PREFERENCE_COURSE_TABLE_CELL_COLOR);
+            boolean singleColor = sharedPreferences.getBoolean(Config.PREFERENCE_COURSE_TABLE_SHOW_SINGLE_COLOR, Config.DEFAULT_PREFERENCE_COURSE_TABLE_SHOW_SINGLE_COLOR);
 
-        //设置行列数量
-        boolean showWeekend = sharedPreferences.getBoolean(Config.PREFERENCE_SHOW_WEEKEND, Config.DEFAULT_PREFERENCE_SHOW_WEEKEND);
-        boolean showWide = sharedPreferences.getBoolean(Config.PREFERENCE_SHOW_WIDE_TABLE, Config.DEFAULT_PREFERENCE_SHOW_WIDE_TABLE);
+            //设置行列数量
+            boolean showWeekend = false;
+            for (int i = table.length - 2; i < table.length; i++) {
+                for (int j = 1; j < table[i].length; j++) {
+                    if (table[i][j] != null) {
+                        showWeekend = true;
+                        break;
+                    }
+                }
+            }
+            boolean showWide = sharedPreferences.getBoolean(Config.PREFERENCE_SHOW_WIDE_TABLE, Config.DEFAULT_PREFERENCE_SHOW_WIDE_TABLE);
 
-        int row_max = Config.MAX_DAY_COURSE + 1;
-        int col_max = showWeekend ? Config.MAX_WEEK_DAY + 1 : Config.MAX_WEEK_DAY - 1;
+            int row_max = Config.MAX_DAY_COURSE + 1;
+            int col_max = showWeekend ? Config.MAX_WEEK_DAY + 1 : Config.MAX_WEEK_DAY - 1;
 
-        float alpha = sharedPreferences.getFloat(Config.PREFERENCE_CHANGE_TABLE_TRANSPARENCY, Config.DEFAULT_PREFERENCE_CHANGE_TABLE_TRANSPARENCY);
+            float alpha = sharedPreferences.getFloat(Config.PREFERENCE_CHANGE_TABLE_TRANSPARENCY, Config.DEFAULT_PREFERENCE_CHANGE_TABLE_TRANSPARENCY);
 
-        course_table_layout.setColumnCount(col_max);
-        course_table_layout.setRowCount(row_max);
-        course_table_layout.setMinimumWidth(parent_width);
-        if (hasCustomBackground) {
-            course_table_layout.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
-        }
+            course_table_layout.setColumnCount(col_max);
+            course_table_layout.setRowCount(row_max);
+            course_table_layout.setMinimumWidth(parent_width);
+            if (hasCustomBackground) {
+                course_table_layout.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
+            }
 
-        //设置每个单元格
-        for (int col = 0; col < col_max; col++) {
-            for (int row = 0; row < row_max; row++) {
-                int merge = 1;
-                String text = Objects.requireNonNull(table)[col][row];
+            //设置每个单元格
+            for (int col = 0; col < col_max; col++) {
+                for (int row = 0; row < row_max; row++) {
+                    int merge = 1;
+                    String text = table[col][row];
 
-                //合并相同数据的单元格（仅限一列）
-                if (col > 0 && row > 0) {
-                    if (text != null && !text.isEmpty()) {
-                        for (merge = 1; row + merge < row_max && merge <= row_max; merge++) {
-                            if (table[col][row + merge] == null || !table[col][row + merge].equalsIgnoreCase(text)) {
-                                break;
+                    //合并相同数据的单元格（仅限一列）
+                    if (col > 0 && row > 0) {
+                        if (text != null && !text.isEmpty()) {
+                            for (merge = 1; row + merge < row_max && merge <= row_max; merge++) {
+                                if (table[col][row + merge] == null || !table[col][row + merge].equalsIgnoreCase(text)) {
+                                    break;
+                                }
                             }
                         }
+                        row += merge - 1;
                     }
-                    row += merge - 1;
-                }
 
-                int weight_col = ((col == 0) ? 1 : 2);
-                GridLayout.Spec col_merge = GridLayout.spec(GridLayout.UNDEFINED, 1, weight_col);
-                GridLayout.Spec row_merge = GridLayout.spec(GridLayout.UNDEFINED, merge, 1);
-                GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams(row_merge, col_merge);
-                layoutParams.setGravity(Gravity.FILL);
-                layoutParams.setMargins(1, 1, 1, 1);
+                    int weight_col = ((col == 0) ? 1 : 2);
+                    GridLayout.Spec col_merge = GridLayout.spec(GridLayout.UNDEFINED, 1, weight_col);
+                    GridLayout.Spec row_merge = GridLayout.spec(GridLayout.UNDEFINED, merge, 1);
+                    GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams(row_merge, col_merge);
+                    layoutParams.setGravity(Gravity.FILL);
+                    layoutParams.setMargins(1, 1, 1, 1);
 
-                //添加单元格视图到表格
-                int width = ((col == 0) ? 0 : (parent_width / col_max));
+                    //添加单元格视图到表格
+                    int width = ((col == 0) ? 0 : (parent_width / col_max));
 
-                //设置单元格与文字的颜色
-                int bgColor = Color.WHITE;
-                int textColor = Color.GRAY;
-                if (showCellColor && text != null && row != 0 && col != 0) {
-                    bgColor = getCourseColorById(Objects.requireNonNull(id_table)[col][row]);
-                    if (bgColor == -1 || singleColor) {
-                        bgColor = context.getResources().getColor(R.color.course_cell_background);
+                    //设置单元格与文字的颜色
+                    int bgColor = Color.WHITE;
+                    int textColor = Color.GRAY;
+                    if (showCellColor && text != null && row != 0 && col != 0) {
+                        bgColor = getCourseColorById(Objects.requireNonNull(id_table)[col][row]);
+                        if (bgColor == -1 || singleColor) {
+                            bgColor = context.getResources().getColor(R.color.course_cell_background);
+                        }
+                        if (!isLightColor(bgColor)) {
+                            textColor = Color.WHITE;
+                        }
                     }
-                    if (!isLightColor(bgColor)) {
-                        textColor = Color.WHITE;
+                    if (this_week_no_show_table != null && this_week_no_show_table[col][row]) {
+                        bgColor = context.getResources().getColor(R.color.light_light_grey);
+                        textColor = context.getResources().getColor(R.color.light_grey);
                     }
-                }
-                if (this_week_no_show_table != null && this_week_no_show_table[col][row]) {
-                    bgColor = context.getResources().getColor(R.color.light_light_grey);
-                    textColor = context.getResources().getColor(R.color.light_grey);
-                }
 
-                View cellView = getCellView(text, bgColor, textColor, width, col, row, showWide, hasCustomBackground, alpha);
-                cellView.setLayoutParams(layoutParams);
-                if (row != 0) {
-                    cellView.setMinimumHeight(parent_height / row_max);
+                    View cellView = getCellView(text, bgColor, textColor, width, col, row, showWide, hasCustomBackground, alpha);
+                    cellView.setLayoutParams(layoutParams);
+                    if (row != 0) {
+                        cellView.setMinimumHeight(parent_height / row_max);
+                    }
+                    course_table_layout.addView(cellView);
                 }
-                course_table_layout.addView(cellView);
             }
         }
     }

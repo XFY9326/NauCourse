@@ -74,7 +74,6 @@ public class Config {
     public static final String PREFERENCE_LAST_NOTIFY_TIME = "LAST_NOTIFY_TIME";
     public static final String PREFERENCE_CLASS_BEFORE_NOTIFY = "CLASS_BEFORE_NOTIFY";
     public static final String PREFERENCE_NOTIFY_NEXT_CLASS = "NOTIFY_NEXT_CLASS";
-    public static final String PREFERENCE_SHOW_WEEKEND = "SHOW_WEEKEND";
     public static final String PREFERENCE_DEFAULT_SHOW_TABLE_PAGE = "DEFAULT_SHOW_TABLE_PAGE";
     public static final String PREFERENCE_SHOW_WIDE_TABLE = "SHOW_WIDE_TABLE";
     public static final String PREFERENCE_COURSE_TABLE_CELL_COLOR = "COURSE_TABLE_CELL_COLOR";
@@ -119,7 +118,6 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_ONLY_UPDATE_UNDER_WIFI = false;
     public static final boolean DEFAULT_PREFERENCE_SHOW_NEXT_WEEK = true;
     public static final boolean DEFAULT_PREFERENCE_NOTIFY_NEXT_CLASS = false;
-    public static final boolean DEFAULT_PREFERENCE_SHOW_WEEKEND = true;
     public static final boolean DEFAULT_PREFERENCE_DEFAULT_SHOW_TABLE_PAGE = false;
     public static final boolean DEFAULT_PREFERENCE_SHOW_WIDE_TABLE = false;
     public static final boolean DEFAULT_PREFERENCE_COURSE_TABLE_CELL_COLOR = true;
