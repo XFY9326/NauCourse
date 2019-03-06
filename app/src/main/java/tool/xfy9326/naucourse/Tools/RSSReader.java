@@ -2,9 +2,6 @@ package tool.xfy9326.naucourse.Tools;
 
 import android.util.Xml;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.Serializable;
@@ -15,6 +12,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+@SuppressWarnings("unused")
 public class RSSReader {
     private static final String RSS_TAG_CHANNEL = "channel";
     private static final String RSS_TAG_TITLE = "title";
@@ -81,10 +79,6 @@ public class RSSReader {
                                 link = parser.nextText();
                             }
                             break;
-                        //节约空间，不储存用不到的消息
-                        /*case RSS_TAG_DESCRIPTION:
-                            description = parser.nextText();
-                            break;*/
                         case RSS_TAG_DATE:
                             date = parser.nextText();
                             if (date.contains("T")) {
@@ -122,71 +116,6 @@ public class RSSReader {
                 }
                 eventType = parser.next();
             }
-            return rssObject;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Nullable
-    public static JSONObject RSSObjectToJSONObject(@NonNull RSSObject rssObject) {
-        try {
-            JSONObject jsonObject = new JSONObject();
-
-            JSONArray channelArray = new JSONArray();
-            for (RSSChannel rssChannel : rssObject.getChannels()) {
-                JSONObject channelObject = new JSONObject();
-
-                JSONArray itemArray = new JSONArray();
-                for (RSSItem rssItem : rssChannel.getItems()) {
-                    JSONObject itemObject = new JSONObject();
-                    itemObject.put(RSS_TAG_TITLE, rssItem.getTitle());
-                    itemObject.put(RSS_TAG_LINK, rssItem.getLink());
-                    itemObject.put(RSS_TAG_DESCRIPTION, rssItem.getDescription());
-                    itemObject.put(RSS_TAG_DATE, rssItem.getDate());
-                    itemObject.put(RSS_TAG_TYPE, rssItem.getType());
-
-                    itemArray.put(itemObject);
-                }
-
-                channelObject.put(RSS_TAG_LINK, rssChannel.getLink());
-                channelObject.put(RSS_TAG_TITLE, rssChannel.getTitle());
-                channelObject.put(RSS_TAG_ITEM, itemArray);
-                channelArray.put(channelObject);
-            }
-
-            jsonObject.put(RSS_TAG_CHANNEL, channelArray);
-
-            return jsonObject;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Nullable
-    public static RSSObject JSONObjectToRSSObject(@NonNull JSONObject jsonObject) {
-        try {
-            JSONArray channelArray = jsonObject.getJSONArray(RSS_TAG_CHANNEL);
-            ArrayList<RSSChannel> rssChannelArrayList = new ArrayList<>();
-            ArrayList<RSSItem> rssItemArrayList = new ArrayList<>();
-
-            for (int i = 0; i < channelArray.length(); i++) {
-                JSONObject channelObject = channelArray.getJSONObject(i);
-                JSONArray itemArray = channelObject.getJSONArray(RSS_TAG_ITEM);
-
-                for (int j = 0; j < itemArray.length(); j++) {
-                    JSONObject itemObject = itemArray.getJSONObject(j);
-                    rssItemArrayList.add(new RSSItem(itemObject.getString(RSS_TAG_TITLE), itemObject.getString(RSS_TAG_LINK), itemObject.has(RSS_TAG_DESCRIPTION) ? itemObject.getString(RSS_TAG_DESCRIPTION) : null, itemObject.getString(RSS_TAG_DATE), itemObject.has(RSS_TAG_TYPE) ? itemObject.getString(RSS_TAG_TYPE) : null));
-                }
-
-                rssChannelArrayList.add(new RSSChannel(channelObject.getString(RSS_TAG_TITLE), channelObject.getString(RSS_TAG_LINK), rssItemArrayList));
-                rssItemArrayList.clear();
-            }
-            RSSObject rssObject = new RSSObject(rssChannelArrayList);
-            rssChannelArrayList.clear();
-
             return rssObject;
         } catch (Exception e) {
             e.printStackTrace();

@@ -305,6 +305,7 @@
     <string name="update_table_every_time_sum">较为消耗流量，无特殊需要不建议开启</string>
     <string name="school_calendar_share_error">校历分享失败！</string>
     <string name="share_school_calendar">分享校历</string>
+    <string name="save_failed">保存失败</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>

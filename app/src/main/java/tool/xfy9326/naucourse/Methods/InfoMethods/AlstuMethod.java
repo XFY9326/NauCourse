@@ -14,7 +14,6 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import tool.xfy9326.naucourse.Config;
-import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.LoginMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Utils.AlstuTopic;
@@ -89,8 +88,6 @@ public class AlstuMethod {
             alstuTopic.setTopicUrl(url.toArray(new String[]{}));
             alstuTopic.setTopicDate(date.toArray(new String[]{}));
             alstuTopic.setDataVersionCode(Config.DATA_VERSION_ALSTU_TOPIC);
-
-            DataMethod.saveOfflineData(context, alstuTopic, FILE_NAME, false);
         }
         return alstuTopic;
     }

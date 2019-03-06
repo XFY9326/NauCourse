@@ -2,7 +2,6 @@ package tool.xfy9326.naucourse.Views.RecyclerViews;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +14,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import tool.xfy9326.naucourse.Activities.InfoDetailActivity;
 import tool.xfy9326.naucourse.Config;
-import tool.xfy9326.naucourse.Methods.InfoMethod;
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.Tools.RSSReader;
-import tool.xfy9326.naucourse.Utils.AlstuTopic;
-import tool.xfy9326.naucourse.Utils.JwcTopic;
 import tool.xfy9326.naucourse.Utils.TopicInfo;
 
 /**
@@ -28,14 +23,14 @@ import tool.xfy9326.naucourse.Utils.TopicInfo;
  */
 
 public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder> {
+    @NonNull
     private final Context context;
     @NonNull
-    private final ArrayList<TopicInfo> topic_data;
+    private ArrayList<TopicInfo> topic_data;
 
-    public InfoAdapter(Context context, JwcTopic jwcTopic, AlstuTopic alstuTopic, SparseArray<RSSReader.RSSObject> rssObjects) {
+    public InfoAdapter(@NonNull Context context, @NonNull ArrayList<TopicInfo> topic_data) {
         this.context = context;
-        this.topic_data = new ArrayList<>();
-        InfoMethod.combineData(context, topic_data, jwcTopic, alstuTopic, rssObjects);
+        this.topic_data = topic_data;
     }
 
     @NonNull
@@ -80,13 +75,8 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
     }
 
     //更新列表
-    synchronized public void updateJwcTopic(JwcTopic jwcTopic, AlstuTopic alstuTopic, SparseArray<RSSReader.RSSObject> rssObjects) {
-        if (this.topic_data.isEmpty()) {
-            InfoMethod.combineData(context, topic_data, jwcTopic, alstuTopic, rssObjects);
-        } else {
-            this.topic_data.clear();
-            InfoMethod.combineData(context, topic_data, jwcTopic, alstuTopic, rssObjects);
-        }
+    synchronized public void updateTopic(@NonNull ArrayList<TopicInfo> topicInfo) {
+        this.topic_data = topicInfo;
         notifyDataSetChanged();
     }
 

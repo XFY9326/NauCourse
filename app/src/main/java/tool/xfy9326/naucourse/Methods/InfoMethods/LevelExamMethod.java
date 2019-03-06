@@ -23,6 +23,7 @@ import tool.xfy9326.naucourse.Utils.LevelExam;
 
 public class LevelExamMethod {
     public static final String FILE_NAME = "LevelExam";
+    public static final boolean IS_ENCRYPT = true;
     private final Context context;
     @Nullable
     private Document document;
@@ -115,7 +116,7 @@ public class LevelExamMethod {
         levelExam.setCertificateId(certificateId.toArray(new String[certificateId.size()]));
 
         levelExam.setDataVersionCode(Config.DATA_VERSION_LEVEL_EXAM);
-        if (DataMethod.saveOfflineData(context, levelExam, FILE_NAME, checkTemp)) {
+        if (DataMethod.saveOfflineData(context, levelExam, FILE_NAME, checkTemp, IS_ENCRYPT)) {
             return levelExam;
         } else {
             return null;

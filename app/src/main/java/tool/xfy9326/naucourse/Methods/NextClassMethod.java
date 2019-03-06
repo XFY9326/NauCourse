@@ -20,6 +20,7 @@ import tool.xfy9326.naucourse.Utils.SchoolTime;
 
 public class NextClassMethod {
     public static final String NEXT_COURSE_FILE_NAME = "NextCourse";
+    public static final boolean IS_ENCRYPT = false;
 
     /**
      * 获取下一节课的信息
@@ -32,7 +33,7 @@ public class NextClassMethod {
         NextCourse nextCourse = null;
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
-            SchoolTime schoolTime = (SchoolTime) DataMethod.getOfflineData(context, SchoolTime.class, SchoolTimeMethod.FILE_NAME);
+            SchoolTime schoolTime = (SchoolTime) DataMethod.getOfflineData(context, SchoolTime.class, SchoolTimeMethod.FILE_NAME, SchoolTimeMethod.IS_ENCRYPT);
             ArrayList<Course> courses = DataMethod.getOfflineTableData(context);
 
             if (schoolTime != null && courses != null) {
@@ -52,7 +53,7 @@ public class NextClassMethod {
             nextCourse = new NextCourse();
         }
 
-        DataMethod.saveOfflineData(context, nextCourse, NEXT_COURSE_FILE_NAME, false);
+        DataMethod.saveOfflineData(context, nextCourse, NEXT_COURSE_FILE_NAME, false, IS_ENCRYPT);
         return nextCourse;
     }
 

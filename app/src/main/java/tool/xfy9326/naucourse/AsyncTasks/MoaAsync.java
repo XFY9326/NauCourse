@@ -32,7 +32,7 @@ public class MoaAsync extends AsyncTask<Context, Void, Context> {
             }
             if (loadTime == 0) {
                 //首次只加载离线数据
-                moa = (Moa) DataMethod.getOfflineData(context[0], Moa.class, MoaMethod.FILE_NAME);
+                moa = (Moa) DataMethod.getOfflineData(context[0], Moa.class, MoaMethod.FILE_NAME, MoaMethod.IS_ENCRYPT);
                 loadSuccess = Config.NET_WORK_GET_SUCCESS;
             } else {
                 MoaMethod moaMethod = new MoaMethod(context[0]);

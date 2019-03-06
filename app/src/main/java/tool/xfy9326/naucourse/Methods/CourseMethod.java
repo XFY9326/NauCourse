@@ -4,7 +4,6 @@ import android.content.Context;
 import android.preference.PreferenceManager;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -320,8 +319,7 @@ public class CourseMethod {
     //获取开学是周几
     private int getStartSchoolWeekDay(String startSchoolDate) {
         try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
-            Date date = simpleDateFormat.parse(startSchoolDate);
+            Date date = TimeMethod.sdf_ymd.parse(startSchoolDate);
             Calendar calendar = Calendar.getInstance(Locale.CHINA);
             calendar.setTime(date);
             if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {

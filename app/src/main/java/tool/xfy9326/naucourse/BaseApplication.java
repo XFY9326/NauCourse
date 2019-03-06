@@ -5,6 +5,8 @@ import android.app.Application;
 import com.tencent.bugly.Bugly;
 
 import java.lang.ref.WeakReference;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Activities.CourseActivity;
@@ -23,6 +25,7 @@ import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
 
 public class BaseApplication extends Application {
     private NauSSOClient client;
+    private ExecutorService executorService;
     private WeakReference<ViewPagerAdapter> viewPagerAdapter;
     private WeakReference<InfoDetailActivity> infoDetailActivity;
     private WeakReference<ScoreActivity> scoreActivity;
@@ -43,6 +46,7 @@ public class BaseApplication extends Application {
             Bugly.init(this, "7b78d5ccdc", false);
         }
         client = new NauSSOClient(this);
+        executorService = Executors.newCachedThreadPool();
     }
 
     public NauSSOClient getClient() {
@@ -142,5 +146,9 @@ public class BaseApplication extends Application {
     public void onTerminate() {
         client = null;
         super.onTerminate();
+    }
+
+    public ExecutorService getExecutorService() {
+        return executorService;
     }
 }

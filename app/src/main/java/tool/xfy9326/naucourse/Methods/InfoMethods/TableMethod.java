@@ -29,6 +29,7 @@ import tool.xfy9326.naucourse.Utils.CourseDetail;
 
 public class TableMethod {
     public static final String FILE_NAME = "Course";
+    public static final boolean IS_ENCRYPT = true;
     private final Context context;
     @Nullable
     private Document document;
@@ -169,7 +170,7 @@ public class TableMethod {
             }
 
             if (needSave) {
-                DataMethod.saveOfflineData(context, courseList, TableMethod.FILE_NAME, false);
+                DataMethod.saveOfflineData(context, courseList, TableMethod.FILE_NAME, false, IS_ENCRYPT);
             }
         }
         return courseList;

@@ -26,6 +26,7 @@ import tool.xfy9326.naucourse.Utils.CourseScore;
 
 public class ScoreMethod {
     public static final String FILE_NAME = "CourseScore";
+    public static final boolean IS_ENCRYPT = true;
     private final Context context;
     @Nullable
     private Document document;
@@ -121,7 +122,7 @@ public class ScoreMethod {
         courseScore.setScoreTotal(scoreTotal.toArray(new String[]{}));
 
         courseScore.setDataVersionCode(Config.DATA_VERSION_COURSE_SCORE);
-        if (DataMethod.saveOfflineData(context, courseScore, FILE_NAME, checkTemp)) {
+        if (DataMethod.saveOfflineData(context, courseScore, FILE_NAME, checkTemp, IS_ENCRYPT)) {
             return courseScore;
         } else {
             return null;

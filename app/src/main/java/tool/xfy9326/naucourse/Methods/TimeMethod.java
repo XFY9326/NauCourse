@@ -24,11 +24,11 @@ import tool.xfy9326.naucourse.Utils.SchoolTime;
  */
 
 public class TimeMethod {
-    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+    public static final SimpleDateFormat sdf_ymd = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
 
     static long getInfoDateLong(String date) {
         try {
-            return simpleDateFormat.parse(date).getTime();
+            return sdf_ymd.parse(date).getTime();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -78,7 +78,7 @@ public class TimeMethod {
     }
 
     public static String getNowShowTerm(Context context) {
-        SchoolTime schoolTime = (SchoolTime) DataMethod.getOfflineData(context, SchoolTime.class, SchoolTimeMethod.FILE_NAME);
+        SchoolTime schoolTime = (SchoolTime) DataMethod.getOfflineData(context, SchoolTime.class, SchoolTimeMethod.FILE_NAME, SchoolTimeMethod.IS_ENCRYPT);
         schoolTime = TimeMethod.termSetCheck(context, schoolTime, false);
         return getNowShowTerm(context, schoolTime);
     }
@@ -103,7 +103,7 @@ public class TimeMethod {
             useTermStr = schoolTime.getStartTime();
         }
         try {
-            Date date = simpleDateFormat.parse(useTermStr);
+            Date date = sdf_ymd.parse(useTermStr);
             Calendar calendar = Calendar.getInstance(Locale.CHINA);
             calendar.setTime(date);
 
@@ -152,9 +152,9 @@ public class TimeMethod {
         int max_week = 0;
         if (schoolTime != null) {
             try {
-                Date startDate = simpleDateFormat.parse(schoolTime.getStartTime());
+                Date startDate = sdf_ymd.parse(schoolTime.getStartTime());
                 long startDay = startDate.getTime();
-                long endDay = simpleDateFormat.parse(schoolTime.getEndTime()).getTime();
+                long endDay = sdf_ymd.parse(schoolTime.getEndTime()).getTime();
 
                 Calendar calendar_start = Calendar.getInstance(Locale.CHINA);
                 calendar_start.setTime(startDate);
@@ -184,8 +184,8 @@ public class TimeMethod {
         int weekNum = 0;
         if (schoolTime != null) {
             try {
-                Date startDate = simpleDateFormat.parse(schoolTime.getStartTime());
-                Date endDate = simpleDateFormat.parse(schoolTime.getEndTime());
+                Date startDate = sdf_ymd.parse(schoolTime.getStartTime());
+                Date endDate = sdf_ymd.parse(schoolTime.getEndTime());
 
                 Calendar calendar_start = Calendar.getInstance(Locale.CHINA);
                 calendar_start.setTime(startDate);
@@ -244,7 +244,7 @@ public class TimeMethod {
     private static String[] getWeekDayDate(int week_num, String startSchoolDate) {
         String[] weekDayDate = new String[Config.MAX_WEEK_DAY];
         try {
-            Date startDate = simpleDateFormat.parse(startSchoolDate);
+            Date startDate = sdf_ymd.parse(startSchoolDate);
 
             Calendar calendar = Calendar.getInstance(Locale.CHINA);
             calendar.setTime(startDate);

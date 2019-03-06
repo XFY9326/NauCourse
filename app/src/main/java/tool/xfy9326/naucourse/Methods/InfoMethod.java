@@ -19,10 +19,13 @@ public class InfoMethod {
     public static final String TOPIC_SOURCE_JWC = "JWC";
     public static final String TOPIC_SOURCE_RSS = "RSS";
     public static final String TOPIC_SOURCE_ALSTU = "ALSTU";
+    public static final String FILE_NAME = "TopicInfo";
+    public static final boolean IS_ENCRYPT = false;
     private static Comparator<TopicInfo> date_comparator;
 
     //设置数据（多来源数据整合）
-    public static void combineData(final Context context, final ArrayList<TopicInfo> topic_data, final JwcTopic jwcTopic, final AlstuTopic alstuTopic, final SparseArray<RSSReader.RSSObject> rssObjects) {
+    public static ArrayList<TopicInfo> combineData(final Context context, final JwcTopic jwcTopic, final AlstuTopic alstuTopic, final SparseArray<RSSReader.RSSObject> rssObjects) {
+        ArrayList<TopicInfo> topic_data = new ArrayList<>();
         if (jwcTopic != null) {
             for (int i = 0; i < jwcTopic.getTopic_length(); i++) {
                 long date = TimeMethod.getInfoDateLong(Objects.requireNonNull(jwcTopic.getTopic_date())[i]);
@@ -91,7 +94,8 @@ public class InfoMethod {
         }
 
         sort(topic_data);
-        System.gc();
+
+        return topic_data;
     }
 
     //删除超过三个月的消息

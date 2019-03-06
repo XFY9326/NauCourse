@@ -30,6 +30,10 @@ public class PersonMethod {
     public static final String FILE_NAME_SCORE = "StudentScore";
     public static final String FILE_NAME_PROCESS = "StudentLearnProcess";
     public static final String FILE_NAME_DATA = "StudentInfo";
+    public static final boolean IS_SCORE_ENCRYPT = true;
+    public static final boolean IS_PROCESS_ENCRYPT = true;
+    public static final boolean IS_DATA_ENCRYPT = true;
+
     private final Context context;
     @Nullable
     private Document document;
@@ -100,7 +104,7 @@ public class PersonMethod {
             }
         }
         studentLearnProcess.setDataVersionCode(Config.DATA_VERSION_STUDENT_LEARN_PROCESS);
-        if (DataMethod.saveOfflineData(context, studentLearnProcess, FILE_NAME_PROCESS, checkTemp)) {
+        if (DataMethod.saveOfflineData(context, studentLearnProcess, FILE_NAME_PROCESS, checkTemp, IS_PROCESS_ENCRYPT)) {
             return studentLearnProcess;
         } else {
             return null;
@@ -143,7 +147,7 @@ public class PersonMethod {
         }
 
         studentScore.setDataVersionCode(Config.DATA_VERSION_STUDENT_SCORE);
-        if (DataMethod.saveOfflineData(context, studentScore, FILE_NAME_SCORE, checkTemp)) {
+        if (DataMethod.saveOfflineData(context, studentScore, FILE_NAME_SCORE, checkTemp, IS_SCORE_ENCRYPT)) {
             return studentScore;
         } else {
             return null;
@@ -185,7 +189,7 @@ public class PersonMethod {
             }
         }
         studentInfo.setDataVersionCode(Config.DATA_VERSION_STUDENT_INFO);
-        if (DataMethod.saveOfflineData(context, studentInfo, FILE_NAME_DATA, checkTemp)) {
+        if (DataMethod.saveOfflineData(context, studentInfo, FILE_NAME_DATA, checkTemp, IS_DATA_ENCRYPT)) {
             return studentInfo;
         } else {
             return null;

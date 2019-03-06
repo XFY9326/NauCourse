@@ -3,8 +3,6 @@ package tool.xfy9326.naucourse.Methods.InfoMethods;
 import android.content.Context;
 import android.util.SparseArray;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -12,6 +10,9 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,54 +28,22 @@ public class RSSInfoMethod {
     private static final int RSS_TYPE_TW = 3;
     private static final int RSS_TYPE_XXB = 4;
 
-    //private static final int[] RSS_TYPE_ALL = new int[]{RSS_TYPE_JW, RSS_TYPE_XW, RSS_TYPE_TW, RSS_TYPE_XXB};
-
     private static final String RSS_JW_URL = "http://plus.nau.edu.cn/_wp3services/rssoffer?siteId=126&templateId=221&columnId=4353";
     private static final String RSS_XW_URL = "http://plus.nau.edu.cn/_wp3services/rssoffer?siteId=110&templateId=181&columnId=3439";
     private static final String RSS_TW_URL = "http://plus.nau.edu.cn/_wp3services/rssoffer?siteId=105&templateId=177&columnId=3364";
     private static final String RSS_XXB_URL = "http://plus.nau.edu.cn/_wp3services/rssoffer?siteId=116&templateId=188&columnId=4048";
 
-    private static final String RSS_JW_FILE_NAME = "RssJwTopic";
-    private static final String RSS_XW_FILE_NAME = "RssXwTopic";
-    private static final String RSS_TW_FILE_NAME = "RssTwTopic";
-    private static final String RSS_XXB_FILE_NAME = "RssXxbTopic";
     private static Document document_detail;
     private static String lastLoadInfoDetailHost;
     private final SparseArray<RSSReader.RSSObject> rssObjectSparseArray;
     private final Integer[] typeList;
-    private final Context context;
     private boolean hasFailedLoad = false;
+    private final ExecutorService executorService;
 
-    public RSSInfoMethod(@NonNull Context context) {
-        this.context = context;
+    public RSSInfoMethod(@NonNull Context context, ExecutorService executorService) {
+        this.executorService = executorService;
         this.rssObjectSparseArray = new SparseArray<>();
         this.typeList = getShowType(context);
-    }
-
-    @Nullable
-    public static SparseArray<RSSReader.RSSObject> getOfflineRSSObject(Context context) {
-        SparseArray<RSSReader.RSSObject> rssObjectSparseArray = new SparseArray<>();
-        for (int typeCode : getShowType(context)) {
-            String fileName = getRSSFileName(typeCode);
-            if (fileName != null) {
-                String jsonData = DataMethod.getOfflineData(context, fileName);
-                if (jsonData != null) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(jsonData);
-                        RSSReader.RSSObject rssObject = RSSReader.JSONObjectToRSSObject(jsonObject);
-                        if (rssObject != null) {
-                            rssObjectSparseArray.put(typeCode, rssObject);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-        if (rssObjectSparseArray.size() != 0) {
-            return rssObjectSparseArray;
-        }
-        return null;
     }
 
     private static Integer[] getShowType(Context context) {
@@ -106,22 +75,6 @@ public class RSSInfoMethod {
                 return RSS_TW_URL;
             case RSS_TYPE_XXB:
                 return RSS_XXB_URL;
-            default:
-                return null;
-        }
-    }
-
-    @Nullable
-    private static String getRSSFileName(int rssType) {
-        switch (rssType) {
-            case RSS_TYPE_JW:
-                return RSS_JW_FILE_NAME;
-            case RSS_TYPE_XW:
-                return RSS_XW_FILE_NAME;
-            case RSS_TYPE_TW:
-                return RSS_TW_FILE_NAME;
-            case RSS_TYPE_XXB:
-                return RSS_XXB_FILE_NAME;
             default:
                 return null;
         }
@@ -182,10 +135,10 @@ public class RSSInfoMethod {
     public int load() throws Exception {
         hasFailedLoad = false;
         rssObjectSparseArray.clear();
-        Thread[] threads = new Thread[typeList.length];
+        Future[] futures = new Future[typeList.length];
         for (int i = 0; i < typeList.length; i++) {
             final int type = typeList[i];
-            threads[i] = new Thread(new Runnable() {
+            futures[i] = executorService.submit(new Runnable() {
                 @Override
                 public void run() {
                     String rssUrl = getRSSUrl(type);
@@ -211,12 +164,10 @@ public class RSSInfoMethod {
                     }
                 }
             });
-            threads[i].start();
         }
-        for (Thread thread : threads) {
-            thread.join();
+        for (Future future : futures) {
+            future.get(Config.TASK_RUN_MAX_SECOND, TimeUnit.SECONDS);
         }
-        System.gc();
         if (typeList.length != 0 && hasFailedLoad) {
             return Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR;
         }
@@ -225,16 +176,6 @@ public class RSSInfoMethod {
 
     @Nullable
     public SparseArray<RSSReader.RSSObject> getRSSObject() {
-        for (int i = 0; i < rssObjectSparseArray.size(); i++) {
-            String fileName = getRSSFileName(rssObjectSparseArray.keyAt(i));
-            if (fileName != null) {
-                JSONObject jsonObject = RSSReader.RSSObjectToJSONObject(rssObjectSparseArray.valueAt(i));
-                if (jsonObject != null) {
-                    String data = jsonObject.toString();
-                    DataMethod.saveOfflineData(context, data, fileName, false);
-                }
-            }
-        }
         return rssObjectSparseArray;
     }
 }

@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -32,11 +30,10 @@ import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Methods.NextClassMethod;
+import tool.xfy9326.naucourse.Methods.TimeMethod;
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.Tools.RSSReader;
-import tool.xfy9326.naucourse.Utils.AlstuTopic;
-import tool.xfy9326.naucourse.Utils.JwcTopic;
 import tool.xfy9326.naucourse.Utils.NextCourse;
+import tool.xfy9326.naucourse.Utils.TopicInfo;
 import tool.xfy9326.naucourse.Views.RecyclerViews.InfoAdapter;
 import tool.xfy9326.naucourse.Widget.NextClassWidget;
 
@@ -165,8 +162,7 @@ public class HomeFragment extends Fragment {
             }
 
             TextView textView_dateNow = view.findViewById(R.id.textView_dateNow);
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
-            textView_dateNow.setText(simpleDateFormat.format(new Date()));
+            textView_dateNow.setText(TimeMethod.sdf_ymd.format(new Date()));
 
             loadTempNextCourse();
 
@@ -259,7 +255,7 @@ public class HomeFragment extends Fragment {
     //优先加载缓存中的下一节课
     private void loadTempNextCourse() {
         if (context != null) {
-            NextCourse nextCourse = (NextCourse) DataMethod.getOfflineData(context, NextCourse.class, NextClassMethod.NEXT_COURSE_FILE_NAME);
+            NextCourse nextCourse = (NextCourse) DataMethod.getOfflineData(context, NextCourse.class, NextClassMethod.NEXT_COURSE_FILE_NAME, NextClassMethod.IS_ENCRYPT);
             if (nextCourse != null) {
                 setNextCourse(nextCourse);
             }
@@ -270,7 +266,7 @@ public class HomeFragment extends Fragment {
     private void setNextCourse() {
         if (context != null) {
             NextCourse nextCourse = NextClassMethod.getNextClassArray(Objects.requireNonNull(getActivity()));
-            DataMethod.saveOfflineData(context, nextCourse, NextClassMethod.NEXT_COURSE_FILE_NAME, false);
+            DataMethod.saveOfflineData(context, nextCourse, NextClassMethod.NEXT_COURSE_FILE_NAME, false, NextClassMethod.IS_ENCRYPT);
             setNextCourse(nextCourse);
             System.gc();
         }
@@ -295,7 +291,7 @@ public class HomeFragment extends Fragment {
                 linearLayout_nextClass.setVisibility(View.GONE);
                 textView_noNextClass.setVisibility(View.VISIBLE);
 
-                DataMethod.deleteOfflineData(context, NextClassMethod.NEXT_COURSE_FILE_NAME);
+                DataMethod.deleteOfflineData(context, NextClassMethod.NEXT_COURSE_FILE_NAME, NextClassMethod.IS_ENCRYPT);
             } else {
                 String time = nextCourse.getCourseTime().replace("~", "\n~\n").trim();
 
@@ -323,14 +319,14 @@ public class HomeFragment extends Fragment {
         this.loadTime = loadTime;
     }
 
-    public void InfoSet(@Nullable JwcTopic jwcTopic, @Nullable AlstuTopic alstuTopic, @Nullable SparseArray<RSSReader.RSSObject> rssObjects) {
+    public void InfoSet(@Nullable ArrayList<TopicInfo> topicInfos) {
         if (isAdded() && recyclerView != null) {
-            if (!(jwcTopic == null && rssObjects == null)) {
+            if (topicInfos != null && getActivity() != null) {
                 if (infoAdapter == null) {
-                    infoAdapter = new InfoAdapter(getActivity(), jwcTopic, alstuTopic, rssObjects);
+                    infoAdapter = new InfoAdapter(getActivity(), topicInfos);
                     recyclerView.setAdapter(infoAdapter);
                 } else {
-                    infoAdapter.updateJwcTopic(jwcTopic, alstuTopic, rssObjects);
+                    infoAdapter.updateTopic(topicInfos);
                 }
             }
         }

@@ -19,6 +19,7 @@ import tool.xfy9326.naucourse.Utils.Moa;
 
 public class MoaMethod {
     public static final String FILE_NAME = "Moa";
+    public static final boolean IS_ENCRYPT = false;
     public static final String Academic_Report = "xsbg";
     public static final int MOA_PAST_SHOW_MONTH = 2;
     private static final String URL = "http://moa.nau.edu.cn:8080/OAMobile/xsdt/xsdt/tj";
@@ -135,7 +136,7 @@ public class MoaMethod {
 
                 moa.setDataVersionCode(Config.DATA_VERSION_MOA);
 
-                if (DataMethod.saveOfflineData(context, moa, FILE_NAME, checkTemp)) {
+                if (DataMethod.saveOfflineData(context, moa, FILE_NAME, checkTemp, IS_ENCRYPT)) {
                     return moa;
                 } else {
                     return null;

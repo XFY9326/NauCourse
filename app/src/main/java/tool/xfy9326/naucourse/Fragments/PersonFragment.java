@@ -380,14 +380,14 @@ public class PersonFragment extends Fragment {
         }
     }
 
-    public void lastViewSet(Context context) {
+    public void lastViewSet(Context context, boolean mustReload) {
         if (isAdded()) {
             //离线数据加载完成，开始拉取网络数据，数据每天更新
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             if (loadTime == 1 && NetMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
                 boolean update_day = true;
 
-                if (sharedPreferences.getBoolean(Config.PREFERENCE_ASYNC_PERSONAL_INFO_BY_DAY, Config.DEFAULT_PREFERENCE_ASYNC_PERSONAL_INFO_BY_DAY)) {
+                if (!mustReload && sharedPreferences.getBoolean(Config.PREFERENCE_ASYNC_PERSONAL_INFO_BY_DAY, Config.DEFAULT_PREFERENCE_ASYNC_PERSONAL_INFO_BY_DAY)) {
                     Calendar calendar = Calendar.getInstance(Locale.CHINA);
                     long personal_info_load_date = sharedPreferences.getLong(Config.PREFERENCE_PERSONAL_INFO_LOAD_DATE_TIME, 0);
                     calendar.setTimeInMillis(personal_info_load_date);

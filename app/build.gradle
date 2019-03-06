@@ -37,6 +37,7 @@ android {
 
         beta.initWith(release)
         beta {
+            debuggable true
             zipAlignEnabled true
             minifyEnabled false
             buildConfigField("String", "VERSION_TYPE", "\"beta\"")

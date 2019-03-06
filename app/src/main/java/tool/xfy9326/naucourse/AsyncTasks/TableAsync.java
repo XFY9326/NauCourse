@@ -48,7 +48,7 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
                 course = DataMethod.getOfflineTableData(context[0]);
                 tableLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 if (loadTime == 0) {
-                    schoolTime = (SchoolTime) DataMethod.getOfflineData(context[0], SchoolTime.class, SchoolTimeMethod.FILE_NAME);
+                    schoolTime = (SchoolTime) DataMethod.getOfflineData(context[0], SchoolTime.class, SchoolTimeMethod.FILE_NAME, SchoolTimeMethod.IS_ENCRYPT);
                     timeLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                     schoolTime = TimeMethod.termSetCheck(context[0], schoolTime, false);
                 } else {
@@ -76,7 +76,7 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
                                 if (now_course != null && !CourseEditMethod.checkCourseList(now_course).isHasError()) {
                                     course.clear();
                                     course.addAll(now_course);
-                                    DataMethod.saveOfflineData(context[0], course, TableMethod.FILE_NAME, false);
+                                    DataMethod.saveOfflineData(context[0], course, TableMethod.FILE_NAME, false, TableMethod.IS_ENCRYPT);
                                 }
                             }
                         }
@@ -106,7 +106,7 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
                 if (NetMethod.checkNetWorkCode(context, new int[]{timeLoadSuccess, tableLoadSuccess}, loadCode, false)) {
                     tableFragment.CourseSet(course, schoolTime, context, true);
                 }
-                tableFragment.lastViewSet(context);
+                tableFragment.lastViewSet(context, course == null || schoolTime == null);
             }
             if (personFragment != null) {
                 personFragment.TimeTextSet(schoolTime, context);

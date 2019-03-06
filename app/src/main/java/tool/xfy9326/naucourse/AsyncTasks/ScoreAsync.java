@@ -43,8 +43,8 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
             }
             if (loadTime == 0) {
                 //首次只加载离线数据
-                studentScore = (StudentScore) DataMethod.getOfflineData(context[0], StudentScore.class, PersonMethod.FILE_NAME_SCORE);
-                courseScore = (CourseScore) DataMethod.getOfflineData(context[0], CourseScore.class, ScoreMethod.FILE_NAME);
+                studentScore = (StudentScore) DataMethod.getOfflineData(context[0], StudentScore.class, PersonMethod.FILE_NAME_SCORE, PersonMethod.IS_SCORE_ENCRYPT);
+                courseScore = (CourseScore) DataMethod.getOfflineData(context[0], CourseScore.class, ScoreMethod.FILE_NAME, ScoreMethod.IS_ENCRYPT);
                 personLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 scoreLoadSuccess = Config.NET_WORK_GET_SUCCESS;
             } else {

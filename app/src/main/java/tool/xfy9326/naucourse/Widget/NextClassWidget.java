@@ -11,14 +11,13 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.RemoteViews;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.NextClassMethod;
+import tool.xfy9326.naucourse.Methods.TimeMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Receivers.CourseUpdateReceiver;
 import tool.xfy9326.naucourse.Utils.NextCourse;
@@ -38,8 +37,7 @@ public class NextClassWidget extends AppWidgetProvider {
     synchronized private static RemoteViews ViewGet(Context context) {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.app_widget_next_class);
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
-        remoteViews.setTextViewText(R.id.textView_app_widget_dateNow, simpleDateFormat.format(new Date()));
+        remoteViews.setTextViewText(R.id.textView_app_widget_dateNow, TimeMethod.sdf_ymd.format(new Date()));
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_ON_CLICK, new Intent(context, NextClassWidget.class).setAction(ACTION_ON_CLICK), PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.layout_app_widget, pendingIntent);

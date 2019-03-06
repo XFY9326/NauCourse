@@ -4,12 +4,18 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.SparseArray;
 
+import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Fragments.HomeFragment;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.DataMethod;
+import tool.xfy9326.naucourse.Methods.InfoMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethods.AlstuMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethods.JwcInfoMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethods.RSSInfoMethod;
@@ -17,6 +23,7 @@ import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Tools.RSSReader;
 import tool.xfy9326.naucourse.Utils.AlstuTopic;
 import tool.xfy9326.naucourse.Utils.JwcTopic;
+import tool.xfy9326.naucourse.Utils.TopicInfo;
 import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
 
 /**
@@ -34,11 +41,13 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
     private AlstuTopic alstuTopic;
     @Nullable
     private SparseArray<RSSReader.RSSObject> rssObjects;
+    private ArrayList<TopicInfo> topicInfoList;
 
     public InfoAsync() {
         this.jwcTopic = null;
         this.rssObjects = null;
         this.alstuTopic = null;
+        this.topicInfoList = null;
     }
 
     @Override
@@ -54,52 +63,17 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
             final boolean showJwcTopic = infoChannel[JwcInfoMethod.TYPE_JWC];
             final boolean showAlstuTopic = infoChannel[AlstuMethod.TYPE_ALSTU];
 
+            final ExecutorService executorService = BaseMethod.getApp(context[0]).getExecutorService();
             if (loadTime == 0) {
                 //首次只加载离线数据
-                Thread[] threads = new Thread[3];
-                threads[0] = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (showJwcTopic) {
-                            jwcTopic = (JwcTopic) DataMethod.getOfflineData(context[0], JwcTopic.class, JwcInfoMethod.FILE_NAME);
-                        } else {
-                            jwcTopic = new JwcTopic();
-                        }
-                        JwcLoadSuccess = Config.NET_WORK_GET_SUCCESS;
-                    }
-                });
-                threads[1] = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (showAlstuTopic) {
-                            alstuTopic = (AlstuTopic) DataMethod.getOfflineData(context[0], AlstuTopic.class, AlstuMethod.FILE_NAME);
-                        } else {
-                            alstuTopic = new AlstuTopic();
-                        }
-                        alstuLoadSuccess = Config.NET_WORK_GET_SUCCESS;
-                    }
-                });
-                threads[2] = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        rssObjects = RSSInfoMethod.getOfflineRSSObject(context[0]);
-                        rssLoadSuccess = Config.NET_WORK_GET_SUCCESS;
-                    }
-                });
+                topicInfoList = DataMethod.getOfflineTopicInfo(context[0]);
 
-                for (Thread thread : threads) {
-                    thread.start();
-                }
-                for (Thread thread : threads) {
-                    try {
-                        thread.join();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
+                JwcLoadSuccess = Config.NET_WORK_GET_SUCCESS;
+                alstuLoadSuccess = Config.NET_WORK_GET_SUCCESS;
+                rssLoadSuccess = Config.NET_WORK_GET_SUCCESS;
             } else {
-                Thread[] threads = new Thread[3];
-                threads[0] = new Thread(new Runnable() {
+                Future[] futures = new Future[3];
+                futures[0] = executorService.submit(new Runnable() {
                     @Override
                     public void run() {
                         try {
@@ -119,7 +93,7 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
                         }
                     }
                 });
-                threads[1] = new Thread(new Runnable() {
+                futures[1] = executorService.submit(new Runnable() {
                     @Override
                     public void run() {
                         try {
@@ -139,11 +113,11 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
                         }
                     }
                 });
-                threads[2] = new Thread(new Runnable() {
+                futures[2] = executorService.submit(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            RSSInfoMethod rssInfoMethod = new RSSInfoMethod(context[0]);
+                            RSSInfoMethod rssInfoMethod = new RSSInfoMethod(context[0], executorService);
                             rssLoadSuccess = rssInfoMethod.load();
                             if (rssLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                                 rssObjects = rssInfoMethod.getRSSObject();
@@ -155,17 +129,21 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
                     }
                 });
 
-                for (Thread thread : threads) {
-                    thread.start();
-                }
-                for (Thread thread : threads) {
+                for (Future future : futures) {
                     try {
-                        thread.join();
-                    } catch (InterruptedException e) {
+                        future.get(Config.TASK_RUN_MAX_SECOND, TimeUnit.SECONDS);
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
+                if (loadCode != Config.NET_WORK_ERROR_CODE_CONNECT_ERROR) {
+                    topicInfoList = InfoMethod.combineData(context[0], jwcTopic, alstuTopic, rssObjects);
+                    if (!DataMethod.saveOfflineData(context[0], topicInfoList, InfoMethod.FILE_NAME, true, InfoMethod.IS_ENCRYPT)) {
+                        topicInfoList = null;
+                    }
+                }
             }
+
             if (homeFragment != null) {
                 homeFragment.setLoadTime(++loadTime);
             }
@@ -189,7 +167,7 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
             HomeFragment homeFragment = viewPagerAdapter.getHomeFragment();
             if (homeFragment != null) {
                 if (NetMethod.checkNetWorkCode(context, new int[]{rssLoadSuccess, alstuLoadSuccess, JwcLoadSuccess}, loadCode, true)) {
-                    homeFragment.InfoSet(jwcTopic, alstuTopic, rssObjects);
+                    homeFragment.InfoSet(topicInfoList);
                 }
                 homeFragment.lastViewSet(context);
             }

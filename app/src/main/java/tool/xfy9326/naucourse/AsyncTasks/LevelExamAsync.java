@@ -33,7 +33,7 @@ public class LevelExamAsync extends AsyncTask<Context, Void, Context> {
             }
             if (loadTime == 0) {
                 //首次只加载离线数据
-                levelExam = (LevelExam) DataMethod.getOfflineData(context[0], LevelExam.class, LevelExamMethod.FILE_NAME);
+                levelExam = (LevelExam) DataMethod.getOfflineData(context[0], LevelExam.class, LevelExamMethod.FILE_NAME, LevelExamMethod.IS_ENCRYPT);
                 levelExamLoadSuccess = Config.NET_WORK_GET_SUCCESS;
             } else {
                 LevelExamMethod levelExamMethod = new LevelExamMethod(context[0]);

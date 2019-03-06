@@ -44,8 +44,8 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
                 }
                 if (loadTime == 0) {
                     //首次只加载离线数据
-                    studentInfo = (StudentInfo) DataMethod.getOfflineData(context[0], StudentInfo.class, PersonMethod.FILE_NAME_DATA);
-                    studentLearnProcess = (StudentLearnProcess) DataMethod.getOfflineData(context[0], StudentLearnProcess.class, PersonMethod.FILE_NAME_PROCESS);
+                    studentInfo = (StudentInfo) DataMethod.getOfflineData(context[0], StudentInfo.class, PersonMethod.FILE_NAME_DATA, PersonMethod.IS_DATA_ENCRYPT);
+                    studentLearnProcess = (StudentLearnProcess) DataMethod.getOfflineData(context[0], StudentLearnProcess.class, PersonMethod.FILE_NAME_PROCESS, PersonMethod.IS_PROCESS_ENCRYPT);
                     personLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 } else {
                     PersonMethod personMethod = new PersonMethod(context[0]);
@@ -78,7 +78,7 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
                 if (NetMethod.checkNetWorkCode(context, new int[]{personLoadSuccess}, loadCode, false)) {
                     personFragment.PersonViewSet(studentInfo, studentLearnProcess, context);
                 }
-                personFragment.lastViewSet(context);
+                personFragment.lastViewSet(context, studentInfo == null || studentLearnProcess == null);
             }
         }
         System.gc();

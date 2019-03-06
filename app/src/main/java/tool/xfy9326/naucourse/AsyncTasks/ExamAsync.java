@@ -37,7 +37,7 @@ public class ExamAsync extends AsyncTask<Context, Void, Context> {
             }
             if (loadTime == 0) {
                 //首次只加载离线数据
-                exam = (Exam) DataMethod.getOfflineData(context[0], Exam.class, ExamMethod.FILE_NAME);
+                exam = (Exam) DataMethod.getOfflineData(context[0], Exam.class, ExamMethod.FILE_NAME, ExamMethod.IS_ENCRYPT);
                 examLoadSuccess = Config.NET_WORK_GET_SUCCESS;
             } else {
                 ExamMethod examMethod = new ExamMethod(context[0]);

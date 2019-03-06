@@ -31,6 +31,7 @@ import tool.xfy9326.naucourse.Utils.Exam;
 
 public class ExamMethod {
     public static final String FILE_NAME = "Exam";
+    public static final boolean IS_ENCRYPT = true;
     public static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.CHINA);
     private final Context context;
     @Nullable
@@ -154,7 +155,7 @@ public class ExamMethod {
         exam.setExamLocation(examLocation.toArray(new String[]{}));
         exam.setDataVersionCode(Config.DATA_VERSION_EXAM);
 
-        if (DataMethod.saveOfflineData(context, exam, FILE_NAME, checkTemp)) {
+        if (DataMethod.saveOfflineData(context, exam, FILE_NAME, checkTemp, IS_ENCRYPT)) {
             return exam;
         } else {
             return null;

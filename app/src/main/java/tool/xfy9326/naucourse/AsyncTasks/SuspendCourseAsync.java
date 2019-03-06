@@ -32,7 +32,7 @@ public class SuspendCourseAsync extends AsyncTask<Context, Void, Context> {
             }
             if (loadTime == 0) {
                 //首次只加载离线数据
-                suspendCourse = (SuspendCourse) DataMethod.getOfflineData(context[0], SuspendCourse.class, SuspendCourseMethod.FILE_NAME);
+                suspendCourse = (SuspendCourse) DataMethod.getOfflineData(context[0], SuspendCourse.class, SuspendCourseMethod.FILE_NAME, SuspendCourseMethod.IS_ENCRYPT);
                 loadSuccess = Config.NET_WORK_GET_SUCCESS;
             } else {
                 SuspendCourseMethod suspendCourseMethod = new SuspendCourseMethod(context[0]);

@@ -29,12 +29,15 @@ import tool.xfy9326.naucourse.Methods.InfoMethods.SuspendCourseMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethods.TableMethod;
 import tool.xfy9326.naucourse.Tools.IO;
 import tool.xfy9326.naucourse.Utils.Course;
+import tool.xfy9326.naucourse.Utils.TopicInfo;
 
 /**
  * Created by 10696 on 2018/4/19.
  */
 
 public class DataMethod {
+    private static final String DATA_VERSION_CODE = "dataVersionCode";
+
     /**
      * 获取离线数据
      *
@@ -43,9 +46,9 @@ public class DataMethod {
      * @param FILE_NAME  缓存数据文件名
      * @return JavaBean对象
      */
-    public static Object getOfflineData(Context context, @NonNull Class file_class, String FILE_NAME) {
+    public static Object getOfflineData(Context context, @NonNull Class file_class, String FILE_NAME, boolean needDecrypt) {
         Object object = null;
-        String content = getOfflineData(context, FILE_NAME);
+        String content = getOfflineContent(context, FILE_NAME, needDecrypt);
         if (content != null) {
             if (checkDataVersionCode(content, file_class)) {
                 try {
@@ -58,12 +61,16 @@ public class DataMethod {
         return object;
     }
 
-    public static String getOfflineData(Context context, String FILE_NAME) {
-        String path = getOfflineDataFilePath(context, FILE_NAME);
+    private static String getOfflineContent(Context context, String FILE_NAME, boolean needDecrypt) {
+        String path = getOfflineDataFilePath(context, FILE_NAME, needDecrypt);
         File file = new File(path);
         if (file.exists()) {
             String data = IO.readFile(path);
-            return SecurityMethod.decryptData(context, data);
+            if (needDecrypt) {
+                return SecurityMethod.decryptData(context, data);
+            } else {
+                return data;
+            }
         }
         return null;
     }
@@ -76,9 +83,24 @@ public class DataMethod {
      */
     public static ArrayList<Course> getOfflineTableData(Context context) {
         ArrayList<Course> result = null;
-        String content = getOfflineData(context, TableMethod.FILE_NAME);
+        String content = getOfflineContent(context, TableMethod.FILE_NAME, TableMethod.IS_ENCRYPT);
         if (content != null && !content.isEmpty()) {
             Type type = new TypeToken<ArrayList<Course>>() {
+            }.getType();
+            try {
+                result = new Gson().fromJson(content, type);
+            } catch (JsonSyntaxException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    public static ArrayList<TopicInfo> getOfflineTopicInfo(Context context) {
+        ArrayList<TopicInfo> result = null;
+        String content = getOfflineContent(context, InfoMethod.FILE_NAME, InfoMethod.IS_ENCRYPT);
+        if (content != null && !content.isEmpty()) {
+            Type type = new TypeToken<ArrayList<TopicInfo>>() {
             }.getType();
             try {
                 result = new Gson().fromJson(content, type);
@@ -92,24 +114,27 @@ public class DataMethod {
     /**
      * 保存离线数据
      *
-     * @param context   Context
-     * @param o         JavaBean对象
-     * @param FILE_NAME 储存的文件名
-     * @param checkTemp 是否检测缓存与要储存的数据相同
+     * @param context     Context
+     * @param o           JavaBean对象
+     * @param FILE_NAME   储存的文件名
+     * @param checkTemp   是否检测缓存与要储存的数据相同
+     * @param needEncrypt 需要加密
      * @return 是否保存成功
      */
-    public static boolean saveOfflineData(final Context context, final Object o, final String FILE_NAME, boolean checkTemp) {
+    public static boolean saveOfflineData(final Context context, final Object o, final String FILE_NAME, boolean checkTemp, boolean needEncrypt) {
         if (o == null) {
             return false;
         } else {
-            return saveOfflineData(context, new Gson().toJson(o), FILE_NAME, checkTemp);
+            return saveOfflineContent(context, new Gson().toJson(o), FILE_NAME, checkTemp, needEncrypt);
         }
     }
 
-    @SuppressWarnings("UnusedReturnValue")
-    public static boolean saveOfflineData(final Context context, final String data, final String FILE_NAME, boolean checkTemp) {
-        String path = getOfflineDataFilePath(context, FILE_NAME);
-        String content = SecurityMethod.encryptData(context, data);
+    private static boolean saveOfflineContent(final Context context, final String data, final String FILE_NAME, boolean checkTemp, boolean needEncrypt) {
+        String path = getOfflineDataFilePath(context, FILE_NAME, needEncrypt);
+        String content = data;
+        if (needEncrypt) {
+            content = SecurityMethod.encryptData(context, data);
+        }
         if (checkTemp) {
             String text = IO.readFile(path);
             if (text != null) {
@@ -145,19 +170,6 @@ public class DataMethod {
         return o;
     }
 
-//    public static Object readExtraData(@NonNull Class file_class, String path) {
-//        Object o = null;
-//        String content = IO.readFile(path);
-//        if (content != null) {
-//            try {
-//                o = new Gson().fromJson(content, file_class);
-//            } catch (JsonSyntaxException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        return o;
-//    }
-
     /**
      * 删除离线数据
      *
@@ -165,8 +177,8 @@ public class DataMethod {
      * @param FILE_NAME 离线数据的文件名
      */
     @SuppressWarnings("SameParameterValue")
-    public static void deleteOfflineData(final Context context, final String FILE_NAME) {
-        File file = new File(getOfflineDataFilePath(context, FILE_NAME));
+    public static void deleteOfflineData(final Context context, final String FILE_NAME, boolean isEncrypt) {
+        File file = new File(getOfflineDataFilePath(context, FILE_NAME, isEncrypt));
         if (file.exists()) {
             //noinspection ResultOfMethodCallIgnored
             file.delete();
@@ -220,8 +232,8 @@ public class DataMethod {
         if (nowVersionCode > 0) {
             try {
                 JSONObject jsonObject = new JSONObject(content);
-                if (jsonObject.has("dataVersionCode") && !jsonObject.isNull("dataVersionCode")) {
-                    int dataVersionCode = jsonObject.getInt("dataVersionCode");
+                if (jsonObject.has(DATA_VERSION_CODE) && !jsonObject.isNull(DATA_VERSION_CODE)) {
+                    int dataVersionCode = jsonObject.getInt(DATA_VERSION_CODE);
                     if (dataVersionCode == nowVersionCode) {
                         return true;
                     }
@@ -233,8 +245,8 @@ public class DataMethod {
         return false;
     }
 
-    private static String getOfflineDataFilePath(Context context, String FILE_NAME) {
-        return context.getFilesDir() + File.separator + FILE_NAME + ".txn";
+    private static String getOfflineDataFilePath(Context context, String FILE_NAME, boolean encryptAble) {
+        return context.getFilesDir() + File.separator + FILE_NAME + (encryptAble ? ".txn" : ".tnd");
     }
 
     public static class InfoData {

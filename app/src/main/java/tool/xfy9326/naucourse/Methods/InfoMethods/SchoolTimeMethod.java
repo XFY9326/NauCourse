@@ -27,6 +27,7 @@ import tool.xfy9326.naucourse.Utils.SchoolTime;
 
 public class SchoolTimeMethod {
     public static final String FILE_NAME = "SchoolTime";
+    public static final boolean IS_ENCRYPT = false;
     private final Context context;
     @Nullable
     private Document document;
@@ -78,7 +79,7 @@ public class SchoolTimeMethod {
             }
 
             schoolTime.setDataVersionCode(Config.DATA_VERSION_SCHOOL_TIME);
-            if (DataMethod.saveOfflineData(context, schoolTime, FILE_NAME, false)) {
+            if (DataMethod.saveOfflineData(context, schoolTime, FILE_NAME, false, IS_ENCRYPT)) {
                 return schoolTime;
             }
         }

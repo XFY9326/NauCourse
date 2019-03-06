@@ -14,10 +14,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
-import tool.xfy9326.naucourse.AsyncTasks.TempAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
+import tool.xfy9326.naucourse.Methods.TempMethod;
 import tool.xfy9326.naucourse.Methods.UpdateMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, R.string.login_success, Toast.LENGTH_SHORT).show();
                 Toast.makeText(this, R.string.init_data_loading, Toast.LENGTH_SHORT).show();
                 if (NetMethod.isNetworkConnected(this)) {
-                    new TempAsync().execute(getApplicationContext());
+                    TempMethod.loadAllTemp(getApplicationContext());
                 }
             }
         }

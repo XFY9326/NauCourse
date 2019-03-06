@@ -30,7 +30,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
@@ -375,14 +374,22 @@ public class CourseActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    DataMethod.saveOfflineData(CourseActivity.this, courseArrayList, TableMethod.FILE_NAME, false);
-                    needSave = false;
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.save_success, Snackbar.LENGTH_SHORT).show();
-                        }
-                    });
+                    if (DataMethod.saveOfflineData(CourseActivity.this, courseArrayList, TableMethod.FILE_NAME, false, TableMethod.IS_ENCRYPT)) {
+                        needSave = false;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.save_success, Snackbar.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.save_failed, Snackbar.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
                 }
                 runOnUiThread(new Runnable() {
                     @Override
@@ -564,12 +571,11 @@ public class CourseActivity extends AppCompatActivity {
         final Calendar calendarEnd = Calendar.getInstance(Locale.CHINA);
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
-        final SchoolTime schoolTime = (SchoolTime) DataMethod.getOfflineData(activity, SchoolTime.class, SchoolTimeMethod.FILE_NAME);
+        final SchoolTime schoolTime = (SchoolTime) DataMethod.getOfflineData(activity, SchoolTime.class, SchoolTimeMethod.FILE_NAME, SchoolTimeMethod.IS_ENCRYPT);
         if (schoolTime != null) {
             try {
-                calendarStart.setTime(simpleDateFormat.parse(schoolTime.getStartTime()));
-                calendarEnd.setTime(simpleDateFormat.parse(schoolTime.getEndTime()));
+                calendarStart.setTime(TimeMethod.sdf_ymd.parse(schoolTime.getStartTime()));
+                calendarEnd.setTime(TimeMethod.sdf_ymd.parse(schoolTime.getEndTime()));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -577,14 +583,14 @@ public class CourseActivity extends AppCompatActivity {
 
         if (customStartTermDate != null && customEndTermDate != null) {
             try {
-                calendarStart.setTime(simpleDateFormat.parse(customStartTermDate));
-                calendarEnd.setTime(simpleDateFormat.parse(customEndTermDate));
+                calendarStart.setTime(TimeMethod.sdf_ymd.parse(customStartTermDate));
+                calendarEnd.setTime(TimeMethod.sdf_ymd.parse(customEndTermDate));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         } else {
-            customStartTermDate = simpleDateFormat.format(calendarStart.getTime());
-            customEndTermDate = simpleDateFormat.format(calendarEnd.getTime());
+            customStartTermDate = TimeMethod.sdf_ymd.format(calendarStart.getTime());
+            customEndTermDate = TimeMethod.sdf_ymd.format(calendarEnd.getTime());
         }
 
         LayoutInflater layoutInflater = activity.getLayoutInflater();
@@ -628,9 +634,8 @@ public class CourseActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (customStartTermDate != null && customEndTermDate != null) {
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
                     try {
-                        long termDay = simpleDateFormat.parse(customEndTermDate).getTime() - simpleDateFormat.parse(customStartTermDate).getTime();
+                        long termDay = TimeMethod.sdf_ymd.parse(customEndTermDate).getTime() - TimeMethod.sdf_ymd.parse(customStartTermDate).getTime();
                         if (termDay <= 0 || termDay / (1000 * 60 * 60 * 24) < 30 || termDay / (1000 * 60 * 60 * 24) > (7 * Config.DEFAULT_MAX_WEEK)) {
                             Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.term_set_failed, Snackbar.LENGTH_SHORT).show();
                         } else {

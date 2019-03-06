@@ -16,6 +16,7 @@ import tool.xfy9326.naucourse.Utils.SuspendCourse;
 
 public class SuspendCourseMethod {
     public static final String FILE_NAME = "SuspendCourse";
+    public static final boolean IS_ENCRYPT = false;
     private static final String URL = "http://jwc.nau.edu.cn/SuspendCourseInfo.aspx";
     private final Context context;
     private Document document;
@@ -146,7 +147,7 @@ public class SuspendCourseMethod {
 
             suspendCourse.setDataVersionCode(Config.DATA_VERSION_SUSPEND_COURSE);
 
-            if (DataMethod.saveOfflineData(context, suspendCourse, FILE_NAME, checkTemp)) {
+            if (DataMethod.saveOfflineData(context, suspendCourse, FILE_NAME, checkTemp, IS_ENCRYPT)) {
                 return suspendCourse;
             } else {
                 return null;

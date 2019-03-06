@@ -321,7 +321,7 @@ public class TableFragment extends Fragment {
                     nextCourse.setInVacation(false);
                     homeFragment.setNextCourse(nextCourse);
                 }
-                DataMethod.saveOfflineData(context, nextCourse, NextClassMethod.NEXT_COURSE_FILE_NAME, false);
+                DataMethod.saveOfflineData(context, nextCourse, NextClassMethod.NEXT_COURSE_FILE_NAME, false, NextClassMethod.IS_ENCRYPT);
             }
         }
 
@@ -478,12 +478,12 @@ public class TableFragment extends Fragment {
         }
     }
 
-    public void lastViewSet(Context context) {
+    public void lastViewSet(Context context, boolean mustReload) {
         if (isAdded()) {
             //离线数据加载完成，开始拉取网络数据
             if (loadTime == 1 && NetMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
                 boolean update_day = true;
-                if (sharedPreferences != null) {
+                if (!mustReload && sharedPreferences != null) {
                     if (!sharedPreferences.getBoolean(Config.PREFERENCE_UPDATE_TABLE_EVERY_TIME, Config.DEFAULT_PREFERENCE_UPDATE_TABLE_EVERY_TIME) && sharedPreferences.getBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE, Config.DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE)) {
                         Calendar calendar = Calendar.getInstance(Locale.CHINA);
                         long course_table_load_date = sharedPreferences.getLong(Config.PREFERENCE_COURSE_TABLE_AUTO_LOAD_DATE_TIME, 0);

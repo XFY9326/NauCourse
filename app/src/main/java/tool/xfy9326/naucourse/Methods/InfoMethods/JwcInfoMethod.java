@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
-import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.LoginMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
@@ -137,7 +136,6 @@ public class JwcInfoMethod {
 
         jwcTopic.setTopic_url(url);
         jwcTopic.setDataVersionCode(Config.DATA_VERSION_JWC_TOPIC);
-        DataMethod.saveOfflineData(context, jwcTopic, FILE_NAME, false);
         return jwcTopic;
     }
 
