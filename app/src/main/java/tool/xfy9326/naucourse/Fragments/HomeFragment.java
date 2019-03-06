@@ -319,14 +319,14 @@ public class HomeFragment extends Fragment {
         this.loadTime = loadTime;
     }
 
-    public void InfoSet(@Nullable ArrayList<TopicInfo> topicInfos) {
+    public void InfoSet(@Nullable ArrayList<TopicInfo> topicInfoArrayList) {
         if (isAdded() && recyclerView != null) {
-            if (topicInfos != null && getActivity() != null) {
+            if (topicInfoArrayList != null && getActivity() != null) {
                 if (infoAdapter == null) {
-                    infoAdapter = new InfoAdapter(getActivity(), topicInfos);
+                    infoAdapter = new InfoAdapter(getActivity(), topicInfoArrayList);
                     recyclerView.setAdapter(infoAdapter);
                 } else {
-                    infoAdapter.updateTopic(topicInfos);
+                    infoAdapter.updateTopic(topicInfoArrayList);
                 }
             }
         }

@@ -194,15 +194,15 @@ public class CourseMethod {
             weekNum = 1;
         }
         if (checkSame) {
-            if (weekNum != this.weekNum) {
+            if (weekNum == this.weekNum) {
                 return;
             }
         }
+        List<String> week_day = TimeMethod.getWeekDayArray(context, weekNum, schoolTime.getStartTime());
+        getTable(weekNum, schoolTime.getStartTime());
         if (course_time == null) {
             course_time = TimeMethod.getCourseTimeArray(context);
         }
-        List<String> week_day = TimeMethod.getWeekDayArray(context, weekNum, schoolTime.getStartTime());
-        getTable(weekNum, schoolTime.getStartTime());
         setTableTimeLine(course_time, week_day);
         this.weekNum = weekNum;
     }

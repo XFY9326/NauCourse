@@ -366,7 +366,7 @@ public class TableFragment extends Fragment {
             if (courseMethod == null) {
                 courseMethod = new CourseMethod(context, courses, schoolTime);
             } else {
-                courseMethod.updateTableCourse(courses, schoolTime, isDataReload);
+                courseMethod.updateTableCourse(courses, schoolTime, !isDataReload);
             }
             if (view != null) {
                 ImageView imageView_table_background = view.findViewById(R.id.imageView_table_background);
