@@ -29,7 +29,7 @@ import tool.xfy9326.naucourse.AsyncTasks.InfoDetailAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethod;
-import tool.xfy9326.naucourse.Methods.InfoMethods.AlstuMethod;
+import tool.xfy9326.naucourse.Methods.NetInfoMethods.AlstuMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.TopicInfo;

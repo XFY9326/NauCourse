@@ -8,7 +8,7 @@ import tool.xfy9326.naucourse.Activities.SuspendCourseActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.DataMethod;
-import tool.xfy9326.naucourse.Methods.InfoMethods.SuspendCourseMethod;
+import tool.xfy9326.naucourse.Methods.NetInfoMethods.SuspendCourseMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Utils.SuspendCourse;
 

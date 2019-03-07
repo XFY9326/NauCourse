@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import tool.xfy9326.naucourse.Config;
-import tool.xfy9326.naucourse.Methods.InfoMethods.SchoolTimeMethod;
+import tool.xfy9326.naucourse.Methods.NetInfoMethods.SchoolTimeMethod;
 import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.NextCourse;
 import tool.xfy9326.naucourse.Utils.SchoolTime;

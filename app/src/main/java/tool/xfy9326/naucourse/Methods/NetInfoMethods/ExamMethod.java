@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.Methods.InfoMethods;
+package tool.xfy9326.naucourse.Methods.NetInfoMethods;
 
 import android.content.Context;
 import android.content.SharedPreferences;

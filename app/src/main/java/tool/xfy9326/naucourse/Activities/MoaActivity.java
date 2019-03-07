@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import tool.xfy9326.naucourse.AsyncTasks.MoaAsync;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
-import tool.xfy9326.naucourse.Methods.InfoMethods.MoaMethod;
+import tool.xfy9326.naucourse.Methods.NetInfoMethods.MoaMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Moa;

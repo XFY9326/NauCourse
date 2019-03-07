@@ -11,7 +11,7 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import tool.xfy9326.naucourse.Methods.InfoMethods.ExamMethod;
+import tool.xfy9326.naucourse.Methods.NetInfoMethods.ExamMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Exam;
 

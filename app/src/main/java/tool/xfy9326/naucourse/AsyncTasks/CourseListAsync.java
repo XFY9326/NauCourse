@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import tool.xfy9326.naucourse.Activities.CourseActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
-import tool.xfy9326.naucourse.Methods.InfoMethods.TableMethod;
+import tool.xfy9326.naucourse.Methods.NetInfoMethods.TableMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Utils.Course;
 

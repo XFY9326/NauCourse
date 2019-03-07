@@ -9,7 +9,7 @@ import tool.xfy9326.naucourse.Activities.SchoolCalendarActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.ImageMethod;
-import tool.xfy9326.naucourse.Methods.InfoMethods.SchoolCalendarMethod;
+import tool.xfy9326.naucourse.Methods.NetInfoMethods.SchoolCalendarMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 
 public class SchoolCalendarAsync extends AsyncTask<Context, Void, Context> {

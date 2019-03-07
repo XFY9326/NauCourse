@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import tool.xfy9326.naucourse.Activities.MoaActivity;
-import tool.xfy9326.naucourse.Methods.InfoMethods.MoaMethod;
+import tool.xfy9326.naucourse.Methods.NetInfoMethods.MoaMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Moa;
 

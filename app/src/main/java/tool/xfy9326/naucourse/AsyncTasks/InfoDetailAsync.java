@@ -11,9 +11,9 @@ import tool.xfy9326.naucourse.Activities.InfoDetailActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.InfoMethod;
-import tool.xfy9326.naucourse.Methods.InfoMethods.AlstuMethod;
-import tool.xfy9326.naucourse.Methods.InfoMethods.JwcInfoMethod;
-import tool.xfy9326.naucourse.Methods.InfoMethods.RSSInfoMethod;
+import tool.xfy9326.naucourse.Methods.NetInfoMethods.AlstuMethod;
+import tool.xfy9326.naucourse.Methods.NetInfoMethods.JwcInfoMethod;
+import tool.xfy9326.naucourse.Methods.NetInfoMethods.RSSInfoMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 
 /**

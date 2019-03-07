@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.Methods.InfoMethods;
+package tool.xfy9326.naucourse.Methods.NetInfoMethods;
 
 import android.content.Context;
 
@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
@@ -90,36 +89,30 @@ public class MoaMethod {
                     String report_time = jsonObject.getString("REPORTTIME") + " " + jsonObject.getString("REPORTTIMEF");
                     long report_time_long = simpleDateFormat.parse(report_time).getTime();
                     if (report_time_long > past_date) {
-                        timeLong.add(report_time_long);
-                        id.add(String.valueOf(jsonObject.getInt("ID")));
-                        title.add(jsonObject.getString("TITLE"));
+                        int addPosition = 0;
+                        if (!timeLong.isEmpty()) {
+                            for (; addPosition < timeLong.size(); addPosition++) {
+                                if (report_time_long > timeLong.get(addPosition)) {
+                                    break;
+                                }
+                            }
+                        }
+
+                        timeLong.add(addPosition, report_time_long);
+                        id.add(addPosition, String.valueOf(jsonObject.getInt("ID")));
+                        title.add(addPosition, jsonObject.getString("TITLE"));
 
                         String type_temp = jsonObject.getString("LB");
-                        type.add(type_temp);
+                        type.add(addPosition, type_temp);
 
                         if (type_temp.equalsIgnoreCase(Academic_Report)) {
-                            reporter.add(jsonObject.getString("REPORTER") + " " + jsonObject.getString("REPORTERJOB"));
+                            reporter.add(addPosition, jsonObject.getString("REPORTER") + " " + jsonObject.getString("REPORTERJOB"));
                         } else {
-                            reporter.add(jsonObject.getString("FIELD1"));
+                            reporter.add(addPosition, jsonObject.getString("FIELD1"));
                         }
-                        location.add(jsonObject.getString("REPORTROOMNAME"));
-                        time.add(report_time);
-                        applyUnit.add(jsonObject.getString("APPLYUNIT"));
-                    }
-                }
-
-                for (int i = 0; i < id.size(); i++) {
-                    for (int j = 1; j < id.size() - i; j++) {
-                        if (timeLong.get(j) > timeLong.get(j - 1)) {
-                            Collections.swap(id, j, j - 1);
-                            Collections.swap(time, j, j - 1);
-                            Collections.swap(timeLong, j, j - 1);
-                            Collections.swap(applyUnit, j, j - 1);
-                            Collections.swap(location, j, j - 1);
-                            Collections.swap(title, j, j - 1);
-                            Collections.swap(reporter, j, j - 1);
-                            Collections.swap(type, j, j - 1);
-                        }
+                        location.add(addPosition, jsonObject.getString("REPORTROOMNAME"));
+                        time.add(addPosition, report_time);
+                        applyUnit.add(addPosition, jsonObject.getString("APPLYUNIT"));
                     }
                 }
 

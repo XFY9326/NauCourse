@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Objects;
 
-import tool.xfy9326.naucourse.Methods.InfoMethods.RSSInfoMethod;
+import tool.xfy9326.naucourse.Methods.NetInfoMethods.RSSInfoMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Tools.RSSReader;
 import tool.xfy9326.naucourse.Utils.AlstuTopic;
@@ -123,13 +123,6 @@ public class InfoMethod {
                 public int compare(TopicInfo o1, TopicInfo o2) {
                     if (o1.getDateLong() > 0 && o2.getDateLong() > 0) {
                         return Long.compare(o2.getDateLong(), o1.getDateLong());
-                    }
-                    if (TOPIC_SOURCE_JWC.equals(o1.getType())) {
-                        return 1;
-                    } else if (TOPIC_SOURCE_ALSTU.equals(o1.getType())) {
-                        return 0;
-                    } else if (TOPIC_SOURCE_RSS.equals(o1.getType())) {
-                        return -1;
                     }
                     return 0;
                 }

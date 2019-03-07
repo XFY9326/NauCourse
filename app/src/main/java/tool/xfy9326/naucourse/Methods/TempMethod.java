@@ -5,12 +5,12 @@ import android.content.Context;
 import java.util.concurrent.ExecutorService;
 
 import tool.xfy9326.naucourse.Config;
-import tool.xfy9326.naucourse.Methods.InfoMethods.ExamMethod;
-import tool.xfy9326.naucourse.Methods.InfoMethods.LevelExamMethod;
-import tool.xfy9326.naucourse.Methods.InfoMethods.MoaMethod;
-import tool.xfy9326.naucourse.Methods.InfoMethods.PersonMethod;
-import tool.xfy9326.naucourse.Methods.InfoMethods.ScoreMethod;
-import tool.xfy9326.naucourse.Methods.InfoMethods.SuspendCourseMethod;
+import tool.xfy9326.naucourse.Methods.NetInfoMethods.ExamMethod;
+import tool.xfy9326.naucourse.Methods.NetInfoMethods.LevelExamMethod;
+import tool.xfy9326.naucourse.Methods.NetInfoMethods.MoaMethod;
+import tool.xfy9326.naucourse.Methods.NetInfoMethods.PersonMethod;
+import tool.xfy9326.naucourse.Methods.NetInfoMethods.ScoreMethod;
+import tool.xfy9326.naucourse.Methods.NetInfoMethods.SuspendCourseMethod;
 
 public class TempMethod {
 
