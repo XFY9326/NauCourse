@@ -61,6 +61,7 @@ import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.CourseDetail;
 import tool.xfy9326.naucourse.Utils.NextCourse;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
+import tool.xfy9326.naucourse.Views.NestedHorizontalScrollView;
 import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
 import tool.xfy9326.naucourse.Widget.NextClassWidget;
 
@@ -298,6 +299,9 @@ public class TableFragment extends Fragment {
                 }
 
                 setTableData(schoolTime, isDataReload, hasCustomBackground);
+
+                NestedHorizontalScrollView horizontalScrollView = view.findViewById(R.id.nhScrollView_table);
+                horizontalScrollView.setFitWidthNestedScroll(!sharedPreferences.getBoolean(Config.PREFERENCE_SHOW_WIDE_TABLE, Config.DEFAULT_PREFERENCE_SHOW_WIDE_TABLE));
 
                 updateAllNextCourseView(context);
             }

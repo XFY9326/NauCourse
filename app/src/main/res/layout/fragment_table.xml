@@ -66,11 +66,14 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fillViewport="true"
             android:scrollbars="none">
 
-            <HorizontalScrollView
+            <tool.xfy9326.naucourse.Views.NestedHorizontalScrollView
+                android:id="@+id/nhScrollView_table"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fillViewport="true"
                 android:scrollbars="none">
 
                 <LinearLayout
@@ -88,7 +91,7 @@
 
                 </LinearLayout>
 
-            </HorizontalScrollView>
+            </tool.xfy9326.naucourse.Views.NestedHorizontalScrollView>
 
         </ScrollView>
 

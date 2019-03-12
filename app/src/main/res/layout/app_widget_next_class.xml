@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_app_widget"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="80dp"
     android:background="@drawable/shape_corner_square_light_grey_transparent"
     android:clickable="true"
     android:focusable="true"
@@ -14,7 +14,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="18dp"
+        android:layout_height="20dp"
         android:background="@drawable/shape_corner_square_white_transparent"
         android:gravity="center_vertical"
         android:padding="2dp">
@@ -26,7 +26,7 @@
             android:layout_weight="1"
             android:gravity="center_vertical|start"
             android:text="@string/course_next"
-            android:textColor="@color/colorSecondaryText"
+            android:textColor="@color/grey"
             android:textSize="12sp" />
 
         <TextView
@@ -36,7 +36,7 @@
             android:layout_marginEnd="5dp"
             android:layout_weight="1"
             android:gravity="center_vertical|end"
-            android:textColor="@color/colorSecondaryText"
+            android:textColor="@color/grey"
             android:textSize="12sp" />
 
     </LinearLayout>
@@ -44,7 +44,7 @@
     <TextView
         android:id="@+id/textView_app_widget_noNextClass"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="58dp"
         android:layout_gravity="center_horizontal"
         android:drawableStart="@drawable/ic_rest"
         android:drawablePadding="30dp"
@@ -56,10 +56,9 @@
     <LinearLayout
         android:id="@+id/layout_app_widget_nextClass"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="58dp"
         android:layout_marginStart="6dp"
         android:layout_marginEnd="6dp"
-        android:background="@android:color/transparent"
         android:gravity="center_vertical"
         android:paddingTop="3dp"
         android:paddingBottom="2dp"
@@ -68,15 +67,14 @@
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@android:color/transparent">
+            android:layout_weight="1">
 
             <TextView
                 android:id="@+id/textView_app_widget_nextClass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center|start"
-                android:padding="3dp"
+                android:padding="4dp"
                 android:textColor="@android:color/black"
                 android:textSize="14sp" />
 
@@ -84,7 +82,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:background="@android:color/transparent"
                 android:gravity="center_vertical"
                 android:padding="2dp">
 
@@ -92,7 +89,7 @@
                     android:id="@+id/textView_app_widget_nextLocation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorSecondaryText"
+                    android:textColor="@color/grey"
                     android:textSize="12sp" />
 
                 <TextView
@@ -100,7 +97,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:textColor="@color/colorSecondaryText"
+                    android:textColor="@color/grey"
                     android:textSize="12sp" />
 
             </LinearLayout>
