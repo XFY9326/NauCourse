@@ -24,7 +24,7 @@ public class InfoMethod {
     private static Comparator<TopicInfo> date_comparator;
 
     //设置数据（多来源数据整合）
-    public static ArrayList<TopicInfo> combineData(final Context context, final JwcTopic jwcTopic, final AlstuTopic alstuTopic, final SparseArray<RSSReader.RSSObject> rssObjects) {
+    synchronized public static ArrayList<TopicInfo> combineData(final Context context, final JwcTopic jwcTopic, final AlstuTopic alstuTopic, final SparseArray<RSSReader.RSSObject> rssObjects) {
         ArrayList<TopicInfo> topic_data = new ArrayList<>();
         if (jwcTopic != null) {
             for (int i = 0; i < jwcTopic.getTopic_length(); i++) {
@@ -116,7 +116,7 @@ public class InfoMethod {
         return true;
     }
 
-    private static void sort(ArrayList<TopicInfo> topic_data) {
+    synchronized private static void sort(ArrayList<TopicInfo> topic_data) {
         if (date_comparator == null) {
             date_comparator = new Comparator<TopicInfo>() {
                 @Override

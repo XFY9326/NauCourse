@@ -36,32 +36,36 @@ public class LoginMethod {
      * @return ReLogin状态值
      * @throws Exception 重新登陆时的网络错误
      */
-    synchronized static int reLogin(@NonNull Context context) throws Exception {
+    static int reLogin(@NonNull Context context) throws Exception {
         if (!isTryingReLogin) {
             isTryingReLogin = true;
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-            String id = sharedPreferences.getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
-            String pw = SecurityMethod.getUserPassWord(context);
-            if (!pw.equalsIgnoreCase(Config.DEFAULT_PREFERENCE_USER_PW) && !id.equalsIgnoreCase(Config.DEFAULT_PREFERENCE_USER_ID)) {
-                NauSSOClient nauSSOClient = BaseMethod.getApp(context).getClient();
-                nauSSOClient.jwcLoginOut();
-                Thread.sleep(1000);
-                if (nauSSOClient.login(id, Objects.requireNonNull(pw))) {
-                    nauSSOClient.alstuLogin();
-                    String loginURL = nauSSOClient.getJwcLoginUrl();
-                    if (loginURL != null) {
-                        sharedPreferences.edit().putString(Config.PREFERENCE_LOGIN_URL, loginURL).apply();
-                        isTryingReLogin = false;
-                        return Config.RE_LOGIN_SUCCESS;
-                    }
-                }
-            }
-            sharedPreferences.edit().putBoolean(Config.PREFERENCE_HAS_LOGIN, false).apply();
+            int result = doReLogin(context);
             isTryingReLogin = false;
-            return Config.RE_LOGIN_FAILED;
+            return result;
         } else {
             return Config.RE_LOGIN_TRYING;
         }
+    }
+
+    synchronized private static int doReLogin(@NonNull Context context) throws Exception {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String id = sharedPreferences.getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
+        String pw = SecurityMethod.getUserPassWord(context);
+        if (!pw.equalsIgnoreCase(Config.DEFAULT_PREFERENCE_USER_PW) && !id.equalsIgnoreCase(Config.DEFAULT_PREFERENCE_USER_ID)) {
+            NauSSOClient nauSSOClient = BaseMethod.getApp(context).getClient();
+            nauSSOClient.jwcLoginOut();
+            Thread.sleep(1000);
+            if (nauSSOClient.login(id, Objects.requireNonNull(pw))) {
+                nauSSOClient.alstuLogin();
+                String loginURL = nauSSOClient.getJwcLoginUrl();
+                if (loginURL != null) {
+                    sharedPreferences.edit().putString(Config.PREFERENCE_LOGIN_URL, loginURL).apply();
+                    return Config.RE_LOGIN_SUCCESS;
+                }
+            }
+        }
+        sharedPreferences.edit().putBoolean(Config.PREFERENCE_HAS_LOGIN, false).apply();
+        return Config.RE_LOGIN_FAILED;
     }
 
     /**

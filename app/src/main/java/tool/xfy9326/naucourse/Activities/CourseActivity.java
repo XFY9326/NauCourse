@@ -415,6 +415,9 @@ public class CourseActivity extends AppCompatActivity {
                     if (course != null) {
                         boolean found = false;
                         int i;
+                        if (courseArrayList == null) {
+                            courseArrayList = new ArrayList<>();
+                        }
                         for (i = 0; i < courseArrayList.size() && !found; i++) {
                             if (Objects.requireNonNull(courseArrayList.get(i).getCourseId()).equalsIgnoreCase(course.getCourseId())) {
                                 courseArrayList.set(i, course);
@@ -574,8 +577,8 @@ public class CourseActivity extends AppCompatActivity {
         final SchoolTime schoolTime = (SchoolTime) DataMethod.getOfflineData(activity, SchoolTime.class, SchoolTimeMethod.FILE_NAME, SchoolTimeMethod.IS_ENCRYPT);
         if (schoolTime != null) {
             try {
-                calendarStart.setTime(TimeMethod.sdf_ymd.parse(schoolTime.getStartTime()));
-                calendarEnd.setTime(TimeMethod.sdf_ymd.parse(schoolTime.getEndTime()));
+                calendarStart.setTime(TimeMethod.parseDateSDF(schoolTime.getStartTime()));
+                calendarEnd.setTime(TimeMethod.parseDateSDF(schoolTime.getEndTime()));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -583,14 +586,14 @@ public class CourseActivity extends AppCompatActivity {
 
         if (customStartTermDate != null && customEndTermDate != null) {
             try {
-                calendarStart.setTime(TimeMethod.sdf_ymd.parse(customStartTermDate));
-                calendarEnd.setTime(TimeMethod.sdf_ymd.parse(customEndTermDate));
+                calendarStart.setTime(TimeMethod.parseDateSDF(customStartTermDate));
+                calendarEnd.setTime(TimeMethod.parseDateSDF(customEndTermDate));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         } else {
-            customStartTermDate = TimeMethod.sdf_ymd.format(calendarStart.getTime());
-            customEndTermDate = TimeMethod.sdf_ymd.format(calendarEnd.getTime());
+            customStartTermDate = TimeMethod.formatDateSDF(calendarStart.getTime());
+            customEndTermDate = TimeMethod.formatDateSDF(calendarEnd.getTime());
         }
 
         LayoutInflater layoutInflater = activity.getLayoutInflater();
@@ -635,7 +638,7 @@ public class CourseActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 if (customStartTermDate != null && customEndTermDate != null) {
                     try {
-                        long termDay = TimeMethod.sdf_ymd.parse(customEndTermDate).getTime() - TimeMethod.sdf_ymd.parse(customStartTermDate).getTime();
+                        long termDay = TimeMethod.parseDateSDF(customEndTermDate).getTime() - TimeMethod.parseDateSDF(customStartTermDate).getTime();
                         if (termDay <= 0 || termDay / (1000 * 60 * 60 * 24) < 30 || termDay / (1000 * 60 * 60 * 24) > (7 * Config.DEFAULT_MAX_WEEK)) {
                             Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.term_set_failed, Snackbar.LENGTH_SHORT).show();
                         } else {

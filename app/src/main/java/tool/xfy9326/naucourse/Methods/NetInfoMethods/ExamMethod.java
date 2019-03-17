@@ -10,9 +10,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Objects;
 
 import androidx.annotation.Nullable;
@@ -21,6 +19,7 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.LoginMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
+import tool.xfy9326.naucourse.Methods.TimeMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Exam;
 
@@ -32,7 +31,6 @@ import tool.xfy9326.naucourse.Utils.Exam;
 public class ExamMethod {
     public static final String FILE_NAME = "Exam";
     public static final boolean IS_ENCRYPT = true;
-    public static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.CHINA);
     private final Context context;
     @Nullable
     private Document document;
@@ -110,7 +108,7 @@ public class ExamMethod {
                             if (str.contains("-") && str.contains(" ")) {
                                 str = str.substring(0, str.indexOf(" ") + 1) + str.substring(str.indexOf("-") + 1);
                                 try {
-                                    examEnd = simpleDateFormat.parse(str).getTime() / 1000L;
+                                    examEnd = TimeMethod.parseDateSDFHM(str).getTime() / 1000L;
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                     examEnd = -1;

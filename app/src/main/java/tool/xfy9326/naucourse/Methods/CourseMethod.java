@@ -332,7 +332,7 @@ public class CourseMethod {
     //获取开学是周几
     private int getStartSchoolWeekDay(String startSchoolDate) {
         try {
-            Date date = TimeMethod.sdf_ymd.parse(startSchoolDate);
+            Date date = TimeMethod.parseDateSDF(startSchoolDate);
             Calendar calendar = Calendar.getInstance(Locale.CHINA);
             calendar.setTime(date);
             if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {

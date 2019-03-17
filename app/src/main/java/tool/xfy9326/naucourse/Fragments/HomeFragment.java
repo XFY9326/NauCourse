@@ -162,7 +162,7 @@ public class HomeFragment extends Fragment {
             }
 
             TextView textView_dateNow = view.findViewById(R.id.textView_dateNow);
-            textView_dateNow.setText(TimeMethod.sdf_ymd.format(new Date()));
+            textView_dateNow.setText(TimeMethod.formatDateSDF(new Date()));
 
             loadTempNextCourse();
 

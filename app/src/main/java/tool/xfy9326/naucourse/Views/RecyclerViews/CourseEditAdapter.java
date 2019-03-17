@@ -321,8 +321,14 @@ public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.Co
                         if (start.isEmpty() || end.isEmpty()) {
                             Toast.makeText(activity, R.string.input_less, Toast.LENGTH_SHORT).show();
                         } else {
-                            int startInt = Integer.valueOf(start);
-                            int endInt = Integer.valueOf(end);
+                            int startInt = 0;
+                            int endInt = 0;
+                            try {
+                                startInt = Integer.valueOf(start);
+                                endInt = Integer.valueOf(end);
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+                            }
                             if (startInt >= endInt || startInt <= 0 || isWeekNumber && endInt > Config.DEFAULT_MAX_WEEK || (!isWeekNumber && endInt > Config.MAX_DAY_COURSE)) {
                                 Toast.makeText(activity, R.string.input_error, Toast.LENGTH_SHORT).show();
                             } else {

@@ -46,11 +46,11 @@
         android:layout_width="wrap_content"
         android:layout_height="58dp"
         android:layout_gravity="center_horizontal"
-        android:drawableStart="@drawable/ic_rest"
+        android:drawableStart="@drawable/ic_rest_dark"
         android:drawablePadding="30dp"
         android:gravity="center"
         android:text="@string/in_vacation"
-        android:textColor="@color/colorSecondaryText"
+        android:textColor="@color/grey"
         android:textSize="12sp" />
 
     <LinearLayout

@@ -37,7 +37,7 @@ public class NextClassWidget extends AppWidgetProvider {
     synchronized private static RemoteViews ViewGet(Context context) {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.app_widget_next_class);
 
-        remoteViews.setTextViewText(R.id.textView_app_widget_dateNow, TimeMethod.sdf_ymd.format(new Date()));
+        remoteViews.setTextViewText(R.id.textView_app_widget_dateNow, TimeMethod.formatDateSDF(new Date()));
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_ON_CLICK, new Intent(context, NextClassWidget.class).setAction(ACTION_ON_CLICK), PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.layout_app_widget, pendingIntent);

@@ -20,6 +20,7 @@ import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Methods.TempMethod;
 import tool.xfy9326.naucourse.Methods.UpdateMethod;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.Views.FixedViewPager;
 import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
 
 /**
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private final static String CURRENT_FRAGMENT_INDEX = "CURRENT_FRAGMENT_INDEX";
     private SharedPreferences sharedPreferences = null;
     private ViewPagerAdapter viewPagerAdapter = null;
-    private ViewPager viewPager = null;
+    private FixedViewPager viewPager = null;
     private boolean hasLogin = false;
 
     @Override

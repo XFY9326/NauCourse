@@ -5,7 +5,6 @@ import android.content.Context;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,6 +13,7 @@ import java.util.Locale;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
+import tool.xfy9326.naucourse.Methods.TimeMethod;
 import tool.xfy9326.naucourse.Utils.Moa;
 
 public class MoaMethod {
@@ -22,7 +22,6 @@ public class MoaMethod {
     public static final String Academic_Report = "xsbg";
     public static final int MOA_PAST_SHOW_MONTH = 2;
     private static final String URL = "http://moa.nau.edu.cn:8080/OAMobile/xsdt/xsdt/tj";
-    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
     private final Context context;
     private String Url_Data;
 
@@ -87,7 +86,7 @@ public class MoaMethod {
                     JSONObject jsonObject = (JSONObject) jsonArray.get(i);
 
                     String report_time = jsonObject.getString("REPORTTIME") + " " + jsonObject.getString("REPORTTIMEF");
-                    long report_time_long = simpleDateFormat.parse(report_time).getTime();
+                    long report_time_long = TimeMethod.parseDateSDFHM2(report_time).getTime();
                     if (report_time_long > past_date) {
                         int addPosition = 0;
                         if (!timeLong.isEmpty()) {

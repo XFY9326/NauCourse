@@ -26,25 +26,29 @@ public class MainHandler extends Handler {
 
     @Override
     public void handleMessage(@NonNull Message msg) {
-        switch (msg.what) {
-            case Config.HANDLER_RELOAD_TABLE:
-                ViewPagerAdapter viewPagerAdapter = baseApplicationWeakReference.get().getViewPagerAdapter();
-                if (viewPagerAdapter != null) {
-                    TableFragment tableFragment = viewPagerAdapter.getTableFragment();
-                    if (tableFragment != null) {
-                        tableFragment.reloadTable(false);
+        try {
+            switch (msg.what) {
+                case Config.HANDLER_RELOAD_TABLE:
+                    ViewPagerAdapter viewPagerAdapter = baseApplicationWeakReference.get().getViewPagerAdapter();
+                    if (viewPagerAdapter != null) {
+                        TableFragment tableFragment = viewPagerAdapter.getTableFragment();
+                        if (tableFragment != null) {
+                            tableFragment.reloadTable(false);
+                        }
                     }
-                }
-                break;
-            case Config.HANDLER_RELOAD_TABLE_DATA:
-                viewPagerAdapter = baseApplicationWeakReference.get().getViewPagerAdapter();
-                if (viewPagerAdapter != null) {
-                    TableFragment tableFragment = viewPagerAdapter.getTableFragment();
-                    if (tableFragment != null) {
-                        tableFragment.reloadTable(true);
+                    break;
+                case Config.HANDLER_RELOAD_TABLE_DATA:
+                    viewPagerAdapter = baseApplicationWeakReference.get().getViewPagerAdapter();
+                    if (viewPagerAdapter != null) {
+                        TableFragment tableFragment = viewPagerAdapter.getTableFragment();
+                        if (tableFragment != null) {
+                            tableFragment.reloadTable(true);
+                        }
                     }
-                }
-                break;
+                    break;
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
         super.handleMessage(msg);
     }

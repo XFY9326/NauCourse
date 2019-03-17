@@ -11,7 +11,7 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import tool.xfy9326.naucourse.Methods.NetInfoMethods.ExamMethod;
+import tool.xfy9326.naucourse.Methods.TimeMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Exam;
 
@@ -45,7 +45,7 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ExamViewHolder
                 if (time.contains("-")) {
                     time = time.substring(0, time.indexOf("-"));
                     try {
-                        long examTime = ExamMethod.simpleDateFormat.parse(time).getTime() / 1000L;
+                        long examTime = TimeMethod.parseDateSDFHM(time).getTime() / 1000L;
                         if (examTime > now) {
                             long day = (examTime - now) / (3600 * 24);
                             if (day > 0) {
