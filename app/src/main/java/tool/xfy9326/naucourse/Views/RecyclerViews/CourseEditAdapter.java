@@ -31,13 +31,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import tool.xfy9326.naucourse.Activities.CourseEditActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.CourseEditMethod;
+import tool.xfy9326.naucourse.Methods.TimeMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.CourseDetail;
 
 public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.CourseEditViewHolder> {
     private final CourseEditActivity activity;
     private ArrayList<CourseDetail> courseDetails;
-    private String[] weekArray;
 
     public CourseEditAdapter(CourseEditActivity activity, ArrayList<CourseDetail> courseDetails) {
         this.activity = activity;
@@ -51,7 +51,7 @@ public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.Co
     @Override
     public void onBindViewHolder(@NonNull final CourseEditViewHolder holder, int position) {
         //设置初始化的布局
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, getWeekArray());
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, TimeMethod.getWeekStrArray(activity));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         holder.spinner_course_edit_week.setAdapter(adapter);
 
@@ -196,22 +196,6 @@ public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.Co
         LayoutInflater inflater = LayoutInflater.from(activity);
         View view = inflater.inflate(R.layout.item_course_time_edit, parent, false);
         return new CourseEditViewHolder(view);
-    }
-
-    /**
-     * 获取一个星期的数组
-     *
-     * @return 星期显示数组
-     */
-    private String[] getWeekArray() {
-        if (weekArray == null) {
-            weekArray = new String[Config.MAX_WEEK_DAY];
-            String[] num = activity.getResources().getStringArray(R.array.week_number);
-            for (int i = 0; i < Config.MAX_WEEK_DAY; i++) {
-                weekArray[i] = activity.getString(R.string.week_day, num[i]);
-            }
-        }
-        return weekArray;
     }
 
     //编辑上课地点

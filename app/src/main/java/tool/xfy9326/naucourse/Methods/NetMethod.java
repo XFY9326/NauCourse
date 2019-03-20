@@ -10,12 +10,14 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -40,13 +42,61 @@ public class NetMethod {
     public static String loadUrl(@NonNull String url) throws IOException {
         OkHttpClient.Builder client_builder = new OkHttpClient.Builder();
         OkHttpClient client = client_builder.build();
+        return loadUrl(client, url, null);
+    }
+
+    public static String loadUrl(OkHttpClient client, @NonNull String url, HashMap<String, String> header) throws IOException {
         Request.Builder request_builder = new Request.Builder();
         request_builder.url(url);
+        if (header != null) {
+            for (String key : header.keySet()) {
+                String value = header.get(key);
+                request_builder.header(key, value == null ? "" : value);
+            }
+        }
         Response response = client.newCall(request_builder.build()).execute();
         if (response.isSuccessful()) {
             ResponseBody responseBody = response.body();
             if (responseBody != null) {
                 String result = responseBody.string();
+                responseBody.close();
+                response.close();
+                return result;
+            }
+        }
+        response.close();
+        return null;
+    }
+
+    /**
+     * POST一个网页
+     *
+     * @param client Client
+     * @param url    网页URL
+     * @param form   POST Form
+     * @param header Header
+     * @return 页面内容
+     * @throws IOException 网页获取错误
+     */
+    public static String postUrl(@NonNull OkHttpClient client, @NonNull String url, @NonNull HashMap<String, String> form, @NonNull HashMap<String, String> header) throws IOException {
+        FormBody.Builder form_builder = new FormBody.Builder();
+        for (String key : form.keySet()) {
+            String value = form.get(key);
+            form_builder.add(key, value == null ? "" : value);
+        }
+        Request.Builder request_builder = new Request.Builder();
+        request_builder.url(url);
+        request_builder.post(form_builder.build());
+        for (String key : header.keySet()) {
+            String value = header.get(key);
+            request_builder.header(key, value == null ? "" : value);
+        }
+        Response response = client.newCall(request_builder.build()).execute();
+        if (response.isSuccessful()) {
+            ResponseBody responseBody = response.body();
+            if (responseBody != null) {
+                String result = responseBody.string();
+                responseBody.close();
                 response.close();
                 return result;
             }

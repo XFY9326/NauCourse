@@ -367,7 +367,7 @@ public class CourseActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             if (checkName != null && conflictName != null) {
-                                Snackbar.make(findViewById(R.id.layout_course_manage_content), getString(R.string.course_edit_error_conflict, checkName, conflictName), Snackbar.LENGTH_SHORT).show();
+                                Snackbar.make(findViewById(R.id.layout_course_manage_content), getString(R.string.course_edit_error_conflict, checkName, conflictName), Snackbar.LENGTH_LONG).show();
                             } else {
                                 Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.course_edit_error, Snackbar.LENGTH_SHORT).show();
                             }
@@ -546,7 +546,7 @@ public class CourseActivity extends AppCompatActivity {
                 courses_choose.add(courses.get(i));
             }
         }
-        ArrayList<Course> list = CourseEditMethod.combineCourseList(courses_choose, courseArrayList, termCheck);
+        ArrayList<Course> list = CourseEditMethod.combineCourseList(courses_choose, courseArrayList, termCheck, false);
         if (list != null) {
             courseArrayList.clear();
             courseArrayList.addAll(list);

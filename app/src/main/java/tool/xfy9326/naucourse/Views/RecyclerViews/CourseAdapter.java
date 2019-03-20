@@ -68,7 +68,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
             @Override
             public void onClick(View v) {
                 if (sharedPreferences.getBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE, Config.DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE)) {
-                    if (course.getCourseId() != null && !course.getCourseId().contains(Config.CUSTOM_COURSE_PREFIX)) {
+                    if (course.getCourseId() != null && !course.getCourseId().contains(Config.CUSTOM_COURSE_PREFIX) && !course.getCourseId().contains(Config.SEARCH_COURSE_PREFIX)) {
                         autoUpdateCourseAlert();
                         return;
                     }

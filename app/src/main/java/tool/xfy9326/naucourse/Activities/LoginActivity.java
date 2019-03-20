@@ -82,6 +82,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 editText_userId.clearFocus();
                 editText_userPw.clearFocus();
+                BaseMethod.hideKeyBoard(LoginActivity.this);
                 if (NetMethod.isNetworkConnected(LoginActivity.this)) {
                     final String id = editText_userId.getText().toString().trim();
                     final String pw = editText_userPw.getText().toString().trim();

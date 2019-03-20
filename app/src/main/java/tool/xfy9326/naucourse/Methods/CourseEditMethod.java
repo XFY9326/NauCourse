@@ -1,13 +1,47 @@
 package tool.xfy9326.naucourse.Methods;
 
+import android.content.Context;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.Methods.NetInfoMethods.CourseSearchMethod;
+import tool.xfy9326.naucourse.Methods.NetInfoMethods.TableMethod;
 import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.CourseDetail;
+import tool.xfy9326.naucourse.Utils.CourseSearchDetail;
 
 public class CourseEditMethod {
+
+    /**
+     * 添加并保存搜索到的课程
+     *
+     * @param context            Context
+     * @param termCheck          新学期的课程强制替换(以最新的学期为准，课表中只会存在一种学期的课程)
+     * @param courseSearchDetail 搜索课程的信息
+     * @return 添加结果
+     */
+    public static AddSearchCourseResult addSearchCourse(Context context, boolean termCheck, CourseSearchDetail courseSearchDetail) {
+        AddSearchCourseResult addSearchCourseResult = new AddSearchCourseResult();
+        ArrayList<Course> courseSearchArrayList = new ArrayList<>();
+        courseSearchArrayList.add(CourseSearchMethod.convertToCourse(context, courseSearchDetail));
+        ArrayList<Course> courseArrayList = DataMethod.getOfflineTableData(context);
+        if (courseArrayList == null) {
+            courseArrayList = new ArrayList<>();
+        }
+        courseArrayList = combineCourseList(courseSearchArrayList, courseArrayList, termCheck, true);
+        CourseCheckResult courseCheckResult = checkCourseList(courseArrayList);
+
+        if (!courseCheckResult.isHasError()) {
+            addSearchCourseResult.setSaveSuccess(DataMethod.saveOfflineData(context, courseArrayList, TableMethod.FILE_NAME, false, TableMethod.IS_ENCRYPT));
+        }
+        addSearchCourseResult.setCourseCheckResult(courseCheckResult);
+        addSearchCourseResult.setAddSuccess(!courseCheckResult.isHasError());
+
+        return addSearchCourseResult;
+    }
 
     /**
      * 课程信息列表按照ID拼接
@@ -15,9 +49,10 @@ public class CourseEditMethod {
      * @param combineCourses   需要并入的课表
      * @param combineToCourses 原课表
      * @param termCheck        新学期的课程强制替换(以最新的学期为准，课表中只会存在一种学期的课程)
+     * @param combineDetail    是否合并课程时间等信息
      * @return 课程信息列表
      */
-    public static ArrayList<Course> combineCourseList(ArrayList<Course> combineCourses, ArrayList<Course> combineToCourses, boolean termCheck) {
+    public static ArrayList<Course> combineCourseList(ArrayList<Course> combineCourses, ArrayList<Course> combineToCourses, boolean termCheck, boolean combineDetail) {
         long newTerm = 0;
         if (termCheck) {
             //获取最新的学期
@@ -52,6 +87,18 @@ public class CourseEditMethod {
                     String id = course.getCourseId();
                     if (id != null && id.equalsIgnoreCase(result.get(i).getCourseId())) {
                         course.setCourseColor(result.get(i).getCourseColor());
+                        if (combineDetail) {
+                            CourseDetail[] resultCourseDetail = result.get(i).getCourseDetail();
+                            if (resultCourseDetail != null) {
+                                if (course.getCourseDetail() != null) {
+                                    ArrayList<CourseDetail> courseDetails = new ArrayList<>(Arrays.asList(course.getCourseDetail()));
+                                    courseDetails.addAll(Arrays.asList(resultCourseDetail));
+                                    course.setCourseDetail(courseDetails.toArray(new CourseDetail[]{}));
+                                } else {
+                                    course.setCourseDetail(result.get(i).getCourseDetail());
+                                }
+                            }
+                        }
                         result.set(i, course);
                         found = true;
                     }
@@ -199,6 +246,41 @@ public class CourseEditMethod {
      */
     private static boolean checkWeekDay(int check, int find) {
         return check != find;
+    }
+
+    public static class AddSearchCourseResult {
+        private CourseCheckResult courseCheckResult;
+        private boolean saveSuccess;
+        private boolean addSuccess;
+
+        AddSearchCourseResult() {
+            this.saveSuccess = false;
+            this.addSuccess = false;
+        }
+
+        public CourseCheckResult getCourseCheckResult() {
+            return courseCheckResult;
+        }
+
+        void setCourseCheckResult(CourseCheckResult courseCheckResult) {
+            this.courseCheckResult = courseCheckResult;
+        }
+
+        public boolean isSaveSuccess() {
+            return saveSuccess;
+        }
+
+        void setSaveSuccess(boolean saveSuccess) {
+            this.saveSuccess = saveSuccess;
+        }
+
+        public boolean isAddSuccess() {
+            return addSuccess;
+        }
+
+        void setAddSuccess(boolean addSuccess) {
+            this.addSuccess = addSuccess;
+        }
     }
 
     public static class CourseCheckResult {

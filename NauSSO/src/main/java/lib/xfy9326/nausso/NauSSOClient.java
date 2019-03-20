@@ -137,6 +137,7 @@ public class NauSSOClient {
                     } else {
                         loginErrorCode = LOGIN_SUCCESS;
                         loginUrl = response.request().url().query();
+                        response.close();
                         return true;
                     }
                 } else {
@@ -165,6 +166,7 @@ public class NauSSOClient {
             ResponseBody responseBody = response.body();
             if (responseBody != null) {
                 String result = responseBody.string();
+                responseBody.close();
                 response.close();
                 return result;
             }

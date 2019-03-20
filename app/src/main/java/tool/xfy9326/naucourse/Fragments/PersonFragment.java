@@ -24,6 +24,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import tool.xfy9326.naucourse.Activities.AboutActivity;
+import tool.xfy9326.naucourse.Activities.CourseSearchActivity;
 import tool.xfy9326.naucourse.Activities.CourseSettingsActivity;
 import tool.xfy9326.naucourse.Activities.ExamActivity;
 import tool.xfy9326.naucourse.Activities.GlobalSettingsActivity;
@@ -153,7 +154,7 @@ public class PersonFragment extends Fragment {
             CardView cardView_suspend_course = view.findViewById(R.id.cardView_suspend_course);
             CardView cardView_moa = view.findViewById(R.id.cardView_moa);
 
-            CardView cardView_jw_link = view.findViewById(R.id.cardView_jw_link);
+            CardView cardView_course_search = view.findViewById(R.id.cardView_course_search);
             CardView cardView_alstu_link = view.findViewById(R.id.cardView_alstu_link);
 
             cardView_suspend_course.setOnClickListener(new View.OnClickListener() {
@@ -273,11 +274,13 @@ public class PersonFragment extends Fragment {
                     }
                 }
             });
-            cardView_jw_link.setOnClickListener(new View.OnClickListener() {
+            cardView_course_search.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (getActivity() != null && isAdded()) {
-                        NetMethod.viewUrlInBrowser(getActivity(), "http://jwc.nau.edu.cn/Students/default.aspx");
+                        Intent intent = new Intent(getActivity(), CourseSearchActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getActivity().startActivity(intent);
                     }
                 }
             });

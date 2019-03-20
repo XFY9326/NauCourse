@@ -150,7 +150,7 @@
     <string name="import_course_from_jwc_current">从教务系统导入本学期课程</string>
     <string name="import_course_from_jwc_next">从教务系统导入下学期课程</string>
     <string name="create_new_course">新建一个课程</string>
-    <string name="course_edit_error_conflict">当前%1$s与%2$s课程存在冲突！</string>
+    <string name="course_edit_error_conflict">当前&#160;%1$s&#160;与&#160;%2$s&#160;课程存在冲突！</string>
     <string name="course_edit_error">当前课程时间设置存在问题！</string>
     <string name="course_edit_name">课程名</string>
     <string name="course_edit_teacher">教师</string>
@@ -304,6 +304,19 @@
     <string name="school_calendar_share_error">校历分享失败！</string>
     <string name="share_school_calendar">分享校历</string>
     <string name="save_failed">保存失败</string>
+    <string name="course_search">课程搜索</string>
+    <string name="course_search_college">开课学院：%1$s</string>
+    <string name="course_search_time">上课时间：%1$s</string>
+    <string name="course_search_person">上课人数：%1$d</string>
+    <string name="import_course">导入该课程</string>
+    <string name="search_type">检索类型：</string>
+    <string name="search">搜索</string>
+    <string name="search_empty">搜索值为空！</string>
+    <string name="search_value_error">搜索值错误！</string>
+    <string name="search_other_value">其他搜索：</string>
+    <string name="search_use_full_name_warning">请使用完整名称进行该类型的搜索！</string>
+    <string name="search_no_result">搜索结果为空！</string>
+    <string name="import_success">导入成功！</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>

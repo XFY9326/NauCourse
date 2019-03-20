@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_dialog_course_search_detail"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="3dp"
+        app:cardPreventCornerOverlap="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/shape_corner_square_light_grey"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/textView_course_search_detail_teacher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="@string/course_card_teacher"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView_course_search_detail_score"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="@string/course_card_score"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView_course_search_detail_class"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="@string/course_card_class"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView_course_search_detail_combined_class"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="@string/course_card_combined_class"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView_course_search_detail_college"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="@string/course_search_college"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView_course_search_detail_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="@string/course_card_location"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView_course_search_detail_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="@string/course_search_time"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView_course_search_detail_person"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="@string/course_search_person"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

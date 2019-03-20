@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import java.util.regex.Pattern;
@@ -136,5 +137,15 @@ public class BaseMethod {
         builder.setOnCancelListener(cancelListener);
         builder.setView(view);
         return builder.show();
+    }
+
+    public static void hideKeyBoard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (inputMethodManager != null) {
+            View view = activity.getCurrentFocus();
+            if (view != null) {
+                inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }
     }
 }

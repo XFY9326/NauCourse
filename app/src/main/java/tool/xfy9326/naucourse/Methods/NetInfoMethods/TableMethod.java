@@ -39,6 +39,14 @@ public class TableMethod {
         this.document = null;
     }
 
+    static int getRandomColor(Context context) {
+        //颜色随机
+        int[] colorList = BaseMethod.getColorArray(context);
+        Random random = new Random();
+        int num = random.nextInt(colorList.length) % (colorList.length + 1);
+        return colorList[num];
+    }
+
     public int load() throws Exception {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
@@ -160,11 +168,8 @@ public class TableMethod {
 
                 course.setCourseDetail(courseDetail_list);
 
-                //颜色随机
-                int[] colorList = BaseMethod.getColorArray(context);
-                Random random = new Random();
-                int num = random.nextInt(colorList.length) % (colorList.length + 1);
-                course.setCourseColor(colorList[num]);
+
+                course.setCourseColor(getRandomColor(context));
 
                 courseList.add(course);
             }

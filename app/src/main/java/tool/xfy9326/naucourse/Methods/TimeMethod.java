@@ -27,6 +27,7 @@ public class TimeMethod {
     private static final SimpleDateFormat sdf_ymd = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
     private static final SimpleDateFormat sdf_ymd_hm = new SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.CHINA);
     private static final SimpleDateFormat sdf_ymd_hm2 = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
+    private static String[] weekArray = null;
 
     public static synchronized Date parseDateSDFHM2(String str) throws ParseException {
         return sdf_ymd_hm2.parse(str);
@@ -300,5 +301,22 @@ public class TimeMethod {
             day.add(time[i - 1] + "\n" + i);
         }
         return day;
+    }
+
+    /**
+     * 获取一个星期的数组
+     *
+     * @param context Context
+     * @return 星期显示数组
+     */
+    public static String[] getWeekStrArray(Context context) {
+        if (weekArray == null) {
+            weekArray = new String[Config.MAX_WEEK_DAY];
+            String[] num = context.getResources().getStringArray(R.array.week_number);
+            for (int i = 0; i < Config.MAX_WEEK_DAY; i++) {
+                weekArray[i] = context.getString(R.string.week_day, num[i]);
+            }
+        }
+        return weekArray;
     }
 }
