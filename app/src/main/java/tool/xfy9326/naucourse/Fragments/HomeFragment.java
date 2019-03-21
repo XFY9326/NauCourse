@@ -34,7 +34,7 @@ import tool.xfy9326.naucourse.Methods.TimeMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.NextCourse;
 import tool.xfy9326.naucourse.Utils.TopicInfo;
-import tool.xfy9326.naucourse.Views.RecyclerViews.InfoAdapter;
+import tool.xfy9326.naucourse.Views.RecyclerAdapters.InfoAdapter;
 import tool.xfy9326.naucourse.Widget.NextClassWidget;
 
 /**

@@ -62,7 +62,7 @@ import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Tools.URI;
 import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.SchoolTime;
-import tool.xfy9326.naucourse.Views.RecyclerViews.CourseAdapter;
+import tool.xfy9326.naucourse.Views.RecyclerAdapters.CourseAdapter;
 
 public class CourseActivity extends AppCompatActivity {
     public static final int COURSE_EDIT_REQUEST_CODE = 1;

@@ -24,7 +24,7 @@ import tool.xfy9326.naucourse.Methods.NetInfoMethods.MoaMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Moa;
-import tool.xfy9326.naucourse.Views.RecyclerViews.MoaAdapter;
+import tool.xfy9326.naucourse.Views.RecyclerAdapters.MoaAdapter;
 
 public class MoaActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout = null;

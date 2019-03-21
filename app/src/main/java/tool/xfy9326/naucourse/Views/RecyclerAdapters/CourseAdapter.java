@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.Views.RecyclerViews;
+package tool.xfy9326.naucourse.Views.RecyclerAdapters;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;

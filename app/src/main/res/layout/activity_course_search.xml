@@ -121,13 +121,28 @@
 
         </androidx.cardview.widget.CardView>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView_course_search"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="1dp"
-            android:paddingTop="5dp"
-            android:paddingRight="1dp" />
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <tool.xfy9326.naucourse.Views.AdvancedRecyclerView
+                android:id="@+id/recyclerView_course_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="1dp"
+                android:paddingTop="5dp"
+                android:paddingRight="1dp" />
+
+            <TextView
+                android:id="@+id/textView_empty_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/empty_data"
+                android:visibility="gone" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

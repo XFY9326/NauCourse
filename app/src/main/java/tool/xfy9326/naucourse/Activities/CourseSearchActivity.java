@@ -21,7 +21,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import tool.xfy9326.naucourse.AsyncTasks.CourseSearchAsync;
 import tool.xfy9326.naucourse.AsyncTasks.CourseSearchClassNameAsync;
 import tool.xfy9326.naucourse.AsyncTasks.CourseSearchInfoAsync;
@@ -33,7 +32,8 @@ import tool.xfy9326.naucourse.Methods.TimeMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.CourseSearchDetail;
 import tool.xfy9326.naucourse.Utils.CourseSearchInfo;
-import tool.xfy9326.naucourse.Views.RecyclerViews.CourseSearchAdapter;
+import tool.xfy9326.naucourse.Views.AdvancedRecyclerView;
+import tool.xfy9326.naucourse.Views.RecyclerAdapters.CourseSearchAdapter;
 
 public class CourseSearchActivity extends AppCompatActivity {
     private CourseSearchMethod courseSearchMethod;
@@ -47,7 +47,7 @@ public class CourseSearchActivity extends AppCompatActivity {
     private boolean hasTableUpdate = false;
     private ArrayAdapter<String> value_adapter = null;
     private List<String> termList;
-    private RecyclerView recyclerView;
+    private AdvancedRecyclerView recyclerView;
     private String lastSelectClassName = null;
 
     @Override
@@ -77,6 +77,7 @@ public class CourseSearchActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerView_course_search);
         recyclerView.setFocusableInTouchMode(false);
+        recyclerView.setEmptyView(findViewById(R.id.textView_empty_data));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         courseSearchAdapter = new CourseSearchAdapter(this);

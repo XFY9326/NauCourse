@@ -24,7 +24,7 @@ import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Exam;
-import tool.xfy9326.naucourse.Views.RecyclerViews.ExamAdapter;
+import tool.xfy9326.naucourse.Views.RecyclerAdapters.ExamAdapter;
 
 /**
  * Created by 10696 on 2018/3/3.

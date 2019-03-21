@@ -87,6 +87,7 @@ public class API {
                     ResponseBody responseBody = response.body();
                     if (responseBody != null) {
                         String body = responseBody.string();
+                        responseBody.close();
                         response.close();
                         try {
                             JSONObject responseJson = new JSONObject(body);
