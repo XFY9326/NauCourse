@@ -48,6 +48,7 @@ public class CourseSearchActivity extends AppCompatActivity {
     private ArrayAdapter<String> value_adapter = null;
     private List<String> termList;
     private RecyclerView recyclerView;
+    private String lastSelectClassName = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,7 +85,7 @@ public class CourseSearchActivity extends AppCompatActivity {
         getBaseSearchData();
     }
 
-    public void closeLoadingDialog() {
+    synchronized public void closeLoadingDialog() {
         if (loadingDialog != null) {
             if (loadingDialog.isShowing()) {
                 loadingDialog.cancel();
@@ -124,7 +125,7 @@ public class CourseSearchActivity extends AppCompatActivity {
         new CourseSearchClassNameAsync().execute(courseSearchMethod, term, getApplicationContext());
     }
 
-    public void setBaseSearchView(final LinkedHashMap<String, String> searchTypeList, final List<String> termList, final List<String> roomList, final List<String> deptList) {
+    synchronized public void setBaseSearchView(final LinkedHashMap<String, String> searchTypeList, final List<String> termList, final List<String> roomList, final List<String> deptList) {
         if (searchTypeList != null && termList != null && roomList != null && deptList != null) {
             this.termList = termList;
 
@@ -137,6 +138,16 @@ public class CourseSearchActivity extends AppCompatActivity {
             final EditText editText_value = findViewById(R.id.editText_course_search_value);
 
             spinner_search_value.setAdapter(value_adapter);
+            spinner_search_value.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    lastSelectClassName = (String) spinner_search_value.getSelectedItem();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
 
             ArrayAdapter<String> term_adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, termList);
             term_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -256,7 +267,7 @@ public class CourseSearchActivity extends AppCompatActivity {
         }
     }
 
-    public void setSearchResult(List<CourseSearchDetail> courseSearchDetails) {
+    synchronized public void setSearchResult(List<CourseSearchDetail> courseSearchDetails) {
         if (courseSearchDetails != null && courseSearchAdapter != null) {
             if (courseSearchDetails.size() == 0) {
                 Snackbar.make(findViewById(R.id.layout_course_search_content), R.string.search_no_result, Snackbar.LENGTH_SHORT).show();
@@ -265,11 +276,20 @@ public class CourseSearchActivity extends AppCompatActivity {
         }
     }
 
-    public void setClassNameList(List<String> classNameList) {
+    synchronized public void setClassNameList(List<String> classNameList) {
         if (classNameList != null && classNameList.size() > 0) {
             value_adapter.clear();
             value_adapter.addAll(classNameList);
             value_adapter.notifyDataSetChanged();
+            Spinner spinner_search_value = findViewById(R.id.spinner_course_search_value);
+            int index = 0;
+            for (int i = 0; i < classNameList.size(); i++) {
+                if (classNameList.get(i) != null && classNameList.get(i).equals(lastSelectClassName)) {
+                    index = i;
+                    break;
+                }
+            }
+            spinner_search_value.setSelection(index);
         }
     }
 

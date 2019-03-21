@@ -449,7 +449,7 @@ public class CourseActivity extends AppCompatActivity {
                         if (path != null) {
                             ArrayList<Course> courses = BackupMethod.restoreCourse(path);
                             if (courses != null) {
-                                addCourseList(courses, false, true, false);
+                                addCourseList(courses, false, true, false, false);
                                 super.onActivityResult(requestCode, resultCode, data);
                                 return;
                             }
@@ -482,8 +482,9 @@ public class CourseActivity extends AppCompatActivity {
      * @param isCurrentTerm             是否是当前学期的课程表
      * @param isBackup                  是否是备份导入
      * @param nextTermCourseImportError 下学期课表是否导入失败
+     * @param combineColor 是否合并颜色
      */
-    public void addCourseList(final ArrayList<Course> courses, boolean isCurrentTerm, final boolean isBackup, boolean nextTermCourseImportError) {
+    public void addCourseList(final ArrayList<Course> courses, boolean isCurrentTerm, final boolean isBackup, boolean nextTermCourseImportError, final boolean combineColor) {
         if (!activityDestroy) {
             closeLoadingDialog();
             if (nextTermCourseImportError) {
@@ -508,13 +509,13 @@ public class CourseActivity extends AppCompatActivity {
                     builder.setPositiveButton(R.string.add_course_and_clean, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            chooseCourseAdd(checked, courses, true, isBackup);
+                            chooseCourseAdd(checked, courses, true, isBackup, combineColor);
                         }
                     });
                     builder.setNeutralButton(R.string.add_course_only, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            chooseCourseAdd(checked, courses, false, isBackup);
+                            chooseCourseAdd(checked, courses, false, isBackup, combineColor);
                         }
                     });
                     builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -539,14 +540,14 @@ public class CourseActivity extends AppCompatActivity {
         }
     }
 
-    private void chooseCourseAdd(boolean[] checked, ArrayList<Course> courses, boolean termCheck, boolean isBackup) {
+    private void chooseCourseAdd(boolean[] checked, ArrayList<Course> courses, boolean termCheck, boolean isBackup, boolean combineColor) {
         ArrayList<Course> courses_choose = new ArrayList<>();
         for (int i = 0; i < checked.length; i++) {
             if (checked[i]) {
                 courses_choose.add(courses.get(i));
             }
         }
-        ArrayList<Course> list = CourseEditMethod.combineCourseList(courses_choose, courseArrayList, termCheck, false);
+        ArrayList<Course> list = CourseEditMethod.combineCourseList(courses_choose, courseArrayList, termCheck, false, combineColor);
         if (list != null) {
             courseArrayList.clear();
             courseArrayList.addAll(list);
@@ -726,7 +727,7 @@ public class CourseActivity extends AppCompatActivity {
         if (courses == null) {
             Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.recover_failed, Snackbar.LENGTH_SHORT).show();
         } else {
-            addCourseList(courses, false, true, false);
+            addCourseList(courses, false, true, false, false);
         }
     }
 

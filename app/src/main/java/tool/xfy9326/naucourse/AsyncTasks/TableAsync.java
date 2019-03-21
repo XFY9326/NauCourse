@@ -72,7 +72,7 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
                         if (tableMethod.load() == Config.NET_WORK_GET_SUCCESS) {
                             ArrayList<Course> update_course = tableMethod.getCourseTable(false);
                             if (update_course != null) {
-                                ArrayList<Course> now_course = CourseEditMethod.combineCourseList(update_course, course, true, false);
+                                ArrayList<Course> now_course = CourseEditMethod.combineCourseList(update_course, course, true, false, true);
                                 if (now_course != null && !CourseEditMethod.checkCourseList(now_course).isHasError()) {
                                     course.clear();
                                     course.addAll(now_course);

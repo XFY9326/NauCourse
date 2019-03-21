@@ -358,7 +358,7 @@ public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.Co
                     for (int i = 0; i < arr.length && !error; i++) {
                         for (int j = 0; j < arr.length && !error; j++) {
                             if (i != j) {
-                                if (!CourseEditMethod.checkWeekNumOrCourseTime(new String[]{arr[i]}, new String[]{arr[j]})) {
+                                if (!CourseEditMethod.checkNoSameTime(new String[]{arr[i]}, new String[]{arr[j]})) {
                                     error = true;
                                 }
                             }

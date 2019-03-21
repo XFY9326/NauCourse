@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import androidx.annotation.Nullable;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.NetInfoMethods.CourseSearchMethod;
 import tool.xfy9326.naucourse.Methods.NetInfoMethods.TableMethod;
@@ -31,9 +32,21 @@ public class CourseEditMethod {
         if (courseArrayList == null) {
             courseArrayList = new ArrayList<>();
         }
-        courseArrayList = combineCourseList(courseSearchArrayList, courseArrayList, termCheck, true);
-        CourseCheckResult courseCheckResult = checkCourseList(courseArrayList);
-
+        courseArrayList = combineCourseList(courseSearchArrayList, courseArrayList, termCheck, true, true);
+        boolean detailTimeCheck = true;
+        for (Course course : courseArrayList) {
+            if (!checkCourseDetail(course.getCourseDetail())) {
+                detailTimeCheck = false;
+                break;
+            }
+        }
+        CourseCheckResult courseCheckResult;
+        if (detailTimeCheck) {
+            courseCheckResult = checkCourseList(courseArrayList);
+        } else {
+            courseCheckResult = new CourseCheckResult();
+            courseCheckResult.setHasError(true);
+        }
         if (!courseCheckResult.isHasError()) {
             addSearchCourseResult.setSaveSuccess(DataMethod.saveOfflineData(context, courseArrayList, TableMethod.FILE_NAME, false, TableMethod.IS_ENCRYPT));
         }
@@ -50,9 +63,10 @@ public class CourseEditMethod {
      * @param combineToCourses 原课表
      * @param termCheck        新学期的课程强制替换(以最新的学期为准，课表中只会存在一种学期的课程)
      * @param combineDetail    是否合并课程时间等信息
+     * @param combineColor     是否合并颜色
      * @return 课程信息列表
      */
-    public static ArrayList<Course> combineCourseList(ArrayList<Course> combineCourses, ArrayList<Course> combineToCourses, boolean termCheck, boolean combineDetail) {
+    public static ArrayList<Course> combineCourseList(ArrayList<Course> combineCourses, ArrayList<Course> combineToCourses, boolean termCheck, boolean combineDetail, boolean combineColor) {
         long newTerm = 0;
         if (termCheck) {
             //获取最新的学期
@@ -86,7 +100,9 @@ public class CourseEditMethod {
                 for (int i = 0; i < result.size() && !found; i++) {
                     String id = course.getCourseId();
                     if (id != null && id.equalsIgnoreCase(result.get(i).getCourseId())) {
-                        course.setCourseColor(result.get(i).getCourseColor());
+                        if (combineColor) {
+                            course.setCourseColor(result.get(i).getCourseColor());
+                        }
                         if (combineDetail) {
                             CourseDetail[] resultCourseDetail = result.get(i).getCourseDetail();
                             if (resultCourseDetail != null) {
@@ -129,34 +145,26 @@ public class CourseEditMethod {
      */
     public static CourseCheckResult checkCourseList(ArrayList<Course> courses) {
         CourseCheckResult courseCheckResult = new CourseCheckResult();
-        for (int i = 0; i < courses.size(); i++) {
-            for (int j = 0; j < courses.size(); j++) {
-                if (i != j) {
-                    if (courses.get(i).getCourseTerm() != null && !courses.get(i).getCourseTerm().equals(courses.get(j).getCourseTerm())) {
-                        continue;
-                    }
-                    CourseDetail[] courseDetail_list_check = courses.get(i).getCourseDetail();
-                    if (courseDetail_list_check != null) {
-                        for (CourseDetail courseDetail_check : courseDetail_list_check) {
-                            if (courseDetail_check == null) {
-                                continue;
-                            }
-                            CourseDetail[] courseDetail_list = courses.get(j).getCourseDetail();
-                            if (courseDetail_list != null) {
-                                for (CourseDetail courseDetail : courseDetail_list) {
-                                    if (courseDetail == null) {
-                                        continue;
-                                    }
-                                    if (!((courseDetail_check.getWeekMode() == Config.COURSE_DETAIL_WEEKMODE_SINGLE
-                                            && courseDetail.getWeekMode() == Config.COURSE_DETAIL_WEEKMODE_DOUBLE)
-                                            || (courseDetail_check.getWeekMode() == Config.COURSE_DETAIL_WEEKMODE_DOUBLE
-                                            && courseDetail.getWeekMode() == Config.COURSE_DETAIL_WEEKMODE_SINGLE))) {
-
-                                        boolean weekDayCorrect = checkWeekDay(courseDetail_check.getWeekDay(), courseDetail.getWeekDay());
-                                        boolean weekNumCorrect = checkWeekNumOrCourseTime(courseDetail_check.getWeeks(), courseDetail.getWeeks());
-                                        boolean courseTimeCorrect = checkWeekNumOrCourseTime(courseDetail_check.getCourseTime(), courseDetail.getCourseTime());
-
-                                        if (!weekDayCorrect && !weekNumCorrect && !courseTimeCorrect) {
+        try {
+            for (int i = 0; i < courses.size(); i++) {
+                for (int j = 0; j < courses.size(); j++) {
+                    if (i != j) {
+                        if (courses.get(i).getCourseTerm() != null && !courses.get(i).getCourseTerm().equals(courses.get(j).getCourseTerm())) {
+                            continue;
+                        }
+                        CourseDetail[] courseDetail_list_check = courses.get(i).getCourseDetail();
+                        if (courseDetail_list_check != null) {
+                            for (CourseDetail courseDetail_check : courseDetail_list_check) {
+                                if (courseDetail_check == null) {
+                                    continue;
+                                }
+                                CourseDetail[] courseDetail_list = courses.get(j).getCourseDetail();
+                                if (courseDetail_list != null) {
+                                    for (CourseDetail courseDetail : courseDetail_list) {
+                                        if (courseDetail == null) {
+                                            continue;
+                                        }
+                                        if (isCourseDetailTimeError(courseDetail, courseDetail_check)) {
                                             courseCheckResult.setHasError(true);
                                             courseCheckResult.setCheckCourseName(courses.get(i).getCourseName());
                                             courseCheckResult.setConflictCourseName(courses.get(j).getCourseName());
@@ -169,8 +177,10 @@ public class CourseEditMethod {
                     }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            courseCheckResult.setHasError(true);
         }
-        courseCheckResult.setHasError(false);
         return courseCheckResult;
     }
 
@@ -180,15 +190,13 @@ public class CourseEditMethod {
      * @param courseDetails 课程详细信息列表
      * @return 是否有重复
      */
-    public static boolean checkCourseDetail(CourseDetail[] courseDetails) {
+    public static boolean checkCourseDetail(@Nullable CourseDetail[] courseDetails) {
         if (courseDetails != null) {
             for (int i = 0; i < courseDetails.length; i++) {
                 for (int j = 0; j < courseDetails.length; j++) {
                     if (i != j) {
-                        if (!checkWeekNumOrCourseTime(courseDetails[i].getWeeks(), courseDetails[j].getWeeks())) {
-                            if (!checkWeekNumOrCourseTime(courseDetails[i].getCourseTime(), courseDetails[j].getCourseTime())) {
-                                return false;
-                            }
+                        if (isCourseDetailTimeError(courseDetails[i], courseDetails[j])) {
+                            return false;
                         }
                     }
                 }
@@ -202,50 +210,141 @@ public class CourseEditMethod {
     /**
      * 检查周数与上课时间重复
      *
-     * @param check 需要检查的对象
-     * @param find  对比的对象
+     * @param courseDetail1 CourseDetail
+     * @param courseDetail2 CourseDetail
      * @return 是否有重复
      */
-    public static boolean checkWeekNumOrCourseTime(String[] check, String[] find) {
-        if (check == null || find == null) {
+    private static boolean isCourseDetailTimeError(@Nullable CourseDetail courseDetail1, @Nullable CourseDetail courseDetail2) {
+        if (courseDetail1 == null || courseDetail2 == null) {
+            return true;
+        }
+        int weekMode1 = courseDetail1.getWeekMode();
+        int weekMode2 = courseDetail2.getWeekMode();
+        if (weekMode1 == Config.COURSE_DETAIL_WEEKMODE_SINGLE && weekMode2 == Config.COURSE_DETAIL_WEEKMODE_DOUBLE ||
+                weekMode2 == Config.COURSE_DETAIL_WEEKMODE_SINGLE && weekMode1 == Config.COURSE_DETAIL_WEEKMODE_DOUBLE) {
             return false;
         }
-        for (String check_str : check) {
-            int max_check;
-            int min_check;
-            if (check_str.contains("-")) {
-                String[] check_arr = check_str.split("-");
-                min_check = Integer.valueOf(check_arr[0]);
-                max_check = Integer.valueOf(check_arr[1]);
-            } else {
-                min_check = max_check = Integer.valueOf(check_str);
-            }
+        if (courseDetail1.getWeekDay() != courseDetail2.getWeekDay()) {
+            return false;
+        }
+        boolean noSameTime = checkNoSameTime(courseDetail1.getCourseTime(), courseDetail2.getCourseTime());
+        if (noSameTime) {
+            return false;
+        }
 
-            for (String find_str : find) {
-                if (find_str.contains("-")) {
-                    String[] find_arr = find_str.split("-");
-                    if (Integer.valueOf(find_arr[0]) <= max_check && Integer.valueOf(find_arr[1]) >= min_check) {
-                        return false;
-                    }
+        int[] week1 = convertWeekToArr(courseDetail1.getWeeks(), weekMode1);
+        int[] week2 = convertWeekToArr(courseDetail2.getWeeks(), weekMode2);
+        if (week1 == null || week2 == null) {
+            return true;
+        }
+
+        for (int i = 0; i < week1.length && i < week2.length; i++) {
+            if (week1[i] == 1 && week2[i] == 1) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Nullable
+    private static int[] convertWeekToArr(@Nullable String[] weeks, int mode) {
+        int[] result = new int[Config.DEFAULT_MAX_WEEK];
+        if (weeks == null) {
+            return null;
+        }
+        try {
+            for (String week : weeks) {
+                int min, max;
+                if (week.contains("-")) {
+                    String[] arr = week.split("-");
+                    min = Integer.valueOf(arr[0]);
+                    max = Integer.valueOf(arr[1]);
                 } else {
-                    if (Integer.valueOf(find_str) >= min_check && Integer.valueOf(find_str) <= max_check) {
-                        return false;
+                    min = max = Integer.valueOf(week);
+                }
+                for (int i = min; i <= max; i++) {
+                    if (mode == Config.COURSE_DETAIL_WEEKMODE_SINGLE) {
+                        if (i % 2 != 0) {
+                            result[i] = 1;
+                        }
+                    } else if (mode == Config.COURSE_DETAIL_WEEKMODE_DOUBLE) {
+                        if (i % 2 == 0) {
+                            result[i] = 1;
+                        }
+                    } else {
+                        result[i] = 1;
                     }
                 }
             }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return null;
         }
-        return true;
+        return result;
     }
 
-    /**
-     * 检查上课周数是否有重复
-     *
-     * @param check 需要检查的
-     * @param find  对比的
-     * @return 是否有重复
-     */
-    private static boolean checkWeekDay(int check, int find) {
-        return check != find;
+    public static boolean checkNoSameTime(String[] time1, String[] time2) {
+        if (time1 != null && time2 != null) {
+            System.out.println("1: " + Arrays.toString(time1));
+            System.out.println("2: " + Arrays.toString(time2));
+            try {
+                for (String t1 : time1) {
+                    for (String t2 : time2) {
+                        if (t1.contains("-")) {
+                            String[] arr1 = t1.split("-");
+                            int min1 = Integer.valueOf(arr1[0]);
+                            int max1 = Integer.valueOf(arr1[1]);
+                            if (t2.contains("-")) {
+                                String[] arr2 = t2.split("-");
+                                int min2 = Integer.valueOf(arr2[0]);
+                                int max2 = Integer.valueOf(arr2[1]);
+                                if (min1 > min2) {
+                                    if (min1 == max2) {
+                                        return false;
+                                    } else if (min1 < max2) {
+                                        return false;
+                                    }
+                                } else if (min2 > min1) {
+                                    if (min2 == max1) {
+                                        return false;
+                                    } else if (min2 < max1) {
+                                        return false;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            } else {
+                                int s2 = Integer.valueOf(t2);
+                                if (min1 <= s2 && s2 <= max1) {
+                                    return false;
+                                }
+                            }
+                        } else {
+                            int s1 = Integer.valueOf(t1);
+                            if (t2.contains("-")) {
+                                String[] arr2 = t2.split("-");
+                                int min2 = Integer.valueOf(arr2[0]);
+                                int max2 = Integer.valueOf(arr2[1]);
+                                if (min2 <= s1 && s1 <= max2) {
+                                    return false;
+                                }
+                            } else {
+                                int s2 = Integer.valueOf(t2);
+                                if (s1 == s2) {
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     public static class AddSearchCourseResult {
