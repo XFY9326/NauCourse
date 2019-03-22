@@ -71,6 +71,9 @@ public class SchoolCalendarActivity extends AppCompatActivity {
             case R.id.menu_calendar_share:
                 shareCalendar();
                 break;
+            case R.id.menu_calendar_refresh:
+                getData();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

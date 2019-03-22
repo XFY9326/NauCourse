@@ -147,10 +147,16 @@ public class BaseApplication extends Application {
     @Override
     public void onTerminate() {
         client = null;
+        if (!executorService.isShutdown()) {
+            executorService.shutdownNow();
+        }
         super.onTerminate();
     }
 
     public ExecutorService getExecutorService() {
+        if (executorService == null) {
+            executorService = Executors.newCachedThreadPool();
+        }
         return executorService;
     }
 

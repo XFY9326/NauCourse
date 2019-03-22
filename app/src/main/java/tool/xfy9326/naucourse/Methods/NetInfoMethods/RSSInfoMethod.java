@@ -127,7 +127,7 @@ public class RSSInfoMethod {
         Elements tags = Objects.requireNonNull(document_detail).body().getElementsByClass("Article_Content");
         String html = tags.html();
         if (lastLoadInfoDetailHost != null) {
-            html = html.replace("href=\"", "href=\"" + lastLoadInfoDetailHost).replaceAll("<img.*?/?>", "");
+            html = html.replace("href=\"/", "href=\"" + lastLoadInfoDetailHost + "/").replaceAll("<img.*?/?>", "");
         }
         return html;
     }
