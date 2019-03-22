@@ -90,7 +90,7 @@ public class SchoolCalendarActivity extends AppCompatActivity {
         }
     }
 
-    public void setCalendarView(Bitmap bitmap) {
+    synchronized public void setCalendarView(Bitmap bitmap) {
         if (bitmap != null) {
             PhotoView photoView = findViewById(R.id.photoView_school_calendar);
             findViewById(R.id.layout_loading_school_calendar).setVisibility(View.GONE);
@@ -146,7 +146,7 @@ public class SchoolCalendarActivity extends AppCompatActivity {
 
     }
 
-    public void lastViewSet(Context context) {
+    synchronized public void lastViewSet(Context context) {
         //离线数据加载完成，开始拉取网络数据
         if (loadTime == 1 && NetMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
             getData();
