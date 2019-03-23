@@ -72,6 +72,10 @@ public class SchoolCalendarActivity extends AppCompatActivity {
                 shareCalendar();
                 break;
             case R.id.menu_calendar_refresh:
+                PhotoView photoView = findViewById(R.id.photoView_school_calendar);
+                photoView.setVisibility(View.GONE);
+                findViewById(R.id.layout_loading_school_calendar).setVisibility(View.VISIBLE);
+                photoView.refreshDrawableState();
                 getData();
                 break;
         }

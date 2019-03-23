@@ -78,6 +78,7 @@ public class CourseSearchAdapter extends RecyclerView.Adapter<CourseSearchAdapte
         LayoutInflater layoutInflater = activity.getLayoutInflater();
         View view = layoutInflater.inflate(R.layout.dialog_course_search_detail, (ViewGroup) activity.findViewById(R.id.layout_dialog_course_search_detail));
 
+        ((TextView) view.findViewById(R.id.textView_course_search_name)).setText(courseSearchDetail.getName());
         ((TextView) view.findViewById(R.id.textView_course_search_detail_teacher)).setText(activity.getString(R.string.course_card_teacher, getTeacherStr(courseSearchDetail)));
         ((TextView) view.findViewById(R.id.textView_course_search_detail_score)).setText(activity.getString(R.string.course_card_score, courseSearchDetail.getScore()));
         ((TextView) view.findViewById(R.id.textView_course_search_detail_class)).setText(activity.getString(R.string.course_card_class, courseSearchDetail.getClassName()));
@@ -88,7 +89,6 @@ public class CourseSearchAdapter extends RecyclerView.Adapter<CourseSearchAdapte
         ((TextView) view.findViewById(R.id.textView_course_search_detail_person)).setText(activity.getString(R.string.course_search_person, courseSearchDetail.getStuNum()));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle(courseSearchDetail.getName());
         builder.setView(view);
         if (termList != null && courseSearchDetail.getTerm().equals(termList.get(0))) {
             builder.setNeutralButton(R.string.import_course, new DialogInterface.OnClickListener() {

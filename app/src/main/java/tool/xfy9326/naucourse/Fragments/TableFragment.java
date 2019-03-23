@@ -257,7 +257,7 @@ public class TableFragment extends Fragment {
                 if (schoolTime.getWeekNum() != 0) {
                     int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK);
                     if (sharedPreferences != null && sharedPreferences.getBoolean(Config.PREFERENCE_SHOW_NEXT_WEEK, Config.DEFAULT_PREFERENCE_SHOW_NEXT_WEEK)) {
-                        if ((weekDayNum == Calendar.SUNDAY || weekDayNum == Calendar.SATURDAY) && weekNum + 1 <= TimeMethod.getMaxWeekNum(schoolTime) && CourseMethod.hasWeekendCourse(courses)) {
+                        if ((weekDayNum == Calendar.SUNDAY || weekDayNum == Calendar.SATURDAY) && weekNum + 1 <= TimeMethod.getMaxWeekNum(schoolTime) && !CourseMethod.hasWeekendCourse(courses)) {
                             schoolTime.setWeekNum(++weekNum);
                         }
                     }

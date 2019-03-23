@@ -317,7 +317,8 @@
     <string name="search_use_full_name_warning">请使用完整名称进行该类型的搜索！</string>
     <string name="search_no_result">搜索结果为空！</string>
     <string name="import_success">导入成功！</string>
-    <string name="empty_data">暂无数据</string>
+    <string name="empty_search_data">暂无搜索结果</string>
+    <string name="course_search_result_title">◈ 搜索结果</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>
