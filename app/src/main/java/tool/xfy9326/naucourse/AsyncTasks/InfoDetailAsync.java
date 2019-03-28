@@ -60,7 +60,7 @@ public class InfoDetailAsync extends AsyncTask<Context, Void, Context> {
                 } else if (info_source.equals(InfoMethod.TOPIC_SOURCE_RSS)) {
                     loadSuccess = RSSInfoMethod.loadDetail(info_url);
                     if (loadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                        data = RSSInfoMethod.getDetail();
+                        data = RSSInfoMethod.getDetail(context[0]);
                     }
                 } else if (info_source.equals(InfoMethod.TOPIC_SOURCE_ALSTU)) {
                     AlstuMethod alstuMethod = new AlstuMethod(context[0]);

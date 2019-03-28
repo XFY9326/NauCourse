@@ -40,6 +40,7 @@ public class RSSInfoMethod {
     private boolean hasFailedLoad = false;
     private final ExecutorService executorService;
 
+
     public RSSInfoMethod(@NonNull Context context, ExecutorService executorService) {
         this.executorService = executorService;
         this.rssObjectSparseArray = new SparseArray<>();
@@ -123,11 +124,13 @@ public class RSSInfoMethod {
     }
 
     @NonNull
-    public static String getDetail() {
+    public static String getDetail(Context context) {
         Elements tags = Objects.requireNonNull(document_detail).body().getElementsByClass("Article_Content");
         String html = tags.html();
         if (lastLoadInfoDetailHost != null) {
-            html = html.replace("href=\"/", "href=\"" + lastLoadInfoDetailHost + "/").replaceAll("<img.*?/?>", "");
+            html = html.replace("href=\"/", "href=\"" + lastLoadInfoDetailHost + "/")
+                    .replaceAll("附件：<img.*?/?>", "附件：")
+                    .replaceAll("<img.*?/?>", context.getResources().getString(R.string.image_replace));
         }
         return html;
     }

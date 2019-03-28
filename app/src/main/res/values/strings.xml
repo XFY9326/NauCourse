@@ -319,6 +319,7 @@
     <string name="import_success">导入成功！</string>
     <string name="empty_search_data">暂无搜索结果</string>
     <string name="course_search_result_title">◈ 搜索结果</string>
+    <string name="image_replace">[前往原网页查看图片]</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>

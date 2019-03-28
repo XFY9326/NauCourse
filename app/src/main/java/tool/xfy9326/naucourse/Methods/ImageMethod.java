@@ -102,5 +102,4 @@ public class ImageMethod {
         }
         return false;
     }
-
 }

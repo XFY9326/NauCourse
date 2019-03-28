@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.LoginMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
+import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.AlstuTopic;
 
 public class AlstuMethod {
@@ -141,7 +142,7 @@ public class AlstuMethod {
         Element element = Objects.requireNonNull(detailDocument).body().getElementById("nr");
         Elements elements_p = element.getElementsByTag("p");
         elements_p.remove(0);
-        String result = elements_p.html().replaceAll("<img.*?/?>", "");
+        String result = elements_p.html().replaceAll("<img.*?/?>", context.getResources().getString(R.string.image_replace));
         result += getDownloadFileText(detailDocument);
         return result;
     }

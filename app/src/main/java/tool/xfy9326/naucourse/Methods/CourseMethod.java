@@ -3,7 +3,6 @@ package tool.xfy9326.naucourse.Methods;
 import android.content.Context;
 import android.preference.PreferenceManager;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -340,7 +339,7 @@ public class CourseMethod {
             } else {
                 return calendar.get(Calendar.DAY_OF_WEEK) - 1;
             }
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return 1;
