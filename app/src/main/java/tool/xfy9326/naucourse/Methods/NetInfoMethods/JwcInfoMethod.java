@@ -172,6 +172,6 @@ public class JwcInfoMethod {
                 }
             }
         }
-        return result.toString();
+        return result.toString().replaceAll("<img.*?/?>", context.getResources().getString(R.string.image_replace));
     }
 }

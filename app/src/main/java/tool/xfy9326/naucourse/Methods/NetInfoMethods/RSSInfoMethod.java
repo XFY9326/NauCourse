@@ -129,7 +129,7 @@ public class RSSInfoMethod {
         String html = tags.html();
         if (lastLoadInfoDetailHost != null) {
             html = html.replace("href=\"/", "href=\"" + lastLoadInfoDetailHost + "/")
-                    .replaceAll("附件：<img.*?/?>", "附件：")
+                    .replaceAll("<img src=\"/_ueditor/themes/default/images/icon_.*?.gif\">", "")
                     .replaceAll("<img.*?/?>", context.getResources().getString(R.string.image_replace));
         }
         return html;
