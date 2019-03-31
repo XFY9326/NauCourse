@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import java.util.Random;
 import java.util.regex.Pattern;
 
 import androidx.annotation.NonNull;
@@ -147,5 +148,13 @@ public class BaseMethod {
                 inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             }
         }
+    }
+
+    public static int getRandomColor(Context context) {
+        //颜色随机
+        int[] colorList = BaseMethod.getColorArray(context);
+        Random random = new Random();
+        int num = random.nextInt(colorList.length) % (colorList.length + 1);
+        return colorList[num];
     }
 }

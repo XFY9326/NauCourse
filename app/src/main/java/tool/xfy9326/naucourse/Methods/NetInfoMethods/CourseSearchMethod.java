@@ -21,6 +21,7 @@ import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
 import tool.xfy9326.naucourse.Utils.Course;
 import tool.xfy9326.naucourse.Utils.CourseDetail;
@@ -63,7 +64,7 @@ public class CourseSearchMethod {
         course.setCourseTeacher(courseSearchDetail.getTeacher());
         course.setCourseTerm(courseSearchDetail.getTerm());
 
-        course.setCourseColor(TableMethod.getRandomColor(context));
+        course.setCourseColor(BaseMethod.getRandomColor(context));
         String id = Config.SEARCH_COURSE_PREFIX + "-"
                 + courseSearchDetail.getTerm()
                 + courseSearchDetail.getTeacherId()

@@ -114,6 +114,10 @@ public class CourseActivity extends AppCompatActivity {
             case android.R.id.home:
                 saveCheck();
                 return true;
+
+            case R.id.menu_course_random_course_color:
+                randomSetCourseColor();
+                break;
             //清空课程
             case R.id.menu_course_delete_all:
                 Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.confirm_delete_all, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(android.R.string.yes, new View.OnClickListener() {
@@ -482,7 +486,7 @@ public class CourseActivity extends AppCompatActivity {
      * @param isCurrentTerm             是否是当前学期的课程表
      * @param isBackup                  是否是备份导入
      * @param nextTermCourseImportError 下学期课表是否导入失败
-     * @param combineColor 是否合并颜色
+     * @param combineColor              是否合并颜色
      */
     public void addCourseList(final ArrayList<Course> courses, boolean isCurrentTerm, final boolean isBackup, boolean nextTermCourseImportError, final boolean combineColor) {
         if (!activityDestroy) {
@@ -729,6 +733,16 @@ public class CourseActivity extends AppCompatActivity {
         } else {
             addCourseList(courses, false, true, false, false);
         }
+    }
+
+    private void randomSetCourseColor() {
+        needSave = true;
+        for (Course course : courseArrayList) {
+            course.setCourseColor(BaseMethod.getRandomColor(CourseActivity.this));
+        }
+        courseAdapter.updateList(courseArrayList);
+        courseAdapter.notifyDataSetChanged();
+        Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.random_course_color_success, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override

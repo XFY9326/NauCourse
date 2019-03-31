@@ -26,20 +26,26 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/menu_course_backup"
+        android:id="@+id/menu_course_random_course_color"
         android:orderInCategory="3"
+        android:title="@string/random_course_color"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_course_backup"
+        android:orderInCategory="4"
         android:title="@string/backup_course"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_course_recover"
-        android:orderInCategory="4"
+        android:orderInCategory="5"
         android:title="@string/recover_course"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_course_choose_recover"
-        android:orderInCategory="5"
+        android:orderInCategory="6"
         android:title="@string/recover_choose_course"
         app:showAsAction="never" />
 

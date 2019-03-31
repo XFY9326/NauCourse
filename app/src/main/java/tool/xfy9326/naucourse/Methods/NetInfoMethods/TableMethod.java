@@ -10,7 +10,6 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import androidx.annotation.Nullable;
 import lib.xfy9326.nausso.NauSSOClient;
@@ -37,14 +36,6 @@ public class TableMethod {
     public TableMethod(Context context) {
         this.context = context;
         this.document = null;
-    }
-
-    static int getRandomColor(Context context) {
-        //颜色随机
-        int[] colorList = BaseMethod.getColorArray(context);
-        Random random = new Random();
-        int num = random.nextInt(colorList.length) % (colorList.length + 1);
-        return colorList[num];
     }
 
     public int load() throws Exception {
@@ -169,7 +160,7 @@ public class TableMethod {
                 course.setCourseDetail(courseDetail_list);
 
 
-                course.setCourseColor(getRandomColor(context));
+                course.setCourseColor(BaseMethod.getRandomColor(context));
 
                 courseList.add(course);
             }
