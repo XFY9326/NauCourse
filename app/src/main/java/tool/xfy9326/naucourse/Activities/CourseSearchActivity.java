@@ -143,6 +143,9 @@ public class CourseSearchActivity extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     lastSelectClassName = (String) spinner_search_value.getSelectedItem();
+                    if (courseSearchAdapter != null) {
+                        courseSearchAdapter.clearSearchResult();
+                    }
                 }
 
                 @Override

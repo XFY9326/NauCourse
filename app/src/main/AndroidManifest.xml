@@ -160,7 +160,6 @@
         <activity
             android:name=".Activities.CourseSearchActivity"
             android:label="@string/course_search"
-            android:screenOrientation="portrait"
             tools:ignore="InnerclassSeparator">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

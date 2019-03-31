@@ -36,20 +36,20 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
+                    android:layout_height="wrap_content"
                     android:gravity="center_vertical"
+                    android:orientation="vertical"
                     android:padding="5dp">
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:baselineAligned="false">
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:gravity="center_vertical">
 
                             <TextView
@@ -65,9 +65,9 @@
                         </LinearLayout>
 
                         <LinearLayout
-
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:gravity="center_vertical">
 
                             <TextView
@@ -82,9 +82,17 @@
 
                         </LinearLayout>
 
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:gravity="center_vertical">
 
                             <TextView
@@ -94,16 +102,14 @@
 
                             <Spinner
                                 android:id="@+id/spinner_course_search_value"
-                                android:layout_width="0dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:spinnerMode="dialog" />
 
                             <EditText
                                 android:id="@+id/editText_course_search_value"
-                                android:layout_width="0dp"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:hint="@string/search"
                                 android:inputType="text"
                                 android:textSize="14sp"
@@ -112,15 +118,15 @@
 
                         </LinearLayout>
 
-                    </LinearLayout>
+                        <Button
+                            android:id="@+id/button_course_search"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/ic_search" />
 
-                    <Button
-                        android:id="@+id/button_course_search"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginEnd="10dp"
-                        android:background="@drawable/ic_search" />
+                    </LinearLayout>
 
                 </LinearLayout>
 
