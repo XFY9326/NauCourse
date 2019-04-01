@@ -37,6 +37,7 @@
         <activity
             android:name=".Activities.LoginActivity"
             android:label="@string/login"
+            android:theme="@style/LoginActivityTheme"
             tools:ignore="InnerclassSeparator" />
 
         <activity

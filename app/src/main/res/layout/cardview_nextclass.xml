@@ -30,7 +30,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:text="@string/course_next"
-                android:textSize="14sp" />
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/textView_dateNow"
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:textSize="14sp" />
+                android:textSize="13sp" />
 
         </LinearLayout>
 

@@ -5,116 +5,124 @@
     android:id="@+id/layout_login_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/activity_login_background"
+    android:fitsSystemWindows="true"
     tools:context=".Activities.LoginActivity">
-
-    <include layout="@layout/widget_toolbar" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?android:attr/actionBarSize"
+        android:layout_marginTop="50dp"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="15dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="10"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:adjustViewBounds="true"
-            android:paddingEnd="35dp"
-            android:paddingStart="35dp"
             android:scaleType="centerInside"
             app:srcCompat="@drawable/nau_logo"
             tools:ignore="ContentDescription" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="30dp"
             android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="5dp">
+            android:gravity="center_horizontal|bottom"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-            <TextView
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:text="@string/user_id"
-                android:textSize="15sp" />
-
-            <EditText
-                android:id="@+id/editText_userId"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="20dp"
-                android:ems="10"
-                android:hint="@string/user_id"
-                android:inputType="number"
-                android:textSize="15sp"
-                tools:ignore="Autofill" />
-        </LinearLayout>
+                android:layout_marginStart="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="5dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="5dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/user_id"
+                    android:src="@drawable/ic_user" />
 
-            <TextView
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:text="@string/user_pw"
-                android:textSize="15sp" />
+                <EditText
+                    android:id="@+id/editText_userId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:ems="10"
+                    android:hint="@string/user_id"
+                    android:inputType="number"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textColorHint="@color/colorSecondaryText"
+                    android:textSize="15sp"
+                    tools:ignore="Autofill" />
+            </LinearLayout>
 
-            <EditText
-                android:id="@+id/editText_userPw"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="20dp"
-                android:ems="10"
-                android:hint="@string/user_pw"
-                android:inputType="textPassword"
-                android:textSize="15sp"
-                tools:ignore="Autofill" />
-        </LinearLayout>
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="5dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_weight="2"
-            android:orientation="vertical">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/user_pw"
+                    android:src="@drawable/ic_password" />
 
-            <CheckBox
-                android:id="@+id/checkBox_rememberPw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:checked="true"
-                android:text="@string/remember_pw"
-                android:textSize="12sp" />
+                <EditText
+                    android:id="@+id/editText_userPw"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:ems="10"
+                    android:hint="@string/user_pw"
+                    android:inputType="textPassword"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textColorHint="@color/colorSecondaryText"
+                    android:textSize="15sp"
+                    tools:ignore="Autofill" />
+            </LinearLayout>
 
-            <Button
-                android:id="@+id/button_login"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/selector_button"
-                android:text="@string/login" />
+                android:layout_marginTop="50dp"
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="@string/login_attention"
-                android:textSize="12sp" />
+                <CheckBox
+                    android:id="@+id/checkBox_rememberPw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:checked="true"
+                    android:text="@string/remember_pw"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/button_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/selector_button"
+                    android:text="@string/login"
+                    android:textColor="@android:color/white" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
