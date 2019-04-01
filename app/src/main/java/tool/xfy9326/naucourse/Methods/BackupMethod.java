@@ -8,7 +8,8 @@ import tool.xfy9326.naucourse.Utils.Course;
 
 public class BackupMethod {
     private static final String BACKUP_PATH = Config.DATA_DIR_PATH + "backup" + File.separator;
-    private static final String COURSE_BACKUP_NAME = "Course.nbk";
+    private static final String COURSE_BACKUP_PREFIX = ".nbk";
+    private static final String COURSE_BACKUP_NAME = "Course" + COURSE_BACKUP_PREFIX;
 
     private static String getCourseBackupPath() {
         return BACKUP_PATH + COURSE_BACKUP_NAME;

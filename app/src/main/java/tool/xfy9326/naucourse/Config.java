@@ -55,6 +55,7 @@ public class Config {
     public static final String INTENT_ADD_COURSE = "ADD_COURSE";
     public static final String INTENT_ADD_COURSE_TERM = "ADD_COURSE_TERM";
     public static final String INTENT_EDIT_COURSE = "EDIT_COURSE";
+    public static final String INTENT_VIEW_PAGER_POSITION = "VIEW_PAGER_POSITION";
 
     public static final int DEFAULT_MAX_WEEK = 21;
     public static final int MAX_WEEK_DAY = 7;

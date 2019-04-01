@@ -38,7 +38,7 @@ public class NotificationMethod {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             String lastNotifyId = sharedPreferences.getString(Config.PREFERENCE_LAST_NOTIFY_ID, null);
             if (lastNotifyId == null || !lastNotifyId.equals(nextCourse.getCourseId())) {
-                showNotification(context, NOTIFICATION_CODE_NEXT_COURSE, nextCourse.getCourseName(), nextCourse.getCourseTeacher() + "  " + nextCourse.getCourseLocation() + "  " + nextCourse.getCourseTime());
+                showNotification(context, NOTIFICATION_CODE_NEXT_COURSE, nextCourse.getCourseName(), String.format("%s %s %s", nextCourse.getCourseTeacher(), nextCourse.getCourseLocation(), nextCourse.getCourseTime()));
                 sharedPreferences.edit().putString(Config.PREFERENCE_LAST_NOTIFY_ID, nextCourse.getCourseId()).apply();
             }
         }
@@ -65,7 +65,7 @@ public class NotificationMethod {
             builder.setContentText(text);
             builder.setAutoCancel(true);
 
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, ACTIVITY_REQUEST_CODE, new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, ACTIVITY_REQUEST_CODE, new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra(Config.INTENT_VIEW_PAGER_POSITION, Config.VIEWPAGER_TABLE_PAGE), PendingIntent.FLAG_UPDATE_CURRENT);
             builder.setContentIntent(pendingIntent);
 
             notificationManager.notify(code, builder.build());

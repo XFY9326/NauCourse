@@ -121,12 +121,20 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager.setOffscreenPageLimit(ViewPagerAdapter.ITEM_COUNT);
         viewPager.setAdapter(viewPagerAdapter);
+        if (getIntent() != null) {
+            int position = getIntent().getIntExtra(Config.INTENT_VIEW_PAGER_POSITION, -1);
+            if (position >= 0 && position <= ViewPagerAdapter.ITEM_COUNT) {
+                fragment_current_index = position;
+            }
+        }
         if (fragment_current_index < 0) {
             if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Config.PREFERENCE_DEFAULT_SHOW_TABLE_PAGE, Config.DEFAULT_PREFERENCE_DEFAULT_SHOW_TABLE_PAGE)) {
                 viewPager.setCurrentItem(Config.VIEWPAGER_TABLE_PAGE, true);
+                bnv.getMenu().getItem(Config.VIEWPAGER_TABLE_PAGE).setChecked(true);
             }
         } else {
             viewPager.setCurrentItem(fragment_current_index, true);
+            bnv.getMenu().getItem(fragment_current_index).setChecked(true);
         }
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

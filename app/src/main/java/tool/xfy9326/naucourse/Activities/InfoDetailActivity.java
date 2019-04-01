@@ -110,12 +110,21 @@ public class InfoDetailActivity extends AppCompatActivity {
                     Uri content_url = Uri.parse(url);
                     intent.setData(content_url);
                 } else if (item.getItemId() == R.id.menu_info_detail_share) {
-                    String shareText;
-                    if (Objects.requireNonNull(info_source).equals(InfoMethod.TOPIC_SOURCE_ALSTU)) {
-                        shareText = info_title + " " + getString(R.string.please_login_shared_url) + "\n" + url;
-                    } else {
-                        shareText = info_title + "\n" + url;
+                    String infoTag = getString(R.string.unknown_post);
+                    if (info_source != null) {
+                        switch (info_source) {
+                            case InfoMethod.TOPIC_SOURCE_JWC:
+                                infoTag = getString(R.string.jw_system);
+                                break;
+                            case InfoMethod.TOPIC_SOURCE_ALSTU:
+                                infoTag = getString(R.string.alstu_system);
+                                break;
+                            case InfoMethod.TOPIC_SOURCE_RSS:
+                                infoTag = info_type;
+                                break;
+                        }
                     }
+                    String shareText = String.format("[%s] %s\n%s", infoTag, info_title, url);
                     intent.setAction(Intent.ACTION_SEND);
                     intent.setType("text/plain");
                     intent.putExtra(Intent.EXTRA_SUBJECT, info_type);
