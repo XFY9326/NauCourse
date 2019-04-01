@@ -45,6 +45,7 @@
     <string name="double_click_exit">再按一次返回键退出</string>
     <string name="date">日期</string>
     <string name="application_version">版本：</string>
+    <string name="new_application_version">更新版本：</string>
     <string name="application_author">作者：</string>
     <string name="author" translatable="false">XFY9326（逸雪飞扬）</string>
     <string name="copyright" translatable="false">Copyright © %1$d XFY9326</string>

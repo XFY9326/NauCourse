@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Locale;
+
 import androidx.appcompat.app.AlertDialog;
 import lib.xfy9326.updater.Updater;
 import tool.xfy9326.naucourse.BuildConfig;
@@ -65,11 +67,11 @@ public class UpdateMethod {
                     @Override
                     public void findUpdate(int versionCode, String versionName, int subVersion, String updateInfo, String updateType, final String updateUrl, boolean forceUpdate, String updateTime) {
                         if (!activity.isDestroyed() && (!isImportantUpdate || forceUpdate)) {
-                            final String versionNew = versionName + "-" + subVersion + "(" + versionCode + ") " + updateType;
+                            final String versionNew = String.format(Locale.CHINA, "%s.%d(%d) %s", versionName, subVersion, versionCode, updateType);
                             String lastCheckVersion = sharedPreferences.getString(Config.PREFERENCE_LAST_CHECK_VERSION, null);
                             if (manualCheck || (lastCheckVersion == null || !lastCheckVersion.equalsIgnoreCase(versionNew))) {
-                                String versionNow = BuildConfig.VERSION_NAME + "-" + Config.SUB_VERSION + "(" + BuildConfig.VERSION_CODE + ") " + Config.VERSION_TYPE;
-                                String showVersion = activity.getString(R.string.application_version) + "v" + versionNow + " -> v" + versionNew;
+                                String versionNow = String.format(Locale.CHINA, "%s.%d(%d) %s", BuildConfig.VERSION_NAME, Config.SUB_VERSION, BuildConfig.VERSION_CODE, Config.VERSION_TYPE);
+                                String showVersion = String.format("%sv%s\n%sv%s", activity.getString(R.string.application_version), versionNow, activity.getString(R.string.new_application_version), versionNew);
                                 showVersion = showVersion.replace(Updater.UPDATE_TYPE_BETA, activity.getString(R.string.beta)).replace(Updater.UPDATE_TYPE_RELEASE, activity.getString(R.string.release)).replace(Config.DEBUG, activity.getString(R.string.debug));
 
                                 LayoutInflater layoutInflater = activity.getLayoutInflater();
