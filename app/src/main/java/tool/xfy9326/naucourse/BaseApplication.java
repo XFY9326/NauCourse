@@ -27,7 +27,7 @@ import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
 public class BaseApplication extends Application {
     private NauSSOClient client;
     private ExecutorService executorService;
-    private WeakReference<ViewPagerAdapter> viewPagerAdapter;
+    private ViewPagerAdapter viewPagerAdapter;
     private WeakReference<InfoDetailActivity> infoDetailActivity;
     private WeakReference<ScoreActivity> scoreActivity;
     private WeakReference<ExamActivity> examActivity;
@@ -56,11 +56,11 @@ public class BaseApplication extends Application {
     }
 
     public ViewPagerAdapter getViewPagerAdapter() {
-        return viewPagerAdapter.get();
+        return viewPagerAdapter;
     }
 
     public void setViewPagerAdapter(ViewPagerAdapter viewPagerAdapter) {
-        this.viewPagerAdapter = new WeakReference<>(viewPagerAdapter);
+        this.viewPagerAdapter = viewPagerAdapter;
     }
 
     public InfoDetailActivity getInfoDetailActivity() {

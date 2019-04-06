@@ -46,14 +46,16 @@ public class TimeMethod {
     }
 
     static long getInfoDateLong(String date) {
-        date = date.trim();
-        try {
-            Date dat = parseDateSDF(date);
-            if (dat != null) {
-                return dat.getTime();
+        if (date != null) {
+            date = date.trim();
+            try {
+                Date dat = parseDateSDF(date);
+                if (dat != null) {
+                    return dat.getTime();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return -1;
     }
