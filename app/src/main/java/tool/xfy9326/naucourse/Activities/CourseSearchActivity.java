@@ -1,6 +1,7 @@
 package tool.xfy9326.naucourse.Activities;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
@@ -10,17 +11,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.google.android.material.snackbar.Snackbar;
-
-import java.util.LinkedHashMap;
-import java.util.List;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.LinkedHashMap;
+import java.util.List;
+
 import tool.xfy9326.naucourse.AsyncTasks.CourseSearchAsync;
 import tool.xfy9326.naucourse.AsyncTasks.CourseSearchClassNameAsync;
 import tool.xfy9326.naucourse.AsyncTasks.CourseSearchInfoAsync;
@@ -89,7 +91,7 @@ public class CourseSearchActivity extends AppCompatActivity {
     synchronized public void closeLoadingDialog() {
         if (loadingDialog != null) {
             if (loadingDialog.isShowing()) {
-                loadingDialog.cancel();
+                loadingDialog.dismiss();
             }
             loadingDialog = null;
         }
@@ -107,14 +109,19 @@ public class CourseSearchActivity extends AppCompatActivity {
 
     private void getBaseSearchData() {
         if (loadingDialog == null) {
-            loadingDialog = BaseMethod.showLoadingDialog(this, false, null);
+            loadingDialog = BaseMethod.showLoadingDialog(this, true, new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    finish();
+                }
+            });
         }
         new CourseSearchInfoAsync().execute(courseSearchMethod, getApplicationContext());
     }
 
     private void searchDetail(CourseSearchInfo courseSearchInfo) {
         if (loadingDialog == null) {
-            loadingDialog = BaseMethod.showLoadingDialog(this, false, null);
+            loadingDialog = BaseMethod.showLoadingDialog(this, true, null);
         }
         new CourseSearchAsync().execute(courseSearchInfo, courseSearchMethod, getApplicationContext());
     }

@@ -25,16 +25,6 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.Objects;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -46,6 +36,17 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.Objects;
+
 import tool.xfy9326.naucourse.AsyncTasks.CourseListAsync;
 import tool.xfy9326.naucourse.AsyncTasks.CourseNextListAsync;
 import tool.xfy9326.naucourse.Config;
@@ -419,10 +420,7 @@ public class CourseActivity extends AppCompatActivity {
                     if (course != null) {
                         boolean found = false;
                         int i;
-                        if (courseArrayList == null) {
-                            courseArrayList = new ArrayList<>();
-                        }
-                        for (i = 0; i < courseArrayList.size() && !found; i++) {
+                        for (i = 0; courseAdapter != null && i < courseArrayList.size() && !found; i++) {
                             if (Objects.requireNonNull(courseArrayList.get(i).getCourseId()).equalsIgnoreCase(course.getCourseId())) {
                                 courseArrayList.set(i, course);
                                 found = true;

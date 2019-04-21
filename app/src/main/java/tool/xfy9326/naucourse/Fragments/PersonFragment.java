@@ -14,15 +14,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Calendar;
-import java.util.Locale;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import java.util.Calendar;
+import java.util.Locale;
+
 import tool.xfy9326.naucourse.Activities.AboutActivity;
 import tool.xfy9326.naucourse.Activities.CourseSearchActivity;
 import tool.xfy9326.naucourse.Activities.CourseSettingsActivity;
@@ -161,7 +162,7 @@ public class PersonFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     if (getActivity() != null && isAdded()) {
-                        startActivity(new Intent(getActivity(), SuspendCourseActivity.class));
+                        startActivity(new Intent(getActivity(), SuspendCourseActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                     }
                 }
             });
@@ -170,7 +171,7 @@ public class PersonFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     if (getActivity() != null && isAdded()) {
-                        startActivity(new Intent(getActivity(), MoaActivity.class));
+                        startActivity(new Intent(getActivity(), MoaActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                     }
                 }
             });
@@ -179,7 +180,7 @@ public class PersonFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     if (getActivity() != null && isAdded()) {
-                        startActivity(new Intent(getActivity(), SchoolCalendarActivity.class));
+                        startActivity(new Intent(getActivity(), SchoolCalendarActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                     }
                 }
             });
@@ -190,7 +191,7 @@ public class PersonFragment extends Fragment {
                     if (getActivity() != null && isAdded()) {
                         if (studentInfo != null && studentLearnProcess != null) {
                             Intent intent = new Intent(getActivity(), StudentInfoActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                             intent.putExtra(Config.INTENT_STUDENT_LEARN_PROCESS, studentLearnProcess);
                             intent.putExtra(Config.INTENT_STUDENT_INFO, studentInfo);
                             getActivity().startActivity(intent);
@@ -206,7 +207,7 @@ public class PersonFragment extends Fragment {
                 public void onClick(View v) {
                     if (getActivity() != null && isAdded()) {
                         Intent intent = new Intent(getActivity(), ScoreActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         getActivity().startActivity(intent);
                     }
                 }
@@ -216,7 +217,7 @@ public class PersonFragment extends Fragment {
                 public void onClick(View v) {
                     if (getActivity() != null && isAdded()) {
                         Intent intent = new Intent(getActivity(), ExamActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         getActivity().startActivity(intent);
                     }
                 }
@@ -226,7 +227,7 @@ public class PersonFragment extends Fragment {
                 public void onClick(View v) {
                     if (getActivity() != null && isAdded()) {
                         Intent intent = new Intent(getActivity(), LevelExamActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         getActivity().startActivity(intent);
                     }
                 }
@@ -237,7 +238,7 @@ public class PersonFragment extends Fragment {
                 public void onClick(View v) {
                     if (getActivity() != null && isAdded()) {
                         Intent intent = new Intent(getActivity(), CourseSettingsActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         getActivity().startActivity(intent);
                     }
                 }
@@ -247,7 +248,7 @@ public class PersonFragment extends Fragment {
                 public void onClick(View v) {
                     if (getActivity() != null && isAdded()) {
                         Intent intent = new Intent(getActivity(), GlobalSettingsActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         getActivity().startActivity(intent);
                     }
                 }
@@ -269,7 +270,7 @@ public class PersonFragment extends Fragment {
                 public void onClick(View v) {
                     if (getActivity() != null && isAdded()) {
                         Intent intent = new Intent(getActivity(), AboutActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         getActivity().startActivity(intent);
                     }
                 }
@@ -279,7 +280,7 @@ public class PersonFragment extends Fragment {
                 public void onClick(View v) {
                     if (getActivity() != null && isAdded()) {
                         Intent intent = new Intent(getActivity(), CourseSearchActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         getActivity().startActivity(intent);
                     }
                 }

@@ -12,10 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Objects;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -25,6 +21,11 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Objects;
+
 import tool.xfy9326.naucourse.AsyncTasks.InfoAsync;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.DataMethod;
@@ -42,6 +43,7 @@ import tool.xfy9326.naucourse.Widget.NextClassWidget;
  */
 
 public class HomeFragment extends Fragment {
+    private static String[] infoTypeList;
     @Nullable
     private View view;
     @Nullable
@@ -63,6 +65,7 @@ public class HomeFragment extends Fragment {
         this.recyclerView = null;
         this.swipeRefreshLayout = null;
         this.infoAdapter = null;
+        infoTypeList = new String[0];
     }
 
     @Override
@@ -74,6 +77,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         this.context = context;
+        infoTypeList = context.getResources().getStringArray(R.array.notification_type);
         super.onAttach(context);
     }
 
@@ -212,16 +216,8 @@ public class HomeFragment extends Fragment {
         if (context != null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle(R.string.info_channel_select);
-            String[] infoList = new String[]{
-                    context.getString(R.string.jw_system_info),
-                    context.getString(R.string.jwc),
-                    context.getString(R.string.xw),
-                    context.getString(R.string.tw),
-                    context.getString(R.string.xxb),
-                    context.getString(R.string.alstu_system)
-            };
             infoSelectList = DataMethod.InfoData.getInfoChannel(context);
-            builder.setMultiChoiceItems(infoList, infoSelectList, new DialogInterface.OnMultiChoiceClickListener() {
+            builder.setMultiChoiceItems(infoTypeList, infoSelectList, new DialogInterface.OnMultiChoiceClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                     infoSelectList[which] = isChecked;

@@ -13,12 +13,13 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.snackbar.Snackbar;
+
 import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
@@ -37,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     @Nullable
     private Dialog loadingDialog;
     @Nullable
-    private String loginURL;
+    private String loginURL = null;
     private int loginErrorCode;
     private SharedPreferences sharedPreferences;
 
@@ -45,11 +46,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        loginURL = null;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         ViewSet();
-        netCheck();
         updateCheck();
+        netCheck();
     }
 
     @Override
@@ -95,44 +95,43 @@ public class LoginActivity extends AppCompatActivity {
             final NauSSOClient nauSSOClient = BaseMethod.getApp(LoginActivity.this).getClient();
             showLoadingDialog(LoginActivity.this);
             LoginMethod.cleanUserTemp(LoginActivity.this);
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
+            login(nauSSOClient, id, pw);
+            if (checkBox_rememberPw.isChecked()) {
+                SecurityMethod.saveUserInfo(LoginActivity.this, id, pw);
+                sharedPreferences.edit().putBoolean(Config.PREFERENCE_REMEMBER_PW, true).apply();
+            } else {
+                sharedPreferences.edit().putString(Config.PREFERENCE_USER_ID, id).putString(Config.PREFERENCE_USER_PW, Config.DEFAULT_PREFERENCE_USER_PW).putBoolean(Config.PREFERENCE_REMEMBER_PW, false).apply();
+            }
+        } else {
+            Snackbar.make(findViewById(R.id.layout_login_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    private void login(final NauSSOClient nauSSOClient, final String id, final String pw) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (nauSSOClient.login(id, pw)) {
+                        nauSSOClient.alstuLogin();
+                        loginURL = nauSSOClient.getJwcLoginUrl();
+                        if (loginURL != null) {
+                            loginSuccess = true;
+                        }
+                    }
+                    loginErrorCode = nauSSOClient.getLoginErrorCode();
+                    if (loginErrorCode == NauSSOClient.LOGIN_ALREADY_LOGIN) {
+                        LoginMethod.loginOut(LoginActivity.this);
+                        Thread.sleep(1000);
                         if (nauSSOClient.login(id, pw)) {
-                            nauSSOClient.alstuLogin();
                             loginURL = nauSSOClient.getJwcLoginUrl();
                             if (loginURL != null) {
                                 loginSuccess = true;
                             }
                         }
                         loginErrorCode = nauSSOClient.getLoginErrorCode();
-                        if (loginErrorCode == NauSSOClient.LOGIN_ALREADY_LOGIN) {
-                            LoginMethod.loginOut(LoginActivity.this);
-                            Thread.sleep(1000);
-                            if (nauSSOClient.login(id, pw)) {
-                                loginURL = nauSSOClient.getJwcLoginUrl();
-                                if (loginURL != null) {
-                                    loginSuccess = true;
-                                }
-                            }
-                            loginErrorCode = nauSSOClient.getLoginErrorCode();
-                        }
-                        if (!LoginActivity.this.isDestroyed() && !LoginActivity.this.isFinishing()) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (loadingDialog != null && loadingDialog.isShowing()) {
-                                        loadingDialog.cancel();
-                                        loadingDialog = null;
-                                    }
-                                }
-                            });
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        loginSuccess = false;
-                        loginErrorCode = NauSSOClient.LOGIN_ERROR;
+                    }
+                    if (!LoginActivity.this.isDestroyed() && !LoginActivity.this.isFinishing()) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -143,17 +142,22 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         });
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    loginSuccess = false;
+                    loginErrorCode = NauSSOClient.LOGIN_ERROR;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (loadingDialog != null && loadingDialog.isShowing()) {
+                                loadingDialog.cancel();
+                                loadingDialog = null;
+                            }
+                        }
+                    });
                 }
-            }).start();
-            if (checkBox_rememberPw.isChecked()) {
-                SecurityMethod.saveUserInfo(LoginActivity.this, String.valueOf(id), String.valueOf(pw));
-                sharedPreferences.edit().putBoolean(Config.PREFERENCE_REMEMBER_PW, true).apply();
-            } else {
-                sharedPreferences.edit().putString(Config.PREFERENCE_USER_ID, String.valueOf(id)).putString(Config.PREFERENCE_USER_PW, Config.DEFAULT_PREFERENCE_USER_PW).putBoolean(Config.PREFERENCE_REMEMBER_PW, false).apply();
             }
-        } else {
-            Snackbar.make(findViewById(R.id.layout_login_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
-        }
+        }).start();
     }
 
     private void showLoginAttentionDialog() {
@@ -174,7 +178,6 @@ public class LoginActivity extends AppCompatActivity {
         DialogInterface.OnCancelListener cancelListener = new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                System.gc();
                 if (loginSuccess) {
                     PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(Config.PREFERENCE_HAS_LOGIN, true).putString(Config.PREFERENCE_LOGIN_URL, loginURL).apply();
                     startActivity(new Intent(LoginActivity.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP).putExtra(Config.INTENT_JUST_LOGIN, true));

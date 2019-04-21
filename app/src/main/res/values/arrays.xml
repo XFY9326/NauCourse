@@ -91,4 +91,13 @@
         <item>#c5cae9</item>
     </string-array>
 
+    <string-array name="notification_type">
+        <item>@string/jw_system_info</item>
+        <item>@string/jwc</item>
+        <item>@string/xw</item>
+        <item>@string/tw</item>
+        <item>@string/xxb</item>
+        <item>@string/alstu_system</item>
+    </string-array>
+
 </resources>

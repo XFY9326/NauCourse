@@ -26,6 +26,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+import androidx.gridlayout.widget.GridLayout;
+
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.io.File;
@@ -36,13 +44,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.cardview.widget.CardView;
-import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
-import androidx.gridlayout.widget.GridLayout;
 import tool.xfy9326.naucourse.Activities.CourseActivity;
 import tool.xfy9326.naucourse.AsyncTasks.TableAsync;
 import tool.xfy9326.naucourse.Config;
@@ -174,7 +175,7 @@ public class TableFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (getActivity() != null) {
             if (item.getItemId() == R.id.menu_table_edit) {
-                Intent intent = new Intent(getActivity(), CourseActivity.class);
+                Intent intent = new Intent(getActivity(), CourseActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
             } else if (item.getItemId() == R.id.menu_table_share) {
                 shareTable();
@@ -246,7 +247,8 @@ public class TableFragment extends Fragment {
                 Calendar calendar = Calendar.getInstance(Locale.CHINA);
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH) + 1;
-                String weekDay = getResources().getStringArray(R.array.week_number)[calendar.get(Calendar.DAY_OF_WEEK) == 1 ? 6 : calendar.get(Calendar.DAY_OF_WEEK) - 2];
+                int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+                String weekDay = getResources().getStringArray(R.array.week_number)[dayOfWeek == 1 ? 6 : dayOfWeek - 2];
                 String week = context.getString(R.string.week, weekNum);
                 if (schoolTime.getWeekNum() == 0) {
                     week = context.getString(R.string.time_vacation);
