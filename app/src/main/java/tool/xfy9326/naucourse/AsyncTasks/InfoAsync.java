@@ -4,13 +4,14 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.SparseArray;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Fragments.HomeFragment;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
@@ -73,59 +74,50 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
                 rssLoadSuccess = Config.NET_WORK_GET_SUCCESS;
             } else {
                 Future[] futures = new Future[3];
-                futures[0] = executorService.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            if (showJwcTopic) {
-                                JwcInfoMethod jwcInfoMethod = new JwcInfoMethod(context[0]);
-                                JwcLoadSuccess = jwcInfoMethod.load();
-                                if (JwcLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                                    jwcTopic = jwcInfoMethod.getJwcTopic();
-                                }
-                            } else {
-                                jwcTopic = new JwcTopic();
-                                JwcLoadSuccess = Config.NET_WORK_GET_SUCCESS;
+                futures[0] = executorService.submit(() -> {
+                    try {
+                        if (showJwcTopic) {
+                            JwcInfoMethod jwcInfoMethod = new JwcInfoMethod(context[0]);
+                            JwcLoadSuccess = jwcInfoMethod.load();
+                            if (JwcLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
+                                jwcTopic = jwcInfoMethod.getJwcTopic();
                             }
-                        } catch (Exception e) {
-                            JwcLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
-                            e.printStackTrace();
+                        } else {
+                            jwcTopic = new JwcTopic();
+                            JwcLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                         }
+                    } catch (Exception e) {
+                        JwcLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+                        e.printStackTrace();
                     }
                 });
-                futures[1] = executorService.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            if (showAlstuTopic) {
-                                AlstuMethod alstuMethod = new AlstuMethod(context[0]);
-                                alstuLoadSuccess = alstuMethod.load();
-                                if (alstuLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                                    alstuTopic = alstuMethod.getAlstuTopic();
-                                }
-                            } else {
-                                alstuTopic = new AlstuTopic();
-                                alstuLoadSuccess = Config.NET_WORK_GET_SUCCESS;
+                futures[1] = executorService.submit(() -> {
+                    try {
+                        if (showAlstuTopic) {
+                            AlstuMethod alstuMethod = new AlstuMethod(context[0]);
+                            alstuLoadSuccess = alstuMethod.load();
+                            if (alstuLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
+                                alstuTopic = alstuMethod.getAlstuTopic();
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            alstuLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+                        } else {
+                            alstuTopic = new AlstuTopic();
+                            alstuLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        alstuLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
                     }
                 });
-                futures[2] = executorService.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            RSSInfoMethod rssInfoMethod = new RSSInfoMethod(context[0], executorService);
-                            rssLoadSuccess = rssInfoMethod.load();
-                            if (rssLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                                rssObjects = rssInfoMethod.getRSSObject();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            rssLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+                futures[2] = executorService.submit(() -> {
+                    try {
+                        RSSInfoMethod rssInfoMethod = new RSSInfoMethod(context[0], executorService);
+                        rssLoadSuccess = rssInfoMethod.load();
+                        if (rssLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
+                            rssObjects = rssInfoMethod.getRSSObject();
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        rssLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
                     }
                 });
 

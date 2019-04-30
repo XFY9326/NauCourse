@@ -1,8 +1,6 @@
 package tool.xfy9326.naucourse.Activities;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,10 +9,19 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -23,16 +30,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.ViewCompat;
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.CourseEditMethod;
@@ -60,7 +57,7 @@ public class CourseEditActivity extends AppCompatActivity {
     }
 
     private void ToolBarSet() {
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar(findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
@@ -134,14 +131,11 @@ public class CourseEditActivity extends AppCompatActivity {
             recyclerView.setAdapter(courseEditAdapter);
 
             FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton_course_edit_add);
-            floatingActionButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    courseDetailArrayList.add(new CourseDetail());
-                    courseEditAdapter.setData(courseDetailArrayList);
-                    courseEditAdapter.notifyItemRangeInserted(courseDetailArrayList.size() - 1, 1);
-                    needSave = true;
-                }
+            floatingActionButton.setOnClickListener(v -> {
+                courseDetailArrayList.add(new CourseDetail());
+                courseEditAdapter.setData(courseDetailArrayList);
+                courseEditAdapter.notifyItemRangeInserted(courseDetailArrayList.size() - 1, 1);
+                needSave = true;
             });
         } else {
             setResult(RESULT_CANCELED);
@@ -165,20 +159,16 @@ public class CourseEditActivity extends AppCompatActivity {
                 saveCheck();
                 return true;
             case R.id.menu_course_delete_all:
-                Snackbar.make(findViewById(R.id.layout_course_edit_content), R.string.confirm_delete_all, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(android.R.string.yes, new View.OnClickListener() {
-                    @SuppressLint("RestrictedApi")
-                    @Override
-                    public void onClick(View v) {
-                        courseDetailArrayList.clear();
-                        courseEditAdapter.notifyDataSetChanged();
-                        needSave = true;
-                        FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton_course_edit_add);
-                        if (floatingActionButton.getVisibility() != View.VISIBLE) {
-                            floatingActionButton.setVisibility(View.VISIBLE);
-                            ViewCompat.animate(floatingActionButton).scaleX(1.0F).scaleY(1.0F).alpha(1.0F)
-                                    .setInterpolator(new FastOutSlowInInterpolator()).withLayer().setListener(null)
-                                    .start();
-                        }
+                Snackbar.make(findViewById(R.id.layout_course_edit_content), R.string.confirm_delete_all, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(android.R.string.yes, v -> {
+                    courseDetailArrayList.clear();
+                    courseEditAdapter.notifyDataSetChanged();
+                    needSave = true;
+                    FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton_course_edit_add);
+                    if (floatingActionButton.getVisibility() != View.VISIBLE) {
+                        floatingActionButton.setVisibility(View.VISIBLE);
+                        ViewCompat.animate(floatingActionButton).scaleX(1.0F).scaleY(1.0F).alpha(1.0F)
+                                .setInterpolator(new FastOutSlowInInterpolator()).withLayer().setListener(null)
+                                .start();
                     }
                 }).show();
                 break;
@@ -197,12 +187,7 @@ public class CourseEditActivity extends AppCompatActivity {
 
     private void saveCheck() {
         if (needSave) {
-            Snackbar.make(findViewById(R.id.layout_course_edit_content), R.string.save_attention, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(android.R.string.yes, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            }).show();
+            Snackbar.make(findViewById(R.id.layout_course_edit_content), R.string.save_attention, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(android.R.string.yes, v -> finish()).show();
         } else {
             finish();
         }
@@ -210,7 +195,7 @@ public class CourseEditActivity extends AppCompatActivity {
 
     private void setTerm() {
         LayoutInflater layoutInflater = getLayoutInflater();
-        final View view = layoutInflater.inflate(R.layout.dialog_course_term_set, (ViewGroup) findViewById(R.id.layout_dialog_course_term_set));
+        final View view = layoutInflater.inflate(R.layout.dialog_course_term_set, findViewById(R.id.layout_dialog_course_term_set));
 
         final EditText editText_year = view.findViewById(R.id.editText_course_school_year);
         final RadioButton radioButton_term_one = view.findViewById(R.id.radioButton_term_one);
@@ -229,24 +214,21 @@ public class CourseEditActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(CourseEditActivity.this);
         builder.setTitle(R.string.course_term);
-        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String str_year = editText_year.getText().toString();
-                if (!str_year.isEmpty() && BaseMethod.isInteger(str_year)) {
-                    long year = Long.valueOf(str_year);
-                    if (year >= 1983L) {
-                        //仅支持四位数的年份，仅支持一年两学期制
-                        long term = (year * 10000L + year + 1L) * 10L + (radioButton_term_one.isChecked() ? 1L : 2L);
-                        course.setCourseTerm(String.valueOf(term));
-                        ((TextView) findViewById(R.id.textView_course_edit_term)).setText(getString(R.string.course_edit_course_time_detail, year, year + 1, (radioButton_term_one.isChecked() ? 1 : 2)));
-                        needSave = true;
-                    } else {
-                        Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.input_error, Snackbar.LENGTH_LONG).show();
-                    }
+        builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
+            String str_year = editText_year.getText().toString();
+            if (!str_year.isEmpty() && BaseMethod.isInteger(str_year)) {
+                long year = Long.valueOf(str_year);
+                if (year >= 1983L) {
+                    //仅支持四位数的年份，仅支持一年两学期制
+                    long term = (year * 10000L + year + 1L) * 10L + (radioButton_term_one.isChecked() ? 1L : 2L);
+                    course.setCourseTerm(String.valueOf(term));
+                    ((TextView) findViewById(R.id.textView_course_edit_term)).setText(getString(R.string.course_edit_course_time_detail, year, year + 1, (radioButton_term_one.isChecked() ? 1 : 2)));
+                    needSave = true;
                 } else {
                     Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.input_error, Snackbar.LENGTH_LONG).show();
                 }
+            } else {
+                Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.input_error, Snackbar.LENGTH_LONG).show();
             }
         });
         builder.setNegativeButton(android.R.string.cancel, null);
@@ -279,37 +261,30 @@ public class CourseEditActivity extends AppCompatActivity {
             course.setCourseClass(editable_class.toString());
             course.setCourseCombinedClass(editable_combineClass.toString());
 
-            new Thread(new Runnable() {
-                @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument")
-                @Override
-                public void run() {
-                    course.setCourseDetail(courseDetailArrayList.toArray(new CourseDetail[courseDetailArrayList.size()]));
+            new Thread(() -> {
+                course.setCourseDetail(courseDetailArrayList.toArray(new CourseDetail[0]));
 
-                    final boolean checkDataCorrect = CourseEditMethod.checkCourseDetail(course.getCourseDetail());
-                    final boolean checkDataExist = checkAllSet();
+                final boolean checkDataCorrect = CourseEditMethod.checkCourseDetail(course.getCourseDetail());
+                final boolean checkDataExist = checkAllSet();
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (!activityDestroy) {
-                                if (checkDataCorrect && checkDataExist) {
-                                    setResult(RESULT_OK, new Intent().putExtra(Config.INTENT_EDIT_COURSE_ITEM, course));
-                                    needSave = false;
-                                    Snackbar.make(findViewById(R.id.layout_course_edit_content), R.string.save_success, Snackbar.LENGTH_SHORT).show();
-                                } else if (!checkDataCorrect) {
-                                    Snackbar.make(findViewById(R.id.layout_course_edit_content), R.string.conflict_error, Snackbar.LENGTH_SHORT).show();
-                                } else {
-                                    Snackbar.make(findViewById(R.id.layout_course_edit_content), R.string.input_less, Snackbar.LENGTH_SHORT).show();
-                                }
-
-                                if (loadingDialog != null && loadingDialog.isShowing()) {
-                                    loadingDialog.cancel();
-                                    loadingDialog = null;
-                                }
-                            }
+                runOnUiThread(() -> {
+                    if (!activityDestroy) {
+                        if (checkDataCorrect && checkDataExist) {
+                            setResult(RESULT_OK, new Intent().putExtra(Config.INTENT_EDIT_COURSE_ITEM, course));
+                            needSave = false;
+                            Snackbar.make(findViewById(R.id.layout_course_edit_content), R.string.save_success, Snackbar.LENGTH_SHORT).show();
+                        } else if (!checkDataCorrect) {
+                            Snackbar.make(findViewById(R.id.layout_course_edit_content), R.string.conflict_error, Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            Snackbar.make(findViewById(R.id.layout_course_edit_content), R.string.input_less, Snackbar.LENGTH_SHORT).show();
                         }
-                    });
-                }
+
+                        if (loadingDialog != null && loadingDialog.isShowing()) {
+                            loadingDialog.cancel();
+                            loadingDialog = null;
+                        }
+                    }
+                });
             }).start();
         }
     }

@@ -1,6 +1,5 @@
 package tool.xfy9326.naucourse.Views.RecyclerAdapters;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -11,13 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.jaredrummler.android.colorpicker.ColorPickerDialog;
-import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
-
-import java.util.ArrayList;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -25,6 +17,14 @@ import androidx.cardview.widget.CardView;
 import androidx.core.view.ViewCompat;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.jaredrummler.android.colorpicker.ColorPickerDialog;
+import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
+
+import java.util.ArrayList;
+
 import tool.xfy9326.naucourse.Activities.CourseActivity;
 import tool.xfy9326.naucourse.Activities.CourseEditActivity;
 import tool.xfy9326.naucourse.Config;
@@ -64,33 +64,27 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         final Course course = courseArrayList.get(holder.getAdapterPosition());
         holder.textView_course_name.setText(course.getCourseName());
         holder.textView_course_edit_teacher.setText(activity.getString(R.string.course_card_teacher, courseArrayList.get(holder.getAdapterPosition()).getCourseTeacher()));
-        holder.button_course_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (sharedPreferences.getBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE, Config.DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE)) {
-                    if (course.getCourseId() != null && !course.getCourseId().contains(Config.CUSTOM_COURSE_PREFIX) && !course.getCourseId().contains(Config.SEARCH_COURSE_PREFIX)) {
-                        autoUpdateCourseAlert();
-                        return;
-                    }
+        holder.button_course_edit.setOnClickListener(v -> {
+            if (sharedPreferences.getBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE, Config.DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE)) {
+                if (course.getCourseId() != null && !course.getCourseId().contains(Config.CUSTOM_COURSE_PREFIX) && !course.getCourseId().contains(Config.SEARCH_COURSE_PREFIX)) {
+                    autoUpdateCourseAlert();
+                    return;
                 }
-                Intent intent = new Intent(activity, CourseEditActivity.class);
-                intent.putExtra(Config.INTENT_EDIT_COURSE, true);
-                intent.putExtra(Config.INTENT_EDIT_COURSE_ITEM, course);
-                activity.startActivityForResult(intent, CourseActivity.COURSE_EDIT_REQUEST_CODE);
             }
+            Intent intent = new Intent(activity, CourseEditActivity.class);
+            intent.putExtra(Config.INTENT_EDIT_COURSE, true);
+            intent.putExtra(Config.INTENT_EDIT_COURSE_ITEM, course);
+            activity.startActivityForResult(intent, CourseActivity.COURSE_EDIT_REQUEST_CODE);
         });
         if (showCellColor) {
             holder.button_course_color.setVisibility(View.VISIBLE);
-            holder.button_course_color.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (showCellColor) {
-                        if (!singleColor) {
-                            editColor(holder.getAdapterPosition());
-                        } else {
-                            if (!activity.activityDestroy) {
-                                Snackbar.make(activity.findViewById(R.id.layout_course_manage_content), R.string.single_color_warn, Snackbar.LENGTH_SHORT).show();
-                            }
+            holder.button_course_color.setOnClickListener(v -> {
+                if (showCellColor) {
+                    if (!singleColor) {
+                        editColor(holder.getAdapterPosition());
+                    } else {
+                        if (!activity.activityDestroy) {
+                            Snackbar.make(activity.findViewById(R.id.layout_course_manage_content), R.string.single_color_warn, Snackbar.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -98,30 +92,23 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         } else {
             holder.button_course_color.setVisibility(View.GONE);
         }
-        holder.button_course_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!activity.activityDestroy) {
-                    Snackbar.make(activity.findViewById(R.id.layout_course_manage_content), R.string.delete_confirm, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(android.R.string.yes, new View.OnClickListener() {
-                        @SuppressLint("RestrictedApi")
-                        @Override
-                        public void onClick(View v) {
-                            if (!activity.activityDestroy && holder.getAdapterPosition() > -1) {
-                                courseArrayList.remove(holder.getAdapterPosition());
-                                notifyItemRemoved(holder.getAdapterPosition());
-                                activity.setArrayChanged();
+        holder.button_course_delete.setOnClickListener(v -> {
+            if (!activity.activityDestroy) {
+                Snackbar.make(activity.findViewById(R.id.layout_course_manage_content), R.string.delete_confirm, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(android.R.string.yes, v1 -> {
+                    if (!activity.activityDestroy && holder.getAdapterPosition() > -1) {
+                        courseArrayList.remove(holder.getAdapterPosition());
+                        notifyItemRemoved(holder.getAdapterPosition());
+                        activity.setArrayChanged();
 
-                                FloatingActionButton floatingActionButton = activity.findViewById(R.id.floatingActionButton_course_add);
-                                if (floatingActionButton.getVisibility() != View.VISIBLE) {
-                                    floatingActionButton.setVisibility(View.VISIBLE);
-                                    ViewCompat.animate(floatingActionButton).scaleX(1.0F).scaleY(1.0F).alpha(1.0F)
-                                            .setInterpolator(new FastOutSlowInInterpolator()).withLayer().setListener(null)
-                                            .start();
-                                }
-                            }
+                        FloatingActionButton floatingActionButton = activity.findViewById(R.id.floatingActionButton_course_add);
+                        if (floatingActionButton.getVisibility() != View.VISIBLE) {
+                            floatingActionButton.setVisibility(View.VISIBLE);
+                            ViewCompat.animate(floatingActionButton).scaleX(1.0F).scaleY(1.0F).alpha(1.0F)
+                                    .setInterpolator(new FastOutSlowInInterpolator()).withLayer().setListener(null)
+                                    .start();
                         }
-                    }).show();
-                }
+                    }
+                }).show();
             }
         });
 

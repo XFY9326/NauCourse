@@ -15,15 +15,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
-
-import java.util.Objects;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.Objects;
+
 import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.AsyncTasks.InfoDetailAsync;
 import tool.xfy9326.naucourse.Config;
@@ -76,7 +76,7 @@ public class InfoDetailActivity extends AppCompatActivity {
     }
 
     private void ToolBarSet() {
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar(findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);

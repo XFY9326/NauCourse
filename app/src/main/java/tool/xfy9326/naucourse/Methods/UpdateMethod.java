@@ -1,20 +1,19 @@
 package tool.xfy9326.naucourse.Methods;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+
 import java.util.Locale;
 
-import androidx.appcompat.app.AlertDialog;
 import lib.xfy9326.updater.Updater;
 import tool.xfy9326.naucourse.BuildConfig;
 import tool.xfy9326.naucourse.Config;
@@ -41,12 +40,7 @@ public class UpdateMethod {
                     @Override
                     public void noUpdate() {
                         if (manualCheck) {
-                            activity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(activity, activity.getString(R.string.no_update), Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                            activity.runOnUiThread(() -> Toast.makeText(activity, activity.getString(R.string.no_update), Toast.LENGTH_SHORT).show());
                         }
                         isCheckingUpdate = false;
                     }
@@ -54,12 +48,7 @@ public class UpdateMethod {
                     @Override
                     public void onError() {
                         if (manualCheck) {
-                            activity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(activity, activity.getString(R.string.check_update_error), Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                            activity.runOnUiThread(() -> Toast.makeText(activity, activity.getString(R.string.check_update_error), Toast.LENGTH_SHORT).show());
                         }
                         isCheckingUpdate = false;
                     }
@@ -75,7 +64,7 @@ public class UpdateMethod {
                                 showVersion = showVersion.replace(Updater.UPDATE_TYPE_BETA, activity.getString(R.string.beta)).replace(Updater.UPDATE_TYPE_RELEASE, activity.getString(R.string.release)).replace(Config.DEBUG, activity.getString(R.string.debug));
 
                                 LayoutInflater layoutInflater = activity.getLayoutInflater();
-                                View view = layoutInflater.inflate(R.layout.dialog_application_update, (ViewGroup) activity.findViewById(R.id.layout_dialog_application_update));
+                                View view = layoutInflater.inflate(R.layout.dialog_application_update, activity.findViewById(R.id.layout_dialog_application_update));
 
                                 TextView version = view.findViewById(R.id.textView_update_version);
                                 version.setText(showVersion);
@@ -93,35 +82,24 @@ public class UpdateMethod {
                                 final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                                 builder.setTitle(R.string.find_update);
 
-                                builder.setPositiveButton(R.string.update_immediately, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Uri uri = Uri.parse(updateUrl);
-                                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                                        activity.startActivity(intent);
-                                    }
+                                builder.setPositiveButton(R.string.update_immediately, (dialog, which) -> {
+                                    Uri uri = Uri.parse(updateUrl);
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                                    activity.startActivity(intent);
                                 });
                                 builder.setNegativeButton(R.string.update_later, null);
                                 if (!forceUpdate) {
-                                    builder.setNeutralButton(R.string.version_no_mention, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            sharedPreferences.edit().putString(Config.PREFERENCE_LAST_CHECK_VERSION, versionNew).apply();
-                                        }
-                                    });
+                                    builder.setNeutralButton(R.string.version_no_mention, (dialog, which) -> sharedPreferences.edit().putString(Config.PREFERENCE_LAST_CHECK_VERSION, versionNew).apply());
                                 }
 
                                 builder.setView(view);
                                 if (!activity.isDestroyed()) {
-                                    activity.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            try {
-                                                Toast.makeText(activity, R.string.find_update, Toast.LENGTH_SHORT).show();
-                                                builder.show();
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
+                                    activity.runOnUiThread(() -> {
+                                        try {
+                                            Toast.makeText(activity, R.string.find_update, Toast.LENGTH_SHORT).show();
+                                            builder.show();
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
                                         }
                                     });
                                 }
@@ -132,12 +110,7 @@ public class UpdateMethod {
                 });
             } else {
                 if (manualCheck) {
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(activity, activity.getString(R.string.network_error), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    activity.runOnUiThread(() -> Toast.makeText(activity, activity.getString(R.string.network_error), Toast.LENGTH_SHORT).show());
                 }
                 isCheckingUpdate = false;
             }

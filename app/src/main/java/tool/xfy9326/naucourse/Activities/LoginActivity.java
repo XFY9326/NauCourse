@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -72,12 +71,7 @@ public class LoginActivity extends AppCompatActivity {
         CheckBox checkBox_rememberPw = findViewById(R.id.checkBox_rememberPw);
         checkBox_rememberPw.setChecked(sharedPreferences.getBoolean(Config.PREFERENCE_REMEMBER_PW, Config.DEFAULT_PREFERENCE_REMEMBER_PW));
         Button button_login = findViewById(R.id.button_login);
-        button_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showLoginAttentionDialog();
-            }
-        });
+        button_login.setOnClickListener(v -> showLoginAttentionDialog());
     }
 
     private void login() {
@@ -108,54 +102,45 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login(final NauSSOClient nauSSOClient, final String id, final String pw) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
+        new Thread(() -> {
+            try {
+                if (nauSSOClient.login(id, pw)) {
+                    nauSSOClient.alstuLogin();
+                    loginURL = nauSSOClient.getJwcLoginUrl();
+                    if (loginURL != null) {
+                        loginSuccess = true;
+                    }
+                }
+                loginErrorCode = nauSSOClient.getLoginErrorCode();
+                if (loginErrorCode == NauSSOClient.LOGIN_ALREADY_LOGIN) {
+                    LoginMethod.loginOut(LoginActivity.this);
+                    Thread.sleep(1000);
                     if (nauSSOClient.login(id, pw)) {
-                        nauSSOClient.alstuLogin();
                         loginURL = nauSSOClient.getJwcLoginUrl();
                         if (loginURL != null) {
                             loginSuccess = true;
                         }
                     }
                     loginErrorCode = nauSSOClient.getLoginErrorCode();
-                    if (loginErrorCode == NauSSOClient.LOGIN_ALREADY_LOGIN) {
-                        LoginMethod.loginOut(LoginActivity.this);
-                        Thread.sleep(1000);
-                        if (nauSSOClient.login(id, pw)) {
-                            loginURL = nauSSOClient.getJwcLoginUrl();
-                            if (loginURL != null) {
-                                loginSuccess = true;
-                            }
-                        }
-                        loginErrorCode = nauSSOClient.getLoginErrorCode();
-                    }
-                    if (!LoginActivity.this.isDestroyed() && !LoginActivity.this.isFinishing()) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (loadingDialog != null && loadingDialog.isShowing()) {
-                                    loadingDialog.cancel();
-                                    loadingDialog = null;
-                                }
-                            }
-                        });
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    loginSuccess = false;
-                    loginErrorCode = NauSSOClient.LOGIN_ERROR;
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (loadingDialog != null && loadingDialog.isShowing()) {
-                                loadingDialog.cancel();
-                                loadingDialog = null;
-                            }
+                }
+                if (!LoginActivity.this.isDestroyed() && !LoginActivity.this.isFinishing()) {
+                    runOnUiThread(() -> {
+                        if (loadingDialog != null && loadingDialog.isShowing()) {
+                            loadingDialog.cancel();
+                            loadingDialog = null;
                         }
                     });
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+                loginSuccess = false;
+                loginErrorCode = NauSSOClient.LOGIN_ERROR;
+                runOnUiThread(() -> {
+                    if (loadingDialog != null && loadingDialog.isShowing()) {
+                        loadingDialog.cancel();
+                        loadingDialog = null;
+                    }
+                });
             }
         }).start();
     }
@@ -164,36 +149,28 @@ public class LoginActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
         builder.setTitle(R.string.attention);
         builder.setMessage(R.string.login_attention);
-        builder.setPositiveButton(R.string.login, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                login();
-            }
-        });
+        builder.setPositiveButton(R.string.login, (dialog, which) -> login());
         builder.setNegativeButton(android.R.string.cancel, null);
         builder.show();
     }
 
     private void showLoadingDialog(@NonNull final Context context) {
-        DialogInterface.OnCancelListener cancelListener = new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                if (loginSuccess) {
-                    PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(Config.PREFERENCE_HAS_LOGIN, true).putString(Config.PREFERENCE_LOGIN_URL, loginURL).apply();
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP).putExtra(Config.INTENT_JUST_LOGIN, true));
-                    finish();
-                } else {
-                    switch (loginErrorCode) {
-                        case NauSSOClient.LOGIN_ERROR:
-                            Snackbar.make(findViewById(R.id.layout_login_content), R.string.login_error, Snackbar.LENGTH_SHORT).show();
-                            break;
-                        case NauSSOClient.LOGIN_ALREADY_LOGIN:
-                            Snackbar.make(findViewById(R.id.layout_login_content), R.string.already_login_error, Snackbar.LENGTH_SHORT).show();
-                            break;
-                        case NauSSOClient.LOGIN_USER_INFO_WRONG:
-                            Snackbar.make(findViewById(R.id.layout_login_content), R.string.user_info_error, Snackbar.LENGTH_SHORT).show();
-                            break;
-                    }
+        DialogInterface.OnCancelListener cancelListener = dialog -> {
+            if (loginSuccess) {
+                PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(Config.PREFERENCE_HAS_LOGIN, true).putString(Config.PREFERENCE_LOGIN_URL, loginURL).apply();
+                startActivity(new Intent(LoginActivity.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP).putExtra(Config.INTENT_JUST_LOGIN, true));
+                finish();
+            } else {
+                switch (loginErrorCode) {
+                    case NauSSOClient.LOGIN_ERROR:
+                        Snackbar.make(findViewById(R.id.layout_login_content), R.string.login_error, Snackbar.LENGTH_SHORT).show();
+                        break;
+                    case NauSSOClient.LOGIN_ALREADY_LOGIN:
+                        Snackbar.make(findViewById(R.id.layout_login_content), R.string.already_login_error, Snackbar.LENGTH_SHORT).show();
+                        break;
+                    case NauSSOClient.LOGIN_USER_INFO_WRONG:
+                        Snackbar.make(findViewById(R.id.layout_login_content), R.string.user_info_error, Snackbar.LENGTH_SHORT).show();
+                        break;
                 }
             }
         };
@@ -201,17 +178,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void netCheck() {
-        NetMethod.isJwcAvailable(new NetMethod.OnAvailableListener() {
-            @Override
-            public void OnError() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(LoginActivity.this, R.string.jwc_net_no_connection, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
+        NetMethod.isJwcAvailable(() -> runOnUiThread(() -> Toast.makeText(LoginActivity.this, R.string.jwc_net_no_connection, Toast.LENGTH_SHORT).show()));
     }
 
     synchronized private void updateCheck() {

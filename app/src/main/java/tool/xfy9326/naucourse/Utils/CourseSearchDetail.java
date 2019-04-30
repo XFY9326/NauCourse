@@ -2,7 +2,6 @@ package tool.xfy9326.naucourse.Utils;
 
 public class CourseSearchDetail {
     private String className;
-    private String time;
     private String name;
     private String[] week;
     private String weekDes;
@@ -26,14 +25,6 @@ public class CourseSearchDetail {
 
     public void setClassName(String className) {
         this.className = className;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
     }
 
     public String getName() {

@@ -6,6 +6,9 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,8 +21,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import okhttp3.Cookie;
 import okhttp3.HttpUrl;
 
@@ -51,7 +52,7 @@ class PersistentCookieStore {
                     Cookie decodedCookie = decodeCookie(encodedCookie);
                     if (decodedCookie != null) {
                         if (!cookies.containsKey(entry.getKey())) {
-                            cookies.put(entry.getKey(), new ConcurrentHashMap<String, Cookie>());
+                            cookies.put(entry.getKey(), new ConcurrentHashMap<>());
                         }
                         ConcurrentHashMap<String, Cookie> concurrentHashMap = cookies.get(entry.getKey());
                         if (concurrentHashMap != null) {
@@ -73,7 +74,7 @@ class PersistentCookieStore {
         //将cookies缓存到内存中 如果缓存过期 就重置此cookie
         if (!cookie.persistent()) {
             if (!cookies.containsKey(url.host())) {
-                cookies.put(url.host(), new ConcurrentHashMap<String, Cookie>());
+                cookies.put(url.host(), new ConcurrentHashMap<>());
             }
             ConcurrentHashMap<String, Cookie> concurrentHashMap = cookies.get(url.host());
             if (concurrentHashMap != null) {

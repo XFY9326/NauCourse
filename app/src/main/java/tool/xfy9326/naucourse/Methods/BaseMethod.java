@@ -8,17 +8,17 @@ import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
-
-import java.util.Random;
-import java.util.regex.Pattern;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import java.util.Random;
+import java.util.regex.Pattern;
+
 import tool.xfy9326.naucourse.BaseApplication;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
@@ -113,12 +113,7 @@ public class BaseMethod {
 
     public static void setRefreshing(final SwipeRefreshLayout swipeRefreshLayout, final boolean refreshing) {
         if (swipeRefreshLayout != null && (refreshing && !swipeRefreshLayout.isRefreshing() || !refreshing && swipeRefreshLayout.isRefreshing())) {
-            swipeRefreshLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    swipeRefreshLayout.setRefreshing(refreshing);
-                }
-            });
+            swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(refreshing));
         }
     }
 
@@ -132,7 +127,7 @@ public class BaseMethod {
      */
     public static Dialog showLoadingDialog(@NonNull Activity activity, boolean cancelable, @Nullable DialogInterface.OnCancelListener cancelListener) {
         LayoutInflater layoutInflater = activity.getLayoutInflater();
-        View view = layoutInflater.inflate(R.layout.dialog_loading, (ViewGroup) activity.findViewById(R.id.dialog_layout_loading));
+        View view = layoutInflater.inflate(R.layout.dialog_loading, activity.findViewById(R.id.dialog_layout_loading));
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setCancelable(cancelable);
         builder.setOnCancelListener(cancelListener);

@@ -1,7 +1,5 @@
 package tool.xfy9326.naucourse.Views.RecyclerAdapters;
 
-import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.text.Editable;
 import android.view.LayoutInflater;
@@ -11,10 +9,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.view.ViewCompat;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -23,11 +26,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.view.ViewCompat;
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
-import androidx.recyclerview.widget.RecyclerView;
 import tool.xfy9326.naucourse.Activities.CourseEditActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.CourseEditMethod;
@@ -93,43 +91,37 @@ public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.Co
                     break;
             }
 
-            holder.checkBox_course_edit_single_week.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        if (holder.checkBox_course_edit_double_week.isChecked()) {
-                            courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_ONCE_MORE);
-                        } else {
-                            courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_SINGLE);
-                        }
+            holder.checkBox_course_edit_single_week.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    if (holder.checkBox_course_edit_double_week.isChecked()) {
+                        courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_ONCE_MORE);
                     } else {
-                        if (holder.checkBox_course_edit_double_week.isChecked()) {
-                            courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_DOUBLE);
-                        } else {
-                            courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_ONCE);
-                        }
+                        courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_SINGLE);
                     }
-                    activity.setArrayChanged();
+                } else {
+                    if (holder.checkBox_course_edit_double_week.isChecked()) {
+                        courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_DOUBLE);
+                    } else {
+                        courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_ONCE);
+                    }
                 }
+                activity.setArrayChanged();
             });
-            holder.checkBox_course_edit_double_week.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        if (holder.checkBox_course_edit_single_week.isChecked()) {
-                            courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_ONCE_MORE);
-                        } else {
-                            courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_DOUBLE);
-                        }
+            holder.checkBox_course_edit_double_week.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    if (holder.checkBox_course_edit_single_week.isChecked()) {
+                        courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_ONCE_MORE);
                     } else {
-                        if (holder.checkBox_course_edit_single_week.isChecked()) {
-                            courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_SINGLE);
-                        } else {
-                            courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_ONCE);
-                        }
+                        courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_DOUBLE);
                     }
-                    activity.setArrayChanged();
+                } else {
+                    if (holder.checkBox_course_edit_single_week.isChecked()) {
+                        courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_SINGLE);
+                    } else {
+                        courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_ONCE);
+                    }
                 }
+                activity.setArrayChanged();
             });
 
             holder.spinner_course_edit_week.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -142,46 +134,22 @@ public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.Co
                 public void onNothingSelected(AdapterView<?> parent) {
                 }
             });
-            holder.button_course_edit_week_num.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    editNumberItem(holder.getAdapterPosition(), true);
-                }
-            });
-            holder.button_course_edit_time.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    editNumberItem(holder.getAdapterPosition(), false);
-                }
-            });
-            holder.button_course_edit_location.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    editLocation(holder.getAdapterPosition());
-                }
-            });
-            holder.button_delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Snackbar.make(activity.findViewById(R.id.layout_course_edit_content), R.string.delete_confirm, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(android.R.string.yes, new View.OnClickListener() {
-                        @SuppressLint("RestrictedApi")
-                        @Override
-                        public void onClick(View v) {
-                            courseDetails.remove(holder.getAdapterPosition());
-                            notifyItemRemoved(holder.getAdapterPosition());
-                            activity.setArrayChanged();
+            holder.button_course_edit_week_num.setOnClickListener(v -> editNumberItem(holder.getAdapterPosition(), true));
+            holder.button_course_edit_time.setOnClickListener(v -> editNumberItem(holder.getAdapterPosition(), false));
+            holder.button_course_edit_location.setOnClickListener(v -> editLocation(holder.getAdapterPosition()));
+            holder.button_delete.setOnClickListener(v -> Snackbar.make(activity.findViewById(R.id.layout_course_edit_content), R.string.delete_confirm, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(android.R.string.yes, v1 -> {
+                courseDetails.remove(holder.getAdapterPosition());
+                notifyItemRemoved(holder.getAdapterPosition());
+                activity.setArrayChanged();
 
-                            FloatingActionButton floatingActionButton = activity.findViewById(R.id.floatingActionButton_course_edit_add);
-                            if (floatingActionButton.getVisibility() != View.VISIBLE) {
-                                floatingActionButton.setVisibility(View.VISIBLE);
-                                ViewCompat.animate(floatingActionButton).scaleX(1.0F).scaleY(1.0F).alpha(1.0F)
-                                        .setInterpolator(new FastOutSlowInInterpolator()).withLayer().setListener(null)
-                                        .start();
-                            }
-                        }
-                    }).show();
+                FloatingActionButton floatingActionButton = activity.findViewById(R.id.floatingActionButton_course_edit_add);
+                if (floatingActionButton.getVisibility() != View.VISIBLE) {
+                    floatingActionButton.setVisibility(View.VISIBLE);
+                    ViewCompat.animate(floatingActionButton).scaleX(1.0F).scaleY(1.0F).alpha(1.0F)
+                            .setInterpolator(new FastOutSlowInInterpolator()).withLayer().setListener(null)
+                            .start();
                 }
-            });
+            }).show());
         }
     }
 
@@ -201,7 +169,7 @@ public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.Co
     //编辑上课地点
     private void editLocation(final int position) {
         LayoutInflater layoutInflater = activity.getLayoutInflater();
-        View view = layoutInflater.inflate(R.layout.dialog_edit_text, (ViewGroup) activity.findViewById(R.id.layout_dialog_edit_text));
+        View view = layoutInflater.inflate(R.layout.dialog_edit_text, activity.findViewById(R.id.layout_dialog_edit_text));
 
         final TextInputEditText editText = view.findViewById(R.id.editText_dialog_edit_text);
         if (courseDetails.get(position).getLocation() != null) {
@@ -210,16 +178,13 @@ public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.Co
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(R.string.course_edit_location);
-        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Editable editable = editText.getText();
-                if (editable != null) {
-                    String str = editable.toString();
-                    courseDetails.get(position).setLocation(str);
-                    activity.setArrayChanged();
-                    notifyItemChanged(position);
-                }
+        builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
+            Editable editable = editText.getText();
+            if (editable != null) {
+                String str = editable.toString();
+                courseDetails.get(position).setLocation(str);
+                activity.setArrayChanged();
+                notifyItemChanged(position);
             }
         });
         builder.setNegativeButton(android.R.string.cancel, null);
@@ -230,7 +195,7 @@ public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.Co
     //编辑上课时间与周数
     private void editNumberItem(final int position, final boolean isWeekNumber) {
         LayoutInflater layoutInflater = activity.getLayoutInflater();
-        View view = layoutInflater.inflate(R.layout.dialog_course_time_set, (ViewGroup) activity.findViewById(R.id.layout_dialog_course_time_set));
+        View view = layoutInflater.inflate(R.layout.dialog_course_time_set, activity.findViewById(R.id.layout_dialog_course_time_set));
 
         final EditText editText_show = view.findViewById(R.id.editText_course_edit_time_now_list);
         if (isWeekNumber) {
@@ -246,18 +211,15 @@ public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.Co
         }
 
         Button button_backspace = view.findViewById(R.id.button_course_edit_time_backspace);
-        button_backspace.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String str = editText_show.getText().toString();
-                if (str.isEmpty()) {
-                    Toast.makeText(activity, R.string.no_item_to_delete, Toast.LENGTH_SHORT).show();
+        button_backspace.setOnClickListener(v -> {
+            String str = editText_show.getText().toString();
+            if (str.isEmpty()) {
+                Toast.makeText(activity, R.string.no_item_to_delete, Toast.LENGTH_SHORT).show();
+            } else {
+                if (str.contains(", ")) {
+                    editText_show.setText(str.substring(0, str.lastIndexOf(", ")));
                 } else {
-                    if (str.contains(", ")) {
-                        editText_show.setText(str.substring(0, str.lastIndexOf(", ")));
-                    } else {
-                        editText_show.setText("");
-                    }
+                    editText_show.setText("");
                 }
             }
         });
@@ -267,63 +229,57 @@ public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.Co
         final TextInputEditText editText_end = view.findViewById(R.id.editText_course_edit_time_end_time);
 
         final CheckBox checkBox_single = view.findViewById(R.id.checkBox_course_edit_time_single_time);
-        checkBox_single.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    editText_end.setText("");
-                    editText_end.setEnabled(false);
-                } else {
-                    editText_end.setEnabled(true);
-                }
+        checkBox_single.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                editText_end.setText("");
+                editText_end.setEnabled(false);
+            } else {
+                editText_end.setEnabled(true);
             }
         });
 
         Button button_add = view.findViewById(R.id.button_course_edit_time_add);
-        button_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Editable editable_start = editText_start.getText();
-                Editable editable_end = editText_end.getText();
-                if (editable_start != null && editable_end != null) {
-                    String start = editable_start.toString();
-                    String end = editable_end.toString();
-                    boolean isSingle = checkBox_single.isChecked();
-                    if (isSingle) {
-                        if (start.isEmpty()) {
-                            Toast.makeText(activity, R.string.input_less, Toast.LENGTH_SHORT).show();
+        button_add.setOnClickListener(v -> {
+            Editable editable_start = editText_start.getText();
+            Editable editable_end = editText_end.getText();
+            if (editable_start != null && editable_end != null) {
+                String start = editable_start.toString();
+                String end = editable_end.toString();
+                boolean isSingle = checkBox_single.isChecked();
+                if (isSingle) {
+                    if (start.isEmpty()) {
+                        Toast.makeText(activity, R.string.input_less, Toast.LENGTH_SHORT).show();
+                    } else {
+                        String str = editText_show.getText().toString();
+                        if (str.isEmpty()) {
+                            editText_show.setText(start);
+                        } else {
+                            String output = str + ", " + start;
+                            editText_show.setText(output);
+                        }
+                    }
+                } else {
+                    if (start.isEmpty() || end.isEmpty()) {
+                        Toast.makeText(activity, R.string.input_less, Toast.LENGTH_SHORT).show();
+                    } else {
+                        int startInt = 0;
+                        int endInt = 0;
+                        try {
+                            startInt = Integer.valueOf(start);
+                            endInt = Integer.valueOf(end);
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
+                        }
+                        if (startInt >= endInt || startInt <= 0 || isWeekNumber && endInt > Config.DEFAULT_MAX_WEEK || (!isWeekNumber && endInt > Config.MAX_DAY_COURSE)) {
+                            Toast.makeText(activity, R.string.input_error, Toast.LENGTH_SHORT).show();
                         } else {
                             String str = editText_show.getText().toString();
                             if (str.isEmpty()) {
-                                editText_show.setText(start);
-                            } else {
-                                String output = str + ", " + start;
+                                String output = start + "-" + end;
                                 editText_show.setText(output);
-                            }
-                        }
-                    } else {
-                        if (start.isEmpty() || end.isEmpty()) {
-                            Toast.makeText(activity, R.string.input_less, Toast.LENGTH_SHORT).show();
-                        } else {
-                            int startInt = 0;
-                            int endInt = 0;
-                            try {
-                                startInt = Integer.valueOf(start);
-                                endInt = Integer.valueOf(end);
-                            } catch (NumberFormatException e) {
-                                e.printStackTrace();
-                            }
-                            if (startInt >= endInt || startInt <= 0 || isWeekNumber && endInt > Config.DEFAULT_MAX_WEEK || (!isWeekNumber && endInt > Config.MAX_DAY_COURSE)) {
-                                Toast.makeText(activity, R.string.input_error, Toast.LENGTH_SHORT).show();
                             } else {
-                                String str = editText_show.getText().toString();
-                                if (str.isEmpty()) {
-                                    String output = start + "-" + end;
-                                    editText_show.setText(output);
-                                } else {
-                                    String output = str + ", " + start + "-" + end;
-                                    editText_show.setText(output);
-                                }
+                                String output = str + ", " + start + "-" + end;
+                                editText_show.setText(output);
                             }
                         }
                     }
@@ -337,46 +293,43 @@ public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.Co
         } else {
             builder.setTitle(R.string.course_detail_edit_time);
         }
-        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String str = editText_show.getText().toString();
-                if (str.isEmpty()) {
-                    if (isWeekNumber) {
-                        courseDetails.get(position).setWeeks(null);
-                    } else {
-                        courseDetails.get(position).setCourseTime(null);
-                    }
+        builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
+            String str = editText_show.getText().toString();
+            if (str.isEmpty()) {
+                if (isWeekNumber) {
+                    courseDetails.get(position).setWeeks(null);
                 } else {
-                    String[] arr;
-                    if (str.contains(", ")) {
-                        arr = str.split(", ");
-                    } else {
-                        arr = new String[]{str};
-                    }
-                    boolean error = false;
-                    for (int i = 0; i < arr.length && !error; i++) {
-                        for (int j = 0; j < arr.length && !error; j++) {
-                            if (i != j) {
-                                if (!CourseEditMethod.checkNoSameTime(new String[]{arr[i]}, new String[]{arr[j]})) {
-                                    error = true;
-                                }
+                    courseDetails.get(position).setCourseTime(null);
+                }
+            } else {
+                String[] arr;
+                if (str.contains(", ")) {
+                    arr = str.split(", ");
+                } else {
+                    arr = new String[]{str};
+                }
+                boolean error = false;
+                for (int i = 0; i < arr.length && !error; i++) {
+                    for (int j = 0; j < arr.length && !error; j++) {
+                        if (i != j) {
+                            if (!CourseEditMethod.checkNoSameTime(new String[]{arr[i]}, new String[]{arr[j]})) {
+                                error = true;
                             }
                         }
                     }
-                    if (error) {
-                        Toast.makeText(activity, R.string.input_error, Toast.LENGTH_SHORT).show();
+                }
+                if (error) {
+                    Toast.makeText(activity, R.string.input_error, Toast.LENGTH_SHORT).show();
+                } else {
+                    if (isWeekNumber) {
+                        courseDetails.get(position).setWeeks(arr);
                     } else {
-                        if (isWeekNumber) {
-                            courseDetails.get(position).setWeeks(arr);
-                        } else {
-                            courseDetails.get(position).setCourseTime(arr);
-                        }
+                        courseDetails.get(position).setCourseTime(arr);
                     }
                 }
-                activity.setArrayChanged();
-                notifyItemChanged(position);
             }
+            activity.setArrayChanged();
+            notifyItemChanged(position);
         });
         builder.setNegativeButton(android.R.string.cancel, null);
         builder.setView(view);

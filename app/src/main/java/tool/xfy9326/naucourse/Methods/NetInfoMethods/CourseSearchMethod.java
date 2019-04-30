@@ -2,6 +2,9 @@ package tool.xfy9326.naucourse.Methods.NetInfoMethods;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -14,8 +17,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
@@ -34,7 +35,7 @@ public class CourseSearchMethod {
     private static final String CLASS_NAME_URL = "http://jwc.nau.edu.cn/GetClassNameListByTerm.ashx";
     private final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
     private Document document;
-    private OkHttpClient client;
+    private final OkHttpClient client;
 
     public CourseSearchMethod() {
         OkHttpClient.Builder client_builder = new OkHttpClient.Builder();
@@ -47,7 +48,7 @@ public class CourseSearchMethod {
             @Override
             public List<Cookie> loadForRequest(HttpUrl httpUrl) {
                 List<Cookie> cookies = cookieStore.get(httpUrl.host());
-                return cookies != null ? cookies : new ArrayList<Cookie>();
+                return cookies != null ? cookies : new ArrayList<>();
             }
         });
         client = client_builder.build();

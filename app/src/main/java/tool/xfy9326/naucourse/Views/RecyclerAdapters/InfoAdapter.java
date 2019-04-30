@@ -7,11 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+
 import tool.xfy9326.naucourse.Activities.InfoDetailActivity;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
@@ -62,14 +63,11 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
             }
             holder.textView_post.setText(context.getString(R.string.info_post, detail.getPost()));
             holder.textView_date.setText(context.getString(R.string.info_date, detail.getDate()));
-            holder.cardView_info.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, InfoDetailActivity.class);
-                    intent.putExtra(Config.INTENT_INFO_DETAIL, detail);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
-                }
+            holder.cardView_info.setOnClickListener(v -> {
+                Intent intent = new Intent(context, InfoDetailActivity.class);
+                intent.putExtra(Config.INTENT_INFO_DETAIL, detail);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
             });
         }
     }

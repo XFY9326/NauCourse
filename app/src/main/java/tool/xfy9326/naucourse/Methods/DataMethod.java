@@ -3,6 +3,9 @@ package tool.xfy9326.naucourse.Methods;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
@@ -14,8 +17,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
-import androidx.preference.PreferenceManager;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.NetInfoMethods.AlstuMethod;
 import tool.xfy9326.naucourse.Methods.NetInfoMethods.ExamMethod;
@@ -46,7 +47,7 @@ public class DataMethod {
      * @param FILE_NAME  缓存数据文件名
      * @return JavaBean对象
      */
-    public static Object getOfflineData(Context context, @NonNull Class file_class, String FILE_NAME, boolean needDecrypt) {
+    public static <T> Object getOfflineData(Context context, @NonNull Class<T> file_class, String FILE_NAME, boolean needDecrypt) {
         Object object = null;
         String content = getOfflineContent(context, FILE_NAME, needDecrypt);
         if (content != null) {

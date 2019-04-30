@@ -9,12 +9,13 @@ import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -219,7 +220,6 @@ public class NetMethod {
                 } else {
                     NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
                     if (networkInfo != null) {
-                        //noinspection deprecation
                         return networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
                     }
                 }

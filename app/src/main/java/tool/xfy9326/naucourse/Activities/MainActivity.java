@@ -4,16 +4,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.MenuItem;
 import android.widget.Toast;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
@@ -72,17 +71,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void netCheck() {
-        NetMethod.isJwcAvailable(new NetMethod.OnAvailableListener() {
-            @Override
-            public void OnError() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MainActivity.this, R.string.jwc_net_no_connection, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
+        NetMethod.isJwcAvailable(() -> runOnUiThread(() -> Toast.makeText(MainActivity.this, R.string.jwc_net_no_connection, Toast.LENGTH_SHORT).show()));
     }
 
     private void loginCheck() {
@@ -109,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void ToolBarSet() {
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar(findViewById(R.id.toolbar));
     }
 
     private void ViewSet(int fragment_current_index) {
@@ -154,22 +143,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.bnv_item_home:
-                        viewPager.setCurrentItem(0);
-                        return true;
-                    case R.id.bnv_item_table:
-                        viewPager.setCurrentItem(1);
-                        return true;
-                    case R.id.bnv_item_person:
-                        viewPager.setCurrentItem(2);
-                        return true;
-                }
-                return false;
+        bnv.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.bnv_item_home:
+                    viewPager.setCurrentItem(0);
+                    return true;
+                case R.id.bnv_item_table:
+                    viewPager.setCurrentItem(1);
+                    return true;
+                case R.id.bnv_item_person:
+                    viewPager.setCurrentItem(2);
+                    return true;
             }
+            return false;
         });
 
         BaseMethod.getApp(this).setViewPagerAdapter(viewPagerAdapter);

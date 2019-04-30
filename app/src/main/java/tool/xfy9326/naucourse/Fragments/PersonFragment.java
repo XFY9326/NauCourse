@@ -2,7 +2,6 @@ package tool.xfy9326.naucourse.Fragments;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -120,20 +119,12 @@ public class PersonFragment extends Fragment {
             swipeRefreshLayout = view.findViewById(R.id.swipeLayout_person);
             swipeRefreshLayout.setDistanceToTriggerSync(200);
             swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
-            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    if (NetMethod.isNetworkConnected(context)) {
-                        getData();
-                    } else {
-                        Toast.makeText(context, R.string.network_error, Toast.LENGTH_SHORT).show();
-                        swipeRefreshLayout.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                swipeRefreshLayout.setRefreshing(false);
-                            }
-                        });
-                    }
+            swipeRefreshLayout.setOnRefreshListener(() -> {
+                if (NetMethod.isNetworkConnected(context)) {
+                    getData();
+                } else {
+                    Toast.makeText(context, R.string.network_error, Toast.LENGTH_SHORT).show();
+                    swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(false));
                 }
             });
 
@@ -158,139 +149,100 @@ public class PersonFragment extends Fragment {
             CardView cardView_course_search = view.findViewById(R.id.cardView_course_search);
             CardView cardView_alstu_link = view.findViewById(R.id.cardView_alstu_link);
 
-            cardView_suspend_course.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (getActivity() != null && isAdded()) {
-                        startActivity(new Intent(getActivity(), SuspendCourseActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+            cardView_suspend_course.setOnClickListener(v -> {
+                if (getActivity() != null && isAdded()) {
+                    startActivity(new Intent(getActivity(), SuspendCourseActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                }
+            });
+
+            cardView_moa.setOnClickListener(v -> {
+                if (getActivity() != null && isAdded()) {
+                    startActivity(new Intent(getActivity(), MoaActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                }
+            });
+
+            cardView_school_calendar.setOnClickListener(v -> {
+                if (getActivity() != null && isAdded()) {
+                    startActivity(new Intent(getActivity(), SchoolCalendarActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                }
+            });
+
+            cardView_stdInfo.setOnClickListener(v -> {
+                if (getActivity() != null && isAdded()) {
+                    if (studentInfo != null && studentLearnProcess != null) {
+                        Intent intent = new Intent(getActivity(), StudentInfoActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        intent.putExtra(Config.INTENT_STUDENT_LEARN_PROCESS, studentLearnProcess);
+                        intent.putExtra(Config.INTENT_STUDENT_INFO, studentInfo);
+                        getActivity().startActivity(intent);
+                    } else {
+                        Toast.makeText(getActivity(), R.string.data_is_loading, Toast.LENGTH_SHORT).show();
                     }
                 }
             });
 
-            cardView_moa.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (getActivity() != null && isAdded()) {
-                        startActivity(new Intent(getActivity(), MoaActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-                    }
+            cardView_score.setOnClickListener(v -> {
+                if (getActivity() != null && isAdded()) {
+                    Intent intent = new Intent(getActivity(), ScoreActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    getActivity().startActivity(intent);
+                }
+            });
+            cardView_exam.setOnClickListener(v -> {
+                if (getActivity() != null && isAdded()) {
+                    Intent intent = new Intent(getActivity(), ExamActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    getActivity().startActivity(intent);
+                }
+            });
+            cardView_levelExam.setOnClickListener(v -> {
+                if (getActivity() != null && isAdded()) {
+                    Intent intent = new Intent(getActivity(), LevelExamActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    getActivity().startActivity(intent);
                 }
             });
 
-            cardView_school_calendar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (getActivity() != null && isAdded()) {
-                        startActivity(new Intent(getActivity(), SchoolCalendarActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+            cardView_course_settings.setOnClickListener(v -> {
+                if (getActivity() != null && isAdded()) {
+                    Intent intent = new Intent(getActivity(), CourseSettingsActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    getActivity().startActivity(intent);
+                }
+            });
+            cardView_global_settings.setOnClickListener(v -> {
+                if (getActivity() != null && isAdded()) {
+                    Intent intent = new Intent(getActivity(), GlobalSettingsActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    getActivity().startActivity(intent);
+                }
+            });
+            cardView_login_out.setOnClickListener(v -> {
+                if (getActivity() != null && isAdded()) {
+                    if (NetMethod.isNetworkConnected(getActivity())) {
+                        loginOut(getActivity());
+                    } else {
+                        Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_SHORT).show();
                     }
                 }
             });
-
-            cardView_stdInfo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (getActivity() != null && isAdded()) {
-                        if (studentInfo != null && studentLearnProcess != null) {
-                            Intent intent = new Intent(getActivity(), StudentInfoActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                            intent.putExtra(Config.INTENT_STUDENT_LEARN_PROCESS, studentLearnProcess);
-                            intent.putExtra(Config.INTENT_STUDENT_INFO, studentInfo);
-                            getActivity().startActivity(intent);
-                        } else {
-                            Toast.makeText(getActivity(), R.string.data_is_loading, Toast.LENGTH_SHORT).show();
-                        }
-                    }
+            cardView_about.setOnClickListener(v -> {
+                if (getActivity() != null && isAdded()) {
+                    Intent intent = new Intent(getActivity(), AboutActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    getActivity().startActivity(intent);
                 }
             });
-
-            cardView_score.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (getActivity() != null && isAdded()) {
-                        Intent intent = new Intent(getActivity(), ScoreActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                        getActivity().startActivity(intent);
-                    }
+            cardView_course_search.setOnClickListener(v -> {
+                if (getActivity() != null && isAdded()) {
+                    Intent intent = new Intent(getActivity(), CourseSearchActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    getActivity().startActivity(intent);
                 }
             });
-            cardView_exam.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (getActivity() != null && isAdded()) {
-                        Intent intent = new Intent(getActivity(), ExamActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                        getActivity().startActivity(intent);
-                    }
-                }
-            });
-            cardView_levelExam.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (getActivity() != null && isAdded()) {
-                        Intent intent = new Intent(getActivity(), LevelExamActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                        getActivity().startActivity(intent);
-                    }
-                }
-            });
-
-            cardView_course_settings.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (getActivity() != null && isAdded()) {
-                        Intent intent = new Intent(getActivity(), CourseSettingsActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                        getActivity().startActivity(intent);
-                    }
-                }
-            });
-            cardView_global_settings.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (getActivity() != null && isAdded()) {
-                        Intent intent = new Intent(getActivity(), GlobalSettingsActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                        getActivity().startActivity(intent);
-                    }
-                }
-            });
-            cardView_login_out.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (getActivity() != null && isAdded()) {
-                        if (NetMethod.isNetworkConnected(getActivity())) {
-                            loginOut(getActivity());
-                        } else {
-                            Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
-            });
-            cardView_about.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (getActivity() != null && isAdded()) {
-                        Intent intent = new Intent(getActivity(), AboutActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                        getActivity().startActivity(intent);
-                    }
-                }
-            });
-            cardView_course_search.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (getActivity() != null && isAdded()) {
-                        Intent intent = new Intent(getActivity(), CourseSearchActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                        getActivity().startActivity(intent);
-                    }
-                }
-            });
-            cardView_alstu_link.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (getActivity() != null && isAdded()) {
-                        NetMethod.viewUrlInBrowser(getActivity(), "http://alstu.nau.edu.cn/default.aspx");
-                    }
+            cardView_alstu_link.setOnClickListener(v -> {
+                if (getActivity() != null && isAdded()) {
+                    NetMethod.viewUrlInBrowser(getActivity(), "http://alstu.nau.edu.cn/default.aspx");
                 }
             });
         }
@@ -303,59 +255,44 @@ public class PersonFragment extends Fragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle(R.string.login_out);
             builder.setMessage(getString(R.string.ask_login_out, userId));
-            builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (getActivity() != null) {
-                        loadingDialog = BaseMethod.showLoadingDialog(getActivity(), false, null);
-                    }
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (LoginMethod.loginOut(context)) {
-                                if (getActivity() != null) {
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (isAdded()) {
-                                                Toast.makeText(getActivity(), R.string.login_out_error, Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    });
-                                }
-                            } else {
-                                if (isAdded() && getActivity() != null) {
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            //小部件清空
-                                            if (getActivity() != null) {
-                                                getActivity().sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
-                                            }
-                                            //重启当前程序
-                                            Intent intent = new Intent(context, LoginActivity.class);
-                                            startActivityForResult(intent, Config.REQUEST_ACTIVITY_LOGIN);
-                                            if (getActivity() != null) {
-                                                getActivity().finish();
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-                            if (isAdded() && getActivity() != null) {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (loadingDialog != null && loadingDialog.isShowing()) {
-                                            loadingDialog.cancel();
-                                            loadingDialog = null;
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                    }).start();
+            builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                if (getActivity() != null) {
+                    loadingDialog = BaseMethod.showLoadingDialog(getActivity(), false, null);
                 }
+                new Thread(() -> {
+                    if (LoginMethod.loginOut(context)) {
+                        if (getActivity() != null) {
+                            getActivity().runOnUiThread(() -> {
+                                if (isAdded()) {
+                                    Toast.makeText(getActivity(), R.string.login_out_error, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    } else {
+                        if (isAdded() && getActivity() != null) {
+                            getActivity().runOnUiThread(() -> {
+                                //小部件清空
+                                if (getActivity() != null) {
+                                    getActivity().sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
+                                }
+                                //重启当前程序
+                                Intent intent = new Intent(context, LoginActivity.class);
+                                startActivityForResult(intent, Config.REQUEST_ACTIVITY_LOGIN);
+                                if (getActivity() != null) {
+                                    getActivity().finish();
+                                }
+                            });
+                        }
+                    }
+                    if (isAdded() && getActivity() != null) {
+                        getActivity().runOnUiThread(() -> {
+                            if (loadingDialog != null && loadingDialog.isShowing()) {
+                                loadingDialog.cancel();
+                                loadingDialog = null;
+                            }
+                        });
+                    }
+                }).start();
             });
             builder.setNegativeButton(android.R.string.cancel, null);
             builder.show();

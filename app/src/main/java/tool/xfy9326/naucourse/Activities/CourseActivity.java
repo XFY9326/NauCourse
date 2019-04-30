@@ -1,6 +1,5 @@
 package tool.xfy9326.naucourse.Activities;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -17,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -30,7 +28,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.ViewCompat;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -121,20 +118,16 @@ public class CourseActivity extends AppCompatActivity {
                 break;
             //清空课程
             case R.id.menu_course_delete_all:
-                Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.confirm_delete_all, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(android.R.string.yes, new View.OnClickListener() {
-                    @SuppressLint("RestrictedApi")
-                    @Override
-                    public void onClick(View v) {
-                        courseArrayList.clear();
-                        courseAdapter.notifyDataSetChanged();
-                        needSave = true;
-                        FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton_course_add);
-                        if (floatingActionButton.getVisibility() != View.VISIBLE) {
-                            floatingActionButton.setVisibility(View.VISIBLE);
-                            ViewCompat.animate(floatingActionButton).scaleX(1.0F).scaleY(1.0F).alpha(1.0F)
-                                    .setInterpolator(new FastOutSlowInInterpolator()).withLayer().setListener(null)
-                                    .start();
-                        }
+                Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.confirm_delete_all, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(android.R.string.yes, v -> {
+                    courseArrayList.clear();
+                    courseAdapter.notifyDataSetChanged();
+                    needSave = true;
+                    FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton_course_add);
+                    if (floatingActionButton.getVisibility() != View.VISIBLE) {
+                        floatingActionButton.setVisibility(View.VISIBLE);
+                        ViewCompat.animate(floatingActionButton).scaleX(1.0F).scaleY(1.0F).alpha(1.0F)
+                                .setInterpolator(new FastOutSlowInInterpolator()).withLayer().setListener(null)
+                                .start();
                     }
                 }).show();
                 break;
@@ -162,7 +155,7 @@ public class CourseActivity extends AppCompatActivity {
     }
 
     private void ToolBarSet() {
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar(findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
@@ -171,32 +164,21 @@ public class CourseActivity extends AppCompatActivity {
     }
 
     synchronized private void getData() {
-        loadingDialog = BaseMethod.showLoadingDialog(CourseActivity.this, true, new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                finish();
+        loadingDialog = BaseMethod.showLoadingDialog(CourseActivity.this, true, dialog -> finish());
+        new Thread(() -> {
+            courseArrayList = DataMethod.getOfflineTableData(CourseActivity.this);
+            if (courseArrayList == null) {
+                courseArrayList = new ArrayList<>();
             }
-        });
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                courseArrayList = DataMethod.getOfflineTableData(CourseActivity.this);
-                if (courseArrayList == null) {
-                    courseArrayList = new ArrayList<>();
+            runOnUiThread(() -> {
+                if (loadingDialog != null && loadingDialog.isShowing()) {
+                    loadingDialog.dismiss();
                 }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (loadingDialog != null && loadingDialog.isShowing()) {
-                            loadingDialog.dismiss();
-                        }
-                        if (!activityDestroy) {
-                            courseAdapter = new CourseAdapter(CourseActivity.this, courseArrayList);
-                            recyclerView.setAdapter(courseAdapter);
-                        }
-                    }
-                });
-            }
+                if (!activityDestroy) {
+                    courseAdapter = new CourseAdapter(CourseActivity.this, courseArrayList);
+                    recyclerView.setAdapter(courseAdapter);
+                }
+            });
         }).start();
     }
 
@@ -218,28 +200,22 @@ public class CourseActivity extends AppCompatActivity {
         scrollToPosition();
 
         FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton_course_add);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(CourseActivity.this);
-                builder.setItems(new String[]{getString(R.string.create_new_course), getString(R.string.import_course_from_jwc_current), getString(R.string.import_course_from_jwc_next)}, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                createNewCourse();
-                                break;
-                            case 1:
-                                importDataFromJwc();
-                                break;
-                            case 2:
-                                importDataFromJwcNext();
-                                break;
-                        }
-                    }
-                });
-                builder.show();
-            }
+        floatingActionButton.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(CourseActivity.this);
+            builder.setItems(new String[]{getString(R.string.create_new_course), getString(R.string.import_course_from_jwc_current), getString(R.string.import_course_from_jwc_next)}, (dialog, which) -> {
+                switch (which) {
+                    case 0:
+                        createNewCourse();
+                        break;
+                    case 1:
+                        importDataFromJwc();
+                        break;
+                    case 2:
+                        importDataFromJwcNext();
+                        break;
+                }
+            });
+            builder.show();
         });
 
         autoUpdateCourseAlert();
@@ -247,46 +223,40 @@ public class CourseActivity extends AppCompatActivity {
 
     private void createNewCourse() {
         LayoutInflater layoutInflater = getLayoutInflater();
-        final View view = layoutInflater.inflate(R.layout.dialog_course_term_set, (ViewGroup) findViewById(R.id.layout_dialog_course_term_set));
+        final View view = layoutInflater.inflate(R.layout.dialog_course_term_set, findViewById(R.id.layout_dialog_course_term_set));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(CourseActivity.this);
         builder.setTitle(R.string.course_term);
-        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                EditText editText_year = view.findViewById(R.id.editText_course_school_year);
-                RadioButton radioButton_term_one = view.findViewById(R.id.radioButton_term_one);
-                String str_year = editText_year.getText().toString();
-                if (!str_year.isEmpty() && BaseMethod.isInteger(str_year)) {
-                    long year = Long.valueOf(str_year);
-                    if (year >= 1983L) {
-                        //仅支持四位数的年份，仅支持一年两学期制
-                        long term = (year * 10000L + year + 1L) * 10L + (radioButton_term_one.isChecked() ? 1L : 2L);
-                        Intent intent = new Intent(CourseActivity.this, CourseEditActivity.class);
-                        intent.putExtra(Config.INTENT_ADD_COURSE, true);
-                        intent.putExtra(Config.INTENT_ADD_COURSE_TERM, term);
-                        startActivityForResult(intent, COURSE_ADD_REQUEST_CODE);
-                    } else {
-                        Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.input_error, Snackbar.LENGTH_LONG).show();
-                    }
-                } else {
-                    Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.input_error, Snackbar.LENGTH_LONG).show();
-                }
-            }
-        });
-        builder.setNeutralButton(R.string.use_now_term, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String term = TimeMethod.getNowShowTerm(CourseActivity.this);
-                if (term != null) {
-                    long termLong = Long.valueOf(term);
+        builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
+            EditText editText_year = view.findViewById(R.id.editText_course_school_year);
+            RadioButton radioButton_term_one = view.findViewById(R.id.radioButton_term_one);
+            String str_year = editText_year.getText().toString();
+            if (!str_year.isEmpty() && BaseMethod.isInteger(str_year)) {
+                long year = Long.valueOf(str_year);
+                if (year >= 1983L) {
+                    //仅支持四位数的年份，仅支持一年两学期制
+                    long term = (year * 10000L + year + 1L) * 10L + (radioButton_term_one.isChecked() ? 1L : 2L);
                     Intent intent = new Intent(CourseActivity.this, CourseEditActivity.class);
                     intent.putExtra(Config.INTENT_ADD_COURSE, true);
-                    intent.putExtra(Config.INTENT_ADD_COURSE_TERM, termLong);
+                    intent.putExtra(Config.INTENT_ADD_COURSE_TERM, term);
                     startActivityForResult(intent, COURSE_ADD_REQUEST_CODE);
                 } else {
                     Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.input_error, Snackbar.LENGTH_LONG).show();
                 }
+            } else {
+                Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.input_error, Snackbar.LENGTH_LONG).show();
+            }
+        });
+        builder.setNeutralButton(R.string.use_now_term, (dialog, which) -> {
+            String term = TimeMethod.getNowShowTerm(CourseActivity.this);
+            if (term != null) {
+                long termLong = Long.valueOf(term);
+                Intent intent = new Intent(CourseActivity.this, CourseEditActivity.class);
+                intent.putExtra(Config.INTENT_ADD_COURSE, true);
+                intent.putExtra(Config.INTENT_ADD_COURSE_TERM, termLong);
+                startActivityForResult(intent, COURSE_ADD_REQUEST_CODE);
+            } else {
+                Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.input_error, Snackbar.LENGTH_LONG).show();
             }
         });
         builder.setNegativeButton(android.R.string.cancel, null);
@@ -302,12 +272,7 @@ public class CourseActivity extends AppCompatActivity {
                 builder.setTitle(R.string.attention);
                 builder.setMessage(R.string.auto_update_course_table_alert);
                 builder.setPositiveButton(android.R.string.yes, null);
-                builder.setNeutralButton(R.string.no_alert_again, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        sharedPreferences.edit().putBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE_ALERT, true).apply();
-                    }
-                });
+                builder.setNeutralButton(R.string.no_alert_again, (dialog, which) -> sharedPreferences.edit().putBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE_ALERT, true).apply());
                 builder.show();
             }
         }
@@ -342,12 +307,7 @@ public class CourseActivity extends AppCompatActivity {
     //保存检查
     private void saveCheck() {
         if (needSave) {
-            Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.save_attention, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(android.R.string.yes, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            }).show();
+            Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.save_attention, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(android.R.string.yes, v -> finish()).show();
         } else {
             finish();
         }
@@ -361,53 +321,34 @@ public class CourseActivity extends AppCompatActivity {
     //保存数据
     synchronized private void saveData() {
         loadingDialog = BaseMethod.showLoadingDialog(CourseActivity.this, false, null);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                final CourseEditMethod.CourseCheckResult checkResult = CourseEditMethod.checkCourseList(courseArrayList);
-                if (checkResult.isHasError()) {
-                    final String checkName = checkResult.getCheckCourseName();
-                    final String conflictName = checkResult.getConflictCourseName();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (checkName != null && conflictName != null) {
-                                Snackbar.make(findViewById(R.id.layout_course_manage_content), getString(R.string.course_edit_error_conflict, checkName, conflictName), Snackbar.LENGTH_LONG).show();
-                            } else {
-                                Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.course_edit_error, Snackbar.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                } else {
-                    if (DataMethod.saveOfflineData(CourseActivity.this, courseArrayList, TableMethod.FILE_NAME, false, TableMethod.IS_ENCRYPT)) {
-                        needSave = false;
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.save_success, Snackbar.LENGTH_SHORT).show();
-                            }
-                        });
+        new Thread(() -> {
+            final CourseEditMethod.CourseCheckResult checkResult = CourseEditMethod.checkCourseList(courseArrayList);
+            if (checkResult.isHasError()) {
+                final String checkName = checkResult.getCheckCourseName();
+                final String conflictName = checkResult.getConflictCourseName();
+                runOnUiThread(() -> {
+                    if (checkName != null && conflictName != null) {
+                        Snackbar.make(findViewById(R.id.layout_course_manage_content), getString(R.string.course_edit_error_conflict, checkName, conflictName), Snackbar.LENGTH_LONG).show();
                     } else {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.save_failed, Snackbar.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!activityDestroy) {
-                            if (loadingDialog != null && loadingDialog.isShowing()) {
-                                loadingDialog.cancel();
-                                loadingDialog = null;
-                            }
-                        }
+                        Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.course_edit_error, Snackbar.LENGTH_SHORT).show();
                     }
                 });
+            } else {
+                if (DataMethod.saveOfflineData(CourseActivity.this, courseArrayList, TableMethod.FILE_NAME, false, TableMethod.IS_ENCRYPT)) {
+                    needSave = false;
+                    runOnUiThread(() -> Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.save_success, Snackbar.LENGTH_SHORT).show());
+                } else {
+                    runOnUiThread(() -> Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.save_failed, Snackbar.LENGTH_SHORT).show());
+                }
             }
+            runOnUiThread(() -> {
+                if (!activityDestroy) {
+                    if (loadingDialog != null && loadingDialog.isShowing()) {
+                        loadingDialog.cancel();
+                        loadingDialog = null;
+                    }
+                }
+            });
         }).start();
     }
 
@@ -502,30 +443,10 @@ public class CourseActivity extends AppCompatActivity {
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle(isBackup ? R.string.backup_course : isCurrentTerm ? R.string.import_course_from_jwc_current : R.string.import_course_from_jwc_next);
-                    builder.setMultiChoiceItems(name, checked, new DialogInterface.OnMultiChoiceClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                            checked[which] = isChecked;
-                        }
-                    });
-                    builder.setPositiveButton(R.string.add_course_and_clean, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            chooseCourseAdd(checked, courses, true, isBackup, combineColor);
-                        }
-                    });
-                    builder.setNeutralButton(R.string.add_course_only, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            chooseCourseAdd(checked, courses, false, isBackup, combineColor);
-                        }
-                    });
-                    builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            courses.clear();
-                        }
-                    });
+                    builder.setMultiChoiceItems(name, checked, (dialog, which, isChecked) -> checked[which] = isChecked);
+                    builder.setPositiveButton(R.string.add_course_and_clean, (dialog, which) -> chooseCourseAdd(checked, courses, true, isBackup, combineColor));
+                    builder.setNeutralButton(R.string.add_course_only, (dialog, which) -> chooseCourseAdd(checked, courses, false, isBackup, combineColor));
+                    builder.setNegativeButton(android.R.string.cancel, (dialog, which) -> courses.clear());
                     builder.show();
                 } else {
                     Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.course_empty, Snackbar.LENGTH_SHORT).show();
@@ -600,7 +521,7 @@ public class CourseActivity extends AppCompatActivity {
         }
 
         LayoutInflater layoutInflater = activity.getLayoutInflater();
-        View view = layoutInflater.inflate(R.layout.dialog_term_time_set, (ViewGroup) activity.findViewById(R.id.layout_dialog_term_time_set));
+        View view = layoutInflater.inflate(R.layout.dialog_term_time_set, activity.findViewById(R.id.layout_dialog_term_time_set));
 
         TextView textView_start = view.findViewById(R.id.textView_custom_start_date);
         textView_start.setText(activity.getString(R.string.custom_term_start_date, customStartTermDate));
@@ -609,68 +530,56 @@ public class CourseActivity extends AppCompatActivity {
         textView_end.setText(activity.getString(R.string.custom_term_end_date, customEndTermDate));
 
         Button button_start = view.findViewById(R.id.button_custom_start_date);
-        button_start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (termSetDialog != null) {
-                    if (termSetDialog.isShowing()) {
-                        termSetDialog.cancel();
-                    }
+        button_start.setOnClickListener(v -> {
+            if (termSetDialog != null) {
+                if (termSetDialog.isShowing()) {
+                    termSetDialog.cancel();
                 }
-                showDatePickDialog(activity, true, calendarStart.get(Calendar.YEAR), calendarStart.get(Calendar.MONTH), calendarStart.get(Calendar.DAY_OF_MONTH));
             }
+            showDatePickDialog(activity, true, calendarStart.get(Calendar.YEAR), calendarStart.get(Calendar.MONTH), calendarStart.get(Calendar.DAY_OF_MONTH));
         });
 
         Button button_end = view.findViewById(R.id.button_custom_end_date);
-        button_end.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (termSetDialog != null) {
-                    if (termSetDialog.isShowing()) {
-                        termSetDialog.cancel();
-                    }
+        button_end.setOnClickListener(v -> {
+            if (termSetDialog != null) {
+                if (termSetDialog.isShowing()) {
+                    termSetDialog.cancel();
                 }
-                showDatePickDialog(activity, false, calendarEnd.get(Calendar.YEAR), calendarEnd.get(Calendar.MONTH), calendarEnd.get(Calendar.DAY_OF_MONTH));
             }
+            showDatePickDialog(activity, false, calendarEnd.get(Calendar.YEAR), calendarEnd.get(Calendar.MONTH), calendarEnd.get(Calendar.DAY_OF_MONTH));
         });
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(R.string.custom_term);
-        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (customStartTermDate != null && customEndTermDate != null) {
-                    try {
-                        long termDay = TimeMethod.parseDateSDF(customEndTermDate).getTime() - TimeMethod.parseDateSDF(customStartTermDate).getTime();
-                        if (termDay <= 0 || termDay / (1000 * 60 * 60 * 24) < 30 || termDay / (1000 * 60 * 60 * 24) > (7 * Config.DEFAULT_MAX_WEEK)) {
-                            Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.term_set_failed, Snackbar.LENGTH_SHORT).show();
-                        } else {
-                            needReload = true;
-                            if (schoolTime != null) {
-                                sharedPreferences.edit().putString(Config.PREFERENCE_OLD_TERM_START_DATE, schoolTime.getStartTime())
-                                        .putString(Config.PREFERENCE_OLD_TERM_END_DATE, schoolTime.getEndTime()).apply();
-                            }
-                            sharedPreferences.edit().putString(Config.PREFERENCE_CUSTOM_TERM_START_DATE, customStartTermDate)
-                                    .putString(Config.PREFERENCE_CUSTOM_TERM_END_DATE, customEndTermDate).apply();
-                            Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.term_set_success, Snackbar.LENGTH_SHORT).show();
+        builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
+            if (customStartTermDate != null && customEndTermDate != null) {
+                try {
+                    long termDay = TimeMethod.parseDateSDF(customEndTermDate).getTime() - TimeMethod.parseDateSDF(customStartTermDate).getTime();
+                    if (termDay <= 0 || termDay / (1000 * 60 * 60 * 24) < 30 || termDay / (1000 * 60 * 60 * 24) > (7 * Config.DEFAULT_MAX_WEEK)) {
+                        Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.term_set_failed, Snackbar.LENGTH_SHORT).show();
+                    } else {
+                        needReload = true;
+                        if (schoolTime != null) {
+                            sharedPreferences.edit().putString(Config.PREFERENCE_OLD_TERM_START_DATE, schoolTime.getStartTime())
+                                    .putString(Config.PREFERENCE_OLD_TERM_END_DATE, schoolTime.getEndTime()).apply();
                         }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                        sharedPreferences.edit().putString(Config.PREFERENCE_CUSTOM_TERM_START_DATE, customStartTermDate)
+                                .putString(Config.PREFERENCE_CUSTOM_TERM_END_DATE, customEndTermDate).apply();
+                        Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.term_set_success, Snackbar.LENGTH_SHORT).show();
                     }
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
             }
         });
         builder.setNegativeButton(android.R.string.cancel, null);
-        builder.setNeutralButton(R.string.reset, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                sharedPreferences.edit().remove(Config.PREFERENCE_OLD_TERM_START_DATE)
-                        .remove(Config.PREFERENCE_OLD_TERM_END_DATE)
-                        .remove(Config.PREFERENCE_CUSTOM_TERM_START_DATE)
-                        .remove(Config.PREFERENCE_CUSTOM_TERM_END_DATE).apply();
-                needReload = true;
-                Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.term_set_success, Snackbar.LENGTH_SHORT).show();
-            }
+        builder.setNeutralButton(R.string.reset, (dialog, which) -> {
+            sharedPreferences.edit().remove(Config.PREFERENCE_OLD_TERM_START_DATE)
+                    .remove(Config.PREFERENCE_OLD_TERM_END_DATE)
+                    .remove(Config.PREFERENCE_CUSTOM_TERM_START_DATE)
+                    .remove(Config.PREFERENCE_CUSTOM_TERM_END_DATE).apply();
+            needReload = true;
+            Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.term_set_success, Snackbar.LENGTH_SHORT).show();
         });
         builder.setView(view);
         termSetDialog = builder.show();
@@ -685,26 +594,18 @@ public class CourseActivity extends AppCompatActivity {
         }
         pickerDialog.setCancelable(false);
         pickerDialog.setCanceledOnTouchOutside(false);
-        pickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(android.R.string.yes), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                DatePicker datePicker = pickerDialog.getDatePicker();
-                DecimalFormat df = new DecimalFormat("00");
-                String getDate = datePicker.getYear() + "-" + df.format(datePicker.getMonth() + 1) + "-" + df.format(datePicker.getDayOfMonth());
-                if (isStartDate) {
-                    customStartTermDate = getDate;
-                } else {
-                    customEndTermDate = getDate;
-                }
-                showTermSetDialog(CourseActivity.this);
+        pickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(android.R.string.yes), (dialog, which) -> {
+            DatePicker datePicker = pickerDialog.getDatePicker();
+            DecimalFormat df = new DecimalFormat("00");
+            String getDate = datePicker.getYear() + "-" + df.format(datePicker.getMonth() + 1) + "-" + df.format(datePicker.getDayOfMonth());
+            if (isStartDate) {
+                customStartTermDate = getDate;
+            } else {
+                customEndTermDate = getDate;
             }
+            showTermSetDialog(CourseActivity.this);
         });
-        pickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                showTermSetDialog(CourseActivity.this);
-            }
-        });
+        pickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), (dialog, which) -> showTermSetDialog(CourseActivity.this));
         pickerDialog.show();
     }
 

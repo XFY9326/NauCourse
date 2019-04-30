@@ -13,14 +13,15 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.gridlayout.widget.GridLayout;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
+
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Course;
@@ -270,14 +271,11 @@ public class CourseViewMethod {
 
             //单元格监听
             if (row != 0 && col != 0) {
-                linearLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        for (Course course : courses) {
-                            if (onCourseTableClick != null && Objects.requireNonNull(course.getCourseId()).equals(Objects.requireNonNull(id_table)[col][row])) {
-                                onCourseTableClick.OnItemClick(course);
-                                break;
-                            }
+                linearLayout.setOnClickListener(v -> {
+                    for (Course course : courses) {
+                        if (onCourseTableClick != null && Objects.requireNonNull(course.getCourseId()).equals(Objects.requireNonNull(id_table)[col][row])) {
+                            onCourseTableClick.OnItemClick(course);
+                            break;
                         }
                     }
                 });

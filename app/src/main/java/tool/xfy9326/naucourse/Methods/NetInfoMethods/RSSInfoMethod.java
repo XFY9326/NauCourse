@@ -3,6 +3,9 @@ package tool.xfy9326.naucourse.Methods.NetInfoMethods;
 import android.content.Context;
 import android.util.SparseArray;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -14,8 +17,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.DataMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
@@ -141,30 +142,27 @@ public class RSSInfoMethod {
         Future[] futures = new Future[typeList.length];
         for (int i = 0; i < typeList.length; i++) {
             final int type = typeList[i];
-            futures[i] = executorService.submit(new Runnable() {
-                @Override
-                public void run() {
-                    String rssUrl = getRSSUrl(type);
-                    if (rssUrl != null) {
-                        try {
-                            String data = NetMethod.loadUrl(rssUrl);
-                            if (data != null) {
-                                RSSReader.RSSObject rssObject = RSSReader.getRSSObject(data);
-                                if (rssObject != null) {
-                                    rssObjectSparseArray.put(type, rssObject);
-                                } else {
-                                    hasFailedLoad = true;
-                                }
+            futures[i] = executorService.submit(() -> {
+                String rssUrl = getRSSUrl(type);
+                if (rssUrl != null) {
+                    try {
+                        String data = NetMethod.loadUrl(rssUrl);
+                        if (data != null) {
+                            RSSReader.RSSObject rssObject = RSSReader.getRSSObject(data);
+                            if (rssObject != null) {
+                                rssObjectSparseArray.put(type, rssObject);
                             } else {
                                 hasFailedLoad = true;
                             }
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        } else {
                             hasFailedLoad = true;
                         }
-                    } else {
+                    } catch (IOException e) {
+                        e.printStackTrace();
                         hasFailedLoad = true;
                     }
+                } else {
+                    hasFailedLoad = true;
                 }
             });
         }

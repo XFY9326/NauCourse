@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.Nullable;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -11,7 +13,6 @@ import org.jsoup.select.Elements;
 import java.util.List;
 import java.util.Objects;
 
-import androidx.annotation.Nullable;
 import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.DataMethod;
@@ -154,6 +155,10 @@ public class PersonMethod {
         }
     }
 
+    private static String getDetailMsg(String str) {
+        return str.substring(5, str.indexOf("【")).trim();
+    }
+
     @Nullable
     public StudentInfo getUserData(boolean checkTemp) {
         StudentInfo studentInfo = new StudentInfo();
@@ -165,7 +170,7 @@ public class PersonMethod {
                 continue;
             }
             if (str.contains("学生姓名：")) {
-                studentInfo.setStd_name(str.substring(5, str.indexOf("【")).trim());
+                studentInfo.setStd_name(getDetailMsg(str));
                 continue;
             }
             if (str.contains("所在年级：")) {
@@ -173,11 +178,11 @@ public class PersonMethod {
                 continue;
             }
             if (str.contains("学院归属：")) {
-                studentInfo.setStd_collage(str.substring(5, str.indexOf("【")).trim());
+                studentInfo.setStd_collage(getDetailMsg(str));
                 continue;
             }
             if (str.contains("专业信息：")) {
-                studentInfo.setStd_major(str.substring(5, str.indexOf("【")).trim());
+                studentInfo.setStd_major(getDetailMsg(str));
                 continue;
             }
             if (str.contains("专业方向：")) {

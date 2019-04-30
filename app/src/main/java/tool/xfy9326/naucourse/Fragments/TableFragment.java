@@ -1,7 +1,6 @@
 package tool.xfy9326.naucourse.Fragments;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -189,12 +188,9 @@ public class TableFragment extends Fragment {
             course_table_layout = view.findViewById(R.id.course_table_layout);
 
             CardView cardView_date = view.findViewById(R.id.cardview_table_date);
-            cardView_date.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (nowWeekNum != 0 && nowWeekNum - 1 != lastSelect) {
-                        reloadTable(false);
-                    }
+            cardView_date.setOnClickListener(v -> {
+                if (nowWeekNum != 0 && nowWeekNum - 1 != lastSelect) {
+                    reloadTable(false);
                 }
             });
 
@@ -362,12 +358,7 @@ public class TableFragment extends Fragment {
                 courseViewMethod.setTableView(course_table_layout, cardView_course.getWidth(), cardView_course.getHeight());
             }
             if (isDataReload) {
-                courseViewMethod.setOnCourseTableClickListener(new CourseViewMethod.OnCourseTableItemClickListener() {
-                    @Override
-                    public void OnItemClick(@NonNull Course course) {
-                        CourseCardSet(course);
-                    }
-                });
+                courseViewMethod.setOnCourseTableClickListener(this::CourseCardSet);
             }
             if (courseMethod == null) {
                 courseMethod = new CourseMethod(context, courses, schoolTime);
@@ -400,7 +391,7 @@ public class TableFragment extends Fragment {
     private void CourseCardSet(@NonNull Course course) {
         if (getActivity() != null) {
             LayoutInflater layoutInflater = getLayoutInflater();
-            View view_dialog = layoutInflater.inflate(R.layout.dialog_course_card, (ViewGroup) getActivity().findViewById(R.id.layout_course_card));
+            View view_dialog = layoutInflater.inflate(R.layout.dialog_course_card, getActivity().findViewById(R.id.layout_course_card));
 
             LinearLayout linearLayout_content = view_dialog.findViewById(R.id.layout_course_card_content);
             TextView textView_name = view_dialog.findViewById(R.id.textView_course_card_name);
@@ -453,7 +444,7 @@ public class TableFragment extends Fragment {
                         String[] course_times = detail.getCourseTime();
                         String[] week_num = context.getResources().getStringArray(R.array.week_number);
                         for (String course_time : Objects.requireNonNull(course_times)) {
-                            View view_card = layoutInflater.inflate(R.layout.item_course_card, (ViewGroup) getActivity().findViewById(R.id.layout_course_card_item));
+                            View view_card = layoutInflater.inflate(R.layout.item_course_card, getActivity().findViewById(R.id.layout_course_card_item));
                             String time = context.getString(R.string.course_card_time, course_week, weekmode, week_num[detail.getWeekDay() - 1], course_time);
                             String location = context.getString(R.string.course_card_location, detail.getLocation());
                             ((TextView) view_card.findViewById(R.id.textView_course_card_time)).setText(time);
@@ -533,34 +524,28 @@ public class TableFragment extends Fragment {
                         final String path = Config.PICTURE_DICTIONARY_PATH + Config.COURSE_TABLE_FILE_NAME;
                         if (ImageMethod.saveBitmap(bitmap, path, false) && context != null && isAdded() && getActivity() != null) {
                             LayoutInflater layoutInflater = getLayoutInflater();
-                            View view = layoutInflater.inflate(R.layout.dialog_share_image, (ViewGroup) getActivity().findViewById(R.id.layout_dialog_share_image));
+                            View view = layoutInflater.inflate(R.layout.dialog_share_image, getActivity().findViewById(R.id.layout_dialog_share_image));
                             PhotoView photoView = view.findViewById(R.id.photoView_share_image);
                             photoView.setImageDrawable(new BitmapDrawable(getResources(), bitmap));
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(context);
                             builder.setView(view);
                             builder.setTitle(R.string.share_course_table);
-                            builder.setPositiveButton(R.string.share, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    if (getActivity() != null) {
-                                        Uri photoURI = FileProvider.getUriForFile(getActivity(), Config.FILE_PROVIDER_AUTH, new File(path));
-                                        Intent intent = new Intent(Intent.ACTION_SEND);
-                                        intent.setType("image/*");
-                                        intent.putExtra(Intent.EXTRA_STREAM, photoURI);
-                                        intent.addCategory(Intent.CATEGORY_DEFAULT);
-                                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                        startActivity(Intent.createChooser(intent, getString(R.string.share_course_table)));
-                                    }
+                            builder.setPositiveButton(R.string.share, (dialog, which) -> {
+                                if (getActivity() != null) {
+                                    Uri photoURI = FileProvider.getUriForFile(getActivity(), Config.FILE_PROVIDER_AUTH, new File(path));
+                                    Intent intent = new Intent(Intent.ACTION_SEND);
+                                    intent.setType("image/*");
+                                    intent.putExtra(Intent.EXTRA_STREAM, photoURI);
+                                    intent.addCategory(Intent.CATEGORY_DEFAULT);
+                                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                    startActivity(Intent.createChooser(intent, getString(R.string.share_course_table)));
                                 }
                             });
                             builder.setNegativeButton(android.R.string.cancel, null);
-                            builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                @Override
-                                public void onCancel(DialogInterface dialog) {
-                                    if (!bitmap.isRecycled()) {
-                                        bitmap.recycle();
-                                    }
+                            builder.setOnCancelListener(dialog -> {
+                                if (!bitmap.isRecycled()) {
+                                    bitmap.recycle();
                                 }
                             });
                             builder.show();

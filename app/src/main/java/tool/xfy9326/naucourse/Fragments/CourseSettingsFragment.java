@@ -1,7 +1,6 @@
 package tool.xfy9326.naucourse.Fragments;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -13,20 +12,21 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.Toast;
-
-import com.google.android.material.textfield.TextInputEditText;
-
-import java.io.File;
-import java.util.List;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
+
+import com.google.android.material.textfield.TextInputEditText;
+
+import java.io.File;
+import java.util.List;
+import java.util.Objects;
+
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Handlers.MainHandler;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
@@ -76,74 +76,59 @@ public class CourseSettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void PreferenceSet() {
-        Preference.OnPreferenceChangeListener tableReloadListener = new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                updateCourseTable = true;
-                return true;
-            }
+        Preference.OnPreferenceChangeListener tableReloadListener = (preference, newValue) -> {
+            updateCourseTable = true;
+            return true;
         };
-        Preference.OnPreferenceChangeListener tableDataReloadListener = new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                updateCourseTable = true;
-                reloadTableData = true;
-                return true;
-            }
+        Preference.OnPreferenceChangeListener tableDataReloadListener = (preference, newValue) -> {
+            updateCourseTable = true;
+            reloadTableData = true;
+            return true;
         };
 
-        findPreference(Config.PREFERENCE_SHOW_NEXT_WEEK).setOnPreferenceChangeListener(tableReloadListener);
-        findPreference(Config.PREFERENCE_SHOW_WIDE_TABLE).setOnPreferenceChangeListener(tableReloadListener);
-        findPreference(Config.PREFERENCE_COURSE_TABLE_CELL_COLOR).setOnPreferenceChangeListener(tableReloadListener);
-        findPreference(Config.PREFERENCE_COURSE_TABLE_SHOW_SINGLE_COLOR).setOnPreferenceChangeListener(tableReloadListener);
-        findPreference(Config.PREFERENCE_SHOW_NO_THIS_WEEK_CLASS).setOnPreferenceChangeListener(tableDataReloadListener);
+        ((Preference) Objects.requireNonNull(findPreference(Config.PREFERENCE_SHOW_NEXT_WEEK))).setOnPreferenceChangeListener(tableReloadListener);
+        ((Preference) Objects.requireNonNull(findPreference(Config.PREFERENCE_SHOW_WIDE_TABLE))).setOnPreferenceChangeListener(tableReloadListener);
+        ((Preference) Objects.requireNonNull(findPreference(Config.PREFERENCE_COURSE_TABLE_CELL_COLOR))).setOnPreferenceChangeListener(tableReloadListener);
+        ((Preference) Objects.requireNonNull(findPreference(Config.PREFERENCE_COURSE_TABLE_SHOW_SINGLE_COLOR))).setOnPreferenceChangeListener(tableReloadListener);
+        ((Preference) Objects.requireNonNull(findPreference(Config.PREFERENCE_SHOW_NO_THIS_WEEK_CLASS))).setOnPreferenceChangeListener(tableDataReloadListener);
 
-        findPreference(Config.PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if ((boolean) newValue && !cropSuccess) {
-                    if (isAdded() && getActivity() != null) {
-                        if (PermissionMethod.checkStoragePermission(getActivity(), WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE)) {
-                            chooseAndCropImage();
-                        } else {
-                            Toast.makeText(getActivity(), R.string.permission_error, Toast.LENGTH_SHORT).show();
-                        }
+        ((Preference) Objects.requireNonNull(findPreference(Config.PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND))).setOnPreferenceChangeListener((preference, newValue) -> {
+            if ((boolean) newValue && !cropSuccess) {
+                if (isAdded() && getActivity() != null) {
+                    if (PermissionMethod.checkStoragePermission(getActivity(), WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE)) {
+                        chooseAndCropImage();
+                    } else {
+                        Toast.makeText(getActivity(), R.string.permission_error, Toast.LENGTH_SHORT).show();
                     }
-                    updateCourseTable = true;
-                    return false;
-                } else {
-                    if (getActivity() != null) {
-                        File file = new File(ImageMethod.getCourseTableBackgroundImagePath(getActivity()));
-                        if (file.exists()) {
-                            //noinspection ResultOfMethodCallIgnored
-                            file.delete();
-                        }
-                    }
-                    cropSuccess = false;
-                    updateCourseTable = true;
-                    return true;
                 }
-            }
-        });
-
-        findPreference(Config.PREFERENCE_CHANGE_TABLE_TRANSPARENCY).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                changeTransparency();
+                updateCourseTable = true;
+                return false;
+            } else {
+                if (getActivity() != null) {
+                    File file = new File(ImageMethod.getCourseTableBackgroundImagePath(getActivity()));
+                    if (file.exists()) {
+                        //noinspection ResultOfMethodCallIgnored
+                        file.delete();
+                    }
+                }
+                cropSuccess = false;
+                updateCourseTable = true;
                 return true;
             }
         });
 
-        findPreference(Config.PREFERENCE_NOTIFY_NEXT_CLASS).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if ((boolean) newValue && getActivity() != null) {
-                    Toast.makeText(getActivity(), R.string.ask_lock_background, Toast.LENGTH_SHORT).show();
-                    //初始化自动更新
-                    getActivity().sendBroadcast(new Intent(CourseUpdateReceiver.UPDATE_ACTION).putExtra(Config.INTENT_IS_ONLY_INIT, true));
-                }
-                return true;
+        ((Preference) Objects.requireNonNull(findPreference(Config.PREFERENCE_CHANGE_TABLE_TRANSPARENCY))).setOnPreferenceClickListener(preference -> {
+            changeTransparency();
+            return true;
+        });
+
+        ((Preference) Objects.requireNonNull(findPreference(Config.PREFERENCE_NOTIFY_NEXT_CLASS))).setOnPreferenceChangeListener((preference, newValue) -> {
+            if ((boolean) newValue && getActivity() != null) {
+                Toast.makeText(getActivity(), R.string.ask_lock_background, Toast.LENGTH_SHORT).show();
+                //初始化自动更新
+                getActivity().sendBroadcast(new Intent(CourseUpdateReceiver.UPDATE_ACTION).putExtra(Config.INTENT_IS_ONLY_INIT, true));
             }
+            return true;
         });
     }
 
@@ -166,7 +151,7 @@ public class CourseSettingsFragment extends PreferenceFragmentCompat {
             transparency_value = sharedPreferences.getFloat(Config.PREFERENCE_CHANGE_TABLE_TRANSPARENCY, Config.DEFAULT_PREFERENCE_CHANGE_TABLE_TRANSPARENCY);
 
             LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-            View view = layoutInflater.inflate(R.layout.dialog_edit_progress, (ViewGroup) getActivity().findViewById(R.id.layout_dialog_edit_progress));
+            View view = layoutInflater.inflate(R.layout.dialog_edit_progress, getActivity().findViewById(R.id.layout_dialog_edit_progress));
 
             final TextInputEditText textInputEditText = view.findViewById(R.id.editText_dialog_edit_progress);
             textInputEditText.setHint(R.string.transparency);
@@ -196,20 +181,14 @@ public class CourseSettingsFragment extends PreferenceFragmentCompat {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(R.string.change_table_transparency);
-            builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    sharedPreferences.edit().putFloat(Config.PREFERENCE_CHANGE_TABLE_TRANSPARENCY, transparency_value).apply();
-                    updateCourseTable = true;
-                }
+            builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                sharedPreferences.edit().putFloat(Config.PREFERENCE_CHANGE_TABLE_TRANSPARENCY, transparency_value).apply();
+                updateCourseTable = true;
             });
             builder.setNegativeButton(android.R.string.cancel, null);
-            builder.setNeutralButton(R.string.reset, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    sharedPreferences.edit().remove(Config.PREFERENCE_CHANGE_TABLE_TRANSPARENCY).apply();
-                    updateCourseTable = true;
-                }
+            builder.setNeutralButton(R.string.reset, (dialog, which) -> {
+                sharedPreferences.edit().remove(Config.PREFERENCE_CHANGE_TABLE_TRANSPARENCY).apply();
+                updateCourseTable = true;
             });
             builder.setView(view);
             builder.show();
@@ -275,7 +254,7 @@ public class CourseSettingsFragment extends PreferenceFragmentCompat {
                 if (resultCode == Activity.RESULT_OK && getActivity() != null && imageTempPath != null) {
                     if (IO.copyFile(imageTempPath, ImageMethod.getCourseTableBackgroundImagePath(getActivity()), true)) {
                         cropSuccess = true;
-                        ((CheckBoxPreference) findPreference(Config.PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND)).setChecked(true);
+                        ((CheckBoxPreference) Objects.requireNonNull(findPreference(Config.PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND))).setChecked(true);
                         PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean(Config.PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND, true).apply();
                         updateCourseTable = true;
                         imageTempPath = null;

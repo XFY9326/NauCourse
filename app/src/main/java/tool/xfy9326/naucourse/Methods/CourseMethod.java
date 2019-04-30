@@ -3,6 +3,9 @@ package tool.xfy9326.naucourse.Methods;
 import android.content.Context;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -10,8 +13,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.Course;
@@ -58,7 +59,7 @@ public class CourseMethod {
     private static NextCourse getNextClass(@NonNull Context context, String[][] this_week_table, String[][] this_week_id_table, boolean[][] this_week_no_show_table, @NonNull ArrayList<Course> courses) {
         NextCourse nextCourse = new NextCourse();
         Calendar calendar = Calendar.getInstance(Locale.CHINA);
-        int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK) == 1 ? 7 : calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY ? 7 : calendar.get(Calendar.DAY_OF_WEEK) - 1;
 
         String[] today = this_week_table[weekDayNum];
         String[] todayId = this_week_id_table[weekDayNum];

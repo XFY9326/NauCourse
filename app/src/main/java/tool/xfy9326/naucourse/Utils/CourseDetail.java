@@ -10,11 +10,11 @@ import androidx.annotation.Nullable;
 public class CourseDetail extends BaseData {
     //Num-Num,Num...
     @Nullable
-    private String weeks[] = null;
+    private String[] weeks = null;
     private int weekDay = 0;
     //Num-Num,Num...
     @Nullable
-    private String courseTime[] = null;
+    private String[] courseTime = null;
     private int weekMode = 0;
     @Nullable
     private String location = null;

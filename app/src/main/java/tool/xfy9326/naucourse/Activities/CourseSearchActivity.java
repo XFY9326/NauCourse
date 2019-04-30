@@ -1,7 +1,6 @@
 package tool.xfy9326.naucourse.Activities;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
@@ -14,7 +13,6 @@ import android.widget.Spinner;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -63,7 +61,7 @@ public class CourseSearchActivity extends AppCompatActivity {
     }
 
     private void ToolBarSet() {
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar(findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
@@ -88,7 +86,7 @@ public class CourseSearchActivity extends AppCompatActivity {
         getBaseSearchData();
     }
 
-    synchronized public void closeLoadingDialog() {
+    private synchronized void closeLoadingDialog() {
         if (loadingDialog != null) {
             if (loadingDialog.isShowing()) {
                 loadingDialog.dismiss();
@@ -109,12 +107,7 @@ public class CourseSearchActivity extends AppCompatActivity {
 
     private void getBaseSearchData() {
         if (loadingDialog == null) {
-            loadingDialog = BaseMethod.showLoadingDialog(this, true, new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    finish();
-                }
-            });
+            loadingDialog = BaseMethod.showLoadingDialog(this, true, dialog -> finish());
         }
         new CourseSearchInfoAsync().execute(courseSearchMethod, getApplicationContext());
     }
@@ -235,44 +228,41 @@ public class CourseSearchActivity extends AppCompatActivity {
             });
 
             Button button_search = findViewById(R.id.button_course_search);
-            button_search.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    CourseSearchInfo courseSearchInfo = new CourseSearchInfo();
-                    courseSearchInfo.setTerm(termList.get(spinner_term.getSelectedItemPosition()));
-                    courseSearchInfo.setSearchType(typeValueList[spinner_search_type.getSelectedItemPosition()]);
+            button_search.setOnClickListener(v -> {
+                CourseSearchInfo courseSearchInfo = new CourseSearchInfo();
+                courseSearchInfo.setTerm(termList.get(spinner_term.getSelectedItemPosition()));
+                courseSearchInfo.setSearchType(typeValueList[spinner_search_type.getSelectedItemPosition()]);
 
-                    String value = null;
-                    if (isSpinnerMode) {
-                        if (isWeekTypeSearch) {
-                            value = String.valueOf(spinner_search_value.getSelectedItemPosition() + 1);
-                        } else {
-                            value = String.valueOf(spinner_search_value.getSelectedItem());
-                        }
+                String value = null;
+                if (isSpinnerMode) {
+                    if (isWeekTypeSearch) {
+                        value = String.valueOf(spinner_search_value.getSelectedItemPosition() + 1);
                     } else {
-                        Editable editable = editText_value.getText();
-                        if (editable != null) {
-                            value = editable.toString();
-                        }
+                        value = String.valueOf(spinner_search_value.getSelectedItem());
                     }
-                    if (value != null) {
-                        value = value.trim();
-                        if (value.isEmpty()) {
-                            Snackbar.make(findViewById(R.id.layout_course_search_content), R.string.search_empty, Snackbar.LENGTH_SHORT).show();
-                        } else {
-                            courseSearchInfo.setValue(value);
-                            searchDetail(courseSearchInfo);
-                        }
+                } else {
+                    Editable editable = editText_value.getText();
+                    if (editable != null) {
+                        value = editable.toString();
+                    }
+                }
+                if (value != null) {
+                    value = value.trim();
+                    if (value.isEmpty()) {
+                        Snackbar.make(findViewById(R.id.layout_course_search_content), R.string.search_empty, Snackbar.LENGTH_SHORT).show();
                     } else {
-                        Snackbar.make(findViewById(R.id.layout_course_search_content), R.string.search_value_error, Snackbar.LENGTH_SHORT).show();
+                        courseSearchInfo.setValue(value);
+                        searchDetail(courseSearchInfo);
                     }
+                } else {
+                    Snackbar.make(findViewById(R.id.layout_course_search_content), R.string.search_value_error, Snackbar.LENGTH_SHORT).show();
+                }
 
-                    if (!isSpinnerMode) {
-                        BaseMethod.hideKeyBoard(CourseSearchActivity.this);
-                    }
-                    if (recyclerView != null) {
-                        recyclerView.smoothScrollToPosition(0);
-                    }
+                if (!isSpinnerMode) {
+                    BaseMethod.hideKeyBoard(CourseSearchActivity.this);
+                }
+                if (recyclerView != null) {
+                    recyclerView.smoothScrollToPosition(0);
                 }
             });
         }

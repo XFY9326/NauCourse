@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.Nullable;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,7 +15,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import androidx.annotation.Nullable;
 import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.DataMethod;
@@ -61,7 +62,7 @@ public class ExamMethod {
     }
 
     @Nullable
-    @SuppressWarnings({"SameParameterValue", "ConstantConditions"})
+    @SuppressWarnings({"SameParameterValue"})
     public Exam getExam(boolean checkTemp) {
         ArrayList<String> examId = new ArrayList<>();
         ArrayList<String> examName = new ArrayList<>();
@@ -72,7 +73,7 @@ public class ExamMethod {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         boolean hide_exam = sharedPreferences.getBoolean(Config.PREFERENCE_HIDE_OUT_OF_DATE_EXAM, Config.DEFAULT_PREFERENCE_HIDE_OUT_OF_DATE_EXAM);
-        long now = System.currentTimeMillis() / 1000L;
+        long now = System.currentTimeMillis();
 
         Exam exam = new Exam();
         Elements elements = Objects.requireNonNull(document).body().getElementsByTag("td");
@@ -108,7 +109,7 @@ public class ExamMethod {
                             if (str.contains("-") && str.contains(" ")) {
                                 str = str.substring(0, str.indexOf(" ") + 1) + str.substring(str.indexOf("-") + 1);
                                 try {
-                                    examEnd = TimeMethod.parseDateSDFHM(str).getTime() / 1000L;
+                                    examEnd = TimeMethod.parseDateSDFHM(str).getTime();
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                     examEnd = -1;

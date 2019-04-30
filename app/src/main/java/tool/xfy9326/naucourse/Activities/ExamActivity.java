@@ -7,17 +7,17 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.snackbar.Snackbar;
+
 import tool.xfy9326.naucourse.AsyncTasks.ExamAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
@@ -66,21 +66,19 @@ public class ExamActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_exam_hide_out_of_date:
-                if (NetMethod.isNetworkConnected(ExamActivity.this)) {
-                    getData();
-                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-                    if (sharedPreferences.getBoolean(Config.PREFERENCE_HIDE_OUT_OF_DATE_EXAM, Config.DEFAULT_PREFERENCE_HIDE_OUT_OF_DATE_EXAM)) {
-                        sharedPreferences.edit().putBoolean(Config.PREFERENCE_HIDE_OUT_OF_DATE_EXAM, false).apply();
-                    } else {
-                        sharedPreferences.edit().putBoolean(Config.PREFERENCE_HIDE_OUT_OF_DATE_EXAM, true).apply();
-                    }
-                    invalidateOptionsMenu();
+        if (item.getItemId() == R.id.menu_exam_hide_out_of_date) {
+            if (NetMethod.isNetworkConnected(ExamActivity.this)) {
+                getData();
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+                if (sharedPreferences.getBoolean(Config.PREFERENCE_HIDE_OUT_OF_DATE_EXAM, Config.DEFAULT_PREFERENCE_HIDE_OUT_OF_DATE_EXAM)) {
+                    sharedPreferences.edit().putBoolean(Config.PREFERENCE_HIDE_OUT_OF_DATE_EXAM, false).apply();
                 } else {
-                    Snackbar.make(findViewById(R.id.layout_exam_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
+                    sharedPreferences.edit().putBoolean(Config.PREFERENCE_HIDE_OUT_OF_DATE_EXAM, true).apply();
                 }
-                break;
+                invalidateOptionsMenu();
+            } else {
+                Snackbar.make(findViewById(R.id.layout_exam_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -93,7 +91,7 @@ public class ExamActivity extends AppCompatActivity {
     }
 
     private void ToolBarSet() {
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar(findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
@@ -110,20 +108,12 @@ public class ExamActivity extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.swipeLayout_exam);
         swipeRefreshLayout.setDistanceToTriggerSync(200);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (NetMethod.isNetworkConnected(ExamActivity.this)) {
-                    getData();
-                } else {
-                    Snackbar.make(findViewById(R.id.layout_exam_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
-                    swipeRefreshLayout.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    });
-                }
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            if (NetMethod.isNetworkConnected(ExamActivity.this)) {
+                getData();
+            } else {
+                Snackbar.make(findViewById(R.id.layout_exam_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
+                swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(false));
             }
         });
 

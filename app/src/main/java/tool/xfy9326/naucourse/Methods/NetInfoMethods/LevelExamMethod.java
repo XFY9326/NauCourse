@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.Nullable;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import androidx.annotation.Nullable;
 import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.DataMethod;
@@ -53,7 +54,7 @@ public class LevelExamMethod {
         getLevelExam(false);
     }
 
-    @SuppressWarnings({"ToArrayCallWithZeroLengthArrayArgument", "ConstantConditions"})
+    @SuppressWarnings({"ToArrayCallWithZeroLengthArrayArgument"})
     @Nullable
     public LevelExam getLevelExam(boolean checkTemp) {
         ArrayList<String> examType = new ArrayList<>();

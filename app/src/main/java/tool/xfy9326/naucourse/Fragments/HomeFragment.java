@@ -1,7 +1,6 @@
 package tool.xfy9326.naucourse.Fragments;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -130,12 +129,9 @@ public class HomeFragment extends Fragment {
                 });
             }
             scrollToPosition();
-            view.findViewById(R.id.cardView_info_title).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (recyclerView != null && isAdded()) {
-                        recyclerView.smoothScrollToPosition(0);
-                    }
+            view.findViewById(R.id.cardView_info_title).setOnClickListener(v -> {
+                if (recyclerView != null && isAdded()) {
+                    recyclerView.smoothScrollToPosition(0);
                 }
             });
 
@@ -143,20 +139,12 @@ public class HomeFragment extends Fragment {
                 swipeRefreshLayout = view.findViewById(R.id.swipeLayout_home);
                 swipeRefreshLayout.setDistanceToTriggerSync(200);
                 swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
-                swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        if (NetMethod.isNetworkConnected(context)) {
-                            getData();
-                        } else {
-                            Toast.makeText(context, R.string.network_error, Toast.LENGTH_SHORT).show();
-                            swipeRefreshLayout.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    swipeRefreshLayout.setRefreshing(false);
-                                }
-                            });
-                        }
+                swipeRefreshLayout.setOnRefreshListener(() -> {
+                    if (NetMethod.isNetworkConnected(context)) {
+                        getData();
+                    } else {
+                        Toast.makeText(context, R.string.network_error, Toast.LENGTH_SHORT).show();
+                        swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(false));
                     }
                 });
             }
@@ -171,43 +159,25 @@ public class HomeFragment extends Fragment {
             loadTempNextCourse();
 
             CardView cardView_nextClass = view.findViewById(R.id.cardView_local_next_course);
-            cardView_nextClass.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (context != null) {
-                        setNextCourse();
-                        context.sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
-                    }
+            cardView_nextClass.setOnClickListener(v -> {
+                if (context != null) {
+                    setNextCourse();
+                    context.sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
                 }
             });
 
-            view.findViewById(R.id.button_info_select).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setShowInfo();
-                }
-            });
+            view.findViewById(R.id.button_info_select).setOnClickListener(v -> setShowInfo());
         }
     }
 
     private void swipeAndGetInfo() {
         if (context != null && swipeRefreshLayout != null) {
             if (NetMethod.isNetworkConnected(context)) {
-                swipeRefreshLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeRefreshLayout.setRefreshing(true);
-                    }
-                });
+                swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(true));
                 getData();
             } else {
                 Toast.makeText(context, R.string.network_error, Toast.LENGTH_SHORT).show();
-                swipeRefreshLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                });
+                swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(false));
             }
         }
     }
@@ -217,29 +187,21 @@ public class HomeFragment extends Fragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle(R.string.info_channel_select);
             infoSelectList = DataMethod.InfoData.getInfoChannel(context);
-            builder.setMultiChoiceItems(infoTypeList, infoSelectList, new DialogInterface.OnMultiChoiceClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                    infoSelectList[which] = isChecked;
-                }
-            });
-            builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    boolean allFalse = true;
-                    for (boolean checked : infoSelectList) {
-                        if (checked) {
-                            allFalse = false;
-                            break;
-                        }
+            builder.setMultiChoiceItems(infoTypeList, infoSelectList, (dialog, which, isChecked) -> infoSelectList[which] = isChecked);
+            builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                boolean allFalse = true;
+                for (boolean checked : infoSelectList) {
+                    if (checked) {
+                        allFalse = false;
+                        break;
                     }
-                    if (context != null && isAdded()) {
-                        if (allFalse) {
-                            Toast.makeText(context, R.string.info_channel_select_warn, Toast.LENGTH_SHORT).show();
-                        } else {
-                            DataMethod.InfoData.setInfoChannel(context, infoSelectList);
-                            swipeAndGetInfo();
-                        }
+                }
+                if (context != null && isAdded()) {
+                    if (allFalse) {
+                        Toast.makeText(context, R.string.info_channel_select_warn, Toast.LENGTH_SHORT).show();
+                    } else {
+                        DataMethod.InfoData.setInfoChannel(context, infoSelectList);
+                        swipeAndGetInfo();
                     }
                 }
             });

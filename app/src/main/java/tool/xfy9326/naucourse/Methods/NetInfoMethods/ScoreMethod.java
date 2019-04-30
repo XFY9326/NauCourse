@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.Nullable;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -11,7 +13,6 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import androidx.annotation.Nullable;
 import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.DataMethod;
@@ -56,7 +57,6 @@ public class ScoreMethod {
         getCourseScore(false);
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Nullable
     public CourseScore getCourseScore(boolean checkTemp) {
         ArrayList<String> scoreCourseId = new ArrayList<>();

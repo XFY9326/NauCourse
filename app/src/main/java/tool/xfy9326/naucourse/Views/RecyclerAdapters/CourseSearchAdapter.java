@@ -1,20 +1,20 @@
 package tool.xfy9326.naucourse.Views.RecyclerAdapters;
 
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 import java.util.Locale;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
 import tool.xfy9326.naucourse.Activities.CourseSearchActivity;
 import tool.xfy9326.naucourse.Methods.CourseEditMethod;
 import tool.xfy9326.naucourse.R;
@@ -23,7 +23,7 @@ import tool.xfy9326.naucourse.Utils.CourseSearchDetail;
 public class CourseSearchAdapter extends RecyclerView.Adapter<CourseSearchAdapter.CourseSearchViewHolder> {
     private List<CourseSearchDetail> courseSearchDetails;
     @NonNull
-    private CourseSearchActivity activity;
+    private final CourseSearchActivity activity;
     private List<String> termList;
 
     public CourseSearchAdapter(@NonNull CourseSearchActivity activity) {
@@ -66,17 +66,12 @@ public class CourseSearchAdapter extends RecyclerView.Adapter<CourseSearchAdapte
         holder.textView_teacher.setText(activity.getString(R.string.course_card_teacher, getTeacherStr(courseSearchDetail)));
         holder.textView_time.setText(activity.getString(R.string.course_search_time, getTimeStr(courseSearchDetail)));
         holder.textView_location.setText(activity.getString(R.string.course_card_location, courseSearchDetail.getRoomName()));
-        holder.cardView_detail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showMoreInfoDialog(courseSearchDetail);
-            }
-        });
+        holder.cardView_detail.setOnClickListener(v -> showMoreInfoDialog(courseSearchDetail));
     }
 
     private void showMoreInfoDialog(final CourseSearchDetail courseSearchDetail) {
         LayoutInflater layoutInflater = activity.getLayoutInflater();
-        View view = layoutInflater.inflate(R.layout.dialog_course_search_detail, (ViewGroup) activity.findViewById(R.id.layout_dialog_course_search_detail));
+        View view = layoutInflater.inflate(R.layout.dialog_course_search_detail, activity.findViewById(R.id.layout_dialog_course_search_detail));
 
         ((TextView) view.findViewById(R.id.textView_course_search_name)).setText(courseSearchDetail.getName());
         ((TextView) view.findViewById(R.id.textView_course_search_detail_teacher)).setText(activity.getString(R.string.course_card_teacher, getTeacherStr(courseSearchDetail)));
@@ -91,12 +86,7 @@ public class CourseSearchAdapter extends RecyclerView.Adapter<CourseSearchAdapte
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setView(view);
         if (termList != null && courseSearchDetail.getTerm().equals(termList.get(0))) {
-            builder.setNeutralButton(R.string.import_course, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    importCourse(courseSearchDetail);
-                }
-            });
+            builder.setNeutralButton(R.string.import_course, (dialog, which) -> importCourse(courseSearchDetail));
         }
         builder.setPositiveButton(android.R.string.yes, null);
         builder.show();

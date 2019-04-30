@@ -5,16 +5,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.snackbar.Snackbar;
+
 import tool.xfy9326.naucourse.AsyncTasks.SuspendCourseAsync;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
 import tool.xfy9326.naucourse.Methods.NetMethod;
@@ -38,7 +38,7 @@ public class SuspendCourseActivity extends AppCompatActivity {
     }
 
     private void ToolBarSet() {
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar(findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
@@ -55,20 +55,12 @@ public class SuspendCourseActivity extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.swipeLayout_suspend_course);
         swipeRefreshLayout.setDistanceToTriggerSync(200);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (NetMethod.isNetworkConnected(SuspendCourseActivity.this)) {
-                    getData();
-                } else {
-                    Snackbar.make(findViewById(R.id.layout_suspend_course_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
-                    swipeRefreshLayout.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    });
-                }
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            if (NetMethod.isNetworkConnected(SuspendCourseActivity.this)) {
+                getData();
+            } else {
+                Snackbar.make(findViewById(R.id.layout_suspend_course_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
+                swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(false));
             }
         });
         if (loadTime == 0) {

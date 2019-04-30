@@ -1,7 +1,6 @@
 package tool.xfy9326.naucourse.Activities;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -14,20 +13,19 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.FileProvider;
 import tool.xfy9326.naucourse.AsyncTasks.SchoolCalendarAsync;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.BaseMethod;
@@ -51,7 +49,7 @@ public class SchoolCalendarActivity extends AppCompatActivity {
     }
 
     private void ToolBarSet() {
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar(findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
@@ -85,12 +83,7 @@ public class SchoolCalendarActivity extends AppCompatActivity {
     private void showAlert() {
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT, Config.DEFAULT_PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT)) {
-            Snackbar.make(findViewById(R.id.layout_school_calendar_content), R.string.enlarge_alert, Snackbar.LENGTH_SHORT).setAction(R.string.no_alert_again, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    sharedPreferences.edit().putBoolean(Config.PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT, false).apply();
-                }
-            }).setActionTextColor(getResources().getColor(android.R.color.holo_red_light)).show();
+            Snackbar.make(findViewById(R.id.layout_school_calendar_content), R.string.enlarge_alert, Snackbar.LENGTH_SHORT).setAction(R.string.no_alert_again, v -> sharedPreferences.edit().putBoolean(Config.PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT, false).apply()).setActionTextColor(getResources().getColor(android.R.color.holo_red_light)).show();
         }
     }
 
@@ -113,31 +106,23 @@ public class SchoolCalendarActivity extends AppCompatActivity {
                     final Uri imageUri = FileProvider.getUriForFile(this, Config.FILE_PROVIDER_AUTH, new File(path));
 
                     LayoutInflater layoutInflater = getLayoutInflater();
-                    View view = layoutInflater.inflate(R.layout.dialog_share_image, (ViewGroup) findViewById(R.id.layout_dialog_share_image));
+                    View view = layoutInflater.inflate(R.layout.dialog_share_image, findViewById(R.id.layout_dialog_share_image));
                     final PhotoView photoView = view.findViewById(R.id.photoView_share_image);
                     photoView.setImageURI(imageUri);
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setView(view);
                     builder.setTitle(R.string.share_school_calendar);
-                    builder.setPositiveButton(R.string.share, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(Intent.ACTION_SEND);
-                            intent.setType("image/*");
-                            intent.putExtra(Intent.EXTRA_STREAM, imageUri);
-                            intent.addCategory(Intent.CATEGORY_DEFAULT);
-                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                            startActivity(Intent.createChooser(intent, getString(R.string.share_school_calendar)));
-                        }
+                    builder.setPositiveButton(R.string.share, (dialog, which) -> {
+                        Intent intent = new Intent(Intent.ACTION_SEND);
+                        intent.setType("image/*");
+                        intent.putExtra(Intent.EXTRA_STREAM, imageUri);
+                        intent.addCategory(Intent.CATEGORY_DEFAULT);
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        startActivity(Intent.createChooser(intent, getString(R.string.share_school_calendar)));
                     });
                     builder.setNegativeButton(android.R.string.cancel, null);
-                    builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            photoView.refreshDrawableState();
-                        }
-                    });
+                    builder.setOnCancelListener(dialog -> photoView.refreshDrawableState());
                     builder.show();
                 }
             } catch (Exception e) {

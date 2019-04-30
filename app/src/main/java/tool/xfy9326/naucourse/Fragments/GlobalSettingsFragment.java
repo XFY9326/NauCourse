@@ -4,6 +4,9 @@ import android.os.Bundle;
 
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+
+import java.util.Objects;
+
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.UpdateMethod;
 import tool.xfy9326.naucourse.R;
@@ -22,14 +25,11 @@ public class GlobalSettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void PreferenceSet() {
-        findPreference(Config.PREFERENCE_UPDATE_NOW).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                if (isAdded()) {
-                    UpdateMethod.checkUpdate(getActivity(), true);
-                }
-                return false;
+        ((Preference) Objects.requireNonNull(findPreference(Config.PREFERENCE_UPDATE_NOW))).setOnPreferenceClickListener(preference -> {
+            if (isAdded()) {
+                UpdateMethod.checkUpdate(getActivity(), true);
             }
+            return false;
         });
     }
 }

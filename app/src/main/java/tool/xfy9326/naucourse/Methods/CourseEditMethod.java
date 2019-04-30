@@ -2,11 +2,12 @@ package tool.xfy9326.naucourse.Methods;
 
 import android.content.Context;
 
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import androidx.annotation.Nullable;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.NetInfoMethods.CourseSearchMethod;
 import tool.xfy9326.naucourse.Methods.NetInfoMethods.TableMethod;
@@ -45,7 +46,7 @@ public class CourseEditMethod {
             courseCheckResult = checkCourseList(courseArrayList);
         } else {
             courseCheckResult = new CourseCheckResult();
-            courseCheckResult.setHasError(true);
+            courseCheckResult.setHasError();
         }
         if (!courseCheckResult.isHasError()) {
             addSearchCourseResult.setSaveSuccess(DataMethod.saveOfflineData(context, courseArrayList, TableMethod.FILE_NAME, false, TableMethod.IS_ENCRYPT));
@@ -165,7 +166,7 @@ public class CourseEditMethod {
                                             continue;
                                         }
                                         if (isCourseDetailTimeError(courseDetail, courseDetail_check)) {
-                                            courseCheckResult.setHasError(true);
+                                            courseCheckResult.setHasError();
                                             courseCheckResult.setCheckCourseName(courses.get(i).getCourseName());
                                             courseCheckResult.setConflictCourseName(courses.get(j).getCourseName());
                                             return courseCheckResult;
@@ -179,7 +180,7 @@ public class CourseEditMethod {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            courseCheckResult.setHasError(true);
+            courseCheckResult.setHasError();
         }
         return courseCheckResult;
     }
@@ -397,8 +398,8 @@ public class CourseEditMethod {
             return hasError;
         }
 
-        void setHasError(boolean hasError) {
-            this.hasError = hasError;
+        void setHasError() {
+            this.hasError = true;
         }
 
         public String getCheckCourseName() {

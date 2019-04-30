@@ -118,14 +118,11 @@ public class InfoMethod {
 
     synchronized private static void sort(ArrayList<TopicInfo> topic_data) {
         if (date_comparator == null) {
-            date_comparator = new Comparator<TopicInfo>() {
-                @Override
-                public int compare(TopicInfo o1, TopicInfo o2) {
-                    if (o1.getDateLong() > 0 && o2.getDateLong() > 0) {
-                        return Long.compare(o2.getDateLong(), o1.getDateLong());
-                    }
-                    return 0;
+            date_comparator = (o1, o2) -> {
+                if (o1.getDateLong() > 0 && o2.getDateLong() > 0) {
+                    return Long.compare(o2.getDateLong(), o1.getDateLong());
                 }
+                return 0;
             };
         }
         if (!topic_data.isEmpty()) {

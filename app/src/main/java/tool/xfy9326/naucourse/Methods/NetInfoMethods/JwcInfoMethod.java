@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -11,8 +14,6 @@ import org.jsoup.select.Elements;
 import java.util.List;
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.Methods.LoginMethod;
@@ -66,11 +67,11 @@ public class JwcInfoMethod {
         int totalTopic = 0;
         boolean nextTopic = false;
 
-        String type[] = new String[TOPIC_COUNT];
-        String title[] = new String[TOPIC_COUNT];
-        String date[] = new String[TOPIC_COUNT];
-        String post[] = new String[TOPIC_COUNT];
-        String click[] = new String[TOPIC_COUNT];
+        String[] type = new String[TOPIC_COUNT];
+        String[] title = new String[TOPIC_COUNT];
+        String[] date = new String[TOPIC_COUNT];
+        String[] post = new String[TOPIC_COUNT];
+        String[] click = new String[TOPIC_COUNT];
 
         jwcTopic = new JwcTopic();
         jwcTopic.setTopic_length(TOPIC_COUNT);
@@ -120,7 +121,7 @@ public class JwcInfoMethod {
         jwcTopic.setTopic_type(type);
 
         totalTopic = 0;
-        String url[] = new String[TOPIC_COUNT];
+        String[] url = new String[TOPIC_COUNT];
 
         tags = document.body().getElementsByTag("a");
         data = tags.eachAttr("href");

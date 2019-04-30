@@ -27,6 +27,7 @@ public class NestedHorizontalScrollView extends HorizontalScrollView {
         this.fitWidthNestedScroll = fitWidthNestedScroll;
     }
 
+    @SuppressWarnings("EmptyMethod")
     @Override
     public boolean performClick() {
         return super.performClick();

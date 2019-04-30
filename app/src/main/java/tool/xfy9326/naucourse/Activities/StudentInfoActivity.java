@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -12,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.Utils.StudentInfo;
@@ -28,7 +27,7 @@ public class StudentInfoActivity extends AppCompatActivity {
     }
 
     private void ToolBarSet() {
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar(findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
@@ -69,7 +68,7 @@ public class StudentInfoActivity extends AppCompatActivity {
             LayoutInflater layoutInflater = LayoutInflater.from(this);
             LinearLayout linearLayout = findViewById(R.id.layout_info_learn_process);
             for (int i = 0; i < 4; i++) {
-                View view = layoutInflater.inflate(R.layout.item_learn_process, (ViewGroup) findViewById(R.id.layout_learn_process_item), false);
+                View view = layoutInflater.inflate(R.layout.item_learn_process, findViewById(R.id.layout_learn_process_item), false);
                 String name = null;
                 String aim = null;
                 String now = null;
