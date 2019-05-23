@@ -80,6 +80,9 @@ public class ExamMethod {
         boolean startData = false;
         boolean needJump = false;
         int count = 0;
+        String examIdStr = null;
+        String examNameStr = null;
+        String examScoreStr = null;
         for (Element element : elements) {
             String str = element.text().replace(" ", "");
             if (str.contains("考试日程列表")) {
@@ -92,13 +95,13 @@ public class ExamMethod {
                 }
                 switch (count) {
                     case 1:
-                        examId.add(str);
+                        examIdStr = str;
                         break;
                     case 2:
-                        examName.add(str);
+                        examNameStr = str;
                         break;
                     case 3:
-                        examScore.add(str);
+                        examScoreStr = str;
                         break;
                     case 5:
                         if (str.contains("日")) {
@@ -107,18 +110,19 @@ public class ExamMethod {
                         if (hide_exam) {
                             long examEnd = -1;
                             if (str.contains("-") && str.contains(" ")) {
-                                str = str.substring(0, str.indexOf(" ") + 1) + str.substring(str.indexOf("-") + 1);
+                                String time = str.substring(0, str.indexOf(" ") + 1) + str.substring(str.indexOf("-") + 1);
                                 try {
-                                    examEnd = TimeMethod.parseDateSDFHM(str).getTime();
+                                    examEnd = TimeMethod.parseDateSDFHM(time).getTime();
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                     examEnd = -1;
                                 }
                             }
-                            if (examEnd == -1 || examEnd < now) {
-                                examId.remove(examId.size() - 1);
-                                examName.remove(examName.size() - 1);
-                                examScore.remove(examScore.size() - 1);
+                            if (examEnd != -1 && examEnd >= now) {
+                                examId.add(examIdStr);
+                                examName.add(examNameStr);
+                                examScore.add(examScoreStr);
+                            } else {
                                 needJump = true;
                             }
                         }
