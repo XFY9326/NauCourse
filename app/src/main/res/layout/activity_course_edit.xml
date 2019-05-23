@@ -5,7 +5,7 @@
     android:id="@+id/layout_course_edit_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.CourseEditActivity">
+    tools:context=".activities.CourseEditActivity">
 
     <include layout="@layout/widget_toolbar" />
 
@@ -22,7 +22,7 @@
         app:elevation="5dp"
         app:layout_anchor="@id/recyclerView_course_edit_list"
         app:layout_anchorGravity="bottom|end"
-        app:layout_behavior="tool.xfy9326.naucourse.Views.ScrollBehavior"
+        app:layout_behavior="tool.xfy9326.naucourse.views.ScrollBehavior"
         app:srcCompat="@drawable/ic_add" />
 
     <LinearLayout

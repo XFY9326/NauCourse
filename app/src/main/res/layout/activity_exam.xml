@@ -5,7 +5,7 @@
     android:id="@+id/layout_exam_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.ExamActivity">
+    tools:context=".activities.ExamActivity">
 
     <include layout="@layout/widget_toolbar" />
 

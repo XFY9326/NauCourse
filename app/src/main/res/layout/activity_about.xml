@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tool:context=".Activities.AboutActivity">
+    tool:context=".activities.AboutActivity">
 
     <include layout="@layout/widget_toolbar" />
 

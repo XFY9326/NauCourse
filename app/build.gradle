@@ -71,11 +71,11 @@ dependencies {
 
     implementation 'com.tencent.bugly:crashreport:2.8.6.0'
 
-    implementation 'com.google.android.material:material:1.1.0-alpha05'
+    implementation 'com.google.android.material:material:1.1.0-alpha06'
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
-    implementation 'androidx.preference:preference:1.1.0-alpha04'
+    implementation 'androidx.preference:preference:1.1.0-alpha05'
 
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 }

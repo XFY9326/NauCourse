@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tool:context=".Activities.MainActivity">
+    tool:context=".activities.MainActivity">
 
     <include layout="@layout/widget_toolbar" />
 
-    <tool.xfy9326.naucourse.Views.FixedViewPager
+    <tool.xfy9326.naucourse.views.FixedViewPager
         android:id="@+id/viewPaper_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

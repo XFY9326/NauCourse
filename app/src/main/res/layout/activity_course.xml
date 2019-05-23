@@ -5,7 +5,7 @@
     android:id="@+id/layout_course_manage_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.CourseActivity">
+    tools:context=".activities.CourseActivity">
 
     <include layout="@layout/widget_toolbar" />
 
@@ -23,7 +23,7 @@
         app:fabSize="normal"
         app:layout_anchor="@id/recyclerView_course_list"
         app:layout_anchorGravity="bottom|end"
-        app:layout_behavior="tool.xfy9326.naucourse.Views.ScrollBehavior"
+        app:layout_behavior="tool.xfy9326.naucourse.views.ScrollBehavior"
         app:srcCompat="@drawable/ic_add" />
 
     <androidx.recyclerview.widget.RecyclerView

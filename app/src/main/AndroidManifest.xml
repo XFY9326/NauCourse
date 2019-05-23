@@ -22,7 +22,7 @@
         tools:targetApi="n">
 
         <activity
-            android:name=".Activities.MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
@@ -35,140 +35,140 @@
         </activity>
 
         <activity
-            android:name=".Activities.LoginActivity"
+            android:name=".activities.LoginActivity"
             android:label="@string/login"
             android:theme="@style/LoginActivityTheme"
             tools:ignore="InnerclassSeparator" />
 
         <activity
-            android:name=".Activities.StudentInfoActivity"
+            android:name=".activities.StudentInfoActivity"
             android:label="@string/personal_detail"
             tools:ignore="InnerclassSeparator">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
 
         <activity
-            android:name=".Activities.CourseActivity"
+            android:name=".activities.CourseActivity"
             android:label="@string/course_manage"
             tools:ignore="InnerclassSeparator">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
 
         <activity
-            android:name=".Activities.CourseEditActivity"
+            android:name=".activities.CourseEditActivity"
             android:label="@string/course_edit"
             tools:ignore="InnerclassSeparator">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.CourseActivity" />
+                android:value=".activities.CourseActivity" />
         </activity>
 
         <activity
-            android:name=".Activities.ExamActivity"
+            android:name=".activities.ExamActivity"
             android:label="@string/exam"
             tools:ignore="InnerclassSeparator">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
 
         <activity
-            android:name=".Activities.ScoreActivity"
+            android:name=".activities.ScoreActivity"
             android:label="@string/score"
             tools:ignore="InnerclassSeparator">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
 
         <activity
-            android:name=".Activities.LevelExamActivity"
+            android:name=".activities.LevelExamActivity"
             android:label="@string/level_exam"
             tools:ignore="InnerclassSeparator">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
 
         <activity
-            android:name=".Activities.InfoDetailActivity"
+            android:name=".activities.InfoDetailActivity"
             android:label="@string/info_label"
             tools:ignore="InnerclassSeparator">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
 
         <activity
-            android:name=".Activities.SchoolCalendarActivity"
+            android:name=".activities.SchoolCalendarActivity"
             android:label="@string/school_calendar"
             tools:ignore="InnerclassSeparator">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
 
         <activity
-            android:name=".Activities.SuspendCourseActivity"
+            android:name=".activities.SuspendCourseActivity"
             android:label="@string/suspend_course"
             tools:ignore="InnerclassSeparator">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
 
         <activity
-            android:name=".Activities.MoaActivity"
+            android:name=".activities.MoaActivity"
             android:label="@string/moa"
             tools:ignore="InnerclassSeparator">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
 
         <activity
-            android:name=".Activities.GlobalSettingsActivity"
+            android:name=".activities.GlobalSettingsActivity"
             android:label="@string/global_settings"
             tools:ignore="InnerclassSeparator">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
 
         <activity
-            android:name=".Activities.CourseSettingsActivity"
+            android:name=".activities.CourseSettingsActivity"
             android:label="@string/course_settings"
             tools:ignore="InnerclassSeparator">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
 
         <activity
-            android:name=".Activities.AboutActivity"
+            android:name=".activities.AboutActivity"
             android:label="@string/about"
             android:screenOrientation="portrait"
             tools:ignore="InnerclassSeparator">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
 
         <activity
-            android:name=".Activities.CourseSearchActivity"
+            android:name=".activities.CourseSearchActivity"
             android:label="@string/course_search"
             tools:ignore="InnerclassSeparator">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
 
         <receiver
-            android:name=".Receivers.BootCompleteReceiver"
+            android:name=".receivers.BootCompleteReceiver"
             tools:ignore="InnerclassSeparator">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -176,7 +176,7 @@
         </receiver>
 
         <receiver
-            android:name=".Receivers.CourseUpdateReceiver"
+            android:name=".receivers.CourseUpdateReceiver"
             android:exported="false"
             tools:ignore="InnerclassSeparator">
             <intent-filter>
@@ -185,7 +185,7 @@
         </receiver>
 
         <receiver
-            android:name=".Widget.NextClassWidget"
+            android:name=".widget.NextClassWidget"
             tools:ignore="InnerclassSeparator">
             <meta-data
                 android:name="android.appwidget.provider"

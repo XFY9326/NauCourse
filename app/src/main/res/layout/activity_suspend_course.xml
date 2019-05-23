@@ -5,7 +5,7 @@
     android:id="@+id/layout_suspend_course_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.SuspendCourseActivity">
+    tools:context=".activities.SuspendCourseActivity">
 
     <include layout="@layout/widget_toolbar" />
 

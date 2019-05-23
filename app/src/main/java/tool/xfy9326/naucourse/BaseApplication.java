@@ -9,16 +9,16 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import lib.xfy9326.nausso.NauSSOClient;
-import tool.xfy9326.naucourse.Activities.CourseActivity;
-import tool.xfy9326.naucourse.Activities.CourseSearchActivity;
-import tool.xfy9326.naucourse.Activities.ExamActivity;
-import tool.xfy9326.naucourse.Activities.InfoDetailActivity;
-import tool.xfy9326.naucourse.Activities.LevelExamActivity;
-import tool.xfy9326.naucourse.Activities.MoaActivity;
-import tool.xfy9326.naucourse.Activities.SchoolCalendarActivity;
-import tool.xfy9326.naucourse.Activities.ScoreActivity;
-import tool.xfy9326.naucourse.Activities.SuspendCourseActivity;
-import tool.xfy9326.naucourse.Views.ViewPagerAdapter;
+import tool.xfy9326.naucourse.activities.CourseActivity;
+import tool.xfy9326.naucourse.activities.CourseSearchActivity;
+import tool.xfy9326.naucourse.activities.ExamActivity;
+import tool.xfy9326.naucourse.activities.InfoDetailActivity;
+import tool.xfy9326.naucourse.activities.LevelExamActivity;
+import tool.xfy9326.naucourse.activities.MoaActivity;
+import tool.xfy9326.naucourse.activities.SchoolCalendarActivity;
+import tool.xfy9326.naucourse.activities.ScoreActivity;
+import tool.xfy9326.naucourse.activities.SuspendCourseActivity;
+import tool.xfy9326.naucourse.views.ViewPagerAdapter;
 
 /**
  * Created by xfy9326 on 18-2-20.

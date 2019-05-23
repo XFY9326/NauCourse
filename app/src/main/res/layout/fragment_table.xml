@@ -69,7 +69,7 @@
             android:fillViewport="true"
             android:scrollbars="none">
 
-            <tool.xfy9326.naucourse.Views.NestedHorizontalScrollView
+            <tool.xfy9326.naucourse.views.NestedHorizontalScrollView
                 android:id="@+id/nhScrollView_table"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
 
                 </LinearLayout>
 
-            </tool.xfy9326.naucourse.Views.NestedHorizontalScrollView>
+            </tool.xfy9326.naucourse.views.NestedHorizontalScrollView>
 
         </ScrollView>
 

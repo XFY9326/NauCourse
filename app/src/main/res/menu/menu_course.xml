@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Activities.CourseActivity">
+    tools:context=".activities.CourseActivity">
 
     <item
         android:id="@+id/menu_course_save"

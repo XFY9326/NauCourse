@@ -131,7 +131,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none"
-        tools:context=".Activities.StudentInfoActivity">
+        tools:context=".activities.StudentInfoActivity">
 
         <LinearLayout
             android:id="@+id/layout_info_learn_process"

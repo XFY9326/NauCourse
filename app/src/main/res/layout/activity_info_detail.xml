@@ -5,7 +5,7 @@
     android:id="@+id/layout_info_detail_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.InfoDetailActivity">
+    tools:context=".activities.InfoDetailActivity">
 
     <include layout="@layout/widget_toolbar" />
 
