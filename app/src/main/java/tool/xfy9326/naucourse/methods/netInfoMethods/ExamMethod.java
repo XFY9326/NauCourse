@@ -125,6 +125,10 @@ public class ExamMethod {
                             } else {
                                 needJump = true;
                             }
+                        } else {
+                            examId.add(examIdStr);
+                            examName.add(examNameStr);
+                            examScore.add(examScoreStr);
                         }
                         examTime.add(str);
                         break;

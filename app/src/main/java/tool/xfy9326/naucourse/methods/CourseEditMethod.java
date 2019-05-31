@@ -287,8 +287,6 @@ public class CourseEditMethod {
 
     public static boolean checkNoSameTime(String[] time1, String[] time2) {
         if (time1 != null && time2 != null) {
-            System.out.println("1: " + Arrays.toString(time1));
-            System.out.println("2: " + Arrays.toString(time2));
             try {
                 for (String t1 : time1) {
                     for (String t2 : time2) {

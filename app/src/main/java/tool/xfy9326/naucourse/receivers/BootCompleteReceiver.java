@@ -16,7 +16,11 @@ public class BootCompleteReceiver extends BroadcastReceiver {
             if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_NOTIFY_NEXT_CLASS, Config.DEFAULT_PREFERENCE_NOTIFY_NEXT_CLASS)) {
                 context.sendBroadcast(new Intent(context, CourseUpdateReceiver.class).setAction(CourseUpdateReceiver.UPDATE_ACTION).setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES).putExtra(Config.INTENT_IS_ONLY_INIT, true));
             }
-            context.sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
+            try {
+                context.sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

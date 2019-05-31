@@ -59,11 +59,23 @@ public class CourseViewMethod {
     /**
      * 设置需要操作的视图
      *
-     * @param gridLayout   GridLayout课程表主视图
-     * @param parent_width 父控件的宽度
+     * @param gridLayout    GridLayout课程表主视图
+     * @param parent_width  父控件的宽度
+     * @param parent_height 父控件的高度
      */
     public void setTableView(GridLayout gridLayout, int parent_width, int parent_height) {
         this.course_table_layout = gridLayout;
+        this.parent_width = parent_width;
+        this.parent_height = parent_height;
+    }
+
+    /**
+     * 更新表格大小
+     *
+     * @param parent_width  父控件的宽度
+     * @param parent_height 父控件的高度
+     */
+    public void updateTableSize(int parent_width, int parent_height) {
         this.parent_width = parent_width;
         this.parent_height = parent_height;
     }

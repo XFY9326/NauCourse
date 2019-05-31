@@ -1,100 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardview_table_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="6dp"
-        android:layout_marginBottom="2dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="3dp"
-        app:cardPreventCornerOverlap="true">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="35dp">
-
-            <TextView
-                android:id="@+id/textView_table_date"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:gravity="center|start"
-                android:textSize="15sp" />
-
-            <Spinner
-                android:id="@+id/spinner_table_week_chose"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
-
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView_courseTable"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="6dp"
-        android:layout_marginBottom="5dp"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="3dp"
-        app:cardPreventCornerOverlap="true">
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/imageView_table_background"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardview_table_date"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:scaleType="centerCrop"
-            tools:ignore="ContentDescription" />
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginBottom="2dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="3dp"
+            app:cardPreventCornerOverlap="true">
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:scrollbars="none">
-
-            <tool.xfy9326.naucourse.views.NestedHorizontalScrollView
-                android:id="@+id/nhScrollView_table"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp">
+
+                <TextView
+                    android:id="@+id/textView_table_date"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center|start"
+                    android:textSize="15sp" />
+
+                <Spinner
+                    android:id="@+id/spinner_table_week_chose"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView_courseTable"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginBottom="5dp"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="3dp"
+            app:cardPreventCornerOverlap="true">
+
+            <ImageView
+                android:id="@+id/imageView_table_background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:scaleType="centerCrop"
+                tools:ignore="ContentDescription" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:fillViewport="true"
                 android:scrollbars="none">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center">
+                <tool.xfy9326.naucourse.views.NestedHorizontalScrollView
+                    android:id="@+id/nhScrollView_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fillViewport="true"
+                    android:scrollbars="none">
 
-                    <androidx.gridlayout.widget.GridLayout
-                        android:id="@+id/course_table_layout"
-                        android:layout_width="match_parent"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:background="@color/light_grey"
-                        app:alignmentMode="alignMargins"
-                        app:orientation="vertical" />
+                        android:gravity="center">
 
-                </LinearLayout>
+                        <androidx.gridlayout.widget.GridLayout
+                            android:id="@+id/course_table_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/light_grey"
+                            app:alignmentMode="alignMargins"
+                            app:orientation="vertical" />
 
-            </tool.xfy9326.naucourse.views.NestedHorizontalScrollView>
+                    </LinearLayout>
 
-        </ScrollView>
+                </tool.xfy9326.naucourse.views.NestedHorizontalScrollView>
 
-    </androidx.cardview.widget.CardView>
+            </ScrollView>
 
-</LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar_table_loading"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+</RelativeLayout>

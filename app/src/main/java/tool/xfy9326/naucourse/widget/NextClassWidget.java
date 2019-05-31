@@ -85,8 +85,12 @@ public class NextClassWidget extends AppWidgetProvider {
 
     @Override
     public void onUpdate(@NonNull Context context, @NonNull AppWidgetManager appWidgetManager, @NonNull int[] appWidgetIds) {
-        for (int appWidgetId : appWidgetIds) {
-            appWidgetManager.updateAppWidget(appWidgetId, ViewGet(context));
+        try {
+            for (int appWidgetId : appWidgetIds) {
+                appWidgetManager.updateAppWidget(appWidgetId, ViewGet(context));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
