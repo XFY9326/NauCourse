@@ -60,7 +60,6 @@ public class NetMethod {
             ResponseBody responseBody = response.body();
             if (responseBody != null) {
                 String result = responseBody.string();
-                responseBody.close();
                 response.close();
                 return result;
             }
@@ -97,7 +96,6 @@ public class NetMethod {
             ResponseBody responseBody = response.body();
             if (responseBody != null) {
                 String result = responseBody.string();
-                responseBody.close();
                 response.close();
                 return result;
             }
@@ -268,6 +266,7 @@ public class NetMethod {
                 if (response.code() != 200) {
                     availableListener.OnError();
                 }
+                response.close();
             }
         });
     }

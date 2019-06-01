@@ -56,7 +56,7 @@ public class CourseUpdateReceiver extends BroadcastReceiver {
                     if (sharedPreferences.getBoolean(Config.PREFERENCE_CLASS_BEFORE_NOTIFY, false) && sharedPreferences.getBoolean(Config.PREFERENCE_NOTIFY_NEXT_CLASS, Config.DEFAULT_PREFERENCE_NOTIFY_NEXT_CLASS)) {
                         NotificationMethod.showNextClassNotification(context, nextCourse);
                     }
-                    context.sendBroadcast(new Intent(context, NextClassWidget.class).setAction(NextClassWidget.ACTION_ON_CLICK).putExtra(Config.INTENT_NEXT_CLASS_DATA, nextCourse));
+                    context.sendBroadcast(new Intent(context, NextClassWidget.class).setAction(NextClassWidget.ACTION_ON_UPDATE).putExtra(Config.INTENT_NEXT_CLASS_DATA, nextCourse));
                 }
                 setNextAlarm(context, nextUpdateTimeCount(context));
 

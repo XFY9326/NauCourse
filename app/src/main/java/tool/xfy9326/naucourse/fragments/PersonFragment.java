@@ -273,7 +273,7 @@ public class PersonFragment extends Fragment {
                             getActivity().runOnUiThread(() -> {
                                 //小部件清空
                                 if (getActivity() != null) {
-                                    getActivity().sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
+                                    getActivity().sendBroadcast(new Intent(NextClassWidget.ACTION_ON_UPDATE));
                                 }
                                 //重启当前程序
                                 Intent intent = new Intent(context, LoginActivity.class);

@@ -39,6 +39,13 @@
             android:textColor="@color/grey"
             android:textSize="12sp" />
 
+        <Button
+            android:id="@+id/button_app_widget_update"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_margin="1dp"
+            android:background="@drawable/ic_refresh_dark" />
+
     </LinearLayout>
 
     <TextView

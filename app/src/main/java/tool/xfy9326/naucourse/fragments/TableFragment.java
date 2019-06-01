@@ -331,7 +331,7 @@ public class TableFragment extends Fragment {
             context.sendBroadcast(new Intent(context, CourseUpdateReceiver.class).setAction(CourseUpdateReceiver.UPDATE_ACTION).putExtra(Config.INTENT_IS_ONLY_INIT, true));
         } else {
             //更新小部件
-            context.sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
+            context.sendBroadcast(new Intent(NextClassWidget.ACTION_ON_UPDATE));
         }
     }
 

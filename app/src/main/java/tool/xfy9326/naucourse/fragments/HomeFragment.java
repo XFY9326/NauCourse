@@ -162,7 +162,7 @@ public class HomeFragment extends Fragment {
             cardView_nextClass.setOnClickListener(v -> {
                 if (context != null) {
                     setNextCourse();
-                    context.sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
+                    context.sendBroadcast(new Intent(NextClassWidget.ACTION_ON_UPDATE));
                 }
             });
 

@@ -17,7 +17,7 @@ public class BootCompleteReceiver extends BroadcastReceiver {
                 context.sendBroadcast(new Intent(context, CourseUpdateReceiver.class).setAction(CourseUpdateReceiver.UPDATE_ACTION).setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES).putExtra(Config.INTENT_IS_ONLY_INIT, true));
             }
             try {
-                context.sendBroadcast(new Intent(NextClassWidget.ACTION_ON_CLICK));
+                context.sendBroadcast(new Intent(NextClassWidget.ACTION_ON_UPDATE));
             } catch (Exception e) {
                 e.printStackTrace();
             }

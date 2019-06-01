@@ -18,6 +18,7 @@ import java.util.Date;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.activities.MainActivity;
 import tool.xfy9326.naucourse.methods.NextClassMethod;
 import tool.xfy9326.naucourse.methods.TimeMethod;
 import tool.xfy9326.naucourse.receivers.CourseUpdateReceiver;
@@ -29,8 +30,9 @@ import tool.xfy9326.naucourse.utils.NextCourse;
  */
 
 public class NextClassWidget extends AppWidgetProvider {
-    public static final String ACTION_ON_CLICK = "tool.xfy9326.naucourse.Widget.NextClassWidget.OnClick";
-    private static final int REQUEST_ON_CLICK = 1;
+    public static final String ACTION_ON_UPDATE = "tool.xfy9326.naucourse.Widget.NextClassWidget.OnUpdate";
+    private static final int REQUEST_ON_UPDATE = 1;
+    private static final int REQUEST_ON_CLICK_CONTENT = 1;
     @Nullable
     private static NextCourse nextCourse = null;
 
@@ -40,8 +42,11 @@ public class NextClassWidget extends AppWidgetProvider {
 
         remoteViews.setTextViewText(R.id.textView_app_widget_dateNow, TimeMethod.formatDateSDF(new Date()));
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_ON_CLICK, new Intent(context, NextClassWidget.class).setAction(ACTION_ON_CLICK), PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.layout_app_widget, pendingIntent);
+        PendingIntent updatePendingIntent = PendingIntent.getBroadcast(context, REQUEST_ON_UPDATE, new Intent(context, NextClassWidget.class).setAction(ACTION_ON_UPDATE), PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setOnClickPendingIntent(R.id.button_app_widget_update, updatePendingIntent);
+
+        PendingIntent clickContentPendingIntent = PendingIntent.getActivity(context, REQUEST_ON_CLICK_CONTENT, new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setOnClickPendingIntent(R.id.layout_app_widget, clickContentPendingIntent);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
@@ -99,7 +104,7 @@ public class NextClassWidget extends AppWidgetProvider {
     public void onReceive(@NonNull Context context, @NonNull Intent intent) {
         String action = intent.getAction();
         if (action != null) {
-            if (action.equals(ACTION_ON_CLICK)) {
+            if (action.equals(ACTION_ON_UPDATE)) {
                 ComponentName componentName = new ComponentName(context, NextClassWidget.class);
                 AppWidgetManager.getInstance(context).updateAppWidget(componentName, ViewGet(context));
                 nextCourse = (NextCourse) intent.getSerializableExtra(Config.INTENT_NEXT_CLASS_DATA);

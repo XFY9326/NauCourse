@@ -3,11 +3,12 @@ package lib.xfy9326.nausso;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import okhttp3.Cache;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -90,14 +91,16 @@ public class NauSSOClient {
         if (response.isSuccessful()) {
             ResponseBody responseBody = response.body();
             if (responseBody != null) {
-                return responseBody.string();
+                String data = responseBody.string();
+                response.close();
+                return data;
             } else {
                 Log.d(LOG_TAG, "Get Data Response Null");
             }
         } else {
             Log.d(LOG_TAG, "Get Data Failed");
         }
-        System.gc();
+        response.close();
         return null;
     }
 
@@ -166,11 +169,11 @@ public class NauSSOClient {
             ResponseBody responseBody = response.body();
             if (responseBody != null) {
                 String result = responseBody.string();
-                responseBody.close();
                 response.close();
                 return result;
             }
         }
+        response.close();
         return null;
     }
 }

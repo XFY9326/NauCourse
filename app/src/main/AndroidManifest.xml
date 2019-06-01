@@ -192,7 +192,7 @@
                 android:resource="@xml/app_widget_next_class_provider" />
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="tool.xfy9326.naucourse.Widget.NextClassWidget.OnClick" />
+                <action android:name="tool.xfy9326.naucourse.Widget.NextClassWidget.OnUpdate" />
             </intent-filter>
         </receiver>
 
