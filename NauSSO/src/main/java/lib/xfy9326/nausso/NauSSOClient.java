@@ -26,7 +26,6 @@ public class NauSSOClient {
     public static final int LOGIN_USER_INFO_WRONG = 4;
     public static final String JWC_SERVER_URL = "http://jwc.nau.edu.cn";
     private static final int LOGIN_SUCCESS = 0;
-    //只是登陆SSO可能获取教务登陆URL会更加繁琐
     private static final String single_server_url = "http://sso.nau.edu.cn/sso/login?service=http%3a%2f%2fjwc.nau.edu.cn%2fLogin_Single.aspx";
     private static final String ALSTU_LOGIN_SSO_URL = "http://sso.nau.edu.cn/sso/login?service=http%3a%2f%2falstu.nau.edu.cn%2flogin.aspx";
     private static final String ALSTU_TICKET_URL = "http://alstu.nau.edu.cn/login.aspx?ticket=";
@@ -82,7 +81,6 @@ public class NauSSOClient {
         client.newCall(builder.build()).execute().close();
     }
 
-    //加载其他网页
     @Nullable
     public String getData(String requestUrl) throws Exception {
         Request.Builder builder = new Request.Builder();

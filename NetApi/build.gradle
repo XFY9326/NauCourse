@@ -6,8 +6,8 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.projectMinSdkVersion
         targetSdkVersion rootProject.ext.projectTargetSdkVersion
-        versionCode 2
-        versionName "1.1"
+        versionCode 3
+        versionName "1.2"
     }
 
     buildTypes {
@@ -33,6 +33,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.squareup.okhttp3:okhttp:3.14.1'
+    //noinspection GradleDependency
+    implementation 'com.squareup.okhttp3:okhttp:3.12.3'
     implementation 'androidx.annotation:annotation:1.0.2'
 }

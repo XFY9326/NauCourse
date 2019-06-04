@@ -1,12 +1,14 @@
 package lib.xfy9326.updater;
 
+import android.os.Build;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import lib.xfy9326.net.api.API;
 
 public class Updater {
@@ -29,6 +31,7 @@ public class Updater {
             updateJson.put("nowVersionCode", versionCode);
             updateJson.put("updateType", updateType);
             updateJson.put("subVersion", subVersion);
+            updateJson.put("deviceSDK", Build.VERSION.SDK_INT);
 
             api.call(updateJson, new API.OnRequestListener() {
                 @Override
