@@ -2,8 +2,10 @@ package tool.xfy9326.naucourse.activities;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -145,14 +147,21 @@ public class CourseEditActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_course, menu);
+        getMenuInflater().inflate(R.menu.menu_course_edit, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         switch (item.getItemId()) {
             case R.id.menu_course_save:
+                if (sharedPreferences.getBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE, Config.DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE)) {
+                    if (course.getCourseId() != null && !course.getCourseId().contains(Config.CUSTOM_COURSE_PREFIX) && !course.getCourseId().contains(Config.SEARCH_COURSE_PREFIX)) {
+                        autoUpdateCourseAlert();
+                        break;
+                    }
+                }
                 saveData();
                 break;
             case android.R.id.home:
@@ -178,6 +187,14 @@ public class CourseEditActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void autoUpdateCourseAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(CourseEditActivity.this);
+        builder.setTitle(R.string.attention);
+        builder.setMessage(R.string.auto_update_course_table_alert);
+        builder.setPositiveButton(android.R.string.yes, null);
+        builder.show();
     }
 
     @Override

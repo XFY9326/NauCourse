@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.CourseEditActivity">
+
+    <item
+        android:id="@+id/menu_course_term_date"
+        android:icon="@drawable/ic_date_range"
+        android:orderInCategory="0"
+        android:title="@string/custom_term"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_course_save"
+        android:icon="@drawable/ic_save"
+        android:orderInCategory="1"
+        android:title="@string/save"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_course_delete_all"
+        android:icon="@drawable/ic_delete_all"
+        android:orderInCategory="2"
+        android:title="@string/delete_all"
+        app:showAsAction="ifRoom" />
+
+
+</menu>

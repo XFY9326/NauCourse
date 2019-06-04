@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.core.view.ViewCompat;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
@@ -65,12 +64,6 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         holder.textView_course_name.setText(course.getCourseName());
         holder.textView_course_edit_teacher.setText(activity.getString(R.string.course_card_teacher, courseArrayList.get(holder.getAdapterPosition()).getCourseTeacher()));
         holder.button_course_edit.setOnClickListener(v -> {
-            if (sharedPreferences.getBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE, Config.DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE)) {
-                if (course.getCourseId() != null && !course.getCourseId().contains(Config.CUSTOM_COURSE_PREFIX) && !course.getCourseId().contains(Config.SEARCH_COURSE_PREFIX)) {
-                    autoUpdateCourseAlert();
-                    return;
-                }
-            }
             Intent intent = new Intent(activity, CourseEditActivity.class);
             intent.putExtra(Config.INTENT_EDIT_COURSE, true);
             intent.putExtra(Config.INTENT_EDIT_COURSE_ITEM, course);
@@ -171,14 +164,6 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
             }
         });
         colorPickerDialog.show(activity.getSupportFragmentManager(), COLOR_PICKER_DIALOG_TAG);
-    }
-
-    private void autoUpdateCourseAlert() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle(R.string.attention);
-        builder.setMessage(R.string.auto_update_course_table_alert);
-        builder.setPositiveButton(android.R.string.yes, null);
-        builder.show();
     }
 
     @Override
