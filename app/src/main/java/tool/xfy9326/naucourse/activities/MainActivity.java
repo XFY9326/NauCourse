@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void netCheck() {
-        NetMethod.isJwcAvailable(() -> runOnUiThread(() -> Toast.makeText(MainActivity.this, R.string.jwc_net_no_connection, Toast.LENGTH_SHORT).show()));
+        NetMethod.checkJwcAvailable(MainActivity.this);
     }
 
     private void loginCheck() {

@@ -10,11 +10,14 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okhttp3.internal.annotations.EverythingIsNonNull;
 
 /**
  * Created by xfy9326 on 18-2-20.
@@ -153,6 +156,27 @@ public class NauSSOClient {
         return false;
     }
 
+    public void checkJwcServer(final OnAvailableListener availableListener) {
+        Request.Builder request_builder = new Request.Builder();
+        request_builder.url("http://jwc.nau.edu.cn");
+        client.newCall(request_builder.build()).enqueue(new Callback() {
+            @Override
+            @EverythingIsNonNull
+            public void onFailure(Call call, IOException e) {
+                availableListener.OnError();
+            }
+
+            @Override
+            @EverythingIsNonNull
+            public void onResponse(Call call, Response response) {
+                if (response.code() != 200) {
+                    availableListener.OnError();
+                }
+                response.close();
+            }
+        });
+    }
+
     private Cache getCache(Context context) {
         return new Cache(context.getCacheDir(), 10240 * 1024);
     }
@@ -173,5 +197,9 @@ public class NauSSOClient {
         }
         response.close();
         return null;
+    }
+
+    public interface OnAvailableListener {
+        void OnError();
     }
 }

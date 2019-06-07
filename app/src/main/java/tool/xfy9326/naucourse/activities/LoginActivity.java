@@ -10,7 +10,6 @@ import android.preference.PreferenceManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -178,7 +177,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void netCheck() {
-        NetMethod.isJwcAvailable(() -> runOnUiThread(() -> Toast.makeText(LoginActivity.this, R.string.jwc_net_no_connection, Toast.LENGTH_SHORT).show()));
+        NetMethod.checkJwcAvailable(LoginActivity.this);
     }
 
     synchronized private void updateCheck() {

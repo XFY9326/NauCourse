@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourse.methods;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -16,14 +17,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
 
-import okhttp3.Call;
-import okhttp3.Callback;
+import lib.xfy9326.nausso.NauSSOClient;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import okhttp3.internal.annotations.EverythingIsNonNull;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 
@@ -248,30 +247,12 @@ public class NetMethod {
     /**
      * 教务处网络联通判断
      *
-     * @param availableListener 联通接口
+     * @param activity Activity
      */
-    public static void isJwcAvailable(final OnAvailableListener availableListener) {
-        Request.Builder request_builder = new Request.Builder();
-        request_builder.url("http://jwc.nau.edu.cn");
-        new OkHttpClient().newCall(request_builder.build()).enqueue(new Callback() {
-            @Override
-            @EverythingIsNonNull
-            public void onFailure(Call call, IOException e) {
-                availableListener.OnError();
-            }
-
-            @Override
-            @EverythingIsNonNull
-            public void onResponse(Call call, Response response) {
-                if (response.code() != 200) {
-                    availableListener.OnError();
-                }
-                response.close();
-            }
-        });
-    }
-
-    public interface OnAvailableListener {
-        void OnError();
+    public static void checkJwcAvailable(Activity activity) {
+        NauSSOClient client = BaseMethod.getApp(activity).getClient();
+        if (client != null) {
+            client.checkJwcServer(() -> activity.runOnUiThread(() -> Toast.makeText(activity, R.string.jwc_net_no_connection, Toast.LENGTH_SHORT).show()));
+        }
     }
 }
