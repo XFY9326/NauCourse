@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import java.util.Random;
 import java.util.regex.Pattern;
 
 import tool.xfy9326.naucourse.BaseApplication;
+import tool.xfy9326.naucourse.BuildConfig;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 
@@ -83,6 +85,25 @@ public class BaseMethod {
             return NetMethod.isWifiNetWork(context) && autoUpdate;
         } else {
             return autoUpdate;
+        }
+    }
+
+    public static void showNewVersionInfo(Context context, boolean versionCheck) {
+        boolean showDialog = false;
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        if (versionCheck) {
+            int newVersionInfo = sharedPreferences.getInt(Config.PREFERENCE_NEW_VERSION_INFO, Config.DEFAULT_PREFERENCE_NEW_VERSION_INFO);
+            showDialog = newVersionInfo < BuildConfig.VERSION_CODE;
+        }
+        if (!versionCheck || showDialog) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle(R.string.new_version_info_title);
+            builder.setMessage(R.string.new_version_info_content);
+            builder.setPositiveButton(android.R.string.yes, null);
+            builder.show();
+            if (versionCheck) {
+                sharedPreferences.edit().putInt(Config.PREFERENCE_NEW_VERSION_INFO, BuildConfig.VERSION_CODE).apply();
+            }
         }
     }
 

@@ -37,10 +37,12 @@ import tool.xfy9326.naucourse.activities.SchoolCalendarActivity;
 import tool.xfy9326.naucourse.activities.ScoreActivity;
 import tool.xfy9326.naucourse.activities.StudentInfoActivity;
 import tool.xfy9326.naucourse.activities.SuspendCourseActivity;
+import tool.xfy9326.naucourse.activities.UpdateSettingsActivity;
 import tool.xfy9326.naucourse.asyncTasks.StudentAsync;
 import tool.xfy9326.naucourse.methods.BaseMethod;
 import tool.xfy9326.naucourse.methods.LoginMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
+import tool.xfy9326.naucourse.methods.SecurityMethod;
 import tool.xfy9326.naucourse.utils.SchoolTime;
 import tool.xfy9326.naucourse.utils.StudentInfo;
 import tool.xfy9326.naucourse.utils.StudentLearnProcess;
@@ -135,6 +137,7 @@ public class PersonFragment extends Fragment {
 
             CardView cardView_course_settings = view.findViewById(R.id.cardView_course_settings);
             CardView cardView_global_settings = view.findViewById(R.id.cardView_global_settings);
+            CardView cardView_update_settings = view.findViewById(R.id.cardView_update);
             CardView cardView_login_out = view.findViewById(R.id.cardView_login_out);
             CardView cardView_about = view.findViewById(R.id.cardView_about);
 
@@ -217,6 +220,13 @@ public class PersonFragment extends Fragment {
                     getActivity().startActivity(intent);
                 }
             });
+            cardView_update_settings.setOnClickListener(v -> {
+                if (getActivity() != null && isAdded()) {
+                    Intent intent = new Intent(getActivity(), UpdateSettingsActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    getActivity().startActivity(intent);
+                }
+            });
             cardView_login_out.setOnClickListener(v -> {
                 if (getActivity() != null && isAdded()) {
                     if (NetMethod.isNetworkConnected(getActivity())) {
@@ -250,8 +260,7 @@ public class PersonFragment extends Fragment {
 
     private void loginOut(final Context context) {
         if (getActivity() != null) {
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            String userId = sharedPreferences.getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
+            String userId = SecurityMethod.getUserId(context);
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle(R.string.login_out);
             builder.setMessage(getString(R.string.ask_login_out, userId));
@@ -359,7 +368,7 @@ public class PersonFragment extends Fragment {
     synchronized private void getData() {
         BaseMethod.setRefreshing(swipeRefreshLayout, true);
         if (context != null) {
-            if (loadTime == 0) {
+            if (loadTime < 2) {
                 new StudentAsync().execute(context.getApplicationContext());
             } else {
                 new StudentAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getApplicationContext());

@@ -167,6 +167,15 @@
                 android:value=".activities.MainActivity" />
         </activity>
 
+        <activity
+            android:name=".activities.UpdateSettingsActivity"
+            android:label="@string/update_check"
+            tools:ignore="InnerclassSeparator">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+
         <receiver
             android:name=".receivers.BootCompleteReceiver"
             tools:ignore="InnerclassSeparator">

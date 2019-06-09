@@ -2,6 +2,9 @@ package tool.xfy9326.naucourse.methods.netInfoMethods;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -14,17 +17,17 @@ import tool.xfy9326.naucourse.methods.DataMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.utils.SuspendCourse;
 
-public class SuspendCourseMethod {
-    public static final String FILE_NAME = "SuspendCourse";
+public class SuspendCourseMethod extends BaseInfoMethod<SuspendCourse> {
+    public static final String FILE_NAME = SuspendCourse.class.getSimpleName();
     public static final boolean IS_ENCRYPT = false;
     private static final String URL = "http://jwc.nau.edu.cn/SuspendCourseInfo.aspx";
-    private final Context context;
     private Document document;
 
-    public SuspendCourseMethod(Context context) {
-        this.context = context;
+    public SuspendCourseMethod(@NonNull Context context) {
+        super(context);
     }
 
+    @Override
     public int load() throws Exception {
         String data = NetMethod.loadUrl(URL);
         System.gc();
@@ -36,11 +39,13 @@ public class SuspendCourseMethod {
     }
 
     public void saveTemp() {
-        getSuspendCourse(false);
+        getData(false);
     }
 
     @SuppressWarnings({"ToArrayCallWithZeroLengthArrayArgument"})
-    public SuspendCourse getSuspendCourse(boolean checkTemp) {
+    @Nullable
+    @Override
+    public SuspendCourse getData(boolean checkTemp) {
         SuspendCourse suspendCourse = new SuspendCourse();
 
         if (document != null) {

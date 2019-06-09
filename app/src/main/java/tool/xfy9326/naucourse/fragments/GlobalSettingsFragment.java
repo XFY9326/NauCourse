@@ -9,7 +9,7 @@ import java.util.Objects;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.methods.UpdateMethod;
+import tool.xfy9326.naucourse.methods.VPNMethods;
 
 public class GlobalSettingsFragment extends PreferenceFragmentCompat {
 
@@ -25,11 +25,14 @@ public class GlobalSettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void PreferenceSet() {
-        ((Preference) Objects.requireNonNull(findPreference(Config.PREFERENCE_UPDATE_NOW))).setOnPreferenceClickListener(preference -> {
-            if (isAdded()) {
-                UpdateMethod.checkUpdate(getActivity(), true);
-            }
-            return false;
+        ((Preference) Objects.requireNonNull(findPreference(Config.PREFERENCE_SCHOOL_VPN_MODE))).setOnPreferenceChangeListener((preference, newValue) -> {
+            VPNMethods.setVPNMode(getActivity(), (boolean) newValue);
+            return true;
+        });
+
+        ((Preference) Objects.requireNonNull(findPreference(Config.PREFERENCE_SCHOOL_VPN_SMART_MODE))).setOnPreferenceChangeListener((preference, newValue) -> {
+            VPNMethods.setVPNSmartMode(getActivity(), (boolean) newValue);
+            return true;
         });
     }
 }

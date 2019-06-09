@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -201,7 +200,7 @@ public class TableFragment extends Fragment {
 
     synchronized private void getData() {
         if (context != null) {
-            if (loadTime == 0) {
+            if (loadTime < 2) {
                 new TableAsync().execute(context.getApplicationContext());
             } else {
                 new TableAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getApplicationContext());
@@ -512,69 +511,65 @@ public class TableFragment extends Fragment {
     }
 
     private void shareTable() {
-        if (view != null && getActivity() != null) {
+        if (view != null && isAdded()) {
             if (PermissionMethod.checkStoragePermission(getActivity(), 0)) {
                 View tableView = view.findViewById(R.id.course_table_layout);
+                if (view_set && tableView.getVisibility() == View.VISIBLE) {
+                    if (getActivity() != null) {
+                        final Bitmap bitmap = ImageMethod.getViewBitmap(getActivity(), tableView);
 
-                int width = tableView.getWidth();
-                int height = tableView.getHeight();
-                if (width > 0 && height > 0 && view_set) {
-                    final Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-                    Canvas canvas = new Canvas(bitmap);
+                        if (bitmap != null) {
+                            final String path = Config.PICTURE_DICTIONARY_PATH + Config.COURSE_TABLE_IMAGE_FILE_NAME;
 
-                    canvas.drawColor(Color.WHITE);
+                            LayoutInflater layoutInflater = getLayoutInflater();
+                            View view = layoutInflater.inflate(R.layout.dialog_share_image, getActivity().findViewById(R.id.layout_dialog_share_image));
+                            PhotoView photoView = view.findViewById(R.id.photoView_share_image);
+                            photoView.setImageDrawable(new BitmapDrawable(getResources(), bitmap));
 
-                    tableView.layout(0, 0, width, height);
-                    tableView.draw(canvas);
-
-                    final String path = Config.PICTURE_DICTIONARY_PATH + Config.COURSE_TABLE_FILE_NAME;
-                    if (context != null && isAdded() && getActivity() != null) {
-                        LayoutInflater layoutInflater = getLayoutInflater();
-                        View view = layoutInflater.inflate(R.layout.dialog_share_image, getActivity().findViewById(R.id.layout_dialog_share_image));
-                        PhotoView photoView = view.findViewById(R.id.photoView_share_image);
-                        photoView.setImageDrawable(new BitmapDrawable(getResources(), bitmap));
-
-                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setView(view);
-                        builder.setTitle(R.string.share_course_table);
-                        builder.setPositiveButton(R.string.share, (dialog, which) -> {
-                            if (getActivity() != null) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setView(view);
+                            builder.setTitle(R.string.share_course_table);
+                            builder.setPositiveButton(R.string.share, (dialog, which) -> {
+                                if (getActivity() != null) {
+                                    try {
+                                        if (ImageMethod.saveBitmap(bitmap, path, false)) {
+                                            Uri photoURI = FileProvider.getUriForFile(getActivity(), Config.FILE_PROVIDER_AUTH, new File(path));
+                                            Intent intent = new Intent(Intent.ACTION_SEND);
+                                            intent.setType("image/*");
+                                            intent.putExtra(Intent.EXTRA_STREAM, photoURI);
+                                            intent.addCategory(Intent.CATEGORY_DEFAULT);
+                                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                            startActivity(Intent.createChooser(intent, getString(R.string.share_course_table)));
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                        Toast.makeText(getActivity(), R.string.course_table_share_error, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                            builder.setNeutralButton(R.string.save, (dialog, which) -> {
                                 try {
                                     if (ImageMethod.saveBitmap(bitmap, path, false)) {
-                                        Uri photoURI = FileProvider.getUriForFile(getActivity(), Config.FILE_PROVIDER_AUTH, new File(path));
-                                        Intent intent = new Intent(Intent.ACTION_SEND);
-                                        intent.setType("image/*");
-                                        intent.putExtra(Intent.EXTRA_STREAM, photoURI);
-                                        intent.addCategory(Intent.CATEGORY_DEFAULT);
-                                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                        startActivity(Intent.createChooser(intent, getString(R.string.share_course_table)));
+                                        Toast.makeText(getActivity(), getString(R.string.save_file_success, path), Toast.LENGTH_SHORT).show();
                                     }
                                 } catch (IOException e) {
                                     e.printStackTrace();
-                                    Toast.makeText(getActivity(), R.string.course_table_share_error, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
                                 }
-                            }
-                        });
-                        builder.setNeutralButton(R.string.save, (dialog, which) -> {
-                            try {
-                                if (ImageMethod.saveBitmap(bitmap, path, false)) {
-                                    Toast.makeText(getActivity(), getString(R.string.save_file_success, path), Toast.LENGTH_SHORT).show();
+                            });
+                            builder.setNegativeButton(android.R.string.cancel, null);
+                            builder.setOnCancelListener(dialog -> {
+                                if (!bitmap.isRecycled()) {
+                                    bitmap.recycle();
                                 }
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                                Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        builder.setNegativeButton(android.R.string.cancel, null);
-                        builder.setOnCancelListener(dialog -> {
-                            if (!bitmap.isRecycled()) {
-                                bitmap.recycle();
-                            }
-                        });
-                        builder.show();
+                            });
+                            builder.show();
+                        } else {
+                            Toast.makeText(getActivity(), R.string.course_table_share_error, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 } else {
-                    Toast.makeText(getActivity(), R.string.course_table_share_error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.data_is_loading, Toast.LENGTH_SHORT).show();
                 }
             } else {
                 Toast.makeText(getActivity(), R.string.permission_error, Toast.LENGTH_SHORT).show();

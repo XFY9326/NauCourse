@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 import androidx.annotation.Nullable;
 
+import java.net.SocketTimeoutException;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -47,6 +48,11 @@ public class CourseSearchInfoAsync extends AsyncTask<Object, Void, Context> {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                if (e instanceof SocketTimeoutException) {
+                    courseSearchLoadSuccess = Config.NET_WORK_ERROR_CODE_TIME_OUT;
+                } else {
+                    courseSearchLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+                }
                 loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
             }
             return (Context) objects[1];

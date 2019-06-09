@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 
 import androidx.annotation.Nullable;
 
+import java.net.SocketTimeoutException;
+
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.activities.MoaActivity;
 import tool.xfy9326.naucourse.methods.BaseMethod;
@@ -39,18 +41,23 @@ public class MoaAsync extends AsyncTask<Context, Void, Context> {
                 MoaMethod moaMethod = new MoaMethod(context[0]);
                 loadSuccess = moaMethod.load();
                 if (loadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                    moa = moaMethod.getMoaList(loadTime > 1);
+                    moa = moaMethod.getData(loadTime > 1);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
+            if (e instanceof SocketTimeoutException) {
+                loadSuccess = Config.NET_WORK_ERROR_CODE_TIME_OUT;
+            } else {
+                loadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+            }
             loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
         }
         if (moaActivity != null) {
             moaActivity.setLoadTime(++loadTime);
         }
         if (loadTime > 2) {
-            BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);
+            NetMethod.showConnectErrorOnce = false;
         }
         return context[0];
     }

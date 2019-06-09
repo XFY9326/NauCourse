@@ -98,7 +98,7 @@ public class MoaActivity extends AppCompatActivity {
 
     synchronized private void getData() {
         BaseMethod.setRefreshing(swipeRefreshLayout, true);
-        if (loadTime == 0) {
+        if (loadTime < 2) {
             new MoaAsync().execute(getApplicationContext());
         } else {
             new MoaAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());

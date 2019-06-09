@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 import androidx.annotation.Nullable;
 
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 import tool.xfy9326.naucourse.Config;
@@ -19,6 +20,7 @@ public class CourseNextListAsync extends AsyncTask<Context, Void, Context> {
     private int loadCode = Config.NET_WORK_GET_SUCCESS;
     @Nullable
     private ArrayList<Course> course;
+    private boolean syncFinish = false;
 
     public CourseNextListAsync() {
         this.course = null;
@@ -29,30 +31,43 @@ public class CourseNextListAsync extends AsyncTask<Context, Void, Context> {
         try {
             TableNextMethod tableNextMethod = new TableNextMethod(context[0]);
             tableLoadSuccess = tableNextMethod.load();
-            if (tableLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                course = tableNextMethod.getCourseTable();
+            if (tableLoadSuccess == Config.NET_WORK_GET_SUCCESS && !syncFinish) {
+                course = tableNextMethod.getData();
             }
         } catch (Exception e) {
             e.printStackTrace();
+            if (e instanceof SocketTimeoutException) {
+                tableLoadSuccess = Config.NET_WORK_ERROR_CODE_TIME_OUT;
+            } else {
+                tableLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+            }
             loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
         }
         return context[0];
     }
 
     @Override
+    protected void onCancelled() {
+        syncFinish = true;
+        super.onCancelled();
+    }
+
+    @Override
     protected void onPostExecute(Context context) {
-        BaseMethod.getApp(context).setShowConnectErrorOnce(false);
-        CourseActivity courseActivity = BaseMethod.getApp(context).getCourseActivity();
-        if (NetMethod.checkNetWorkCode(context, new int[]{tableLoadSuccess}, loadCode, false)) {
-            if (courseActivity != null) {
-                courseActivity.addCourseList(course, false, false, course == null, true);
+        if (!syncFinish) {
+            NetMethod.showConnectErrorOnce = false;
+            CourseActivity courseActivity = BaseMethod.getApp(context).getCourseActivity();
+            if (NetMethod.checkNetWorkCode(context, new int[]{tableLoadSuccess}, loadCode, false)) {
+                if (courseActivity != null && !syncFinish) {
+                    courseActivity.addCourseList(course, false, false, course == null, true);
+                }
+            } else {
+                if (courseActivity != null) {
+                    courseActivity.closeLoadingDialog();
+                }
             }
-        } else {
-            if (courseActivity != null) {
-                courseActivity.closeLoadingDialog();
-            }
+            System.gc();
         }
-        System.gc();
         super.onPostExecute(context);
     }
 }

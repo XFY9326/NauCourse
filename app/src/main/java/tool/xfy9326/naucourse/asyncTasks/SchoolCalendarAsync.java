@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 
 import androidx.annotation.Nullable;
 
+import java.net.SocketTimeoutException;
+
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.activities.SchoolCalendarActivity;
 import tool.xfy9326.naucourse.methods.BaseMethod;
@@ -45,13 +47,20 @@ public class SchoolCalendarAsync extends AsyncTask<Context, Void, Context> {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            if (e instanceof SocketTimeoutException) {
+                jwLoadSuccess = Config.NET_WORK_ERROR_CODE_TIME_OUT;
+                imageLoadSuccess = Config.NET_WORK_ERROR_CODE_TIME_OUT;
+            } else {
+                jwLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+                imageLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+            }
             loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
         }
         if (schoolCalendarActivity != null) {
             schoolCalendarActivity.setLoadTime(++loadTime);
         }
         if (loadTime > 2) {
-            BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);
+            NetMethod.showConnectErrorOnce = false;
         }
         return context[0];
     }

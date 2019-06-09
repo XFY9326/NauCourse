@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 
 import androidx.annotation.Nullable;
 
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 import tool.xfy9326.naucourse.Config;
@@ -56,7 +57,7 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
                     SchoolTimeMethod schoolTimeMethod = new SchoolTimeMethod(context[0]);
                     timeLoadSuccess = schoolTimeMethod.load();
                     if (timeLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                        schoolTime = schoolTimeMethod.getSchoolTime();
+                        schoolTime = schoolTimeMethod.getData(false);
                         schoolTime = TimeMethod.termSetCheck(context[0], schoolTime, loadTime == 1);
                     }
 
@@ -66,12 +67,12 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
                         TableMethod tableMethod = new TableMethod(context[0]);
                         tableLoadSuccess = tableMethod.load();
                         if (tableLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                            course = tableMethod.getCourseTable(true);
+                            course = tableMethod.getData(true);
                         }
                     } else if (auto_update) {
                         TableMethod tableMethod = new TableMethod(context[0]);
                         if (tableMethod.load() == Config.NET_WORK_GET_SUCCESS) {
-                            ArrayList<Course> update_course = tableMethod.getCourseTable(false);
+                            ArrayList<Course> update_course = tableMethod.getData(false);
                             if (update_course != null) {
                                 ArrayList<Course> now_course = CourseEditMethod.combineCourseList(update_course, course, true, false, true);
                                 if (now_course != null && !CourseEditMethod.checkCourseList(now_course).isHasError()) {
@@ -85,13 +86,18 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                if (e instanceof SocketTimeoutException) {
+                    tableLoadSuccess = Config.NET_WORK_ERROR_CODE_TIME_OUT;
+                } else {
+                    tableLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+                }
                 loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
             }
             if (tableFragment != null) {
                 tableFragment.setLoadTime(++loadTime);
             }
             if (loadTime > 2) {
-                BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);
+                NetMethod.showConnectErrorOnce = false;
             }
         }
         return context[0];

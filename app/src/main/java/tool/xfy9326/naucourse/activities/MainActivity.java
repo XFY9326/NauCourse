@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 ViewSet(-1);
             }
             tempLoad();
+            BaseMethod.showNewVersionInfo(this, true);
         }
     }
 

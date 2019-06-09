@@ -308,6 +308,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|start"
+                    android:layout_marginStart="5dp"
                     android:drawableStart="@drawable/ic_settings"
                     android:drawableEnd="@drawable/ic_more"
                     android:drawablePadding="15dp"
@@ -322,7 +323,9 @@
                 android:id="@+id/cardView_course_settings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
@@ -334,6 +337,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|start"
+                    android:layout_marginStart="5dp"
                     android:drawableStart="@drawable/ic_school"
                     android:drawableEnd="@drawable/ic_more"
                     android:drawablePadding="15dp"
@@ -362,12 +366,40 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|start"
+                    android:layout_marginStart="5dp"
                     android:drawableStart="@drawable/ic_account"
                     android:drawableEnd="@drawable/ic_more"
                     android:drawablePadding="15dp"
                     android:gravity="center_vertical"
                     android:padding="10dp"
                     android:text="@string/login_out"
+                    android:textSize="15sp" />
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView_update"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="2dp"
+                app:cardPreventCornerOverlap="true">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:layout_marginStart="5dp"
+                    android:drawableStart="@drawable/ic_update_check"
+                    android:drawableEnd="@drawable/ic_more"
+                    android:drawablePadding="15dp"
+                    android:gravity="center_vertical"
+                    android:padding="10dp"
+                    android:text="@string/update_check"
                     android:textSize="15sp" />
 
             </androidx.cardview.widget.CardView>
@@ -390,6 +422,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|start"
+                    android:layout_marginStart="5dp"
                     android:drawableStart="@drawable/ic_about"
                     android:drawableEnd="@drawable/ic_more"
                     android:drawablePadding="15dp"

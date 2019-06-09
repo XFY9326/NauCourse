@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.net.SocketTimeoutException;
+
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.fragments.PersonFragment;
 import tool.xfy9326.naucourse.methods.BaseMethod;
@@ -58,13 +60,18 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                if (e instanceof SocketTimeoutException) {
+                    personLoadSuccess = Config.NET_WORK_ERROR_CODE_TIME_OUT;
+                } else {
+                    personLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+                }
                 loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
             }
             if (personFragment != null) {
                 personFragment.setLoadTime(++loadTime);
             }
             if (loadTime > 2) {
-                BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);
+                NetMethod.showConnectErrorOnce = false;
             }
         }
         return context[0];

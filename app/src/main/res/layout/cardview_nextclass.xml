@@ -50,9 +50,9 @@
             android:layout_margin="10dp"
             android:drawableStart="@drawable/ic_rest"
             android:drawablePadding="30dp"
-            android:textSize="13sp"
             android:gravity="center"
-            android:text="@string/in_vacation" />
+            android:text="@string/in_vacation"
+            android:textSize="13sp" />
 
         <LinearLayout
             android:id="@+id/layout_nextClass"

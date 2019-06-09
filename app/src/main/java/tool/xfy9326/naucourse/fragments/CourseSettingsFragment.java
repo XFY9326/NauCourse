@@ -195,60 +195,61 @@ public class CourseSettingsFragment extends PreferenceFragmentCompat {
         }
     }
 
+    private void cropAndSetImage(Uri uri) {
+        if (isAdded() && getActivity() != null && uri != null) {
+            ViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(getActivity()).getViewPagerAdapter();
+            if (viewPagerAdapter != null) {
+                TableFragment tableFragment = viewPagerAdapter.getTableFragment();
+                if (tableFragment != null) {
+                    int height = tableFragment.getTableHeight();
+                    int width = tableFragment.getTableWidth();
+                    if (height > 0 && width > 0) {
+                        Intent intent = new Intent("com.android.camera.action.CROP");
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        } else {
+                            List<ResolveInfo> resInfoList = getActivity().getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+                            for (ResolveInfo resolveInfo : resInfoList) {
+                                String packageName = resolveInfo.activityInfo.packageName;
+                                getActivity().grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            }
+                        }
+                        intent.setDataAndType(uri, "image/*");
+                        intent.putExtra("crop", "true");
+                        intent.putExtra("aspectX", width);
+                        intent.putExtra("aspectY", height);
+                        intent.putExtra("outputX", width);
+                        intent.putExtra("outputY", height);
+                        intent.putExtra("scale", true);
+                        intent.putExtra("return-data", false);
+                        intent.putExtra("noFaceDetection", false);
+                        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+                        imageTempPath = ImageMethod.getCourseTableBackgroundImageTempPath(getActivity());
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.parse("file:///" + imageTempPath));
+
+                        try {
+                            startActivityForResult(intent, CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            if (getContext() != null) {
+                                Toast.makeText(getContext(), R.string.image_crop_no_found, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        return;
+                    }
+                }
+            }
+        }
+        Toast.makeText(getActivity(), R.string.image_get_error, Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != Activity.RESULT_CANCELED) {
             if (requestCode == PICK_IMAGE_CHOOSER_REQUEST_CODE) {
-                if (isAdded() && getActivity() != null && data != null) {
-                    Uri uri = data.getData();
-                    if (uri != null) {
-                        ViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(getActivity()).getViewPagerAdapter();
-                        if (viewPagerAdapter != null) {
-                            TableFragment tableFragment = viewPagerAdapter.getTableFragment();
-                            if (tableFragment != null) {
-                                int height = tableFragment.getTableHeight();
-                                int width = tableFragment.getTableWidth();
-                                if (height > 0 && width > 0) {
-                                    Intent intent = new Intent("com.android.camera.action.CROP");
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                    } else {
-                                        List<ResolveInfo> resInfoList = getActivity().getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-                                        for (ResolveInfo resolveInfo : resInfoList) {
-                                            String packageName = resolveInfo.activityInfo.packageName;
-                                            getActivity().grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                        }
-                                    }
-                                    intent.setDataAndType(uri, "image/*");
-                                    intent.putExtra("crop", "true");
-                                    intent.putExtra("aspectX", width);
-                                    intent.putExtra("aspectY", height);
-                                    intent.putExtra("outputX", width);
-                                    intent.putExtra("outputY", height);
-                                    intent.putExtra("scale", true);
-                                    intent.putExtra("return-data", false);
-                                    intent.putExtra("noFaceDetection", false);
-                                    intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-                                    imageTempPath = ImageMethod.getCourseTableBackgroundImageTempPath(getActivity());
-                                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.parse("file:///" + imageTempPath));
-
-                                    try {
-                                        startActivityForResult(intent, CROP_IMAGE_ACTIVITY_REQUEST_CODE);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                        if (getContext() != null) {
-                                            Toast.makeText(getContext(), R.string.image_crop_no_found, Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-
-                                    super.onActivityResult(requestCode, resultCode, data);
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                    Toast.makeText(getActivity(), R.string.image_get_error, Toast.LENGTH_SHORT).show();
+                if (data != null) {
+                    cropAndSetImage(data.getData());
                 }
             } else if (requestCode == CROP_IMAGE_ACTIVITY_REQUEST_CODE && data != null) {
                 if (resultCode == Activity.RESULT_OK && getActivity() != null && imageTempPath != null) {

@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 
 import androidx.annotation.Nullable;
 
+import java.net.SocketTimeoutException;
+
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.activities.SuspendCourseActivity;
 import tool.xfy9326.naucourse.methods.BaseMethod;
@@ -39,18 +41,23 @@ public class SuspendCourseAsync extends AsyncTask<Context, Void, Context> {
                 SuspendCourseMethod suspendCourseMethod = new SuspendCourseMethod(context[0]);
                 loadSuccess = suspendCourseMethod.load();
                 if (loadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                    suspendCourse = suspendCourseMethod.getSuspendCourse(loadTime > 1);
+                    suspendCourse = suspendCourseMethod.getData(loadTime > 1);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
+            if (e instanceof SocketTimeoutException) {
+                loadSuccess = Config.NET_WORK_ERROR_CODE_TIME_OUT;
+            } else {
+                loadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+            }
             loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
         }
         if (suspendCourseActivity != null) {
             suspendCourseActivity.setLoadTime(++loadTime);
         }
         if (loadTime > 2) {
-            BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);
+            NetMethod.showConnectErrorOnce = false;
         }
         return context[0];
     }

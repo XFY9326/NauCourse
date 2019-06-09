@@ -3,19 +3,20 @@ package tool.xfy9326.naucourse.methods;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import lib.xfy9326.nausso.NauSSOClient;
 import okhttp3.FormBody;
@@ -31,6 +32,16 @@ import tool.xfy9326.naucourse.R;
  */
 
 public class NetMethod {
+    public static boolean showConnectErrorOnce = false;
+    private static boolean showLoginErrorOnce = false;
+
+    public static NauSSOClient getNewSSOClient(Context context) {
+        NauSSOClient client = new NauSSOClient(context);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        client.setVPNSmartMode(sharedPreferences.getBoolean(Config.PREFERENCE_SCHOOL_VPN_SMART_MODE, Config.DEFAULT_PREFERENCE_SCHOOL_VPN_SMART_MODE), VPNMethods.NON_VPN_HOST);
+        VPNMethods.setVPNMode(context, client, sharedPreferences.getBoolean(Config.PREFERENCE_SCHOOL_VPN_MODE, Config.DEFAULT_PREFERENCE_SCHOOL_VPN_MODE));
+        return client;
+    }
 
     /**
      * 加载一个网页
@@ -41,6 +52,9 @@ public class NetMethod {
      */
     public static String loadUrl(@NonNull String url) throws IOException {
         OkHttpClient.Builder client_builder = new OkHttpClient.Builder();
+        client_builder.connectTimeout(8, TimeUnit.SECONDS);
+        client_builder.readTimeout(4, TimeUnit.SECONDS);
+        client_builder.writeTimeout(4, TimeUnit.SECONDS);
         OkHttpClient client = client_builder.build();
         return loadUrl(client, url, null);
     }
@@ -115,7 +129,7 @@ public class NetMethod {
      */
     public static String loadUrlFromLoginClient(@NonNull Context context, String url, boolean tryReLogin) throws Exception {
         String data = BaseMethod.getApp(context).getClient().getData(url);
-        if (!LoginMethod.checkUserLogin(Objects.requireNonNull(data)) && tryReLogin) {
+        if (!NauSSOClient.checkUserLogin(data) && tryReLogin) {
             int reLogin_result = LoginMethod.reLogin(context);
             switch (reLogin_result) {
                 case Config.RE_LOGIN_SUCCESS:
@@ -127,11 +141,9 @@ public class NetMethod {
                     }
                     return loadUrlFromLoginClient(context, url, false);
                 case Config.RE_LOGIN_FAILED:
-                    Log.d("NETWORK", "RE LOGIN ERROR");
                     break;
             }
         }
-        System.gc();
         return data;
     }
 
@@ -146,25 +158,29 @@ public class NetMethod {
      */
     synchronized public static boolean checkNetWorkCode(@NonNull Context context, @NonNull int[] dataLoadCode, int contentLoadCode, boolean ignoreSingleGetDataError) {
         if (contentLoadCode == Config.NET_WORK_ERROR_CODE_CONNECT_ERROR) {
-            if (!BaseMethod.getApp(context).isShowConnectErrorOnce()) {
+            if (!showConnectErrorOnce) {
                 Toast.makeText(context, R.string.network_get_error, Toast.LENGTH_SHORT).show();
-                BaseMethod.getApp(context).setShowConnectErrorOnce(true);
+                showConnectErrorOnce = true;
             }
             return false;
         }
         int getDataErrorCount = 0;
         for (int code : dataLoadCode) {
+            if (code == Config.NET_WORK_ERROR_CODE_TIME_OUT) {
+                Toast.makeText(context, R.string.network_get_error, Toast.LENGTH_SHORT).show();
+                return false;
+            }
             if (code == Config.NET_WORK_ERROR_CODE_CONNECT_NO_LOGIN) {
-                if (!BaseMethod.getApp(context).isShowLoginErrorOnce()) {
+                if (!showLoginErrorOnce) {
                     Toast.makeText(context, R.string.user_login_error, Toast.LENGTH_LONG).show();
-                    BaseMethod.getApp(context).setShowLoginErrorOnce();
+                    showLoginErrorOnce = true;
                 }
                 return false;
             }
             if (code == Config.NET_WORK_ERROR_CODE_CONNECT_USER_DATA) {
-                if (!BaseMethod.getApp(context).isShowLoginErrorOnce()) {
+                if (!showLoginErrorOnce) {
                     Toast.makeText(context, R.string.user_login_error, Toast.LENGTH_LONG).show();
-                    BaseMethod.getApp(context).setShowLoginErrorOnce();
+                    showLoginErrorOnce = true;
                 }
                 return false;
             }
@@ -252,7 +268,7 @@ public class NetMethod {
     public static void checkJwcAvailable(Activity activity) {
         NauSSOClient client = BaseMethod.getApp(activity).getClient();
         if (client != null) {
-            client.checkJwcServer(() -> activity.runOnUiThread(() -> Toast.makeText(activity, R.string.jwc_net_no_connection, Toast.LENGTH_SHORT).show()));
+            client.checkServer(() -> activity.runOnUiThread(() -> Toast.makeText(activity, R.string.school_net_no_connection, Toast.LENGTH_SHORT).show()));
         }
     }
 }

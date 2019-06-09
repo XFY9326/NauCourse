@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.net.SocketTimeoutException;
+
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.activities.ExamActivity;
 import tool.xfy9326.naucourse.methods.BaseMethod;
@@ -44,18 +46,23 @@ public class ExamAsync extends AsyncTask<Context, Void, Context> {
                 ExamMethod examMethod = new ExamMethod(context[0]);
                 examLoadSuccess = examMethod.load();
                 if (examLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                    exam = examMethod.getExam(false);
+                    exam = examMethod.getData(false);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
+            if (e instanceof SocketTimeoutException) {
+                examLoadSuccess = Config.NET_WORK_ERROR_CODE_TIME_OUT;
+            } else {
+                examLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+            }
             loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
         }
         if (examActivity != null) {
             examActivity.setLoadTime(++loadTime);
         }
         if (loadTime > 2) {
-            BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);
+            NetMethod.showConnectErrorOnce = false;
         }
         return context[0];
     }

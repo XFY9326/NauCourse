@@ -17,11 +17,12 @@
         android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardView_info_detail_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"
@@ -87,6 +88,7 @@
             android:scrollbars="none">
 
             <LinearLayout
+                android:id="@+id/layout_info_detail_data"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 

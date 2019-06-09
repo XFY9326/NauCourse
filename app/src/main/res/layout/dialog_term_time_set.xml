@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingBottom="10dp"
-    android:paddingEnd="20dp"
     android:paddingStart="20dp"
-    android:paddingTop="15dp">
+    android:paddingTop="15dp"
+    android:paddingEnd="20dp"
+    android:paddingBottom="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,8 +25,8 @@
             android:id="@+id/button_custom_start_date"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/ic_edit_dark" />
 
     </LinearLayout>
@@ -48,8 +48,8 @@
             android:id="@+id/button_custom_end_date"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/ic_edit_dark" />
 
     </LinearLayout>

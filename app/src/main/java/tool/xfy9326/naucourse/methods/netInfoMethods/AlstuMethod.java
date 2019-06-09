@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,28 +15,26 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.methods.LoginMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
+import tool.xfy9326.naucourse.methods.VPNMethods;
 import tool.xfy9326.naucourse.utils.AlstuTopic;
 
-public class AlstuMethod {
-    public static final String FILE_NAME = "AlstuTopic";
+public class AlstuMethod extends BaseInfoDetailMethod<AlstuTopic> {
+    public static final String FILE_NAME = AlstuTopic.class.getSimpleName();
     public static final int TYPE_ALSTU = 5;
     public static final String ALSTU_SERVER_URL = "http://alstu.nau.edu.cn/";
     private static final String ALSTU_MSG_URL = ALSTU_SERVER_URL + "MESSAGE/DEFAULT.ASPX";
-    private final Context context;
-    private Document document;
-    private Document detailDocument;
+    private Document detailDocument = null;
+    private Document document = null;
 
     public AlstuMethod(@NonNull Context context) {
-        this.context = context;
-        this.document = null;
-        this.detailDocument = null;
+        super(context);
     }
 
-    private static String getDownloadFileText(Document detailDocument) {
+    private static String getDownloadFileText(Context context, Document detailDocument) {
         StringBuilder result = new StringBuilder();
         Element element_data = Objects.requireNonNull(detailDocument).body().getElementById("MyDataList");
         if (element_data != null) {
@@ -51,7 +50,7 @@ public class AlstuMethod {
                 if (a.hasAttr("onclick")) {
                     String fileDownloadName = a.attr("onclick");
                     fileDownloadName = fileDownloadName.substring(fileDownloadName.indexOf("\'") + 1, fileDownloadName.lastIndexOf("\'"));
-                    result.append(combineDownloadText(year, fileDownloadName, a.text()));
+                    result.append(combineDownloadText(context, year, fileDownloadName, a.text()));
                 }
 
             }
@@ -59,16 +58,17 @@ public class AlstuMethod {
         return result.toString();
     }
 
-    private static String combineDownloadText(String year, String fileDownloadName, String fileName) {
-        return "<p><a href=\"" + ALSTU_SERVER_URL + "aldfdnf.aspx?lx=st&ylx=" + year + "&file=" + fileDownloadName + "\">" + fileName + "</a></p>";
+    private static String combineDownloadText(Context context, String year, String fileDownloadName, String fileName) {
+        return "<p><a href=\"" + VPNMethods.vpnLinkUrlFix(context, ALSTU_SERVER_URL, "aldfdnf.aspx?lx=st&ylx=" + year + "&file=" + fileDownloadName) + "\">" + fileName + "</a></p>";
     }
 
+    @Override
     public int load() throws Exception {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
             String data = NetMethod.loadUrlFromLoginClient(context, ALSTU_MSG_URL, true);
             if (data != null) {
-                if (LoginMethod.checkUserLogin(data)) {
+                if (NauSSOClient.checkUserLogin(data)) {
                     document = Jsoup.parse(data);
                     return Config.NET_WORK_GET_SUCCESS;
                 }
@@ -79,7 +79,9 @@ public class AlstuMethod {
         return Config.NET_WORK_ERROR_CODE_CONNECT_NO_LOGIN;
     }
 
-    public AlstuTopic getAlstuTopic() {
+    @Nullable
+    @Override
+    public AlstuTopic getData(boolean checkTemp) {
         AlstuTopic alstuTopic = new AlstuTopic();
         ArrayList<String> title = new ArrayList<>();
         ArrayList<String> url = new ArrayList<>();
@@ -122,12 +124,13 @@ public class AlstuMethod {
         return alstuTopic;
     }
 
+    @Override
     public int loadDetail(String url) throws Exception {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
-            String data = NetMethod.loadUrlFromLoginClient(context, ALSTU_SERVER_URL + url, true);
+            String data = NetMethod.loadUrlFromLoginClient(context, VPNMethods.vpnLinkUrlFix(context, ALSTU_SERVER_URL, url), true);
             if (data != null) {
-                if (LoginMethod.checkUserLogin(data)) {
+                if (NauSSOClient.checkUserLogin(data)) {
                     detailDocument = Jsoup.parse(data);
                     return Config.NET_WORK_GET_SUCCESS;
                 }
@@ -139,12 +142,13 @@ public class AlstuMethod {
     }
 
     @NonNull
-    public String getDetail() {
-        Element element = Objects.requireNonNull(detailDocument).body().getElementById("nr");
-        Elements elements_p = element.getElementsByTag("p");
+    @Override
+    public String getDetailData() {
+        Element element_body = Objects.requireNonNull(detailDocument).body();
+        Elements elements_p = element_body.getElementById("nr").getElementsByTag("p");
         elements_p.remove(0);
         String result = elements_p.html().replaceAll("<img.*?/?>", context.getResources().getString(R.string.image_replace));
-        result += getDownloadFileText(detailDocument);
+        result += getDownloadFileText(context, detailDocument);
         return result;
     }
 }

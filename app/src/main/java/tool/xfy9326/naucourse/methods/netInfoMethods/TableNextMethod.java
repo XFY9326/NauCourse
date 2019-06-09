@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.jsoup.Jsoup;
@@ -17,27 +18,25 @@ import java.util.Random;
 import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.LoginMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.utils.Course;
 import tool.xfy9326.naucourse.utils.CourseDetail;
 
-public class TableNextMethod {
-    private final Context context;
+public class TableNextMethod extends BaseNetMethod {
     @Nullable
     private Document document;
 
-    public TableNextMethod(Context context) {
-        this.context = context;
-        this.document = null;
+    public TableNextMethod(@NonNull Context context) {
+        super(context);
     }
 
+    @Override
     public int load() throws Exception {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
             String data = NetMethod.loadUrlFromLoginClient(context, NauSSOClient.JWC_SERVER_URL + "/Students/MyCourseScheduleTableNext.aspx", true);
             if (data != null) {
-                if (LoginMethod.checkUserLogin(data)) {
+                if (NauSSOClient.checkUserLogin(data)) {
                     document = Jsoup.parse(data);
                     return Config.NET_WORK_GET_SUCCESS;
                 }
@@ -48,7 +47,7 @@ public class TableNextMethod {
         return Config.NET_WORK_ERROR_CODE_CONNECT_NO_LOGIN;
     }
 
-    public ArrayList<Course> getCourseTable() {
+    public ArrayList<Course> getData() {
         ArrayList<Course> courseList = new ArrayList<>();
         if (document != null) {
             boolean startCourse = false;

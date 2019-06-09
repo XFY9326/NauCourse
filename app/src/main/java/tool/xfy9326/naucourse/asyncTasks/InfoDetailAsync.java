@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.net.SocketTimeoutException;
 import java.util.Objects;
 
 import tool.xfy9326.naucourse.Config;
@@ -56,10 +57,10 @@ public class InfoDetailAsync extends AsyncTask<Context, Void, Context> {
                     JwcInfoMethod jwcInfoMethod = new JwcInfoMethod(context[0]);
                     loadSuccess = jwcInfoMethod.loadDetail(info_url);
                     if (loadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                        data = jwcInfoMethod.getDetail();
+                        data = jwcInfoMethod.getDetailData();
                     }
                 } else if (info_source.equals(InfoMethod.TOPIC_SOURCE_RSS)) {
-                    loadSuccess = RSSInfoMethod.loadDetail(info_url);
+                    loadSuccess = RSSInfoMethod.loadDetail(context[0], info_url);
                     if (loadSuccess == Config.NET_WORK_GET_SUCCESS) {
                         data = RSSInfoMethod.getDetail(context[0]);
                     }
@@ -67,12 +68,17 @@ public class InfoDetailAsync extends AsyncTask<Context, Void, Context> {
                     AlstuMethod alstuMethod = new AlstuMethod(context[0]);
                     loadSuccess = alstuMethod.loadDetail(info_url);
                     if (loadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                        data = alstuMethod.getDetail();
+                        data = alstuMethod.getDetailData();
                     }
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
+            if (e instanceof SocketTimeoutException) {
+                loadSuccess = Config.NET_WORK_ERROR_CODE_TIME_OUT;
+            } else {
+                loadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+            }
             loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
         }
         return context[0];

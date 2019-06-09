@@ -3,7 +3,13 @@ package tool.xfy9326.naucourse.methods;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Environment;
+import android.view.View;
+
+import androidx.annotation.Nullable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,6 +20,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.tools.IO;
 
 public class ImageMethod {
@@ -63,6 +71,95 @@ public class ImageMethod {
         return false;
     }
 
+    @Nullable
+    public static Bitmap getViewBitmap(Context context, View view) {
+        return getViewsBitmap(context, new View[]{view}, true);
+    }
+
+    @Nullable
+    public static Bitmap getViewsBitmap(Context context, View[] views, boolean isVertical) {
+        if (views.length > 0) {
+            int widthSum = 0;
+            int heightSum = 0;
+            int maxWidth = 0;
+            int maxHeight = 0;
+
+            for (View v : views) {
+                int w = v.getWidth();
+                int h = v.getHeight();
+                if (maxWidth < w) {
+                    maxWidth = w;
+                }
+                if (maxHeight < h) {
+                    maxHeight = h;
+                }
+                widthSum += w;
+                heightSum += h;
+            }
+            if (widthSum > 0 && heightSum > 0) {
+                Bitmap bitmap;
+                if (isVertical) {
+                    bitmap = Bitmap.createBitmap(maxWidth, heightSum, Bitmap.Config.RGB_565);
+                } else {
+                    bitmap = Bitmap.createBitmap(widthSum, maxHeight, Bitmap.Config.RGB_565);
+                }
+
+                Canvas canvas = new Canvas(bitmap);
+                canvas.drawColor(Color.WHITE);
+
+                int heightCount = 0;
+                int widthCount = 0;
+                for (View v : views) {
+                    int w = v.getWidth();
+                    int h = v.getHeight();
+
+                    Bitmap bitmap_temp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+                    Canvas canvas_temp = new Canvas(bitmap_temp);
+                    v.draw(canvas_temp);
+
+                    if (isVertical) {
+                        float left = 0;
+                        if (w < maxWidth) {
+                            left = (maxWidth - w) / 2f;
+                        }
+                        canvas.drawBitmap(bitmap_temp, left, heightCount, null);
+                    } else {
+                        float top = 0;
+                        if (h < maxHeight) {
+                            top = (maxHeight - h) / 2f;
+                        }
+                        canvas.drawBitmap(bitmap_temp, widthCount, top, null);
+                    }
+                    heightCount += h;
+                    widthCount += w;
+
+                    bitmap_temp.recycle();
+                }
+
+                drawWaterPrint(context, canvas, "@" + context.getString(R.string.app_name));
+
+                return bitmap;
+            }
+        }
+        return null;
+    }
+
+    private static void drawWaterPrint(Context context, Canvas canvas, String text) {
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setAlpha(80);
+        paint.setAntiAlias(true);
+        paint.setTextSize((float) dip2px(context, Config.WATER_PRINT_TEXT_SIZE));
+        paint.setFakeBoldText(true);
+        canvas.save();
+
+        float textWidth = paint.measureText(text);
+
+        canvas.drawText(text, canvas.getWidth() - textWidth - dip2px(context, 4), canvas.getHeight() - 15 - dip2px(context, 4), paint);
+
+        canvas.restore();
+    }
+
     private static Bitmap getBitmapFromUrl(String URL) throws Exception {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder().get().url(URL).build();
@@ -93,7 +190,7 @@ public class ImageMethod {
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fileOutputStream);
                     fileOutputStream.flush();
                     fileOutputStream.close();
-                    if (recycle) {
+                    if (recycle && !bitmap.isRecycled()) {
                         bitmap.recycle();
                     }
                     return true;
@@ -101,5 +198,10 @@ public class ImageMethod {
             }
         }
         return false;
+    }
+
+    private static int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
 }

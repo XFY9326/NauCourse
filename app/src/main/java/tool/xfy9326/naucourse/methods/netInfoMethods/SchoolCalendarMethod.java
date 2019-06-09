@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.jsoup.Jsoup;
@@ -20,21 +21,20 @@ import tool.xfy9326.naucourse.methods.NetMethod;
  * 获取教务信息
  */
 
-public class SchoolCalendarMethod {
+public class SchoolCalendarMethod extends BaseNetMethod {
     private static final String server_url = "http://jw.nau.edu.cn";
     private static final String calendar_server_utl = "http://www.nau.edu.cn";
-    private final Context context;
     @Nullable
     private Document document;
 
-    public SchoolCalendarMethod(Context context) {
-        this.context = context;
+    public SchoolCalendarMethod(@NonNull Context context) {
+        super(context);
         this.document = null;
     }
 
+    @Override
     public int load() throws Exception {
         String data = NetMethod.loadUrl(server_url);
-        System.gc();
         if (data != null) {
             document = Jsoup.parse(data);
             return Config.NET_WORK_GET_SUCCESS;

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.jsoup.Jsoup;
@@ -16,7 +17,6 @@ import java.util.Objects;
 import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.methods.DataMethod;
-import tool.xfy9326.naucourse.methods.LoginMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.utils.StudentInfo;
 import tool.xfy9326.naucourse.utils.StudentLearnProcess;
@@ -27,7 +27,7 @@ import tool.xfy9326.naucourse.utils.StudentScore;
  * 学生信息获取方法
  */
 
-public class PersonMethod {
+public class PersonMethod extends BaseNetMethod {
     public static final String FILE_NAME_SCORE = "StudentScore";
     public static final String FILE_NAME_PROCESS = "StudentLearnProcess";
     public static final String FILE_NAME_DATA = "StudentInfo";
@@ -35,21 +35,24 @@ public class PersonMethod {
     public static final boolean IS_PROCESS_ENCRYPT = true;
     public static final boolean IS_DATA_ENCRYPT = true;
 
-    private final Context context;
     @Nullable
     private Document document;
 
-    public PersonMethod(Context context) {
-        this.context = context;
-        this.document = null;
+    public PersonMethod(@NonNull Context context) {
+        super(context);
     }
 
+    private static String getDetailMsg(String str) {
+        return str.substring(5, str.indexOf("【")).trim();
+    }
+
+    @Override
     public int load() throws Exception {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
             String data = NetMethod.loadUrlFromLoginClient(context, NauSSOClient.JWC_SERVER_URL + "/Students/StudentIndex.aspx", true);
             if (data != null) {
-                if (LoginMethod.checkUserLogin(data)) {
+                if (NauSSOClient.checkUserLogin(data)) {
                     document = Jsoup.parse(data);
                     return Config.NET_WORK_GET_SUCCESS;
                 }
@@ -153,10 +156,6 @@ public class PersonMethod {
         } else {
             return null;
         }
-    }
-
-    private static String getDetailMsg(String str) {
-        return str.substring(5, str.indexOf("【")).trim();
     }
 
     @Nullable

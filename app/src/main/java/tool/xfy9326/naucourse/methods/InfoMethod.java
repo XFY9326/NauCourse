@@ -29,9 +29,9 @@ public class InfoMethod {
         if (jwcTopic != null) {
             for (int i = 0; i < jwcTopic.getTopic_length(); i++) {
                 long date = TimeMethod.getInfoDateLong(Objects.requireNonNull(jwcTopic.getTopic_date())[i]);
-                if (isKeepMsgDate(date)) {
+                if (isKeepMsgDate(date) && !Objects.requireNonNull(jwcTopic.getTopic_title())[i].isEmpty()) {
                     TopicInfo infoDetail = new TopicInfo();
-                    infoDetail.setTitle(Objects.requireNonNull(jwcTopic.getTopic_title())[i]);
+                    infoDetail.setTitle(jwcTopic.getTopic_title()[i]);
                     infoDetail.setClick(Objects.requireNonNull(jwcTopic.getTopic_click())[i]);
                     infoDetail.setDate(jwcTopic.getTopic_date()[i]);
                     infoDetail.setDateLong(date);
@@ -48,9 +48,9 @@ public class InfoMethod {
         if (alstuTopic != null) {
             for (int i = 0; i < alstuTopic.getTopic_length(); i++) {
                 long date = TimeMethod.getInfoDateLong(Objects.requireNonNull(alstuTopic.getTopicDate())[i]);
-                if (isKeepMsgDate(date)) {
+                if (isKeepMsgDate(date) && !Objects.requireNonNull(alstuTopic.getTopicTitle())[i].isEmpty()) {
                     TopicInfo infoDetail = new TopicInfo();
-                    infoDetail.setTitle(Objects.requireNonNull(alstuTopic.getTopicTitle())[i]);
+                    infoDetail.setTitle(alstuTopic.getTopicTitle()[i]);
                     infoDetail.setClick(null);
                     infoDetail.setDate(alstuTopic.getTopicDate()[i]);
                     infoDetail.setDateLong(date);
@@ -74,7 +74,7 @@ public class InfoMethod {
                     for (RSSReader.RSSChannel rssChannel : rssObject.getChannels()) {
                         for (RSSReader.RSSItem rssItem : rssChannel.getItems()) {
                             long date = TimeMethod.getInfoDateLong(rssItem.getDate());
-                            if (isKeepMsgDate(date)) {
+                            if (isKeepMsgDate(date) && !rssItem.getTitle().isEmpty()) {
                                 TopicInfo infoDetail = new TopicInfo();
                                 infoDetail.setTitle(rssItem.getTitle());
                                 infoDetail.setClick(null);
@@ -112,8 +112,9 @@ public class InfoMethod {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            return true;
         }
-        return true;
+        return false;
     }
 
     synchronized private static void sort(ArrayList<TopicInfo> topic_data) {

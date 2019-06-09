@@ -10,7 +10,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
@@ -21,6 +20,7 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.methods.DataMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
+import tool.xfy9326.naucourse.methods.VPNMethods;
 import tool.xfy9326.naucourse.tools.RSSReader;
 
 public class RSSInfoMethod {
@@ -40,9 +40,11 @@ public class RSSInfoMethod {
     private final Integer[] typeList;
     private final ExecutorService executorService;
     private boolean hasFailedLoad = false;
+    private final Context context;
 
 
     public RSSInfoMethod(@NonNull Context context, ExecutorService executorService) {
+        this.context = context.getApplicationContext();
         this.executorService = executorService;
         this.rssObjectSparseArray = new SparseArray<>();
         this.typeList = getShowType(context);
@@ -114,8 +116,8 @@ public class RSSInfoMethod {
         }
     }
 
-    public static int loadDetail(String url) throws Exception {
-        String data = NetMethod.loadUrl(url);
+    public static int loadDetail(Context context, String url) throws Exception {
+        String data = NetMethod.loadUrlFromLoginClient(context, url, false);
         lastLoadInfoDetailHost = url.substring(0, url.indexOf("/", 9));
         if (data != null) {
             document_detail = Jsoup.parse(data);
@@ -129,9 +131,9 @@ public class RSSInfoMethod {
         Elements tags = Objects.requireNonNull(document_detail).body().getElementsByClass("Article_Content");
         String html = tags.html();
         if (lastLoadInfoDetailHost != null) {
-            html = html.replace("href=\"/", "href=\"" + lastLoadInfoDetailHost + "/")
-                    .replaceAll("<img src=\"/_ueditor/themes/default/images/icon_.*?.gif\">", "")
-                    .replaceAll("<img.*?/?>", context.getResources().getString(R.string.image_replace));
+            html = html.replace("href=\"/", "href=\"" + VPNMethods.vpnLinkUrlFix(context, lastLoadInfoDetailHost, "/"))
+                    .replaceAll("<img src=\".*?/_ueditor/themes/default/images/icon_.*?.gif.*?\">", "")
+                    .replaceAll("<img.*?/?>", "<div><p>" + context.getResources().getString(R.string.image_replace)) + "</p></div>";
         }
         return html;
     }
@@ -146,7 +148,7 @@ public class RSSInfoMethod {
                 String rssUrl = getRSSUrl(type);
                 if (rssUrl != null) {
                     try {
-                        String data = NetMethod.loadUrl(rssUrl);
+                        String data = NetMethod.loadUrlFromLoginClient(context, rssUrl, false);
                         if (data != null) {
                             RSSReader.RSSObject rssObject = RSSReader.getRSSObject(data);
                             if (rssObject != null) {
@@ -157,7 +159,7 @@ public class RSSInfoMethod {
                         } else {
                             hasFailedLoad = true;
                         }
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                         hasFailedLoad = true;
                     }

@@ -17,8 +17,8 @@ import java.util.Objects;
 import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.methods.LoginMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
+import tool.xfy9326.naucourse.methods.VPNMethods;
 import tool.xfy9326.naucourse.utils.JwcTopic;
 
 /**
@@ -26,11 +26,10 @@ import tool.xfy9326.naucourse.utils.JwcTopic;
  * 获取教务系统信息
  */
 
-public class JwcInfoMethod {
-    public static final String FILE_NAME = "JwcTopic";
+public class JwcInfoMethod extends BaseInfoDetailMethod<JwcTopic> {
+    public static final String FILE_NAME = JwcTopic.class.getSimpleName();
     public static final int TYPE_JWC = 0;
     private static final int TOPIC_COUNT = 15;
-    private final Context context;
     @Nullable
     private JwcTopic jwcTopic;
     @Nullable
@@ -38,19 +37,18 @@ public class JwcInfoMethod {
     @Nullable
     private Document detailDocument;
 
-    public JwcInfoMethod(Context context) {
-        this.context = context;
-        this.document = null;
-        this.detailDocument = null;
+    public JwcInfoMethod(@NonNull Context context) {
+        super(context);
         this.jwcTopic = null;
     }
 
+    @Override
     public int load() throws Exception {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
             String data = NetMethod.loadUrlFromLoginClient(context, NauSSOClient.JWC_SERVER_URL + "/Issue/TopicList.aspx?bn=%E6%95%99%E5%8A%A1%E9%80%9A%E7%9F%A5&sn=%E6%95%99%E5%8A%A1%E9%80%9A%E7%9F%A5", true);
             if (data != null) {
-                if (LoginMethod.checkUserLogin(data)) {
+                if (NauSSOClient.checkUserLogin(data)) {
                     document = Jsoup.parse(data);
                     return Config.NET_WORK_GET_SUCCESS;
                 }
@@ -62,7 +60,8 @@ public class JwcInfoMethod {
     }
 
     @Nullable
-    public JwcTopic getJwcTopic() {
+    @Override
+    public JwcTopic getData(boolean checkTemp) {
         int divideCount = 0;
         int totalTopic = 0;
         boolean nextTopic = false;
@@ -140,12 +139,13 @@ public class JwcInfoMethod {
         return jwcTopic;
     }
 
+    @Override
     public int loadDetail(String url) throws Exception {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
-            String data = NetMethod.loadUrlFromLoginClient(context, NauSSOClient.JWC_SERVER_URL + url, true);
+            String data = NetMethod.loadUrlFromLoginClient(context, VPNMethods.vpnLinkUrlFix(context, NauSSOClient.JWC_SERVER_URL, url), true);
             if (data != null) {
-                if (LoginMethod.checkUserLogin(data)) {
+                if (NauSSOClient.checkUserLogin(data)) {
                     detailDocument = Jsoup.parse(data);
                     return Config.NET_WORK_GET_SUCCESS;
                 }
@@ -157,7 +157,8 @@ public class JwcInfoMethod {
     }
 
     @NonNull
-    public String getDetail() {
+    @Override
+    public String getDetailData() {
         StringBuilder result = new StringBuilder();
         if (detailDocument != null) {
             Elements tags = detailDocument.body().getElementsByTag("tr");

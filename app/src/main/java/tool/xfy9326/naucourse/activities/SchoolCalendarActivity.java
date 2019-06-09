@@ -101,7 +101,7 @@ public class SchoolCalendarActivity extends AppCompatActivity {
     private void shareCalendar() {
         if (PermissionMethod.checkStoragePermission(this, 0)) {
             try {
-                final String path = Config.PICTURE_DICTIONARY_PATH + Config.SCHOOL_CALENDAR_FILE_NAME;
+                final String path = Config.PICTURE_DICTIONARY_PATH + Config.SCHOOL_CALENDAR_IMAGE_FILE_NAME;
                 if (IO.copyFile(ImageMethod.getSchoolCalendarImagePath(this), path, false)) {
                     final Uri imageUri = FileProvider.getUriForFile(this, Config.FILE_PROVIDER_AUTH, new File(path));
 
@@ -143,7 +143,7 @@ public class SchoolCalendarActivity extends AppCompatActivity {
     }
 
     synchronized private void getData() {
-        if (loadTime == 0) {
+        if (loadTime < 2) {
             new SchoolCalendarAsync().execute(getApplicationContext());
         } else {
             new SchoolCalendarAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());

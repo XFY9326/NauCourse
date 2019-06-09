@@ -21,9 +21,9 @@ import tool.xfy9326.naucourse.methods.CourseEditMethod;
 import tool.xfy9326.naucourse.utils.CourseSearchDetail;
 
 public class CourseSearchAdapter extends RecyclerView.Adapter<CourseSearchAdapter.CourseSearchViewHolder> {
-    private List<CourseSearchDetail> courseSearchDetails;
     @NonNull
     private final CourseSearchActivity activity;
+    private List<CourseSearchDetail> courseSearchDetails;
     private List<String> termList;
 
     public CourseSearchAdapter(@NonNull CourseSearchActivity activity) {

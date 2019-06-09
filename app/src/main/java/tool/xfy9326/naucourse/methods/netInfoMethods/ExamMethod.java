@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.jsoup.Jsoup;
@@ -19,7 +20,6 @@ import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.methods.DataMethod;
-import tool.xfy9326.naucourse.methods.LoginMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.methods.TimeMethod;
 import tool.xfy9326.naucourse.utils.Exam;
@@ -29,24 +29,23 @@ import tool.xfy9326.naucourse.utils.Exam;
  * 获取考试信息
  */
 
-public class ExamMethod {
-    public static final String FILE_NAME = "Exam";
+public class ExamMethod extends BaseInfoMethod<Exam> {
+    public static final String FILE_NAME = Exam.class.getSimpleName();
     public static final boolean IS_ENCRYPT = true;
-    private final Context context;
     @Nullable
     private Document document;
 
-    public ExamMethod(Context context) {
-        this.context = context;
-        this.document = null;
+    public ExamMethod(@NonNull Context context) {
+        super(context);
     }
 
+    @Override
     public int load() throws Exception {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
             String data = NetMethod.loadUrlFromLoginClient(context, NauSSOClient.JWC_SERVER_URL + "/Students/MyExamArrangeList.aspx", true);
             if (data != null) {
-                if (LoginMethod.checkUserLogin(data)) {
+                if (NauSSOClient.checkUserLogin(data)) {
                     document = Jsoup.parse(data);
                     return Config.NET_WORK_GET_SUCCESS;
                 }
@@ -58,12 +57,13 @@ public class ExamMethod {
     }
 
     public void saveTemp() {
-        getExam(false);
+        getData(false);
     }
 
     @Nullable
+    @Override
     @SuppressWarnings({"SameParameterValue"})
-    public Exam getExam(boolean checkTemp) {
+    public Exam getData(boolean checkTemp) {
         ArrayList<String> examId = new ArrayList<>();
         ArrayList<String> examName = new ArrayList<>();
         ArrayList<String> examType = new ArrayList<>();

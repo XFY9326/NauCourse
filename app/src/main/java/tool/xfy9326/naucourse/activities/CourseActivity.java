@@ -407,15 +407,23 @@ public class CourseActivity extends AppCompatActivity {
 
     //从教务处导入本学期课程数据
     private void importDataFromJwc() {
-        loadingDialog = BaseMethod.showLoadingDialog(CourseActivity.this, false, null);
-        new CourseListAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
+        CourseListAsync courseListAsync = new CourseListAsync();
+        loadingDialog = BaseMethod.showLoadingDialog(CourseActivity.this, true, dialog -> {
+            courseListAsync.cancel(true);
+            closeLoadingDialog();
+        });
+        courseListAsync.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
     }
 
     //从教务处导入下学期课程数据
     private void importDataFromJwcNext() {
-        loadingDialog = BaseMethod.showLoadingDialog(CourseActivity.this, false, null);
+        CourseNextListAsync courseNextListAsync = new CourseNextListAsync();
+        loadingDialog = BaseMethod.showLoadingDialog(CourseActivity.this, true, dialog -> {
+            courseNextListAsync.cancel(true);
+            closeLoadingDialog();
+        });
         Toast.makeText(this, R.string.need_custom_term_alert, Toast.LENGTH_LONG).show();
-        new CourseNextListAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
+        courseNextListAsync.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
     }
 
     /**

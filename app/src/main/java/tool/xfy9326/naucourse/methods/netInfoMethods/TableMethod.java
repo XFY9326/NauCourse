@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.jsoup.Jsoup;
@@ -17,7 +18,6 @@ import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.methods.BaseMethod;
 import tool.xfy9326.naucourse.methods.DataMethod;
-import tool.xfy9326.naucourse.methods.LoginMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.utils.Course;
 import tool.xfy9326.naucourse.utils.CourseDetail;
@@ -27,24 +27,23 @@ import tool.xfy9326.naucourse.utils.CourseDetail;
  * 课程表信息获取与整理方法
  */
 
-public class TableMethod {
-    public static final String FILE_NAME = "Course";
+public class TableMethod extends BaseInfoMethod<ArrayList<Course>> {
+    public static final String FILE_NAME = Course.class.getSimpleName();
     public static final boolean IS_ENCRYPT = true;
-    private final Context context;
     @Nullable
     private Document document;
 
-    public TableMethod(Context context) {
-        this.context = context;
-        this.document = null;
+    public TableMethod(@NonNull Context context) {
+        super(context);
     }
 
+    @Override
     public int load() throws Exception {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
             String data = NetMethod.loadUrlFromLoginClient(context, NauSSOClient.JWC_SERVER_URL + "/Students/MyCourseScheduleTable.aspx", true);
             if (data != null) {
-                if (LoginMethod.checkUserLogin(data)) {
+                if (NauSSOClient.checkUserLogin(data)) {
                     document = Jsoup.parse(data);
                     return Config.NET_WORK_GET_SUCCESS;
                 }
@@ -57,7 +56,8 @@ public class TableMethod {
 
     //数据分类方法：课程基本信息——上课周数——上课节数
     @Nullable
-    public ArrayList<Course> getCourseTable(boolean needSave) {
+    @Override
+    public ArrayList<Course> getData(boolean checkTemp) {
         ArrayList<Course> courseList = new ArrayList<>();
         if (document != null) {
             long allCourseTerm = 0;
@@ -166,8 +166,9 @@ public class TableMethod {
                 courseList.add(course);
             }
 
-            if (needSave) {
-                DataMethod.saveOfflineData(context, courseList, TableMethod.FILE_NAME, false, IS_ENCRYPT);
+            //保存数据
+            if (checkTemp) {
+                DataMethod.saveOfflineData(context, courseList, FILE_NAME, false, IS_ENCRYPT);
             }
         }
         return courseList;

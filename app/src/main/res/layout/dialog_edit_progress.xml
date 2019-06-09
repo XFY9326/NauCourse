@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:paddingBottom="15dp"
-    android:paddingEnd="15dp"
     android:paddingStart="15dp"
-    android:paddingTop="20dp">
+    android:paddingTop="20dp"
+    android:paddingEnd="15dp"
+    android:paddingBottom="15dp">
 
     <SeekBar
         android:id="@+id/seekBar_dialog_edit_progress"

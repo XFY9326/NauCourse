@@ -121,7 +121,7 @@ public class ScoreActivity extends AppCompatActivity {
 
     synchronized private void getData() {
         BaseMethod.setRefreshing(swipeRefreshLayout, true);
-        if (loadTime == 0) {
+        if (loadTime < 2) {
             new ScoreAsync().execute(getApplicationContext());
         } else {
             new ScoreAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());

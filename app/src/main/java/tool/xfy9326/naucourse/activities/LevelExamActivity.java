@@ -95,7 +95,7 @@ public class LevelExamActivity extends AppCompatActivity {
 
     synchronized private void getData() {
         BaseMethod.setRefreshing(swipeRefreshLayout, true);
-        if (loadTime == 0) {
+        if (loadTime < 2) {
             new LevelExamAsync().execute(getApplicationContext());
         } else {
             new LevelExamAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());

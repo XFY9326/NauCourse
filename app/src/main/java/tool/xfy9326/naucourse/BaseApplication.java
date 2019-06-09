@@ -18,6 +18,7 @@ import tool.xfy9326.naucourse.activities.MoaActivity;
 import tool.xfy9326.naucourse.activities.SchoolCalendarActivity;
 import tool.xfy9326.naucourse.activities.ScoreActivity;
 import tool.xfy9326.naucourse.activities.SuspendCourseActivity;
+import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.views.ViewPagerAdapter;
 
 /**
@@ -38,16 +39,13 @@ public class BaseApplication extends Application {
     private WeakReference<MoaActivity> moaActivity;
     private WeakReference<CourseSearchActivity> courseSearchActivity;
 
-    private boolean showLoginErrorOnce = false;
-    private boolean showConnectErrorOnce = false;
-
     @Override
     public void onCreate() {
         super.onCreate();
         if (!BuildConfig.DEBUG) {
             Bugly.init(this, "7b78d5ccdc", false);
         }
-        client = new NauSSOClient(this);
+        client = NetMethod.getNewSSOClient(this);
         executorService = Executors.newCachedThreadPool();
     }
 
@@ -85,15 +83,6 @@ public class BaseApplication extends Application {
 
     public void setExamActivity(ExamActivity examActivity) {
         this.examActivity = new WeakReference<>(examActivity);
-    }
-
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public boolean isShowLoginErrorOnce() {
-        return showLoginErrorOnce;
-    }
-
-    synchronized public void setShowLoginErrorOnce() {
-        this.showLoginErrorOnce = true;
     }
 
     public LevelExamActivity getLevelExamActivity() {
@@ -134,14 +123,6 @@ public class BaseApplication extends Application {
 
     public void setMoaActivity(MoaActivity moaActivity) {
         this.moaActivity = new WeakReference<>(moaActivity);
-    }
-
-    public boolean isShowConnectErrorOnce() {
-        return showConnectErrorOnce;
-    }
-
-    public void setShowConnectErrorOnce(boolean showConnectErrorOnce) {
-        this.showConnectErrorOnce = showConnectErrorOnce;
     }
 
     @Override

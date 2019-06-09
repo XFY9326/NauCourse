@@ -70,7 +70,7 @@ public class SuspendCourseActivity extends AppCompatActivity {
 
     synchronized private void getData() {
         BaseMethod.setRefreshing(swipeRefreshLayout, true);
-        if (loadTime == 0) {
+        if (loadTime < 2) {
             new SuspendCourseAsync().execute(getApplicationContext());
         } else {
             new SuspendCourseAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());

@@ -34,8 +34,8 @@ public class CourseSearchMethod {
     private static final String SEARCH_URL = "http://jwc.nau.edu.cn/GetCourseArrangeInfo.ashx";
     private static final String CLASS_NAME_URL = "http://jwc.nau.edu.cn/GetClassNameListByTerm.ashx";
     private final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
-    private Document document;
     private final OkHttpClient client;
+    private Document document;
 
     public CourseSearchMethod() {
         OkHttpClient.Builder client_builder = new OkHttpClient.Builder();

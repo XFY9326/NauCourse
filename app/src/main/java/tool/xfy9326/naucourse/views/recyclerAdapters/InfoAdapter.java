@@ -27,7 +27,12 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
     @NonNull
     private final Context context;
     @NonNull
-    private ArrayList<TopicInfo> topic_data;
+    private final ArrayList<TopicInfo> topic_data;
+
+    public InfoAdapter(@NonNull Context context) {
+        this.context = context;
+        this.topic_data = new ArrayList<>();
+    }
 
     public InfoAdapter(@NonNull Context context, @NonNull ArrayList<TopicInfo> topic_data) {
         this.context = context;
@@ -74,9 +79,11 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
 
     //更新列表
     synchronized public void updateTopic(@NonNull ArrayList<TopicInfo> topicInfo) {
-        this.topic_data.clear();
-        this.topic_data.addAll(topicInfo);
-        notifyDataSetChanged();
+        if (topicInfo.size() > 0) {
+            this.topic_data.clear();
+            this.topic_data.addAll(topicInfo);
+            notifyDataSetChanged();
+        }
     }
 
     /**

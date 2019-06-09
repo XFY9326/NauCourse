@@ -100,4 +100,10 @@
         <item>@string/alstu_system</item>
     </string-array>
 
+    <string-array name="info_share_type">
+        <item>@string/share_url</item>
+        <item>@string/share_text</item>
+        <item>@string/share_image</item>
+    </string-array>
+
 </resources>

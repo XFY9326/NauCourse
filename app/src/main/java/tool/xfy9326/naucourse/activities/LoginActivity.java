@@ -1,17 +1,14 @@
 package tool.xfy9326.naucourse.activities;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -58,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void ViewSet() {
         EditText editText_userId = findViewById(R.id.editText_userId);
-        String userId = sharedPreferences.getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
+        String userId = SecurityMethod.getUserId(sharedPreferences);
         if (!userId.equals(Config.DEFAULT_PREFERENCE_USER_ID)) {
             editText_userId.setText(userId);
         }
@@ -67,8 +64,6 @@ public class LoginActivity extends AppCompatActivity {
         if (!en_userPw.equals(Config.DEFAULT_PREFERENCE_USER_PW)) {
             editText_userPw.setText(SecurityMethod.getUserPassWord(this));
         }
-        CheckBox checkBox_rememberPw = findViewById(R.id.checkBox_rememberPw);
-        checkBox_rememberPw.setChecked(sharedPreferences.getBoolean(Config.PREFERENCE_REMEMBER_PW, Config.DEFAULT_PREFERENCE_REMEMBER_PW));
         Button button_login = findViewById(R.id.button_login);
         button_login.setOnClickListener(v -> showLoginAttentionDialog());
     }
@@ -76,7 +71,6 @@ public class LoginActivity extends AppCompatActivity {
     private void login() {
         final EditText editText_userId = findViewById(R.id.editText_userId);
         final EditText editText_userPw = findViewById(R.id.editText_userPw);
-        final CheckBox checkBox_rememberPw = findViewById(R.id.checkBox_rememberPw);
 
         editText_userId.clearFocus();
         editText_userPw.clearFocus();
@@ -86,15 +80,10 @@ public class LoginActivity extends AppCompatActivity {
             final String id = editText_userId.getText().toString().trim();
             final String pw = editText_userPw.getText().toString().trim();
             final NauSSOClient nauSSOClient = BaseMethod.getApp(LoginActivity.this).getClient();
-            showLoadingDialog(LoginActivity.this);
+            showLoadingDialog();
             LoginMethod.cleanUserTemp(LoginActivity.this);
             login(nauSSOClient, id, pw);
-            if (checkBox_rememberPw.isChecked()) {
-                SecurityMethod.saveUserInfo(LoginActivity.this, id, pw);
-                sharedPreferences.edit().putBoolean(Config.PREFERENCE_REMEMBER_PW, true).apply();
-            } else {
-                sharedPreferences.edit().putString(Config.PREFERENCE_USER_ID, id).putString(Config.PREFERENCE_USER_PW, Config.DEFAULT_PREFERENCE_USER_PW).putBoolean(Config.PREFERENCE_REMEMBER_PW, false).apply();
-            }
+            SecurityMethod.saveUserInfo(LoginActivity.this, id, pw);
         } else {
             Snackbar.make(findViewById(R.id.layout_login_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
         }
@@ -112,13 +101,9 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 loginErrorCode = nauSSOClient.getLoginErrorCode();
                 if (loginErrorCode == NauSSOClient.LOGIN_ALREADY_LOGIN) {
-                    LoginMethod.loginOut(LoginActivity.this);
-                    Thread.sleep(1000);
-                    if (nauSSOClient.login(id, pw)) {
+                    if (LoginMethod.doReLogin(LoginActivity.this, id, pw, sharedPreferences, true) == Config.RE_LOGIN_SUCCESS) {
+                        loginSuccess = true;
                         loginURL = nauSSOClient.getJwcLoginUrl();
-                        if (loginURL != null) {
-                            loginSuccess = true;
-                        }
                     }
                     loginErrorCode = nauSSOClient.getLoginErrorCode();
                 }
@@ -153,10 +138,10 @@ public class LoginActivity extends AppCompatActivity {
         builder.show();
     }
 
-    private void showLoadingDialog(@NonNull final Context context) {
+    private void showLoadingDialog() {
         DialogInterface.OnCancelListener cancelListener = dialog -> {
             if (loginSuccess) {
-                PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(Config.PREFERENCE_HAS_LOGIN, true).putString(Config.PREFERENCE_LOGIN_URL, loginURL).apply();
+                sharedPreferences.edit().putBoolean(Config.PREFERENCE_HAS_LOGIN, true).putString(Config.PREFERENCE_LOGIN_URL, loginURL).apply();
                 startActivity(new Intent(LoginActivity.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP).putExtra(Config.INTENT_JUST_LOGIN, true));
                 finish();
             } else {

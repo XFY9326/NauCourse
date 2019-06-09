@@ -36,10 +36,14 @@ public class Config {
 
     public static final int TASK_RUN_MAX_SECOND = 100;
 
+    public static final int WATER_PRINT_TEXT_SIZE = 14;
+
     public static final String DATA_DIR_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "NauCourse" + File.separator;
     public static final String PICTURE_DICTIONARY_PATH = DATA_DIR_PATH + "picture" + File.separator;
-    public static final String COURSE_TABLE_FILE_NAME = "CourseTable.jpeg";
-    public static final String SCHOOL_CALENDAR_FILE_NAME = "SchoolCalendar.jpeg";
+    public static final String PICTURE_TEMP_DICTIONARY_PATH = PICTURE_DICTIONARY_PATH + ".temp" + File.separator;
+    public static final String COURSE_TABLE_IMAGE_FILE_NAME = "CourseTable.jpeg";
+    public static final String INFO_DETAIL_IMAGE_FILE_NAME = "InfoDetail.jpeg";
+    public static final String SCHOOL_CALENDAR_IMAGE_FILE_NAME = "SchoolCalendar.jpeg";
 
     public static final String FILE_PROVIDER_AUTH = "tool.xfy9326.naucourse.provider";
 
@@ -65,7 +69,6 @@ public class Config {
     public static final String SEARCH_COURSE_PREFIX = "Search";
 
     public static final String PREFERENCE_HAS_LOGIN = "HAS_LOGIN";
-    public static final String PREFERENCE_REMEMBER_PW = "REMEMBER_PW";
     public static final String PREFERENCE_USER_ID = "USER_ID";
     public static final String PREFERENCE_USER_PW = "USER_PW";
     public static final String PREFERENCE_LOGIN_URL = "LOGIN_URL";
@@ -111,15 +114,17 @@ public class Config {
     public static final String PREFERENCE_INFO_CHANNEL_SELECTED_ALSTU = "INFO_CHANNEL_SELECTED_ALSTU";
     public static final String PREFERENCE_HIDE_OUT_OF_DATE_EXAM = "HIDE_OUT_OF_DATE_EXAM";
     public static final String PREFERENCE_UPDATE_TABLE_EVERY_TIME = "UPDATE_TABLE_EVERY_TIME";
+    public static final String PREFERENCE_SCHOOL_VPN_MODE = "SCHOOL_VPN_MODE";
+    public static final String PREFERENCE_SCHOOL_VPN_SMART_MODE = "SCHOOL_VPN_SMART_MODE";
+    public static final String PREFERENCE_NEW_VERSION_INFO = "NEW_VERSION_INFO";
 
     public static final boolean DEFAULT_PREFERENCE_HAS_LOGIN = false;
-    public static final boolean DEFAULT_PREFERENCE_REMEMBER_PW = true;
     public static final String DEFAULT_PREFERENCE_USER_ID = "NULL";
     public static final String DEFAULT_PREFERENCE_USER_PW = "NULL";
     public static final boolean DEFAULT_PREFERENCE_UPDATE_DATA_ON_START = true;
     public static final boolean DEFAULT_PREFERENCE_ONLY_UPDATE_UNDER_WIFI = false;
     public static final boolean DEFAULT_PREFERENCE_SHOW_NEXT_WEEK = true;
-    public static final boolean DEFAULT_PREFERENCE_NOTIFY_NEXT_CLASS = false;
+    public static final boolean DEFAULT_PREFERENCE_NOTIFY_NEXT_CLASS = true;
     public static final boolean DEFAULT_PREFERENCE_DEFAULT_SHOW_TABLE_PAGE = false;
     public static final boolean DEFAULT_PREFERENCE_SHOW_WIDE_TABLE = false;
     public static final boolean DEFAULT_PREFERENCE_COURSE_TABLE_CELL_COLOR = true;
@@ -128,7 +133,7 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_COURSE_TABLE_SHOW_SINGLE_COLOR = false;
     public static final boolean DEFAULT_PREFERENCE_ASYNC_PERSONAL_INFO_BY_DAY = true;
     public static final boolean DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE = true;
-    public static final boolean DEFAULT_PREFERENCE_SHOW_NO_THIS_WEEK_CLASS = false;
+    public static final boolean DEFAULT_PREFERENCE_SHOW_NO_THIS_WEEK_CLASS = true;
     public static final boolean DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE_ALERT = false;
     public static final boolean DEFAULT_PREFERENCE_AUTO_CHECK_UPDATE = true;
     public static final boolean DEFAULT_PREFERENCE_AUTO_CHECK_IMPORTANT_UPDATE = false;
@@ -143,6 +148,9 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_ALSTU = true;
     public static final boolean DEFAULT_PREFERENCE_HIDE_OUT_OF_DATE_EXAM = false;
     public static final boolean DEFAULT_PREFERENCE_UPDATE_TABLE_EVERY_TIME = false;
+    public static final boolean DEFAULT_PREFERENCE_SCHOOL_VPN_MODE = false;
+    public static final boolean DEFAULT_PREFERENCE_SCHOOL_VPN_SMART_MODE = true;
+    public static final int DEFAULT_PREFERENCE_NEW_VERSION_INFO = 0;
 
     //网络连接错误代码
     public static final int NET_WORK_GET_SUCCESS = 0;
@@ -150,6 +158,7 @@ public class Config {
     public static final int NET_WORK_ERROR_CODE_CONNECT_USER_DATA = 2;
     public static final int NET_WORK_ERROR_CODE_CONNECT_NO_LOGIN = 3;
     public static final int NET_WORK_ERROR_CODE_GET_DATA_ERROR = 4;
+    public static final int NET_WORK_ERROR_CODE_TIME_OUT = 5;
 
     //离线数据版本号
     public static final int DATA_VERSION_COURSE_SCORE = 1;

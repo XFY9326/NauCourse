@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.net.SocketTimeoutException;
+
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.activities.ScoreActivity;
 import tool.xfy9326.naucourse.methods.BaseMethod;
@@ -58,18 +60,25 @@ public class ScoreAsync extends AsyncTask<Context, Void, Context> {
                 ScoreMethod scoreMethod = new ScoreMethod(context[0]);
                 scoreLoadSuccess = scoreMethod.load();
                 if (scoreLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                    courseScore = scoreMethod.getCourseScore(loadTime > 1);
+                    courseScore = scoreMethod.getData(loadTime > 1);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
+            if (e instanceof SocketTimeoutException) {
+                personLoadSuccess = Config.NET_WORK_ERROR_CODE_TIME_OUT;
+                scoreLoadSuccess = Config.NET_WORK_ERROR_CODE_TIME_OUT;
+            } else {
+                personLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+                scoreLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+            }
             loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
         }
         if (scoreActivity != null) {
             scoreActivity.setLoadTime(++loadTime);
         }
         if (loadTime > 2) {
-            BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);
+            NetMethod.showConnectErrorOnce = false;
         }
         return context[0];
     }

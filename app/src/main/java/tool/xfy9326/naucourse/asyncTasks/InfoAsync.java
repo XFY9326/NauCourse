@@ -7,6 +7,7 @@ import android.util.SparseArray;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -80,15 +81,20 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
                             JwcInfoMethod jwcInfoMethod = new JwcInfoMethod(context[0]);
                             JwcLoadSuccess = jwcInfoMethod.load();
                             if (JwcLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                                jwcTopic = jwcInfoMethod.getJwcTopic();
+                                jwcTopic = jwcInfoMethod.getData(false);
                             }
                         } else {
                             jwcTopic = new JwcTopic();
                             JwcLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                         }
                     } catch (Exception e) {
-                        JwcLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
                         e.printStackTrace();
+                        if (e instanceof SocketTimeoutException) {
+                            JwcLoadSuccess = Config.NET_WORK_ERROR_CODE_TIME_OUT;
+                        } else {
+                            JwcLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+                        }
+                        loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
                     }
                 });
                 futures[1] = executorService.submit(() -> {
@@ -97,7 +103,7 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
                             AlstuMethod alstuMethod = new AlstuMethod(context[0]);
                             alstuLoadSuccess = alstuMethod.load();
                             if (alstuLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
-                                alstuTopic = alstuMethod.getAlstuTopic();
+                                alstuTopic = alstuMethod.getData(false);
                             }
                         } else {
                             alstuTopic = new AlstuTopic();
@@ -105,7 +111,12 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        alstuLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+                        if (e instanceof SocketTimeoutException) {
+                            alstuLoadSuccess = Config.NET_WORK_ERROR_CODE_TIME_OUT;
+                        } else {
+                            alstuLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+                        }
+                        loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
                     }
                 });
                 futures[2] = executorService.submit(() -> {
@@ -117,7 +128,12 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        rssLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+                        if (e instanceof SocketTimeoutException) {
+                            rssLoadSuccess = Config.NET_WORK_ERROR_CODE_TIME_OUT;
+                        } else {
+                            rssLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+                        }
+                        loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
                     }
                 });
 
@@ -128,7 +144,7 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
                         e.printStackTrace();
                     }
                 }
-                if (loadCode != Config.NET_WORK_ERROR_CODE_CONNECT_ERROR) {
+                if (loadCode == Config.NET_WORK_GET_SUCCESS) {
                     topicInfoList = InfoMethod.combineData(context[0], jwcTopic, alstuTopic, rssObjects);
                     if (!DataMethod.saveOfflineData(context[0], topicInfoList, InfoMethod.FILE_NAME, true, InfoMethod.IS_ENCRYPT)) {
                         topicInfoList = null;
@@ -139,14 +155,8 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
             if (homeFragment != null) {
                 homeFragment.setLoadTime(++loadTime);
             }
-            if ((rssLoadSuccess == -1 || rssLoadSuccess == Config.NET_WORK_ERROR_CODE_CONNECT_ERROR) &&
-                    (alstuLoadSuccess == -1 || alstuLoadSuccess == Config.NET_WORK_ERROR_CODE_CONNECT_ERROR) &&
-                    (JwcLoadSuccess == -1 || JwcLoadSuccess == Config.NET_WORK_ERROR_CODE_CONNECT_ERROR) &&
-                    (rssLoadSuccess != -1 && alstuLoadSuccess != -1 && JwcLoadSuccess != -1)) {
-                loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
-            }
             if (loadTime > 2) {
-                BaseMethod.getApp(context[0]).setShowConnectErrorOnce(false);
+                NetMethod.showConnectErrorOnce = false;
             }
         }
         return context[0];

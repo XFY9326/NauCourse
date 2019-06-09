@@ -2,6 +2,8 @@ package tool.xfy9326.naucourse.methods.netInfoMethods;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -16,17 +18,16 @@ import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.methods.TimeMethod;
 import tool.xfy9326.naucourse.utils.Moa;
 
-public class MoaMethod {
-    public static final String FILE_NAME = "Moa";
+public class MoaMethod extends BaseInfoMethod<Moa> {
+    public static final String FILE_NAME = Moa.class.getSimpleName();
     public static final boolean IS_ENCRYPT = false;
     public static final String Academic_Report = "xsbg";
     public static final int MOA_PAST_SHOW_MONTH = 2;
     private static final String URL = "http://moa.nau.edu.cn:8080/OAMobile/xsdt/xsdt/tj";
-    private final Context context;
     private String Url_Data;
 
-    public MoaMethod(Context context) {
-        this.context = context;
+    public MoaMethod(@NonNull Context context) {
+        super(context);
         this.Url_Data = null;
     }
 
@@ -46,6 +47,7 @@ public class MoaMethod {
         return result;
     }
 
+    @Override
     public int load() throws Exception {
         String data = NetMethod.loadUrl(URL);
         System.gc();
@@ -57,11 +59,12 @@ public class MoaMethod {
     }
 
     public void saveTemp() {
-        getMoaList(false);
+        getData(false);
     }
 
     @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument")
-    public Moa getMoaList(boolean checkTemp) {
+    @Override
+    public Moa getData(boolean checkTemp) {
         Moa moa = new Moa();
         if (Url_Data != null) {
             Url_Data = Url_Data.substring(Url_Data.indexOf("var msg = ") + 10, Url_Data.lastIndexOf("var obj = '[';"));

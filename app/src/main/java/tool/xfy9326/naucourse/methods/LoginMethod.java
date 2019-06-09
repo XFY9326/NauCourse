@@ -7,7 +7,6 @@ import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 
 import java.io.File;
-import java.util.Objects;
 
 import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
@@ -19,16 +18,6 @@ import tool.xfy9326.naucourse.Config;
 
 public class LoginMethod {
     static boolean isTryingReLogin = false;
-
-    /**
-     * 检测用用户是否登陆成功
-     *
-     * @param data 获取的网络数据
-     * @return 是否登陆成功
-     */
-    public static boolean checkUserLogin(String data) {
-        return !(data.contains("系统错误提示页") && data.contains("当前程序在执行过程中出现了未知异常，请重试") || data.contains("用户登录_南京审计大学教务管理系统") || data.contains("南京审计大学统一身份认证登录") || data.contains("location=\"LOGIN.ASPX\";"));
-    }
 
     /**
      * 用户Cookie过期后尝试重新登陆
@@ -48,24 +37,33 @@ public class LoginMethod {
         }
     }
 
-    synchronized private static int doReLogin(@NonNull Context context) throws Exception {
+    private static int doReLogin(@NonNull Context context) throws Exception {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String id = sharedPreferences.getString(Config.PREFERENCE_USER_ID, Config.DEFAULT_PREFERENCE_USER_ID);
-        String pw = SecurityMethod.getUserPassWord(context);
+        String id = SecurityMethod.getUserId(sharedPreferences);
+        String pw = SecurityMethod.getUserPassWord(sharedPreferences);
         if (!pw.equalsIgnoreCase(Config.DEFAULT_PREFERENCE_USER_PW) && !id.equalsIgnoreCase(Config.DEFAULT_PREFERENCE_USER_ID)) {
-            NauSSOClient nauSSOClient = BaseMethod.getApp(context).getClient();
+            return doReLogin(context, id, pw, sharedPreferences, false);
+        }
+        return Config.RE_LOGIN_FAILED;
+    }
+
+    synchronized public static int doReLogin(@NonNull Context context, String id, String pw, SharedPreferences sharedPreferences, boolean justReLogin) throws Exception {
+        NauSSOClient nauSSOClient = BaseMethod.getApp(context).getClient();
+        if (justReLogin || NauSSOClient.isNeedLogoutBeforeReLogin()) {
             nauSSOClient.jwcLoginOut();
+            nauSSOClient.loginOut();
             Thread.sleep(1000);
-            if (nauSSOClient.login(id, Objects.requireNonNull(pw))) {
-                nauSSOClient.alstuLogin();
-                String loginURL = nauSSOClient.getJwcLoginUrl();
-                if (loginURL != null) {
+        }
+        if (nauSSOClient.login(id, pw)) {
+            nauSSOClient.alstuLogin();
+            String loginURL = nauSSOClient.getJwcLoginUrl();
+            if (loginURL != null) {
+                if (!justReLogin) {
                     sharedPreferences.edit().putString(Config.PREFERENCE_LOGIN_URL, loginURL).apply();
-                    return Config.RE_LOGIN_SUCCESS;
                 }
+                return Config.RE_LOGIN_SUCCESS;
             }
         }
-        sharedPreferences.edit().putBoolean(Config.PREFERENCE_HAS_LOGIN, false).apply();
         return Config.RE_LOGIN_FAILED;
     }
 
@@ -77,8 +75,9 @@ public class LoginMethod {
      */
     public static boolean loginOut(@NonNull Context context) {
         try {
-            BaseMethod.getApp(context).getClient().jwcLoginOut();
-            BaseMethod.getApp(context).getClient().loginOut();
+            NauSSOClient nauSSOClient = BaseMethod.getApp(context).getClient();
+            nauSSOClient.jwcLoginOut();
+            nauSSOClient.loginOut();
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             sharedPreferences.edit().remove(Config.PREFERENCE_LOGIN_URL)
                     .remove(Config.PREFERENCE_LOGIN_URL)
@@ -87,6 +86,9 @@ public class LoginMethod {
                     .remove(Config.PREFERENCE_NETWORK_REMEMBER_PASSWORD)
                     .remove(Config.PREFERENCE_PERSONAL_INFO_LOAD_DATE_TIME)
                     .remove(Config.PREFERENCE_COURSE_TABLE_AUTO_LOAD_DATE_TIME)
+                    .remove(Config.PREFERENCE_UPDATE_DATA_ON_START)
+                    .remove(Config.PREFERENCE_ONLY_UPDATE_UNDER_WIFI)
+                    .remove(Config.PREFERENCE_ONLY_UPDATE_APPLICATION_UNDER_WIFI)
                     .remove(Config.PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND)
                     .remove(Config.PREFERENCE_SCHOOL_CALENDAR_URL)
                     .remove(Config.PREFERENCE_CLASS_BEFORE_NOTIFY)
@@ -101,6 +103,8 @@ public class LoginMethod {
                     .remove(Config.PREFERENCE_INFO_CHANNEL_SELECTED_TW)
                     .remove(Config.PREFERENCE_INFO_CHANNEL_SELECTED_XXB)
                     .remove(Config.PREFERENCE_HIDE_OUT_OF_DATE_EXAM)
+                    .remove(Config.PREFERENCE_SCHOOL_VPN_MODE)
+                    .remove(Config.PREFERENCE_SCHOOL_VPN_SMART_MODE)
                     .putBoolean(Config.PREFERENCE_HAS_LOGIN, false)
                     .apply();
             cleanUserTemp(context);

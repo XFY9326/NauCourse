@@ -20,6 +20,7 @@ import lib.xfy9326.updater.Updater;
 import tool.xfy9326.naucourse.BuildConfig;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.methods.BaseMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
 
 /**
@@ -45,6 +46,8 @@ public class AboutActivity extends AppCompatActivity {
     }
 
     private void ViewSet() {
+        findViewById(R.id.imageView_about_app_icon).setOnClickListener(v -> BaseMethod.showNewVersionInfo(AboutActivity.this, false));
+
         TextView textView_version = findViewById(R.id.textView_about_version);
         TextView textView_copy_right = findViewById(R.id.textView_about_copy_right);
 

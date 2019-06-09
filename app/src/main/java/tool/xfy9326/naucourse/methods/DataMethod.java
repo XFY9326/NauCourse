@@ -188,46 +188,33 @@ public class DataMethod {
 
     private static boolean checkDataVersionCode(String content, Class file_class) {
         int nowVersionCode;
-        switch (file_class.getSimpleName()) {
-            case ScoreMethod.FILE_NAME:
-                nowVersionCode = Config.DATA_VERSION_COURSE_SCORE;
-                break;
-            case ExamMethod.FILE_NAME:
-                nowVersionCode = Config.DATA_VERSION_EXAM;
-                break;
-            case JwcInfoMethod.FILE_NAME:
-                nowVersionCode = Config.DATA_VERSION_JWC_TOPIC;
-                break;
-            case NextClassMethod.NEXT_COURSE_FILE_NAME:
-                nowVersionCode = Config.DATA_VERSION_NEXT_COURSE;
-                break;
-            case SchoolTimeMethod.FILE_NAME:
-                nowVersionCode = Config.DATA_VERSION_SCHOOL_TIME;
-                break;
-            case PersonMethod.FILE_NAME_DATA:
-                nowVersionCode = Config.DATA_VERSION_STUDENT_INFO;
-                break;
-            case PersonMethod.FILE_NAME_PROCESS:
-                nowVersionCode = Config.DATA_VERSION_STUDENT_LEARN_PROCESS;
-                break;
-            case PersonMethod.FILE_NAME_SCORE:
-                nowVersionCode = Config.DATA_VERSION_STUDENT_SCORE;
-                break;
-            case LevelExamMethod.FILE_NAME:
-                nowVersionCode = Config.DATA_VERSION_LEVEL_EXAM;
-                break;
-            case MoaMethod.FILE_NAME:
-                nowVersionCode = Config.DATA_VERSION_MOA;
-                break;
-            case SuspendCourseMethod.FILE_NAME:
-                nowVersionCode = Config.DATA_VERSION_SUSPEND_COURSE;
-                break;
-            case AlstuMethod.FILE_NAME:
-                nowVersionCode = Config.DATA_VERSION_ALSTU_TOPIC;
-                break;
-            default:
-                nowVersionCode = 0;
-                break;
+        String simpleName = file_class.getSimpleName();
+        if (simpleName.equals(ScoreMethod.FILE_NAME)) {
+            nowVersionCode = Config.DATA_VERSION_COURSE_SCORE;
+        } else if (simpleName.equals(ExamMethod.FILE_NAME)) {
+            nowVersionCode = Config.DATA_VERSION_EXAM;
+        } else if (simpleName.equals(JwcInfoMethod.FILE_NAME)) {
+            nowVersionCode = Config.DATA_VERSION_JWC_TOPIC;
+        } else if (simpleName.equals(NextClassMethod.NEXT_COURSE_FILE_NAME)) {
+            nowVersionCode = Config.DATA_VERSION_NEXT_COURSE;
+        } else if (simpleName.equals(SchoolTimeMethod.FILE_NAME)) {
+            nowVersionCode = Config.DATA_VERSION_SCHOOL_TIME;
+        } else if (simpleName.equals(PersonMethod.FILE_NAME_DATA)) {
+            nowVersionCode = Config.DATA_VERSION_STUDENT_INFO;
+        } else if (simpleName.equals(PersonMethod.FILE_NAME_PROCESS)) {
+            nowVersionCode = Config.DATA_VERSION_STUDENT_LEARN_PROCESS;
+        } else if (simpleName.equals(PersonMethod.FILE_NAME_SCORE)) {
+            nowVersionCode = Config.DATA_VERSION_STUDENT_SCORE;
+        } else if (simpleName.equals(LevelExamMethod.FILE_NAME)) {
+            nowVersionCode = Config.DATA_VERSION_LEVEL_EXAM;
+        } else if (simpleName.equals(MoaMethod.FILE_NAME)) {
+            nowVersionCode = Config.DATA_VERSION_MOA;
+        } else if (simpleName.equals(SuspendCourseMethod.FILE_NAME)) {
+            nowVersionCode = Config.DATA_VERSION_SUSPEND_COURSE;
+        } else if (simpleName.equals(AlstuMethod.FILE_NAME)) {
+            nowVersionCode = Config.DATA_VERSION_ALSTU_TOPIC;
+        } else {
+            nowVersionCode = 0;
         }
 
         if (nowVersionCode > 0) {
