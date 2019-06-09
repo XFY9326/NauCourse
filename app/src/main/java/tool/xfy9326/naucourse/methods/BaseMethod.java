@@ -100,6 +100,7 @@ public class BaseMethod {
             builder.setTitle(R.string.new_version_info_title);
             builder.setMessage(R.string.new_version_info_content);
             builder.setPositiveButton(android.R.string.yes, null);
+            builder.setCancelable(false);
             builder.show();
             if (versionCheck) {
                 sharedPreferences.edit().putInt(Config.PREFERENCE_NEW_VERSION_INFO, BuildConfig.VERSION_CODE).apply();
