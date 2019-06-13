@@ -12,7 +12,10 @@ import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -38,6 +41,25 @@ import tool.xfy9326.naucourse.utils.TopicInfo;
 
 public class DataMethod {
     private static final String DATA_VERSION_CODE = "dataVersionCode";
+
+    @SuppressWarnings("SameParameterValue")
+    static String readAssetsText(Context context, String path) {
+        try {
+            InputStreamReader inputStreamReader = new InputStreamReader(context.getResources().getAssets().open(path));
+            BufferedReader reader = new BufferedReader(inputStreamReader);
+            String line;
+            StringBuilder result = new StringBuilder();
+            while ((line = reader.readLine()) != null) {
+                result.append(line).append("\n");
+            }
+            reader.close();
+            inputStreamReader.close();
+            return result.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     /**
      * 获取离线数据

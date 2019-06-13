@@ -114,6 +114,7 @@ public class PersonFragment extends Fragment {
     public void onStart() {
         super.onStart();
         ViewSet();
+        unlockFunction();
     }
 
     private void ViewSet() {
@@ -150,7 +151,7 @@ public class PersonFragment extends Fragment {
             CardView cardView_moa = view.findViewById(R.id.cardView_moa);
 
             CardView cardView_course_search = view.findViewById(R.id.cardView_course_search);
-            CardView cardView_alstu_link = view.findViewById(R.id.cardView_alstu_link);
+            //CardView cardView_blank = view.findViewById(R.id.cardView_blank);
 
             cardView_suspend_course.setOnClickListener(v -> {
                 if (getActivity() != null && isAdded()) {
@@ -250,11 +251,18 @@ public class PersonFragment extends Fragment {
                     getActivity().startActivity(intent);
                 }
             });
-            cardView_alstu_link.setOnClickListener(v -> {
-                if (getActivity() != null && isAdded()) {
-                    NetMethod.viewUrlInBrowser(getActivity(), "http://alstu.nau.edu.cn/default.aspx");
-                }
-            });
+        }
+    }
+
+    public void unlockFunction() {
+        if (isAdded() && view != null) {
+            CardView cardView_score = view.findViewById(R.id.cardView_score_search);
+            CardView cardView_exam = view.findViewById(R.id.cardView_exam);
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            if (sharedPreferences.getBoolean(Config.PREFERENCE_SHOW_HIDDEN_FUNCTION, Config.DEFAULT_PREFERENCE_SHOW_HIDDEN_FUNCTION)) {
+                cardView_score.setVisibility(View.VISIBLE);
+                cardView_exam.setVisibility(View.VISIBLE);
+            }
         }
     }
 

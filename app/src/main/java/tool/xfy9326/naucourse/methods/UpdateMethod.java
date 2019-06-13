@@ -81,14 +81,15 @@ public class UpdateMethod {
 
                                 final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                                 builder.setTitle(R.string.find_update);
+                                builder.setCancelable(false);
 
                                 builder.setPositiveButton(R.string.update_immediately, (dialog, which) -> {
                                     Uri uri = Uri.parse(updateUrl);
                                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                                     activity.startActivity(intent);
                                 });
-                                builder.setNegativeButton(R.string.update_later, null);
                                 if (!forceUpdate) {
+                                    builder.setNegativeButton(R.string.update_later, null);
                                     builder.setNeutralButton(R.string.version_no_mention, (dialog, which) -> sharedPreferences.edit().putString(Config.PREFERENCE_LAST_CHECK_VERSION, versionNew).apply());
                                 }
 

@@ -59,6 +59,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_about_author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/layout_about_version"
@@ -80,7 +81,19 @@
                 android:layout_weight="1"
                 android:text="@string/author"
                 android:textSize="16sp" />
+
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView_about_eula"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_about_author"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:text="@string/eula"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="15sp" />
 
         <LinearLayout
             android:layout_width="match_parent"

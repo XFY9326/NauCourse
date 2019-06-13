@@ -60,6 +60,7 @@ android {
 
 dependencies {
     implementation project(':NauSSO')
+    implementation project(':NetApi')
     implementation project(':AppUpdater')
 
     implementation 'org.jsoup:jsoup:1.11.3'

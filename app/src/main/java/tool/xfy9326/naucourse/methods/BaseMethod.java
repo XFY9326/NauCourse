@@ -92,8 +92,7 @@ public class BaseMethod {
         boolean showDialog = false;
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (versionCheck) {
-            int newVersionInfo = sharedPreferences.getInt(Config.PREFERENCE_NEW_VERSION_INFO, Config.DEFAULT_PREFERENCE_NEW_VERSION_INFO);
-            showDialog = newVersionInfo < BuildConfig.VERSION_CODE;
+            showDialog = isNewVersion(sharedPreferences);
         }
         if (!versionCheck || showDialog) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -106,6 +105,11 @@ public class BaseMethod {
                 sharedPreferences.edit().putInt(Config.PREFERENCE_NEW_VERSION_INFO, BuildConfig.VERSION_CODE).apply();
             }
         }
+    }
+
+    public static boolean isNewVersion(SharedPreferences sharedPreferences) {
+        int newVersionInfo = sharedPreferences.getInt(Config.PREFERENCE_NEW_VERSION_INFO, Config.DEFAULT_PREFERENCE_NEW_VERSION_INFO);
+        return newVersionInfo < BuildConfig.VERSION_CODE;
     }
 
     /**
@@ -173,5 +177,36 @@ public class BaseMethod {
         Random random = new Random();
         int num = random.nextInt(colorList.length) % (colorList.length + 1);
         return colorList[num];
+    }
+
+    public static void showEULADialog(@NonNull Context context, boolean checkAccept, final OnEULAListener eulaListener) {
+        if (checkAccept) {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            if (sharedPreferences.getBoolean(Config.PREFERENCE_EULA_ACCEPT, Config.DEFAULT_PREFERENCE_EULA_ACCEPT)) {
+                return;
+            }
+        }
+        String eulaText = DataMethod.readAssetsText(context, Config.ASSETS_EULA_PATH);
+        if (eulaText != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle(R.string.eula);
+            builder.setMessage(eulaText);
+            if (checkAccept) {
+                builder.setCancelable(false);
+                builder.setPositiveButton(R.string.accept, (dialog, which) -> eulaListener.OnAccept());
+                builder.setNegativeButton(R.string.reject, (dialog, which) -> eulaListener.OnReject());
+            } else {
+                builder.setPositiveButton(android.R.string.yes, null);
+            }
+            builder.show();
+        } else {
+            eulaListener.OnReject();
+        }
+    }
+
+    public interface OnEULAListener {
+        void OnAccept();
+
+        void OnReject();
     }
 }

@@ -15,8 +15,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.fragments.PersonFragment;
 import tool.xfy9326.naucourse.methods.BaseMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
+import tool.xfy9326.naucourse.methods.SecurityMethod;
 import tool.xfy9326.naucourse.methods.TempMethod;
 import tool.xfy9326.naucourse.methods.UpdateMethod;
 import tool.xfy9326.naucourse.views.FixedViewPager;
@@ -50,6 +52,18 @@ public class MainActivity extends AppCompatActivity {
             }
             tempLoad();
             BaseMethod.showNewVersionInfo(this, true);
+            BaseMethod.showEULADialog(this, true, new BaseMethod.OnEULAListener() {
+                @Override
+                public void OnAccept() {
+                    sharedPreferences.edit().putBoolean(Config.PREFERENCE_EULA_ACCEPT, true).apply();
+                }
+
+                @Override
+                public void OnReject() {
+                    Toast.makeText(MainActivity.this, R.string.eula_not_accept, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            });
         }
     }
 
@@ -160,6 +174,27 @@ public class MainActivity extends AppCompatActivity {
         });
 
         BaseMethod.getApp(this).setViewPagerAdapter(viewPagerAdapter);
+
+        if (BaseMethod.isNewVersion(sharedPreferences)) {
+            SecurityMethod.unlockHiddenFunction(MainActivity.this, new SecurityMethod.OnCheckHiddenFunction() {
+                @Override
+                public void OnSuccess(boolean canUnlock) {
+                    if (canUnlock) {
+                        runOnUiThread(() -> {
+                            PersonFragment personFragment = viewPagerAdapter.getPersonFragment();
+                            if (personFragment != null) {
+                                personFragment.unlockFunction();
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void OnFailed() {
+
+                }
+            });
+        }
     }
 
     //首次登陆提前加载考试与成绩的数据

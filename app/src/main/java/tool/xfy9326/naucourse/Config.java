@@ -49,6 +49,8 @@ public class Config {
 
     public static final String DEBUG = "debug";
 
+    public static final String ASSETS_EULA_PATH = "EULA.txt";
+
     public static final String INTENT_INFO_DETAIL = "INFO_DETAIL";
     public static final String INTENT_IS_ONLY_INIT = "IS_ONLY_INIT";
     public static final String INTENT_NEXT_CLASS_DATA = "NEXT_CLASS_DATA";
@@ -117,6 +119,9 @@ public class Config {
     public static final String PREFERENCE_SCHOOL_VPN_MODE = "SCHOOL_VPN_MODE";
     public static final String PREFERENCE_SCHOOL_VPN_SMART_MODE = "SCHOOL_VPN_SMART_MODE";
     public static final String PREFERENCE_NEW_VERSION_INFO = "NEW_VERSION_INFO";
+    public static final String PREFERENCE_EULA_ACCEPT = "EULA_ACCEPT_V1";
+    public static final String PREFERENCE_NO_SHOW_LOGIN_ATTENTION = "NO_SHOW_LOGIN_ATTENTION";
+    public static final String PREFERENCE_SHOW_HIDDEN_FUNCTION = "SHOW_HIDDEN_FUNCTION";
 
     public static final boolean DEFAULT_PREFERENCE_HAS_LOGIN = false;
     public static final String DEFAULT_PREFERENCE_USER_ID = "NULL";
@@ -151,6 +156,9 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_SCHOOL_VPN_MODE = false;
     public static final boolean DEFAULT_PREFERENCE_SCHOOL_VPN_SMART_MODE = true;
     public static final int DEFAULT_PREFERENCE_NEW_VERSION_INFO = 0;
+    public static final boolean DEFAULT_PREFERENCE_EULA_ACCEPT = false;
+    public static final boolean DEFAULT_PREFERENCE_NO_SHOW_LOGIN_ATTENTION = false;
+    public static final boolean DEFAULT_PREFERENCE_SHOW_HIDDEN_FUNCTION = false;
 
     //网络连接错误代码
     public static final int NET_WORK_GET_SUCCESS = 0;

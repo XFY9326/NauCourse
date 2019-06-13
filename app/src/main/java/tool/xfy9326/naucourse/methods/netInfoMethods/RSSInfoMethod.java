@@ -39,8 +39,8 @@ public class RSSInfoMethod {
     private final SparseArray<RSSReader.RSSObject> rssObjectSparseArray;
     private final Integer[] typeList;
     private final ExecutorService executorService;
-    private boolean hasFailedLoad = false;
     private final Context context;
+    private boolean hasFailedLoad = false;
 
 
     public RSSInfoMethod(@NonNull Context context, ExecutorService executorService) {

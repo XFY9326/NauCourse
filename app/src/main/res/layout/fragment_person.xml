@@ -102,7 +102,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cardView_score_search"
+                    android:id="@+id/cardView_suspend_course"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
@@ -118,17 +118,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="5dp"
-                        android:drawableTop="@drawable/ic_score"
+                        android:drawableTop="@drawable/ic_suspend_course"
                         android:drawablePadding="8dp"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="@string/score"
+                        android:text="@string/suspend_course"
                         android:textSize="13sp" />
 
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cardView_exam"
+                    android:id="@+id/cardView_moa"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
@@ -144,11 +144,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="5dp"
-                        android:drawableTop="@drawable/ic_date"
+                        android:drawableTop="@drawable/ic_moa"
                         android:drawablePadding="8dp"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="@string/exam"
+                        android:text="@string/moa"
                         android:textSize="13sp" />
 
                 </androidx.cardview.widget.CardView>
@@ -213,7 +213,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cardView_suspend_course"
+                    android:id="@+id/cardView_score_search"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
@@ -221,6 +221,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
+                    android:visibility="invisible"
                     app:cardCornerRadius="4dp"
                     app:cardElevation="3dp"
                     app:cardPreventCornerOverlap="true">
@@ -229,17 +230,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="5dp"
-                        android:drawableTop="@drawable/ic_suspend_course"
+                        android:drawableTop="@drawable/ic_score"
                         android:drawablePadding="8dp"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="@string/suspend_course"
+                        android:text="@string/score"
                         android:textSize="13sp" />
 
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cardView_moa"
+                    android:id="@+id/cardView_exam"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
@@ -247,6 +248,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
+                    android:visibility="invisible"
                     app:cardCornerRadius="4dp"
                     app:cardElevation="3dp"
                     app:cardPreventCornerOverlap="true">
@@ -255,17 +257,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="5dp"
-                        android:drawableTop="@drawable/ic_moa"
+                        android:drawableTop="@drawable/ic_date"
                         android:drawablePadding="8dp"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="@string/moa"
+                        android:text="@string/exam"
                         android:textSize="13sp" />
 
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cardView_alstu_link"
+                    android:id="@+id/cardView_blank"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
@@ -273,6 +275,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
+                    android:visibility="invisible"
                     app:cardCornerRadius="4dp"
                     app:cardElevation="3dp"
                     app:cardPreventCornerOverlap="true">

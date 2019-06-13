@@ -44,6 +44,7 @@
     </string-array>
 
     <string-array name="open_source_name">
+        <item>NauCourse</item>
         <item>AndroidX</item>
         <item>Jsoup</item>
         <item>Okhttp3</item>
@@ -53,6 +54,7 @@
     </string-array>
 
     <string-array name="open_source_web">
+        <item>https://github.com/XFY9326/NauCourse</item>
         <item>http://source.android.com</item>
         <item>https://jsoup.org</item>
         <item>http://square.github.io/okhttp</item>

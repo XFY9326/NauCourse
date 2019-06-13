@@ -22,6 +22,7 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.methods.BaseMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
+import tool.xfy9326.naucourse.methods.SecurityMethod;
 
 /**
  * Created by xfy9326 on 18-2-20.
@@ -46,6 +47,24 @@ public class AboutActivity extends AppCompatActivity {
     }
 
     private void ViewSet() {
+        findViewById(R.id.textView_about_app_name).setOnClickListener(v -> SecurityMethod.unlockHiddenFunction(AboutActivity.this, new SecurityMethod.OnCheckHiddenFunction() {
+            @Override
+            public void OnSuccess(boolean canUnlock) {
+                runOnUiThread(() -> {
+                    if (canUnlock) {
+                        Toast.makeText(AboutActivity.this, R.string.unlock_success, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(AboutActivity.this, R.string.unlock_no_auth, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+
+            @Override
+            public void OnFailed() {
+                Toast.makeText(AboutActivity.this, R.string.unlock_failed, Toast.LENGTH_SHORT).show();
+            }
+        }));
         findViewById(R.id.imageView_about_app_icon).setOnClickListener(v -> BaseMethod.showNewVersionInfo(AboutActivity.this, false));
 
         TextView textView_version = findViewById(R.id.textView_about_version);
@@ -88,6 +107,8 @@ public class AboutActivity extends AppCompatActivity {
             builder.setNeutralButton(R.string.qq_wallet, (dialog, which) -> NetMethod.viewUrlInBrowser(AboutActivity.this, Config.DONATE_URL_QQ_WALLET));
             builder.show();
         });
+
+        findViewById(R.id.textView_about_eula).setOnClickListener(v -> BaseMethod.showEULADialog(AboutActivity.this, false, null));
     }
 
 

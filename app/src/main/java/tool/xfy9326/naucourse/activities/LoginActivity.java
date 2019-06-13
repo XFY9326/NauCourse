@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import androidx.annotation.Nullable;
@@ -54,23 +54,24 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void ViewSet() {
-        EditText editText_userId = findViewById(R.id.editText_userId);
+        EditText editText_userId = findViewById(R.id.editText_login_userId);
         String userId = SecurityMethod.getUserId(sharedPreferences);
         if (!userId.equals(Config.DEFAULT_PREFERENCE_USER_ID)) {
             editText_userId.setText(userId);
         }
-        EditText editText_userPw = findViewById(R.id.editText_userPw);
+        EditText editText_userPw = findViewById(R.id.editText_login_userPw);
         String en_userPw = sharedPreferences.getString(Config.PREFERENCE_USER_PW, Config.DEFAULT_PREFERENCE_USER_PW);
         if (!en_userPw.equals(Config.DEFAULT_PREFERENCE_USER_PW)) {
             editText_userPw.setText(SecurityMethod.getUserPassWord(this));
         }
-        Button button_login = findViewById(R.id.button_login);
-        button_login.setOnClickListener(v -> showLoginAttentionDialog());
+        findViewById(R.id.button_login_login).setOnClickListener(v -> showLoginAttentionDialog());
+
+        findViewById(R.id.textView_login_accept_eula).setOnClickListener(v -> BaseMethod.showEULADialog(LoginActivity.this, false, null));
     }
 
     private void login() {
-        final EditText editText_userId = findViewById(R.id.editText_userId);
-        final EditText editText_userPw = findViewById(R.id.editText_userPw);
+        final EditText editText_userId = findViewById(R.id.editText_login_userId);
+        final EditText editText_userPw = findViewById(R.id.editText_login_userPw);
 
         editText_userId.clearFocus();
         editText_userPw.clearFocus();
@@ -130,12 +131,26 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showLoginAttentionDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-        builder.setTitle(R.string.attention);
-        builder.setMessage(R.string.login_attention);
-        builder.setPositiveButton(R.string.login, (dialog, which) -> login());
-        builder.setNegativeButton(android.R.string.cancel, null);
-        builder.show();
+        CheckBox checkBox_eula = findViewById(R.id.checkBox_login_eula_accept);
+        if (!checkBox_eula.isChecked()) {
+            Snackbar.make(findViewById(R.id.layout_login_content), R.string.eula_not_accept, Snackbar.LENGTH_SHORT).show();
+        } else {
+            sharedPreferences.edit().putBoolean(Config.PREFERENCE_EULA_ACCEPT, true).apply();
+            if (!sharedPreferences.getBoolean(Config.PREFERENCE_NO_SHOW_LOGIN_ATTENTION, Config.DEFAULT_PREFERENCE_NO_SHOW_LOGIN_ATTENTION)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                builder.setTitle(R.string.attention);
+                builder.setMessage(R.string.login_attention);
+                builder.setPositiveButton(R.string.login, (dialog, which) -> login());
+                builder.setNeutralButton(R.string.no_alert_again, (dialog, which) -> {
+                    sharedPreferences.edit().putBoolean(Config.PREFERENCE_NO_SHOW_LOGIN_ATTENTION, true).apply();
+                    login();
+                });
+                builder.setNegativeButton(android.R.string.cancel, null);
+                builder.show();
+            } else {
+                login();
+            }
+        }
     }
 
     private void showLoadingDialog() {
