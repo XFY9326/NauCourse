@@ -338,11 +338,11 @@
     <string name="eula_not_accept">你还没有同意《最终用户许可协议》！</string>
     <string name="accept">同意</string>
     <string name="reject">拒绝</string>
-    <string name="unlock_success">解锁成功</string>
-    <string name="unlock_no_auth">未经许可的用户</string>
-    <string name="unlock_failed">解锁失败</string>
+    <string name="unlock_success">解锁成功！</string>
+    <string name="unlock_already_success">你已经解锁成功了！</string>
+    <string name="unlock_attention">该功能不对外开放，出现任何问题开发者无需负责！</string>
 
-    <string name="new_version_info_content">欢迎使用NAU课程表\n\n应校方要求，成绩查询与考试时间查询功能已经对外禁用，未来不排除下架可能性。\n由于学校网络变化原因，部分页面指定时段或在校外网络可能无法访问。你可以尝试打开通用设置中的校园VPN解决这个问题，但是此功能可能会导致加载缓慢与登录失败等问题。\n\n另外注意：我将会于2020年早些时候不再更新支持系统版本低于安卓5.0的设备！</string>
+    <string name="new_version_info_content">欢迎使用NAU课程表\n\n校园VPN模式导致的登录失败多刷新几次就好了\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>

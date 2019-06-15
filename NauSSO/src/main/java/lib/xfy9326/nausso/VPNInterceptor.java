@@ -41,14 +41,19 @@ public class VPNInterceptor implements Interceptor {
             source.request(Long.MAX_VALUE);
             Buffer buffer = source.buffer();
             Charset charset = Util.bomAwareCharset(source, contentType != null ? contentType.charset(StandardCharsets.UTF_8) : StandardCharsets.UTF_8);
-            return buffer.clone().readString(charset);
+            Buffer bufferClone = buffer.clone();
+            String result = bufferClone.readString(charset);
+            bufferClone.close();
+            return result;
         }
         return null;
     }
 
     private static boolean needVPNHost(HttpUrl url) {
         for (String host : noVPNHost) {
-            if (url.host().equalsIgnoreCase(host) || url.host().equalsIgnoreCase(VPN_HOST) && url.toString().contains(host)) {
+            String urlStr = url.toString();
+            String urlHost = url.host();
+            if (urlHost.equalsIgnoreCase(host) || urlHost.equalsIgnoreCase(VPN_HOST) && urlStr.contains(host) || urlStr.contains(NauSSOClient.JWC_HOST_URL)) {
                 return false;
             }
         }

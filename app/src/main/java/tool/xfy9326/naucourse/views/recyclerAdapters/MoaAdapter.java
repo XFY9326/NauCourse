@@ -43,9 +43,12 @@ public class MoaAdapter extends RecyclerView.Adapter<MoaAdapter.MoaViewHolder> {
         } else {
             holder.textViewMoaReporter.setVisibility(View.GONE);
         }
-        holder.textViewMoaTime.setText(activity.getString(R.string.moa_time, moa.getTime()[holder.getAdapterPosition()]));
-        holder.textViewMoaLocation.setText(activity.getString(R.string.moa_location, moa.getLocation()[holder.getAdapterPosition()]));
-        holder.textViewMoaApplyUnit.setText(activity.getString(R.string.moa_apply_unit, moa.getApplyUnit()[holder.getAdapterPosition()]));
+        String time = moa.getTime()[holder.getAdapterPosition()];
+        String location = moa.getLocation()[holder.getAdapterPosition()];
+        String applyUnit = moa.getApplyUnit()[holder.getAdapterPosition()];
+        holder.textViewMoaTime.setText(activity.getString(R.string.moa_time, time != null && !time.equals("null") ? time : ""));
+        holder.textViewMoaLocation.setText(activity.getString(R.string.moa_location, location != null && !location.equals("null") ? location : ""));
+        holder.textViewMoaApplyUnit.setText(activity.getString(R.string.moa_apply_unit, applyUnit != null && !applyUnit.equals("null") ? applyUnit : ""));
     }
 
     @NonNull

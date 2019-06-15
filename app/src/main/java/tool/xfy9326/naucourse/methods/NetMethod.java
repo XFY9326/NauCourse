@@ -141,6 +141,10 @@ public class NetMethod {
                     }
                     return loadUrlFromLoginClient(context, url, false);
                 case Config.RE_LOGIN_FAILED:
+                    reLogin_result = LoginMethod.reLogin(context);
+                    if (reLogin_result == Config.RE_LOGIN_SUCCESS) {
+                        return loadUrlFromLoginClient(context, url, false);
+                    }
                     break;
             }
         }

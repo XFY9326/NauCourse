@@ -22,5 +22,10 @@
         android:title="@string/donate"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/menu_about_new_version_info"
+        android:orderInCategory="3"
+        android:title="@string/new_version_info_title"
+        app:showAsAction="never" />
 
 </menu>

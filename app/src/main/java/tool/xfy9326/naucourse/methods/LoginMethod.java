@@ -51,7 +51,6 @@ public class LoginMethod {
         NauSSOClient nauSSOClient = BaseMethod.getApp(context).getClient();
         if (justReLogin || NauSSOClient.isNeedLogoutBeforeReLogin()) {
             nauSSOClient.jwcLoginOut();
-            nauSSOClient.loginOut();
             Thread.sleep(1000);
         }
         if (nauSSOClient.login(id, pw)) {

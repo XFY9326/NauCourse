@@ -28,6 +28,7 @@ public class NauSSOClient {
     public static final int LOGIN_ALREADY_LOGIN = 2;
     public static final int LOGIN_USER_INFO_WRONG = 4;
     public static final String JWC_SERVER_URL = "http://jwc.nau.edu.cn";
+    static final String JWC_HOST_URL = "jwc.nau.edu.cn";
     private static final int LOGIN_SUCCESS = 0;
     private static final String single_server_url = "http://sso.nau.edu.cn/sso/login?service=http%3a%2f%2fjwc.nau.edu.cn%2fLogin_Single.aspx";
     private static final String ALSTU_LOGIN_SSO_URL = "http://sso.nau.edu.cn/sso/login?service=http%3a%2f%2falstu.nau.edu.cn%2flogin.aspx";

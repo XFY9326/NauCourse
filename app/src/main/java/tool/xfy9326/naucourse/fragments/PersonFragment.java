@@ -114,6 +114,11 @@ public class PersonFragment extends Fragment {
     public void onStart() {
         super.onStart();
         ViewSet();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         unlockFunction();
     }
 
@@ -254,7 +259,7 @@ public class PersonFragment extends Fragment {
         }
     }
 
-    public void unlockFunction() {
+    private void unlockFunction() {
         if (isAdded() && view != null) {
             CardView cardView_score = view.findViewById(R.id.cardView_score_search);
             CardView cardView_exam = view.findViewById(R.id.cardView_exam);
