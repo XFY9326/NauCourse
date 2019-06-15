@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.AboutActivity">
+
+    <item
+        android:id="@+id/menu_about_open_source"
+        android:orderInCategory="0"
+        android:title="@string/open_source"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_about_donate_list"
+        android:orderInCategory="1"
+        android:title="@string/donate_list"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_about_donate"
+        android:orderInCategory="2"
+        android:title="@string/donate"
+        app:showAsAction="never" />
+
+
+</menu>

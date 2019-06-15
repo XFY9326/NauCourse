@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -46,6 +48,34 @@ public class AboutActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_about, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_about_open_source:
+                showOpenSourceList();
+                break;
+            case R.id.menu_about_donate:
+                AlertDialog.Builder builder = new AlertDialog.Builder(AboutActivity.this);
+                builder.setTitle(R.string.donate);
+                builder.setMessage(R.string.donate_content);
+                builder.setPositiveButton(R.string.alipay, (dialog, which) -> NetMethod.viewUrlInBrowser(AboutActivity.this, Config.DONATE_URL_ALIPAY));
+                builder.setNegativeButton(R.string.wechat, (dialog, which) -> NetMethod.viewUrlInBrowser(AboutActivity.this, Config.DONATE_URL_WECHAT));
+                builder.setNeutralButton(R.string.qq_wallet, (dialog, which) -> NetMethod.viewUrlInBrowser(AboutActivity.this, Config.DONATE_URL_QQ_WALLET));
+                builder.show();
+                break;
+            case R.id.menu_about_donate_list:
+                NetMethod.viewUrlInBrowser(AboutActivity.this, Config.DONATE_PERSON_URL);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void ViewSet() {
         findViewById(R.id.textView_about_app_name).setOnClickListener(v -> SecurityMethod.unlockHiddenFunction(AboutActivity.this, new SecurityMethod.OnCheckHiddenFunction() {
             @Override
@@ -77,7 +107,6 @@ public class AboutActivity extends AppCompatActivity {
 
         textView_version.setText(version);
 
-        findViewById(R.id.textView_about_open_source).setOnClickListener(v -> showOpenSourceList());
         findViewById(R.id.textView_about_feedback).setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(AboutActivity.this);
             builder.setTitle(R.string.feedback);
@@ -95,16 +124,6 @@ public class AboutActivity extends AppCompatActivity {
                     Toast.makeText(AboutActivity.this, R.string.launch_failed, Toast.LENGTH_SHORT).show();
                 }
             });
-            builder.show();
-        });
-        findViewById(R.id.textView_about_donate_list).setOnClickListener(v -> NetMethod.viewUrlInBrowser(AboutActivity.this, Config.DONATE_PERSON_URL));
-        findViewById(R.id.textView_about_donate).setOnClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(AboutActivity.this);
-            builder.setTitle(R.string.donate);
-            builder.setMessage(R.string.donate_content);
-            builder.setPositiveButton(R.string.alipay, (dialog, which) -> NetMethod.viewUrlInBrowser(AboutActivity.this, Config.DONATE_URL_ALIPAY));
-            builder.setNegativeButton(R.string.wechat, (dialog, which) -> NetMethod.viewUrlInBrowser(AboutActivity.this, Config.DONATE_URL_WECHAT));
-            builder.setNeutralButton(R.string.qq_wallet, (dialog, which) -> NetMethod.viewUrlInBrowser(AboutActivity.this, Config.DONATE_URL_QQ_WALLET));
             builder.show();
         });
 
