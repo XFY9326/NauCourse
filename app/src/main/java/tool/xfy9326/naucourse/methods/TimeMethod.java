@@ -30,6 +30,10 @@ public class TimeMethod {
     private static final SimpleDateFormat sdf_ymd_hm2 = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
     private static String[] weekArray = null;
 
+    static synchronized String getDateSDF(long time) {
+        return sdf_ymd.format(new Date(time));
+    }
+
     public static synchronized Date parseDateSDFHM2(String str) throws ParseException {
         return sdf_ymd_hm2.parse(str);
     }

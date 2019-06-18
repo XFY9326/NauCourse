@@ -12,14 +12,15 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("unused")
 public class RSSReader {
     private static final String RSS_TAG_CHANNEL = "channel";
     private static final String RSS_TAG_TITLE = "title";
     private static final String RSS_TAG_LINK = "link";
     private static final String RSS_TAG_ITEM = "item";
+    @SuppressWarnings("unused")
     private static final String RSS_TAG_DESCRIPTION = "description";
     private static final String RSS_TAG_DATE = "date";
+    @SuppressWarnings("unused")
     private static final String RSS_TAG_TYPE = "type";
     private static final String RSS_TAG = "rss";
 
@@ -27,6 +28,7 @@ public class RSSReader {
     @Nullable
     public static RSSObject getRSSObject(@NonNull String rssContent) {
         XmlPullParser parser = Xml.newPullParser();
+        rssContent = rssContent.replaceAll("<!-[\\s\\S]*?->", "");
         StringReader stringReader = new StringReader(rssContent);
         try {
             parser.setInput(stringReader);
@@ -136,6 +138,7 @@ public class RSSReader {
         }
     }
 
+    @SuppressWarnings("unused")
     public static class RSSChannel implements Serializable {
         private final String title;
         private final String link;
@@ -161,6 +164,7 @@ public class RSSReader {
         }
     }
 
+    @SuppressWarnings("unused")
     public static class RSSItem implements Serializable {
         private final String title;
         private final String link;

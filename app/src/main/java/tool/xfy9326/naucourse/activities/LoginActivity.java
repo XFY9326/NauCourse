@@ -94,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
         new Thread(() -> {
             try {
                 if (nauSSOClient.login(id, pw)) {
-                    nauSSOClient.alstuLogin();
+                    nauSSOClient.alstuLogin(id, pw);
                     loginURL = nauSSOClient.getJwcLoginUrl();
                     if (loginURL != null) {
                         loginSuccess = true;
@@ -102,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 loginErrorCode = nauSSOClient.getLoginErrorCode();
                 if (loginErrorCode == NauSSOClient.LOGIN_ALREADY_LOGIN) {
-                    if (LoginMethod.doReLogin(LoginActivity.this, id, pw, sharedPreferences, true) == Config.RE_LOGIN_SUCCESS) {
+                    if (LoginMethod.doReLogin(LoginActivity.this, id, pw, sharedPreferences) == Config.RE_LOGIN_SUCCESS) {
                         loginSuccess = true;
                         loginURL = nauSSOClient.getJwcLoginUrl();
                     }

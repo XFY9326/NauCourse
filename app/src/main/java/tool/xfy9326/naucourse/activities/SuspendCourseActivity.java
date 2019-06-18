@@ -51,6 +51,10 @@ public class SuspendCourseActivity extends AppCompatActivity {
         recyclerView.setFocusableInTouchMode(false);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        if (suspendCourseAdapter == null) {
+            suspendCourseAdapter = new SuspendCourseAdapter(SuspendCourseActivity.this);
+        }
+        recyclerView.setAdapter(suspendCourseAdapter);
 
         swipeRefreshLayout = findViewById(R.id.swipeLayout_suspend_course);
         swipeRefreshLayout.setDistanceToTriggerSync(200);
@@ -70,11 +74,7 @@ public class SuspendCourseActivity extends AppCompatActivity {
 
     synchronized private void getData() {
         BaseMethod.setRefreshing(swipeRefreshLayout, true);
-        if (loadTime < 2) {
-            new SuspendCourseAsync().execute(getApplicationContext());
-        } else {
-            new SuspendCourseAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
-        }
+        new SuspendCourseAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
     }
 
     public int getLoadTime() {

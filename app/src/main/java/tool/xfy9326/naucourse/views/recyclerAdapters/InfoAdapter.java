@@ -79,11 +79,9 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
 
     //更新列表
     synchronized public void updateTopic(@NonNull ArrayList<TopicInfo> topicInfo) {
-        if (topicInfo.size() > 0) {
-            this.topic_data.clear();
-            this.topic_data.addAll(topicInfo);
-            notifyDataSetChanged();
-        }
+        this.topic_data.clear();
+        this.topic_data.addAll(topicInfo);
+        notifyDataSetChanged();
     }
 
     /**

@@ -13,6 +13,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.ConnectionPool;
 import okhttp3.FormBody;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -32,11 +33,11 @@ public class NauSSOClient {
     private static final int LOGIN_SUCCESS = 0;
     private static final String single_server_url = "http://sso.nau.edu.cn/sso/login?service=http%3a%2f%2fjwc.nau.edu.cn%2fLogin_Single.aspx";
     private static final String ALSTU_LOGIN_SSO_URL = "http://sso.nau.edu.cn/sso/login?service=http%3a%2f%2falstu.nau.edu.cn%2flogin.aspx";
-    private static final String ALSTU_TICKET_URL = "http://alstu.nau.edu.cn/login.aspx?ticket=";
+    private static final String ALSTU_TICKET_URL = "http://alstu.nau.edu.cn/login.aspx?cas_login=true&ticket=";
     private static final String single_login_out_url = "http://sso.nau.edu.cn/sso/logout";
-    private static boolean needLogoutBeforeReLogin = false;
     @NonNull
-    private final OkHttpClient client;
+    private final OkHttpClient main_client;
+    @NonNull
     private final OkHttpClient client_clean;
     @NonNull
     private final CookieStore cookieStore;
@@ -47,17 +48,8 @@ public class NauSSOClient {
 
     public NauSSOClient(@NonNull Context context) {
         vpnInterceptor = new VPNInterceptor();
-        OkHttpClient.Builder client_builder = new OkHttpClient.Builder();
         cookieStore = new CookieStore(context);
-        client_builder.cookieJar(cookieStore);
-        client_builder.cache(getCache(context));
-        client_builder.connectTimeout(15, TimeUnit.SECONDS);
-        client_builder.readTimeout(5, TimeUnit.SECONDS);
-        client_builder.writeTimeout(5, TimeUnit.SECONDS);
-        client_builder.retryOnConnectionFailure(true);
-        client_builder.connectionPool(new ConnectionPool(10, 5, TimeUnit.MINUTES));
-        client_builder.addInterceptor(vpnInterceptor);
-        client = client_builder.build();
+        main_client = buildSSOClient(context, cookieStore, vpnInterceptor);
 
         OkHttpClient.Builder client_clean_builder = new OkHttpClient.Builder();
         client_clean_builder.connectTimeout(8, TimeUnit.SECONDS);
@@ -66,25 +58,54 @@ public class NauSSOClient {
         client_clean = client_clean_builder.build();
     }
 
-    public static boolean isNeedLogoutBeforeReLogin() {
-        return needLogoutBeforeReLogin;
-    }
-
     /**
-     * 检测用用户是否登陆成功
+     * 检测用户是否登陆成功
      *
      * @param data 获取的网络数据
      * @return 是否登陆成功
      */
     public static boolean checkUserLogin(String data) {
-        if (data != null) {
-            if (data.contains("系统错误提示页") || data.contains("当前程序在执行过程中出现了未知异常，请重试") || data.contains("当前你已经登录") || data.contains("用户登录_南京审计大学教务管理系统")) {
-                needLogoutBeforeReLogin = true;
-                return false;
-            } else
-                return !data.contains("南京审计大学统一身份认证登录") && !data.contains("location=\"LOGIN.ASPX\";");
+        return data != null && !data.contains("系统错误提示页") && !data.contains("当前程序在执行过程中出现了未知异常，请重试") && !data.contains("当前你已经登录") && !data.contains("用户登录_南京审计大学教务管理系统");
+    }
+
+    public static boolean checkAlstuLogin(String data) {
+        return data != null && !data.contains("南京审计大学统一身份认证登录") && !data.contains("location=\"LOGIN.ASPX\";");
+    }
+
+    private static OkHttpClient buildSSOClient(Context context, CookieStore cookieStore, @Nullable Interceptor interceptor) {
+        OkHttpClient.Builder client_builder = new OkHttpClient.Builder();
+        client_builder.cookieJar(cookieStore);
+        client_builder.cache(getCache(context));
+        client_builder.connectTimeout(15, TimeUnit.SECONDS);
+        client_builder.readTimeout(8, TimeUnit.SECONDS);
+        client_builder.writeTimeout(8, TimeUnit.SECONDS);
+        client_builder.retryOnConnectionFailure(true);
+        client_builder.connectionPool(new ConnectionPool(15, 3, TimeUnit.MINUTES));
+        if (interceptor != null) {
+            client_builder.addInterceptor(interceptor);
         }
-        return false;
+        return client_builder.build();
+    }
+
+    private static Cache getCache(Context context) {
+        return new Cache(context.getCacheDir(), 10240 * 1024);
+    }
+
+    private static String loadUrl(String url, OkHttpClient client) throws IOException {
+        Request.Builder request_builder = new Request.Builder();
+        request_builder.url(url);
+
+        Response response = client.newCall(request_builder.build()).execute();
+        if (response.isSuccessful()) {
+            ResponseBody responseBody = response.body();
+            if (responseBody != null) {
+                String result = responseBody.string();
+                response.close();
+                return result;
+            }
+        }
+        response.close();
+        return null;
     }
 
     public boolean isVPNEnabled() {
@@ -121,9 +142,8 @@ public class NauSSOClient {
     synchronized public void loginOut() throws Exception {
         Request.Builder builder = new Request.Builder();
         builder.url(single_login_out_url);
-        client.newCall(builder.build()).execute().close();
+        main_client.newCall(builder.build()).execute().close();
         cookieStore.clearCookies();
-        needLogoutBeforeReLogin = false;
     }
 
     /**
@@ -136,33 +156,68 @@ public class NauSSOClient {
         if (isVPNEnabled()) {
             Request.Builder builder = new Request.Builder();
             builder.url(VPNInterceptor.VPN_SERVER + "/logout");
-            client.newCall(builder.build()).execute().close();
+            main_client.newCall(builder.build()).execute().close();
         }
     }
 
     synchronized public void jwcLoginOut() throws Exception {
         Request.Builder builder = new Request.Builder();
         builder.url(JWC_SERVER_URL + "/LoginOut.aspx");
-        client.newCall(builder.build()).execute().close();
-        needLogoutBeforeReLogin = false;
+        builder.header("Pragma", "no-cache");
+        builder.header("Cache-Control", "no-cache");
+        builder.header("Upgrade-Insecure-Requests", "1");
+        main_client.newCall(builder.build()).execute().close();
     }
 
-    synchronized public void alstuLogin() throws Exception {
+    synchronized public boolean alstuLogin(String userName, String userPw) throws Exception {
+        boolean needLogin = false;
+        String ssoContent = null;
         Request.Builder builder = new Request.Builder();
         builder.url(ALSTU_LOGIN_SSO_URL);
-        Response response = client.newCall(builder.build()).execute();
-
-        String ssoTicket = response.request().url().queryParameter("ticket");
+        Response response = main_client.newCall(builder.build()).execute();
+        if (response.isSuccessful() && response.body() != null) {
+            ssoContent = response.body().string();
+            if (ssoContent.contains("南京审计大学统一身份认证登录")) {
+                needLogin = true;
+            }
+        }
         response.close();
+        if (needLogin) {
+            FormBody formBody = NauNetData.getSSOPostForm(userName, userPw, ssoContent);
+            Request.Builder builder2 = new Request.Builder();
+            builder2.url(response.request().url());
+            builder2.post(formBody);
 
-        builder = new Request.Builder();
-        builder.url(ALSTU_TICKET_URL + ssoTicket);
-        client.newCall(builder.build()).execute().close();
+            Response response2 = main_client.newCall(builder2.build()).execute();
+            if (response2.isSuccessful()) {
+                ResponseBody responseBody = response2.body();
+                if (responseBody != null) {
+                    String body = responseBody.string();
+                    if (!body.contains("密码错误") && !body.contains("请勿输入非法字符")) {
+                        response2.close();
+                        return checkAlstuLogin(body);
+                    }
+                }
+            }
+            response2.close();
+        } else {
+            String ssoTicket = response.request().url().queryParameter("ticket");
+            builder = new Request.Builder();
+            builder.url(ALSTU_TICKET_URL + ssoTicket);
+            Response responseIndex = main_client.newCall(builder.build()).execute();
+            if (responseIndex.isSuccessful() && responseIndex.body() != null) {
+                String data = responseIndex.body().toString();
+                responseIndex.close();
+                return checkAlstuLogin(data);
+            }
+            responseIndex.close();
+        }
+        return false;
     }
 
     @Nullable
     public String getData(String requestUrl) throws Exception {
-        return loadUrl(requestUrl);
+        return loadUrl(requestUrl, main_client);
     }
 
     @Nullable
@@ -179,7 +234,7 @@ public class NauSSOClient {
 
         Request.Builder request_builder = new Request.Builder();
         request_builder.url(VPNInterceptor.VPN_LOGIN_URL);
-        Response dataResponse = client.newCall(request_builder.build()).execute();
+        Response dataResponse = main_client.newCall(request_builder.build()).execute();
         if (dataResponse.isSuccessful()) {
             ResponseBody responseBody = dataResponse.body();
             if (responseBody != null) {
@@ -193,12 +248,11 @@ public class NauSSOClient {
             builder.url(VPNInterceptor.VPN_LOGIN_URL);
             builder.post(formBody);
 
-            Response response = client.newCall(builder.build()).execute();
+            Response response = main_client.newCall(builder.build()).execute();
             if (response.isSuccessful()) {
                 ResponseBody responseBody = response.body();
                 if (responseBody != null) {
                     String body = responseBody.string();
-                    responseBody.close();
                     if (!body.contains("密码错误") && !body.contains("请勿输入非法字符") && body.contains("南京审计大学WEBVPN登录门户")) {
                         response.close();
                     }
@@ -214,14 +268,14 @@ public class NauSSOClient {
             VPNLogin(userId, userPw);
         }
         //缓存SSO的Cookies
-        String ssoContent = loadUrl(single_server_url);
+        String ssoContent = loadUrl(single_server_url, main_client);
         if (ssoContent != null) {
             FormBody formBody = NauNetData.getSSOPostForm(userId, userPw, ssoContent);
             Request.Builder builder = new Request.Builder();
             builder.url(single_server_url);
             builder.post(formBody);
 
-            Response response = client.newCall(builder.build()).execute();
+            Response response = main_client.newCall(builder.build()).execute();
             if (response.isSuccessful()) {
                 ResponseBody responseBody = response.body();
                 if (responseBody != null) {
@@ -230,12 +284,10 @@ public class NauSSOClient {
                         loginErrorCode = LOGIN_USER_INFO_WRONG;
                     } else if (body.startsWith("当前你已经登录")) {
                         loginErrorCode = LOGIN_ALREADY_LOGIN;
-                        needLogoutBeforeReLogin = true;
                     } else if (body.contains("请勿输入非法字符")) {
                         loginErrorCode = LOGIN_ERROR;
                     } else {
                         loginErrorCode = LOGIN_SUCCESS;
-                        needLogoutBeforeReLogin = false;
                         loginUrl = response.request().url().query();
                         response.close();
                         return true;
@@ -277,27 +329,6 @@ public class NauSSOClient {
                 response.close();
             }
         });
-    }
-
-    private Cache getCache(Context context) {
-        return new Cache(context.getCacheDir(), 10240 * 1024);
-    }
-
-    private String loadUrl(String url) throws IOException {
-        Request.Builder request_builder = new Request.Builder();
-        request_builder.url(url);
-
-        Response response = client.newCall(request_builder.build()).execute();
-        if (response.isSuccessful()) {
-            ResponseBody responseBody = response.body();
-            if (responseBody != null) {
-                String result = responseBody.string();
-                response.close();
-                return result;
-            }
-        }
-        response.close();
-        return null;
     }
 
     public interface OnAvailableListener {

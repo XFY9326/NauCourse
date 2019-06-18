@@ -16,6 +16,10 @@ public class LevelExamAdapter extends RecyclerView.Adapter<LevelExamAdapter.Leve
     private final Context context;
     private LevelExam levelExam;
 
+    public LevelExamAdapter(Context context) {
+        this(context, new LevelExam());
+    }
+
     public LevelExamAdapter(Context context, LevelExam levelExam) {
         this.context = context;
         this.levelExam = levelExam;

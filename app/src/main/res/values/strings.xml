@@ -78,7 +78,7 @@
     <string name="unknown_post_type">未知通知</string>
     <string name="only_update_under_wifi">仅在Wifi网络下自动更新数据</string>
     <string name="only_update_under_wifi_sum">避免自动更新数据使用移动网络消耗流量</string>
-    <string name="user_login_error">用户自动重登录失败，请手动重试！</string>
+    <string name="user_login_error">用户自动重登录失败，请刷新重试！</string>
     <string name="course_card_score">学分：%1$s</string>
     <string name="course_card_class">教学班：%1$s</string>
     <string name="course_card_combined_class">合班号：%1$s</string>
@@ -323,7 +323,7 @@
     <string name="image_replace">[请前往原网页查看图片]</string>
     <string name="save_file_success">保存成功！\n文件位于%1$s</string>
     <string name="school_vpn_mode">校园VPN模式</string>
-    <string name="school_vpn_mode_sum">使用校园VPN连接校内网络\n（可能会导致加载变慢与登录失败）</string>
+    <string name="school_vpn_mode_sum">使用校园VPN连接校内网络\n（避免校外访问校内失败）</string>
     <string name="school_vpn_smart_mode">智能VPN连接</string>
     <string name="school_vpn_smart_mode_sum">自动选择需要使用VPN连接的网址</string>
     <string name="school_vpn">校园VPN</string>
@@ -340,9 +340,10 @@
     <string name="reject">拒绝</string>
     <string name="unlock_success">解锁成功！</string>
     <string name="unlock_already_success">你已经解锁成功了！</string>
-    <string name="unlock_attention">该功能不对外开放，出现任何问题开发者无需负责！</string>
+    <string name="unlock_attention">该功能理论不对外开放，若要开启，出现任何问题开发者无需负责！</string>
+    <string name="download_vpn_file">校园VPN模式下，点击链接下载文件时需要登录VPN，之后再次点击链接即可下载！</string>
 
-    <string name="new_version_info_content">欢迎使用NAU课程表\n\n校园VPN模式导致的登录失败多刷新几次就好了\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
+    <string name="new_version_info_content">欢迎使用NAU课程表\n\n应校方要求，考试与成绩查询功能对外禁用。\n\n校园VPM模式目前基本稳定，如果你经常在校外网络查看通知可以尝试打开\n\n关于界面图标有小小的彩蛋\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>

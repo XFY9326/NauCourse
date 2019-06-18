@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -328,7 +329,7 @@ public class HomeFragment extends Fragment {
     synchronized private void getData() {
         BaseMethod.setRefreshing(swipeRefreshLayout, true);
         if (context != null) {
-            new InfoAsync().execute(context.getApplicationContext());
+            new InfoAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getApplicationContext());
         }
     }
 

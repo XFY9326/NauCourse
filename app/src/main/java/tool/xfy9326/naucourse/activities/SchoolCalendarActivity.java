@@ -83,7 +83,10 @@ public class SchoolCalendarActivity extends AppCompatActivity {
     private void showAlert() {
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT, Config.DEFAULT_PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT)) {
-            Snackbar.make(findViewById(R.id.layout_school_calendar_content), R.string.enlarge_alert, Snackbar.LENGTH_SHORT).setAction(R.string.no_alert_again, v -> sharedPreferences.edit().putBoolean(Config.PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT, false).apply()).setActionTextColor(getResources().getColor(android.R.color.holo_red_light)).show();
+            Snackbar.make(findViewById(R.id.layout_school_calendar_content), R.string.enlarge_alert, Snackbar.LENGTH_SHORT)
+                    .setAction(R.string.no_alert_again, v -> sharedPreferences.edit().putBoolean(Config.PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT, false).apply())
+                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                    .show();
         }
     }
 
@@ -143,11 +146,7 @@ public class SchoolCalendarActivity extends AppCompatActivity {
     }
 
     synchronized private void getData() {
-        if (loadTime < 2) {
-            new SchoolCalendarAsync().execute(getApplicationContext());
-        } else {
-            new SchoolCalendarAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
-        }
+        new SchoolCalendarAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
     }
 
     public int getLoadTime() {

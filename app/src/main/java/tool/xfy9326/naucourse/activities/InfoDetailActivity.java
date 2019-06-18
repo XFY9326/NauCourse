@@ -2,12 +2,14 @@ package tool.xfy9326.naucourse.activities;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
@@ -161,7 +163,7 @@ public class InfoDetailActivity extends AppCompatActivity {
                 shareText = String.format("[%s] %s\n%s", infoTag, info_title, url);
             } else {
                 if (info_content != null) {
-                    shareText = String.format("[%s] %s\n%s", infoTag, info_title, info_content);
+                    shareText = String.format("[%s] %s\n\n%s", infoTag, info_title, info_content);
                 } else {
                     Toast.makeText(this, R.string.data_is_loading, Toast.LENGTH_SHORT).show();
                     return;
@@ -260,6 +262,14 @@ public class InfoDetailActivity extends AppCompatActivity {
             getData();
         } else {
             Snackbar.make(findViewById(R.id.layout_info_detail_content), R.string.network_error, Snackbar.LENGTH_SHORT).show();
+        }
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sharedPreferences.getBoolean(Config.PREFERENCE_DOWNLOAD_VPN_FILE_WARNING, Config.DEFAULT_PREFERENCE_DOWNLOAD_VPN_FILE_WARNING) && BaseMethod.getApp(this).getClient().isVPNEnabled()) {
+            Snackbar.make(findViewById(R.id.layout_info_detail_content), R.string.download_vpn_file, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.no_alert_again, v -> sharedPreferences.edit().putBoolean(Config.PREFERENCE_DOWNLOAD_VPN_FILE_WARNING, false).apply())
+                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                    .show();
         }
 
         TextView textView_title = findViewById(R.id.textView_info_detail_title);

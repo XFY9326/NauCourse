@@ -42,28 +42,36 @@ public class LoginMethod {
         String id = SecurityMethod.getUserId(sharedPreferences);
         String pw = SecurityMethod.getUserPassWord(sharedPreferences);
         if (!pw.equalsIgnoreCase(Config.DEFAULT_PREFERENCE_USER_PW) && !id.equalsIgnoreCase(Config.DEFAULT_PREFERENCE_USER_ID)) {
-            return doReLogin(context, id, pw, sharedPreferences, false);
+            return doReLogin(context, id, pw, sharedPreferences);
         }
         return Config.RE_LOGIN_FAILED;
     }
 
-    synchronized public static int doReLogin(@NonNull Context context, String id, String pw, SharedPreferences sharedPreferences, boolean justReLogin) throws Exception {
+    synchronized public static int doReLogin(@NonNull Context context, String id, String pw, SharedPreferences sharedPreferences) throws Exception {
         NauSSOClient nauSSOClient = BaseMethod.getApp(context).getClient();
-        if (justReLogin || NauSSOClient.isNeedLogoutBeforeReLogin()) {
-            nauSSOClient.jwcLoginOut();
-            Thread.sleep(1000);
-        }
+        nauSSOClient.jwcLoginOut();
+        nauSSOClient.loginOut();
+        Thread.sleep(1500);
         if (nauSSOClient.login(id, pw)) {
-            nauSSOClient.alstuLogin();
+            nauSSOClient.alstuLogin(id, pw);
             String loginURL = nauSSOClient.getJwcLoginUrl();
             if (loginURL != null) {
-                if (!justReLogin) {
-                    sharedPreferences.edit().putString(Config.PREFERENCE_LOGIN_URL, loginURL).apply();
-                }
+                sharedPreferences.edit().putString(Config.PREFERENCE_LOGIN_URL, loginURL).apply();
                 return Config.RE_LOGIN_SUCCESS;
             }
         }
         return Config.RE_LOGIN_FAILED;
+    }
+
+    synchronized static boolean doAlstuReLogin(@NonNull Context context) throws Exception {
+        NauSSOClient nauSSOClient = BaseMethod.getApp(context).getClient();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String id = SecurityMethod.getUserId(sharedPreferences);
+        String pw = SecurityMethod.getUserPassWord(sharedPreferences);
+        if (!pw.equalsIgnoreCase(Config.DEFAULT_PREFERENCE_USER_PW) && !id.equalsIgnoreCase(Config.DEFAULT_PREFERENCE_USER_ID)) {
+            return nauSSOClient.alstuLogin(id, pw);
+        }
+        return false;
     }
 
     /**

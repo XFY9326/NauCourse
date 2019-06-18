@@ -52,7 +52,7 @@ public class InfoMethod {
                     TopicInfo infoDetail = new TopicInfo();
                     infoDetail.setTitle(alstuTopic.getTopicTitle()[i]);
                     infoDetail.setClick(null);
-                    infoDetail.setDate(alstuTopic.getTopicDate()[i]);
+                    infoDetail.setDate(TimeMethod.getDateSDF(date));
                     infoDetail.setDateLong(date);
                     infoDetail.setPost(context.getString(R.string.alstu_system));
                     infoDetail.setSource(TOPIC_SOURCE_ALSTU);

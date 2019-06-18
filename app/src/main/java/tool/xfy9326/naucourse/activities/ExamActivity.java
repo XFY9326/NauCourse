@@ -104,6 +104,10 @@ public class ExamActivity extends AppCompatActivity {
         recyclerView.setFocusableInTouchMode(false);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        if (examAdapter == null) {
+            examAdapter = new ExamAdapter(ExamActivity.this);
+        }
+        recyclerView.setAdapter(examAdapter);
 
         swipeRefreshLayout = findViewById(R.id.swipeLayout_exam);
         swipeRefreshLayout.setDistanceToTriggerSync(200);
@@ -142,11 +146,7 @@ public class ExamActivity extends AppCompatActivity {
 
     synchronized private void getData() {
         BaseMethod.setRefreshing(swipeRefreshLayout, true);
-        if (loadTime < 2) {
-            new ExamAsync().execute(getApplicationContext());
-        } else {
-            new ExamAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
-        }
+        new ExamAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
     }
 
     public int getLoadTime() {

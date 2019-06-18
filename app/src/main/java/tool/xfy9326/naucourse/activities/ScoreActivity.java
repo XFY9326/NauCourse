@@ -65,6 +65,10 @@ public class ScoreActivity extends AppCompatActivity {
         recyclerView.setFocusableInTouchMode(false);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        if (scoreAdapter == null) {
+            scoreAdapter = new ScoreAdapter(ScoreActivity.this);
+        }
+        recyclerView.setAdapter(scoreAdapter);
 
         swipeRefreshLayout = findViewById(R.id.swipeLayout_score);
         swipeRefreshLayout.setDistanceToTriggerSync(200);
@@ -121,11 +125,7 @@ public class ScoreActivity extends AppCompatActivity {
 
     synchronized private void getData() {
         BaseMethod.setRefreshing(swipeRefreshLayout, true);
-        if (loadTime < 2) {
-            new ScoreAsync().execute(getApplicationContext());
-        } else {
-            new ScoreAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
-        }
+        new ScoreAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
     }
 
     public int getLoadTime() {

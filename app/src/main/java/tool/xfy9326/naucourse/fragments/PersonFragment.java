@@ -381,11 +381,7 @@ public class PersonFragment extends Fragment {
     synchronized private void getData() {
         BaseMethod.setRefreshing(swipeRefreshLayout, true);
         if (context != null) {
-            if (loadTime < 2) {
-                new StudentAsync().execute(context.getApplicationContext());
-            } else {
-                new StudentAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getApplicationContext());
-            }
+            new StudentAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getApplicationContext());
         }
     }
 

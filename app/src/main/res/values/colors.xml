@@ -11,6 +11,6 @@
     <color name="light_light_grey">#EEEEEE</color>
     <color name="light_grey">#CCCCCC</color>
     <color name="course_cell_background">#90CAF9</color>
-    <color name="light_light_grey_transparent">#99EEEEEE</color>
-    <color name="white_transparent">#73FFFFFF</color>
+    <color name="light_light_grey_transparent">#8CEEEEEE</color>
+    <color name="white_transparent">#66FFFFFF</color>
 </resources>

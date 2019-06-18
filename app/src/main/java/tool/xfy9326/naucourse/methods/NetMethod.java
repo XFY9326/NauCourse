@@ -33,6 +33,7 @@ import tool.xfy9326.naucourse.R;
 
 public class NetMethod {
     public static boolean showConnectErrorOnce = false;
+    private static OkHttpClient okHttpClient = null;
     private static boolean showLoginErrorOnce = false;
 
     public static NauSSOClient getNewSSOClient(Context context) {
@@ -51,12 +52,14 @@ public class NetMethod {
      * @throws IOException 网页获取错误
      */
     public static String loadUrl(@NonNull String url) throws IOException {
-        OkHttpClient.Builder client_builder = new OkHttpClient.Builder();
-        client_builder.connectTimeout(8, TimeUnit.SECONDS);
-        client_builder.readTimeout(4, TimeUnit.SECONDS);
-        client_builder.writeTimeout(4, TimeUnit.SECONDS);
-        OkHttpClient client = client_builder.build();
-        return loadUrl(client, url, null);
+        if (okHttpClient == null) {
+            OkHttpClient.Builder client_builder = new OkHttpClient.Builder();
+            client_builder.connectTimeout(8, TimeUnit.SECONDS);
+            client_builder.readTimeout(4, TimeUnit.SECONDS);
+            client_builder.writeTimeout(4, TimeUnit.SECONDS);
+            okHttpClient = client_builder.build();
+        }
+        return loadUrl(okHttpClient, url, null);
     }
 
     public static String loadUrl(OkHttpClient client, @NonNull String url, HashMap<String, String> header) throws IOException {
@@ -129,7 +132,17 @@ public class NetMethod {
      */
     public static String loadUrlFromLoginClient(@NonNull Context context, String url, boolean tryReLogin) throws Exception {
         String data = BaseMethod.getApp(context).getClient().getData(url);
-        if (!NauSSOClient.checkUserLogin(data) && tryReLogin) {
+        boolean userLogin = NauSSOClient.checkUserLogin(data);
+        boolean alstuLogin = NauSSOClient.checkAlstuLogin(data);
+        if (!(userLogin && alstuLogin) && tryReLogin) {
+            if (userLogin) {
+                if (LoginMethod.doAlstuReLogin(context)) {
+                    Thread.sleep(500);
+                    return BaseMethod.getApp(context).getClient().getData(url);
+                } else {
+                    return null;
+                }
+            }
             int reLogin_result = LoginMethod.reLogin(context);
             switch (reLogin_result) {
                 case Config.RE_LOGIN_SUCCESS:
@@ -139,8 +152,10 @@ public class NetMethod {
                     while (LoginMethod.isTryingReLogin) {
                         Thread.sleep(500);
                     }
+                    Thread.sleep(500);
                     return loadUrlFromLoginClient(context, url, false);
                 case Config.RE_LOGIN_FAILED:
+                    Thread.sleep(500);
                     reLogin_result = LoginMethod.reLogin(context);
                     if (reLogin_result == Config.RE_LOGIN_SUCCESS) {
                         return loadUrlFromLoginClient(context, url, false);

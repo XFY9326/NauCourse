@@ -122,6 +122,7 @@ public class Config {
     public static final String PREFERENCE_EULA_ACCEPT = "EULA_ACCEPT_V1";
     public static final String PREFERENCE_NO_SHOW_LOGIN_ATTENTION = "NO_SHOW_LOGIN_ATTENTION";
     public static final String PREFERENCE_SHOW_HIDDEN_FUNCTION = "SHOW_HIDDEN_FUNCTION";
+    public static final String PREFERENCE_DOWNLOAD_VPN_FILE_WARNING = "DOWNLOAD_VPN_FILE_WARNING";
 
     public static final boolean DEFAULT_PREFERENCE_HAS_LOGIN = false;
     public static final String DEFAULT_PREFERENCE_USER_ID = "NULL";
@@ -159,6 +160,7 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_EULA_ACCEPT = false;
     public static final boolean DEFAULT_PREFERENCE_NO_SHOW_LOGIN_ATTENTION = false;
     public static final boolean DEFAULT_PREFERENCE_SHOW_HIDDEN_FUNCTION = false;
+    public static final boolean DEFAULT_PREFERENCE_DOWNLOAD_VPN_FILE_WARNING = true;
 
     //网络连接错误代码
     public static final int NET_WORK_GET_SUCCESS = 0;

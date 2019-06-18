@@ -22,6 +22,10 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
     private final Context context;
     private CourseScore courseScore;
 
+    public ScoreAdapter(Context context) {
+        this(context, new CourseScore());
+    }
+
     public ScoreAdapter(Context context, CourseScore courseScore) {
         this.context = context;
         this.courseScore = courseScore;

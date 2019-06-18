@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.methods.DataMethod;
@@ -41,6 +43,7 @@ public class RSSInfoMethod {
     private final ExecutorService executorService;
     private final Context context;
     private boolean hasFailedLoad = false;
+    private boolean isLoginError = false;
 
 
     public RSSInfoMethod(@NonNull Context context, ExecutorService executorService) {
@@ -128,8 +131,16 @@ public class RSSInfoMethod {
 
     @NonNull
     public static String getDetail(Context context) {
-        Elements tags = Objects.requireNonNull(document_detail).body().getElementsByClass("Article_Content");
-        String html = tags.html();
+        Element article_content = Objects.requireNonNull(document_detail).body().getElementsByClass("Article_Content").get(0);
+        Elements ps = article_content.getElementsByTag("p");
+        for (int i = ps.size() - 1; i >= 0; i--) {
+            Element p = ps.get(i);
+            if ("".equals(p.text())) {
+                ps.remove(i);
+            }
+        }
+        String html = ps.outerHtml();
+        html = html.replace("&nbsp;&nbsp;", "");
         if (lastLoadInfoDetailHost != null) {
             html = html.replace("href=\"/", "href=\"" + VPNMethods.vpnLinkUrlFix(context, lastLoadInfoDetailHost, "/"))
                     .replaceAll("<img src=\".*?/_ueditor/themes/default/images/icon_.*?.gif.*?\">", "")
@@ -140,6 +151,7 @@ public class RSSInfoMethod {
 
     public int load() throws Exception {
         hasFailedLoad = false;
+        isLoginError = false;
         rssObjectSparseArray.clear();
         Future[] futures = new Future[typeList.length];
         for (int i = 0; i < typeList.length; i++) {
@@ -150,11 +162,16 @@ public class RSSInfoMethod {
                     try {
                         String data = NetMethod.loadUrlFromLoginClient(context, rssUrl, false);
                         if (data != null) {
-                            RSSReader.RSSObject rssObject = RSSReader.getRSSObject(data);
-                            if (rssObject != null) {
-                                rssObjectSparseArray.put(type, rssObject);
+                            if (NauSSOClient.checkUserLogin(data)) {
+                                RSSReader.RSSObject rssObject = RSSReader.getRSSObject(data);
+                                if (rssObject != null) {
+                                    rssObjectSparseArray.put(type, rssObject);
+                                } else {
+                                    hasFailedLoad = true;
+                                }
                             } else {
                                 hasFailedLoad = true;
+                                isLoginError = true;
                             }
                         } else {
                             hasFailedLoad = true;
@@ -172,7 +189,11 @@ public class RSSInfoMethod {
             future.get(Config.TASK_RUN_MAX_SECOND, TimeUnit.SECONDS);
         }
         if (typeList.length != 0 && hasFailedLoad) {
-            return Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR;
+            if (isLoginError) {
+                return Config.NET_WORK_ERROR_CODE_CONNECT_USER_DATA;
+            } else {
+                return Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR;
+            }
         }
         return Config.NET_WORK_GET_SUCCESS;
     }

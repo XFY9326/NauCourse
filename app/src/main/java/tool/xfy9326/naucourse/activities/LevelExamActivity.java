@@ -58,6 +58,10 @@ public class LevelExamActivity extends AppCompatActivity {
         recyclerView.setFocusableInTouchMode(false);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        if (levelExamAdapter == null) {
+            levelExamAdapter = new LevelExamAdapter(LevelExamActivity.this);
+        }
+        recyclerView.setAdapter(levelExamAdapter);
 
         swipeRefreshLayout = findViewById(R.id.swipeLayout_level_exam);
         swipeRefreshLayout.setDistanceToTriggerSync(200);
@@ -95,11 +99,7 @@ public class LevelExamActivity extends AppCompatActivity {
 
     synchronized private void getData() {
         BaseMethod.setRefreshing(swipeRefreshLayout, true);
-        if (loadTime < 2) {
-            new LevelExamAsync().execute(getApplicationContext());
-        } else {
-            new LevelExamAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
-        }
+        new LevelExamAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
     }
 
     public int getLoadTime() {

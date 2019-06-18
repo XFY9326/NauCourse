@@ -50,7 +50,6 @@ public class MoaMethod extends BaseInfoMethod<Moa> {
     @Override
     public int load() throws Exception {
         String data = NetMethod.loadUrl(URL);
-        System.gc();
         if (data != null) {
             this.Url_Data = data;
             return Config.NET_WORK_GET_SUCCESS;

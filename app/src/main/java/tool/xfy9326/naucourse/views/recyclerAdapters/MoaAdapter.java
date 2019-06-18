@@ -17,6 +17,10 @@ public class MoaAdapter extends RecyclerView.Adapter<MoaAdapter.MoaViewHolder> {
     private final MoaActivity activity;
     private Moa moa;
 
+    public MoaAdapter(MoaActivity activity) {
+        this(activity, new Moa());
+    }
+
     public MoaAdapter(MoaActivity activity, Moa moa) {
         this.activity = activity;
         this.moa = moa;

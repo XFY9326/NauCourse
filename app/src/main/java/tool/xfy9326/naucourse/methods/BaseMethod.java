@@ -107,7 +107,7 @@ public class BaseMethod {
         }
     }
 
-    public static boolean isNewVersion(SharedPreferences sharedPreferences) {
+    private static boolean isNewVersion(SharedPreferences sharedPreferences) {
         int newVersionInfo = sharedPreferences.getInt(Config.PREFERENCE_NEW_VERSION_INFO, Config.DEFAULT_PREFERENCE_NEW_VERSION_INFO);
         return newVersionInfo < BuildConfig.VERSION_CODE;
     }

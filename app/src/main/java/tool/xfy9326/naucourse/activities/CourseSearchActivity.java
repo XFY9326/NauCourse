@@ -1,6 +1,7 @@
 package tool.xfy9326.naucourse.activities;
 
 import android.app.Dialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
@@ -109,21 +110,21 @@ public class CourseSearchActivity extends AppCompatActivity {
         if (loadingDialog == null) {
             loadingDialog = BaseMethod.showLoadingDialog(this, true, dialog -> finish());
         }
-        new CourseSearchInfoAsync().execute(courseSearchMethod, getApplicationContext());
+        new CourseSearchInfoAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, courseSearchMethod, getApplicationContext());
     }
 
     private void searchDetail(CourseSearchInfo courseSearchInfo) {
         if (loadingDialog == null) {
             loadingDialog = BaseMethod.showLoadingDialog(this, true, null);
         }
-        new CourseSearchAsync().execute(courseSearchInfo, courseSearchMethod, getApplicationContext());
+        new CourseSearchAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, courseSearchInfo, courseSearchMethod, getApplicationContext());
     }
 
     private void getClassListData(String term) {
         if (loadingDialog == null) {
             loadingDialog = BaseMethod.showLoadingDialog(this, false, null);
         }
-        new CourseSearchClassNameAsync().execute(courseSearchMethod, term, getApplicationContext());
+        new CourseSearchClassNameAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, courseSearchMethod, term, getApplicationContext());
     }
 
     synchronized public void setBaseSearchView(final LinkedHashMap<String, String> searchTypeList, final List<String> termList, final List<String> roomList, final List<String> deptList) {

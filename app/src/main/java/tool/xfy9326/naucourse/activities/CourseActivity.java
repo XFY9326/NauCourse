@@ -175,8 +175,12 @@ public class CourseActivity extends AppCompatActivity {
                     loadingDialog.dismiss();
                 }
                 if (!activityDestroy) {
-                    courseAdapter = new CourseAdapter(CourseActivity.this, courseArrayList);
-                    recyclerView.setAdapter(courseAdapter);
+                    if (courseAdapter == null) {
+                        courseAdapter = new CourseAdapter(CourseActivity.this, courseArrayList);
+                        recyclerView.setAdapter(courseAdapter);
+                    } else {
+                        courseAdapter.updateList(courseArrayList);
+                    }
                 }
             });
         }).start();
@@ -197,6 +201,10 @@ public class CourseActivity extends AppCompatActivity {
                 }
             }
         });
+        if (courseAdapter == null) {
+            courseAdapter = new CourseAdapter(CourseActivity.this);
+        }
+        recyclerView.setAdapter(courseAdapter);
         scrollToPosition();
 
         FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton_course_add);

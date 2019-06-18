@@ -19,6 +19,7 @@ public class VPNInterceptor implements Interceptor {
     static final String VPN_LOGIN_URL = "http://sso.nau.edu.cn/sso/login?service=http://vpn.nau.edu.cn/login?cas_login=true&fromUrl=/";
     private static final String VPN_HOST = "vpn.nau.edu.cn";
     public static final String VPN_SERVER = "http://" + VPN_HOST;
+    private static final String VPN_COOKIES = "http://vpn.nau.edu.cn/wengine-vpn/";
     private static String[] noVPNHost = new String[]{};
     private boolean enabled = false;
     private boolean smartMode = false;
@@ -30,7 +31,7 @@ public class VPNInterceptor implements Interceptor {
     }
 
     private static boolean checkVPNLogin(String data) {
-        return data != null && !data.contains("南京审计大学统一身份认证登录");
+        return data != null && !(data.contains("南京审计大学统一身份认证登录") && !data.contains("vpn_hostname_data"));
     }
 
     private static String getResponseStr(Response response) throws IOException {
@@ -51,9 +52,8 @@ public class VPNInterceptor implements Interceptor {
 
     private static boolean needVPNHost(HttpUrl url) {
         for (String host : noVPNHost) {
-            String urlStr = url.toString();
-            String urlHost = url.host();
-            if (urlHost.equalsIgnoreCase(host) || urlHost.equalsIgnoreCase(VPN_HOST) && urlStr.contains(host) || urlStr.contains(NauSSOClient.JWC_HOST_URL)) {
+            if (url.host().equalsIgnoreCase(host) || url.host().equalsIgnoreCase(VPN_HOST) && url.toString().contains(host) ||
+                    url.toString().contains(NauSSOClient.JWC_HOST_URL)) {
                 return false;
             }
         }
@@ -108,19 +108,19 @@ public class VPNInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
         HttpUrl url = request.url();
-        if (enabled) {
+        if (enabled && !url.toString().equals(VPN_LOGIN_URL) && !url.toString().startsWith(VPN_COOKIES)) {
             if (smartMode) {
                 if (needVPNHost(url)) {
-                    return VPNLoad(chain, request, url);
+                    return VPNLoad(chain, request, url, true);
                 }
             } else {
-                return VPNLoad(chain, request, url);
+                return VPNLoad(chain, request, url, true);
             }
         }
         return chain.proceed(request);
     }
 
-    private Response VPNLoad(Chain chain, Request request, HttpUrl url) throws IOException {
+    private Response VPNLoad(Chain chain, Request request, HttpUrl url, boolean tryReLogin) throws IOException {
         String newUrl = buildVPNUrl(url);
         Request newRequest = request.newBuilder().url(newUrl).build();
 
@@ -130,18 +130,15 @@ public class VPNInterceptor implements Interceptor {
             if (body != null) {
                 if (checkVPNLogin(body)) {
                     if (body.contains("南京审计大学WEBVPN登录门户")) {
+                        response.close();
                         return chain.proceed(newRequest);
                     } else {
                         return response;
                     }
-                } else {
+                } else if (tryReLogin) {
                     if (VPNLogin(chain)) {
-                        if (body.contains("南京审计大学WEBVPN登录门户")) {
-                            response.close();
-                            return chain.proceed(newRequest);
-                        } else {
-                            return response;
-                        }
+                        response.close();
+                        return VPNLoad(chain, request, url, false);
                     }
                 }
             }
@@ -149,7 +146,7 @@ public class VPNInterceptor implements Interceptor {
         return response;
     }
 
-    private boolean VPNLogin(Chain chain) throws IOException {
+    synchronized private boolean VPNLogin(Chain chain) throws IOException {
         String ssoContent = null;
 
         Request.Builder request_builder = new Request.Builder();
@@ -160,8 +157,9 @@ public class VPNInterceptor implements Interceptor {
             if (responseBody != null) {
                 ssoContent = responseBody.string();
             }
-            dataResponse.close();
         }
+        dataResponse.close();
+
         if (ssoContent != null) {
             FormBody formBody = NauNetData.getSSOPostForm(userName, userPw, ssoContent);
             Request.Builder builder = new Request.Builder();
@@ -173,14 +171,13 @@ public class VPNInterceptor implements Interceptor {
                 ResponseBody responseBody = response.body();
                 if (responseBody != null) {
                     String body = responseBody.string();
-                    responseBody.close();
                     if (!body.contains("密码错误") && !body.contains("请勿输入非法字符") && body.contains("南京审计大学WEBVPN登录门户")) {
                         response.close();
                         return true;
                     }
                 }
-                response.close();
             }
+            response.close();
         }
         return false;
     }

@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.List;
-import java.util.Objects;
 
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
@@ -25,7 +24,7 @@ class CookieStore implements CookieJar {
     }
 
     @Override
-    public void saveFromResponse(@NonNull HttpUrl url, @Nullable List<Cookie> cookies) {
+    synchronized public void saveFromResponse(@NonNull HttpUrl url, @Nullable List<Cookie> cookies) {
         if (cookies != null && cookies.size() > 0) {
             for (Cookie item : cookies) {
                 cookieStore.add(url, item);
@@ -35,19 +34,12 @@ class CookieStore implements CookieJar {
 
     @NonNull
     @Override
-    public List<Cookie> loadForRequest(@NonNull HttpUrl url) {
+    synchronized public List<Cookie> loadForRequest(@NonNull HttpUrl url) {
         return cookieStore.get(url);
     }
 
     @SuppressWarnings("UnusedReturnValue")
     boolean clearCookies() {
         return cookieStore.removeAll();
-    }
-
-    @NonNull
-    @SuppressWarnings({"SameParameterValue", "unused"})
-    List<Cookie> getCookies(@NonNull String url) {
-        HttpUrl httpUrl = HttpUrl.parse(url);
-        return cookieStore.get(Objects.requireNonNull(httpUrl));
     }
 }

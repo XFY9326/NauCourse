@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -155,16 +156,20 @@ public class CourseSettingsFragment extends PreferenceFragmentCompat {
 
             final TextInputEditText textInputEditText = view.findViewById(R.id.editText_dialog_edit_progress);
             textInputEditText.setHint(R.string.transparency);
-            textInputEditText.setText(String.valueOf((transparency_value * 100) / 100.0f));
+            textInputEditText.setText(String.valueOf(transparency_value * 100));
             textInputEditText.setEnabled(false);
+
+            TextView textView_unit = view.findViewById(R.id.textView_dialog_progress_unit);
+            textView_unit.setText("%");
+            textView_unit.setVisibility(View.VISIBLE);
 
             SeekBar seekBar = view.findViewById(R.id.seekBar_dialog_edit_progress);
             seekBar.setMax(100);
             seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    transparency_value = (float) progress / 100.0f;
-                    textInputEditText.setText(String.valueOf(transparency_value));
+                    transparency_value = progress / 100.0f;
+                    textInputEditText.setText(String.valueOf(progress));
                 }
 
                 @Override

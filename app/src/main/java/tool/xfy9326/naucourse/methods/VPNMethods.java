@@ -8,7 +8,7 @@ import lib.xfy9326.nausso.NauSSOClient;
 import lib.xfy9326.nausso.VPNInterceptor;
 
 public class VPNMethods {
-    static final String[] NON_VPN_HOST = new String[]{"jw.nau.edu.cn", "www.nau.edu.cn", "nau.edu.cn", "jwc.nau.edu.cn", "xxb.nau.edu.cn", "tw.nau.edu.cn", "xgc.nau.edu.cn"};
+    static final String[] NON_VPN_HOST = new String[]{"jw.nau.edu.cn", "www.nau.edu.cn", "jwc.nau.edu.cn", "xxb.nau.edu.cn", "tw.nau.edu.cn", "xgc.nau.edu.cn"};
     private static final String SCHOOL_MAIN_HOST = "nau.edu.cn";
 
     public static void setVPNMode(Context context, boolean enabled) {
@@ -41,7 +41,7 @@ public class VPNMethods {
         if (url.contains(SCHOOL_MAIN_HOST) || url.startsWith("/")) {
             NauSSOClient client = BaseMethod.getApp(context).getClient();
             if (client.isVPNEnabled() && url.startsWith("/")) {
-                if (!client.isVPNSmartMode() || needVPNHost(url)) {
+                if (!client.isVPNSmartMode() || needVPNHost(host)) {
                     if (url.contains(getRealHost(host)) || url.equals("/")) {
                         return VPNInterceptor.VPN_SERVER + url;
                     } else {

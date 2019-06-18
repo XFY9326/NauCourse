@@ -16,6 +16,10 @@ public class SuspendCourseAdapter extends RecyclerView.Adapter<SuspendCourseAdap
     private final SuspendCourseActivity activity;
     private SuspendCourse suspendCourse;
 
+    public SuspendCourseAdapter(SuspendCourseActivity activity) {
+        this(activity, new SuspendCourse());
+    }
+
     public SuspendCourseAdapter(SuspendCourseActivity activity, SuspendCourse suspendCourse) {
         this.activity = activity;
         this.suspendCourse = suspendCourse;

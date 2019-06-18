@@ -73,6 +73,10 @@ public class MoaActivity extends AppCompatActivity {
         recyclerView.setFocusableInTouchMode(false);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        if (moaAdapter == null) {
+            moaAdapter = new MoaAdapter(MoaActivity.this);
+        }
+        recyclerView.setAdapter(moaAdapter);
 
         swipeRefreshLayout = findViewById(R.id.swipeLayout_moa);
         swipeRefreshLayout.setDistanceToTriggerSync(200);
@@ -98,11 +102,7 @@ public class MoaActivity extends AppCompatActivity {
 
     synchronized private void getData() {
         BaseMethod.setRefreshing(swipeRefreshLayout, true);
-        if (loadTime < 2) {
-            new MoaAsync().execute(getApplicationContext());
-        } else {
-            new MoaAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
-        }
+        new MoaAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
     }
 
     public void setMoa(Moa moa) {

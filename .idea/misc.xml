@@ -2,6 +2,10 @@
 <project version="4">
   <component name="EntryPointsManager">
     <pattern value="tool.xfy9326.naucourse.methods.netInfoMethods.BaseInfoDetailMethod" method="getDetailData" />
+    <pattern value="tool.xfy9326.naucourse.methods.netInfoMethods.BaseInfoDetailMethod" method="loadDetail" />
+    <pattern value="tool.xfy9326.naucourse.methods.netInfoMethods.BaseInfoMethod" method="getData" />
+    <pattern value="tool.xfy9326.naucourse.methods.netInfoMethods.BaseNetMethod" />
+    <pattern value="tool.xfy9326.naucourse.methods.netInfoMethods.BaseNetMethod" method="load" />
   </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="androidx.annotation.Nullable" />

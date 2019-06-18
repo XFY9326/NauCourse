@@ -200,11 +200,7 @@ public class TableFragment extends Fragment {
 
     synchronized private void getData() {
         if (context != null) {
-            if (loadTime < 2) {
-                new TableAsync().execute(context.getApplicationContext());
-            } else {
-                new TableAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getApplicationContext());
-            }
+            new TableAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getApplicationContext());
         }
     }
 

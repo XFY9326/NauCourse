@@ -36,10 +36,14 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     private static final int COLOR_PICKER_DIALOG_ID = 1;
     private final CourseActivity activity;
     private final SharedPreferences sharedPreferences;
-    private ArrayList<Course> courseArrayList;
+    private final ArrayList<Course> courseArrayList;
     private boolean showCellColor;
     private boolean singleColor;
     private ColorPickerDialog colorPickerDialog;
+
+    public CourseAdapter(CourseActivity activity) {
+        this(activity, new ArrayList<>());
+    }
 
     public CourseAdapter(CourseActivity activity, ArrayList<Course> courseArrayList) {
         this.activity = activity;
@@ -49,8 +53,10 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     }
 
     public void updateList(ArrayList<Course> courseArrayList) {
-        this.courseArrayList = courseArrayList;
+        this.courseArrayList.clear();
+        this.courseArrayList.addAll(courseArrayList);
         updateColor();
+        notifyDataSetChanged();
     }
 
     private void updateColor() {

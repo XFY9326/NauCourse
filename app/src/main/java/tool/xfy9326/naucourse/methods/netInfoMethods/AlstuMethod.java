@@ -59,7 +59,7 @@ public class AlstuMethod extends BaseInfoDetailMethod<AlstuTopic> {
     }
 
     private static String combineDownloadText(Context context, String year, String fileDownloadName, String fileName) {
-        return "<p><a href=\"" + VPNMethods.vpnLinkUrlFix(context, ALSTU_SERVER_URL, "aldfdnf.aspx?lx=st&ylx=" + year + "&file=" + fileDownloadName) + "\">" + fileName + "</a></p>";
+        return "<p><a href=\"" + VPNMethods.vpnLinkUrlFix(context, ALSTU_SERVER_URL, "/aldfdnf.aspx?lx=st&ylx=" + year + "&file=" + fileDownloadName) + "\">" + fileName + "</a></p>";
     }
 
     @Override
@@ -68,7 +68,7 @@ public class AlstuMethod extends BaseInfoDetailMethod<AlstuTopic> {
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
             String data = NetMethod.loadUrlFromLoginClient(context, ALSTU_MSG_URL, true);
             if (data != null) {
-                if (NauSSOClient.checkUserLogin(data)) {
+                if (NauSSOClient.checkAlstuLogin(data)) {
                     document = Jsoup.parse(data);
                     return Config.NET_WORK_GET_SUCCESS;
                 }
