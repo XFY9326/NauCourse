@@ -7,8 +7,7 @@
     android:orientation="vertical"
     android:paddingStart="30dp"
     android:paddingTop="15dp"
-    android:paddingEnd="30dp"
-    android:paddingBottom="15dp">
+    android:paddingEnd="30dp">
 
     <TextView
         android:id="@+id/textView_update_version"
@@ -43,6 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:focusedByDefault="false"
+        android:padding="5dp"
         android:scrollbars="none"
         tools:targetApi="o">
 
@@ -50,7 +50,6 @@
             android:id="@+id/textView_update_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:textSize="12sp" />
 
     </ScrollView>
