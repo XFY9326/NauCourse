@@ -42,7 +42,7 @@ public class Config {
     public static final String PICTURE_DICTIONARY_PATH = DATA_DIR_PATH + "picture" + File.separator;
     public static final String PICTURE_TEMP_DICTIONARY_PATH = PICTURE_DICTIONARY_PATH + ".temp" + File.separator;
     public static final String COURSE_TABLE_IMAGE_FILE_NAME = "CourseTable.jpeg";
-    public static final String INFO_DETAIL_IMAGE_FILE_NAME = "InfoDetail.jpeg";
+    public static final String INFO_DETAIL_IMAGE_FILE_NAME = "AnnouncementDetail.jpeg";
     public static final String SCHOOL_CALENDAR_IMAGE_FILE_NAME = "SchoolCalendar.jpeg";
 
     public static final String FILE_PROVIDER_AUTH = "tool.xfy9326.naucourse.provider";
@@ -99,7 +99,6 @@ public class Config {
     public static final String PREFERENCE_SHOW_NO_THIS_WEEK_CLASS = "SHOW_NO_THIS_WEEK_CLASS";
     public static final String PREFERENCE_AUTO_UPDATE_COURSE_TABLE_ALERT = "AUTO_UPDATE_COURSE_TABLE_ALERT";
     public static final String PREFERENCE_AUTO_CHECK_UPDATE = "AUTO_CHECK_UPDATE";
-    public static final String PREFERENCE_AUTO_CHECK_IMPORTANT_UPDATE = "AUTO_CHECK_IMPORTANT_UPDATE";
     public static final String PREFERENCE_CHECK_BETA_UPDATE = "CHECK_BETA_UPDATE";
     public static final String PREFERENCE_UPDATE_NOW = "UPDATE_NOW";
     public static final String PREFERENCE_ONLY_UPDATE_APPLICATION_UNDER_WIFI = "ONLY_UPDATE_APPLICATION_UNDER_WIFI";
@@ -145,7 +144,6 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_SHOW_NO_THIS_WEEK_CLASS = true;
     public static final boolean DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE_ALERT = false;
     public static final boolean DEFAULT_PREFERENCE_AUTO_CHECK_UPDATE = true;
-    public static final boolean DEFAULT_PREFERENCE_AUTO_CHECK_IMPORTANT_UPDATE = false;
     public static final boolean DEFAULT_PREFERENCE_CHECK_BETA_UPDATE = false;
     public static final boolean DEFAULT_PREFERENCE_ONLY_UPDATE_APPLICATION_UNDER_WIFI = false;
     public static final boolean DEFAULT_PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT = true;
