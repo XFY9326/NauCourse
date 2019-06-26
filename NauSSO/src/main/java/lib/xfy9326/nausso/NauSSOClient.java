@@ -240,8 +240,9 @@ public class NauSSOClient {
             if (responseBody != null) {
                 ssoContent = responseBody.string();
             }
-            dataResponse.close();
         }
+        dataResponse.close();
+
         if (ssoContent != null && !ssoContent.contains("南京审计大学WEBVPN登录门户")) {
             FormBody formBody = NauNetData.getSSOPostForm(userName, userPw, ssoContent);
             Request.Builder builder = new Request.Builder();
@@ -267,37 +268,56 @@ public class NauSSOClient {
         if (isVPNEnabled()) {
             VPNLogin(userId, userPw);
         }
-        //缓存SSO的Cookies
-        String ssoContent = loadUrl(single_server_url, main_client);
-        if (ssoContent != null) {
-            FormBody formBody = NauNetData.getSSOPostForm(userId, userPw, ssoContent);
-            Request.Builder builder = new Request.Builder();
-            builder.url(single_server_url);
-            builder.post(formBody);
 
-            Response response = main_client.newCall(builder.build()).execute();
-            if (response.isSuccessful()) {
-                ResponseBody responseBody = response.body();
-                if (responseBody != null) {
-                    String body = responseBody.string();
-                    if (body.contains("密码错误")) {
-                        loginErrorCode = LOGIN_USER_INFO_WRONG;
-                    } else if (body.startsWith("当前你已经登录")) {
-                        loginErrorCode = LOGIN_ALREADY_LOGIN;
-                    } else if (body.contains("请勿输入非法字符")) {
-                        loginErrorCode = LOGIN_ERROR;
+        //缓存SSO的Cookies
+        String ssoContent = null;
+        Request.Builder sso_request_builder = new Request.Builder();
+        sso_request_builder.url(single_server_url);
+
+        Response sso_response = main_client.newCall(sso_request_builder.build()).execute();
+        if (sso_response.isSuccessful()) {
+            ResponseBody responseBody = sso_response.body();
+            if (responseBody != null) {
+                ssoContent = responseBody.string();
+            }
+        }
+        sso_response.close();
+
+        if (ssoContent != null) {
+            if (!ssoContent.contains("南京审计大学统一身份认证登录")) {
+                loginErrorCode = LOGIN_SUCCESS;
+                loginUrl = sso_response.request().url().query();
+                return true;
+            } else {
+                FormBody formBody = NauNetData.getSSOPostForm(userId, userPw, ssoContent);
+                Request.Builder builder = new Request.Builder();
+                builder.url(single_server_url);
+                builder.post(formBody);
+
+                Response response = main_client.newCall(builder.build()).execute();
+                if (response.isSuccessful()) {
+                    ResponseBody responseBody = response.body();
+                    if (responseBody != null) {
+                        String body = responseBody.string();
+                        if (body.contains("密码错误")) {
+                            loginErrorCode = LOGIN_USER_INFO_WRONG;
+                        } else if (body.startsWith("当前你已经登录")) {
+                            loginErrorCode = LOGIN_ALREADY_LOGIN;
+                        } else if (body.contains("请勿输入非法字符")) {
+                            loginErrorCode = LOGIN_ERROR;
+                        } else {
+                            loginErrorCode = LOGIN_SUCCESS;
+                            loginUrl = response.request().url().query();
+                            response.close();
+                            return true;
+                        }
                     } else {
-                        loginErrorCode = LOGIN_SUCCESS;
-                        loginUrl = response.request().url().query();
-                        response.close();
-                        return true;
+                        loginErrorCode = LOGIN_ERROR;
                     }
+                    response.close();
                 } else {
                     loginErrorCode = LOGIN_ERROR;
                 }
-                response.close();
-            } else {
-                loginErrorCode = LOGIN_ERROR;
             }
         } else {
             loginErrorCode = LOGIN_ERROR;

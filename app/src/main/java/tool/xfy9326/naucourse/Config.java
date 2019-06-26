@@ -50,6 +50,7 @@ public class Config {
     public static final String DEBUG = "debug";
 
     public static final String ASSETS_EULA_PATH = "EULA.txt";
+    public static final String ASSETS_LICENSE_PATH = "LICENSE.txt";
 
     public static final String INTENT_INFO_DETAIL = "INFO_DETAIL";
     public static final String INTENT_IS_ONLY_INIT = "IS_ONLY_INIT";
@@ -108,12 +109,6 @@ public class Config {
     public static final String PREFERENCE_OLD_TERM_START_DATE = "OLD_TERM_START_DATE";
     public static final String PREFERENCE_OLD_TERM_END_DATE = "OLD_TERM_END_DATE";
     public static final String PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT = "SCHOOL_CALENDAR_ENLARGE_ALERT";
-    public static final String PREFERENCE_INFO_CHANNEL_SELECTED_JWC_SYSTEM = "INFO_CHANNEL_SELECTED_JWC_SYSTEM";
-    public static final String PREFERENCE_INFO_CHANNEL_SELECTED_JW = "INFO_CHANNEL_SELECTED_JW";
-    public static final String PREFERENCE_INFO_CHANNEL_SELECTED_XW = "INFO_CHANNEL_SELECTED_XW";
-    public static final String PREFERENCE_INFO_CHANNEL_SELECTED_TW = "INFO_CHANNEL_SELECTED_TW";
-    public static final String PREFERENCE_INFO_CHANNEL_SELECTED_XXB = "INFO_CHANNEL_SELECTED_XXB";
-    public static final String PREFERENCE_INFO_CHANNEL_SELECTED_ALSTU = "INFO_CHANNEL_SELECTED_ALSTU";
     public static final String PREFERENCE_HIDE_OUT_OF_DATE_EXAM = "HIDE_OUT_OF_DATE_EXAM";
     public static final String PREFERENCE_UPDATE_TABLE_EVERY_TIME = "UPDATE_TABLE_EVERY_TIME";
     public static final String PREFERENCE_SCHOOL_VPN_MODE = "SCHOOL_VPN_MODE";
@@ -123,6 +118,14 @@ public class Config {
     public static final String PREFERENCE_NO_SHOW_LOGIN_ATTENTION = "NO_SHOW_LOGIN_ATTENTION";
     public static final String PREFERENCE_SHOW_HIDDEN_FUNCTION = "SHOW_HIDDEN_FUNCTION";
     public static final String PREFERENCE_DOWNLOAD_VPN_FILE_WARNING = "DOWNLOAD_VPN_FILE_WARNING";
+    public static final String PREFERENCE_CAN_ADD_COURSE_WARNING = "CAN_ADD_COURSE_WARNING";
+
+    public static final String PREFERENCE_INFO_CHANNEL_SELECTED_JWC_SYSTEM = "INFO_CHANNEL_SELECTED_JWC_SYSTEM";
+    public static final String PREFERENCE_INFO_CHANNEL_SELECTED_JW = "INFO_CHANNEL_SELECTED_JW";
+    public static final String PREFERENCE_INFO_CHANNEL_SELECTED_XW = "INFO_CHANNEL_SELECTED_XW";
+    public static final String PREFERENCE_INFO_CHANNEL_SELECTED_TW = "INFO_CHANNEL_SELECTED_TW";
+    public static final String PREFERENCE_INFO_CHANNEL_SELECTED_XXB = "INFO_CHANNEL_SELECTED_XXB";
+    public static final String PREFERENCE_INFO_CHANNEL_SELECTED_ALSTU = "INFO_CHANNEL_SELECTED_ALSTU";
 
     public static final boolean DEFAULT_PREFERENCE_HAS_LOGIN = false;
     public static final String DEFAULT_PREFERENCE_USER_ID = "NULL";
@@ -146,12 +149,6 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_CHECK_BETA_UPDATE = false;
     public static final boolean DEFAULT_PREFERENCE_ONLY_UPDATE_APPLICATION_UNDER_WIFI = false;
     public static final boolean DEFAULT_PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT = true;
-    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_JWC_SYSTEM = true;
-    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_JW = true;
-    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_XW = true;
-    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_TW = true;
-    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_XXB = true;
-    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_ALSTU = true;
     public static final boolean DEFAULT_PREFERENCE_HIDE_OUT_OF_DATE_EXAM = false;
     public static final boolean DEFAULT_PREFERENCE_UPDATE_TABLE_EVERY_TIME = false;
     public static final boolean DEFAULT_PREFERENCE_SCHOOL_VPN_MODE = false;
@@ -161,6 +158,14 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_NO_SHOW_LOGIN_ATTENTION = false;
     public static final boolean DEFAULT_PREFERENCE_SHOW_HIDDEN_FUNCTION = false;
     public static final boolean DEFAULT_PREFERENCE_DOWNLOAD_VPN_FILE_WARNING = true;
+    public static final boolean DEFAULT_PREFERENCE_CAN_ADD_COURSE_WARNING = true;
+
+    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_JWC_SYSTEM = true;
+    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_JW = true;
+    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_XW = true;
+    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_TW = true;
+    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_XXB = true;
+    public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_ALSTU = true;
 
     //网络连接错误代码
     public static final int NET_WORK_GET_SUCCESS = 0;

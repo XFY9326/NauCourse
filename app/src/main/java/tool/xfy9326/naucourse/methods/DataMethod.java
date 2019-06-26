@@ -41,6 +41,8 @@ import tool.xfy9326.naucourse.utils.TopicInfo;
 
 public class DataMethod {
     private static final String DATA_VERSION_CODE = "dataVersionCode";
+    private static final String ENCRYPTED_FILE_PREFIX = ".txn";
+    private static final String NOT_ENCRYPTED_FILE_PREFIX = ".tnd";
 
     @SuppressWarnings("SameParameterValue")
     static String readAssetsText(Context context, String path) {
@@ -256,7 +258,7 @@ public class DataMethod {
     }
 
     private static String getOfflineDataFilePath(Context context, String FILE_NAME, boolean encryptAble) {
-        return context.getFilesDir() + File.separator + FILE_NAME + (encryptAble ? ".txn" : ".tnd");
+        return context.getFilesDir() + File.separator + FILE_NAME + (encryptAble ? ENCRYPTED_FILE_PREFIX : NOT_ENCRYPTED_FILE_PREFIX);
     }
 
     public static class InfoData {

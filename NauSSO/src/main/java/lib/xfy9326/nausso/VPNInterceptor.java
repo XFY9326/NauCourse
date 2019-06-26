@@ -139,6 +139,8 @@ public class VPNInterceptor implements Interceptor {
                     if (VPNLogin(chain)) {
                         response.close();
                         return VPNLoad(chain, request, url, false);
+                    } else {
+                        return chain.proceed(newRequest);
                     }
                 }
             }
@@ -161,6 +163,9 @@ public class VPNInterceptor implements Interceptor {
         dataResponse.close();
 
         if (ssoContent != null) {
+            if (ssoContent.contains("南京审计大学WEBVPN登录门户")) {
+                return true;
+            }
             FormBody formBody = NauNetData.getSSOPostForm(userName, userPw, ssoContent);
             Request.Builder builder = new Request.Builder();
             builder.url(VPN_LOGIN_URL);

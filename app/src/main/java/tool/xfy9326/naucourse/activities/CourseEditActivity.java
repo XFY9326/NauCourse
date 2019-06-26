@@ -36,6 +36,7 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.methods.BaseMethod;
 import tool.xfy9326.naucourse.methods.CourseEditMethod;
+import tool.xfy9326.naucourse.methods.DialogMethod;
 import tool.xfy9326.naucourse.utils.Course;
 import tool.xfy9326.naucourse.utils.CourseDetail;
 import tool.xfy9326.naucourse.views.recyclerAdapters.CourseEditAdapter;
@@ -235,7 +236,7 @@ public class CourseEditActivity extends AppCompatActivity {
             String str_year = editText_year.getText().toString();
             if (!str_year.isEmpty() && BaseMethod.isInteger(str_year)) {
                 long year = Long.valueOf(str_year);
-                if (year >= 1983L) {
+                if (year >= 1983L && year < 10000L) {
                     //仅支持四位数的年份，仅支持一年两学期制
                     long term = (year * 10000L + year + 1L) * 10L + (radioButton_term_one.isChecked() ? 1L : 2L);
                     course.setCourseTerm(String.valueOf(term));
@@ -255,7 +256,7 @@ public class CourseEditActivity extends AppCompatActivity {
 
     //保存编辑的数据
     synchronized private void saveData() {
-        loadingDialog = BaseMethod.showLoadingDialog(this, false, null);
+        loadingDialog = DialogMethod.showLoadingDialog(this, false, null);
         TextInputEditText editTextCourseEditName = findViewById(R.id.editText_course_edit_name);
         TextInputEditText editTextCourseEditTeacher = findViewById(R.id.editText_course_edit_teacher);
         TextInputEditText editTextCourseEditType = findViewById(R.id.editText_course_edit_type);

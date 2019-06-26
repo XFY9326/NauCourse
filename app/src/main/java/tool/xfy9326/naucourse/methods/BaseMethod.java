@@ -1,19 +1,15 @@
 package tool.xfy9326.naucourse.methods;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -143,24 +139,6 @@ public class BaseMethod {
         }
     }
 
-    /**
-     * 显示加载中的提示
-     *
-     * @param activity       Activity
-     * @param cancelable     是否可以取消显示
-     * @param cancelListener 对取消显示的监听
-     * @return show方法返回的Dialog
-     */
-    public static Dialog showLoadingDialog(@NonNull Activity activity, boolean cancelable, @Nullable DialogInterface.OnCancelListener cancelListener) {
-        LayoutInflater layoutInflater = activity.getLayoutInflater();
-        View view = layoutInflater.inflate(R.layout.dialog_loading, activity.findViewById(R.id.dialog_layout_loading));
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setCancelable(cancelable);
-        builder.setOnCancelListener(cancelListener);
-        builder.setView(view);
-        return builder.show();
-    }
-
     public static void hideKeyBoard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (inputMethodManager != null) {
@@ -177,31 +155,6 @@ public class BaseMethod {
         Random random = new Random();
         int num = random.nextInt(colorList.length) % (colorList.length + 1);
         return colorList[num];
-    }
-
-    public static void showEULADialog(@NonNull Context context, boolean checkAccept, final OnEULAListener eulaListener) {
-        if (checkAccept) {
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-            if (sharedPreferences.getBoolean(Config.PREFERENCE_EULA_ACCEPT, Config.DEFAULT_PREFERENCE_EULA_ACCEPT)) {
-                return;
-            }
-        }
-        String eulaText = DataMethod.readAssetsText(context, Config.ASSETS_EULA_PATH);
-        if (eulaText != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle(R.string.eula);
-            builder.setMessage(eulaText);
-            if (checkAccept) {
-                builder.setCancelable(false);
-                builder.setPositiveButton(R.string.accept, (dialog, which) -> eulaListener.OnAccept());
-                builder.setNegativeButton(R.string.reject, (dialog, which) -> eulaListener.OnReject());
-            } else {
-                builder.setPositiveButton(android.R.string.yes, null);
-            }
-            builder.show();
-        } else {
-            eulaListener.OnReject();
-        }
     }
 
     public interface OnEULAListener {

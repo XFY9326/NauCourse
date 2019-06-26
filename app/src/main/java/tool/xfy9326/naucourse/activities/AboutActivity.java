@@ -26,6 +26,7 @@ import tool.xfy9326.naucourse.BuildConfig;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.methods.BaseMethod;
+import tool.xfy9326.naucourse.methods.DialogMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
 
 /**
@@ -62,17 +63,14 @@ public class AboutActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_about_open_source_license:
+                DialogMethod.showLicenseDialog(this);
+                break;
             case R.id.menu_about_open_source:
                 showOpenSourceList();
                 break;
             case R.id.menu_about_donate:
-                AlertDialog.Builder builder = new AlertDialog.Builder(AboutActivity.this);
-                builder.setTitle(R.string.donate);
-                builder.setMessage(R.string.donate_content);
-                builder.setPositiveButton(R.string.alipay, (dialog, which) -> NetMethod.viewUrlInBrowser(AboutActivity.this, Config.DONATE_URL_ALIPAY));
-                builder.setNegativeButton(R.string.wechat, (dialog, which) -> NetMethod.viewUrlInBrowser(AboutActivity.this, Config.DONATE_URL_WECHAT));
-                builder.setNeutralButton(R.string.qq_wallet, (dialog, which) -> NetMethod.viewUrlInBrowser(AboutActivity.this, Config.DONATE_URL_QQ_WALLET));
-                builder.show();
+                DialogMethod.showDonateDialog(this);
                 break;
             case R.id.menu_about_donate_list:
                 NetMethod.viewUrlInBrowser(AboutActivity.this, Config.DONATE_PERSON_URL);
@@ -138,7 +136,7 @@ public class AboutActivity extends AppCompatActivity {
             builder.show();
         });
 
-        findViewById(R.id.textView_about_eula).setOnClickListener(v -> BaseMethod.showEULADialog(AboutActivity.this, false, null));
+        findViewById(R.id.textView_about_eula).setOnClickListener(v -> DialogMethod.showEULADialog(AboutActivity.this, false, null));
     }
 
     //开源资源列表显示

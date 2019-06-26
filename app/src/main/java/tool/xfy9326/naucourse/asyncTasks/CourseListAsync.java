@@ -36,7 +36,7 @@ public class CourseListAsync extends AsyncTask<Context, Void, Context> {
         try {
             TableMethod tableMethod = new TableMethod(context[0]);
             tableLoadSuccess = tableMethod.load();
-            if (tableLoadSuccess == Config.NET_WORK_GET_SUCCESS && !syncFinish) {
+            if (!syncFinish && tableLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                 course = tableMethod.getData(false);
             }
         } catch (Exception e) {

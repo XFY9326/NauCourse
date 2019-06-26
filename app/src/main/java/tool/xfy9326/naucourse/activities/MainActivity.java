@@ -16,6 +16,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.methods.BaseMethod;
+import tool.xfy9326.naucourse.methods.DialogMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.methods.TempMethod;
 import tool.xfy9326.naucourse.methods.UpdateMethod;
@@ -41,8 +42,6 @@ public class MainActivity extends AppCompatActivity {
         if (hasLogin) {
             setContentView(R.layout.activity_main);
             ToolBarSet();
-            updateCheck();
-            netCheck();
             if (savedInstanceState != null) {
                 ViewSet(savedInstanceState.getInt(CURRENT_FRAGMENT_INDEX, -1));
             } else {
@@ -50,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
             }
             tempLoad();
             BaseMethod.showNewVersionInfo(this, true);
-            BaseMethod.showEULADialog(this, true, new BaseMethod.OnEULAListener() {
+            DialogMethod.showEULADialog(this, true, new BaseMethod.OnEULAListener() {
                 @Override
                 public void OnAccept() {
                     sharedPreferences.edit().putBoolean(Config.PREFERENCE_EULA_ACCEPT, true).apply();
@@ -63,6 +62,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateCheck();
+        netCheck();
     }
 
     @Override

@@ -19,6 +19,7 @@ import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.methods.BaseMethod;
+import tool.xfy9326.naucourse.methods.DialogMethod;
 import tool.xfy9326.naucourse.methods.LoginMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.methods.SecurityMethod;
@@ -66,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         findViewById(R.id.button_login_login).setOnClickListener(v -> showLoginAttentionDialog());
 
-        findViewById(R.id.textView_login_accept_eula).setOnClickListener(v -> BaseMethod.showEULADialog(LoginActivity.this, false, null));
+        findViewById(R.id.textView_login_accept_eula).setOnClickListener(v -> DialogMethod.showEULADialog(LoginActivity.this, false, null));
     }
 
     private void login() {
@@ -173,7 +174,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         };
-        loadingDialog = BaseMethod.showLoadingDialog(LoginActivity.this, true, cancelListener);
+        loadingDialog = DialogMethod.showLoadingDialog(LoginActivity.this, true, cancelListener);
     }
 
     private void netCheck() {

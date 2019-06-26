@@ -53,6 +53,7 @@ import tool.xfy9326.naucourse.methods.BackupMethod;
 import tool.xfy9326.naucourse.methods.BaseMethod;
 import tool.xfy9326.naucourse.methods.CourseEditMethod;
 import tool.xfy9326.naucourse.methods.DataMethod;
+import tool.xfy9326.naucourse.methods.DialogMethod;
 import tool.xfy9326.naucourse.methods.PermissionMethod;
 import tool.xfy9326.naucourse.methods.TimeMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.SchoolTimeMethod;
@@ -164,7 +165,7 @@ public class CourseActivity extends AppCompatActivity {
     }
 
     synchronized private void getData() {
-        loadingDialog = BaseMethod.showLoadingDialog(CourseActivity.this, true, dialog -> finish());
+        loadingDialog = DialogMethod.showLoadingDialog(CourseActivity.this, true, dialog -> finish());
         new Thread(() -> {
             courseArrayList = DataMethod.getOfflineTableData(CourseActivity.this);
             if (courseArrayList == null) {
@@ -241,7 +242,7 @@ public class CourseActivity extends AppCompatActivity {
             String str_year = editText_year.getText().toString();
             if (!str_year.isEmpty() && BaseMethod.isInteger(str_year)) {
                 long year = Long.valueOf(str_year);
-                if (year >= 1983L) {
+                if (year >= 1983L && year < 10000L) {
                     //仅支持四位数的年份，仅支持一年两学期制
                     long term = (year * 10000L + year + 1L) * 10L + (radioButton_term_one.isChecked() ? 1L : 2L);
                     Intent intent = new Intent(CourseActivity.this, CourseEditActivity.class);
@@ -328,7 +329,7 @@ public class CourseActivity extends AppCompatActivity {
 
     //保存数据
     synchronized private void saveData() {
-        loadingDialog = BaseMethod.showLoadingDialog(CourseActivity.this, false, null);
+        loadingDialog = DialogMethod.showLoadingDialog(CourseActivity.this, false, null);
         new Thread(() -> {
             final CourseEditMethod.CourseCheckResult checkResult = CourseEditMethod.checkCourseList(courseArrayList);
             if (checkResult.isHasError()) {
@@ -416,7 +417,7 @@ public class CourseActivity extends AppCompatActivity {
     //从教务处导入本学期课程数据
     private void importDataFromJwc() {
         CourseListAsync courseListAsync = new CourseListAsync();
-        loadingDialog = BaseMethod.showLoadingDialog(CourseActivity.this, true, dialog -> {
+        loadingDialog = DialogMethod.showLoadingDialog(CourseActivity.this, true, dialog -> {
             courseListAsync.cancel(true);
             closeLoadingDialog();
         });
@@ -426,7 +427,7 @@ public class CourseActivity extends AppCompatActivity {
     //从教务处导入下学期课程数据
     private void importDataFromJwcNext() {
         CourseNextListAsync courseNextListAsync = new CourseNextListAsync();
-        loadingDialog = BaseMethod.showLoadingDialog(CourseActivity.this, true, dialog -> {
+        loadingDialog = DialogMethod.showLoadingDialog(CourseActivity.this, true, dialog -> {
             courseNextListAsync.cancel(true);
             closeLoadingDialog();
         });

@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.Objects;
 
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.methods.TimeMethod;
 import tool.xfy9326.naucourse.utils.Exam;
 
 /**
@@ -31,60 +30,11 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ExamViewHolder
     public ExamAdapter(Context context, Exam exam) {
         this.context = context;
         this.exam = exam;
-        updateTimeText();
     }
 
     public void updateData(Exam exam) {
         this.exam = exam;
-        updateTimeText();
         notifyDataSetChanged();
-    }
-
-    private void updateTimeText() {
-        if (exam.getExamMount() > 0) {
-            long now = System.currentTimeMillis() / 1000L;
-            String[] lastTime = new String[exam.getExamMount()];
-            String[] lastTimeUnit = new String[exam.getExamMount()];
-            for (int i = 0; i < exam.getExamMount(); i++) {
-                String time = Objects.requireNonNull(exam.getExamTime())[i];
-                if (time.contains("-")) {
-                    time = time.substring(0, time.indexOf("-"));
-                    try {
-                        long examTime = TimeMethod.parseDateSDFHM(time).getTime() / 1000L;
-                        if (examTime > now) {
-                            long day = (examTime - now) / (3600 * 24);
-                            if (day > 0) {
-                                lastTime[i] = String.valueOf(day);
-                                lastTimeUnit[i] = context.getString(R.string.day);
-                            } else {
-                                long hour = (examTime - now) / 3600;
-                                if (hour > 0) {
-                                    lastTime[i] = String.valueOf(hour);
-                                    lastTimeUnit[i] = context.getString(R.string.hour);
-                                } else {
-                                    long minute = (examTime - now) / 60;
-                                    if (minute > 0) {
-                                        lastTime[i] = String.valueOf(minute);
-                                        lastTimeUnit[i] = context.getString(R.string.minute);
-                                    } else {
-                                        lastTime[i] = String.valueOf(0);
-                                        lastTimeUnit[i] = context.getString(R.string.minute);
-                                    }
-                                }
-                            }
-                        } else {
-                            lastTime[i] = null;
-                            lastTimeUnit[i] = null;
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            this.exam.setLast_time(lastTime);
-            this.exam.setLast_time_unit(lastTimeUnit);
-            System.gc();
-        }
     }
 
     @Override
@@ -95,14 +45,16 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ExamViewHolder
         holder.textView_exam_time.setText(context.getString(R.string.exam_time, Objects.requireNonNull(exam.getExamTime())[holder.getAdapterPosition()]));
         holder.textView_exam_location.setText(context.getString(R.string.exam_location, Objects.requireNonNull(exam.getExamLocation())[holder.getAdapterPosition()]));
 
-        String time = Objects.requireNonNull(exam.getLast_time())[holder.getAdapterPosition()];
-        String unit = Objects.requireNonNull(exam.getLast_time_unit())[holder.getAdapterPosition()];
-        if (time != null && unit != null) {
-            holder.textView_exam_last_time.setText(time);
-            holder.textView_exam_last_time_unit.setText(unit);
-            holder.linearLayout_exam_last_time.setVisibility(View.VISIBLE);
-        } else {
-            holder.linearLayout_exam_last_time.setVisibility(View.GONE);
+        if (exam.getLast_time() != null && exam.getLast_time_unit() != null) {
+            String time = exam.getLast_time()[holder.getAdapterPosition()];
+            String unit = exam.getLast_time_unit()[holder.getAdapterPosition()];
+            if (time != null && unit != null) {
+                holder.textView_exam_last_time.setText(time);
+                holder.textView_exam_last_time_unit.setText(unit);
+                holder.linearLayout_exam_last_time.setVisibility(View.VISIBLE);
+            } else {
+                holder.linearLayout_exam_last_time.setVisibility(View.GONE);
+            }
         }
     }
 

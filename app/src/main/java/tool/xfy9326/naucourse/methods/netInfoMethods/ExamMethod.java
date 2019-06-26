@@ -39,6 +39,43 @@ public class ExamMethod extends BaseInfoMethod<Exam> {
         super(context);
     }
 
+    private static void setLastTimeText(Context context, long now, String startTime, ArrayList<String> examLastTime, ArrayList<String> examLastTimeUnit) {
+        String lastTime = null;
+        String lastTimeUnit = null;
+        if (startTime != null) {
+            long examTime = 0;
+            try {
+                examTime = TimeMethod.parseDateSDFHM(startTime).getTime() / 1000L;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if (examTime > now) {
+                long day = (long) Math.ceil((examTime - now) / (3600f * 24));
+                if (day > 0) {
+                    lastTime = String.valueOf(day);
+                    lastTimeUnit = context.getString(R.string.day);
+                } else {
+                    long hour = (long) Math.ceil((examTime - now) / 3600f);
+                    if (hour > 0) {
+                        lastTime = String.valueOf(hour);
+                        lastTimeUnit = context.getString(R.string.hour);
+                    } else {
+                        long minute = (long) Math.ceil((examTime - now) / 60f);
+                        if (minute > 0) {
+                            lastTime = String.valueOf(minute);
+                            lastTimeUnit = context.getString(R.string.minute);
+                        } else {
+                            lastTime = String.valueOf(0);
+                            lastTimeUnit = context.getString(R.string.minute);
+                        }
+                    }
+                }
+            }
+        }
+        examLastTime.add(lastTime);
+        examLastTimeUnit.add(lastTimeUnit);
+    }
+
     @Override
     public int load() throws Exception {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -70,10 +107,13 @@ public class ExamMethod extends BaseInfoMethod<Exam> {
         ArrayList<String> examScore = new ArrayList<>();
         ArrayList<String> examTime = new ArrayList<>();
         ArrayList<String> examLocation = new ArrayList<>();
+        ArrayList<String> examLastTime = new ArrayList<>();
+        ArrayList<String> examLastTimeUnit = new ArrayList<>();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         boolean hide_exam = sharedPreferences.getBoolean(Config.PREFERENCE_HIDE_OUT_OF_DATE_EXAM, Config.DEFAULT_PREFERENCE_HIDE_OUT_OF_DATE_EXAM);
         long now = System.currentTimeMillis();
+        long lastTimeNow = now / 1000L;
 
         Exam exam = new Exam();
         Elements elements = Objects.requireNonNull(document).body().getElementsByTag("td");
@@ -83,6 +123,8 @@ public class ExamMethod extends BaseInfoMethod<Exam> {
         String examIdStr = null;
         String examNameStr = null;
         String examScoreStr = null;
+        String startDateTime;
+        String endTime;
         for (Element element : elements) {
             String str = element.text().replace(" ", "");
             if (str.contains("考试日程列表")) {
@@ -107,10 +149,18 @@ public class ExamMethod extends BaseInfoMethod<Exam> {
                         if (str.contains("日")) {
                             str = str.replace("日", "日 ");
                         }
+                        if (str.contains("-")) {
+                            String[] time = str.split("-");
+                            startDateTime = time[0];
+                            endTime = time[1];
+                        } else {
+                            startDateTime = null;
+                            endTime = null;
+                        }
                         if (hide_exam) {
                             long examEnd = -1;
-                            if (str.contains("-") && str.contains(" ")) {
-                                String time = str.substring(0, str.indexOf(" ") + 1) + str.substring(str.indexOf("-") + 1);
+                            if (endTime != null && str.contains(" ")) {
+                                String time = str.substring(0, str.indexOf(" ") + 1) + endTime;
                                 try {
                                     examEnd = TimeMethod.parseDateSDFHM(time).getTime();
                                 } catch (ParseException e) {
@@ -122,6 +172,8 @@ public class ExamMethod extends BaseInfoMethod<Exam> {
                                 examId.add(examIdStr);
                                 examName.add(examNameStr);
                                 examScore.add(examScoreStr);
+                                examTime.add(str);
+                                setLastTimeText(context, lastTimeNow, startDateTime, examLastTime, examLastTimeUnit);
                             } else {
                                 needJump = true;
                             }
@@ -129,8 +181,9 @@ public class ExamMethod extends BaseInfoMethod<Exam> {
                             examId.add(examIdStr);
                             examName.add(examNameStr);
                             examScore.add(examScoreStr);
+                            examTime.add(str);
+                            setLastTimeText(context, lastTimeNow, startDateTime, examLastTime, examLastTimeUnit);
                         }
-                        examTime.add(str);
                         break;
                     case 6:
                         if (!needJump) {
@@ -160,6 +213,8 @@ public class ExamMethod extends BaseInfoMethod<Exam> {
         exam.setExamType(examType.toArray(new String[]{}));
         exam.setExamScore(examScore.toArray(new String[]{}));
         exam.setExamLocation(examLocation.toArray(new String[]{}));
+        exam.setLast_time(examLastTime.toArray(new String[]{}));
+        exam.setLast_time_unit(examLastTimeUnit.toArray(new String[]{}));
         exam.setDataVersionCode(Config.DATA_VERSION_EXAM);
 
         if (DataMethod.saveOfflineData(context, exam, FILE_NAME, checkTemp, IS_ENCRYPT)) {

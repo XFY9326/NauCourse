@@ -1,0 +1,83 @@
+package tool.xfy9326.naucourse.methods;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+
+import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.R;
+
+public class DialogMethod {
+    /**
+     * 显示加载中的提示
+     *
+     * @param activity       Activity
+     * @param cancelable     是否可以取消显示
+     * @param cancelListener 对取消显示的监听
+     * @return show方法返回的Dialog
+     */
+    public static Dialog showLoadingDialog(@NonNull Activity activity, boolean cancelable, @Nullable DialogInterface.OnCancelListener cancelListener) {
+        LayoutInflater layoutInflater = activity.getLayoutInflater();
+        View view = layoutInflater.inflate(R.layout.dialog_loading, activity.findViewById(R.id.dialog_layout_loading));
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setCancelable(cancelable);
+        builder.setOnCancelListener(cancelListener);
+        builder.setView(view);
+        return builder.show();
+    }
+
+    public static void showEULADialog(@NonNull Context context, boolean checkAccept, final BaseMethod.OnEULAListener eulaListener) {
+        if (checkAccept) {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            if (sharedPreferences.getBoolean(Config.PREFERENCE_EULA_ACCEPT, Config.DEFAULT_PREFERENCE_EULA_ACCEPT)) {
+                return;
+            }
+        }
+        String eulaText = DataMethod.readAssetsText(context, Config.ASSETS_EULA_PATH);
+        if (eulaText != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle(R.string.eula);
+            builder.setMessage(eulaText);
+            if (checkAccept) {
+                builder.setCancelable(false);
+                builder.setPositiveButton(R.string.accept, (dialog, which) -> eulaListener.OnAccept());
+                builder.setNegativeButton(R.string.reject, (dialog, which) -> eulaListener.OnReject());
+            } else {
+                builder.setPositiveButton(android.R.string.yes, null);
+            }
+            builder.show();
+        } else {
+            eulaListener.OnReject();
+        }
+    }
+
+    public static void showLicenseDialog(@NonNull Context context) {
+        String eulaText = DataMethod.readAssetsText(context, Config.ASSETS_LICENSE_PATH);
+        if (eulaText != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle(R.string.open_source_license);
+            builder.setMessage(eulaText);
+            builder.setPositiveButton(android.R.string.yes, null);
+            builder.show();
+        }
+    }
+
+    public static void showDonateDialog(@NonNull Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(R.string.donate);
+        builder.setMessage(R.string.donate_content);
+        builder.setPositiveButton(R.string.alipay, (dialog, which) -> NetMethod.viewUrlInBrowser(context, Config.DONATE_URL_ALIPAY));
+        builder.setNegativeButton(R.string.wechat, (dialog, which) -> NetMethod.viewUrlInBrowser(context, Config.DONATE_URL_WECHAT));
+        builder.setNeutralButton(R.string.qq_wallet, (dialog, which) -> NetMethod.viewUrlInBrowser(context, Config.DONATE_URL_QQ_WALLET));
+        builder.show();
+    }
+}

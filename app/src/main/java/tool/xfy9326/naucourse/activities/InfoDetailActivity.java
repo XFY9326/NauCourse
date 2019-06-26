@@ -195,7 +195,7 @@ public class InfoDetailActivity extends AppCompatActivity {
                                 intent.putExtra(Intent.EXTRA_STREAM, photoURI);
                                 intent.addCategory(Intent.CATEGORY_DEFAULT);
                                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                runIntent(Intent.createChooser(intent, getString(R.string.share_course_table)));
+                                runIntent(Intent.createChooser(intent, getString(R.string.share_info)));
                             }
                         } catch (IOException e) {
                             e.printStackTrace();

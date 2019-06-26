@@ -28,6 +28,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -88,7 +89,7 @@
                         android:id="@+id/button_course_edit_week_num"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_marginStart="25dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginEnd="25dp"
                         android:background="@drawable/ic_edit_dark" />
 
@@ -121,7 +122,7 @@
                         android:id="@+id/button_course_edit_time"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_marginStart="25dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginEnd="25dp"
                         android:background="@drawable/ic_edit_dark" />
 
@@ -154,7 +155,7 @@
                         android:id="@+id/button_course_edit_location"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_marginStart="25dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginEnd="25dp"
                         android:background="@drawable/ic_edit_dark" />
 

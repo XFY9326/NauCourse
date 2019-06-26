@@ -42,6 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:focusedByDefault="false"
+        android:overScrollMode="never"
         android:padding="5dp"
         android:scrollbars="none"
         tools:targetApi="o">

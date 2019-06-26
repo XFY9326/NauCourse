@@ -40,6 +40,7 @@ import tool.xfy9326.naucourse.activities.SuspendCourseActivity;
 import tool.xfy9326.naucourse.activities.UpdateSettingsActivity;
 import tool.xfy9326.naucourse.asyncTasks.StudentAsync;
 import tool.xfy9326.naucourse.methods.BaseMethod;
+import tool.xfy9326.naucourse.methods.DialogMethod;
 import tool.xfy9326.naucourse.methods.LoginMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.methods.SecurityMethod;
@@ -107,6 +108,7 @@ public class PersonFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_person, container, false);
+        unlockFunction();
         return view;
     }
 
@@ -114,12 +116,6 @@ public class PersonFragment extends Fragment {
     public void onStart() {
         super.onStart();
         ViewSet();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        unlockFunction();
     }
 
     private void ViewSet() {
@@ -279,7 +275,7 @@ public class PersonFragment extends Fragment {
             builder.setMessage(getString(R.string.ask_login_out, userId));
             builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
                 if (getActivity() != null) {
-                    loadingDialog = BaseMethod.showLoadingDialog(getActivity(), false, null);
+                    loadingDialog = DialogMethod.showLoadingDialog(getActivity(), false, null);
                 }
                 new Thread(() -> {
                     if (LoginMethod.loginOut(context)) {

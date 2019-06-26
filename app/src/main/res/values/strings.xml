@@ -212,6 +212,7 @@
     <string name="async_personal_info_by_day">每天自动同步个人信息与成绩</string>
     <string name="async_personal_info_by_day_sum">减少个人数据更新频率，节约流量</string>
     <string name="share_course_table">分享本周的课程表:</string>
+    <string name="share_info">分享文章:</string>
     <string name="moa_jump">跳转到今天的讲座</string>
     <string name="reset">重置</string>
     <string name="auto_update_course_table">智能覆盖更新教务课程表数据</string>
@@ -273,7 +274,7 @@
     <string name="debug">内测版</string>
     <string name="enlarge_alert">注：可使用手势放大查看图片</string>
     <string name="donate">请开发者喝一杯咖啡</string>
-    <string name="donate_content">开发软件不易，如果你希望能够给开发者一些赞助，可以通过如下渠道：</string>
+    <string name="donate_content">开发者为南审的学生，开发软件不易，如果你希望能够给开发者一些私人的赞助，可以通过如下渠道：</string>
     <string name="alipay">支付宝</string>
     <string name="wechat">微信</string>
     <string name="qq_wallet">QQ钱包</string>
@@ -282,7 +283,7 @@
     <string name="day">天</string>
     <string name="hour">小时</string>
     <string name="minute">分钟</string>
-    <string name="exam_last_time">距离考试:</string>
+    <string name="exam_last_time">距考试开始:</string>
     <string name="hide_out_of_date_exam">隐藏过时的考试</string>
     <string name="send_email">发送邮件</string>
     <string name="launch_failed">相关应用启动失败！</string>
@@ -334,6 +335,7 @@
     <string name="share_url">以链接形式分享</string>
     <string name="share_image">以图片形式分享</string>
     <string name="eula">最终用户许可协议</string>
+    <string name="open_source_license">开源协议</string>
     <string name="accept_eula">我已经阅读并同意</string>
     <string name="eula_not_accept">你还没有同意《最终用户许可协议》！</string>
     <string name="accept">同意</string>
@@ -342,8 +344,9 @@
     <string name="unlock_already_success">你已经解锁成功了！</string>
     <string name="unlock_attention">该功能理论不对外开放，若要开启，出现任何问题开发者无需负责！</string>
     <string name="download_vpn_file">校园VPN模式下，点击链接下载文件时需要登录VPN，之后再次点击链接即可下载！</string>
+    <string name="click_to_add_course">点击当前学期搜索的课程可以尝试导入</string>
 
-    <string name="new_version_info_content">欢迎使用NAU课程表\n\n应校方要求，考试与成绩查询功能对外禁用。\n\n校园VPM模式目前基本稳定，如果你经常在校外网络查看通知可以尝试打开\n\n关于界面图标有小小的彩蛋\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
+    <string name="new_version_info_content">欢迎使用NAU课程表\n\n由于学校网络问题，如果通知信息无法显示某些类别，再刷新一次就好了\n\n建议各位只要发现新版本就更新，尽量减少旧版本导致的错误\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>

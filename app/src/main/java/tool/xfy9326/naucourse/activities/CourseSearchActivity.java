@@ -1,8 +1,10 @@
 package tool.xfy9326.naucourse.activities;
 
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,6 +31,7 @@ import tool.xfy9326.naucourse.asyncTasks.CourseSearchClassNameAsync;
 import tool.xfy9326.naucourse.asyncTasks.CourseSearchInfoAsync;
 import tool.xfy9326.naucourse.handlers.MainHandler;
 import tool.xfy9326.naucourse.methods.BaseMethod;
+import tool.xfy9326.naucourse.methods.DialogMethod;
 import tool.xfy9326.naucourse.methods.TimeMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.CourseSearchMethod;
 import tool.xfy9326.naucourse.utils.CourseSearchDetail;
@@ -108,21 +111,21 @@ public class CourseSearchActivity extends AppCompatActivity {
 
     private void getBaseSearchData() {
         if (loadingDialog == null) {
-            loadingDialog = BaseMethod.showLoadingDialog(this, true, dialog -> finish());
+            loadingDialog = DialogMethod.showLoadingDialog(this, true, dialog -> finish());
         }
         new CourseSearchInfoAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, courseSearchMethod, getApplicationContext());
     }
 
     private void searchDetail(CourseSearchInfo courseSearchInfo) {
         if (loadingDialog == null) {
-            loadingDialog = BaseMethod.showLoadingDialog(this, true, null);
+            loadingDialog = DialogMethod.showLoadingDialog(this, true, null);
         }
         new CourseSearchAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, courseSearchInfo, courseSearchMethod, getApplicationContext());
     }
 
     private void getClassListData(String term) {
         if (loadingDialog == null) {
-            loadingDialog = BaseMethod.showLoadingDialog(this, false, null);
+            loadingDialog = DialogMethod.showLoadingDialog(this, false, null);
         }
         new CourseSearchClassNameAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, courseSearchMethod, term, getApplicationContext());
     }
@@ -228,6 +231,7 @@ public class CourseSearchActivity extends AppCompatActivity {
                 }
             });
 
+            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
             Button button_search = findViewById(R.id.button_course_search);
             button_search.setOnClickListener(v -> {
                 CourseSearchInfo courseSearchInfo = new CourseSearchInfo();
@@ -254,6 +258,13 @@ public class CourseSearchActivity extends AppCompatActivity {
                     } else {
                         courseSearchInfo.setValue(value);
                         searchDetail(courseSearchInfo);
+
+                        if (spinner_term.getSelectedItemPosition() == 0 && sharedPreferences.getBoolean(Config.PREFERENCE_CAN_ADD_COURSE_WARNING, Config.DEFAULT_PREFERENCE_CAN_ADD_COURSE_WARNING)) {
+                            Snackbar.make(findViewById(R.id.layout_course_search_content), R.string.click_to_add_course, Snackbar.LENGTH_LONG)
+                                    .setAction(R.string.no_alert_again, view -> sharedPreferences.edit().putBoolean(Config.PREFERENCE_CAN_ADD_COURSE_WARNING, false).apply())
+                                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                                    .show();
+                        }
                     }
                 } else {
                     Snackbar.make(findViewById(R.id.layout_course_search_content), R.string.search_value_error, Snackbar.LENGTH_SHORT).show();
