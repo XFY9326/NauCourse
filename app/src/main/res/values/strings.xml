@@ -346,7 +346,7 @@
     <string name="download_vpn_file">校园VPN模式下，点击链接下载文件时需要登录VPN，之后再次点击链接即可下载！</string>
     <string name="click_to_add_course">点击当前学期搜索的课程可以尝试导入</string>
 
-    <string name="new_version_info_content">欢迎使用NAU课程表\n\n由于学校网络问题，如果通知信息无法显示某些类别，再刷新一次就好了\n\n建议各位只要发现新版本就更新，尽量减少旧版本导致的错误\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
+    <string name="new_version_info_content">欢迎使用NAU课程表\n\n建议各位只要发现新版本就更新，尽量减少旧版本导致的错误。如果在使用过程中发现任何问题，请尽快反馈，谢谢。\n\n今后将会减少稳定版的更新，更多未经测试的新功能将会放在测试版中，如果希望体验新版本可以在更新设置中选择更新到测试版。\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>
