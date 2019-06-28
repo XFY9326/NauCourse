@@ -17,14 +17,6 @@
             android:title="@string/only_update_application_under_wifi" />
         <CheckBoxPreference
             android:defaultValue="false"
-            android:dependency="AUTO_CHECK_UPDATE"
-            android:disableDependentsState="true"
-            android:key="AUTO_CHECK_IMPORTANT_UPDATE"
-            android:summary="@string/auto_check_important_update_sum"
-            android:title="@string/auto_check_important_update" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:dependency="AUTO_CHECK_IMPORTANT_UPDATE"
             android:key="CHECK_BETA_UPDATE"
             android:summary="@string/beta_version_check_sum"
             android:title="@string/beta_version_check" />

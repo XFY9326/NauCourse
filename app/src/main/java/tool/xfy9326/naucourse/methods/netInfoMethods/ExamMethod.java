@@ -49,18 +49,19 @@ public class ExamMethod extends BaseInfoMethod<Exam> {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            if (examTime > now) {
-                long day = (long) Math.ceil((examTime - now) / (3600f * 24));
+            long temp = examTime - now;
+            if (temp > 0) {
+                long day = getShowTime(temp / (3600f * 24));
                 if (day > 0) {
                     lastTime = String.valueOf(day);
                     lastTimeUnit = context.getString(R.string.day);
                 } else {
-                    long hour = (long) Math.ceil((examTime - now) / 3600f);
+                    long hour = getShowTime(temp / 3600f);
                     if (hour > 0) {
                         lastTime = String.valueOf(hour);
                         lastTimeUnit = context.getString(R.string.hour);
                     } else {
-                        long minute = (long) Math.ceil((examTime - now) / 60f);
+                        long minute = getShowTime(temp / 60f);
                         if (minute > 0) {
                             lastTime = String.valueOf(minute);
                             lastTimeUnit = context.getString(R.string.minute);
@@ -74,6 +75,10 @@ public class ExamMethod extends BaseInfoMethod<Exam> {
         }
         examLastTime.add(lastTime);
         examLastTimeUnit.add(lastTimeUnit);
+    }
+
+    private static long getShowTime(double time) {
+        return time > 1 ? (long) Math.ceil(time) : 0;
     }
 
     @Override
