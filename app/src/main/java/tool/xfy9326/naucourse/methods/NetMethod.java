@@ -16,7 +16,6 @@ import androidx.preference.PreferenceManager;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 import lib.xfy9326.nausso.NauSSOClient;
 import okhttp3.FormBody;
@@ -33,7 +32,6 @@ import tool.xfy9326.naucourse.R;
 
 public class NetMethod {
     public static boolean showConnectErrorOnce = false;
-    private static OkHttpClient okHttpClient = null;
     private static boolean showLoginErrorOnce = false;
 
     public static NauSSOClient getNewSSOClient(Context context) {
@@ -47,19 +45,17 @@ public class NetMethod {
     /**
      * 加载一个网页
      *
-     * @param url 网页URL
+     * @param context Context
+     * @param url     网页URL
      * @return 页面内容
      * @throws IOException 网页获取错误
      */
-    public static String loadUrl(@NonNull String url) throws IOException {
-        if (okHttpClient == null) {
-            OkHttpClient.Builder client_builder = new OkHttpClient.Builder();
-            client_builder.connectTimeout(8, TimeUnit.SECONDS);
-            client_builder.readTimeout(4, TimeUnit.SECONDS);
-            client_builder.writeTimeout(4, TimeUnit.SECONDS);
-            okHttpClient = client_builder.build();
+    public static String loadUrl(@NonNull Context context, @NonNull String url) throws IOException {
+        NauSSOClient client = BaseMethod.getApp(context).getClient();
+        if (client != null) {
+            return client.loadRawUrl(url, null);
         }
-        return loadUrl(okHttpClient, url, null);
+        return null;
     }
 
     public static String loadUrl(OkHttpClient client, @NonNull String url, HashMap<String, String> header) throws IOException {

@@ -34,7 +34,7 @@ public class SchoolCalendarMethod extends BaseNetMethod {
 
     @Override
     public int load() throws Exception {
-        String data = NetMethod.loadUrl(server_url);
+        String data = NetMethod.loadUrl(context, server_url);
         if (data != null) {
             document = Jsoup.parse(data);
             return Config.NET_WORK_GET_SUCCESS;
@@ -54,7 +54,7 @@ public class SchoolCalendarMethod extends BaseNetMethod {
                 }
             }
             if (url != null) {
-                String data = NetMethod.loadUrl(url);
+                String data = NetMethod.loadUrl(context, url);
                 if (data != null) {
                     Document document = Jsoup.parse(data);
                     Elements elements_img = document.getElementsByClass("readinfo");
@@ -77,7 +77,7 @@ public class SchoolCalendarMethod extends BaseNetMethod {
                 }
             }
             PreferenceManager.getDefaultSharedPreferences(context).edit().putString(Config.PREFERENCE_SCHOOL_CALENDAR_URL, Image_Url).apply();
-            if (ImageMethod.downloadImage(Image_Url, ImageMethod.getSchoolCalendarImagePath(context))) {
+            if (ImageMethod.downloadImage(context, Image_Url, ImageMethod.getSchoolCalendarImagePath(context), false)) {
                 return Config.NET_WORK_GET_SUCCESS;
             }
         }

@@ -56,6 +56,7 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
                     if (personLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                         studentInfo = personMethod.getUserData(loadTime > 1);
                         studentLearnProcess = personMethod.getUserProcess(loadTime > 1);
+                        personMethod.getStuPhoto(loadTime > 1);
                     }
                 }
             } catch (Exception e) {

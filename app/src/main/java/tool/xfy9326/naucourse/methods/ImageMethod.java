@@ -14,12 +14,8 @@ import androidx.annotation.Nullable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
+import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.tools.IO;
@@ -59,14 +55,33 @@ public class ImageMethod {
         return null;
     }
 
+    public static Bitmap getStuPhoto(Context context) {
+        if (context != null && new File(getStuPhotoPath(context)).exists()) {
+            return BitmapFactory.decodeFile(getStuPhotoPath(context));
+        }
+        return null;
+    }
+
     public static String getSchoolCalendarImagePath(Context context) {
         return context.getFilesDir() + File.separator + "SchoolCalendarImage";
     }
 
-    public static boolean downloadImage(String URL, String downloadPath) throws Exception {
-        Bitmap bitmap = getBitmapFromUrl(URL);
-        if (bitmap != null) {
-            return saveBitmap(bitmap, downloadPath, true);
+    public static String getStuPhotoPath(Context context) {
+        return context.getFilesDir() + File.separator + "StuPhoto";
+    }
+
+    public static boolean downloadImage(Context context, String URL, String downloadPath, boolean needLogin) throws Exception {
+        NauSSOClient client = BaseMethod.getApp(context).getClient();
+        if (client != null) {
+            Bitmap bitmap;
+            if (needLogin) {
+                bitmap = client.getBitmapWithLogin(URL);
+            } else {
+                bitmap = client.getBitmap(URL);
+            }
+            if (bitmap != null) {
+                return saveBitmap(bitmap, downloadPath, true);
+            }
         }
         return false;
     }
@@ -160,24 +175,7 @@ public class ImageMethod {
         canvas.restore();
     }
 
-    private static Bitmap getBitmapFromUrl(String URL) throws Exception {
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Request request = new Request.Builder().get().url(URL).build();
-        Response response = okHttpClient.newCall(request).execute();
-        if (response.isSuccessful()) {
-            ResponseBody responseBody = response.body();
-            if (responseBody != null) {
-                InputStream inputStream = responseBody.byteStream();
-                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                response.close();
-                return bitmap;
-            }
-        }
-        response.close();
-        return null;
-    }
-
-    public static boolean saveBitmap(Bitmap bitmap, String path, boolean recycle) throws IOException {
+    static boolean saveBitmap(Bitmap bitmap, String path, boolean recycle) throws IOException {
         if (bitmap != null && !bitmap.isRecycled()) {
             File file = new File(path);
             if (file.exists()) {

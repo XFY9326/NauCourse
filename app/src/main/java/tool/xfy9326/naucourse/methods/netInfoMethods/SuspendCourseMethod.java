@@ -29,7 +29,7 @@ public class SuspendCourseMethod extends BaseInfoMethod<SuspendCourse> {
 
     @Override
     public int load() throws Exception {
-        String data = NetMethod.loadUrl(URL);
+        String data = NetMethod.loadUrl(context, URL);
         System.gc();
         if (data != null) {
             this.document = Jsoup.parse(data);

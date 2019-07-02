@@ -1,12 +1,16 @@
 package tool.xfy9326.naucourse.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -14,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.methods.DialogMethod;
+import tool.xfy9326.naucourse.methods.ImageMethod;
 import tool.xfy9326.naucourse.utils.StudentInfo;
 import tool.xfy9326.naucourse.utils.StudentLearnProcess;
 
@@ -33,6 +39,30 @@ public class StudentInfoActivity extends AppCompatActivity {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_student_info, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_stu_photo) {
+            Bitmap bitmap = ImageMethod.getStuPhoto(this);
+            if (bitmap != null) {
+                DialogMethod.showImageShareDialog(this,
+                        bitmap,
+                        Config.PICTURE_DICTIONARY_PATH + Config.INFO_STU_PHOTO_FILE_NAME,
+                        R.string.stu_photo,
+                        R.string.share_stu_photo_failed,
+                        R.string.share_stu_photo);
+            } else {
+                Toast.makeText(this, R.string.stu_photo_not_found, Toast.LENGTH_SHORT).show();
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void getData() {

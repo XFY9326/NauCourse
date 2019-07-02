@@ -43,6 +43,7 @@ public class Config {
     public static final String PICTURE_TEMP_DICTIONARY_PATH = PICTURE_DICTIONARY_PATH + ".temp" + File.separator;
     public static final String COURSE_TABLE_IMAGE_FILE_NAME = "CourseTable.jpeg";
     public static final String INFO_DETAIL_IMAGE_FILE_NAME = "AnnouncementDetail.jpeg";
+    public static final String INFO_STU_PHOTO_FILE_NAME = "StuPhoto.jpeg";
     public static final String SCHOOL_CALENDAR_IMAGE_FILE_NAME = "SchoolCalendar.jpeg";
 
     public static final String FILE_PROVIDER_AUTH = "tool.xfy9326.naucourse.provider";

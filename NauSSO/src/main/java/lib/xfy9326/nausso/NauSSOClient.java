@@ -1,11 +1,15 @@
 package lib.xfy9326.nausso;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
@@ -38,7 +42,7 @@ public class NauSSOClient {
     @NonNull
     private final OkHttpClient main_client;
     @NonNull
-    private final OkHttpClient client_clean;
+    private final OkHttpClient clean_client;
     @NonNull
     private final CookieStore cookieStore;
     private final VPNInterceptor vpnInterceptor;
@@ -55,7 +59,7 @@ public class NauSSOClient {
         client_clean_builder.connectTimeout(8, TimeUnit.SECONDS);
         client_clean_builder.readTimeout(4, TimeUnit.SECONDS);
         client_clean_builder.writeTimeout(4, TimeUnit.SECONDS);
-        client_clean = client_clean_builder.build();
+        clean_client = client_clean_builder.build();
     }
 
     /**
@@ -91,10 +95,15 @@ public class NauSSOClient {
         return new Cache(context.getCacheDir(), 10240 * 1024);
     }
 
-    private static String loadUrl(String url, OkHttpClient client) throws IOException {
+    private static String loadUrl(OkHttpClient client, @NonNull String url, HashMap<String, String> header) throws IOException {
         Request.Builder request_builder = new Request.Builder();
         request_builder.url(url);
-
+        if (header != null) {
+            for (String key : header.keySet()) {
+                String value = header.get(key);
+                request_builder.header(key, value == null ? "" : value);
+            }
+        }
         Response response = client.newCall(request_builder.build()).execute();
         if (response.isSuccessful()) {
             ResponseBody responseBody = response.body();
@@ -102,6 +111,22 @@ public class NauSSOClient {
                 String result = responseBody.string();
                 response.close();
                 return result;
+            }
+        }
+        response.close();
+        return null;
+    }
+
+    private static Bitmap getBitmapFromUrl(OkHttpClient client, String URL) throws Exception {
+        Request request = new Request.Builder().get().url(URL).build();
+        Response response = client.newCall(request).execute();
+        if (response.isSuccessful()) {
+            ResponseBody responseBody = response.body();
+            if (responseBody != null) {
+                InputStream inputStream = responseBody.byteStream();
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                response.close();
+                return bitmap;
             }
         }
         response.close();
@@ -216,8 +241,13 @@ public class NauSSOClient {
     }
 
     @Nullable
-    public String getData(String requestUrl) throws Exception {
-        return loadUrl(requestUrl, main_client);
+    public String getData(String requestUrl) throws IOException {
+        return loadUrl(main_client, requestUrl, null);
+    }
+
+    @Nullable
+    public String loadRawUrl(String requestUrl, HashMap<String, String> header) throws IOException {
+        return loadUrl(clean_client, requestUrl, header);
     }
 
     @Nullable
@@ -325,6 +355,14 @@ public class NauSSOClient {
         return false;
     }
 
+    public Bitmap getBitmap(String URL) throws Exception {
+        return getBitmapFromUrl(clean_client, URL);
+    }
+
+    public Bitmap getBitmapWithLogin(String URL) throws Exception {
+        return getBitmapFromUrl(main_client, URL);
+    }
+
     public void checkServer(final OnAvailableListener availableListener) {
         Request.Builder request_builder = new Request.Builder();
         if (isVPNEnabled()) {
@@ -333,7 +371,7 @@ public class NauSSOClient {
             request_builder.url(JWC_SERVER_URL);
         }
         request_builder.header("Cache-Control", "max-age=0");
-        client_clean.newCall(request_builder.build()).enqueue(new Callback() {
+        clean_client.newCall(request_builder.build()).enqueue(new Callback() {
             @Override
             @EverythingIsNonNull
             public void onFailure(Call call, IOException e) {
