@@ -4,14 +4,25 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.FileProvider;
+
+import com.github.chrisbanes.photoview.PhotoView;
+
+import java.io.File;
+import java.io.IOException;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
@@ -79,5 +90,59 @@ public class DialogMethod {
         builder.setNegativeButton(R.string.wechat, (dialog, which) -> NetMethod.viewUrlInBrowser(context, Config.DONATE_URL_WECHAT));
         builder.setNeutralButton(R.string.qq_wallet, (dialog, which) -> NetMethod.viewUrlInBrowser(context, Config.DONATE_URL_QQ_WALLET));
         builder.show();
+    }
+
+    public static void showImageShareDialog(@NonNull Activity activity, Bitmap bitmap, final String saveImgPath, final int shareTitleId, final int shareFailedId, final int shareTextId) {
+        if (PermissionMethod.checkStoragePermission(activity, 0)) {
+            if (bitmap != null) {
+                LayoutInflater layoutInflater = activity.getLayoutInflater();
+                View view = layoutInflater.inflate(R.layout.dialog_share_image, activity.findViewById(R.id.layout_dialog_share_image));
+                final PhotoView photoView = view.findViewById(R.id.photoView_share_image);
+                photoView.setImageDrawable(new BitmapDrawable(activity.getResources(), bitmap));
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setView(view);
+                builder.setTitle(shareTitleId);
+                builder.setPositiveButton(R.string.share, (dialog, which) -> {
+                    try {
+                        if (ImageMethod.saveBitmap(bitmap, saveImgPath, false)) {
+                            Intent intent = new Intent();
+                            intent.setAction(Intent.ACTION_SEND);
+                            Uri photoURI = FileProvider.getUriForFile(activity, Config.FILE_PROVIDER_AUTH, new File(saveImgPath));
+                            intent.setType("image/*");
+                            intent.putExtra(Intent.EXTRA_STREAM, photoURI);
+                            intent.addCategory(Intent.CATEGORY_DEFAULT);
+                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            BaseMethod.runIntent(activity, Intent.createChooser(intent, activity.getString(shareTextId)));
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(activity, shareFailedId, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setNeutralButton(R.string.save, (dialog, which) -> {
+                    try {
+                        if (ImageMethod.saveBitmap(bitmap, saveImgPath, false)) {
+                            Toast.makeText(activity, activity.getString(R.string.save_file_success, saveImgPath), Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(activity, R.string.save_failed, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setNegativeButton(android.R.string.cancel, null);
+                builder.setOnCancelListener(dialog -> {
+                    photoView.refreshDrawableState();
+                    if (!bitmap.isRecycled()) {
+                        bitmap.recycle();
+                    }
+                });
+                builder.show();
+            } else {
+                Toast.makeText(activity, R.string.data_is_loading, Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(activity, R.string.permission_error, Toast.LENGTH_SHORT).show();
+        }
     }
 }

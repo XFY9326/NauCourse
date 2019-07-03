@@ -106,7 +106,7 @@
     <string name="notification_manage">通知管理</string>
     <string name="next_class_notify">提示下一节课的信息</string>
     <string name="next_class_notify_sum">将会在上课前十分钟提示上课信息</string>
-    <string name="open_source_info">本应用开源在南审Git与Github</string>
+    <string name="open_source_info">本应用开源在Github</string>
     <string name="default_show_table_page">默认显示课程表界面</string>
     <string name="default_show_table_page_sum">打开应用时直接显示课程表，减少用用户操作</string>
     <string name="show_wide_course_table">增加课程表内课程信息的显示宽度</string>
@@ -343,6 +343,14 @@
     <string name="unlock_attention">该功能理论不对外开放，若要开启，出现任何问题开发者无需负责！</string>
     <string name="download_vpn_file">校园VPN模式下，点击链接下载文件时需要登录VPN，之后再次点击链接即可下载！</string>
     <string name="click_to_add_course">点击当前学期搜索的课程可以尝试导入</string>
+    <string name="stu_photo">个人证件照</string>
+    <string name="stu_photo_not_found">暂无个人证件照数据\n请刷新个人页面后重试</string>
+    <string name="share_stu_photo">分享个人证件照：</string>
+    <string name="share_stu_photo_failed">个人证件照分享失败</string>
+    <string name="refresh">刷新</string>
+    <string name="school_calendar_list">校历列表</string>
+    <string name="school_calendar_default">默认校历（当前学期）</string>
+    <string name="school_calendar_list_empty">校历列表正在加载中！</string>
 
     <string name="new_version_info_content">欢迎使用NAU课程表\n\n建议各位只要发现新版本就更新，尽量减少旧版本导致的错误。如果在使用过程中发现任何问题，请尽快反馈，谢谢。\n\n今后将会减少稳定版的更新，更多未经测试的新功能将会放在测试版中，如果希望体验新版本可以在更新设置中选择更新到测试版。\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
 

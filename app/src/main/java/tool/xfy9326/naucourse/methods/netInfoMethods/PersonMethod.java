@@ -11,12 +11,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import java.io.File;
 import java.util.List;
 import java.util.Objects;
 
 import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.methods.DataMethod;
+import tool.xfy9326.naucourse.methods.ImageMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.utils.StudentInfo;
 import tool.xfy9326.naucourse.utils.StudentLearnProcess;
@@ -34,7 +36,7 @@ public class PersonMethod extends BaseNetMethod {
     public static final boolean IS_SCORE_ENCRYPT = true;
     public static final boolean IS_PROCESS_ENCRYPT = true;
     public static final boolean IS_DATA_ENCRYPT = true;
-
+    private static final String stu_photo_url = "http://jwc.nau.edu.cn/Students/StuPhotoView.ashx?t=1";
     @Nullable
     private Document document;
 
@@ -66,6 +68,22 @@ public class PersonMethod extends BaseNetMethod {
     public void saveScoreTemp() {
         getUserScore(false);
         getUserProcess(false);
+        getStuPhoto(true);
+    }
+
+    public void getStuPhoto(boolean forceRefresh) {
+        boolean getPhoto = false;
+        File file = new File(ImageMethod.getStuPhotoPath(context));
+        if (!file.exists() || forceRefresh) {
+            getPhoto = true;
+        }
+        if (getPhoto) {
+            try {
+                ImageMethod.downloadImage(context, stu_photo_url, ImageMethod.getStuPhotoPath(context), true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Nullable

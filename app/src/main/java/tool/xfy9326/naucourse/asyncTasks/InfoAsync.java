@@ -84,6 +84,11 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
                     } else {
                         break;
                     }
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
                 if (loadCode == Config.NET_WORK_GET_SUCCESS) {
                     topicInfoList = InfoMethod.combineData(context[0], jwcTopic, alstuTopic, rssObjects);

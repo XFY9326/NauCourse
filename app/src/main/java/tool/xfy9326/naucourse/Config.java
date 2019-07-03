@@ -43,6 +43,7 @@ public class Config {
     public static final String PICTURE_TEMP_DICTIONARY_PATH = PICTURE_DICTIONARY_PATH + ".temp" + File.separator;
     public static final String COURSE_TABLE_IMAGE_FILE_NAME = "CourseTable.jpeg";
     public static final String INFO_DETAIL_IMAGE_FILE_NAME = "AnnouncementDetail.jpeg";
+    public static final String INFO_STU_PHOTO_FILE_NAME = "StuPhoto.jpeg";
     public static final String SCHOOL_CALENDAR_IMAGE_FILE_NAME = "SchoolCalendar.jpeg";
 
     public static final String FILE_PROVIDER_AUTH = "tool.xfy9326.naucourse.provider";
@@ -92,6 +93,7 @@ public class Config {
     public static final String PREFERENCE_CHANGE_TABLE_TRANSPARENCY = "CHANGE_TABLE_TRANSPARENCY";
     public static final String PREFERENCE_COURSE_TABLE_SHOW_SINGLE_COLOR = "COURSE_TABLE_SHOW_SINGLE_COLOR";
     public static final String PREFERENCE_SCHOOL_CALENDAR_URL = "SCHOOL_CALENDAR_URL";
+    public static final String PREFERENCE_SCHOOL_CALENDAR_PAGE_URL = "SCHOOL_CALENDAR_PAGE_URL";
     public static final String PREFERENCE_PERSONAL_INFO_LOAD_DATE_TIME = "PERSONAL_INFO_LOAD_DATE_TIME";
     public static final String PREFERENCE_ASYNC_PERSONAL_INFO_BY_DAY = "ASYNC_PERSONAL_INFO_BY_DAY";
     public static final String PREFERENCE_COURSE_TABLE_AUTO_LOAD_DATE_TIME = "COURSE_TABLE_AUTO_LOAD_DATE_TIME";

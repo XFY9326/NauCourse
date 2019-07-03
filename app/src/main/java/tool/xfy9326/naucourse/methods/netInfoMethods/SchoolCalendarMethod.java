@@ -1,6 +1,7 @@
 package tool.xfy9326.naucourse.methods.netInfoMethods;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.preference.PreferenceManager;
 
@@ -11,6 +12,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import java.util.LinkedHashMap;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.methods.ImageMethod;
@@ -24,17 +27,21 @@ import tool.xfy9326.naucourse.methods.NetMethod;
 public class SchoolCalendarMethod extends BaseNetMethod {
     private static final String server_url = "http://jw.nau.edu.cn";
     private static final String calendar_server_utl = "http://www.nau.edu.cn";
+    private static final String calendar_list = "http://www.nau.edu.cn/p141c89/list.htm";
     @Nullable
     private Document document;
+    @Nullable
+    private Document document_list;
+    private SharedPreferences sharedPreferences;
 
     public SchoolCalendarMethod(@NonNull Context context) {
         super(context);
-        this.document = null;
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     @Override
     public int load() throws Exception {
-        String data = NetMethod.loadUrl(server_url);
+        String data = NetMethod.loadUrl(context, server_url);
         if (data != null) {
             document = Jsoup.parse(data);
             return Config.NET_WORK_GET_SUCCESS;
@@ -42,8 +49,43 @@ public class SchoolCalendarMethod extends BaseNetMethod {
         return Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR;
     }
 
+    public int loadCalendarList() throws Exception {
+        String data = NetMethod.loadUrl(context, calendar_list);
+        if (data != null) {
+            document_list = Jsoup.parse(data);
+            return Config.NET_WORK_GET_SUCCESS;
+        }
+        return Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR;
+    }
+
+    @Nullable
+    public LinkedHashMap<String, String> getCalendarUrlList() {
+        LinkedHashMap<String, String> calendarList = new LinkedHashMap<>();
+        if (document_list != null) {
+            Elements elements = document_list.select("td[class=llink]");
+            for (Element element : elements) {
+                Elements a_arr = element.getElementsByTag("a");
+                if (a_arr != null && a_arr.size() != 0) {
+                    Element a = a_arr.first();
+                    String name = a.text().trim();
+                    String url = a.attr("href").trim();
+                    calendarList.put(name, calendar_server_utl + url);
+                }
+            }
+        }
+        return calendarList;
+    }
+
     public int loadSchoolCalendarImage(boolean checkTemp) throws Exception {
-        String Image_Url = null;
+        String url = sharedPreferences.getString(Config.PREFERENCE_SCHOOL_CALENDAR_PAGE_URL, null);
+        if (url == null) {
+            return loadCurrentSchoolCalendarImage(checkTemp);
+        } else {
+            return saveImageUrl(url, checkTemp);
+        }
+    }
+
+    private int loadCurrentSchoolCalendarImage(boolean checkTemp) throws Exception {
         if (document != null) {
             String url = null;
             Elements elements = document.getElementsByTag("a");
@@ -54,30 +96,38 @@ public class SchoolCalendarMethod extends BaseNetMethod {
                 }
             }
             if (url != null) {
-                String data = NetMethod.loadUrl(url);
-                if (data != null) {
-                    Document document = Jsoup.parse(data);
-                    Elements elements_img = document.getElementsByClass("readinfo");
-                    for (Element element : elements_img) {
-                        Elements elements_img_2 = element.getElementsByTag("img");
-                        for (Element element_2 : elements_img_2) {
-                            if (element_2.hasAttr("src")) {
-                                Image_Url = calendar_server_utl + element_2.attr("src");
-                            }
+                return saveImageUrl(url, checkTemp);
+            }
+        }
+        return Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR;
+    }
+
+    private int saveImageUrl(String imagePageUrl, boolean checkTemp) throws Exception {
+        String imageUrl = null;
+        if (imagePageUrl != null) {
+            String data = NetMethod.loadUrl(context, imagePageUrl);
+            if (data != null) {
+                Document document = Jsoup.parse(data);
+                Elements elements_img = document.getElementsByClass("readinfo");
+                for (Element element : elements_img) {
+                    Elements elements_img_2 = element.getElementsByTag("img");
+                    for (Element element_2 : elements_img_2) {
+                        if (element_2.hasAttr("src")) {
+                            imageUrl = calendar_server_utl + element_2.attr("src");
                         }
                     }
                 }
             }
         }
-        if (Image_Url != null) {
+        if (imageUrl != null) {
             if (checkTemp) {
                 String old_url = PreferenceManager.getDefaultSharedPreferences(context).getString(Config.PREFERENCE_SCHOOL_CALENDAR_URL, null);
-                if (old_url != null && old_url.equalsIgnoreCase(Image_Url)) {
+                if (old_url != null && old_url.equalsIgnoreCase(imageUrl)) {
                     return Config.NET_WORK_GET_SUCCESS;
                 }
             }
-            PreferenceManager.getDefaultSharedPreferences(context).edit().putString(Config.PREFERENCE_SCHOOL_CALENDAR_URL, Image_Url).apply();
-            if (ImageMethod.downloadImage(Image_Url, ImageMethod.getSchoolCalendarImagePath(context))) {
+            sharedPreferences.edit().putString(Config.PREFERENCE_SCHOOL_CALENDAR_URL, imageUrl).apply();
+            if (ImageMethod.downloadImage(context, imageUrl, ImageMethod.getSchoolCalendarImagePath(context), false)) {
                 return Config.NET_WORK_GET_SUCCESS;
             }
         }
