@@ -2,12 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".activities.AboutActivity">
+    tools:context=".activities.StudentInfoActivity">
 
     <item
         android:id="@+id/menu_stu_photo"
+        android:icon="@drawable/ic_person_selected_white"
         android:orderInCategory="0"
         android:title="@string/stu_photo"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 
 </menu>

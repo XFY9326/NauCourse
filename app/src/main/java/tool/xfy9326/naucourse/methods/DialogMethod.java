@@ -97,7 +97,7 @@ public class DialogMethod {
             if (bitmap != null) {
                 LayoutInflater layoutInflater = activity.getLayoutInflater();
                 View view = layoutInflater.inflate(R.layout.dialog_share_image, activity.findViewById(R.id.layout_dialog_share_image));
-                PhotoView photoView = view.findViewById(R.id.photoView_share_image);
+                final PhotoView photoView = view.findViewById(R.id.photoView_share_image);
                 photoView.setImageDrawable(new BitmapDrawable(activity.getResources(), bitmap));
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -132,6 +132,7 @@ public class DialogMethod {
                 });
                 builder.setNegativeButton(android.R.string.cancel, null);
                 builder.setOnCancelListener(dialog -> {
+                    photoView.refreshDrawableState();
                     if (!bitmap.isRecycled()) {
                         bitmap.recycle();
                     }

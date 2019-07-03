@@ -69,7 +69,7 @@ public class NauSSOClient {
      * @return 是否登陆成功
      */
     public static boolean checkUserLogin(String data) {
-        return data != null && !data.contains("系统错误提示页") && !data.contains("当前程序在执行过程中出现了未知异常，请重试") && !data.contains("当前你已经登录") && !data.contains("用户登录_南京审计大学教务管理系统");
+        return data != null && !data.contains("系统错误提示页") && !data.contains("当前程序在执行过程中出现了未知异常，请重试") && !data.contains("当前你已经登录") && !data.contains("用户登录_南京审计大学教务管理系统") && !data.contains("南京审计大学统一身份认证登录");
     }
 
     public static boolean checkAlstuLogin(String data) {
