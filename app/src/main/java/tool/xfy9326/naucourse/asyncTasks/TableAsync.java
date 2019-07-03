@@ -21,7 +21,7 @@ import tool.xfy9326.naucourse.methods.netInfoMethods.SchoolTimeMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.TableMethod;
 import tool.xfy9326.naucourse.utils.Course;
 import tool.xfy9326.naucourse.utils.SchoolTime;
-import tool.xfy9326.naucourse.views.ViewPagerAdapter;
+import tool.xfy9326.naucourse.views.MainViewPagerAdapter;
 
 public class TableAsync extends AsyncTask<Context, Void, Context> {
     private int timeLoadSuccess = -1;
@@ -40,7 +40,7 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
     @Override
     protected Context doInBackground(Context... context) {
         int loadTime = 0;
-        ViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(context[0]).getViewPagerAdapter();
+        MainViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(context[0]).getViewPagerAdapter();
         if (viewPagerAdapter != null) {
             TableFragment tableFragment = viewPagerAdapter.getTableFragment();
             try {
@@ -105,7 +105,7 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
 
     @Override
     protected void onPostExecute(Context context) {
-        ViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(context).getViewPagerAdapter();
+        MainViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(context).getViewPagerAdapter();
         if (viewPagerAdapter != null) {
             TableFragment tableFragment = viewPagerAdapter.getTableFragment();
             PersonFragment personFragment = viewPagerAdapter.getPersonFragment();

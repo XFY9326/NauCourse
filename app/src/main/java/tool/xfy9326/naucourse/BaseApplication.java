@@ -19,7 +19,7 @@ import tool.xfy9326.naucourse.activities.SchoolCalendarActivity;
 import tool.xfy9326.naucourse.activities.ScoreActivity;
 import tool.xfy9326.naucourse.activities.SuspendCourseActivity;
 import tool.xfy9326.naucourse.methods.NetMethod;
-import tool.xfy9326.naucourse.views.ViewPagerAdapter;
+import tool.xfy9326.naucourse.views.MainViewPagerAdapter;
 
 /**
  * Created by xfy9326 on 18-2-20.
@@ -28,7 +28,7 @@ import tool.xfy9326.naucourse.views.ViewPagerAdapter;
 public class BaseApplication extends Application {
     private NauSSOClient client;
     private ExecutorService executorService;
-    private ViewPagerAdapter viewPagerAdapter;
+    private MainViewPagerAdapter viewPagerAdapter;
     private WeakReference<InfoDetailActivity> infoDetailActivity;
     private WeakReference<ScoreActivity> scoreActivity;
     private WeakReference<ExamActivity> examActivity;
@@ -53,11 +53,11 @@ public class BaseApplication extends Application {
         return client;
     }
 
-    public ViewPagerAdapter getViewPagerAdapter() {
+    public MainViewPagerAdapter getViewPagerAdapter() {
         return viewPagerAdapter;
     }
 
-    public void setViewPagerAdapter(ViewPagerAdapter viewPagerAdapter) {
+    public void setViewPagerAdapter(MainViewPagerAdapter viewPagerAdapter) {
         this.viewPagerAdapter = viewPagerAdapter;
     }
 

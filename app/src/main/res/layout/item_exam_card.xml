@@ -28,7 +28,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -73,9 +73,8 @@
 
             <LinearLayout
                 android:id="@+id/layout_exam_last_time"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -101,7 +100,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="2dp"
-                        android:text="@string/minute" />
+                        android:text="@string/minute"
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 

@@ -15,13 +15,13 @@ import tool.xfy9326.naucourse.fragments.TableFragment;
  * Created by xfy9326 on 18-2-20.
  */
 
-public class ViewPagerAdapter extends FragmentPagerAdapter {
+public class MainViewPagerAdapter extends FragmentPagerAdapter {
     public static final int ITEM_COUNT = 3;
     private HomeFragment homeFragment = null;
     private TableFragment tableFragment = null;
     private PersonFragment personFragment = null;
 
-    public ViewPagerAdapter(FragmentManager fragmentManager) {
+    public MainViewPagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         setOldFragments(fragmentManager);
         createNewFragments();

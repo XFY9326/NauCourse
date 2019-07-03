@@ -21,7 +21,7 @@ import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.methods.TempMethod;
 import tool.xfy9326.naucourse.methods.UpdateMethod;
 import tool.xfy9326.naucourse.views.FixedViewPager;
-import tool.xfy9326.naucourse.views.ViewPagerAdapter;
+import tool.xfy9326.naucourse.views.MainViewPagerAdapter;
 
 /**
  * Created by xfy9326 on 18-2-20.
@@ -30,7 +30,7 @@ import tool.xfy9326.naucourse.views.ViewPagerAdapter;
 public class MainActivity extends AppCompatActivity {
     private final static String CURRENT_FRAGMENT_INDEX = "CURRENT_FRAGMENT_INDEX";
     private SharedPreferences sharedPreferences = null;
-    private ViewPagerAdapter viewPagerAdapter = null;
+    private MainViewPagerAdapter viewPagerAdapter = null;
     private FixedViewPager viewPager = null;
     private boolean hasLogin = false;
 
@@ -124,14 +124,14 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewPaper_main);
         final BottomNavigationView bnv = findViewById(R.id.bnv_main);
         if (viewPagerAdapter == null) {
-            viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+            viewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager());
         }
 
-        viewPager.setOffscreenPageLimit(ViewPagerAdapter.ITEM_COUNT);
+        viewPager.setOffscreenPageLimit(MainViewPagerAdapter.ITEM_COUNT);
         viewPager.setAdapter(viewPagerAdapter);
         if (getIntent() != null) {
             int position = getIntent().getIntExtra(Config.INTENT_VIEW_PAGER_POSITION, -1);
-            if (position >= 0 && position <= ViewPagerAdapter.ITEM_COUNT) {
+            if (position >= 0 && position <= MainViewPagerAdapter.ITEM_COUNT) {
                 fragment_current_index = position;
             }
         }

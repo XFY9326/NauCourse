@@ -30,6 +30,7 @@
     <string name="score_NP">年级排名：%1$s</string>
     <string name="score_ZP">专业排名：%1$s</string>
     <string name="score_BP">班级排名：%1$s</string>
+    <string name="credit_weight">绩点权值：%1$s</string>
     <string name="table_date">%1$d年%2$d月&#160;&#160;周%3$s&#160;&#160;&#160;%4$s</string>
     <string name="info_type">类别：%1$s</string>
     <string name="info_click">点击：%1$s</string>
@@ -85,7 +86,8 @@
     <string name="course_card_type">类别：%1$s</string>
     <string name="personal_detail">个人信息</string>
     <string name="main_score_detail">◈ 总体成绩</string>
-    <string name="term_score_detail">◈ 本学期课程成绩</string>
+    <string name="current_score_detail">本学期成绩</string>
+    <string name="history_score_detail">历史成绩</string>
     <string name="score_course_name">课程名称：%1$s</string>
     <string name="score_common">平时：%1$s</string>
     <string name="score_mid">期中：%1$s</string>
@@ -187,7 +189,7 @@
     <string name="show_single_color_sum">不随机设置课程颜色，只显示默认颜色</string>
     <string name="add">添加</string>
     <string name="single_color_warn">请在设置中关闭只显示默认颜色后再设置！</string>
-    <string name="wait_for_evaluate">待测评</string>
+    <string name="wait_for_evaluate">当前存在课程待测评！</string>
     <string name="academic_report">学术报告会</string>
     <string name="large_academic_conference">大型学术会议</string>
     <string name="suspend_course_class_class">教学班：%1$s</string>
@@ -225,9 +227,10 @@
     <string name="attention">提示</string>
     <string name="auto_update_course_table_alert">当前已开启智能覆盖更新教务课程表数据功能，非最新学期的教务系统中的课程有可能会被自动覆盖更新\n\n对导入的本学期课表所做的所有修改都会失效！\n\n如果需要关闭可以前往设置进行更改！</string>
     <string name="course_empty">当前没有任何可以导入的课程！</string>
-    <string name="course_term">课程学期设定</string>
+    <string name="course_term_set">课程学期设定</string>
     <string name="school_year">学年：</string>
     <string name="term">学期：</string>
+    <string name="course_term">学期：%1$s</string>
     <string name="term_one">第一学期</string>
     <string name="term_two">第二学期</string>
     <string name="add_course_term_alert">注：学年指第一学期开始的年份\n&#160;&#160;&#160;&#160;旧学期的课程可能会在自动更新时自动删除！</string>
@@ -316,6 +319,7 @@
     <string name="search_no_result">搜索结果为空！</string>
     <string name="import_success">导入成功！</string>
     <string name="empty_search_data">暂无搜索结果</string>
+    <string name="empty_list">列表为空</string>
     <string name="course_search_result_title">◈ 搜索结果</string>
     <string name="random_course_color">随机设置课程颜色</string>
     <string name="random_course_color_success">随机设置颜色成功！</string>

@@ -72,7 +72,7 @@ public class ScoreMethod extends BaseInfoMethod<CourseScore> {
         int count = 0;
         boolean startData = false;
         for (int i = 0; i < elements.size(); i++) {
-            String str = elements.get(i).text();
+            String str = elements.get(i).text().trim();
             if (str.contains("在修课程列表")) {
                 startData = true;
                 continue;

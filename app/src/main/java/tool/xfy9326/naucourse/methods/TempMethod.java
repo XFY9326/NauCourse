@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutorService;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.methods.netInfoMethods.ExamMethod;
+import tool.xfy9326.naucourse.methods.netInfoMethods.HistoryScoreMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.LevelExamMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.MoaMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.PersonMethod;
@@ -31,6 +32,16 @@ public class TempMethod {
                 ScoreMethod scoreMethod = new ScoreMethod(context);
                 if (scoreMethod.load() == Config.NET_WORK_GET_SUCCESS) {
                     scoreMethod.saveTemp();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        executorService.submit(() -> {
+            try {
+                HistoryScoreMethod historyScoreMethod = new HistoryScoreMethod(context);
+                if (historyScoreMethod.load() == Config.NET_WORK_GET_SUCCESS) {
+                    historyScoreMethod.saveTemp();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

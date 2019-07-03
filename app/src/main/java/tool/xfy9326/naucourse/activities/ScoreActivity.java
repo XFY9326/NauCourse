@@ -9,30 +9,28 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
 
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.asyncTasks.ScoreAsync;
 import tool.xfy9326.naucourse.methods.BaseMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.utils.CourseScore;
+import tool.xfy9326.naucourse.utils.HistoryScore;
 import tool.xfy9326.naucourse.utils.StudentScore;
-import tool.xfy9326.naucourse.views.recyclerAdapters.ScoreAdapter;
+import tool.xfy9326.naucourse.views.ScoreSwipeRefreshLayout;
+import tool.xfy9326.naucourse.views.ScoreViewPagerAdapter;
 
 /**
  * Created by 10696 on 2018/3/2.
  */
 
 public class ScoreActivity extends AppCompatActivity {
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private RecyclerView recyclerView;
-    @Nullable
-    private ScoreAdapter scoreAdapter;
+    private ScoreSwipeRefreshLayout swipeRefreshLayout;
+    private ScoreViewPagerAdapter scoreViewPagerAdapter;
     private int loadTime = 0;
 
     @Override
@@ -61,14 +59,36 @@ public class ScoreActivity extends AppCompatActivity {
     }
 
     private void ViewSet() {
-        recyclerView = findViewById(R.id.recyclerView_score_term);
-        recyclerView.setFocusableInTouchMode(false);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        if (scoreAdapter == null) {
-            scoreAdapter = new ScoreAdapter(ScoreActivity.this);
+        TabLayout tabLayout = findViewById(R.id.tabLayout_score);
+        ViewPager viewPager = findViewById(R.id.viewPaper_score);
+        if (scoreViewPagerAdapter == null) {
+            scoreViewPagerAdapter = new ScoreViewPagerAdapter(getSupportFragmentManager());
         }
-        recyclerView.setAdapter(scoreAdapter);
+        viewPager.setAdapter(scoreViewPagerAdapter);
+        viewPager.setOffscreenPageLimit(ScoreViewPagerAdapter.ITEM_COUNT);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition(), true);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        tabLayout.setupWithViewPager(viewPager);
+        TabLayout.Tab tabItem_0 = tabLayout.getTabAt(0);
+        TabLayout.Tab tabItem_1 = tabLayout.getTabAt(1);
+        if (tabItem_0 != null && tabItem_1 != null) {
+            tabItem_0.setText(R.string.current_score_detail);
+            tabItem_1.setText(R.string.history_score_detail);
+        }
 
         swipeRefreshLayout = findViewById(R.id.swipeLayout_score);
         swipeRefreshLayout.setDistanceToTriggerSync(200);
@@ -86,8 +106,8 @@ public class ScoreActivity extends AppCompatActivity {
         }
     }
 
-    public void setMainScore(@Nullable StudentScore studentScore, @Nullable CourseScore courseScore) {
-        if (studentScore != null && courseScore != null) {
+    public void setStudentScore(@Nullable StudentScore studentScore, @Nullable CourseScore courseScore, @Nullable HistoryScore historyScore) {
+        if (studentScore != null) {
             ((TextView) findViewById(R.id.textView_scoreXF)).setText(getString(R.string.score_XF, studentScore.getScoreXF()));
             ((TextView) findViewById(R.id.textView_scoreJD)).setText(getString(R.string.score_JD, studentScore.getScoreJD()));
             ((TextView) findViewById(R.id.textView_scoreZP)).setText(getString(R.string.score_ZP, studentScore.getScoreZP() == null ? getString(R.string.data_loading) : studentScore.getScoreZP()));
@@ -109,16 +129,15 @@ public class ScoreActivity extends AppCompatActivity {
             }
 
             if (waitForEvaluate(courseScore)) {
-                findViewById(R.id.textView_wait_for_evaluate).setVisibility(View.VISIBLE);
-            } else {
-                findViewById(R.id.textView_wait_for_evaluate).setVisibility(View.GONE);
+                Snackbar.make(findViewById(R.id.layout_score_content), R.string.wait_for_evaluate, Snackbar.LENGTH_SHORT).show();
             }
-
-            if (scoreAdapter == null) {
-                scoreAdapter = new ScoreAdapter(ScoreActivity.this, courseScore);
-                recyclerView.setAdapter(scoreAdapter);
-            } else {
-                scoreAdapter.updateData(courseScore);
+        }
+        if (scoreViewPagerAdapter != null) {
+            if (courseScore != null) {
+                scoreViewPagerAdapter.getCurrentScoreFragment().setScore(courseScore);
+            }
+            if (historyScore != null) {
+                scoreViewPagerAdapter.getHistoryScoreFragment().setScore(historyScore);
             }
         }
     }

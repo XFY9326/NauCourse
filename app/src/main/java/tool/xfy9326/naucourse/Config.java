@@ -177,6 +177,7 @@ public class Config {
 
     //离线数据版本号
     public static final int DATA_VERSION_COURSE_SCORE = 1;
+    public static final int DATA_VERSION_COURSE_HISTORY_SCORE = 1;
     public static final int DATA_VERSION_EXAM = 1;
     public static final int DATA_VERSION_JWC_TOPIC = 1;
     public static final int DATA_VERSION_NEXT_COURSE = 1;

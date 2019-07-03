@@ -9,7 +9,7 @@
 
     <include layout="@layout/widget_toolbar" />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    <tool.xfy9326.naucourse.views.ScoreSwipeRefreshLayout
         android:id="@+id/swipeLayout_score"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -133,41 +133,25 @@
                 app:cardElevation="3dp"
                 app:cardPreventCornerOverlap="true">
 
-                <LinearLayout
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout_score"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:padding="5dp"
-                        android:text="@string/term_score_detail" />
-
-                    <TextView
-                        android:id="@+id/textView_wait_for_evaluate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="15dp"
-                        android:text="@string/wait_for_evaluate"
-                        android:textColor="@android:color/holo_red_dark"
-                        android:textSize="13sp"
-                        android:visibility="gone" />
-
-                </LinearLayout>
+                    android:layout_height="45dp"
+                    android:background="@android:color/white"
+                    android:fillViewport="true"
+                    app:tabMode="fixed" />
 
             </androidx.cardview.widget.CardView>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView_score_term"
+            <tool.xfy9326.naucourse.views.FixedViewPager
+                android:id="@+id/viewPaper_score"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:layout_height="match_parent"
+                android:persistentDrawingCache="animation"
+                android:scrollbars="none" />
 
         </LinearLayout>
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </tool.xfy9326.naucourse.views.ScoreSwipeRefreshLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

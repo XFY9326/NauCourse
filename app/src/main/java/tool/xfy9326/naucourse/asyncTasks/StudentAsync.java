@@ -16,7 +16,7 @@ import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.PersonMethod;
 import tool.xfy9326.naucourse.utils.StudentInfo;
 import tool.xfy9326.naucourse.utils.StudentLearnProcess;
-import tool.xfy9326.naucourse.views.ViewPagerAdapter;
+import tool.xfy9326.naucourse.views.MainViewPagerAdapter;
 
 /**
  * Created by 10696 on 2018/3/2.
@@ -38,7 +38,7 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
     @Override
     protected Context doInBackground(Context... context) {
         int loadTime = 0;
-        ViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(context[0]).getViewPagerAdapter();
+        MainViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(context[0]).getViewPagerAdapter();
         if (viewPagerAdapter != null) {
             PersonFragment personFragment = viewPagerAdapter.getPersonFragment();
             try {
@@ -80,7 +80,7 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
 
     @Override
     protected void onPostExecute(@NonNull Context context) {
-        ViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(context).getViewPagerAdapter();
+        MainViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(context).getViewPagerAdapter();
         if (viewPagerAdapter != null) {
             PersonFragment personFragment = viewPagerAdapter.getPersonFragment();
             if (personFragment != null) {
