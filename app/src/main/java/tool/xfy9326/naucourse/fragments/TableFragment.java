@@ -508,7 +508,7 @@ public class TableFragment extends Fragment {
             }
             DialogMethod.showImageShareDialog(getActivity(),
                     bitmap,
-                    Config.PICTURE_DICTIONARY_PATH + Config.COURSE_TABLE_IMAGE_FILE_NAME,
+                    Config.COURSE_TABLE_IMAGE_FILE_NAME,
                     R.string.share_course_table,
                     R.string.course_table_share_error,
                     R.string.share_course_table);

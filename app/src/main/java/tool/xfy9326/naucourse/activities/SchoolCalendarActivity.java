@@ -64,9 +64,14 @@ public class SchoolCalendarActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_calendar_share:
+                String imageName = Config.SCHOOL_CALENDAR_IMAGE_FILE_NAME;
+                String calendar_name = sharedPreferences.getString(Config.PREFERENCE_SCHOOL_CALENDAR_NAME, null);
+                if (calendar_name != null) {
+                    imageName = calendar_name + ".jpeg";
+                }
                 DialogMethod.showImageShareDialog(this,
                         calendarBitmap,
-                        Config.PICTURE_DICTIONARY_PATH + Config.SCHOOL_CALENDAR_IMAGE_FILE_NAME,
+                        imageName,
                         R.string.share_school_calendar,
                         R.string.school_calendar_share_error,
                         R.string.share_school_calendar);
@@ -105,10 +110,12 @@ public class SchoolCalendarActivity extends AppCompatActivity {
             builder.setTitle(R.string.school_calendar_list);
             builder.setItems(nameList, (dialog, which) -> {
                 String url = calendarList.get(nameList[which]);
+                sharedPreferences.edit().putString(Config.PREFERENCE_SCHOOL_CALENDAR_NAME, nameList[which]).apply();
                 sharedPreferences.edit().putString(Config.PREFERENCE_SCHOOL_CALENDAR_PAGE_URL, url).apply();
                 refresh();
             });
             builder.setNeutralButton(R.string.school_calendar_default, (dialog, which) -> {
+                sharedPreferences.edit().remove(Config.PREFERENCE_SCHOOL_CALENDAR_NAME).apply();
                 sharedPreferences.edit().remove(Config.PREFERENCE_SCHOOL_CALENDAR_PAGE_URL).apply();
                 refresh();
             });

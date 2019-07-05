@@ -10,8 +10,8 @@ import tool.xfy9326.naucourse.fragments.HistoryScoreFragment;
 
 public class ScoreViewPagerAdapter extends FragmentPagerAdapter {
     public static final int ITEM_COUNT = 2;
-    private CurrentScoreFragment currentScoreFragment;
-    private HistoryScoreFragment historyScoreFragment;
+    private final CurrentScoreFragment currentScoreFragment;
+    private final HistoryScoreFragment historyScoreFragment;
 
     public ScoreViewPagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);

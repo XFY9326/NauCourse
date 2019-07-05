@@ -92,7 +92,7 @@ public class DialogMethod {
         builder.show();
     }
 
-    public static void showImageShareDialog(@NonNull Activity activity, Bitmap bitmap, final String saveImgPath, final int shareTitleId, final int shareFailedId, final int shareTextId) {
+    public static void showImageShareDialog(@NonNull Activity activity, Bitmap bitmap, final String saveImgName, final int shareTitleId, final int shareFailedId, final int shareTextId) {
         if (PermissionMethod.checkStoragePermission(activity, 0)) {
             if (bitmap != null) {
                 LayoutInflater layoutInflater = activity.getLayoutInflater();
@@ -104,11 +104,12 @@ public class DialogMethod {
                 builder.setView(view);
                 builder.setTitle(shareTitleId);
                 builder.setPositiveButton(R.string.share, (dialog, which) -> {
+                    String tempPath = Config.PICTURE_TEMP_DICTIONARY_PATH + saveImgName;
                     try {
-                        if (ImageMethod.saveBitmap(bitmap, saveImgPath, false)) {
+                        if (ImageMethod.saveBitmap(bitmap, tempPath, false)) {
                             Intent intent = new Intent();
                             intent.setAction(Intent.ACTION_SEND);
-                            Uri photoURI = FileProvider.getUriForFile(activity, Config.FILE_PROVIDER_AUTH, new File(saveImgPath));
+                            Uri photoURI = FileProvider.getUriForFile(activity, Config.FILE_PROVIDER_AUTH, new File(tempPath));
                             intent.setType("image/*");
                             intent.putExtra(Intent.EXTRA_STREAM, photoURI);
                             intent.addCategory(Intent.CATEGORY_DEFAULT);
@@ -121,9 +122,10 @@ public class DialogMethod {
                     }
                 });
                 builder.setNeutralButton(R.string.save, (dialog, which) -> {
+                    String savePath = Config.PICTURE_DICTIONARY_PATH + saveImgName;
                     try {
-                        if (ImageMethod.saveBitmap(bitmap, saveImgPath, false)) {
-                            Toast.makeText(activity, activity.getString(R.string.save_file_success, saveImgPath), Toast.LENGTH_SHORT).show();
+                        if (ImageMethod.saveBitmap(bitmap, savePath, false)) {
+                            Toast.makeText(activity, activity.getString(R.string.save_file_success, savePath), Toast.LENGTH_SHORT).show();
                         }
                     } catch (IOException e) {
                         e.printStackTrace();

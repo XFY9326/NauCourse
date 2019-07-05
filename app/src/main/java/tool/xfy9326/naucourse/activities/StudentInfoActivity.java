@@ -24,6 +24,8 @@ import tool.xfy9326.naucourse.utils.StudentInfo;
 import tool.xfy9326.naucourse.utils.StudentLearnProcess;
 
 public class StudentInfoActivity extends AppCompatActivity {
+    private StudentInfo studentInfo;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,9 +54,13 @@ public class StudentInfoActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.menu_stu_photo) {
             Bitmap bitmap = ImageMethod.getStuPhoto(this);
             if (bitmap != null) {
+                String imageName = Config.INFO_STU_PHOTO_FILE_NAME;
+                if (studentInfo != null && studentInfo.getStd_id() != null) {
+                    imageName = studentInfo.getStd_id() + ".jpeg";
+                }
                 DialogMethod.showImageShareDialog(this,
                         bitmap,
-                        Config.PICTURE_DICTIONARY_PATH + Config.INFO_STU_PHOTO_FILE_NAME,
+                        imageName,
                         R.string.stu_photo,
                         R.string.share_stu_photo_failed,
                         R.string.share_stu_photo);
@@ -84,6 +90,7 @@ public class StudentInfoActivity extends AppCompatActivity {
     }
 
     private void viewSet(StudentInfo studentInfo) {
+        this.studentInfo = studentInfo;
         ((TextView) findViewById(R.id.textView_info_stdId)).setText(getString(R.string.std_id, studentInfo.getStd_id()));
         ((TextView) findViewById(R.id.textView_info_stdClass)).setText(getString(R.string.std_class, studentInfo.getStd_class()));
         ((TextView) findViewById(R.id.textView_info_stdCollage)).setText(getString(R.string.std_collage, studentInfo.getStd_collage()));

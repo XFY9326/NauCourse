@@ -78,7 +78,7 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
                 while (restartTime++ < INFO_GET_MAX_TIME) {
                     getInfoData(context[0]);
                     if (loadCode == Config.NET_WORK_GET_SUCCESS) {
-                        if (checkInfoData(jwcTopic, alstuTopic, rssObjects)) {
+                        if (!checkInfoData(jwcTopic, alstuTopic, rssObjects)) {
                             break;
                         }
                     } else {

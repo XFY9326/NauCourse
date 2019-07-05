@@ -180,7 +180,7 @@ public class NauSSOClient {
     synchronized public void VPNLoginOut() throws Exception {
         if (isVPNEnabled()) {
             Request.Builder builder = new Request.Builder();
-            builder.url(VPNInterceptor.VPN_SERVER + "/logout");
+            builder.url(VPNMethod.VPN_SERVER + "/logout");
             main_client.newCall(builder.build()).execute().close();
         }
     }
@@ -263,7 +263,7 @@ public class NauSSOClient {
         String ssoContent = null;
 
         Request.Builder request_builder = new Request.Builder();
-        request_builder.url(VPNInterceptor.VPN_LOGIN_URL);
+        request_builder.url(VPNMethod.VPN_LOGIN_URL);
         Response dataResponse = main_client.newCall(request_builder.build()).execute();
         if (dataResponse.isSuccessful()) {
             ResponseBody responseBody = dataResponse.body();
@@ -276,7 +276,7 @@ public class NauSSOClient {
         if (ssoContent != null && !ssoContent.contains("南京审计大学WEBVPN登录门户")) {
             FormBody formBody = NauNetData.getSSOPostForm(userName, userPw, ssoContent);
             Request.Builder builder = new Request.Builder();
-            builder.url(VPNInterceptor.VPN_LOGIN_URL);
+            builder.url(VPNMethod.VPN_LOGIN_URL);
             builder.post(formBody);
 
             Response response = main_client.newCall(builder.build()).execute();
@@ -366,7 +366,7 @@ public class NauSSOClient {
     public void checkServer(final OnAvailableListener availableListener) {
         Request.Builder request_builder = new Request.Builder();
         if (isVPNEnabled()) {
-            request_builder.url(VPNInterceptor.VPN_SERVER);
+            request_builder.url(VPNMethod.VPN_SERVER);
         } else {
             request_builder.url(JWC_SERVER_URL);
         }

@@ -42,7 +42,6 @@ public class Config {
     public static final String PICTURE_DICTIONARY_PATH = DATA_DIR_PATH + "picture" + File.separator;
     public static final String PICTURE_TEMP_DICTIONARY_PATH = PICTURE_DICTIONARY_PATH + ".temp" + File.separator;
     public static final String COURSE_TABLE_IMAGE_FILE_NAME = "CourseTable.jpeg";
-    public static final String INFO_DETAIL_IMAGE_FILE_NAME = "AnnouncementDetail.jpeg";
     public static final String INFO_STU_PHOTO_FILE_NAME = "StuPhoto.jpeg";
     public static final String SCHOOL_CALENDAR_IMAGE_FILE_NAME = "SchoolCalendar.jpeg";
 
@@ -120,6 +119,7 @@ public class Config {
     public static final String PREFERENCE_SHOW_HIDDEN_FUNCTION = "SHOW_HIDDEN_FUNCTION";
     public static final String PREFERENCE_DOWNLOAD_VPN_FILE_WARNING = "DOWNLOAD_VPN_FILE_WARNING";
     public static final String PREFERENCE_CAN_ADD_COURSE_WARNING = "CAN_ADD_COURSE_WARNING";
+    public static final String PREFERENCE_SCHOOL_CALENDAR_NAME = "SCHOOL_CALENDAR_NAME";
 
     public static final String PREFERENCE_INFO_CHANNEL_SELECTED_JWC_SYSTEM = "INFO_CHANNEL_SELECTED_JWC_SYSTEM";
     public static final String PREFERENCE_INFO_CHANNEL_SELECTED_JW = "INFO_CHANNEL_SELECTED_JW";

@@ -15,7 +15,7 @@ import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.utils.HistoryScore;
 
 public class HistoryScoreAdapter extends RecyclerView.Adapter<HistoryScoreAdapter.HistoryScoreViewHolder> {
-    private Context context;
+    private final Context context;
     private HistoryScore historyScore;
 
     public HistoryScoreAdapter(Context context) {

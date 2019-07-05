@@ -28,11 +28,11 @@ public class SchoolCalendarMethod extends BaseNetMethod {
     private static final String server_url = "http://jw.nau.edu.cn";
     private static final String calendar_server_utl = "http://www.nau.edu.cn";
     private static final String calendar_list = "http://www.nau.edu.cn/p141c89/list.htm";
+    private final SharedPreferences sharedPreferences;
     @Nullable
     private Document document;
     @Nullable
     private Document document_list;
-    private SharedPreferences sharedPreferences;
 
     public SchoolCalendarMethod(@NonNull Context context) {
         super(context);

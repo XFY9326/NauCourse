@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourse.utils;
 
+@SuppressWarnings("unused")
 public class HistoryScore extends BaseData {
     private String[] id;
     private String[] name;

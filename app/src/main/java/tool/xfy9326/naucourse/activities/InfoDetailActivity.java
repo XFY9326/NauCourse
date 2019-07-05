@@ -170,7 +170,7 @@ public class InfoDetailActivity extends AppCompatActivity {
             Bitmap bitmap = ImageMethod.getViewsBitmap(InfoDetailActivity.this, new View[]{findViewById(R.id.cardView_info_detail_title), findViewById(R.id.layout_info_detail_data)}, true);
             DialogMethod.showImageShareDialog(InfoDetailActivity.this,
                     bitmap,
-                    Config.PICTURE_DICTIONARY_PATH + Config.INFO_STU_PHOTO_FILE_NAME,
+                    info_title + "_" + info_date + ".jpeg",
                     R.string.share_info_detail,
                     R.string.share_info_failed,
                     R.string.share_info);

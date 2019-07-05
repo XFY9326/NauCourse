@@ -355,8 +355,15 @@
     <string name="school_calendar_list">校历列表</string>
     <string name="school_calendar_default">默认校历（当前学期）</string>
     <string name="school_calendar_list_empty">校历列表正在加载中！</string>
+    <string name="credit_calculator">绩点计算器</string>
+    <string name="credit_weight_input">绩点权值：</string>
+    <string name="credit_course_choose">请选择本学期参与绩点计算的课程：</string>
+    <string name="credit_weight_needed">请正确输入已选课程的绩点权值！</string>
+    <string name="credit_calculate_result">当前课程组合下\n绩点预计值为：%1$f</string>
+    <string name="calculate">计算</string>
+    <string name="credit_no_select">你没有选择任何课程！</string>
 
-    <string name="new_version_info_content">欢迎使用NAU课程表\n\n建议各位只要发现新版本就更新，尽量减少旧版本导致的错误。如果在使用过程中发现任何问题，请尽快反馈，谢谢。\n\n今后将会减少稳定版的更新，更多未经测试的新功能将会放在测试版中，如果希望体验新版本可以在更新设置中选择更新到测试版。\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
+    <string name="new_version_info_content">欢迎使用NAU课程表\n\n\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>
