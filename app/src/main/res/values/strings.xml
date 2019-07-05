@@ -362,6 +362,9 @@
     <string name="credit_calculate_result">当前课程组合下\n绩点预计值为：%1$f</string>
     <string name="calculate">计算</string>
     <string name="credit_no_select">你没有选择任何课程！</string>
+    <string name="credit_current">历史绩点计算：</string>
+    <string name="credit_current_info">对历史成绩绩点重新计算\n绩点值为：%1$f</string>
+    <string name="login_with_vpn_mode">使用校园VPN模式登录</string>
 
     <string name="new_version_info_content">欢迎使用NAU课程表\n\n\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
 

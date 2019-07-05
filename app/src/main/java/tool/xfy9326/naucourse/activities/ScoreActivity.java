@@ -21,6 +21,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.asyncTasks.ScoreAsync;
@@ -43,7 +44,7 @@ public class ScoreActivity extends AppCompatActivity {
     private ScoreSwipeRefreshLayout swipeRefreshLayout;
     private ScoreViewPagerAdapter scoreViewPagerAdapter;
     private CourseScore courseScore;
-    private HistoryScore historyScore;
+    private List<CreditCountCourse> historyCreditCourse;
     private boolean isLoading = true;
     private int loadTime = 0;
 
@@ -65,7 +66,7 @@ public class ScoreActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_score_credit) {
-            if (!isLoading && courseScore != null && historyScore != null) {
+            if (!isLoading && courseScore != null && historyCreditCourse != null) {
                 showCreditCountDialog();
             } else {
                 Snackbar.make(findViewById(R.id.layout_score_content), R.string.data_is_loading, Snackbar.LENGTH_SHORT).show();
@@ -85,8 +86,7 @@ public class ScoreActivity extends AppCompatActivity {
             if (current.size() == 0) {
                 Snackbar.make(findViewById(R.id.layout_score_content), R.string.credit_no_select, Snackbar.LENGTH_SHORT).show();
             } else {
-                ArrayList<CreditCountCourse> history = CreditCountMethod.getHistoryCreditCourse(historyScore);
-                if (current.addAll(history)) {
+                if (current.addAll(historyCreditCourse)) {
                     float credit = CreditCountMethod.getCredit(current);
                     AlertDialog.Builder new_builder = new AlertDialog.Builder(this);
                     new_builder.setTitle(R.string.credit_calculator);
@@ -154,6 +154,19 @@ public class ScoreActivity extends AppCompatActivity {
             tabItem_1.setText(R.string.history_score_detail);
         }
 
+        findViewById(R.id.cardView_score_total).setOnClickListener(v -> {
+            if (historyCreditCourse != null) {
+                float credit = CreditCountMethod.getCredit(historyCreditCourse);
+                AlertDialog.Builder builder = new AlertDialog.Builder(ScoreActivity.this);
+                builder.setTitle(R.string.credit_current);
+                builder.setMessage(getString(R.string.credit_current_info, credit));
+                builder.setPositiveButton(android.R.string.yes, null);
+                builder.show();
+            } else {
+                Snackbar.make(findViewById(R.id.layout_score_content), R.string.data_is_loading, Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
         swipeRefreshLayout = findViewById(R.id.swipeLayout_score);
         swipeRefreshLayout.setDistanceToTriggerSync(200);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
@@ -197,7 +210,9 @@ public class ScoreActivity extends AppCompatActivity {
             }
         }
         this.courseScore = courseScore;
-        this.historyScore = historyScore;
+        if (historyScore != null) {
+            historyCreditCourse = CreditCountMethod.getHistoryCreditCourse(historyScore);
+        }
         if (scoreViewPagerAdapter != null) {
             if (courseScore != null) {
                 scoreViewPagerAdapter.getCurrentScoreFragment().setScore(courseScore);
