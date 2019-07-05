@@ -231,7 +231,7 @@ public class CourseEditActivity extends AppCompatActivity {
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(CourseEditActivity.this);
-        builder.setTitle(R.string.course_term);
+        builder.setTitle(R.string.course_term_set);
         builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
             String str_year = editText_year.getText().toString();
             if (!str_year.isEmpty() && BaseMethod.isInteger(str_year)) {

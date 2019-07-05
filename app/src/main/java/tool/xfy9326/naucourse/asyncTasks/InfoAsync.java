@@ -26,7 +26,7 @@ import tool.xfy9326.naucourse.tools.RSSReader;
 import tool.xfy9326.naucourse.utils.AlstuTopic;
 import tool.xfy9326.naucourse.utils.JwcTopic;
 import tool.xfy9326.naucourse.utils.TopicInfo;
-import tool.xfy9326.naucourse.views.ViewPagerAdapter;
+import tool.xfy9326.naucourse.views.MainViewPagerAdapter;
 
 /**
  * Created by 10696 on 2018/3/2.
@@ -60,7 +60,7 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
     @Override
     protected Context doInBackground(final Context... context) {
         int loadTime = 0;
-        ViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(context[0]).getViewPagerAdapter();
+        MainViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(context[0]).getViewPagerAdapter();
         if (viewPagerAdapter != null) {
             HomeFragment homeFragment = viewPagerAdapter.getHomeFragment();
             if (homeFragment != null) {
@@ -78,7 +78,7 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
                 while (restartTime++ < INFO_GET_MAX_TIME) {
                     getInfoData(context[0]);
                     if (loadCode == Config.NET_WORK_GET_SUCCESS) {
-                        if (checkInfoData(jwcTopic, alstuTopic, rssObjects)) {
+                        if (!checkInfoData(jwcTopic, alstuTopic, rssObjects)) {
                             break;
                         }
                     } else {
@@ -188,7 +188,7 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
 
     @Override
     protected void onPostExecute(@NonNull Context context) {
-        ViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(context).getViewPagerAdapter();
+        MainViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(context).getViewPagerAdapter();
         if (viewPagerAdapter != null) {
             HomeFragment homeFragment = viewPagerAdapter.getHomeFragment();
             if (homeFragment != null) {

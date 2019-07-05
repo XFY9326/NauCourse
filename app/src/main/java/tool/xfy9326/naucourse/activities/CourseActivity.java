@@ -235,7 +235,7 @@ public class CourseActivity extends AppCompatActivity {
         final View view = layoutInflater.inflate(R.layout.dialog_course_term_set, findViewById(R.id.layout_dialog_course_term_set));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(CourseActivity.this);
-        builder.setTitle(R.string.course_term);
+        builder.setTitle(R.string.course_term_set);
         builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
             EditText editText_year = view.findViewById(R.id.editText_course_school_year);
             RadioButton radioButton_term_one = view.findViewById(R.id.radioButton_term_one);

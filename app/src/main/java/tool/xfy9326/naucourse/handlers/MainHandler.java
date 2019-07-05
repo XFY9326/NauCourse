@@ -12,7 +12,7 @@ import tool.xfy9326.naucourse.BaseApplication;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.fragments.TableFragment;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.views.ViewPagerAdapter;
+import tool.xfy9326.naucourse.views.MainViewPagerAdapter;
 
 /**
  * Created by 10696 on 2018/3/17.
@@ -30,7 +30,7 @@ public class MainHandler extends Handler {
         try {
             switch (msg.what) {
                 case Config.HANDLER_RELOAD_TABLE:
-                    ViewPagerAdapter viewPagerAdapter = baseApplicationWeakReference.get().getViewPagerAdapter();
+                    MainViewPagerAdapter viewPagerAdapter = baseApplicationWeakReference.get().getViewPagerAdapter();
                     if (viewPagerAdapter != null) {
                         TableFragment tableFragment = viewPagerAdapter.getTableFragment();
                         if (tableFragment != null) {

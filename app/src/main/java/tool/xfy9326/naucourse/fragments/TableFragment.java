@@ -54,8 +54,8 @@ import tool.xfy9326.naucourse.utils.Course;
 import tool.xfy9326.naucourse.utils.CourseDetail;
 import tool.xfy9326.naucourse.utils.NextCourse;
 import tool.xfy9326.naucourse.utils.SchoolTime;
+import tool.xfy9326.naucourse.views.MainViewPagerAdapter;
 import tool.xfy9326.naucourse.views.NestedHorizontalScrollView;
-import tool.xfy9326.naucourse.views.ViewPagerAdapter;
 import tool.xfy9326.naucourse.widget.NextClassWidget;
 
 /**
@@ -297,7 +297,7 @@ public class TableFragment extends Fragment {
 
     private void updateAllNextCourseView(@NonNull Context context) {
         //主页面下一节课设置
-        ViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(context).getViewPagerAdapter();
+        MainViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(context).getViewPagerAdapter();
         if (viewPagerAdapter != null) {
             HomeFragment homeFragment = viewPagerAdapter.getHomeFragment();
             if (homeFragment != null) {
@@ -508,7 +508,7 @@ public class TableFragment extends Fragment {
             }
             DialogMethod.showImageShareDialog(getActivity(),
                     bitmap,
-                    Config.PICTURE_DICTIONARY_PATH + Config.COURSE_TABLE_IMAGE_FILE_NAME,
+                    Config.COURSE_TABLE_IMAGE_FILE_NAME,
                     R.string.share_course_table,
                     R.string.course_table_share_error,
                     R.string.share_course_table);
