@@ -108,7 +108,7 @@
     <string name="notification_manage">通知管理</string>
     <string name="next_class_notify">提示下一节课的信息</string>
     <string name="next_class_notify_sum">将会在上课前十分钟提示上课信息</string>
-    <string name="open_source_info">本应用开源在Github</string>
+    <string name="open_source_info">本应用基于GPL3.0协议开源于Github</string>
     <string name="default_show_table_page">默认显示课程表界面</string>
     <string name="default_show_table_page_sum">打开应用时直接显示课程表，减少用用户操作</string>
     <string name="show_wide_course_table">增加课程表内课程信息的显示宽度</string>

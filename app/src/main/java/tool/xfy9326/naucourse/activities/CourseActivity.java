@@ -604,11 +604,6 @@ public class CourseActivity extends AppCompatActivity {
 
     private void showDatePickDialog(Activity activity, final boolean isStartDate, int year, int month, int day) {
         final DatePickerDialog pickerDialog = new DatePickerDialog(activity, null, year, month, day);
-        if (isStartDate) {
-            pickerDialog.setTitle(R.string.custom_term_start_date);
-        } else {
-            pickerDialog.setTitle(R.string.custom_term_end_date);
-        }
         pickerDialog.setCancelable(false);
         pickerDialog.setCanceledOnTouchOutside(false);
         pickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(android.R.string.yes), (dialog, which) -> {
