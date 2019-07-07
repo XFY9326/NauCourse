@@ -108,7 +108,6 @@ public class PersonFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_person, container, false);
-        unlockFunction();
         return view;
     }
 
@@ -116,6 +115,12 @@ public class PersonFragment extends Fragment {
     public void onStart() {
         super.onStart();
         ViewSet();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        unlockFunction();
     }
 
     private void ViewSet() {

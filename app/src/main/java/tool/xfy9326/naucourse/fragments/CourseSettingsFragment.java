@@ -36,7 +36,7 @@ import tool.xfy9326.naucourse.methods.ImageMethod;
 import tool.xfy9326.naucourse.methods.PermissionMethod;
 import tool.xfy9326.naucourse.receivers.CourseUpdateReceiver;
 import tool.xfy9326.naucourse.tools.IO;
-import tool.xfy9326.naucourse.views.ViewPagerAdapter;
+import tool.xfy9326.naucourse.views.MainViewPagerAdapter;
 
 /**
  * Created by xfy9326 on 18-2-20.
@@ -202,7 +202,7 @@ public class CourseSettingsFragment extends PreferenceFragmentCompat {
 
     private void cropAndSetImage(Uri uri) {
         if (isAdded() && getActivity() != null && uri != null) {
-            ViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(getActivity()).getViewPagerAdapter();
+            MainViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(getActivity()).getViewPagerAdapter();
             if (viewPagerAdapter != null) {
                 TableFragment tableFragment = viewPagerAdapter.getTableFragment();
                 if (tableFragment != null) {

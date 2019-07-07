@@ -40,40 +40,19 @@ public class ExamMethod extends BaseInfoMethod<Exam> {
     }
 
     private static void setLastTimeText(Context context, long now, String startTime, ArrayList<String> examLastTime, ArrayList<String> examLastTimeUnit) {
-        String lastTime = null;
-        String lastTimeUnit = null;
         if (startTime != null) {
-            long examTime = 0;
             try {
-                examTime = TimeMethod.parseDateSDFHM(startTime).getTime() / 1000L;
+                long examTime = TimeMethod.parseDateSDFHM(startTime).getTime() / 1000L;
+                TimeMethod.CountingDown countingDown = TimeMethod.getCountingDownStr(context, now, examTime);
+                examLastTime.add(countingDown.Time);
+                examLastTimeUnit.add(countingDown.TimeUnit);
+                return;
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            if (examTime > now) {
-                long day = (long) Math.ceil((examTime - now) / (3600f * 24));
-                if (day > 0) {
-                    lastTime = String.valueOf(day);
-                    lastTimeUnit = context.getString(R.string.day);
-                } else {
-                    long hour = (long) Math.ceil((examTime - now) / 3600f);
-                    if (hour > 0) {
-                        lastTime = String.valueOf(hour);
-                        lastTimeUnit = context.getString(R.string.hour);
-                    } else {
-                        long minute = (long) Math.ceil((examTime - now) / 60f);
-                        if (minute > 0) {
-                            lastTime = String.valueOf(minute);
-                            lastTimeUnit = context.getString(R.string.minute);
-                        } else {
-                            lastTime = String.valueOf(0);
-                            lastTimeUnit = context.getString(R.string.minute);
-                        }
-                    }
-                }
-            }
         }
-        examLastTime.add(lastTime);
-        examLastTimeUnit.add(lastTimeUnit);
+        examLastTime.add(null);
+        examLastTimeUnit.add(null);
     }
 
     @Override

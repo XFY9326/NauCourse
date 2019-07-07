@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import lib.xfy9326.nausso.NauSSOClient;
-import lib.xfy9326.nausso.VPNInterceptor;
+import lib.xfy9326.nausso.VPNMethod;
 
 public class VPNMethods {
     static final String[] NON_VPN_HOST = new String[]{"jw.nau.edu.cn", "www.nau.edu.cn", "jwc.nau.edu.cn", "xxb.nau.edu.cn", "tw.nau.edu.cn", "xgc.nau.edu.cn", "my.nau.edu.cn"};
@@ -35,7 +35,7 @@ public class VPNMethods {
     }
 
     public static String vpnLinkUrlFix(Context context, String host, String url) {
-        if (url.startsWith(VPNInterceptor.VPN_SERVER)) {
+        if (url.startsWith(VPNMethod.VPN_SERVER)) {
             return url;
         }
         if (url.contains(SCHOOL_MAIN_HOST) || url.startsWith("/")) {
@@ -43,7 +43,7 @@ public class VPNMethods {
             if (client.isVPNEnabled() && url.startsWith("/")) {
                 if (!client.isVPNSmartMode() || needVPNHost(host)) {
                     if (url.contains(getRealHost(host)) || url.equals("/")) {
-                        return VPNInterceptor.VPN_SERVER + url;
+                        return VPNMethod.VPN_SERVER + url;
                     } else {
                         String vpnHost = buildVPNHost(host);
                         if (vpnHost.endsWith("/") || url.startsWith("/")) {
@@ -70,9 +70,9 @@ public class VPNMethods {
     private static String buildVPNHost(String host) {
         String realHost = getRealHost(host);
         if (host.startsWith("https")) {
-            return VPNInterceptor.VPN_SERVER + "/https/" + realHost;
+            return VPNMethod.VPN_SERVER + "/https/" + realHost;
         } else {
-            return VPNInterceptor.VPN_SERVER + "/http/" + realHost;
+            return VPNMethod.VPN_SERVER + "/http/" + realHost;
         }
     }
 

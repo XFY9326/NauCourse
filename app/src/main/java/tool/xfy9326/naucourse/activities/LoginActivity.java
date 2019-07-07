@@ -67,6 +67,10 @@ public class LoginActivity extends AppCompatActivity {
         }
         findViewById(R.id.button_login_login).setOnClickListener(v -> showLoginAttentionDialog());
 
+        CheckBox checkBox_vpn = findViewById(R.id.checkBox_login_vpn_accept);
+        checkBox_vpn.setChecked(sharedPreferences.getBoolean(Config.PREFERENCE_SCHOOL_VPN_MODE, Config.DEFAULT_PREFERENCE_SCHOOL_VPN_MODE));
+        checkBox_vpn.setOnCheckedChangeListener((buttonView, isChecked) -> sharedPreferences.edit().putBoolean(Config.PREFERENCE_SCHOOL_VPN_MODE, isChecked).apply());
+
         findViewById(R.id.textView_login_accept_eula).setOnClickListener(v -> DialogMethod.showEULADialog(LoginActivity.this, false, null));
     }
 

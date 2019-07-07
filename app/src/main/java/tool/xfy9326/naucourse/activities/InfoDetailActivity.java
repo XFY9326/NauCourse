@@ -1,10 +1,8 @@
 package tool.xfy9326.naucourse.activities;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -13,7 +11,6 @@ import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,13 +23,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 
-import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Objects;
 
 import lib.xfy9326.nausso.NauSSOClient;
@@ -40,10 +33,10 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.asyncTasks.InfoDetailAsync;
 import tool.xfy9326.naucourse.methods.BaseMethod;
+import tool.xfy9326.naucourse.methods.DialogMethod;
 import tool.xfy9326.naucourse.methods.ImageMethod;
 import tool.xfy9326.naucourse.methods.InfoMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
-import tool.xfy9326.naucourse.methods.PermissionMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.AlstuMethod;
 import tool.xfy9326.naucourse.utils.TopicInfo;
 
@@ -127,7 +120,7 @@ public class InfoDetailActivity extends AppCompatActivity {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     Uri content_url = Uri.parse(url);
                     intent.setData(content_url);
-                    runIntent(intent);
+                    BaseMethod.runIntent(InfoDetailActivity.this, intent);
                 } else if (item.getItemId() == R.id.menu_info_detail_share) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle(R.string.share_info_detail);
@@ -172,72 +165,17 @@ public class InfoDetailActivity extends AppCompatActivity {
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_SUBJECT, info_type);
             intent.putExtra(Intent.EXTRA_TEXT, shareText);
-            runIntent(Intent.createChooser(intent, getString(R.string.share)));
+            BaseMethod.runIntent(InfoDetailActivity.this, Intent.createChooser(intent, getString(R.string.share)));
         } else if (shareType == SHARE_TYPE_IMAGE) {
-            if (PermissionMethod.checkStoragePermission(InfoDetailActivity.this, 0)) {
-                Bitmap bitmap = ImageMethod.getViewsBitmap(InfoDetailActivity.this, new View[]{findViewById(R.id.cardView_info_detail_title), findViewById(R.id.layout_info_detail_data)}, true);
-
-                if (bitmap != null) {
-                    final String path = Config.PICTURE_TEMP_DICTIONARY_PATH + Config.INFO_DETAIL_IMAGE_FILE_NAME;
-                    LayoutInflater layoutInflater = getLayoutInflater();
-                    View view = layoutInflater.inflate(R.layout.dialog_share_image, findViewById(R.id.layout_dialog_share_image));
-                    PhotoView photoView = view.findViewById(R.id.photoView_share_image);
-                    photoView.setImageDrawable(new BitmapDrawable(getResources(), bitmap));
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(InfoDetailActivity.this);
-                    builder.setView(view);
-                    builder.setTitle(R.string.share_info_detail);
-                    builder.setPositiveButton(R.string.share, (dialog, which) -> {
-                        try {
-                            if (ImageMethod.saveBitmap(bitmap, path, false)) {
-                                Uri photoURI = FileProvider.getUriForFile(InfoDetailActivity.this, Config.FILE_PROVIDER_AUTH, new File(path));
-                                intent.setType("image/*");
-                                intent.putExtra(Intent.EXTRA_STREAM, photoURI);
-                                intent.addCategory(Intent.CATEGORY_DEFAULT);
-                                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                runIntent(Intent.createChooser(intent, getString(R.string.share_info)));
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            Toast.makeText(InfoDetailActivity.this, R.string.share_info_failed, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    builder.setNeutralButton(R.string.save, (dialog, which) -> {
-                        try {
-                            if (ImageMethod.saveBitmap(bitmap, path, false)) {
-                                Toast.makeText(InfoDetailActivity.this, getString(R.string.save_file_success, path), Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            Toast.makeText(InfoDetailActivity.this, R.string.save_failed, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    builder.setNegativeButton(android.R.string.cancel, null);
-                    builder.setOnCancelListener(dialog -> {
-                        if (!bitmap.isRecycled()) {
-                            bitmap.recycle();
-                        }
-                    });
-                    builder.show();
-                }
-            } else {
-                Toast.makeText(InfoDetailActivity.this, R.string.share_info_failed, Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Toast.makeText(InfoDetailActivity.this, R.string.permission_error, Toast.LENGTH_SHORT).show();
+            Bitmap bitmap = ImageMethod.getViewsBitmap(InfoDetailActivity.this, new View[]{findViewById(R.id.cardView_info_detail_title), findViewById(R.id.layout_info_detail_data)}, true);
+            DialogMethod.showImageShareDialog(InfoDetailActivity.this,
+                    bitmap,
+                    info_title + "_" + info_date + ".jpeg",
+                    R.string.share_info_detail,
+                    R.string.share_info_failed,
+                    R.string.share_info);
         }
     }
-
-
-    private void runIntent(Intent intent) {
-        try {
-            startActivity(intent);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(this, R.string.no_available_application, Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-    }
-
 
     private boolean getIntentData() {
         Intent intent = getIntent();

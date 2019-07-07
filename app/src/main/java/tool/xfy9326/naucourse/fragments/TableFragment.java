@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -29,14 +27,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.gridlayout.widget.GridLayout;
 
-import com.github.chrisbanes.photoview.PhotoView;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -51,18 +44,18 @@ import tool.xfy9326.naucourse.methods.BaseMethod;
 import tool.xfy9326.naucourse.methods.CourseMethod;
 import tool.xfy9326.naucourse.methods.CourseViewMethod;
 import tool.xfy9326.naucourse.methods.DataMethod;
+import tool.xfy9326.naucourse.methods.DialogMethod;
 import tool.xfy9326.naucourse.methods.ImageMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.methods.NextClassMethod;
-import tool.xfy9326.naucourse.methods.PermissionMethod;
 import tool.xfy9326.naucourse.methods.TimeMethod;
 import tool.xfy9326.naucourse.receivers.CourseUpdateReceiver;
 import tool.xfy9326.naucourse.utils.Course;
 import tool.xfy9326.naucourse.utils.CourseDetail;
 import tool.xfy9326.naucourse.utils.NextCourse;
 import tool.xfy9326.naucourse.utils.SchoolTime;
+import tool.xfy9326.naucourse.views.MainViewPagerAdapter;
 import tool.xfy9326.naucourse.views.NestedHorizontalScrollView;
-import tool.xfy9326.naucourse.views.ViewPagerAdapter;
 import tool.xfy9326.naucourse.widget.NextClassWidget;
 
 /**
@@ -304,7 +297,7 @@ public class TableFragment extends Fragment {
 
     private void updateAllNextCourseView(@NonNull Context context) {
         //主页面下一节课设置
-        ViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(context).getViewPagerAdapter();
+        MainViewPagerAdapter viewPagerAdapter = BaseMethod.getApp(context).getViewPagerAdapter();
         if (viewPagerAdapter != null) {
             HomeFragment homeFragment = viewPagerAdapter.getHomeFragment();
             if (homeFragment != null) {
@@ -507,69 +500,18 @@ public class TableFragment extends Fragment {
     }
 
     private void shareTable() {
-        if (view != null && isAdded()) {
-            if (PermissionMethod.checkStoragePermission(getActivity(), 0)) {
-                View tableView = view.findViewById(R.id.course_table_layout);
-                if (view_set && tableView.getVisibility() == View.VISIBLE) {
-                    if (getActivity() != null) {
-                        final Bitmap bitmap = ImageMethod.getViewBitmap(getActivity(), tableView);
-
-                        if (bitmap != null) {
-                            final String path = Config.PICTURE_DICTIONARY_PATH + Config.COURSE_TABLE_IMAGE_FILE_NAME;
-
-                            LayoutInflater layoutInflater = getLayoutInflater();
-                            View view = layoutInflater.inflate(R.layout.dialog_share_image, getActivity().findViewById(R.id.layout_dialog_share_image));
-                            PhotoView photoView = view.findViewById(R.id.photoView_share_image);
-                            photoView.setImageDrawable(new BitmapDrawable(getResources(), bitmap));
-
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                            builder.setView(view);
-                            builder.setTitle(R.string.share_course_table);
-                            builder.setPositiveButton(R.string.share, (dialog, which) -> {
-                                if (getActivity() != null) {
-                                    try {
-                                        if (ImageMethod.saveBitmap(bitmap, path, false)) {
-                                            Uri photoURI = FileProvider.getUriForFile(getActivity(), Config.FILE_PROVIDER_AUTH, new File(path));
-                                            Intent intent = new Intent(Intent.ACTION_SEND);
-                                            intent.setType("image/*");
-                                            intent.putExtra(Intent.EXTRA_STREAM, photoURI);
-                                            intent.addCategory(Intent.CATEGORY_DEFAULT);
-                                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                            startActivity(Intent.createChooser(intent, getString(R.string.share_course_table)));
-                                        }
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                        Toast.makeText(getActivity(), R.string.course_table_share_error, Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                            builder.setNeutralButton(R.string.save, (dialog, which) -> {
-                                try {
-                                    if (ImageMethod.saveBitmap(bitmap, path, false)) {
-                                        Toast.makeText(getActivity(), getString(R.string.save_file_success, path), Toast.LENGTH_SHORT).show();
-                                    }
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                    Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                            builder.setNegativeButton(android.R.string.cancel, null);
-                            builder.setOnCancelListener(dialog -> {
-                                if (!bitmap.isRecycled()) {
-                                    bitmap.recycle();
-                                }
-                            });
-                            builder.show();
-                        } else {
-                            Toast.makeText(getActivity(), R.string.course_table_share_error, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                } else {
-                    Toast.makeText(getActivity(), R.string.data_is_loading, Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Toast.makeText(getActivity(), R.string.permission_error, Toast.LENGTH_SHORT).show();
+        if (view != null && isAdded() && getActivity() != null) {
+            Bitmap bitmap = null;
+            View tableView = view.findViewById(R.id.course_table_layout);
+            if (view_set && tableView.getVisibility() == View.VISIBLE) {
+                bitmap = ImageMethod.getViewBitmap(getActivity(), tableView);
             }
+            DialogMethod.showImageShareDialog(getActivity(),
+                    bitmap,
+                    Config.COURSE_TABLE_IMAGE_FILE_NAME,
+                    R.string.share_course_table,
+                    R.string.course_table_share_error,
+                    R.string.share_course_table);
         }
     }
 

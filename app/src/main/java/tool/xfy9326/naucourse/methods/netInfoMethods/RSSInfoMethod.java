@@ -149,6 +149,10 @@ public class RSSInfoMethod {
         return html;
     }
 
+    private static boolean checkRSS(String content) {
+        return content != null && content.contains("rss") && content.contains("channel") && content.contains("title");
+    }
+
     public int load() throws Exception {
         hasFailedLoad = false;
         isLoginError = false;
@@ -161,7 +165,7 @@ public class RSSInfoMethod {
                 if (rssUrl != null) {
                     try {
                         String data = NetMethod.loadUrlFromLoginClient(context, rssUrl, false);
-                        if (data != null) {
+                        if (checkRSS(data)) {
                             if (NauSSOClient.checkUserLogin(data)) {
                                 RSSReader.RSSObject rssObject = RSSReader.getRSSObject(data);
                                 if (rssObject != null) {

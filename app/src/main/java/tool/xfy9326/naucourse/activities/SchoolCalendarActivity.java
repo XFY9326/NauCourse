@@ -1,48 +1,45 @@
 package tool.xfy9326.naucourse.activities;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.File;
+import java.util.LinkedHashMap;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.asyncTasks.SchoolCalendarAsync;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.ImageMethod;
+import tool.xfy9326.naucourse.methods.DialogMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
-import tool.xfy9326.naucourse.methods.PermissionMethod;
-import tool.xfy9326.naucourse.tools.IO;
 
 public class SchoolCalendarActivity extends AppCompatActivity {
     private int loadTime = 0;
+    private LinkedHashMap<String, String> calendarList;
+    private SharedPreferences sharedPreferences;
+    private Bitmap calendarBitmap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_school_calendar);
         BaseMethod.getApp(this).setSchoolCalendarActivity(this);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         ToolBarSet();
         getData();
         showAlert();
@@ -67,21 +64,37 @@ public class SchoolCalendarActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_calendar_share:
-                shareCalendar();
+                String imageName = Config.SCHOOL_CALENDAR_IMAGE_FILE_NAME;
+                String calendar_name = sharedPreferences.getString(Config.PREFERENCE_SCHOOL_CALENDAR_NAME, null);
+                if (calendar_name != null) {
+                    imageName = calendar_name + ".jpeg";
+                }
+                DialogMethod.showImageShareDialog(this,
+                        calendarBitmap,
+                        imageName,
+                        R.string.share_school_calendar,
+                        R.string.school_calendar_share_error,
+                        R.string.share_school_calendar);
                 break;
             case R.id.menu_calendar_refresh:
-                PhotoView photoView = findViewById(R.id.photoView_school_calendar);
-                photoView.setVisibility(View.GONE);
-                findViewById(R.id.layout_loading_school_calendar).setVisibility(View.VISIBLE);
-                photoView.refreshDrawableState();
-                getData();
+                refresh();
+                break;
+            case R.id.menu_calendar_list:
+                showSchoolCalendarList();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private void refresh() {
+        PhotoView photoView = findViewById(R.id.photoView_school_calendar);
+        photoView.setVisibility(View.GONE);
+        findViewById(R.id.layout_loading_school_calendar).setVisibility(View.VISIBLE);
+        photoView.refreshDrawableState();
+        getData();
+    }
+
     private void showAlert() {
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT, Config.DEFAULT_PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT)) {
             Snackbar.make(findViewById(R.id.layout_school_calendar_content), R.string.enlarge_alert, Snackbar.LENGTH_SHORT)
                     .setAction(R.string.no_alert_again, v -> sharedPreferences.edit().putBoolean(Config.PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT, false).apply())
@@ -90,7 +103,37 @@ public class SchoolCalendarActivity extends AppCompatActivity {
         }
     }
 
-    synchronized public void setCalendarView(Bitmap bitmap) {
+    private void showSchoolCalendarList() {
+        if (calendarList != null && calendarList.size() > 0) {
+            final String[] nameList = calendarList.keySet().toArray(new String[]{});
+            AlertDialog.Builder builder = new AlertDialog.Builder(SchoolCalendarActivity.this);
+            builder.setTitle(R.string.school_calendar_list);
+            builder.setItems(nameList, (dialog, which) -> {
+                String url = calendarList.get(nameList[which]);
+                sharedPreferences.edit().putString(Config.PREFERENCE_SCHOOL_CALENDAR_NAME, nameList[which]).apply();
+                sharedPreferences.edit().putString(Config.PREFERENCE_SCHOOL_CALENDAR_PAGE_URL, url).apply();
+                refresh();
+            });
+            builder.setNeutralButton(R.string.school_calendar_default, (dialog, which) -> {
+                sharedPreferences.edit().remove(Config.PREFERENCE_SCHOOL_CALENDAR_NAME).apply();
+                sharedPreferences.edit().remove(Config.PREFERENCE_SCHOOL_CALENDAR_PAGE_URL).apply();
+                refresh();
+            });
+            builder.setNegativeButton(android.R.string.cancel, null);
+            builder.show();
+        } else {
+            Snackbar.make(findViewById(R.id.layout_school_calendar_content), R.string.school_calendar_list_empty, Snackbar.LENGTH_SHORT).show();
+        }
+
+    }
+
+    synchronized public void setCalendarData(LinkedHashMap<String, String> calendarList, Bitmap bitmap) {
+        setCalendarView(bitmap);
+        this.calendarBitmap = bitmap;
+        this.calendarList = calendarList;
+    }
+
+    synchronized private void setCalendarView(Bitmap bitmap) {
         if (bitmap != null) {
             PhotoView photoView = findViewById(R.id.photoView_school_calendar);
             findViewById(R.id.layout_loading_school_calendar).setVisibility(View.GONE);
@@ -99,43 +142,6 @@ public class SchoolCalendarActivity extends AppCompatActivity {
         } else if (loadTime > 1) {
             Snackbar.make(findViewById(R.id.layout_school_calendar_content), R.string.data_get_error, Snackbar.LENGTH_SHORT).show();
         }
-    }
-
-    private void shareCalendar() {
-        if (PermissionMethod.checkStoragePermission(this, 0)) {
-            try {
-                final String path = Config.PICTURE_DICTIONARY_PATH + Config.SCHOOL_CALENDAR_IMAGE_FILE_NAME;
-                if (IO.copyFile(ImageMethod.getSchoolCalendarImagePath(this), path, false)) {
-                    final Uri imageUri = FileProvider.getUriForFile(this, Config.FILE_PROVIDER_AUTH, new File(path));
-
-                    LayoutInflater layoutInflater = getLayoutInflater();
-                    View view = layoutInflater.inflate(R.layout.dialog_share_image, findViewById(R.id.layout_dialog_share_image));
-                    final PhotoView photoView = view.findViewById(R.id.photoView_share_image);
-                    photoView.setImageURI(imageUri);
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setView(view);
-                    builder.setTitle(R.string.share_school_calendar);
-                    builder.setPositiveButton(R.string.share, (dialog, which) -> {
-                        Intent intent = new Intent(Intent.ACTION_SEND);
-                        intent.setType("image/*");
-                        intent.putExtra(Intent.EXTRA_STREAM, imageUri);
-                        intent.addCategory(Intent.CATEGORY_DEFAULT);
-                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        startActivity(Intent.createChooser(intent, getString(R.string.share_school_calendar)));
-                    });
-                    builder.setNegativeButton(android.R.string.cancel, null);
-                    builder.setOnCancelListener(dialog -> photoView.refreshDrawableState());
-                    builder.show();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(this, R.string.school_calendar_share_error, Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Toast.makeText(this, R.string.permission_error, Toast.LENGTH_SHORT).show();
-        }
-
     }
 
     synchronized public void lastViewSet(Context context) {
@@ -159,6 +165,10 @@ public class SchoolCalendarActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+
+        if (!calendarBitmap.isRecycled()) {
+            calendarBitmap.recycle();
+        }
         BaseMethod.getApp(this).setSchoolCalendarActivity(null);
         System.gc();
         super.onDestroy();

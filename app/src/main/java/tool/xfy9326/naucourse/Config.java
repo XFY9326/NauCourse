@@ -42,7 +42,7 @@ public class Config {
     public static final String PICTURE_DICTIONARY_PATH = DATA_DIR_PATH + "picture" + File.separator;
     public static final String PICTURE_TEMP_DICTIONARY_PATH = PICTURE_DICTIONARY_PATH + ".temp" + File.separator;
     public static final String COURSE_TABLE_IMAGE_FILE_NAME = "CourseTable.jpeg";
-    public static final String INFO_DETAIL_IMAGE_FILE_NAME = "InfoDetail.jpeg";
+    public static final String INFO_STU_PHOTO_FILE_NAME = "StuPhoto.jpeg";
     public static final String SCHOOL_CALENDAR_IMAGE_FILE_NAME = "SchoolCalendar.jpeg";
 
     public static final String FILE_PROVIDER_AUTH = "tool.xfy9326.naucourse.provider";
@@ -92,6 +92,7 @@ public class Config {
     public static final String PREFERENCE_CHANGE_TABLE_TRANSPARENCY = "CHANGE_TABLE_TRANSPARENCY";
     public static final String PREFERENCE_COURSE_TABLE_SHOW_SINGLE_COLOR = "COURSE_TABLE_SHOW_SINGLE_COLOR";
     public static final String PREFERENCE_SCHOOL_CALENDAR_URL = "SCHOOL_CALENDAR_URL";
+    public static final String PREFERENCE_SCHOOL_CALENDAR_PAGE_URL = "SCHOOL_CALENDAR_PAGE_URL";
     public static final String PREFERENCE_PERSONAL_INFO_LOAD_DATE_TIME = "PERSONAL_INFO_LOAD_DATE_TIME";
     public static final String PREFERENCE_ASYNC_PERSONAL_INFO_BY_DAY = "ASYNC_PERSONAL_INFO_BY_DAY";
     public static final String PREFERENCE_COURSE_TABLE_AUTO_LOAD_DATE_TIME = "COURSE_TABLE_AUTO_LOAD_DATE_TIME";
@@ -99,7 +100,6 @@ public class Config {
     public static final String PREFERENCE_SHOW_NO_THIS_WEEK_CLASS = "SHOW_NO_THIS_WEEK_CLASS";
     public static final String PREFERENCE_AUTO_UPDATE_COURSE_TABLE_ALERT = "AUTO_UPDATE_COURSE_TABLE_ALERT";
     public static final String PREFERENCE_AUTO_CHECK_UPDATE = "AUTO_CHECK_UPDATE";
-    public static final String PREFERENCE_AUTO_CHECK_IMPORTANT_UPDATE = "AUTO_CHECK_IMPORTANT_UPDATE";
     public static final String PREFERENCE_CHECK_BETA_UPDATE = "CHECK_BETA_UPDATE";
     public static final String PREFERENCE_UPDATE_NOW = "UPDATE_NOW";
     public static final String PREFERENCE_ONLY_UPDATE_APPLICATION_UNDER_WIFI = "ONLY_UPDATE_APPLICATION_UNDER_WIFI";
@@ -119,6 +119,8 @@ public class Config {
     public static final String PREFERENCE_SHOW_HIDDEN_FUNCTION = "SHOW_HIDDEN_FUNCTION";
     public static final String PREFERENCE_DOWNLOAD_VPN_FILE_WARNING = "DOWNLOAD_VPN_FILE_WARNING";
     public static final String PREFERENCE_CAN_ADD_COURSE_WARNING = "CAN_ADD_COURSE_WARNING";
+    public static final String PREFERENCE_SCHOOL_CALENDAR_NAME = "SCHOOL_CALENDAR_NAME";
+    public static final String PREFERENCE_NEED_CUSTOM_TERM_ALERT = "NEED_CUSTOM_TERM_ALERT";
 
     public static final String PREFERENCE_INFO_CHANNEL_SELECTED_JWC_SYSTEM = "INFO_CHANNEL_SELECTED_JWC_SYSTEM";
     public static final String PREFERENCE_INFO_CHANNEL_SELECTED_JW = "INFO_CHANNEL_SELECTED_JW";
@@ -145,7 +147,6 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_SHOW_NO_THIS_WEEK_CLASS = true;
     public static final boolean DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE_ALERT = false;
     public static final boolean DEFAULT_PREFERENCE_AUTO_CHECK_UPDATE = true;
-    public static final boolean DEFAULT_PREFERENCE_AUTO_CHECK_IMPORTANT_UPDATE = false;
     public static final boolean DEFAULT_PREFERENCE_CHECK_BETA_UPDATE = false;
     public static final boolean DEFAULT_PREFERENCE_ONLY_UPDATE_APPLICATION_UNDER_WIFI = false;
     public static final boolean DEFAULT_PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT = true;
@@ -159,6 +160,7 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_SHOW_HIDDEN_FUNCTION = false;
     public static final boolean DEFAULT_PREFERENCE_DOWNLOAD_VPN_FILE_WARNING = true;
     public static final boolean DEFAULT_PREFERENCE_CAN_ADD_COURSE_WARNING = true;
+    public static final boolean DEFAULT_PREFERENCE_NEED_CUSTOM_TERM_ALERT = true;
 
     public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_JWC_SYSTEM = true;
     public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_JW = true;
@@ -177,6 +179,7 @@ public class Config {
 
     //离线数据版本号
     public static final int DATA_VERSION_COURSE_SCORE = 1;
+    public static final int DATA_VERSION_COURSE_HISTORY_SCORE = 1;
     public static final int DATA_VERSION_EXAM = 1;
     public static final int DATA_VERSION_JWC_TOPIC = 1;
     public static final int DATA_VERSION_NEXT_COURSE = 1;

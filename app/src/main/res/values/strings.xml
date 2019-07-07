@@ -30,6 +30,7 @@
     <string name="score_NP">年级排名：%1$s</string>
     <string name="score_ZP">专业排名：%1$s</string>
     <string name="score_BP">班级排名：%1$s</string>
+    <string name="credit_weight">绩点权值：%1$s</string>
     <string name="table_date">%1$d年%2$d月&#160;&#160;周%3$s&#160;&#160;&#160;%4$s</string>
     <string name="info_type">类别：%1$s</string>
     <string name="info_click">点击：%1$s</string>
@@ -85,7 +86,8 @@
     <string name="course_card_type">类别：%1$s</string>
     <string name="personal_detail">个人信息</string>
     <string name="main_score_detail">◈ 总体成绩</string>
-    <string name="term_score_detail">◈ 本学期课程成绩</string>
+    <string name="current_score_detail">本学期成绩</string>
+    <string name="history_score_detail">历史成绩</string>
     <string name="score_course_name">课程名称：%1$s</string>
     <string name="score_common">平时：%1$s</string>
     <string name="score_mid">期中：%1$s</string>
@@ -106,7 +108,7 @@
     <string name="notification_manage">通知管理</string>
     <string name="next_class_notify">提示下一节课的信息</string>
     <string name="next_class_notify_sum">将会在上课前十分钟提示上课信息</string>
-    <string name="open_source_info">本应用开源在南审Git与Github</string>
+    <string name="open_source_info">本应用基于GPL3.0协议开源于Github</string>
     <string name="default_show_table_page">默认显示课程表界面</string>
     <string name="default_show_table_page_sum">打开应用时直接显示课程表，减少用用户操作</string>
     <string name="show_wide_course_table">增加课程表内课程信息的显示宽度</string>
@@ -114,7 +116,7 @@
     <string name="course_table_cell_color">课程信息背景色显示</string>
     <string name="course_table_cell_color_sum">课程信息格将会显示背景色</string>
     <string name="learn_process">◈ 修学进度</string>
-    <string name="data_is_loading">数据正在加载中，请稍后再试</string>
+    <string name="data_is_loading">数据正在加载中，请稍后再试！</string>
     <string name="process_bx">必修课</string>
     <string name="process_zx">专选课</string>
     <string name="process_rx">任选课</string>
@@ -129,8 +131,9 @@
     <string name="no_available_application">无可用APP</string>
     <string name="ask_lock_background">在后台锁定本应用以带来更好的使用体验！</string>
     <string name="feedback">问题反馈</string>
-    <string name="feedback_by_mail">您可以通过发送反馈邮件到作者邮箱的方式反馈您遇到的问题或者提出好的建议,您的所有建议与反馈都会得到认真的查阅。\n\n邮箱：%1$s</string>
+    <string name="feedback_by_mail">您可以通过发送反馈邮件或加入QQ群的方式反馈您遇到的问题或者提出好的建议,您的所有建议与反馈都会得到认真的查阅。\n\n邮箱：%1$s\n\nQQ群：%2$s</string>
     <string name="mail" translatable="false">1069665464@qq.com</string>
+    <string name="qq_group" translatable="false">704668624</string>
     <string name="level_exam">等级考试</string>
     <string name="level_exam_title">◈ 等级考试</string>
     <string name="level_exam_type">项目类别：%1$s</string>
@@ -187,7 +190,7 @@
     <string name="show_single_color_sum">不随机设置课程颜色，只显示默认颜色</string>
     <string name="add">添加</string>
     <string name="single_color_warn">请在设置中关闭只显示默认颜色后再设置！</string>
-    <string name="wait_for_evaluate">待测评</string>
+    <string name="wait_for_evaluate">当前存在课程待测评！</string>
     <string name="academic_report">学术报告会</string>
     <string name="large_academic_conference">大型学术会议</string>
     <string name="suspend_course_class_class">教学班：%1$s</string>
@@ -225,9 +228,10 @@
     <string name="attention">提示</string>
     <string name="auto_update_course_table_alert">当前已开启智能覆盖更新教务课程表数据功能，非最新学期的教务系统中的课程有可能会被自动覆盖更新\n\n对导入的本学期课表所做的所有修改都会失效！\n\n如果需要关闭可以前往设置进行更改！</string>
     <string name="course_empty">当前没有任何可以导入的课程！</string>
-    <string name="course_term">课程学期设定</string>
+    <string name="course_term_set">课程学期设定</string>
     <string name="school_year">学年：</string>
     <string name="term">学期：</string>
+    <string name="course_term">学期：%1$s</string>
     <string name="term_one">第一学期</string>
     <string name="term_two">第二学期</string>
     <string name="add_course_term_alert">注：学年指第一学期开始的年份\n&#160;&#160;&#160;&#160;旧学期的课程可能会在自动更新时自动删除！</string>
@@ -238,8 +242,6 @@
     <string name="beta_version_check_sum">较不稳定但更快修复错误并体验新功能</string>
     <string name="auto_check_update">自动检查应用更新</string>
     <string name="auto_check_update_sum">每次启动应用自动检查应用更新，不建议关闭</string>
-    <string name="auto_check_important_update">仅检查重要版本的应用更新</string>
-    <string name="auto_check_important_update_sum">减少更新频率仅修复重要错误\n可能会错过普通问题修复</string>
     <string name="update_now">立即检查应用更新</string>
     <string name="global_settings">通用设置</string>
     <string name="check_update_error">应用更新时出现错误！</string>
@@ -258,8 +260,8 @@
     <string name="custom_term">自定义学期</string>
     <string name="custom_term_start_date">开始日期：%1$s</string>
     <string name="custom_term_end_date">结束日期：%1$s</string>
-    <string name="need_custom_term_alert">若学期数不正确可在顶部学期设置中自定义！</string>
-    <string name="custom_term_alert">注：自定义的学期将在教务更新学期后被自动替换！</string>
+    <string name="import_next_term_alert">手动导入下个学期的课程可能会导致学期开始与结束时间错误，若学期数不正确可在顶部菜单学期设置中自定义！\n\n导入的下学期课表在变为当前学期课表前并不会自动更新，如有改动请重新导入！</string>
+    <string name="custom_term_alert">注：自定义的学期开始结束时间将在教务更新学期后被自动替换！</string>
     <string name="term_set_success">学期修改成功！</string>
     <string name="term_set_failed">学期数错误或者过短！</string>
     <string name="course_table_reloading">正在重新加载课表中… …</string>
@@ -318,6 +320,7 @@
     <string name="search_no_result">搜索结果为空！</string>
     <string name="import_success">导入成功！</string>
     <string name="empty_search_data">暂无搜索结果</string>
+    <string name="empty_list">列表为空</string>
     <string name="course_search_result_title">◈ 搜索结果</string>
     <string name="random_course_color">随机设置课程颜色</string>
     <string name="random_course_color_success">随机设置颜色成功！</string>
@@ -345,8 +348,27 @@
     <string name="unlock_attention">该功能理论不对外开放，若要开启，出现任何问题开发者无需负责！</string>
     <string name="download_vpn_file">校园VPN模式下，点击链接下载文件时需要登录VPN，之后再次点击链接即可下载！</string>
     <string name="click_to_add_course">点击当前学期搜索的课程可以尝试导入</string>
+    <string name="stu_photo">个人证件照</string>
+    <string name="stu_photo_not_found">暂无个人证件照数据\n请刷新个人页面后重试</string>
+    <string name="share_stu_photo">分享个人证件照：</string>
+    <string name="share_stu_photo_failed">个人证件照分享失败</string>
+    <string name="refresh">刷新</string>
+    <string name="school_calendar_list">校历列表</string>
+    <string name="school_calendar_default">默认校历（当前学期）</string>
+    <string name="school_calendar_list_empty">校历列表正在加载中！</string>
+    <string name="credit_calculator">绩点计算器</string>
+    <string name="credit_weight_input">绩点权值：</string>
+    <string name="credit_course_choose">请选择本学期参与绩点计算的课程：</string>
+    <string name="credit_weight_needed">请正确输入已选课程的绩点权值！</string>
+    <string name="credit_calculate_result">当前课程组合下\n绩点预计值为：%1$f</string>
+    <string name="calculate">计算</string>
+    <string name="credit_no_select">你没有选择任何课程！</string>
+    <string name="credit_current">历史绩点计算：</string>
+    <string name="credit_current_info">对历史成绩绩点重新计算\n绩点值为：%1$f</string>
+    <string name="login_with_vpn_mode">使用校园VPN模式登录</string>
+    <string name="confirm_and_not_show_again">确认且不再显示</string>
 
-    <string name="new_version_info_content">欢迎使用NAU课程表\n\n建议各位只要发现新版本就更新，尽量减少旧版本导致的错误。如果在使用过程中发现任何问题，请尽快反馈，谢谢。\n\n今后将会减少稳定版的更新，更多未经测试的新功能将会放在测试版中，如果希望体验新版本可以在更新设置中选择更新到测试版。\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
+    <string name="new_version_info_content">欢迎使用NAU课程表\n\n鉴于发送邮件在急需要解决问题时步骤繁琐，大家可以加入反馈QQ群反馈信息：704668624\n\n如果在校外无法查看校内通知，可以尝试通用设置里的校园VPN模式\n\n如果想要提前查看下学期课程必须在课程编辑里手动导入\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>

@@ -28,7 +28,6 @@ public class RSSReader {
     @Nullable
     public static RSSObject getRSSObject(@NonNull String rssContent) {
         XmlPullParser parser = Xml.newPullParser();
-        rssContent = rssContent.replaceAll("<!-[\\s\\S]*?->", "");
         StringReader stringReader = new StringReader(rssContent);
         try {
             parser.setInput(stringReader);
