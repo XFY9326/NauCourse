@@ -10,6 +10,7 @@
     android:paddingEnd="10dp">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_credit_course_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"

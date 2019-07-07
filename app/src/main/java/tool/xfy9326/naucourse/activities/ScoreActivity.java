@@ -79,7 +79,6 @@ public class ScoreActivity extends AppCompatActivity {
         final CreditCountAdapter adapter = new CreditCountAdapter(this, courseScore);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.credit_course_choose);
-        builder.setCancelable(false);
         builder.setAdapter(adapter, null);
         builder.setPositiveButton(R.string.calculate, (dialog, which) -> {
             ArrayList<CreditCountCourse> current = adapter.getResult();
@@ -209,7 +208,9 @@ public class ScoreActivity extends AppCompatActivity {
                 Snackbar.make(findViewById(R.id.layout_score_content), R.string.wait_for_evaluate, Snackbar.LENGTH_SHORT).show();
             }
         }
-        this.courseScore = courseScore;
+        if (courseScore != null) {
+            this.courseScore = courseScore;
+        }
         if (historyScore != null) {
             historyCreditCourse = CreditCountMethod.getHistoryCreditCourse(historyScore);
         }

@@ -119,7 +119,7 @@ public class AboutActivity extends AppCompatActivity {
         findViewById(R.id.textView_about_feedback).setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(AboutActivity.this);
             builder.setTitle(R.string.feedback);
-            builder.setMessage(getString(R.string.feedback_by_mail, getString(R.string.mail)));
+            builder.setMessage(getString(R.string.feedback_by_mail, getString(R.string.mail), getString(R.string.qq_group)));
             builder.setPositiveButton(android.R.string.yes, null);
             builder.setNeutralButton(R.string.send_email, (dialog, which) -> {
                 Intent intent = new Intent(Intent.ACTION_SENDTO);

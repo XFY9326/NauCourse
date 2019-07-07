@@ -54,7 +54,7 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
     }
 
     private static boolean checkInfoData(JwcTopic jwcTopic, AlstuTopic alstuTopic, SparseArray<RSSReader.RSSObject> rssObjects) {
-        return jwcTopic != null && alstuTopic != null && rssObjects != null;
+        return jwcTopic != null && alstuTopic != null && rssObjects != null && rssObjects.size() != 0;
     }
 
     @Override
