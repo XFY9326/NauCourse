@@ -23,6 +23,7 @@ import java.util.Objects;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.methods.netInfoMethods.AlstuMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.ExamMethod;
+import tool.xfy9326.naucourse.methods.netInfoMethods.HistoryScoreMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.JwcInfoMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.LevelExamMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.MoaMethod;
@@ -237,6 +238,8 @@ public class DataMethod {
             nowVersionCode = Config.DATA_VERSION_SUSPEND_COURSE;
         } else if (simpleName.equals(AlstuMethod.FILE_NAME)) {
             nowVersionCode = Config.DATA_VERSION_ALSTU_TOPIC;
+        } else if (simpleName.equals(HistoryScoreMethod.FILE_NAME)) {
+            nowVersionCode = Config.DATA_VERSION_COURSE_HISTORY_SCORE;
         } else {
             nowVersionCode = 0;
         }

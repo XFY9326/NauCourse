@@ -1,7 +1,9 @@
 package tool.xfy9326.naucourse.methods;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
@@ -146,6 +148,15 @@ public class BaseMethod {
             if (view != null) {
                 inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             }
+        }
+    }
+
+    public static void runIntent(Activity activity, Intent intent) {
+        try {
+            activity.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(activity, R.string.no_available_application, Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
     }
 

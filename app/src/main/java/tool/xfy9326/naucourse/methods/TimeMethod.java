@@ -326,4 +326,41 @@ public class TimeMethod {
         }
         return weekArray;
     }
+
+    public static CountingDown getCountingDownStr(@NonNull Context context, long now, long future) {
+        CountingDown countingDown = new CountingDown();
+        long temp = future - now;
+        if (temp > 0) {
+            long day = getShowTime(temp / (3600f * 24));
+            if (day > 0) {
+                countingDown.Time = String.valueOf(day);
+                countingDown.TimeUnit = context.getString(R.string.day);
+            } else {
+                long hour = getShowTime(temp / 3600f);
+                if (hour > 0) {
+                    countingDown.Time = String.valueOf(hour);
+                    countingDown.TimeUnit = context.getString(R.string.hour);
+                } else {
+                    long minute = getShowTime(temp / 60f);
+                    if (minute > 0) {
+                        countingDown.Time = String.valueOf(minute);
+                        countingDown.TimeUnit = context.getString(R.string.minute);
+                    } else {
+                        countingDown.Time = String.valueOf(0);
+                        countingDown.TimeUnit = context.getString(R.string.minute);
+                    }
+                }
+            }
+        }
+        return countingDown;
+    }
+
+    private static long getShowTime(double time) {
+        return time > 1 ? (long) Math.ceil(time) : 0;
+    }
+
+    public static class CountingDown {
+        public String Time = null;
+        public String TimeUnit = null;
+    }
 }

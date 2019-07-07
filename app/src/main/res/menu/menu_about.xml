@@ -6,9 +6,10 @@
 
     <item
         android:id="@+id/menu_about_open_source_license"
+        android:icon="@drawable/ic_code"
         android:orderInCategory="0"
         android:title="@string/open_source_license"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menu_about_open_source"

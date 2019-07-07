@@ -100,6 +100,9 @@ public class LoginMethod {
                     .remove(Config.PREFERENCE_SCHOOL_CALENDAR_URL)
                     .remove(Config.PREFERENCE_CLASS_BEFORE_NOTIFY)
                     .remove(Config.PREFERENCE_CUSTOM_TERM_START_DATE)
+                    .remove(Config.PREFERENCE_SCHOOL_CALENDAR_NAME)
+                    .remove(Config.PREFERENCE_SCHOOL_CALENDAR_PAGE_URL)
+                    .remove(Config.PREFERENCE_SCHOOL_CALENDAR_URL)
                     .remove(Config.PREFERENCE_CUSTOM_TERM_END_DATE)
                     .remove(Config.PREFERENCE_OLD_TERM_START_DATE)
                     .remove(Config.PREFERENCE_OLD_TERM_END_DATE)
@@ -110,7 +113,6 @@ public class LoginMethod {
                     .remove(Config.PREFERENCE_INFO_CHANNEL_SELECTED_TW)
                     .remove(Config.PREFERENCE_INFO_CHANNEL_SELECTED_XXB)
                     .remove(Config.PREFERENCE_HIDE_OUT_OF_DATE_EXAM)
-                    .remove(Config.PREFERENCE_SCHOOL_VPN_MODE)
                     .remove(Config.PREFERENCE_SCHOOL_VPN_SMART_MODE)
                     .remove(Config.PREFERENCE_EULA_ACCEPT)
                     .remove(Config.PREFERENCE_SHOW_HIDDEN_FUNCTION)
@@ -132,15 +134,21 @@ public class LoginMethod {
      */
     public static void cleanUserTemp(Context context) {
         File cache_file = context.getCacheDir();
-        for (File file : cache_file.listFiles()) {
-            //noinspection ResultOfMethodCallIgnored
-            file.delete();
-        }
+        deleteAll(cache_file);
         File data_file = context.getFilesDir();
-        for (File file : data_file.listFiles()) {
-            //noinspection ResultOfMethodCallIgnored
-            file.delete();
-        }
+        deleteAll(data_file);
     }
 
+    private static void deleteAll(File f) {
+        if (f.exists()) {
+            if (f.isFile()) {
+                //noinspection ResultOfMethodCallIgnored
+                f.delete();
+            } else if (f.isDirectory()) {
+                for (File file : f.listFiles()) {
+                    deleteAll(file);
+                }
+            }
+        }
+    }
 }
