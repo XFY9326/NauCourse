@@ -21,7 +21,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -83,6 +82,7 @@ public class CourseActivity extends AppCompatActivity {
     private String customStartTermDate = null;
     private String customEndTermDate = null;
     private Dialog termSetDialog = null;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,6 +90,7 @@ public class CourseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course);
         activityDestroy = false;
         BaseMethod.getApp(this).setCourseActivity(this);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         ToolBarSet();
         ViewSet();
         getData();
@@ -274,7 +275,6 @@ public class CourseActivity extends AppCompatActivity {
     }
 
     private void autoUpdateCourseAlert() {
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE, Config.DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE)) {
             if (!sharedPreferences.getBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE_ALERT, Config.DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE_ALERT)) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -424,14 +424,31 @@ public class CourseActivity extends AppCompatActivity {
         courseListAsync.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
     }
 
-    //从教务处导入下学期课程数据
+
     private void importDataFromJwcNext() {
+        if (sharedPreferences.getBoolean(Config.PREFERENCE_NEED_CUSTOM_TERM_ALERT, Config.DEFAULT_PREFERENCE_NEED_CUSTOM_TERM_ALERT)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(CourseActivity.this);
+            builder.setTitle(R.string.attention);
+            builder.setMessage(R.string.import_next_term_alert);
+            builder.setPositiveButton(android.R.string.yes, (dialog, which) -> importNextDataTermFromJwc());
+            builder.setNeutralButton(R.string.confirm_and_not_show_again, (dialog, which) -> {
+                sharedPreferences.edit().putBoolean(Config.PREFERENCE_NEED_CUSTOM_TERM_ALERT, false).apply();
+                importNextDataTermFromJwc();
+            });
+            builder.setNegativeButton(android.R.string.cancel, null);
+            builder.show();
+        } else {
+            importNextDataTermFromJwc();
+        }
+    }
+
+    //从教务处导入下学期课程数据
+    private void importNextDataTermFromJwc() {
         CourseNextListAsync courseNextListAsync = new CourseNextListAsync();
         loadingDialog = DialogMethod.showLoadingDialog(CourseActivity.this, true, dialog -> {
             courseNextListAsync.cancel(true);
             closeLoadingDialog();
         });
-        Toast.makeText(this, R.string.need_custom_term_alert, Toast.LENGTH_LONG).show();
         courseNextListAsync.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
     }
 

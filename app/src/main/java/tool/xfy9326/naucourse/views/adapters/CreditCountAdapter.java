@@ -12,6 +12,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.cardview.widget.CardView;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
@@ -90,7 +92,9 @@ public class CreditCountAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.item_credit_course, null);
             viewHolder.checkBoxCourse = convertView.findViewById(R.id.checkBox_credit_course);
             viewHolder.editTextCreditWeight = convertView.findViewById(R.id.editText_credit_weight);
+            viewHolder.cardViewItem = convertView.findViewById(R.id.cardView_credit_course_item);
             if (nameList != null && scoreList != null && studyScoreList != null) {
+                viewHolder.cardViewItem.setOnClickListener(v -> viewHolder.checkBoxCourse.setChecked(!viewHolder.checkBoxCourse.isChecked()));
                 viewHolder.checkBoxCourse.setText(nameList.get(position));
                 viewHolder.checkBoxCourse.setOnCheckedChangeListener((buttonView, isChecked) -> checkedList[position] = isChecked);
                 viewHolder.editTextCreditWeight.addTextChangedListener(new TextWatcher() {
@@ -126,6 +130,7 @@ public class CreditCountAdapter extends BaseAdapter {
     }
 
     static class CreditCountViewHolder {
+        CardView cardViewItem;
         CheckBox checkBoxCourse;
         EditText editTextCreditWeight;
     }
