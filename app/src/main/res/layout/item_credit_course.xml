@@ -5,9 +5,7 @@
     android:id="@+id/layout_credit_course_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingStart="10dp"
-    android:paddingEnd="10dp">
+    android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView_credit_course_item"
@@ -32,12 +30,15 @@
                 android:id="@+id/checkBox_credit_course"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:textSize="13sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/credit_weight_input" />
+                android:layout_marginStart="5dp"
+                android:text="@string/credit_weight_input"
+                android:textSize="13sp" />
 
             <EditText
                 android:id="@+id/editText_credit_weight"
@@ -49,7 +50,7 @@
                 android:gravity="center"
                 android:inputType="numberDecimal"
                 android:text="1.0"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 tools:ignore="Autofill,HardcodedText,LabelFor" />
 
         </LinearLayout>

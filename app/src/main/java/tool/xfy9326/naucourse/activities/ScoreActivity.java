@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +16,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -34,7 +38,7 @@ import tool.xfy9326.naucourse.utils.HistoryScore;
 import tool.xfy9326.naucourse.utils.StudentScore;
 import tool.xfy9326.naucourse.views.ScoreSwipeRefreshLayout;
 import tool.xfy9326.naucourse.views.ScoreViewPagerAdapter;
-import tool.xfy9326.naucourse.views.adapters.CreditCountAdapter;
+import tool.xfy9326.naucourse.views.recyclerAdapters.CreditCountAdapter;
 
 /**
  * Created by 10696 on 2018/3/2.
@@ -77,9 +81,17 @@ public class ScoreActivity extends AppCompatActivity {
 
     private void showCreditCountDialog() {
         final CreditCountAdapter adapter = new CreditCountAdapter(this, courseScore);
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View view = layoutInflater.inflate(R.layout.dialog_score_credit, findViewById(R.id.layout_dialog_score_credit));
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView_dialog_score_credit);
+        recyclerView.setFocusableInTouchMode(false);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.credit_course_choose);
-        builder.setAdapter(adapter, null);
+        builder.setView(view);
         builder.setPositiveButton(R.string.calculate, (dialog, which) -> {
             ArrayList<CreditCountCourse> current = adapter.getResult();
             if (current.size() == 0) {
