@@ -97,16 +97,13 @@ public class ScoreActivity extends AppCompatActivity {
             if (current.size() == 0) {
                 Snackbar.make(findViewById(R.id.layout_score_content), R.string.credit_no_select, Snackbar.LENGTH_SHORT).show();
             } else {
-                if (current.addAll(historyCreditCourse)) {
-                    float credit = CreditCountMethod.getCredit(current);
-                    AlertDialog.Builder new_builder = new AlertDialog.Builder(this);
-                    new_builder.setTitle(R.string.credit_calculator);
-                    new_builder.setMessage(getString(R.string.credit_calculate_result, credit));
-                    new_builder.setPositiveButton(android.R.string.yes, null);
-                    new_builder.show();
-                } else {
-                    Snackbar.make(findViewById(R.id.layout_score_content), R.string.input_error, Snackbar.LENGTH_SHORT).show();
-                }
+                ArrayList<CreditCountCourse> courseList = CreditCountMethod.combineCreditCourse(current, historyCreditCourse);
+                float credit = CreditCountMethod.getCredit(courseList);
+                AlertDialog.Builder new_builder = new AlertDialog.Builder(this);
+                new_builder.setTitle(R.string.credit_calculator);
+                new_builder.setMessage(getString(R.string.credit_calculate_result, credit));
+                new_builder.setPositiveButton(android.R.string.yes, null);
+                new_builder.show();
             }
         });
         builder.setNegativeButton(android.R.string.cancel, null);
@@ -164,19 +161,6 @@ public class ScoreActivity extends AppCompatActivity {
             tabItem_0.setText(R.string.current_score_detail);
             tabItem_1.setText(R.string.history_score_detail);
         }
-
-        findViewById(R.id.cardView_score_total).setOnClickListener(v -> {
-            if (historyCreditCourse != null) {
-                float credit = CreditCountMethod.getCredit(historyCreditCourse);
-                AlertDialog.Builder builder = new AlertDialog.Builder(ScoreActivity.this);
-                builder.setTitle(R.string.credit_current);
-                builder.setMessage(getString(R.string.credit_current_info, credit));
-                builder.setPositiveButton(android.R.string.yes, null);
-                builder.show();
-            } else {
-                Snackbar.make(findViewById(R.id.layout_score_content), R.string.data_is_loading, Snackbar.LENGTH_SHORT).show();
-            }
-        });
 
         swipeRefreshLayout = findViewById(R.id.swipeLayout_score);
         swipeRefreshLayout.setDistanceToTriggerSync(200);

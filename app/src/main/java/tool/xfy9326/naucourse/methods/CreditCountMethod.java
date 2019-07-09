@@ -14,6 +14,8 @@ public class CreditCountMethod {
             float creditWeight = Float.parseFloat(historyScore.getCreditWeight()[i]);
             if (creditWeight > 0 && isDouble(historyScore.getScore()[i])) {
                 CreditCountCourse creditCountCourse = new CreditCountCourse();
+                creditCountCourse.setCourseId(historyScore.getId()[i]);
+                creditCountCourse.setCourseName(historyScore.getName()[i]);
                 creditCountCourse.setCreditWeight(creditWeight);
                 creditCountCourse.setScore(Float.parseFloat(historyScore.getScore()[i]));
                 creditCountCourse.setStudyScore(Float.parseFloat(historyScore.getStudyScore()[i]));
@@ -21,6 +23,27 @@ public class CreditCountMethod {
             }
         }
         return courses;
+    }
+
+    public static ArrayList<CreditCountCourse> combineCreditCourse(List<CreditCountCourse> a, List<CreditCountCourse> b) {
+        ArrayList<CreditCountCourse> result = new ArrayList<>(a);
+        for (CreditCountCourse bCourse : b) {
+            boolean foundSame = false;
+            for (CreditCountCourse aCourse : a) {
+                if (bCourse.getCourseId() != null && aCourse.getCourseId() != null && bCourse.getCourseId().equals(aCourse.getCourseId())) {
+                    foundSame = true;
+                    break;
+                }
+                if (bCourse.getCourseName() != null && aCourse.getCourseName() != null && bCourse.getCourseName().equals(aCourse.getCourseName())) {
+                    foundSame = true;
+                    break;
+                }
+            }
+            if (!foundSame) {
+                result.add(bCourse);
+            }
+        }
+        return result;
     }
 
     public static float getCredit(List<CreditCountCourse> courseList) {

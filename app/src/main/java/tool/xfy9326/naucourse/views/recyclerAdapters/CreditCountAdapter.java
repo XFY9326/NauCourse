@@ -15,7 +15,6 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
 import tool.xfy9326.naucourse.R;
@@ -24,32 +23,29 @@ import tool.xfy9326.naucourse.utils.CreditCountCourse;
 
 public class CreditCountAdapter extends RecyclerView.Adapter<CreditCountAdapter.CreditCountViewHolder> {
     private final Context context;
-    private final ArrayList<String> nameList;
-    private final ArrayList<Float> scoreList;
-    private final ArrayList<Float> studyScoreList;
+    private final ArrayList<CreditCountCourse> countCourses;
     private final boolean[] checkedList;
-    private final float[] weightList;
 
     public CreditCountAdapter(Context context, CourseScore courseScore) {
         this.context = context;
-        nameList = new ArrayList<>();
-        scoreList = new ArrayList<>();
-        studyScoreList = new ArrayList<>();
+        this.countCourses = new ArrayList<>();
         courseScoreFix(courseScore);
         this.checkedList = new boolean[getItemCount()];
-        this.weightList = new float[getItemCount()];
-        Arrays.fill(weightList, 1f);
     }
 
     private void courseScoreFix(CourseScore courseScore) {
         for (int i = 0; i < courseScore.getCourseAmount(); i++) {
             if (!Objects.requireNonNull(courseScore.getScoreTotal())[i].contains("未")) {
                 try {
+                    CreditCountCourse course = new CreditCountCourse();
                     float score = Float.parseFloat(Objects.requireNonNull(courseScore.getScoreTotal())[i]);
                     float studyScore = Float.parseFloat(Objects.requireNonNull(courseScore.getScoreCourseXf())[i]);
-                    nameList.add(Objects.requireNonNull(courseScore.getScoreCourseName())[i]);
-                    scoreList.add(score);
-                    studyScoreList.add(studyScore);
+                    course.setCourseId(Objects.requireNonNull(courseScore.getScoreCourseId())[i]);
+                    course.setCourseName(Objects.requireNonNull(courseScore.getScoreCourseName())[i]);
+                    course.setScore(score);
+                    course.setStudyScore(studyScore);
+                    course.setCreditWeight(1f);
+                    countCourses.add(course);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -58,24 +54,21 @@ public class CreditCountAdapter extends RecyclerView.Adapter<CreditCountAdapter.
     }
 
     public ArrayList<CreditCountCourse> getResult() {
-        ArrayList<CreditCountCourse> courses = new ArrayList<>();
-        for (int i = 0; i < getItemCount(); i++) {
+        ArrayList<CreditCountCourse> result = new ArrayList<>();
+        for (int i = 0; i < countCourses.size(); i++) {
             if (checkedList[i]) {
-                CreditCountCourse course = new CreditCountCourse();
-                course.setScore(scoreList.get(i));
-                course.setStudyScore(studyScoreList.get(i));
-                course.setCreditWeight(weightList[i]);
-                courses.add(course);
+                result.add(countCourses.get(i));
             }
         }
-        return courses;
+        return result;
     }
 
     @Override
     public void onBindViewHolder(@NonNull CreditCountViewHolder holder, int position) {
         holder.cardViewItem.setOnClickListener(v -> holder.checkBoxCourse.setChecked(!holder.checkBoxCourse.isChecked()));
-        if (nameList != null && scoreList != null && studyScoreList != null) {
-            holder.checkBoxCourse.setText(nameList.get(holder.getAdapterPosition()));
+        final CreditCountCourse course = countCourses.get(holder.getAdapterPosition());
+        if (course != null) {
+            holder.checkBoxCourse.setText(course.getCourseName());
             holder.checkBoxCourse.setOnCheckedChangeListener((buttonView, isChecked) -> checkedList[holder.getAdapterPosition()] = isChecked);
             holder.editTextCreditWeight.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -92,7 +85,7 @@ public class CreditCountAdapter extends RecyclerView.Adapter<CreditCountAdapter.
                 public void afterTextChanged(Editable s) {
                     String str = s.toString();
                     try {
-                        weightList[holder.getAdapterPosition()] = Float.parseFloat(str);
+                        course.setCreditWeight(Float.parseFloat(str));
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                         Toast.makeText(context, R.string.credit_weight_needed, Toast.LENGTH_SHORT).show();
@@ -112,7 +105,7 @@ public class CreditCountAdapter extends RecyclerView.Adapter<CreditCountAdapter.
 
     @Override
     public int getItemCount() {
-        return nameList.size();
+        return countCourses.size();
     }
 
     static class CreditCountViewHolder extends RecyclerView.ViewHolder {
