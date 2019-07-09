@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +16,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -34,7 +38,7 @@ import tool.xfy9326.naucourse.utils.HistoryScore;
 import tool.xfy9326.naucourse.utils.StudentScore;
 import tool.xfy9326.naucourse.views.ScoreSwipeRefreshLayout;
 import tool.xfy9326.naucourse.views.ScoreViewPagerAdapter;
-import tool.xfy9326.naucourse.views.adapters.CreditCountAdapter;
+import tool.xfy9326.naucourse.views.recyclerAdapters.CreditCountAdapter;
 
 /**
  * Created by 10696 on 2018/3/2.
@@ -77,24 +81,29 @@ public class ScoreActivity extends AppCompatActivity {
 
     private void showCreditCountDialog() {
         final CreditCountAdapter adapter = new CreditCountAdapter(this, courseScore);
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View view = layoutInflater.inflate(R.layout.dialog_score_credit, findViewById(R.id.layout_dialog_score_credit));
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView_dialog_score_credit);
+        recyclerView.setFocusableInTouchMode(false);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.credit_course_choose);
-        builder.setAdapter(adapter, null);
+        builder.setView(view);
         builder.setPositiveButton(R.string.calculate, (dialog, which) -> {
             ArrayList<CreditCountCourse> current = adapter.getResult();
             if (current.size() == 0) {
                 Snackbar.make(findViewById(R.id.layout_score_content), R.string.credit_no_select, Snackbar.LENGTH_SHORT).show();
             } else {
-                if (current.addAll(historyCreditCourse)) {
-                    float credit = CreditCountMethod.getCredit(current);
-                    AlertDialog.Builder new_builder = new AlertDialog.Builder(this);
-                    new_builder.setTitle(R.string.credit_calculator);
-                    new_builder.setMessage(getString(R.string.credit_calculate_result, credit));
-                    new_builder.setPositiveButton(android.R.string.yes, null);
-                    new_builder.show();
-                } else {
-                    Snackbar.make(findViewById(R.id.layout_score_content), R.string.input_error, Snackbar.LENGTH_SHORT).show();
-                }
+                ArrayList<CreditCountCourse> courseList = CreditCountMethod.combineCreditCourse(current, historyCreditCourse);
+                float credit = CreditCountMethod.getCredit(courseList);
+                AlertDialog.Builder new_builder = new AlertDialog.Builder(this);
+                new_builder.setTitle(R.string.credit_calculator);
+                new_builder.setMessage(getString(R.string.credit_calculate_result, credit));
+                new_builder.setPositiveButton(android.R.string.yes, null);
+                new_builder.show();
             }
         });
         builder.setNegativeButton(android.R.string.cancel, null);
@@ -152,19 +161,6 @@ public class ScoreActivity extends AppCompatActivity {
             tabItem_0.setText(R.string.current_score_detail);
             tabItem_1.setText(R.string.history_score_detail);
         }
-
-        findViewById(R.id.cardView_score_total).setOnClickListener(v -> {
-            if (historyCreditCourse != null) {
-                float credit = CreditCountMethod.getCredit(historyCreditCourse);
-                AlertDialog.Builder builder = new AlertDialog.Builder(ScoreActivity.this);
-                builder.setTitle(R.string.credit_current);
-                builder.setMessage(getString(R.string.credit_current_info, credit));
-                builder.setPositiveButton(android.R.string.yes, null);
-                builder.show();
-            } else {
-                Snackbar.make(findViewById(R.id.layout_score_content), R.string.data_is_loading, Snackbar.LENGTH_SHORT).show();
-            }
-        });
 
         swipeRefreshLayout = findViewById(R.id.swipeLayout_score);
         swipeRefreshLayout.setDistanceToTriggerSync(200);
