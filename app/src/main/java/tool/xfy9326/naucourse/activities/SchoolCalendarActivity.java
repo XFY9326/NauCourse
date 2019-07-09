@@ -165,8 +165,7 @@ public class SchoolCalendarActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-
-        if (!calendarBitmap.isRecycled()) {
+        if (calendarBitmap != null && !calendarBitmap.isRecycled()) {
             calendarBitmap.recycle();
         }
         BaseMethod.getApp(this).setSchoolCalendarActivity(null);
