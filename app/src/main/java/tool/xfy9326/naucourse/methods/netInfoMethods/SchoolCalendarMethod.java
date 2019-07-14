@@ -26,8 +26,8 @@ import tool.xfy9326.naucourse.methods.NetMethod;
 
 public class SchoolCalendarMethod extends BaseNetMethod {
     private static final String server_url = "http://jw.nau.edu.cn";
-    private static final String calendar_server_utl = "http://www.nau.edu.cn";
-    private static final String calendar_list = "http://www.nau.edu.cn/p141c89/list.htm";
+    private static final String calendar_server_utl = "https://www.nau.edu.cn";
+    private static final String calendar_list = "https://www.nau.edu.cn/p141c89/list.htm";
     private final SharedPreferences sharedPreferences;
     @Nullable
     private Document document;
@@ -62,7 +62,7 @@ public class SchoolCalendarMethod extends BaseNetMethod {
     public LinkedHashMap<String, String> getCalendarUrlList() {
         LinkedHashMap<String, String> calendarList = new LinkedHashMap<>();
         if (document_list != null) {
-            Elements elements = document_list.select("td[class=llink]");
+            Elements elements = document_list.select("span[class=cols_title]");
             for (Element element : elements) {
                 Elements a_arr = element.getElementsByTag("a");
                 if (a_arr != null && a_arr.size() != 0) {
@@ -108,14 +108,10 @@ public class SchoolCalendarMethod extends BaseNetMethod {
             String data = NetMethod.loadUrl(context, imagePageUrl);
             if (data != null) {
                 Document document = Jsoup.parse(data);
-                Elements elements_img = document.getElementsByClass("readinfo");
-                for (Element element : elements_img) {
-                    Elements elements_img_2 = element.getElementsByTag("img");
-                    for (Element element_2 : elements_img_2) {
-                        if (element_2.hasAttr("src")) {
-                            imageUrl = calendar_server_utl + element_2.attr("src");
-                        }
-                    }
+                Elements elements_img = document.select("div[class=wp_articlecontent]");
+                Element element = elements_img.get(0).getElementsByTag("img").first();
+                if (element.hasAttr("src")) {
+                    imageUrl = calendar_server_utl + element.attr("src");
                 }
             }
         }
