@@ -37,7 +37,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
@@ -537,7 +536,7 @@ public class CourseActivity extends AppCompatActivity {
             try {
                 calendarStart.setTime(TimeMethod.parseDateSDF(schoolTime.getStartTime()));
                 calendarEnd.setTime(TimeMethod.parseDateSDF(schoolTime.getEndTime()));
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -546,7 +545,7 @@ public class CourseActivity extends AppCompatActivity {
             try {
                 calendarStart.setTime(TimeMethod.parseDateSDF(customStartTermDate));
                 calendarEnd.setTime(TimeMethod.parseDateSDF(customEndTermDate));
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
@@ -601,7 +600,7 @@ public class CourseActivity extends AppCompatActivity {
                                 .putString(Config.PREFERENCE_CUSTOM_TERM_END_DATE, customEndTermDate).apply();
                         Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.term_set_success, Snackbar.LENGTH_SHORT).show();
                     }
-                } catch (ParseException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

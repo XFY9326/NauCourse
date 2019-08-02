@@ -11,7 +11,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="15dp">
@@ -21,6 +20,7 @@
             android:layout_height="150dp"
             android:adjustViewBounds="true"
             android:scaleType="centerInside"
+            android:layout_weight="1"
             app:srcCompat="@drawable/nau_logo"
             tools:ignore="ContentDescription" />
 
@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="10dp"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:gravity="center_horizontal|bottom"
             android:orientation="vertical"
             android:padding="20dp">
@@ -95,7 +95,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="30dp"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 

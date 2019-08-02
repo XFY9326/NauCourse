@@ -218,7 +218,7 @@ public class NauSSOClient {
                 ResponseBody responseBody = response2.body();
                 if (responseBody != null) {
                     String body = responseBody.string();
-                    if (!body.contains("密码错误") && !body.contains("请勿输入非法字符")) {
+                    if (!body.contains("密码错误") && !body.contains("请勿输入非法字符") && !body.contains("用户名不存在")) {
                         response2.close();
                         return checkAlstuLogin(body);
                     }
@@ -329,7 +329,7 @@ public class NauSSOClient {
                     ResponseBody responseBody = response.body();
                     if (responseBody != null) {
                         String body = responseBody.string();
-                        if (body.contains("密码错误")) {
+                        if (body.contains("密码错误") || body.contains("用户名不存在")) {
                             loginErrorCode = LOGIN_USER_INFO_WRONG;
                         } else if (body.startsWith("当前你已经登录")) {
                             loginErrorCode = LOGIN_ALREADY_LOGIN;

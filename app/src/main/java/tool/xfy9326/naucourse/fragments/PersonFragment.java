@@ -23,6 +23,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import java.util.Calendar;
 import java.util.Locale;
 
+import tool.xfy9326.naucourse.BuildConfig;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.activities.AboutActivity;
@@ -108,6 +109,7 @@ public class PersonFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_person, container, false);
+        unlockFunction();
         return view;
     }
 
@@ -115,12 +117,6 @@ public class PersonFragment extends Fragment {
     public void onStart() {
         super.onStart();
         ViewSet();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        unlockFunction();
     }
 
     private void ViewSet() {
@@ -265,7 +261,7 @@ public class PersonFragment extends Fragment {
             CardView cardView_score = view.findViewById(R.id.cardView_score_search);
             CardView cardView_exam = view.findViewById(R.id.cardView_exam);
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-            if (sharedPreferences.getBoolean(Config.PREFERENCE_SHOW_HIDDEN_FUNCTION, Config.DEFAULT_PREFERENCE_SHOW_HIDDEN_FUNCTION)) {
+            if (BuildConfig.DEBUG || sharedPreferences.getBoolean(Config.PREFERENCE_SHOW_HIDDEN_FUNCTION, Config.DEFAULT_PREFERENCE_SHOW_HIDDEN_FUNCTION)) {
                 cardView_score.setVisibility(View.VISIBLE);
                 cardView_exam.setVisibility(View.VISIBLE);
             }

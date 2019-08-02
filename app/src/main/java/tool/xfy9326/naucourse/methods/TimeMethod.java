@@ -7,7 +7,6 @@ import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,15 +33,15 @@ public class TimeMethod {
         return sdf_ymd.format(new Date(time));
     }
 
-    public static synchronized Date parseDateSDFHM2(String str) throws ParseException {
+    public static synchronized Date parseDateSDFHM2(String str) throws Exception {
         return sdf_ymd_hm2.parse(str);
     }
 
-    public static synchronized Date parseDateSDFHM(String str) throws ParseException {
+    public static synchronized Date parseDateSDFHM(String str) throws Exception {
         return sdf_ymd_hm.parse(str);
     }
 
-    public static synchronized Date parseDateSDF(String str) throws ParseException {
+    public static synchronized Date parseDateSDF(String str) throws Exception {
         return sdf_ymd.parse(str);
     }
 
@@ -146,7 +145,7 @@ public class TimeMethod {
                 result.append(year - 1).append(year).append(2);
             }
             return result.toString();
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -195,7 +194,7 @@ public class TimeMethod {
                     max_week++;
                 }
 
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -244,7 +243,7 @@ public class TimeMethod {
                     startDay = calendar_start.getTimeInMillis();
                     weekNum++;
                 }
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -288,7 +287,7 @@ public class TimeMethod {
                 calendar.add(Calendar.DATE, 1);
             }
 
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return weekDayDate;
