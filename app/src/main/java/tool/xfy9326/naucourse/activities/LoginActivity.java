@@ -24,6 +24,7 @@ import tool.xfy9326.naucourse.methods.LoginMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.methods.SecurityMethod;
 import tool.xfy9326.naucourse.methods.UpdateMethod;
+import tool.xfy9326.naucourse.methods.VPNMethods;
 
 /**
  * Created by xfy9326 on 18-2-20.
@@ -69,7 +70,13 @@ public class LoginActivity extends AppCompatActivity {
 
         CheckBox checkBox_vpn = findViewById(R.id.checkBox_login_vpn_accept);
         checkBox_vpn.setChecked(sharedPreferences.getBoolean(Config.PREFERENCE_SCHOOL_VPN_MODE, Config.DEFAULT_PREFERENCE_SCHOOL_VPN_MODE));
-        checkBox_vpn.setOnCheckedChangeListener((buttonView, isChecked) -> sharedPreferences.edit().putBoolean(Config.PREFERENCE_SCHOOL_VPN_MODE, isChecked).apply());
+        checkBox_vpn.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sharedPreferences.edit().putBoolean(Config.PREFERENCE_SCHOOL_VPN_MODE, isChecked).apply();
+            VPNMethods.setVPNMode(this, isChecked);
+        });
+
+        CheckBox checkBox_eula = findViewById(R.id.checkBox_login_eula_accept);
+        checkBox_eula.setChecked(sharedPreferences.getBoolean(Config.PREFERENCE_EULA_ACCEPT, Config.DEFAULT_PREFERENCE_EULA_ACCEPT));
 
         findViewById(R.id.textView_login_accept_eula).setOnClickListener(v -> DialogMethod.showEULADialog(LoginActivity.this, false, null));
     }

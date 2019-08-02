@@ -129,7 +129,9 @@ public class SchoolCalendarActivity extends AppCompatActivity {
 
     synchronized public void setCalendarData(LinkedHashMap<String, String> calendarList, Bitmap bitmap) {
         setCalendarView(bitmap);
-        this.calendarBitmap = bitmap;
+        if (bitmap != null && !bitmap.isRecycled()) {
+            this.calendarBitmap = bitmap;
+        }
         this.calendarList = calendarList;
     }
 
@@ -165,11 +167,11 @@ public class SchoolCalendarActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        super.onDestroy();
         if (calendarBitmap != null && !calendarBitmap.isRecycled()) {
             calendarBitmap.recycle();
         }
         BaseMethod.getApp(this).setSchoolCalendarActivity(null);
         System.gc();
-        super.onDestroy();
     }
 }

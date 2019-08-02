@@ -101,6 +101,7 @@ public class AboutActivity extends AppCompatActivity {
                 if (iconClickCount >= ICON_CLICK_MAX_COUNT) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(AboutActivity.this);
                     builder.setTitle(R.string.attention);
+                    builder.setCancelable(false);
                     builder.setMessage(R.string.unlock_attention);
                     builder.setPositiveButton(R.string.accept, (dialog, which) -> {
                         Toast.makeText(AboutActivity.this, R.string.unlock_success, Toast.LENGTH_SHORT).show();

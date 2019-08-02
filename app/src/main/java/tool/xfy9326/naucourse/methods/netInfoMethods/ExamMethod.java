@@ -12,7 +12,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -47,7 +46,7 @@ public class ExamMethod extends BaseInfoMethod<Exam> {
                 examLastTime.add(countingDown.Time);
                 examLastTimeUnit.add(countingDown.TimeUnit);
                 return;
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -142,7 +141,7 @@ public class ExamMethod extends BaseInfoMethod<Exam> {
                                 String time = str.substring(0, str.indexOf(" ") + 1) + endTime;
                                 try {
                                     examEnd = TimeMethod.parseDateSDFHM(time).getTime();
-                                } catch (ParseException e) {
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                     examEnd = -1;
                                 }
