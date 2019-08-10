@@ -12,5 +12,5 @@ abstract class BaseInfoMethod<T> extends BaseNetMethod {
     }
 
     @Nullable
-    public abstract T getData(boolean checkTemp) throws Exception;
+    public abstract T getData(boolean checkTemp);
 }

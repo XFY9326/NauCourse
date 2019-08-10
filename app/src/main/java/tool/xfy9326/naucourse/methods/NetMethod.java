@@ -124,9 +124,9 @@ public class NetMethod {
      * @param url        需要获取的url
      * @param tryReLogin 检测到登陆错误后是否尝试重新登陆
      * @return 获取的数据字符串
-     * @throws Exception 网络连接中的错误
+     * @throws IOException 网络连接中的错误
      */
-    public static String loadUrlFromLoginClient(@NonNull Context context, String url, boolean tryReLogin) throws Exception {
+    public static String loadUrlFromLoginClient(@NonNull Context context, String url, boolean tryReLogin) throws IOException, InterruptedException {
         String data = BaseMethod.getApp(context).getClient().getData(url);
         boolean userLogin = NauSSOClient.checkUserLogin(data);
         boolean alstuLogin = NauSSOClient.checkAlstuLogin(data);

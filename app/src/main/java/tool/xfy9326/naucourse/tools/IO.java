@@ -72,8 +72,8 @@ public class IO {
     }
 
     public static boolean createPath(File file) {
-        if (file.getParent().trim().length() != 1) {
-            File filepath = file.getParentFile();
+        File filepath = file.getParentFile();
+        if (filepath != null && filepath.getAbsolutePath().trim().length() != 1) {
             if (!filepath.exists()) {
                 return filepath.mkdirs();
             }

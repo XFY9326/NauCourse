@@ -1,13 +1,14 @@
 package lib.xfy9326.net.api;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -91,29 +92,28 @@ public class API {
                         response.close();
                         try {
                             JSONObject responseJson = new JSONObject(body);
-                            if (responseJson.getString("status") != null) {
-                                if (responseJson.getString("status").equals(STATUS_SUCCESS)) {
-                                    if (responseJson.getString("data") != null && responseJson.getString("api_key") != null && responseJson.getString("api_key").equals(API_KEY)) {
-                                        String resultStr = responseJson.getString("data");
+                            responseJson.getString("status");
+                            if (responseJson.getString("status").equals(STATUS_SUCCESS)) {
+                                responseJson.getString("data");
+                                responseJson.getString("api_key");
+                                if (responseJson.getString("api_key").equals(API_KEY)) {
+                                    String resultStr = responseJson.getString("data");
+                                    try {
+                                        resultStr = AES.Decrypt(resultStr, API_KEY, API_IV);
                                         try {
-                                            resultStr = AES.Decrypt(resultStr, API_KEY, API_IV);
-                                            try {
-                                                JSONObject result = new JSONObject(resultStr);
-                                                requestListener.OnResponse(STATUS_SUCCESS, result);
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                                requestListener.OnError(ERROR_TYPE_RESPONSE_DATA_ERROR, e.getMessage());
-                                            }
-                                        } catch (Exception e) {
+                                            JSONObject result = new JSONObject(resultStr);
+                                            requestListener.OnResponse(STATUS_SUCCESS, result);
+                                        } catch (JSONException e) {
                                             e.printStackTrace();
-                                            requestListener.OnError(ERROR_TYPE_RESPONSE_AES_ERROR, e.getMessage());
+                                            requestListener.OnError(ERROR_TYPE_RESPONSE_DATA_ERROR, e.getMessage());
                                         }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        requestListener.OnError(ERROR_TYPE_RESPONSE_AES_ERROR, e.getMessage());
                                     }
-                                } else {
-                                    requestListener.OnResponse(requestJson.getString("status"), null);
                                 }
                             } else {
-                                requestListener.OnError(ERROR_TYPE_RESPONSE_DATA_ERROR, null);
+                                requestListener.OnResponse(requestJson.getString("status"), null);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
