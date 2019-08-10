@@ -263,7 +263,7 @@
     <string name="import_next_term_alert">手动导入下个学期的课程可能会导致学期开始与结束时间错误，若学期数不正确可在顶部菜单学期设置中自定义！\n\n导入的下学期课表在变为当前学期课表前并不会自动更新，如有改动请重新导入！</string>
     <string name="custom_term_alert">注：自定义的学期开始结束时间将在教务更新学期后被自动替换！</string>
     <string name="term_set_success">学期修改成功！</string>
-    <string name="term_set_failed">学期数错误或者过短！</string>
+    <string name="term_set_failed">学期周数错误，过长或过短！</string>
     <string name="course_table_reloading">正在重新加载课表中… …</string>
     <string name="school_net_no_connection">学校网站无法连接！</string>
     <string name="not_publish">未发布</string>
