@@ -161,7 +161,7 @@ public class ImageMethod {
 
     private static void drawWaterPrint(Context context, Canvas canvas, String text) {
         Paint paint = new Paint();
-        paint.setColor(Color.BLACK);
+        paint.setColor(context.getResources().getColor(R.color.course_snapshot_water_print));
         paint.setAlpha(80);
         paint.setAntiAlias(true);
         paint.setTextSize((float) dip2px(context, Config.WATER_PRINT_TEXT_SIZE));

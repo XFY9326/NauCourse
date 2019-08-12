@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:background="@drawable/shape_corner_square_light_grey"
+            android:background="@drawable/shape_corner_square_item"
             android:gravity="center_vertical"
             android:orientation="vertical"
             android:padding="5dp">

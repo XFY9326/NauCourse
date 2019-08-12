@@ -23,8 +23,9 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
-        android:background="@android:color/white"
+        android:background="@color/tab_bar_background"
         app:itemHorizontalTranslationEnabled="false"
+        app:itemIconTint="@color/selector_color"
         app:labelVisibilityMode="unlabeled"
         app:menu="@menu/menu_bnv" />
 

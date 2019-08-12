@@ -45,7 +45,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="25dp"
                         android:layout_marginTop="50dp"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/student_name"
                         android:textSize="22sp" />
 
                     <View
@@ -316,7 +316,7 @@
                     android:drawableEnd="@drawable/ic_more"
                     android:drawablePadding="15dp"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="15dp"
                     android:text="@string/global_settings"
                     android:textSize="15sp" />
 
@@ -345,7 +345,7 @@
                     android:drawableEnd="@drawable/ic_more"
                     android:drawablePadding="15dp"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="15dp"
                     android:text="@string/course_settings"
                     android:textSize="15sp" />
 
@@ -374,7 +374,7 @@
                     android:drawableEnd="@drawable/ic_more"
                     android:drawablePadding="15dp"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="15dp"
                     android:text="@string/login_out"
                     android:textSize="15sp" />
 
@@ -401,7 +401,7 @@
                     android:drawableEnd="@drawable/ic_more"
                     android:drawablePadding="15dp"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="15dp"
                     android:text="@string/update_check"
                     android:textSize="15sp" />
 
@@ -430,7 +430,7 @@
                     android:drawableEnd="@drawable/ic_more"
                     android:drawablePadding="15dp"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="15dp"
                     android:text="@string/about"
                     android:textSize="15sp" />
 

@@ -4,7 +4,7 @@
     android:id="@+id/layout_app_widget"
     android:layout_width="match_parent"
     android:layout_height="80dp"
-    android:background="@drawable/shape_corner_square_light_grey_transparent"
+    android:background="@drawable/shape_corner_square_item_transparent"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"

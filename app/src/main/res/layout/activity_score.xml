@@ -137,7 +137,7 @@
                     android:id="@+id/tabLayout_score"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:background="@android:color/white"
+                    android:background="@color/tab_bar_background"
                     android:fillViewport="true"
                     app:tabMode="fixed" />
 

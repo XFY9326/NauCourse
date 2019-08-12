@@ -116,7 +116,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
             if (color == -1 || singleColor) {
                 color = activity.getResources().getColor(R.color.course_cell_background);
             }
-            holder.cardView_course_edit.setBackgroundColor(color);
+            holder.cardView_course_edit.setCardBackgroundColor(color);
         }
     }
 

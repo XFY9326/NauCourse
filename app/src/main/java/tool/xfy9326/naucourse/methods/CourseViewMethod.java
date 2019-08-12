@@ -34,6 +34,8 @@ import tool.xfy9326.naucourse.utils.Course;
 public class CourseViewMethod {
     private final Context context;
     private final SharedPreferences sharedPreferences;
+    private int defaultCourseBackground;
+    private int defaultTextColor;
     private ArrayList<Course> courses;
     private int parent_width = 0;
     private int parent_height = 0;
@@ -54,6 +56,8 @@ public class CourseViewMethod {
         this.id_table = null;
         this.courses = courses;
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        this.defaultCourseBackground = context.getResources().getColor(R.color.course_item_background);
+        this.defaultTextColor = context.getResources().getColor(R.color.colorSecondaryText);
     }
 
     /**
@@ -146,6 +150,8 @@ public class CourseViewMethod {
             course_table_layout.setMinimumWidth(parent_width);
             if (hasCustomBackground) {
                 course_table_layout.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
+            } else {
+                course_table_layout.setBackgroundColor(context.getResources().getColor(R.color.table_background));
             }
 
             //设置每个单元格
@@ -177,8 +183,8 @@ public class CourseViewMethod {
                     int width = ((col == 0) ? 0 : (parent_width / col_max));
 
                     //设置单元格与文字的颜色
-                    int bgColor = Color.WHITE;
-                    int textColor = Color.GRAY;
+                    int bgColor = defaultCourseBackground;
+                    int textColor = defaultTextColor;
                     if (showCellColor && text != null && row != 0 && col != 0) {
                         bgColor = getCourseColorById(Objects.requireNonNull(id_table)[col][row]);
                         if (bgColor == -1 || singleColor) {
@@ -189,7 +195,7 @@ public class CourseViewMethod {
                         }
                     }
                     if (this_week_no_show_table != null && this_week_no_show_table[col][row]) {
-                        bgColor = context.getResources().getColor(R.color.light_light_grey);
+                        bgColor = context.getResources().getColor(R.color.course_cell_no_this_week);
                         textColor = context.getResources().getColor(R.color.light_grey);
                     }
 
