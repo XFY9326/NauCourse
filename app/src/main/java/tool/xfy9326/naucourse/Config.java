@@ -73,8 +73,6 @@ public class Config {
     public static final String CUSTOM_COURSE_PREFIX = "Custom";
     public static final String SEARCH_COURSE_PREFIX = "Search";
 
-    public static final String STATUE_NIGHT_MODE = "STATUE_NIGHT_MODE";
-
     public static final String PREFERENCE_HAS_LOGIN = "HAS_LOGIN";
     public static final String PREFERENCE_USER_ID = "USER_ID";
     public static final String PREFERENCE_USER_PW = "USER_PW";

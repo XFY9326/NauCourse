@@ -34,8 +34,8 @@ import tool.xfy9326.naucourse.utils.Course;
 public class CourseViewMethod {
     private final Context context;
     private final SharedPreferences sharedPreferences;
-    private int defaultCourseBackground;
-    private int defaultTextColor;
+    private final int defaultCourseBackground;
+    private final int defaultTextColor;
     private ArrayList<Course> courses;
     private int parent_width = 0;
     private int parent_height = 0;
