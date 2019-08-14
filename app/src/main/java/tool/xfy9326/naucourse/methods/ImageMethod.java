@@ -88,11 +88,11 @@ public class ImageMethod {
 
     @Nullable
     public static Bitmap getViewBitmap(Context context, View view) {
-        return getViewsBitmap(context, new View[]{view}, true);
+        return getViewsBitmap(context, new View[]{view}, true, Color.TRANSPARENT);
     }
 
     @Nullable
-    public static Bitmap getViewsBitmap(Context context, View[] views, boolean isVertical) {
+    public static Bitmap getViewsBitmap(Context context, View[] views, boolean isVertical, int backgroundColor) {
         if (views.length > 0) {
             int widthSum = 0;
             int heightSum = 0;
@@ -120,7 +120,7 @@ public class ImageMethod {
                 }
 
                 Canvas canvas = new Canvas(bitmap);
-                canvas.drawColor(Color.WHITE);
+                canvas.drawColor(backgroundColor);
 
                 int heightCount = 0;
                 int widthCount = 0;

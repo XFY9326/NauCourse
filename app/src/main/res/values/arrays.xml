@@ -108,4 +108,16 @@
         <item>@string/share_image</item>
     </string-array>
 
+    <string-array name="night_mode">
+        <item>@string/night_mode_follow_system</item>
+        <item>@string/night_mode_on</item>
+        <item>@string/night_mode_off</item>
+    </string-array>
+
+    <integer-array name="night_mode_value">
+        <item>-1</item>
+        <item>2</item>
+        <item>1</item>
+    </integer-array>
+
 </resources>

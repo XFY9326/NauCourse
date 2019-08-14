@@ -21,4 +21,5 @@
     <color name="course_item_background">#FFFFFF</color>
     <color name="course_snapshot_water_print">#000000</color>
     <color name="course_cell_no_this_week">#EEEEEE</color>
+    <color name="info_detail_share_background">#FFFFFF</color>
 </resources>
