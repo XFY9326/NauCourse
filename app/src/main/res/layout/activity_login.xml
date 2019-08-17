@@ -18,7 +18,7 @@
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:maxWidth="150dp"
@@ -31,7 +31,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_weight="1"
             android:gravity="center_horizontal|bottom"
             android:orientation="vertical"
             android:padding="20dp">
@@ -116,7 +115,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/login_with_vpn_mode"
                         android:textColor="@android:color/white"
-                        android:textSize="13sp" />
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
@@ -136,7 +135,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/accept_eula"
                         android:textColor="@android:color/white"
-                        android:textSize="13sp" />
+                        android:textSize="12sp" />
 
                     <TextView
                         android:id="@+id/textView_login_accept_eula"
@@ -145,7 +144,7 @@
                         android:layout_marginStart="5dp"
                         android:text="@string/eula"
                         android:textColor="@android:color/holo_blue_dark"
-                        android:textSize="13sp" />
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
@@ -158,7 +157,6 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="10dp"
                 android:background="@drawable/selector_button"
                 android:gravity="center"
                 android:text="@string/login"
