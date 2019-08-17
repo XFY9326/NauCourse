@@ -121,7 +121,7 @@ public class CourseActivity extends AppCompatActivity {
             case R.id.menu_course_delete_all:
                 Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.confirm_delete_all, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(android.R.string.yes, v -> {
                     courseArrayList.clear();
-                    courseAdapter.notifyDataSetChanged();
+                    courseAdapter.clearAll();
                     needSave = true;
                     FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton_course_add);
                     if (floatingActionButton.getVisibility() != View.VISIBLE) {
