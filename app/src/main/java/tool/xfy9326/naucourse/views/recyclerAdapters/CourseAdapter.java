@@ -52,6 +52,11 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         updateColor();
     }
 
+    public void clearAll() {
+        this.courseArrayList.clear();
+        notifyDataSetChanged();
+    }
+
     public void updateList(ArrayList<Course> courseArrayList) {
         this.courseArrayList.clear();
         this.courseArrayList.addAll(courseArrayList);
