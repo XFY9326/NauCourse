@@ -88,11 +88,11 @@ public class ImageMethod {
 
     @Nullable
     public static Bitmap getViewBitmap(Context context, View view) {
-        return getViewsBitmap(context, new View[]{view}, true);
+        return getViewsBitmap(context, new View[]{view}, true, Color.TRANSPARENT);
     }
 
     @Nullable
-    public static Bitmap getViewsBitmap(Context context, View[] views, boolean isVertical) {
+    public static Bitmap getViewsBitmap(Context context, View[] views, boolean isVertical, int backgroundColor) {
         if (views.length > 0) {
             int widthSum = 0;
             int heightSum = 0;
@@ -120,7 +120,7 @@ public class ImageMethod {
                 }
 
                 Canvas canvas = new Canvas(bitmap);
-                canvas.drawColor(Color.WHITE);
+                canvas.drawColor(backgroundColor);
 
                 int heightCount = 0;
                 int widthCount = 0;
@@ -161,7 +161,7 @@ public class ImageMethod {
 
     private static void drawWaterPrint(Context context, Canvas canvas, String text) {
         Paint paint = new Paint();
-        paint.setColor(Color.BLACK);
+        paint.setColor(context.getResources().getColor(R.color.course_snapshot_water_print));
         paint.setAlpha(80);
         paint.setAntiAlias(true);
         paint.setTextSize((float) dip2px(context, Config.WATER_PRINT_TEXT_SIZE));

@@ -1,47 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/school_vpn">
-        <CheckBoxPreference
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.preference.PreferenceCategory android:title="@string/theme_settings">
+        <androidx.preference.Preference
+            android:key="NIGHT_MODE"
+            android:summary="@string/night_mode_sum"
+            android:title="@string/night_mode" />
+    </androidx.preference.PreferenceCategory>
+    <androidx.preference.PreferenceCategory android:title="@string/school_vpn">
+        <androidx.preference.CheckBoxPreference
             android:defaultValue="false"
             android:key="SCHOOL_VPN_MODE"
             android:summary="@string/school_vpn_mode_sum"
             android:title="@string/school_vpn_mode" />
-        <CheckBoxPreference
+        <androidx.preference.CheckBoxPreference
             android:defaultValue="true"
             android:dependency="SCHOOL_VPN_MODE"
             android:key="SCHOOL_VPN_SMART_MODE"
             android:summary="@string/school_vpn_smart_mode_sum"
             android:title="@string/school_vpn_smart_mode" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="@string/data_get">
-        <CheckBoxPreference
+    </androidx.preference.PreferenceCategory>
+    <androidx.preference.PreferenceCategory android:title="@string/data_get">
+        <androidx.preference.CheckBoxPreference
             android:defaultValue="true"
             android:key="UPDATE_DATA_ON_START"
             android:summary="@string/on_start_data_get_sum"
             android:title="@string/on_start_data_get" />
-        <CheckBoxPreference
+        <androidx.preference.CheckBoxPreference
             android:defaultValue="false"
             android:dependency="UPDATE_DATA_ON_START"
             android:key="ONLY_UPDATE_UNDER_WIFI"
             android:summary="@string/only_update_under_wifi_sum"
             android:title="@string/only_update_under_wifi" />
-        <CheckBoxPreference
+        <androidx.preference.CheckBoxPreference
             android:defaultValue="true"
             android:dependency="UPDATE_DATA_ON_START"
             android:key="ASYNC_PERSONAL_INFO_BY_DAY"
             android:summary="@string/async_personal_info_by_day_sum"
             android:title="@string/async_personal_info_by_day" />
-        <CheckBoxPreference
+        <androidx.preference.CheckBoxPreference
             android:defaultValue="true"
             android:dependency="UPDATE_DATA_ON_START"
             android:key="AUTO_UPDATE_COURSE_TABLE"
             android:summary="@string/auto_update_course_table_sum"
             android:title="@string/auto_update_course_table" />
-        <CheckBoxPreference
+        <androidx.preference.CheckBoxPreference
             android:defaultValue="false"
             android:dependency="AUTO_UPDATE_COURSE_TABLE"
             android:key="UPDATE_TABLE_EVERY_TIME"
             android:summary="@string/update_table_every_time_sum"
             android:title="@string/update_table_every_time" />
-    </PreferenceCategory>
-</PreferenceScreen>
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

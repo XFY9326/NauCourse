@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 abstract class BaseNetMethod {
-    protected final Context context;
+    final Context context;
 
     BaseNetMethod(@NonNull Context context) {
         this.context = context;

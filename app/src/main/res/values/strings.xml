@@ -15,7 +15,7 @@
     <string name="loading">正在加载中&#8230;&#160;&#8230;.</string>
     <string name="data_loading">加载中…</string>
     <string name="login_success">登陆成功！</string>
-    <string name="course_settings">课程设置</string>
+    <string name="course_settings">课表设置</string>
     <string name="about">关于</string>
     <string name="std_id">学号：%1$s</string>
     <string name="std_name">姓名：%1$s</string>
@@ -263,7 +263,7 @@
     <string name="import_next_term_alert">手动导入下个学期的课程可能会导致学期开始与结束时间错误，若学期数不正确可在顶部菜单学期设置中自定义！\n\n导入的下学期课表在变为当前学期课表前并不会自动更新，如有改动请重新导入！</string>
     <string name="custom_term_alert">注：自定义的学期开始结束时间将在教务更新学期后被自动替换！</string>
     <string name="term_set_success">学期修改成功！</string>
-    <string name="term_set_failed">学期数错误或者过短！</string>
+    <string name="term_set_failed">学期周数错误，过长或过短！</string>
     <string name="course_table_reloading">正在重新加载课表中… …</string>
     <string name="school_net_no_connection">学校网站无法连接！</string>
     <string name="not_publish">未发布</string>
@@ -365,8 +365,14 @@
     <string name="credit_no_select">你没有选择任何课程！</string>
     <string name="login_with_vpn_mode">使用校园VPN模式登录</string>
     <string name="confirm_and_not_show_again">确认且不再显示</string>
+    <string name="theme_settings">主题设置</string>
+    <string name="night_mode">夜间模式</string>
+    <string name="night_mode_sum">设置并切换暗色调的夜间主题</string>
+    <string name="night_mode_on">开启夜间模式</string>
+    <string name="night_mode_off">关闭夜间模式</string>
+    <string name="night_mode_follow_system">跟随系统设置</string>
 
-    <string name="new_version_info_content">欢迎使用NAU课程表\n\n鉴于发送邮件在急需要解决问题时步骤繁琐，大家可以加入反馈QQ群反馈信息：704668624\n\n如果在校外无法查看校内通知，可以尝试通用设置里的校园VPN模式\n\n如果想要提前查看下学期课程必须在课程编辑里手动导入\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
+    <string name="new_version_info_content">欢迎使用NAU课程表\n\n反馈QQ群：704668624\n\n如果新生在使用过程中有出现特定页面或者程序崩溃问题，请及时上报\n\n如果在校外无法查看校内通知，可以尝试通用设置里的校园VPN模式\n\n如果想要提前查看下学期课程必须在课程编辑里手动导入\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>

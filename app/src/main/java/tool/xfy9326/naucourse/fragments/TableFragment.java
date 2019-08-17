@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -374,7 +373,7 @@ public class TableFragment extends Fragment {
                     imageView_table_background.setImageDrawable(null);
                     imageView_table_background.refreshDrawableState();
                     if (course_table_layout != null) {
-                        course_table_layout.setBackgroundColor(Color.LTGRAY);
+                        course_table_layout.setBackgroundColor(getResources().getColor(R.color.table_background));
                     }
                 }
             }

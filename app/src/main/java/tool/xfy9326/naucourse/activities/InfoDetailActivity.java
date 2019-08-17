@@ -167,7 +167,7 @@ public class InfoDetailActivity extends AppCompatActivity {
             intent.putExtra(Intent.EXTRA_TEXT, shareText);
             BaseMethod.runIntent(InfoDetailActivity.this, Intent.createChooser(intent, getString(R.string.share)));
         } else if (shareType == SHARE_TYPE_IMAGE) {
-            Bitmap bitmap = ImageMethod.getViewsBitmap(InfoDetailActivity.this, new View[]{findViewById(R.id.cardView_info_detail_title), findViewById(R.id.layout_info_detail_data)}, true);
+            Bitmap bitmap = ImageMethod.getViewsBitmap(InfoDetailActivity.this, new View[]{findViewById(R.id.cardView_info_detail_title), findViewById(R.id.layout_info_detail_data)}, true, getResources().getColor(R.color.info_detail_share_background));
             DialogMethod.showImageShareDialog(InfoDetailActivity.this,
                     bitmap,
                     info_title + "_" + info_date + ".jpeg",

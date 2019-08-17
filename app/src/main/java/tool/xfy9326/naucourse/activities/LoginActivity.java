@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
@@ -66,6 +67,24 @@ public class LoginActivity extends AppCompatActivity {
         if (!en_userPw.equals(Config.DEFAULT_PREFERENCE_USER_PW)) {
             editText_userPw.setText(SecurityMethod.getUserPassWord(this));
         }
+
+        editText_userId.setOnEditorActionListener((textView, i, keyEvent) -> {
+            if (i == EditorInfo.IME_ACTION_DONE) {
+                editText_userPw.requestFocus();
+                return true;
+            }
+            return false;
+        });
+
+        editText_userPw.setOnEditorActionListener((textView, i, keyEvent) -> {
+            if (i == EditorInfo.IME_ACTION_DONE) {
+                BaseMethod.hideKeyBoard(LoginActivity.this);
+                showLoginAttentionDialog();
+                return true;
+            }
+            return false;
+        });
+
         findViewById(R.id.button_login_login).setOnClickListener(v -> showLoginAttentionDialog());
 
         CheckBox checkBox_vpn = findViewById(R.id.checkBox_login_vpn_accept);

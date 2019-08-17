@@ -137,7 +137,10 @@ public class BaseMethod {
 
     public static void setRefreshing(final SwipeRefreshLayout swipeRefreshLayout, final boolean refreshing) {
         if (swipeRefreshLayout != null && (refreshing && !swipeRefreshLayout.isRefreshing() || !refreshing && swipeRefreshLayout.isRefreshing())) {
-            swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(refreshing));
+            swipeRefreshLayout.setRefreshing(refreshing);
+            if (refreshing && !swipeRefreshLayout.isRefreshing() || !refreshing && swipeRefreshLayout.isRefreshing()) {
+                swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(refreshing));
+            }
         }
     }
 

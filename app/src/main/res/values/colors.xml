@@ -5,12 +5,20 @@
     <color name="colorAccent">#536DFE</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
-    <color name="ic_launcher_background">#E1FAFF</color>
     <color name="activity_login_background">#243247</color>
+    <color name="ic_launcher_background">#E1FAFF</color>
     <color name="grey">#4B4B4B</color>
-    <color name="light_light_grey">#EEEEEE</color>
     <color name="light_grey">#BBBBBB</color>
     <color name="course_cell_background">#90CAF9</color>
     <color name="light_light_grey_transparent">#8CEEEEEE</color>
     <color name="white_transparent">#66FFFFFF</color>
+    <color name="tab_bar_background">#FFFFFF</color>
+    <color name="card_item_background">#EEEEEE</color>
+    <color name="student_name">#000000</color>
+    <color name="important_item">#000000</color>
+    <color name="table_background">#BBBBBB</color>
+    <color name="course_item_background">#FFFFFF</color>
+    <color name="course_snapshot_water_print">#000000</color>
+    <color name="course_cell_no_this_week">#EEEEEE</color>
+    <color name="info_detail_share_background">#FFFFFF</color>
 </resources>

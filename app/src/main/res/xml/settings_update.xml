@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/update_check">
-        <Preference
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.preference.PreferenceCategory android:title="@string/update_check">
+        <androidx.preference.Preference
             android:key="UPDATE_NOW"
             android:title="@string/update_now" />
-        <CheckBoxPreference
+        <androidx.preference.CheckBoxPreference
             android:defaultValue="true"
             android:key="AUTO_CHECK_UPDATE"
             android:summary="@string/auto_check_update_sum"
             android:title="@string/auto_check_update" />
-        <CheckBoxPreference
+        <androidx.preference.CheckBoxPreference
             android:defaultValue="false"
             android:dependency="AUTO_CHECK_UPDATE"
             android:key="ONLY_UPDATE_APPLICATION_UNDER_WIFI"
             android:summary="@string/only_update_application_under_wifi_sum"
             android:title="@string/only_update_application_under_wifi" />
-        <CheckBoxPreference
+        <androidx.preference.CheckBoxPreference
             android:defaultValue="false"
             android:key="CHECK_BETA_UPDATE"
             android:summary="@string/beta_version_check_sum"
             android:title="@string/beta_version_check" />
-    </PreferenceCategory>
-</PreferenceScreen>
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

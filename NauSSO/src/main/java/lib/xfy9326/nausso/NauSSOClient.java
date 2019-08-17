@@ -160,11 +160,11 @@ public class NauSSOClient {
         vpnInterceptor.setEnabled(false);
     }
 
-    synchronized public boolean login(@NonNull String userId, @NonNull String userPw) throws Exception {
+    synchronized public boolean login(@NonNull String userId, @NonNull String userPw) throws IOException {
         return singleLogin(userId, userPw);
     }
 
-    synchronized public void loginOut() throws Exception {
+    synchronized public void loginOut() throws IOException {
         Request.Builder builder = new Request.Builder();
         builder.url(single_login_out_url);
         main_client.newCall(builder.build()).execute().close();
@@ -174,10 +174,9 @@ public class NauSSOClient {
     /**
      * VPN注销
      *
-     * @throws Exception 错误
-     * @deprecated 目前VPN注销存在一直加载的问题
+     * @throws IOException 错误
      */
-    synchronized public void VPNLoginOut() throws Exception {
+    synchronized public void VPNLoginOut() throws IOException {
         if (isVPNEnabled()) {
             Request.Builder builder = new Request.Builder();
             builder.url(VPNMethod.VPN_SERVER + "/logout");
@@ -185,7 +184,7 @@ public class NauSSOClient {
         }
     }
 
-    synchronized public void jwcLoginOut() throws Exception {
+    synchronized public void jwcLoginOut() throws IOException {
         Request.Builder builder = new Request.Builder();
         builder.url(JWC_SERVER_URL + "/LoginOut.aspx");
         builder.header("Pragma", "no-cache");
@@ -194,7 +193,7 @@ public class NauSSOClient {
         main_client.newCall(builder.build()).execute().close();
     }
 
-    synchronized public boolean alstuLogin(String userName, String userPw) throws Exception {
+    synchronized public boolean alstuLogin(String userName, String userPw) throws IOException {
         boolean needLogin = false;
         String ssoContent = null;
         Request.Builder builder = new Request.Builder();

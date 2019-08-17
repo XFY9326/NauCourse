@@ -2,6 +2,9 @@ package tool.xfy9326.naucourse;
 
 import android.app.Application;
 
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.preference.PreferenceManager;
+
 import com.tencent.bugly.Bugly;
 
 import java.lang.ref.WeakReference;
@@ -47,6 +50,8 @@ public class BaseApplication extends Application {
         }
         client = NetMethod.getNewSSOClient(this);
         executorService = Executors.newCachedThreadPool();
+        int currentNightMode = PreferenceManager.getDefaultSharedPreferences(this).getInt(Config.PREFERENCE_NIGHT_MODE, Config.DEFAULT_PREFERENCE_NIGHT_MODE);
+        AppCompatDelegate.setDefaultNightMode(currentNightMode);
     }
 
     public NauSSOClient getClient() {

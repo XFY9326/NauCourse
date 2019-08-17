@@ -12,5 +12,5 @@ abstract class BaseInfoDetailMethod<T> extends BaseInfoMethod<T> {
     public abstract int loadDetail(String url) throws Exception;
 
     @NonNull
-    public abstract String getDetailData() throws Exception;
+    public abstract String getDetailData();
 }

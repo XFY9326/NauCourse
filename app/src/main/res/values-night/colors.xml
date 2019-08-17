@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3244AD</color>
+    <color name="colorPrimaryDark">#283483</color>
+    <color name="colorAccent">#88AFC4</color>
+    <color name="colorPrimaryText">#DBDBDB</color>
+    <color name="colorSecondaryText">#C7C7C7</color>
+    <color name="tab_bar_background">#424242</color>
+    <color name="card_item_background">#333333</color>
+    <color name="student_name">#FFFFFF</color>
+    <color name="important_item">#FFFFFF</color>
+    <color name="table_background">#303030</color>
+    <color name="course_item_background">#424242</color>
+    <color name="course_snapshot_water_print">#FFFFFF</color>
+    <color name="course_cell_no_this_week">#575757</color>
+    <color name="info_detail_share_background">#424242</color>
+</resources>

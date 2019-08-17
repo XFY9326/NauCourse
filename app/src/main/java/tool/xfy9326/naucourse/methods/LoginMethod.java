@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 
 import java.io.File;
+import java.io.IOException;
 
 import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
@@ -24,9 +25,9 @@ public class LoginMethod {
      *
      * @param context Context
      * @return ReLogin状态值
-     * @throws Exception 重新登陆时的网络错误
+     * @throws IOException 重新登陆时的网络错误
      */
-    static int reLogin(@NonNull Context context) throws Exception {
+    static int reLogin(@NonNull Context context) throws IOException, InterruptedException {
         if (!isTryingReLogin) {
             isTryingReLogin = true;
             int result = doReLogin(context);
@@ -37,7 +38,7 @@ public class LoginMethod {
         }
     }
 
-    private static int doReLogin(@NonNull Context context) throws Exception {
+    private static int doReLogin(@NonNull Context context) throws IOException, InterruptedException {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String id = SecurityMethod.getUserId(sharedPreferences);
         String pw = SecurityMethod.getUserPassWord(sharedPreferences);
@@ -47,11 +48,12 @@ public class LoginMethod {
         return Config.RE_LOGIN_FAILED;
     }
 
-    synchronized public static int doReLogin(@NonNull Context context, String id, String pw, SharedPreferences sharedPreferences) throws Exception {
+    synchronized public static int doReLogin(@NonNull Context context, String id, String pw, SharedPreferences sharedPreferences) throws IOException, InterruptedException {
         NauSSOClient nauSSOClient = BaseMethod.getApp(context).getClient();
         nauSSOClient.jwcLoginOut();
+        nauSSOClient.VPNLoginOut();
         nauSSOClient.loginOut();
-        Thread.sleep(1500);
+        Thread.sleep(2000);
         if (nauSSOClient.login(id, pw)) {
             nauSSOClient.alstuLogin(id, pw);
             String loginURL = nauSSOClient.getJwcLoginUrl();
@@ -63,7 +65,7 @@ public class LoginMethod {
         return Config.RE_LOGIN_FAILED;
     }
 
-    synchronized static boolean doAlstuReLogin(@NonNull Context context) throws Exception {
+    synchronized static boolean doAlstuReLogin(@NonNull Context context) throws IOException {
         NauSSOClient nauSSOClient = BaseMethod.getApp(context).getClient();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String id = SecurityMethod.getUserId(sharedPreferences);
@@ -145,8 +147,11 @@ public class LoginMethod {
                 //noinspection ResultOfMethodCallIgnored
                 f.delete();
             } else if (f.isDirectory()) {
-                for (File file : f.listFiles()) {
-                    deleteAll(file);
+                File[] fileList = f.listFiles();
+                if (fileList != null) {
+                    for (File file : fileList) {
+                        deleteAll(file);
+                    }
                 }
             }
         }
