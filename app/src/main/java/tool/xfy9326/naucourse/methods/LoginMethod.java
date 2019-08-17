@@ -51,8 +51,9 @@ public class LoginMethod {
     synchronized public static int doReLogin(@NonNull Context context, String id, String pw, SharedPreferences sharedPreferences) throws IOException, InterruptedException {
         NauSSOClient nauSSOClient = BaseMethod.getApp(context).getClient();
         nauSSOClient.jwcLoginOut();
+        nauSSOClient.VPNLoginOut();
         nauSSOClient.loginOut();
-        Thread.sleep(1500);
+        Thread.sleep(2000);
         if (nauSSOClient.login(id, pw)) {
             nauSSOClient.alstuLogin(id, pw);
             String loginURL = nauSSOClient.getJwcLoginUrl();

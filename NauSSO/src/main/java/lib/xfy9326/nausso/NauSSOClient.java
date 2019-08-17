@@ -175,7 +175,6 @@ public class NauSSOClient {
      * VPN注销
      *
      * @throws IOException 错误
-     * @deprecated 目前VPN注销存在一直加载的问题
      */
     synchronized public void VPNLoginOut() throws IOException {
         if (isVPNEnabled()) {
