@@ -129,7 +129,7 @@
     <string name="share">分享</string>
     <string name="permission_error">未给予相关权限！</string>
     <string name="no_available_application">无可用APP</string>
-    <string name="ask_lock_background">在后台锁定本应用以带来更好的使用体验！</string>
+    <string name="ask_lock_background">为了能够在后台运行并及时提示，你可以在后台锁定本应用并且允许开机启动</string>
     <string name="feedback">问题反馈</string>
     <string name="feedback_by_mail">您可以通过发送反馈邮件或加入QQ群的方式反馈您遇到的问题或者提出好的建议,您的所有建议与反馈都会得到认真的查阅。\n\n邮箱：%1$s\n\nQQ群：%2$s</string>
     <string name="mail" translatable="false">1069665464@qq.com</string>

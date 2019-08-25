@@ -125,7 +125,15 @@ public class CourseSettingsFragment extends PreferenceFragmentCompat {
 
         ((Preference) Objects.requireNonNull(findPreference(Config.PREFERENCE_NOTIFY_NEXT_CLASS))).setOnPreferenceChangeListener((preference, newValue) -> {
             if ((boolean) newValue && getActivity() != null) {
-                Toast.makeText(getActivity(), R.string.ask_lock_background, Toast.LENGTH_SHORT).show();
+                final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                if (sharedPreferences.getBoolean(Config.PREFERENCE_NOTIFY_SHOW_ATTENTION, Config.DEFAULT_PREFERENCE_NOTIFY_SHOW_ATTENTION)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle(R.string.attention);
+                    builder.setMessage(R.string.ask_lock_background);
+                    builder.setNeutralButton(R.string.no_alert_again, (dialogInterface, i) -> sharedPreferences.edit().putBoolean(Config.PREFERENCE_NOTIFY_SHOW_ATTENTION, false).apply());
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.show();
+                }
                 //初始化自动更新
                 getActivity().sendBroadcast(new Intent(CourseUpdateReceiver.UPDATE_ACTION).putExtra(Config.INTENT_IS_ONLY_INIT, true));
             }

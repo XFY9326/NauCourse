@@ -184,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
     private void tempLoad() {
         if (getIntent() != null) {
             if (getIntent().getBooleanExtra(Config.INTENT_JUST_LOGIN, false)) {
+                getIntent().removeExtra(Config.INTENT_JUST_LOGIN);
                 Toast.makeText(this, R.string.login_success, Toast.LENGTH_SHORT).show();
                 Toast.makeText(this, R.string.init_data_loading, Toast.LENGTH_SHORT).show();
                 if (NetMethod.isNetworkConnected(this)) {
