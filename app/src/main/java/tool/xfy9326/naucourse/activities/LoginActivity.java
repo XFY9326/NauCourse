@@ -46,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         ViewSet();
+        BaseMethod.showNewVersionInfo(this, true);
         updateCheck();
         netCheck();
     }
