@@ -29,6 +29,7 @@ public class GlobalSettingsFragment extends PreferenceFragmentCompat {
         PreferenceSet();
     }
 
+    @SuppressWarnings("SameReturnValue")
     private void PreferenceSet() {
         ((Preference) Objects.requireNonNull(findPreference(Config.PREFERENCE_NIGHT_MODE))).setOnPreferenceClickListener(preference -> {
             showNightModeChooseDialog();

@@ -24,6 +24,7 @@ public class UpdateSettingsFragment extends PreferenceFragmentCompat {
         PreferenceSet();
     }
 
+    @SuppressWarnings("SameReturnValue")
     private void PreferenceSet() {
         ((Preference) Objects.requireNonNull(findPreference(Config.PREFERENCE_UPDATE_NOW))).setOnPreferenceClickListener(preference -> {
             if (isAdded()) {

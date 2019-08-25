@@ -34,6 +34,7 @@ public class Updater {
             updateJson.put("deviceSDK", Build.VERSION.SDK_INT);
 
             api.call(updateJson, new API.OnRequestListener() {
+                @SuppressWarnings("unused")
                 @Override
                 public void OnResponse(String status, @Nullable JSONObject jsonObject) {
                     if (jsonObject == null) {
