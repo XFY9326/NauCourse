@@ -26,6 +26,7 @@ public class CurrentScoreFragment extends Fragment {
         this.view = null;
         this.recyclerView = null;
         this.scoreAdapter = null;
+        setRetainInstance(true);
     }
 
     @Nullable
