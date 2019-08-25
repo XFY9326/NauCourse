@@ -64,7 +64,7 @@ dependencies {
 
     implementation 'com.jaredrummler:colorpicker:1.1.0'
 
-    implementation 'com.tencent.bugly:crashreport:2.8.6.0'
+    implementation 'com.tencent.bugly:crashreport:3.0.0'
 
     implementation 'com.google.android.material:material:1.1.0-alpha09'
     implementation 'androidx.appcompat:appcompat:1.1.0-rc01'

@@ -15,10 +15,8 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.utils.CourseScore;
 import tool.xfy9326.naucourse.utils.CreditCountCourse;
 
 public class CreditCountAdapter extends RecyclerView.Adapter<CreditCountAdapter.CreditCountViewHolder> {
@@ -26,31 +24,10 @@ public class CreditCountAdapter extends RecyclerView.Adapter<CreditCountAdapter.
     private final ArrayList<CreditCountCourse> countCourses;
     private final boolean[] checkedList;
 
-    public CreditCountAdapter(Context context, CourseScore courseScore) {
+    public CreditCountAdapter(Context context, ArrayList<CreditCountCourse> countCourses) {
         this.context = context;
-        this.countCourses = new ArrayList<>();
-        courseScoreFix(courseScore);
+        this.countCourses = countCourses;
         this.checkedList = new boolean[getItemCount()];
-    }
-
-    private void courseScoreFix(CourseScore courseScore) {
-        for (int i = 0; i < courseScore.getCourseAmount(); i++) {
-            if (!Objects.requireNonNull(courseScore.getScoreTotal())[i].contains("未")) {
-                try {
-                    CreditCountCourse course = new CreditCountCourse();
-                    float score = Float.parseFloat(Objects.requireNonNull(courseScore.getScoreTotal())[i]);
-                    float studyScore = Float.parseFloat(Objects.requireNonNull(courseScore.getScoreCourseXf())[i]);
-                    course.setCourseId(Objects.requireNonNull(courseScore.getScoreCourseId())[i]);
-                    course.setCourseName(Objects.requireNonNull(courseScore.getScoreCourseName())[i]);
-                    course.setScore(score);
-                    course.setStudyScore(studyScore);
-                    course.setCreditWeight(1f);
-                    countCourses.add(course);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     public ArrayList<CreditCountCourse> getResult() {

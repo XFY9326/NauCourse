@@ -53,6 +53,17 @@ public class ScoreActivity extends AppCompatActivity {
     private boolean isLoading = true;
     private int loadTime = 0;
 
+    private static boolean waitForEvaluate(CourseScore courseScore) {
+        if (courseScore != null && courseScore.getScoreTotal() != null) {
+            for (String score : courseScore.getScoreTotal()) {
+                if (score.contains("测评")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +83,12 @@ public class ScoreActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.menu_score_credit) {
             if (!isLoading && courseScore != null && historyCreditCourse != null) {
-                showCreditCountDialog();
+                ArrayList<CreditCountCourse> countCourses = CreditCountMethod.getCreditCountCourse(courseScore);
+                if (countCourses.size() > 0) {
+                    showCreditCountDialog(countCourses);
+                } else {
+                    Snackbar.make(findViewById(R.id.layout_score_content), R.string.credit_count_course_empty, Snackbar.LENGTH_SHORT).show();
+                }
             } else {
                 Snackbar.make(findViewById(R.id.layout_score_content), R.string.data_is_loading, Snackbar.LENGTH_SHORT).show();
             }
@@ -80,8 +96,8 @@ public class ScoreActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void showCreditCountDialog() {
-        final CreditCountAdapter adapter = new CreditCountAdapter(this, courseScore);
+    private void showCreditCountDialog(final ArrayList<CreditCountCourse> creditCountCourses) {
+        final CreditCountAdapter adapter = new CreditCountAdapter(this, creditCountCourses);
         LayoutInflater layoutInflater = getLayoutInflater();
         View view = layoutInflater.inflate(R.layout.dialog_score_credit, findViewById(R.id.layout_dialog_score_credit));
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView_dialog_score_credit);
@@ -243,17 +259,6 @@ public class ScoreActivity extends AppCompatActivity {
             BaseMethod.setRefreshing(swipeRefreshLayout, false);
         }
         isLoading = false;
-    }
-
-    private boolean waitForEvaluate(CourseScore courseScore) {
-        if (courseScore != null && courseScore.getScoreTotal() != null) {
-            for (String score : courseScore.getScoreTotal()) {
-                if (score.contains("测评")) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
 }

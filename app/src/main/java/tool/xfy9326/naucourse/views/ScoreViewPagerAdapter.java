@@ -32,12 +32,10 @@ public class ScoreViewPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         Fragment fragment;
         switch (position) {
-            case 0:
-                fragment = currentScoreFragment;
-                break;
             case 1:
                 fragment = historyScoreFragment;
                 break;
+            case 0:
             default:
                 fragment = currentScoreFragment;
                 break;

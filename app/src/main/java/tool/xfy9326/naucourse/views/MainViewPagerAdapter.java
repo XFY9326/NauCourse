@@ -69,15 +69,13 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         Fragment fragment;
         switch (position) {
-            case 0:
-                fragment = homeFragment;
-                break;
             case 1:
                 fragment = tableFragment;
                 break;
             case 2:
                 fragment = personFragment;
                 break;
+            case 0:
             default:
                 fragment = homeFragment;
                 break;

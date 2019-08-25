@@ -12,6 +12,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,7 +38,7 @@ public class SchoolTimeMethod extends BaseInfoMethod<SchoolTime> {
     }
 
     @Override
-    public int load() throws Exception {
+    public int load() throws IOException, InterruptedException {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
             String url = sharedPreferences.getString(Config.PREFERENCE_LOGIN_URL, null);

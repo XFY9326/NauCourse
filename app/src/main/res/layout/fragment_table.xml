@@ -104,11 +104,27 @@
 
     </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/progressBar_table_loading"
-        style="?android:attr/progressBarStyle"
+    <LinearLayout
+        android:id="@+id/layout_table_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ProgressBar
+
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="@string/table_loading_tip" />
+
+    </LinearLayout>
 
 </RelativeLayout>

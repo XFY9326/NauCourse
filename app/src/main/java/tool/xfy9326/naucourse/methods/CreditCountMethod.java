@@ -2,12 +2,36 @@ package tool.xfy9326.naucourse.methods;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
+import tool.xfy9326.naucourse.utils.CourseScore;
 import tool.xfy9326.naucourse.utils.CreditCountCourse;
 import tool.xfy9326.naucourse.utils.HistoryScore;
 
 public class CreditCountMethod {
+    public static ArrayList<CreditCountCourse> getCreditCountCourse(CourseScore courseScore) {
+        ArrayList<CreditCountCourse> countCourses = new ArrayList<>();
+        for (int i = 0; i < courseScore.getCourseAmount(); i++) {
+            if (!Objects.requireNonNull(courseScore.getScoreTotal())[i].contains("未")) {
+                try {
+                    CreditCountCourse course = new CreditCountCourse();
+                    float score = Float.parseFloat(Objects.requireNonNull(courseScore.getScoreTotal())[i]);
+                    float studyScore = Float.parseFloat(Objects.requireNonNull(courseScore.getScoreCourseXf())[i]);
+                    course.setCourseId(Objects.requireNonNull(courseScore.getScoreCourseId())[i]);
+                    course.setCourseName(Objects.requireNonNull(courseScore.getScoreCourseName())[i]);
+                    course.setScore(score);
+                    course.setStudyScore(studyScore);
+                    course.setCreditWeight(1f);
+                    countCourses.add(course);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return countCourses;
+    }
+
     public static ArrayList<CreditCountCourse> getHistoryCreditCourse(HistoryScore historyScore) {
         ArrayList<CreditCountCourse> courses = new ArrayList<>();
         for (int i = 0; i < historyScore.getCourseAmount(); i++) {

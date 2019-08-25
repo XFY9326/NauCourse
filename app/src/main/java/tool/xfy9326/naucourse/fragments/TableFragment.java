@@ -17,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -341,9 +340,9 @@ public class TableFragment extends Fragment {
     private void setTableData(@NonNull SchoolTime schoolTime, boolean isDataReload, boolean hasCustomBackground) {
         if (view != null) {
             CardView cardView_course = view.findViewById(R.id.cardView_courseTable);
-            ProgressBar progressBar_loading = view.findViewById(R.id.progressBar_table_loading);
-            if (progressBar_loading.getVisibility() != View.GONE) {
-                progressBar_loading.setVisibility(View.GONE);
+            LinearLayout layout_loading = view.findViewById(R.id.layout_table_loading);
+            if (layout_loading.getVisibility() != View.GONE) {
+                layout_loading.setVisibility(View.GONE);
             }
             if (courseViewMethod == null) {
                 courseViewMethod = new CourseViewMethod(context, courses);

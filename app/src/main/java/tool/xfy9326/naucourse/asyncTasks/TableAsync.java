@@ -62,14 +62,13 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
                     }
 
                     //首次加载没有课程数据时或者打开自动更新时自动联网获取
-                    boolean auto_update = PreferenceManager.getDefaultSharedPreferences(context[0]).getBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE, Config.DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE);
-                    if (course == null) {
+                    if (course == null || course.size() == 0) {
                         TableMethod tableMethod = new TableMethod(context[0]);
                         tableLoadSuccess = tableMethod.load();
                         if (tableLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                             course = tableMethod.getData(true);
                         }
-                    } else if (auto_update) {
+                    } else if (PreferenceManager.getDefaultSharedPreferences(context[0]).getBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE, Config.DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE)) {
                         TableMethod tableMethod = new TableMethod(context[0]);
                         if (tableMethod.load() == Config.NET_WORK_GET_SUCCESS) {
                             ArrayList<Course> update_course = tableMethod.getData(false);
@@ -84,13 +83,13 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
                         }
                     }
                 }
+            } catch (SocketTimeoutException e) {
+                e.printStackTrace();
+                tableLoadSuccess = Config.NET_WORK_ERROR_CODE_TIME_OUT;
+                loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
             } catch (Exception e) {
                 e.printStackTrace();
-                if (e instanceof SocketTimeoutException) {
-                    tableLoadSuccess = Config.NET_WORK_ERROR_CODE_TIME_OUT;
-                } else {
-                    tableLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
-                }
+                tableLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
                 loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
             }
             if (tableFragment != null) {
