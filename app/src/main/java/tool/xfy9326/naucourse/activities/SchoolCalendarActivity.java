@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.preference.PreferenceManager;
 
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.material.snackbar.Snackbar;
@@ -41,12 +42,12 @@ public class SchoolCalendarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_school_calendar);
         BaseMethod.getApp(this).setSchoolCalendarActivity(this);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        ToolBarSet();
+        toolBarSet();
         getData();
         showAlert();
     }
 
-    private void ToolBarSet() {
+    private void toolBarSet() {
         setSupportActionBar(findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -66,9 +67,9 @@ public class SchoolCalendarActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_calendar_share:
                 String imageName = Config.SCHOOL_CALENDAR_IMAGE_FILE_NAME;
-                String calendar_name = sharedPreferences.getString(Config.PREFERENCE_SCHOOL_CALENDAR_NAME, null);
-                if (calendar_name != null) {
-                    imageName = calendar_name + ".jpeg";
+                String calendarName = sharedPreferences.getString(Config.PREFERENCE_SCHOOL_CALENDAR_NAME, null);
+                if (calendarName != null) {
+                    imageName = calendarName + ".jpeg";
                 }
                 DialogMethod.showImageShareDialog(this,
                         calendarBitmap,
@@ -83,6 +84,7 @@ public class SchoolCalendarActivity extends AppCompatActivity {
             case R.id.menu_calendar_list:
                 showSchoolCalendarList();
                 break;
+            default:
         }
         return super.onOptionsItemSelected(item);
     }
@@ -99,7 +101,7 @@ public class SchoolCalendarActivity extends AppCompatActivity {
         if (sharedPreferences.getBoolean(Config.PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT, Config.DEFAULT_PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT)) {
             Snackbar.make(findViewById(R.id.layout_school_calendar_content), R.string.enlarge_alert, Snackbar.LENGTH_SHORT)
                     .setAction(R.string.no_alert_again, v -> sharedPreferences.edit().putBoolean(Config.PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT, false).apply())
-                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                    .setActionTextColor(ResourcesCompat.getColor(getResources(), android.R.color.holo_red_light, getTheme()))
                     .show();
         }
     }

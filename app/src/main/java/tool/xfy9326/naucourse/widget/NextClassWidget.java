@@ -7,12 +7,12 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import java.util.Date;
 
@@ -37,7 +37,7 @@ public class NextClassWidget extends AppWidgetProvider {
     private static NextCourse nextCourse = null;
 
     @NonNull
-    synchronized private static RemoteViews ViewGet(Context context) {
+    synchronized private static RemoteViews viewGet(Context context) {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.app_widget_next_class);
 
         remoteViews.setTextViewText(R.id.textView_app_widget_dateNow, TimeMethod.formatDateSDF(new Date()));
@@ -92,7 +92,7 @@ public class NextClassWidget extends AppWidgetProvider {
     public void onUpdate(@NonNull Context context, @NonNull AppWidgetManager appWidgetManager, @NonNull int[] appWidgetIds) {
         try {
             for (int appWidgetId : appWidgetIds) {
-                appWidgetManager.updateAppWidget(appWidgetId, ViewGet(context));
+                appWidgetManager.updateAppWidget(appWidgetId, viewGet(context));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -106,7 +106,7 @@ public class NextClassWidget extends AppWidgetProvider {
         if (action != null) {
             if (action.equals(ACTION_ON_UPDATE)) {
                 ComponentName componentName = new ComponentName(context, NextClassWidget.class);
-                AppWidgetManager.getInstance(context).updateAppWidget(componentName, ViewGet(context));
+                AppWidgetManager.getInstance(context).updateAppWidget(componentName, viewGet(context));
                 nextCourse = (NextCourse) intent.getSerializableExtra(Config.INTENT_NEXT_CLASS_DATA);
             }
         }

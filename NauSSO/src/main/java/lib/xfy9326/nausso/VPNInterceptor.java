@@ -51,16 +51,16 @@ class VPNInterceptor implements Interceptor {
         if (enabled && !url.toString().equals(VPNMethod.VPN_LOGIN_URL) && !url.toString().startsWith(VPN_COOKIES)) {
             if (smartMode) {
                 if (VPNMethod.needVPNHost(url)) {
-                    return VPNLoad(chain, request, url, true);
+                    return loadVPN(chain, request, url, true);
                 }
             } else {
-                return VPNLoad(chain, request, url, true);
+                return loadVPN(chain, request, url, true);
             }
         }
         return chain.proceed(request);
     }
 
-    private Response VPNLoad(Chain chain, Request request, HttpUrl url, boolean tryReLogin) throws IOException {
+    private Response loadVPN(Chain chain, Request request, HttpUrl url, boolean tryReLogin) throws IOException {
         String newUrl = VPNMethod.buildVPNUrl(url);
         Request newRequest = request.newBuilder().url(newUrl).build();
 
@@ -76,9 +76,9 @@ class VPNInterceptor implements Interceptor {
                         return response;
                     }
                 } else if (tryReLogin) {
-                    if (VPNLogin(chain)) {
+                    if (loginVPN(chain)) {
                         response.close();
-                        return VPNLoad(chain, request, url, false);
+                        return loadVPN(chain, request, url, false);
                     } else {
                         return chain.proceed(newRequest);
                     }
@@ -88,12 +88,12 @@ class VPNInterceptor implements Interceptor {
         return response;
     }
 
-    synchronized private boolean VPNLogin(Chain chain) throws IOException {
+    synchronized private boolean loginVPN(Chain chain) throws IOException {
         String ssoContent = null;
 
-        Request.Builder request_builder = new Request.Builder();
-        request_builder.url(VPNMethod.VPN_LOGIN_URL);
-        Response dataResponse = chain.proceed(request_builder.build());
+        Request.Builder requestBuilder = new Request.Builder();
+        requestBuilder.url(VPNMethod.VPN_LOGIN_URL);
+        Response dataResponse = chain.proceed(requestBuilder.build());
         if (dataResponse.isSuccessful()) {
             ResponseBody responseBody = dataResponse.body();
             if (responseBody != null) {

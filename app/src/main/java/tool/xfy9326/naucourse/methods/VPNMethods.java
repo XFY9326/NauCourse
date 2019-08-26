@@ -2,7 +2,8 @@ package tool.xfy9326.naucourse.methods;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+
+import androidx.preference.PreferenceManager;
 
 import lib.xfy9326.nausso.NauSSOClient;
 import lib.xfy9326.nausso.VPNMethod;
@@ -42,7 +43,7 @@ public class VPNMethods {
             NauSSOClient client = BaseMethod.getApp(context).getClient();
             if (client.isVPNEnabled() && url.startsWith("/")) {
                 if (!client.isVPNSmartMode() || needVPNHost(host)) {
-                    if (url.contains(getRealHost(host)) || url.equals("/")) {
+                    if (url.contains(getRealHost(host)) || "/".equals(url)) {
                         return VPNMethod.VPN_SERVER + url;
                     } else {
                         String vpnHost = buildVPNHost(host);

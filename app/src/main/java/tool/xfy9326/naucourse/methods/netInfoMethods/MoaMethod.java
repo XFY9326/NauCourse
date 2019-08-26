@@ -21,14 +21,14 @@ import tool.xfy9326.naucourse.utils.Moa;
 public class MoaMethod extends BaseInfoMethod<Moa> {
     public static final String FILE_NAME = Moa.class.getSimpleName();
     public static final boolean IS_ENCRYPT = false;
-    public static final String Academic_Report = "xsbg";
+    public static final String ACADEMIC_REPORT = "xsbg";
     public static final int MOA_PAST_SHOW_MONTH = 2;
     private static final String URL = "http://moa.nau.edu.cn:8080/OAMobile/xsdt/xsdt/tj";
-    private String Url_Data;
+    private String urlData;
 
     public MoaMethod(@NonNull Context context) {
         super(context);
-        this.Url_Data = null;
+        this.urlData = null;
     }
 
     public static int getScrollPosition(Moa moa) {
@@ -51,7 +51,7 @@ public class MoaMethod extends BaseInfoMethod<Moa> {
     public int load() throws Exception {
         String data = NetMethod.loadUrl(context, URL);
         if (data != null) {
-            this.Url_Data = data;
+            this.urlData = data;
             return Config.NET_WORK_GET_SUCCESS;
         }
         return Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR;
@@ -65,10 +65,10 @@ public class MoaMethod extends BaseInfoMethod<Moa> {
     @Override
     public Moa getData(boolean checkTemp) {
         Moa moa = new Moa();
-        if (Url_Data != null) {
-            Url_Data = Url_Data.substring(Url_Data.indexOf("var msg = ") + 10, Url_Data.lastIndexOf("var obj = '[';"));
+        if (urlData != null) {
+            urlData = urlData.substring(urlData.indexOf("var msg = ") + 10, urlData.lastIndexOf("var obj = '[';"));
             try {
-                JSONArray jsonArray = new JSONArray(Url_Data);
+                JSONArray jsonArray = new JSONArray(urlData);
 
                 ArrayList<String> id = new ArrayList<>();
                 ArrayList<String> title = new ArrayList<>();
@@ -82,37 +82,37 @@ public class MoaMethod extends BaseInfoMethod<Moa> {
                 Calendar calendar = Calendar.getInstance(Locale.CHINA);
                 calendar.setTime(new Date());
                 calendar.add(Calendar.MONTH, -MOA_PAST_SHOW_MONTH);
-                long past_date = calendar.getTimeInMillis();
+                long pastDate = calendar.getTimeInMillis();
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = (JSONObject) jsonArray.get(i);
 
-                    String report_time = jsonObject.getString("REPORTTIME") + " " + jsonObject.getString("REPORTTIMEF");
-                    long report_time_long = TimeMethod.parseDateSDFHM2(report_time).getTime();
-                    if (report_time_long > past_date) {
+                    String reportTime = jsonObject.getString("REPORTTIME") + " " + jsonObject.getString("REPORTTIMEF");
+                    long reportTimeLong = TimeMethod.parseDateSDFHM2(reportTime).getTime();
+                    if (reportTimeLong > pastDate) {
                         int addPosition = 0;
                         if (!timeLong.isEmpty()) {
                             for (; addPosition < timeLong.size(); addPosition++) {
-                                if (report_time_long > timeLong.get(addPosition)) {
+                                if (reportTimeLong > timeLong.get(addPosition)) {
                                     break;
                                 }
                             }
                         }
 
-                        timeLong.add(addPosition, report_time_long);
+                        timeLong.add(addPosition, reportTimeLong);
                         id.add(addPosition, String.valueOf(jsonObject.getInt("ID")));
                         title.add(addPosition, jsonObject.getString("TITLE"));
 
-                        String type_temp = jsonObject.getString("LB");
-                        type.add(addPosition, type_temp);
+                        String typeTemp = jsonObject.getString("LB");
+                        type.add(addPosition, typeTemp);
 
-                        if (type_temp.equalsIgnoreCase(Academic_Report)) {
+                        if (typeTemp.equalsIgnoreCase(ACADEMIC_REPORT)) {
                             reporter.add(addPosition, jsonObject.getString("REPORTER") + " " + jsonObject.getString("REPORTERJOB"));
                         } else {
                             reporter.add(addPosition, jsonObject.getString("FIELD1"));
                         }
                         location.add(addPosition, jsonObject.getString("REPORTROOMNAME"));
-                        time.add(addPosition, report_time);
+                        time.add(addPosition, reportTime);
                         applyUnit.add(addPosition, jsonObject.getString("APPLYUNIT"));
                     }
                 }

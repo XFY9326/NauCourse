@@ -39,9 +39,9 @@ public class MoaAdapter extends RecyclerView.Adapter<MoaAdapter.MoaViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull MoaViewHolder holder, int position) {
         holder.textViewMoaTitle.setText(moa.getTitle()[holder.getAdapterPosition()]);
-        holder.textViewMoaType.setText(activity.getString(R.string.moa_type, (moa.getType()[holder.getAdapterPosition()]).equalsIgnoreCase(MoaMethod.Academic_Report) ? activity.getString(R.string.academic_report) : activity.getString(R.string.large_academic_conference)));
+        holder.textViewMoaType.setText(activity.getString(R.string.moa_type, (moa.getType()[holder.getAdapterPosition()]).equalsIgnoreCase(MoaMethod.ACADEMIC_REPORT) ? activity.getString(R.string.academic_report) : activity.getString(R.string.large_academic_conference)));
         String reporter = moa.getReporter()[holder.getAdapterPosition()];
-        if (reporter != null && !reporter.equalsIgnoreCase("null")) {
+        if (reporter != null && !"null".equalsIgnoreCase(reporter)) {
             holder.textViewMoaReporter.setVisibility(View.VISIBLE);
             holder.textViewMoaReporter.setText(activity.getString(R.string.moa_reporter, reporter));
         } else {
@@ -50,9 +50,9 @@ public class MoaAdapter extends RecyclerView.Adapter<MoaAdapter.MoaViewHolder> {
         String time = moa.getTime()[holder.getAdapterPosition()];
         String location = moa.getLocation()[holder.getAdapterPosition()];
         String applyUnit = moa.getApplyUnit()[holder.getAdapterPosition()];
-        holder.textViewMoaTime.setText(activity.getString(R.string.moa_time, time != null && !time.equals("null") ? time : ""));
-        holder.textViewMoaLocation.setText(activity.getString(R.string.moa_location, location != null && !location.equals("null") ? location : ""));
-        holder.textViewMoaApplyUnit.setText(activity.getString(R.string.moa_apply_unit, applyUnit != null && !applyUnit.equals("null") ? applyUnit : ""));
+        holder.textViewMoaTime.setText(activity.getString(R.string.moa_time, time != null && !"null".equals(time) ? time : ""));
+        holder.textViewMoaLocation.setText(activity.getString(R.string.moa_location, location != null && !"null".equals(location) ? location : ""));
+        holder.textViewMoaApplyUnit.setText(activity.getString(R.string.moa_apply_unit, applyUnit != null && !"null".equals(applyUnit) ? applyUnit : ""));
     }
 
     @NonNull

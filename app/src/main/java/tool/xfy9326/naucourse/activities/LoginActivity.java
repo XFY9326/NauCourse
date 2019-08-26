@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -13,6 +12,7 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        ViewSet();
+        viewSet();
         BaseMethod.showNewVersionInfo(this, true);
         updateCheck();
         netCheck();
@@ -57,27 +57,27 @@ public class LoginActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void ViewSet() {
-        EditText editText_userId = findViewById(R.id.editText_login_userId);
+    private void viewSet() {
+        EditText editTextUserId = findViewById(R.id.editText_login_userId);
         String userId = SecurityMethod.getUserId(sharedPreferences);
         if (!userId.equals(Config.DEFAULT_PREFERENCE_USER_ID)) {
-            editText_userId.setText(userId);
+            editTextUserId.setText(userId);
         }
-        EditText editText_userPw = findViewById(R.id.editText_login_userPw);
-        String en_userPw = sharedPreferences.getString(Config.PREFERENCE_USER_PW, Config.DEFAULT_PREFERENCE_USER_PW);
-        if (!en_userPw.equals(Config.DEFAULT_PREFERENCE_USER_PW)) {
-            editText_userPw.setText(SecurityMethod.getUserPassWord(this));
+        EditText editTextUserPw = findViewById(R.id.editText_login_userPw);
+        String enUserPw = sharedPreferences.getString(Config.PREFERENCE_USER_PW, Config.DEFAULT_PREFERENCE_USER_PW);
+        if (!enUserPw.equals(Config.DEFAULT_PREFERENCE_USER_PW)) {
+            editTextUserPw.setText(SecurityMethod.getUserPassWord(this));
         }
 
-        editText_userId.setOnEditorActionListener((textView, i, keyEvent) -> {
+        editTextUserId.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i == EditorInfo.IME_ACTION_DONE) {
-                editText_userPw.requestFocus();
+                editTextUserPw.requestFocus();
                 return true;
             }
             return false;
         });
 
-        editText_userPw.setOnEditorActionListener((textView, i, keyEvent) -> {
+        editTextUserPw.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i == EditorInfo.IME_ACTION_DONE) {
                 BaseMethod.hideKeyBoard(LoginActivity.this);
                 showLoginAttentionDialog();
@@ -88,30 +88,30 @@ public class LoginActivity extends AppCompatActivity {
 
         findViewById(R.id.button_login_login).setOnClickListener(v -> showLoginAttentionDialog());
 
-        CheckBox checkBox_vpn = findViewById(R.id.checkBox_login_vpn_accept);
-        checkBox_vpn.setChecked(sharedPreferences.getBoolean(Config.PREFERENCE_SCHOOL_VPN_MODE, Config.DEFAULT_PREFERENCE_SCHOOL_VPN_MODE));
-        checkBox_vpn.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        CheckBox checkBoxVpn = findViewById(R.id.checkBox_login_vpn_accept);
+        checkBoxVpn.setChecked(sharedPreferences.getBoolean(Config.PREFERENCE_SCHOOL_VPN_MODE, Config.DEFAULT_PREFERENCE_SCHOOL_VPN_MODE));
+        checkBoxVpn.setOnCheckedChangeListener((buttonView, isChecked) -> {
             sharedPreferences.edit().putBoolean(Config.PREFERENCE_SCHOOL_VPN_MODE, isChecked).apply();
             VPNMethods.setVPNMode(this, isChecked);
         });
 
-        CheckBox checkBox_eula = findViewById(R.id.checkBox_login_eula_accept);
-        checkBox_eula.setChecked(sharedPreferences.getBoolean(Config.PREFERENCE_EULA_ACCEPT, Config.DEFAULT_PREFERENCE_EULA_ACCEPT));
+        CheckBox checkBoxEula = findViewById(R.id.checkBox_login_eula_accept);
+        checkBoxEula.setChecked(sharedPreferences.getBoolean(Config.PREFERENCE_EULA_ACCEPT, Config.DEFAULT_PREFERENCE_EULA_ACCEPT));
 
         findViewById(R.id.textView_login_accept_eula).setOnClickListener(v -> DialogMethod.showEULADialog(LoginActivity.this, false, null));
     }
 
     private void login() {
-        final EditText editText_userId = findViewById(R.id.editText_login_userId);
-        final EditText editText_userPw = findViewById(R.id.editText_login_userPw);
+        final EditText editTextUserId = findViewById(R.id.editText_login_userId);
+        final EditText editTextUserPw = findViewById(R.id.editText_login_userPw);
 
-        editText_userId.clearFocus();
-        editText_userPw.clearFocus();
+        editTextUserId.clearFocus();
+        editTextUserPw.clearFocus();
         BaseMethod.hideKeyBoard(LoginActivity.this);
 
         if (NetMethod.isNetworkConnected(LoginActivity.this)) {
-            final String id = editText_userId.getText().toString().trim();
-            final String pw = editText_userPw.getText().toString().trim();
+            final String id = editTextUserId.getText().toString().trim();
+            final String pw = editTextUserPw.getText().toString().trim();
             final NauSSOClient nauSSOClient = BaseMethod.getApp(LoginActivity.this).getClient();
             showLoadingDialog();
             LoginMethod.cleanUserTemp(LoginActivity.this);
@@ -163,8 +163,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showLoginAttentionDialog() {
-        CheckBox checkBox_eula = findViewById(R.id.checkBox_login_eula_accept);
-        if (!checkBox_eula.isChecked()) {
+        CheckBox checkBoxEula = findViewById(R.id.checkBox_login_eula_accept);
+        if (!checkBoxEula.isChecked()) {
             Snackbar.make(findViewById(R.id.layout_login_content), R.string.eula_not_accept, Snackbar.LENGTH_SHORT).show();
         } else {
             sharedPreferences.edit().putBoolean(Config.PREFERENCE_EULA_ACCEPT, true).apply();
@@ -202,6 +202,7 @@ public class LoginActivity extends AppCompatActivity {
                     case NauSSOClient.LOGIN_USER_INFO_WRONG:
                         Snackbar.make(findViewById(R.id.layout_login_content), R.string.user_info_error, Snackbar.LENGTH_SHORT).show();
                         break;
+                    default:
                 }
             }
         };

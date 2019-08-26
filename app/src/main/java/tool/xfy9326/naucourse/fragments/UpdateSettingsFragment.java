@@ -21,11 +21,11 @@ public class UpdateSettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onResume() {
         super.onResume();
-        PreferenceSet();
+        preferenceSet();
     }
 
     @SuppressWarnings("SameReturnValue")
-    private void PreferenceSet() {
+    private void preferenceSet() {
         ((Preference) Objects.requireNonNull(findPreference(Config.PREFERENCE_UPDATE_NOW))).setOnPreferenceClickListener(preference -> {
             if (isAdded()) {
                 UpdateMethod.checkUpdate(getActivity(), true);

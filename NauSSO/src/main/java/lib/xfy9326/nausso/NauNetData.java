@@ -14,9 +14,9 @@ import okhttp3.FormBody;
 class NauNetData {
 
     static FormBody getSSOPostForm(String userId, String userPw, String ssoContent) {
-        FormBody.Builder form_builder = new FormBody.Builder();
-        form_builder.add("username", userId);
-        form_builder.add("password", userPw);
+        FormBody.Builder formBuilder = new FormBody.Builder();
+        formBuilder.add("username", userId);
+        formBuilder.add("password", userPw);
 
         Document document = Jsoup.parse(ssoContent);
         Elements nameList = document.select("input[name]");
@@ -24,10 +24,10 @@ class NauNetData {
             String value = element.attr("value");
             String name = element.attr("name");
             if ("lt".equals(name) || "execution".equals(name) || "_eventId".equals(name) || "useVCode".equals(name) || "isUseVCode".equals(name) || "sessionVcode".equals(name) || "errorCount".equals(name)) {
-                form_builder.add(name, value);
+                formBuilder.add(name, value);
             }
         }
 
-        return form_builder.build();
+        return formBuilder.build();
     }
 }

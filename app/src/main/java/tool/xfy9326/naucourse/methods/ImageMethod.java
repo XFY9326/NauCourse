@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -128,27 +129,27 @@ public class ImageMethod {
                     int w = v.getWidth();
                     int h = v.getHeight();
 
-                    Bitmap bitmap_temp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-                    Canvas canvas_temp = new Canvas(bitmap_temp);
-                    v.draw(canvas_temp);
+                    Bitmap bitmapTemp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+                    Canvas canvasTemp = new Canvas(bitmapTemp);
+                    v.draw(canvasTemp);
 
                     if (isVertical) {
                         float left = 0;
                         if (w < maxWidth) {
                             left = (maxWidth - w) / 2f;
                         }
-                        canvas.drawBitmap(bitmap_temp, left, heightCount, null);
+                        canvas.drawBitmap(bitmapTemp, left, heightCount, null);
                     } else {
                         float top = 0;
                         if (h < maxHeight) {
                             top = (maxHeight - h) / 2f;
                         }
-                        canvas.drawBitmap(bitmap_temp, widthCount, top, null);
+                        canvas.drawBitmap(bitmapTemp, widthCount, top, null);
                     }
                     heightCount += h;
                     widthCount += w;
 
-                    bitmap_temp.recycle();
+                    bitmapTemp.recycle();
                 }
 
                 drawWaterPrint(context, canvas, "@" + context.getString(R.string.app_name));
@@ -161,7 +162,7 @@ public class ImageMethod {
 
     private static void drawWaterPrint(Context context, Canvas canvas, String text) {
         Paint paint = new Paint();
-        paint.setColor(context.getResources().getColor(R.color.course_snapshot_water_print));
+        paint.setColor(ResourcesCompat.getColor(context.getResources(), R.color.course_snapshot_water_print, context.getTheme()));
         paint.setAlpha(80);
         paint.setAntiAlias(true);
         paint.setTextSize((float) dip2px(context, Config.WATER_PRINT_TEXT_SIZE));

@@ -53,17 +53,17 @@ public class API {
         API_TYPE = type;
         API_FUNCTION = function;
 
-        OkHttpClient.Builder client_builder = new OkHttpClient.Builder();
-        client_builder.connectTimeout(20, TimeUnit.SECONDS);
-        client_builder.writeTimeout(10, TimeUnit.SECONDS);
-        client_builder.readTimeout(10, TimeUnit.SECONDS);
-        client = client_builder.build();
+        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+        clientBuilder.connectTimeout(20, TimeUnit.SECONDS);
+        clientBuilder.writeTimeout(10, TimeUnit.SECONDS);
+        clientBuilder.readTimeout(10, TimeUnit.SECONDS);
+        client = clientBuilder.build();
     }
 
     public void call(@NonNull JSONObject data, @NonNull final OnRequestListener requestListener) {
         String dataStr = data.toString();
         try {
-            dataStr = AES.Encrypt(dataStr, API_KEY, API_IV);
+            dataStr = AES.encrypt(dataStr, API_KEY, API_IV);
 
             final JSONObject requestJson = new JSONObject();
             requestJson.put("data", dataStr);
@@ -79,7 +79,7 @@ public class API {
                 @Override
                 @EverythingIsNonNull
                 public void onFailure(Call call, IOException e) {
-                    requestListener.OnError(ERROR_TYPE_REQUEST_FAILED, e.getMessage());
+                    requestListener.onError(ERROR_TYPE_REQUEST_FAILED, e.getMessage());
                 }
 
                 @Override
@@ -99,42 +99,42 @@ public class API {
                                 if (responseJson.getString("api_key").equals(API_KEY)) {
                                     String resultStr = responseJson.getString("data");
                                     try {
-                                        resultStr = AES.Decrypt(resultStr, API_KEY, API_IV);
+                                        resultStr = AES.decrypt(resultStr, API_KEY, API_IV);
                                         try {
                                             JSONObject result = new JSONObject(resultStr);
-                                            requestListener.OnResponse(STATUS_SUCCESS, result);
+                                            requestListener.onResponse(STATUS_SUCCESS, result);
                                         } catch (JSONException e) {
                                             e.printStackTrace();
-                                            requestListener.OnError(ERROR_TYPE_RESPONSE_DATA_ERROR, e.getMessage());
+                                            requestListener.onError(ERROR_TYPE_RESPONSE_DATA_ERROR, e.getMessage());
                                         }
                                     } catch (Exception e) {
                                         e.printStackTrace();
-                                        requestListener.OnError(ERROR_TYPE_RESPONSE_AES_ERROR, e.getMessage());
+                                        requestListener.onError(ERROR_TYPE_RESPONSE_AES_ERROR, e.getMessage());
                                     }
                                 }
                             } else {
-                                requestListener.OnResponse(requestJson.getString("status"), null);
+                                requestListener.onResponse(requestJson.getString("status"), null);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            requestListener.OnError(ERROR_TYPE_RESPONSE_DATA_ERROR, e.getMessage());
+                            requestListener.onError(ERROR_TYPE_RESPONSE_DATA_ERROR, e.getMessage());
                         }
                     } else {
-                        requestListener.OnError(ERROR_TYPE_RESPONSE_DATA_ERROR, null);
+                        requestListener.onError(ERROR_TYPE_RESPONSE_DATA_ERROR, null);
                     }
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
-            requestListener.OnError(ERROR_TYPE_REQUEST_AES_ERROR, e.getMessage());
+            requestListener.onError(ERROR_TYPE_REQUEST_AES_ERROR, e.getMessage());
         }
 
     }
 
     public interface OnRequestListener {
         @SuppressWarnings("unused")
-        void OnResponse(String status, @Nullable JSONObject jsonObject);
+        void onResponse(String status, @Nullable JSONObject jsonObject);
 
-        void OnError(int errorCode, @Nullable String errorMsg);
+        void onError(int errorCode, @Nullable String errorMsg);
     }
 }

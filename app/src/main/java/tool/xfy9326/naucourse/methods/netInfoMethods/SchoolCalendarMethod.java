@@ -3,10 +3,10 @@ package tool.xfy9326.naucourse.methods.netInfoMethods;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,14 +25,14 @@ import tool.xfy9326.naucourse.methods.NetMethod;
  */
 
 public class SchoolCalendarMethod extends BaseNetMethod {
-    private static final String server_url = "http://jw.nau.edu.cn";
-    private static final String calendar_server_utl = "https://www.nau.edu.cn";
-    private static final String calendar_list = "https://www.nau.edu.cn/p141c89/list.htm";
+    private static final String SERVER_URL = "http://jw.nau.edu.cn";
+    private static final String CALENDAR_SERVER_URL = "https://www.nau.edu.cn";
+    private static final String CALENDAR_LIST = "https://www.nau.edu.cn/p141c89/list.htm";
     private final SharedPreferences sharedPreferences;
     @Nullable
     private Document document;
     @Nullable
-    private Document document_list;
+    private Document documentList;
 
     public SchoolCalendarMethod(@NonNull Context context) {
         super(context);
@@ -41,7 +41,7 @@ public class SchoolCalendarMethod extends BaseNetMethod {
 
     @Override
     public int load() throws Exception {
-        String data = NetMethod.loadUrl(context, server_url);
+        String data = NetMethod.loadUrl(context, SERVER_URL);
         if (data != null) {
             document = Jsoup.parse(data);
             return Config.NET_WORK_GET_SUCCESS;
@@ -50,9 +50,9 @@ public class SchoolCalendarMethod extends BaseNetMethod {
     }
 
     public int loadCalendarList() throws Exception {
-        String data = NetMethod.loadUrl(context, calendar_list);
+        String data = NetMethod.loadUrl(context, CALENDAR_LIST);
         if (data != null) {
-            document_list = Jsoup.parse(data);
+            documentList = Jsoup.parse(data);
             return Config.NET_WORK_GET_SUCCESS;
         }
         return Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR;
@@ -61,15 +61,15 @@ public class SchoolCalendarMethod extends BaseNetMethod {
     @Nullable
     public LinkedHashMap<String, String> getCalendarUrlList() {
         LinkedHashMap<String, String> calendarList = new LinkedHashMap<>();
-        if (document_list != null) {
-            Elements elements = document_list.select("span[class=cols_title]");
+        if (documentList != null) {
+            Elements elements = documentList.select("span[class=cols_title]");
             for (Element element : elements) {
-                Elements a_arr = element.getElementsByTag("a");
-                if (a_arr != null && a_arr.size() != 0) {
-                    Element a = a_arr.first();
+                Elements aArr = element.getElementsByTag("a");
+                if (aArr != null && aArr.size() != 0) {
+                    Element a = aArr.first();
                     String name = a.text().trim();
                     String url = a.attr("href").trim();
-                    calendarList.put(name, calendar_server_utl + url);
+                    calendarList.put(name, CALENDAR_SERVER_URL + url);
                 }
             }
         }
@@ -108,17 +108,17 @@ public class SchoolCalendarMethod extends BaseNetMethod {
             String data = NetMethod.loadUrl(context, imagePageUrl);
             if (data != null) {
                 Document document = Jsoup.parse(data);
-                Elements elements_img = document.select("div[class=wp_articlecontent]");
-                Element element = elements_img.get(0).getElementsByTag("img").first();
+                Elements elementsImg = document.select("div[class=wp_articlecontent]");
+                Element element = elementsImg.get(0).getElementsByTag("img").first();
                 if (element.hasAttr("src")) {
-                    imageUrl = calendar_server_utl + element.attr("src");
+                    imageUrl = CALENDAR_SERVER_URL + element.attr("src");
                 }
             }
         }
         if (imageUrl != null) {
             if (checkTemp) {
-                String old_url = PreferenceManager.getDefaultSharedPreferences(context).getString(Config.PREFERENCE_SCHOOL_CALENDAR_URL, null);
-                if (old_url != null && old_url.equalsIgnoreCase(imageUrl)) {
+                String oldUrl = PreferenceManager.getDefaultSharedPreferences(context).getString(Config.PREFERENCE_SCHOOL_CALENDAR_URL, null);
+                if (oldUrl != null && oldUrl.equalsIgnoreCase(imageUrl)) {
                     return Config.NET_WORK_GET_SUCCESS;
                 }
             }

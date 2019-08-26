@@ -49,7 +49,7 @@ public class CourseSettingsFragment extends PreferenceFragmentCompat {
     private boolean updateCourseTable = false;
     private boolean reloadTableData = false;
     private boolean cropSuccess = false;
-    private float transparency_value;
+    private float transparencyValue;
     private String imageTempPath;
 
     @Override
@@ -60,7 +60,7 @@ public class CourseSettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onResume() {
         super.onResume();
-        PreferenceSet();
+        preferenceSet();
     }
 
     @Override
@@ -76,7 +76,7 @@ public class CourseSettingsFragment extends PreferenceFragmentCompat {
         super.onDestroy();
     }
 
-    private void PreferenceSet() {
+    private void preferenceSet() {
         Preference.OnPreferenceChangeListener tableReloadListener = (preference, newValue) -> {
             updateCourseTable = true;
             return true;
@@ -157,26 +157,26 @@ public class CourseSettingsFragment extends PreferenceFragmentCompat {
     private void changeTransparency() {
         if (getActivity() != null) {
             final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            transparency_value = sharedPreferences.getFloat(Config.PREFERENCE_CHANGE_TABLE_TRANSPARENCY, Config.DEFAULT_PREFERENCE_CHANGE_TABLE_TRANSPARENCY);
+            transparencyValue = sharedPreferences.getFloat(Config.PREFERENCE_CHANGE_TABLE_TRANSPARENCY, Config.DEFAULT_PREFERENCE_CHANGE_TABLE_TRANSPARENCY);
 
             LayoutInflater layoutInflater = getActivity().getLayoutInflater();
             View view = layoutInflater.inflate(R.layout.dialog_edit_progress, getActivity().findViewById(R.id.layout_dialog_edit_progress));
 
             final TextInputEditText textInputEditText = view.findViewById(R.id.editText_dialog_edit_progress);
             textInputEditText.setHint(R.string.transparency);
-            textInputEditText.setText(String.valueOf(transparency_value * 100));
+            textInputEditText.setText(String.valueOf(transparencyValue * 100));
             textInputEditText.setEnabled(false);
 
-            TextView textView_unit = view.findViewById(R.id.textView_dialog_progress_unit);
-            textView_unit.setText("%");
-            textView_unit.setVisibility(View.VISIBLE);
+            TextView textViewUnit = view.findViewById(R.id.textView_dialog_progress_unit);
+            textViewUnit.setText("%");
+            textViewUnit.setVisibility(View.VISIBLE);
 
             SeekBar seekBar = view.findViewById(R.id.seekBar_dialog_edit_progress);
             seekBar.setMax(100);
             seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    transparency_value = progress / 100.0f;
+                    transparencyValue = progress / 100.0f;
                     textInputEditText.setText(String.valueOf(progress));
                 }
 
@@ -190,12 +190,12 @@ public class CourseSettingsFragment extends PreferenceFragmentCompat {
 
                 }
             });
-            seekBar.setProgress((int) (transparency_value * 100));
+            seekBar.setProgress((int) (transparencyValue * 100));
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(R.string.change_table_transparency);
             builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                sharedPreferences.edit().putFloat(Config.PREFERENCE_CHANGE_TABLE_TRANSPARENCY, transparency_value).apply();
+                sharedPreferences.edit().putFloat(Config.PREFERENCE_CHANGE_TABLE_TRANSPARENCY, transparencyValue).apply();
                 updateCourseTable = true;
             });
             builder.setNegativeButton(android.R.string.cancel, null);

@@ -3,7 +3,6 @@ package tool.xfy9326.naucourse.methods;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.preference.PreferenceManager;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.AbsoluteSizeSpan;
@@ -16,7 +15,9 @@ import android.widget.TextView;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.gridlayout.widget.GridLayout;
+import androidx.preference.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,15 +38,15 @@ public class CourseViewMethod {
     private final int defaultCourseBackground;
     private final int defaultTextColor;
     private ArrayList<Course> courses;
-    private int parent_width = 0;
-    private int parent_height = 0;
-    private GridLayout course_table_layout;
+    private int parentWidth = 0;
+    private int parentHeight = 0;
+    private GridLayout courseTableLayout;
     @Nullable
     private String[][] table;
     @Nullable
-    private String[][] id_table;
+    private String[][] idTable;
     @Nullable
-    private boolean[][] this_week_no_show_table;
+    private boolean[][] thisWeekNoShowTable;
     @Nullable
     private OnCourseTableItemClickListener onCourseTableClick;
 
@@ -53,53 +54,53 @@ public class CourseViewMethod {
         this.context = context;
         this.onCourseTableClick = null;
         this.table = null;
-        this.id_table = null;
+        this.idTable = null;
         this.courses = courses;
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        this.defaultCourseBackground = context.getResources().getColor(R.color.course_item_background);
-        this.defaultTextColor = context.getResources().getColor(R.color.colorSecondaryText);
+        this.defaultCourseBackground = ResourcesCompat.getColor(context.getResources(), R.color.course_item_background, context.getTheme());
+        this.defaultTextColor = ResourcesCompat.getColor(context.getResources(), R.color.colorSecondaryText, context.getTheme());
     }
 
     /**
      * 设置需要操作的视图
      *
-     * @param gridLayout    GridLayout课程表主视图
-     * @param parent_width  父控件的宽度
-     * @param parent_height 父控件的高度
+     * @param gridLayout   GridLayout课程表主视图
+     * @param parentWidth  父控件的宽度
+     * @param parentHeight 父控件的高度
      */
-    public void setTableView(GridLayout gridLayout, int parent_width, int parent_height) {
-        this.course_table_layout = gridLayout;
-        this.parent_width = parent_width;
-        this.parent_height = parent_height;
+    public void setTableView(GridLayout gridLayout, int parentWidth, int parentHeight) {
+        this.courseTableLayout = gridLayout;
+        this.parentWidth = parentWidth;
+        this.parentHeight = parentHeight;
     }
 
     /**
      * 更新表格大小
      *
-     * @param parent_width  父控件的宽度
-     * @param parent_height 父控件的高度
+     * @param parentWidth  父控件的宽度
+     * @param parentHeight 父控件的高度
      */
-    public void updateTableSize(int parent_width, int parent_height) {
-        this.parent_width = parent_width;
-        this.parent_height = parent_height;
+    public void updateTableSize(int parentWidth, int parentHeight) {
+        this.parentWidth = parentWidth;
+        this.parentHeight = parentHeight;
     }
 
     /**
      * 更新课程表视图
      *
      * @param table     需要显示信息的二维数组
-     * @param id_table  课程信息对应的ID的二维数组
+     * @param idTable   课程信息对应的ID的二维数组
      * @param checkSame 是否检查到相同数据就不更新视图
      */
-    public void updateCourseTableView(ArrayList<Course> courses, @Nullable String[][] table, @Nullable String[][] id_table, @Nullable boolean[][] this_week_no_show_table, boolean checkSame, boolean hasCustomBackground) {
+    public void updateCourseTableView(ArrayList<Course> courses, @Nullable String[][] table, @Nullable String[][] idTable, @Nullable boolean[][] thisWeekNoShowTable, boolean checkSame, boolean hasCustomBackground) {
         this.courses = courses;
-        if (table != null && id_table != null && this_week_no_show_table != null) {
-            if (checkSame && Arrays.equals(table, this.table) && Arrays.equals(id_table, this.id_table) && Arrays.equals(this_week_no_show_table, this.this_week_no_show_table)) {
+        if (table != null && idTable != null && thisWeekNoShowTable != null) {
+            if (checkSame && Arrays.equals(table, this.table) && Arrays.equals(idTable, this.idTable) && Arrays.equals(thisWeekNoShowTable, this.thisWeekNoShowTable)) {
                 return;
             } else {
                 this.table = table;
-                this.id_table = id_table;
-                this.this_week_no_show_table = this_week_no_show_table;
+                this.idTable = idTable;
+                this.thisWeekNoShowTable = thisWeekNoShowTable;
             }
         }
         if (checkData()) {
@@ -117,13 +118,13 @@ public class CourseViewMethod {
     }
 
     private boolean checkData() {
-        return course_table_layout != null && parent_width != 0 && table != null && id_table != null && this_week_no_show_table != null && courses != null;
+        return courseTableLayout != null && parentWidth != 0 && table != null && idTable != null && thisWeekNoShowTable != null && courses != null;
     }
 
     synchronized private void loadView(boolean hasCustomBackground) {
         if (table != null) {
             //清空原来的数据
-            course_table_layout.removeAllViews();
+            courseTableLayout.removeAllViews();
 
             boolean showCellColor = sharedPreferences.getBoolean(Config.PREFERENCE_COURSE_TABLE_CELL_COLOR, Config.DEFAULT_PREFERENCE_COURSE_TABLE_CELL_COLOR);
             boolean singleColor = sharedPreferences.getBoolean(Config.PREFERENCE_COURSE_TABLE_SHOW_SINGLE_COLOR, Config.DEFAULT_PREFERENCE_COURSE_TABLE_SHOW_SINGLE_COLOR);
@@ -140,30 +141,30 @@ public class CourseViewMethod {
             }
             boolean showWide = sharedPreferences.getBoolean(Config.PREFERENCE_SHOW_WIDE_TABLE, Config.DEFAULT_PREFERENCE_SHOW_WIDE_TABLE);
 
-            int row_max = Config.MAX_DAY_COURSE + 1;
-            int col_max = showWeekend ? Config.MAX_WEEK_DAY + 1 : Config.MAX_WEEK_DAY - 1;
+            int rowMax = Config.MAX_DAY_COURSE + 1;
+            int colMax = showWeekend ? Config.MAX_WEEK_DAY + 1 : Config.MAX_WEEK_DAY - 1;
 
             float alpha = sharedPreferences.getFloat(Config.PREFERENCE_CHANGE_TABLE_TRANSPARENCY, Config.DEFAULT_PREFERENCE_CHANGE_TABLE_TRANSPARENCY);
 
-            course_table_layout.setColumnCount(col_max);
-            course_table_layout.setRowCount(row_max);
-            course_table_layout.setMinimumWidth(parent_width);
+            courseTableLayout.setColumnCount(colMax);
+            courseTableLayout.setRowCount(rowMax);
+            courseTableLayout.setMinimumWidth(parentWidth);
             if (hasCustomBackground) {
-                course_table_layout.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
+                courseTableLayout.setBackgroundColor(ResourcesCompat.getColor(context.getResources(), android.R.color.transparent, context.getTheme()));
             } else {
-                course_table_layout.setBackgroundColor(context.getResources().getColor(R.color.table_background));
+                courseTableLayout.setBackgroundColor(ResourcesCompat.getColor(context.getResources(), R.color.table_background, context.getTheme()));
             }
 
             //设置每个单元格
-            for (int col = 0; col < col_max; col++) {
-                for (int row = 0; row < row_max; row++) {
+            for (int col = 0; col < colMax; col++) {
+                for (int row = 0; row < rowMax; row++) {
                     int merge = 1;
                     String text = table[col][row];
 
                     //合并相同数据的单元格（仅限一列）
                     if (col > 0 && row > 0) {
                         if (text != null && !text.isEmpty()) {
-                            for (merge = 1; row + merge < row_max && merge <= row_max; merge++) {
+                            for (merge = 1; row + merge < rowMax && merge <= rowMax; merge++) {
                                 if (table[col][row + merge] == null || !table[col][row + merge].equalsIgnoreCase(text)) {
                                     break;
                                 }
@@ -172,39 +173,39 @@ public class CourseViewMethod {
                         row += merge - 1;
                     }
 
-                    int weight_col = ((col == 0) ? 1 : 2);
-                    GridLayout.Spec col_merge = GridLayout.spec(GridLayout.UNDEFINED, 1, weight_col);
-                    GridLayout.Spec row_merge = GridLayout.spec(GridLayout.UNDEFINED, merge, 1);
-                    GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams(row_merge, col_merge);
+                    int weightCol = ((col == 0) ? 1 : 2);
+                    GridLayout.Spec colMerge = GridLayout.spec(GridLayout.UNDEFINED, 1, weightCol);
+                    GridLayout.Spec rowMerge = GridLayout.spec(GridLayout.UNDEFINED, merge, 1);
+                    GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams(rowMerge, colMerge);
                     layoutParams.setGravity(Gravity.FILL);
                     layoutParams.setMargins(1, 1, 1, 1);
 
                     //添加单元格视图到表格
-                    int width = ((col == 0) ? 0 : (parent_width / col_max));
+                    int width = ((col == 0) ? 0 : (parentWidth / colMax));
 
                     //设置单元格与文字的颜色
                     int bgColor = defaultCourseBackground;
                     int textColor = defaultTextColor;
                     if (showCellColor && text != null && row != 0 && col != 0) {
-                        bgColor = getCourseColorById(Objects.requireNonNull(id_table)[col][row]);
+                        bgColor = getCourseColorById(Objects.requireNonNull(idTable)[col][row]);
                         if (bgColor == -1 || singleColor) {
-                            bgColor = context.getResources().getColor(R.color.course_cell_background);
+                            bgColor = ResourcesCompat.getColor(context.getResources(), R.color.course_cell_background, context.getTheme());
                         }
                         if (!isLightColor(bgColor)) {
                             textColor = Color.WHITE;
                         }
                     }
-                    if (this_week_no_show_table != null && this_week_no_show_table[col][row]) {
-                        bgColor = context.getResources().getColor(R.color.course_cell_no_this_week);
-                        textColor = context.getResources().getColor(R.color.light_grey);
+                    if (thisWeekNoShowTable != null && thisWeekNoShowTable[col][row]) {
+                        bgColor = ResourcesCompat.getColor(context.getResources(), R.color.course_cell_no_this_week, context.getTheme());
+                        textColor = ResourcesCompat.getColor(context.getResources(), R.color.light_grey, context.getTheme());
                     }
 
                     View cellView = getCellView(text, bgColor, textColor, width, col, row, showWide, hasCustomBackground, alpha);
                     cellView.setLayoutParams(layoutParams);
                     if (row != 0) {
-                        cellView.setMinimumHeight(parent_height / row_max);
+                        cellView.setMinimumHeight(parentHeight / rowMax);
                     }
-                    course_table_layout.addView(cellView);
+                    courseTableLayout.addView(cellView);
                 }
             }
         }
@@ -222,7 +223,7 @@ public class CourseViewMethod {
         int blue = (color & 0x0000ff);
         float total = red * 0.299f + green * 0.587f + blue * 0.114f;
         //DEFAULT 200
-        return !(total < 220);
+        return total >= 220;
     }
 
     private int getCourseColorById(String id) {
@@ -291,8 +292,8 @@ public class CourseViewMethod {
             if (row != 0 && col != 0) {
                 linearLayout.setOnClickListener(v -> {
                     for (Course course : courses) {
-                        if (onCourseTableClick != null && Objects.requireNonNull(course.getCourseId()).equals(Objects.requireNonNull(id_table)[col][row])) {
-                            onCourseTableClick.OnItemClick(course);
+                        if (onCourseTableClick != null && Objects.requireNonNull(course.getCourseId()).equals(Objects.requireNonNull(idTable)[col][row])) {
+                            onCourseTableClick.onItemClick(course);
                             break;
                         }
                     }
@@ -305,6 +306,6 @@ public class CourseViewMethod {
     }
 
     public interface OnCourseTableItemClickListener {
-        void OnItemClick(Course course);
+        void onItemClick(Course course);
     }
 }

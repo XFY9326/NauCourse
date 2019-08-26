@@ -36,7 +36,7 @@ public class Updater {
             api.call(updateJson, new API.OnRequestListener() {
                 @SuppressWarnings("unused")
                 @Override
-                public void OnResponse(String status, @Nullable JSONObject jsonObject) {
+                public void onResponse(String status, @Nullable JSONObject jsonObject) {
                     if (jsonObject == null) {
                         updateListener.onError();
                         Log.d(LOG_TAG, "DATA NO FOUND");
@@ -63,7 +63,7 @@ public class Updater {
                 }
 
                 @Override
-                public void OnError(int errorCode, @Nullable String errorMsg) {
+                public void onError(int errorCode, @Nullable String errorMsg) {
                     Log.d(LOG_TAG, "API ERROR -> Code:" + errorCode + " Msg:" + errorMsg);
                     updateListener.onError();
                 }

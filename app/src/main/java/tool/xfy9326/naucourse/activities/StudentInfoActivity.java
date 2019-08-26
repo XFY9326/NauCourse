@@ -31,11 +31,11 @@ public class StudentInfoActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_info);
-        ToolBarSet();
+        toolBarSet();
         getData();
     }
 
-    private void ToolBarSet() {
+    private void toolBarSet() {
         setSupportActionBar(findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -159,15 +159,16 @@ public class StudentInfoActivity extends AppCompatActivity {
                             process = 0;
                         }
                         break;
+                    default:
                 }
                 ((TextView) view.findViewById(R.id.textView_process_name)).setText(name);
                 ((TextView) view.findViewById(R.id.textView_process_aim)).setText(aim);
                 ((TextView) view.findViewById(R.id.textView_process_now)).setText(now);
                 ((TextView) view.findViewById(R.id.textView_process_still)).setText(still);
                 if (i == 2) {
-                    TextView textView_award = view.findViewById(R.id.textView_process_award);
-                    textView_award.setVisibility(View.VISIBLE);
-                    textView_award.setText(award);
+                    TextView textViewAward = view.findViewById(R.id.textView_process_award);
+                    textViewAward.setVisibility(View.VISIBLE);
+                    textViewAward.setText(award);
                 }
                 ProgressBar progressBar = view.findViewById(R.id.progressBar_process_learn);
                 progressBar.setMax(100);

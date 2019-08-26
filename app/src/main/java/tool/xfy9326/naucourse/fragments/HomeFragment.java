@@ -107,10 +107,10 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        ViewSet();
+        viewSet();
     }
 
-    private void ViewSet() {
+    private void viewSet() {
         if (view != null) {
             if (recyclerView == null && getActivity() != null) {
                 recyclerView = view.findViewById(R.id.recyclerView_information);
@@ -155,13 +155,13 @@ public class HomeFragment extends Fragment {
                 getData();
             }
 
-            TextView textView_dateNow = view.findViewById(R.id.textView_dateNow);
-            textView_dateNow.setText(TimeMethod.formatDateSDF(new Date()));
+            TextView textViewDateNow = view.findViewById(R.id.textView_dateNow);
+            textViewDateNow.setText(TimeMethod.formatDateSDF(new Date()));
 
             loadTempNextCourse();
 
-            CardView cardView_nextClass = view.findViewById(R.id.cardView_local_next_course);
-            cardView_nextClass.setOnClickListener(v -> {
+            CardView cardViewNextClass = view.findViewById(R.id.cardView_local_next_course);
+            cardViewNextClass.setOnClickListener(v -> {
                 if (context != null) {
                     setNextCourse();
                     context.sendBroadcast(new Intent(NextClassWidget.ACTION_ON_UPDATE));
@@ -240,33 +240,33 @@ public class HomeFragment extends Fragment {
      */
     void setNextCourse(NextCourse nextCourse) {
         if (isAdded() && context != null && view != null) {
-            TextView textView_noNextClass = view.findViewById(R.id.textView_noNextClass);
-            LinearLayout linearLayout_nextClass = view.findViewById(R.id.layout_nextClass);
+            TextView textViewNoNextClass = view.findViewById(R.id.textView_noNextClass);
+            LinearLayout linearLayoutNextClass = view.findViewById(R.id.layout_nextClass);
             if (nextCourse.getCourseTime() == null) {
                 if (nextCourse.isInVacation()) {
-                    textView_noNextClass.setText(R.string.in_vacation);
+                    textViewNoNextClass.setText(R.string.in_vacation);
                 } else {
-                    textView_noNextClass.setText(R.string.no_course);
+                    textViewNoNextClass.setText(R.string.no_course);
                 }
-                linearLayout_nextClass.setVisibility(View.GONE);
-                textView_noNextClass.setVisibility(View.VISIBLE);
+                linearLayoutNextClass.setVisibility(View.GONE);
+                textViewNoNextClass.setVisibility(View.VISIBLE);
 
                 DataMethod.deleteOfflineData(context, NextClassMethod.NEXT_COURSE_FILE_NAME, NextClassMethod.IS_ENCRYPT);
             } else {
                 String time = nextCourse.getCourseTime().replace("~", "\n~\n").trim();
 
-                TextView textView_nextClass = view.findViewById(R.id.textView_nextClass);
-                TextView textView_nextLocation = view.findViewById(R.id.textView_nextLocation);
-                TextView textView_nextTeacher = view.findViewById(R.id.textView_nextTeacher);
-                TextView textView_nextTime = view.findViewById(R.id.textView_nextTime);
+                TextView textViewNextClass = view.findViewById(R.id.textView_nextClass);
+                TextView textViewNextLocation = view.findViewById(R.id.textView_nextLocation);
+                TextView textViewNextTeacher = view.findViewById(R.id.textView_nextTeacher);
+                TextView textViewNextTime = view.findViewById(R.id.textView_nextTime);
 
-                textView_nextClass.setText(nextCourse.getCourseName());
-                textView_nextLocation.setText(nextCourse.getCourseLocation());
-                textView_nextTeacher.setText(nextCourse.getCourseTeacher());
-                textView_nextTime.setText(time);
+                textViewNextClass.setText(nextCourse.getCourseName());
+                textViewNextLocation.setText(nextCourse.getCourseLocation());
+                textViewNextTeacher.setText(nextCourse.getCourseTeacher());
+                textViewNextTime.setText(time);
 
-                textView_noNextClass.setVisibility(View.GONE);
-                linearLayout_nextClass.setVisibility(View.VISIBLE);
+                textViewNoNextClass.setVisibility(View.GONE);
+                linearLayoutNextClass.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -279,7 +279,7 @@ public class HomeFragment extends Fragment {
         this.loadTime = loadTime;
     }
 
-    public void InfoSet(@Nullable ArrayList<TopicInfo> topicInfoArrayList) {
+    public void infoSet(@Nullable ArrayList<TopicInfo> topicInfoArrayList) {
         if (isAdded() && recyclerView != null) {
             if (topicInfoArrayList != null && getActivity() != null) {
                 if (infoAdapter == null) {

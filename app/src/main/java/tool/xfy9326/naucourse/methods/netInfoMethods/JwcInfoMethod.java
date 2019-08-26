@@ -2,10 +2,10 @@ package tool.xfy9326.naucourse.methods.netInfoMethods;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -109,6 +109,7 @@ public class JwcInfoMethod extends BaseInfoDetailMethod<JwcTopic> {
                         divideCount = 0;
                         totalTopic++;
                         break;
+                    default:
                 }
             }
         }

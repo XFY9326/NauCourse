@@ -26,11 +26,11 @@ public class GlobalSettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onResume() {
         super.onResume();
-        PreferenceSet();
+        preferenceSet();
     }
 
     @SuppressWarnings("SameReturnValue")
-    private void PreferenceSet() {
+    private void preferenceSet() {
         ((Preference) Objects.requireNonNull(findPreference(Config.PREFERENCE_NIGHT_MODE))).setOnPreferenceClickListener(preference -> {
             showNightModeChooseDialog();
             return true;

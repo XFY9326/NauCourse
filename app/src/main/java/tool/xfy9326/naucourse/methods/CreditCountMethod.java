@@ -10,6 +10,8 @@ import tool.xfy9326.naucourse.utils.CreditCountCourse;
 import tool.xfy9326.naucourse.utils.HistoryScore;
 
 public class CreditCountMethod {
+    private static final Pattern DOUBLE_PATTERN = Pattern.compile("^[-+]?[.\\d]*$");
+
     public static ArrayList<CreditCountCourse> getCreditCountCourse(CourseScore courseScore) {
         ArrayList<CreditCountCourse> countCourses = new ArrayList<>();
         for (int i = 0; i < courseScore.getCourseAmount(); i++) {
@@ -89,7 +91,6 @@ public class CreditCountMethod {
         if (null == str || "".equals(str)) {
             return false;
         }
-        Pattern pattern = Pattern.compile("^[-+]?[.\\d]*$");
-        return pattern.matcher(str).matches();
+        return DOUBLE_PATTERN.matcher(str).matches();
     }
 }

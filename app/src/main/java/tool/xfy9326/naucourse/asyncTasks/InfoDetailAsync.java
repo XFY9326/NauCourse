@@ -28,45 +28,45 @@ public class InfoDetailAsync extends AsyncTask<Context, Void, Context> {
     private int loadSuccess = -1;
     private int loadCode = Config.NET_WORK_GET_SUCCESS;
     @Nullable
-    private String info_source;
+    private String infoSource;
     @Nullable
-    private String info_url;
+    private String infoUrl;
 
     public InfoDetailAsync() {
         this.data = null;
-        this.info_source = null;
-        this.info_url = null;
+        this.infoSource = null;
+        this.infoUrl = null;
     }
 
     /**
      * 设置加载详细信息来源与地址
      *
-     * @param info_source 信息来源
-     * @param info_url    信息地址
+     * @param infoSource 信息来源
+     * @param infoUrl    信息地址
      */
-    public void setData(String info_source, String info_url) {
-        this.info_source = info_source;
-        this.info_url = info_url;
+    public void setData(String infoSource, String infoUrl) {
+        this.infoSource = infoSource;
+        this.infoUrl = infoUrl;
     }
 
     @Override
     protected Context doInBackground(Context... context) {
         try {
             if (context[0] != null) {
-                if (Objects.requireNonNull(info_source).equals(InfoMethod.TOPIC_SOURCE_JWC)) {
+                if (Objects.requireNonNull(infoSource).equals(InfoMethod.TOPIC_SOURCE_JWC)) {
                     JwcInfoMethod jwcInfoMethod = new JwcInfoMethod(context[0]);
-                    loadSuccess = jwcInfoMethod.loadDetail(info_url);
+                    loadSuccess = jwcInfoMethod.loadDetail(infoUrl);
                     if (loadSuccess == Config.NET_WORK_GET_SUCCESS) {
                         data = jwcInfoMethod.getDetailData();
                     }
-                } else if (info_source.equals(InfoMethod.TOPIC_SOURCE_RSS)) {
-                    loadSuccess = RSSInfoMethod.loadDetail(context[0], info_url);
+                } else if (infoSource.equals(InfoMethod.TOPIC_SOURCE_RSS)) {
+                    loadSuccess = RSSInfoMethod.loadDetail(context[0], infoUrl);
                     if (loadSuccess == Config.NET_WORK_GET_SUCCESS) {
                         data = RSSInfoMethod.getDetail(context[0]);
                     }
-                } else if (info_source.equals(InfoMethod.TOPIC_SOURCE_ALSTU)) {
+                } else if (infoSource.equals(InfoMethod.TOPIC_SOURCE_ALSTU)) {
                     AlstuMethod alstuMethod = new AlstuMethod(context[0]);
-                    loadSuccess = alstuMethod.loadDetail(info_url);
+                    loadSuccess = alstuMethod.loadDetail(infoUrl);
                     if (loadSuccess == Config.NET_WORK_GET_SUCCESS) {
                         data = alstuMethod.getDetailData();
                     }
@@ -89,7 +89,7 @@ public class InfoDetailAsync extends AsyncTask<Context, Void, Context> {
         InfoDetailActivity infoDetailActivity = BaseMethod.getApp(context).getInfoDetailActivity();
         if (infoDetailActivity != null) {
             if (NetMethod.checkNetWorkCode(context, new int[]{loadSuccess}, loadCode, false)) {
-                infoDetailActivity.InfoDetailSet(data);
+                infoDetailActivity.infoDetailSet(data);
             }
         }
         System.gc();

@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,8 +24,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.gridlayout.widget.GridLayout;
+import androidx.preference.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -67,7 +68,7 @@ public class TableFragment extends Fragment {
     @Nullable
     private Context context;
     @Nullable
-    private GridLayout course_table_layout;
+    private GridLayout courseTableLayout;
     @Nullable
     private ArrayList<Course> courses;
     @Nullable
@@ -77,10 +78,10 @@ public class TableFragment extends Fragment {
     @Nullable
     private CourseViewMethod courseViewMethod;
     @Nullable
-    private Spinner spinner_week;
+    private Spinner spinnerWeek;
     private int lastSelect;
     private int lastSetWeekNumber;
-    private boolean view_set = false;
+    private boolean viewSet = false;
     private boolean inVacation;
     private int nowWeekNum = 0;
     private SharedPreferences sharedPreferences = null;
@@ -90,10 +91,10 @@ public class TableFragment extends Fragment {
         this.context = null;
         this.courses = null;
         this.schoolTime = null;
-        this.course_table_layout = null;
+        this.courseTableLayout = null;
         this.courseMethod = null;
         this.courseViewMethod = null;
-        this.spinner_week = null;
+        this.spinnerWeek = null;
         this.lastSelect = 0;
         this.lastSetWeekNumber = 0;
         this.inVacation = false;
@@ -130,9 +131,9 @@ public class TableFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (!view_set) {
-            ViewSet();
-            view_set = true;
+        if (!viewSet) {
+            viewSet();
+            viewSet = true;
         }
         if (context != null && lastSetWeekNumber > 0) {
             updateAllNextCourseView(context);
@@ -142,15 +143,15 @@ public class TableFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        this.view_set = false;
+        this.viewSet = false;
         this.view = null;
         this.context = null;
         this.courses = null;
         this.schoolTime = null;
-        this.course_table_layout = null;
+        this.courseTableLayout = null;
         this.courseMethod = null;
         this.courseViewMethod = null;
-        this.spinner_week = null;
+        this.spinnerWeek = null;
         this.loadTime = 0;
     }
 
@@ -174,12 +175,12 @@ public class TableFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private void ViewSet() {
+    private void viewSet() {
         if (view != null) {
-            course_table_layout = view.findViewById(R.id.course_table_layout);
+            courseTableLayout = view.findViewById(R.id.course_table_layout);
 
-            CardView cardView_date = view.findViewById(R.id.cardview_table_date);
-            cardView_date.setOnClickListener(v -> {
+            CardView cardViewDate = view.findViewById(R.id.cardview_table_date);
+            cardViewDate.setOnClickListener(v -> {
                 if (nowWeekNum != 0 && nowWeekNum - 1 != lastSelect) {
                     reloadTable(false);
                 }
@@ -203,7 +204,7 @@ public class TableFragment extends Fragment {
      * @param context      Context
      * @param isDataReload 是否是刷新本地信息
      */
-    public void CourseSet(@Nullable ArrayList<Course> courses, @Nullable final SchoolTime schoolTime, @Nullable final Context context, boolean isDataReload) {
+    public void courseSet(@Nullable ArrayList<Course> courses, @Nullable final SchoolTime schoolTime, @Nullable final Context context, boolean isDataReload) {
         if (context != null && courses != null && schoolTime != null && courses.size() != 0) {
             if (isDataReload) {
                 this.courses = courses;
@@ -226,7 +227,7 @@ public class TableFragment extends Fragment {
             this.lastSetWeekNumber = weekNum;
 
             if (isAdded() && view != null && getActivity() != null) {
-                TextView textView_date = view.findViewById(R.id.textView_table_date);
+                TextView textViewDate = view.findViewById(R.id.textView_table_date);
                 Calendar calendar = Calendar.getInstance(Locale.CHINA);
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH) + 1;
@@ -236,7 +237,7 @@ public class TableFragment extends Fragment {
                 if (schoolTime.getWeekNum() == 0) {
                     week = context.getString(R.string.time_vacation);
                 }
-                textView_date.setText(context.getString(R.string.table_date, year, month, weekDay, week));
+                textViewDate.setText(context.getString(R.string.table_date, year, month, weekDay, week));
 
                 //提前显示下一周的课表
                 if (schoolTime.getWeekNum() != 0) {
@@ -253,21 +254,21 @@ public class TableFragment extends Fragment {
                 if (lastSelect != weekNum - 1) {
                     lastSelect = weekNum - 1;
                     lastSetWeekNumber = lastSelect + 1;
-                    if (spinner_week != null) {
-                        spinner_week.setSelection(lastSelect);
+                    if (spinnerWeek != null) {
+                        spinnerWeek.setSelection(lastSelect);
                     }
                 }
 
-                if (spinner_week == null || isDataReload) {
+                if (spinnerWeek == null || isDataReload) {
                     List<String> weekArr = TimeMethod.getWeekArray(context, schoolTime);
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, weekArr);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinner_week = view.findViewById(R.id.spinner_table_week_chose);
-                    spinner_week.setAdapter(adapter);
+                    spinnerWeek = view.findViewById(R.id.spinner_table_week_chose);
+                    spinnerWeek.setAdapter(adapter);
                     if (lastSelect < weekArr.size()) {
-                        spinner_week.setSelection(lastSelect);
+                        spinnerWeek.setSelection(lastSelect);
                     }
-                    spinner_week.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    spinnerWeek.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             if (lastSelect != position) {
@@ -323,35 +324,35 @@ public class TableFragment extends Fragment {
 
     int getTableWidth() {
         if (view != null && isAdded()) {
-            CardView cardView_course = view.findViewById(R.id.cardView_courseTable);
-            return cardView_course.getWidth();
+            CardView cardViewCourse = view.findViewById(R.id.cardView_courseTable);
+            return cardViewCourse.getWidth();
         }
         return -1;
     }
 
     int getTableHeight() {
         if (view != null && isAdded()) {
-            CardView cardView_course = view.findViewById(R.id.cardView_courseTable);
-            return cardView_course.getHeight();
+            CardView cardViewCourse = view.findViewById(R.id.cardView_courseTable);
+            return cardViewCourse.getHeight();
         }
         return -1;
     }
 
     private void setTableData(@NonNull SchoolTime schoolTime, boolean isDataReload, boolean hasCustomBackground) {
         if (view != null) {
-            CardView cardView_course = view.findViewById(R.id.cardView_courseTable);
-            LinearLayout layout_loading = view.findViewById(R.id.layout_table_loading);
-            if (layout_loading.getVisibility() != View.GONE) {
-                layout_loading.setVisibility(View.GONE);
+            CardView cardViewCourse = view.findViewById(R.id.cardView_courseTable);
+            LinearLayout layoutLoading = view.findViewById(R.id.layout_table_loading);
+            if (layoutLoading.getVisibility() != View.GONE) {
+                layoutLoading.setVisibility(View.GONE);
             }
             if (courseViewMethod == null) {
                 courseViewMethod = new CourseViewMethod(context, courses);
-                courseViewMethod.setTableView(course_table_layout, cardView_course.getWidth(), cardView_course.getHeight());
+                courseViewMethod.setTableView(courseTableLayout, cardViewCourse.getWidth(), cardViewCourse.getHeight());
             } else {
-                courseViewMethod.updateTableSize(cardView_course.getWidth(), cardView_course.getHeight());
+                courseViewMethod.updateTableSize(cardViewCourse.getWidth(), cardViewCourse.getHeight());
             }
             if (isDataReload) {
-                courseViewMethod.setOnCourseTableClickListener(this::CourseCardSet);
+                courseViewMethod.setOnCourseTableClickListener(this::courseCardSet);
             }
             if (courseMethod == null) {
                 courseMethod = new CourseMethod(context, courses, schoolTime);
@@ -359,20 +360,20 @@ public class TableFragment extends Fragment {
                 courseMethod.updateTableCourse(courses, schoolTime, !isDataReload);
             }
             if (view != null) {
-                ImageView imageView_table_background = view.findViewById(R.id.imageView_table_background);
+                ImageView imageViewTableBackground = view.findViewById(R.id.imageView_table_background);
                 if (hasCustomBackground) {
                     Bitmap bitmap = ImageMethod.getTableBackgroundBitmap(getActivity());
                     if (bitmap != null) {
-                        imageView_table_background.refreshDrawableState();
-                        imageView_table_background.setImageBitmap(bitmap);
+                        imageViewTableBackground.refreshDrawableState();
+                        imageViewTableBackground.setImageBitmap(bitmap);
                     } else {
                         hasCustomBackground = false;
                     }
                 } else {
-                    imageView_table_background.setImageDrawable(null);
-                    imageView_table_background.refreshDrawableState();
-                    if (course_table_layout != null) {
-                        course_table_layout.setBackgroundColor(getResources().getColor(R.color.table_background));
+                    imageViewTableBackground.setImageDrawable(null);
+                    imageViewTableBackground.refreshDrawableState();
+                    if (courseTableLayout != null && context != null) {
+                        courseTableLayout.setBackgroundColor(ResourcesCompat.getColor(context.getResources(), R.color.table_background, context.getTheme()));
                     }
                 }
             }
@@ -381,44 +382,44 @@ public class TableFragment extends Fragment {
     }
 
     //表格中的课程详细信息显示
-    private void CourseCardSet(@NonNull Course course) {
+    private void courseCardSet(@NonNull Course course) {
         if (getActivity() != null) {
             LayoutInflater layoutInflater = getLayoutInflater();
-            View view_dialog = layoutInflater.inflate(R.layout.dialog_course_card, getActivity().findViewById(R.id.layout_course_card));
+            View viewDialog = layoutInflater.inflate(R.layout.dialog_course_card, getActivity().findViewById(R.id.layout_course_card));
 
-            LinearLayout linearLayout_content = view_dialog.findViewById(R.id.layout_course_card_content);
-            TextView textView_name = view_dialog.findViewById(R.id.textView_course_card_name);
+            LinearLayout linearLayoutContent = viewDialog.findViewById(R.id.layout_course_card_content);
+            TextView textViewName = viewDialog.findViewById(R.id.textView_course_card_name);
 
-            TextView textView_id = view_dialog.findViewById(R.id.textView_course_card_id);
-            TextView textView_teacher = view_dialog.findViewById(R.id.textView_course_card_teacher);
-            TextView textView_type = view_dialog.findViewById(R.id.textView_course_card_type);
-            TextView textView_score = view_dialog.findViewById(R.id.textView_course_card_score);
-            TextView textView_class = view_dialog.findViewById(R.id.textView_course_card_class);
-            TextView textView_class_combined = view_dialog.findViewById(R.id.textView_course_card_combined_class);
+            TextView textViewId = viewDialog.findViewById(R.id.textView_course_card_id);
+            TextView textViewTeacher = viewDialog.findViewById(R.id.textView_course_card_teacher);
+            TextView textViewType = viewDialog.findViewById(R.id.textView_course_card_type);
+            TextView textViewScore = viewDialog.findViewById(R.id.textView_course_card_score);
+            TextView textViewClass = viewDialog.findViewById(R.id.textView_course_card_class);
+            TextView textViewClassCombined = viewDialog.findViewById(R.id.textView_course_card_combined_class);
 
-            textView_name.setText(course.getCourseName());
+            textViewName.setText(course.getCourseName());
 
-            textView_id.setText(Objects.requireNonNull(context).getString(R.string.course_card_id, course.getCourseId()));
-            textView_teacher.setText(context.getString(R.string.course_card_teacher, course.getCourseTeacher()));
+            textViewId.setText(Objects.requireNonNull(context).getString(R.string.course_card_id, course.getCourseId()));
+            textViewTeacher.setText(context.getString(R.string.course_card_teacher, course.getCourseTeacher()));
             if (course.getCourseScore() != null && !course.getCourseScore().isEmpty()) {
-                textView_score.setText(context.getString(R.string.course_card_score, course.getCourseScore()));
+                textViewScore.setText(context.getString(R.string.course_card_score, course.getCourseScore()));
             } else {
-                textView_score.setVisibility(View.GONE);
+                textViewScore.setVisibility(View.GONE);
             }
             if (course.getCourseType() != null && !course.getCourseType().isEmpty()) {
-                textView_type.setText(context.getString(R.string.course_card_type, course.getCourseType()));
+                textViewType.setText(context.getString(R.string.course_card_type, course.getCourseType()));
             } else {
-                textView_type.setVisibility(View.GONE);
+                textViewType.setVisibility(View.GONE);
             }
             if (course.getCourseClass() != null && !course.getCourseClass().isEmpty()) {
-                textView_class.setText(context.getString(R.string.course_card_class, course.getCourseClass()));
+                textViewClass.setText(context.getString(R.string.course_card_class, course.getCourseClass()));
             } else {
-                textView_class.setVisibility(View.GONE);
+                textViewClass.setVisibility(View.GONE);
             }
             if (course.getCourseCombinedClass() != null && !course.getCourseCombinedClass().isEmpty()) {
-                textView_class_combined.setText(context.getString(R.string.course_card_combined_class, course.getCourseCombinedClass()));
+                textViewClassCombined.setText(context.getString(R.string.course_card_combined_class, course.getCourseCombinedClass()));
             } else {
-                textView_class_combined.setVisibility(View.GONE);
+                textViewClassCombined.setVisibility(View.GONE);
             }
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -426,28 +427,28 @@ public class TableFragment extends Fragment {
             CourseDetail[] details = course.getCourseDetail();
             if (details != null) {
                 for (CourseDetail detail : details) {
-                    String[] course_weeks = detail.getWeeks();
+                    String[] courseWeeks = detail.getWeeks();
                     String weekmode = "";
                     if (detail.getWeekMode() == Config.COURSE_DETAIL_WEEKMODE_SINGLE) {
                         weekmode = context.getString(R.string.course_card_time_week_mode, context.getString(R.string.single_week_mode));
                     } else if (detail.getWeekMode() == Config.COURSE_DETAIL_WEEKMODE_DOUBLE) {
                         weekmode = context.getString(R.string.course_card_time_week_mode, context.getString(R.string.double_week_mode));
                     }
-                    for (String course_week : Objects.requireNonNull(course_weeks)) {
-                        String[] course_times = detail.getCourseTime();
-                        String[] week_num = context.getResources().getStringArray(R.array.week_number);
-                        for (String course_time : Objects.requireNonNull(course_times)) {
-                            View view_card = layoutInflater.inflate(R.layout.item_course_card, getActivity().findViewById(R.id.layout_course_card_item));
-                            String time = context.getString(R.string.course_card_time, course_week, weekmode, week_num[detail.getWeekDay() - 1], course_time);
+                    for (String courseWeek : Objects.requireNonNull(courseWeeks)) {
+                        String[] courseTimes = detail.getCourseTime();
+                        String[] weekNum = context.getResources().getStringArray(R.array.week_number);
+                        for (String courseTime : Objects.requireNonNull(courseTimes)) {
+                            View viewCard = layoutInflater.inflate(R.layout.item_course_card, getActivity().findViewById(R.id.layout_course_card_item));
+                            String time = context.getString(R.string.course_card_time, courseWeek, weekmode, weekNum[detail.getWeekDay() - 1], courseTime);
                             String location = context.getString(R.string.course_card_location, detail.getLocation());
-                            ((TextView) view_card.findViewById(R.id.textView_course_card_time)).setText(time);
-                            ((TextView) view_card.findViewById(R.id.textView_course_card_location)).setText(location);
-                            linearLayout_content.addView(view_card);
+                            ((TextView) viewCard.findViewById(R.id.textView_course_card_time)).setText(time);
+                            ((TextView) viewCard.findViewById(R.id.textView_course_card_location)).setText(location);
+                            linearLayoutContent.addView(viewCard);
                         }
                     }
                 }
             }
-            builder.setView(view_dialog);
+            builder.setView(viewDialog);
             builder.show();
         }
     }
@@ -461,7 +462,7 @@ public class TableFragment extends Fragment {
                 getData();
                 Toast.makeText(getActivity(), R.string.course_table_reloading, Toast.LENGTH_SHORT).show();
             } else if (courses != null && schoolTime != null) {
-                CourseSet(courses, schoolTime, getActivity(), false);
+                courseSet(courses, schoolTime, getActivity(), false);
             }
         }
     }
@@ -470,27 +471,27 @@ public class TableFragment extends Fragment {
         if (isAdded()) {
             //离线数据加载完成，开始拉取网络数据
             if (loadTime == 1 && NetMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
-                boolean update_day = true;
+                boolean updateDay = true;
                 if (!mustReload && sharedPreferences != null) {
                     if (!sharedPreferences.getBoolean(Config.PREFERENCE_UPDATE_TABLE_EVERY_TIME, Config.DEFAULT_PREFERENCE_UPDATE_TABLE_EVERY_TIME) && sharedPreferences.getBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE, Config.DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE)) {
                         Calendar calendar = Calendar.getInstance(Locale.CHINA);
-                        long course_table_load_date = sharedPreferences.getLong(Config.PREFERENCE_COURSE_TABLE_AUTO_LOAD_DATE_TIME, 0);
-                        calendar.setTimeInMillis(course_table_load_date);
-                        int load_day = calendar.get(Calendar.DAY_OF_YEAR);
-                        int load_year = calendar.get(Calendar.YEAR);
+                        long courseTableLoadDate = sharedPreferences.getLong(Config.PREFERENCE_COURSE_TABLE_AUTO_LOAD_DATE_TIME, 0);
+                        calendar.setTimeInMillis(courseTableLoadDate);
+                        int loadDay = calendar.get(Calendar.DAY_OF_YEAR);
+                        int loadYear = calendar.get(Calendar.YEAR);
                         calendar.setTimeInMillis(System.currentTimeMillis());
-                        int now_day = calendar.get(Calendar.DAY_OF_YEAR);
-                        int now_year = calendar.get(Calendar.YEAR);
+                        int nowDay = calendar.get(Calendar.DAY_OF_YEAR);
+                        int nowYear = calendar.get(Calendar.YEAR);
 
-                        if (load_year == now_year && now_day == load_day) {
-                            update_day = false;
+                        if (loadYear == nowYear && nowDay == loadDay) {
+                            updateDay = false;
                         } else {
                             sharedPreferences.edit().putLong(Config.PREFERENCE_COURSE_TABLE_AUTO_LOAD_DATE_TIME, System.currentTimeMillis()).apply();
                         }
                     }
                 }
 
-                if (update_day) {
+                if (updateDay) {
                     getData();
                 }
             }
@@ -501,7 +502,7 @@ public class TableFragment extends Fragment {
         if (view != null && isAdded() && getActivity() != null) {
             Bitmap bitmap = null;
             View tableView = view.findViewById(R.id.course_table_layout);
-            if (view_set && tableView.getVisibility() == View.VISIBLE) {
+            if (viewSet && tableView.getVisibility() == View.VISIBLE) {
                 bitmap = ImageMethod.getViewBitmap(getActivity(), tableView);
             }
             DialogMethod.showImageShareDialog(getActivity(),

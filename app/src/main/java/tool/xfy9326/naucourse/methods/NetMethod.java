@@ -59,15 +59,15 @@ public class NetMethod {
     }
 
     public static String loadUrl(OkHttpClient client, @NonNull String url, HashMap<String, String> header) throws IOException {
-        Request.Builder request_builder = new Request.Builder();
-        request_builder.url(url);
+        Request.Builder requestBuilder = new Request.Builder();
+        requestBuilder.url(url);
         if (header != null) {
             for (String key : header.keySet()) {
                 String value = header.get(key);
-                request_builder.header(key, value == null ? "" : value);
+                requestBuilder.header(key, value == null ? "" : value);
             }
         }
-        Response response = client.newCall(request_builder.build()).execute();
+        Response response = client.newCall(requestBuilder.build()).execute();
         if (response.isSuccessful()) {
             ResponseBody responseBody = response.body();
             if (responseBody != null) {
@@ -91,19 +91,19 @@ public class NetMethod {
      * @throws IOException 网页获取错误
      */
     public static String postUrl(@NonNull OkHttpClient client, @NonNull String url, @NonNull HashMap<String, String> form, @NonNull HashMap<String, String> header) throws IOException {
-        FormBody.Builder form_builder = new FormBody.Builder();
+        FormBody.Builder formBuilder = new FormBody.Builder();
         for (String key : form.keySet()) {
             String value = form.get(key);
-            form_builder.add(key, value == null ? "" : value);
+            formBuilder.add(key, value == null ? "" : value);
         }
-        Request.Builder request_builder = new Request.Builder();
-        request_builder.url(url);
-        request_builder.post(form_builder.build());
+        Request.Builder requestBuilder = new Request.Builder();
+        requestBuilder.url(url);
+        requestBuilder.post(formBuilder.build());
         for (String key : header.keySet()) {
             String value = header.get(key);
-            request_builder.header(key, value == null ? "" : value);
+            requestBuilder.header(key, value == null ? "" : value);
         }
-        Response response = client.newCall(request_builder.build()).execute();
+        Response response = client.newCall(requestBuilder.build()).execute();
         if (response.isSuccessful()) {
             ResponseBody responseBody = response.body();
             if (responseBody != null) {
@@ -139,8 +139,8 @@ public class NetMethod {
                     return null;
                 }
             }
-            int reLogin_result = LoginMethod.reLogin(context);
-            switch (reLogin_result) {
+            int reLoginResult = LoginMethod.reLogin(context);
+            switch (reLoginResult) {
                 case Config.RE_LOGIN_SUCCESS:
                     data = BaseMethod.getApp(context).getClient().getData(url);
                     break;
@@ -152,11 +152,12 @@ public class NetMethod {
                     return loadUrlFromLoginClient(context, url, false);
                 case Config.RE_LOGIN_FAILED:
                     Thread.sleep(500);
-                    reLogin_result = LoginMethod.reLogin(context);
-                    if (reLogin_result == Config.RE_LOGIN_SUCCESS) {
+                    reLoginResult = LoginMethod.reLogin(context);
+                    if (reLoginResult == Config.RE_LOGIN_SUCCESS) {
                         return loadUrlFromLoginClient(context, url, false);
                     }
                     break;
+                default:
             }
         }
         return data;

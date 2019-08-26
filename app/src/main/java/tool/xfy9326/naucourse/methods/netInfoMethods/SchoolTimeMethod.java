@@ -2,10 +2,10 @@ package tool.xfy9326.naucourse.methods.netInfoMethods;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -67,7 +67,7 @@ public class SchoolTimeMethod extends BaseInfoMethod<SchoolTime> {
             for (int i = 0; i < text.size(); i++) {
                 switch (i) {
                     case 2:
-                        if (!text.get(i).equals("放假中")) {
+                        if (!"放假中".equals(text.get(i))) {
                             schoolTime.setWeekNum(Integer.valueOf(text.get(i).trim().substring(1, 2)));
                         }
                         break;
@@ -77,6 +77,7 @@ public class SchoolTimeMethod extends BaseInfoMethod<SchoolTime> {
                     case 4:
                         schoolTime.setEndTime(text.get(i));
                         break;
+                    default:
                 }
             }
 

@@ -2,9 +2,9 @@ package tool.xfy9326.naucourse.asyncTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
@@ -71,12 +71,12 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
                     } else if (PreferenceManager.getDefaultSharedPreferences(context[0]).getBoolean(Config.PREFERENCE_AUTO_UPDATE_COURSE_TABLE, Config.DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE)) {
                         TableMethod tableMethod = new TableMethod(context[0]);
                         if (tableMethod.load() == Config.NET_WORK_GET_SUCCESS) {
-                            ArrayList<Course> update_course = tableMethod.getData(false);
-                            if (update_course != null) {
-                                ArrayList<Course> now_course = CourseEditMethod.combineCourseList(update_course, course, true, false, true);
-                                if (now_course != null && !CourseEditMethod.checkCourseList(now_course).isHasError()) {
+                            ArrayList<Course> updateCourse = tableMethod.getData(false);
+                            if (updateCourse != null) {
+                                ArrayList<Course> nowCourse = CourseEditMethod.combineCourseList(updateCourse, course, true, false, true);
+                                if (nowCourse != null && !CourseEditMethod.checkCourseList(nowCourse).isHasError()) {
                                     course.clear();
-                                    course.addAll(now_course);
+                                    course.addAll(nowCourse);
                                     DataMethod.saveOfflineData(context[0], course, TableMethod.FILE_NAME, false, TableMethod.IS_ENCRYPT);
                                 }
                             }
@@ -110,12 +110,12 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
             PersonFragment personFragment = viewPagerAdapter.getPersonFragment();
             if (tableFragment != null) {
                 if (NetMethod.checkNetWorkCode(context, new int[]{timeLoadSuccess, tableLoadSuccess}, loadCode, false)) {
-                    tableFragment.CourseSet(course, schoolTime, context, true);
+                    tableFragment.courseSet(course, schoolTime, context, true);
                 }
                 tableFragment.lastViewSet(context, course == null || schoolTime == null);
             }
             if (personFragment != null) {
-                personFragment.TimeTextSet(schoolTime, context);
+                personFragment.timeTextSet(schoolTime, context);
             }
         }
         System.gc();

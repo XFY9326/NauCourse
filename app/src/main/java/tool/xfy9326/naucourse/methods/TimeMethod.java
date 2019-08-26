@@ -2,10 +2,10 @@ package tool.xfy9326.naucourse.methods;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,29 +24,29 @@ import tool.xfy9326.naucourse.utils.SchoolTime;
  */
 
 public class TimeMethod {
-    private static final SimpleDateFormat sdf_ymd = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
-    private static final SimpleDateFormat sdf_ymd_hm = new SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.CHINA);
-    private static final SimpleDateFormat sdf_ymd_hm2 = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
+    private static final SimpleDateFormat SDF_YMD = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+    private static final SimpleDateFormat SDF_YMD_HM = new SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.CHINA);
+    private static final SimpleDateFormat SDF_YMD_HM_2 = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
     private static String[] weekArray = null;
 
     static synchronized String getDateSDF(long time) {
-        return sdf_ymd.format(new Date(time));
+        return SDF_YMD.format(new Date(time));
     }
 
     public static synchronized Date parseDateSDFHM2(String str) throws Exception {
-        return sdf_ymd_hm2.parse(str);
+        return SDF_YMD_HM_2.parse(str);
     }
 
     public static synchronized Date parseDateSDFHM(String str) throws Exception {
-        return sdf_ymd_hm.parse(str);
+        return SDF_YMD_HM.parse(str);
     }
 
     public static synchronized Date parseDateSDF(String str) throws Exception {
-        return sdf_ymd.parse(str);
+        return SDF_YMD.parse(str);
     }
 
     public static synchronized String formatDateSDF(Date date) {
-        return sdf_ymd.format(date);
+        return SDF_YMD.format(date);
     }
 
     static long getInfoDateLong(String date) {
@@ -161,11 +161,11 @@ public class TimeMethod {
     @NonNull
     public static List<String> getWeekArray(@NonNull Context context, SchoolTime schoolTime) {
         List<String> week = new ArrayList<>();
-        int max_week = getMaxWeekNum(schoolTime);
-        if (max_week == 0) {
-            max_week = Config.DEFAULT_MAX_WEEK;
+        int maxWeek = getMaxWeekNum(schoolTime);
+        if (maxWeek == 0) {
+            maxWeek = Config.DEFAULT_MAX_WEEK;
         }
-        for (int i = 1; i <= max_week; i++) {
+        for (int i = 1; i <= maxWeek; i++) {
             week.add(context.getString(R.string.week, i));
         }
         return week;
@@ -178,27 +178,27 @@ public class TimeMethod {
      * @return 最大周数
      */
     public static int getMaxWeekNum(@Nullable SchoolTime schoolTime) {
-        int max_week = 0;
+        int maxWeek = 0;
         if (schoolTime != null) {
             try {
                 Date startDate = parseDateSDF(schoolTime.getStartTime());
                 long startDay = startDate.getTime();
                 long endDay = parseDateSDF(schoolTime.getEndTime()).getTime();
 
-                Calendar calendar_start = Calendar.getInstance(Locale.CHINA);
-                calendar_start.setTime(startDate);
+                Calendar calendarStart = Calendar.getInstance(Locale.CHINA);
+                calendarStart.setTime(startDate);
 
                 while (startDay < endDay) {
-                    calendar_start.add(Calendar.DATE, 7);
-                    startDay = calendar_start.getTimeInMillis();
-                    max_week++;
+                    calendarStart.add(Calendar.DATE, 7);
+                    startDay = calendarStart.getTimeInMillis();
+                    maxWeek++;
                 }
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return max_week;
+        return maxWeek;
     }
 
 
@@ -216,31 +216,31 @@ public class TimeMethod {
                 Date startDate = parseDateSDF(schoolTime.getStartTime());
                 Date endDate = parseDateSDF(schoolTime.getEndTime());
 
-                Calendar calendar_start = Calendar.getInstance(Locale.CHINA);
-                calendar_start.setTime(startDate);
+                Calendar calendarStart = Calendar.getInstance(Locale.CHINA);
+                calendarStart.setTime(startDate);
 
-                Calendar calendar_end = Calendar.getInstance(Locale.CHINA);
-                calendar_end.setTime(endDate);
-                calendar_end.add(Calendar.DATE, 1);
+                Calendar calendarEnd = Calendar.getInstance(Locale.CHINA);
+                calendarEnd.setTime(endDate);
+                calendarEnd.add(Calendar.DATE, 1);
 
-                Calendar calendar_now = Calendar.getInstance(Locale.CHINA);
-                calendar_now.setTime(new Date());
+                Calendar calendarNow = Calendar.getInstance(Locale.CHINA);
+                calendarNow.setTime(new Date());
 
-                if (calendar_now.getTimeInMillis() < calendar_start.getTimeInMillis() || calendar_now.getTimeInMillis() > calendar_end.getTimeInMillis()) {
+                if (calendarNow.getTimeInMillis() < calendarStart.getTimeInMillis() || calendarNow.getTimeInMillis() > calendarEnd.getTimeInMillis()) {
                     return 0;
                 }
 
-                calendar_start.add(Calendar.DATE, calendar_start.getFirstDayOfWeek() - calendar_start.get(Calendar.DAY_OF_WEEK) + 1);
-                calendar_now.add(Calendar.DATE, -7);
-                if (calendar_now.getTimeInMillis() < calendar_start.getTimeInMillis()) {
+                calendarStart.add(Calendar.DATE, calendarStart.getFirstDayOfWeek() - calendarStart.get(Calendar.DAY_OF_WEEK) + 1);
+                calendarNow.add(Calendar.DATE, -7);
+                if (calendarNow.getTimeInMillis() < calendarStart.getTimeInMillis()) {
                     return 1;
                 }
 
-                long startDay = calendar_start.getTimeInMillis();
-                long nowDay = new Date().getTime();
+                long startDay = calendarStart.getTimeInMillis();
+                long nowDay = System.currentTimeMillis();
                 while (startDay < nowDay) {
-                    calendar_start.add(Calendar.DATE, 7);
-                    startDay = calendar_start.getTimeInMillis();
+                    calendarStart.add(Calendar.DATE, 7);
+                    startDay = calendarStart.getTimeInMillis();
                     weekNum++;
                 }
             } catch (Exception e) {
@@ -254,23 +254,23 @@ public class TimeMethod {
      * 获取指定周每一天的的日期
      *
      * @param context         Context
-     * @param week_num        周数
+     * @param weekNum         周数
      * @param startSchoolDate 开学时间（SchoolTime）
      * @return 周数与日期的列表
      */
     @NonNull
-    static List<String> getWeekDayArray(Context context, int week_num, String startSchoolDate) {
+    static List<String> getWeekDayArray(Context context, int weekNum, String startSchoolDate) {
         List<String> week = new ArrayList<>();
         String[] num = context.getResources().getStringArray(R.array.week_number);
-        String[] week_day_date = getWeekDayDate(week_num, startSchoolDate);
+        String[] weekDayDate = getWeekDayDate(weekNum, startSchoolDate);
         for (int i = 1; i <= Config.MAX_WEEK_DAY; i++) {
-            week.add((context.getString(R.string.week_day, num[i - 1]) + "\n" + week_day_date[i - 1]).trim());
+            week.add((context.getString(R.string.week_day, num[i - 1]) + "\n" + weekDayDate[i - 1]).trim());
         }
         return week;
     }
 
     @NonNull
-    private static String[] getWeekDayDate(int week_num, String startSchoolDate) {
+    private static String[] getWeekDayDate(int weekNum, String startSchoolDate) {
         String[] weekDayDate = new String[Config.MAX_WEEK_DAY];
         try {
             Date startDate = parseDateSDF(startSchoolDate);
@@ -280,7 +280,7 @@ public class TimeMethod {
             calendar.setFirstDayOfWeek(Calendar.MONDAY);
             calendar.add(Calendar.DATE, calendar.getFirstDayOfWeek() - calendar.get(Calendar.DAY_OF_WEEK));
 
-            calendar.add(Calendar.DATE, (week_num - 1) * 7);
+            calendar.add(Calendar.DATE, (weekNum - 1) * 7);
 
             for (int i = 0; i < Config.MAX_WEEK_DAY; i++) {
                 weekDayDate[i] = (calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DAY_OF_MONTH);
@@ -332,21 +332,21 @@ public class TimeMethod {
         if (temp > 0) {
             long day = getShowTime(temp / (3600f * 24));
             if (day > 0) {
-                countingDown.Time = String.valueOf(day);
-                countingDown.TimeUnit = context.getString(R.string.day);
+                countingDown.time = String.valueOf(day);
+                countingDown.timeUnit = context.getString(R.string.day);
             } else {
                 long hour = getShowTime(temp / 3600f);
                 if (hour > 0) {
-                    countingDown.Time = String.valueOf(hour);
-                    countingDown.TimeUnit = context.getString(R.string.hour);
+                    countingDown.time = String.valueOf(hour);
+                    countingDown.timeUnit = context.getString(R.string.hour);
                 } else {
                     long minute = getShowTime(temp / 60f);
                     if (minute > 0) {
-                        countingDown.Time = String.valueOf(minute);
-                        countingDown.TimeUnit = context.getString(R.string.minute);
+                        countingDown.time = String.valueOf(minute);
+                        countingDown.timeUnit = context.getString(R.string.minute);
                     } else {
-                        countingDown.Time = String.valueOf(0);
-                        countingDown.TimeUnit = context.getString(R.string.minute);
+                        countingDown.time = String.valueOf(0);
+                        countingDown.timeUnit = context.getString(R.string.minute);
                     }
                 }
             }
@@ -359,7 +359,7 @@ public class TimeMethod {
     }
 
     public static class CountingDown {
-        public String Time = null;
-        public String TimeUnit = null;
+        public String time = null;
+        public String timeUnit = null;
     }
 }

@@ -50,6 +50,7 @@ public class ScoreSwipeRefreshLayout extends SwipeRefreshLayout {
             case MotionEvent.ACTION_CANCEL:
                 mIsVpDragger = false;
                 break;
+            default:
         }
         return super.onInterceptTouchEvent(ev);
     }

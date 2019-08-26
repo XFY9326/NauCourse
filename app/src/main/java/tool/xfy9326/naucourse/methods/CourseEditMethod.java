@@ -153,19 +153,19 @@ public class CourseEditMethod {
                         if (courses.get(i).getCourseTerm() != null && !courses.get(i).getCourseTerm().equals(courses.get(j).getCourseTerm())) {
                             continue;
                         }
-                        CourseDetail[] courseDetail_list_check = courses.get(i).getCourseDetail();
-                        if (courseDetail_list_check != null) {
-                            for (CourseDetail courseDetail_check : courseDetail_list_check) {
-                                if (courseDetail_check == null) {
+                        CourseDetail[] courseDetailListCheck = courses.get(i).getCourseDetail();
+                        if (courseDetailListCheck != null) {
+                            for (CourseDetail courseDetailCheck : courseDetailListCheck) {
+                                if (courseDetailCheck == null) {
                                     continue;
                                 }
-                                CourseDetail[] courseDetail_list = courses.get(j).getCourseDetail();
-                                if (courseDetail_list != null) {
-                                    for (CourseDetail courseDetail : courseDetail_list) {
+                                CourseDetail[] courseDetailList = courses.get(j).getCourseDetail();
+                                if (courseDetailList != null) {
+                                    for (CourseDetail courseDetail : courseDetailList) {
                                         if (courseDetail == null) {
                                             continue;
                                         }
-                                        if (isCourseDetailTimeError(courseDetail, courseDetail_check)) {
+                                        if (isCourseDetailTimeError(courseDetail, courseDetailCheck)) {
                                             courseCheckResult.setHasError();
                                             courseCheckResult.setCheckCourseName(courses.get(i).getCourseName());
                                             courseCheckResult.setConflictCourseName(courses.get(j).getCourseName());

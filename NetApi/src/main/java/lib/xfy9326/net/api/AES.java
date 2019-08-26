@@ -6,7 +6,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 class AES {
 
-    static String Encrypt(String str, String key, String iv) throws Exception {
+    static String encrypt(String str, String key, String iv) throws Exception {
         Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
         int blockSize = cipher.getBlockSize();
 
@@ -28,7 +28,7 @@ class AES {
         return byte2hex(encrypted).toLowerCase();
     }
 
-    static String Decrypt(String str, String key, String iv) throws Exception {
+    static String decrypt(String str, String key, String iv) throws Exception {
         byte[] encrypted1 = hex2byte(str);
 
         Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
@@ -59,8 +59,8 @@ class AES {
     private static String byte2hex(byte[] b) {
         StringBuilder hs = new StringBuilder();
         String sTmp;
-        for (byte aB : b) {
-            sTmp = (Integer.toHexString(aB & 0XFF));
+        for (byte ab : b) {
+            sTmp = (Integer.toHexString(ab & 0XFF));
             if (sTmp.length() == 1) {
                 hs.append("0").append(sTmp);
             } else {

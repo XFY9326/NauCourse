@@ -39,10 +39,10 @@ public class HistoryScoreFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        ViewSet();
+        viewSet();
     }
 
-    private void ViewSet() {
+    private void viewSet() {
         if (isAdded() && getActivity() != null && view != null) {
             recyclerView = view.findViewById(R.id.recyclerView_list);
             recyclerView.setFocusableInTouchMode(false);

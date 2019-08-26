@@ -49,26 +49,26 @@ public class SuspendCourseMethod extends BaseInfoMethod<SuspendCourse> {
         SuspendCourse suspendCourse = new SuspendCourse();
 
         if (document != null) {
-            Element element_info = document.getElementById("Term");
-            suspendCourse.setTerm(element_info.text());
-            element_info = document.getElementById("StartDate");
-            suspendCourse.setTermStart(element_info.text());
-            element_info = document.getElementById("EndDate");
-            suspendCourse.setTermEnd(element_info.text());
+            Element elementInfo = document.getElementById("Term");
+            suspendCourse.setTerm(elementInfo.text());
+            elementInfo = document.getElementById("StartDate");
+            suspendCourse.setTermStart(elementInfo.text());
+            elementInfo = document.getElementById("EndDate");
+            suspendCourse.setTermEnd(elementInfo.text());
 
             ArrayList<String> name = new ArrayList<>();
             ArrayList<String> course = new ArrayList<>();
             ArrayList<String> teacher = new ArrayList<>();
 
-            ArrayList<String[]> detail_type_arr = new ArrayList<>();
-            ArrayList<String[]> detail_class_arr = new ArrayList<>();
-            ArrayList<String[]> detail_location_arr = new ArrayList<>();
-            ArrayList<String[]> detail_date_arr = new ArrayList<>();
+            ArrayList<String[]> detailTypeArr = new ArrayList<>();
+            ArrayList<String[]> detailClassArr = new ArrayList<>();
+            ArrayList<String[]> detailLocationArr = new ArrayList<>();
+            ArrayList<String[]> detailDateArr = new ArrayList<>();
 
-            ArrayList<String> detail_type = new ArrayList<>();
-            ArrayList<String> detail_class = new ArrayList<>();
-            ArrayList<String> detail_location = new ArrayList<>();
-            ArrayList<String> detail_date = new ArrayList<>();
+            ArrayList<String> detailType = new ArrayList<>();
+            ArrayList<String> detailClass = new ArrayList<>();
+            ArrayList<String> detailLocation = new ArrayList<>();
+            ArrayList<String> detailDate = new ArrayList<>();
 
             Elements elements = document.getElementsByTag("td");
 
@@ -98,46 +98,47 @@ public class SuspendCourseMethod extends BaseInfoMethod<SuspendCourse> {
                         switch (detailLine) {
                             case 0:
                                 if (element.hasAttr("rowspan")) {
-                                    detail_type_arr.add(detail_type.toArray(new String[detail_type.size()]));
-                                    detail_class_arr.add(detail_class.toArray(new String[detail_class.size()]));
-                                    detail_location_arr.add(detail_location.toArray(new String[detail_location.size()]));
-                                    detail_date_arr.add(detail_date.toArray(new String[detail_date.size()]));
+                                    detailTypeArr.add(detailType.toArray(new String[detailType.size()]));
+                                    detailClassArr.add(detailClass.toArray(new String[detailClass.size()]));
+                                    detailLocationArr.add(detailLocation.toArray(new String[detailLocation.size()]));
+                                    detailDateArr.add(detailDate.toArray(new String[detailDate.size()]));
 
-                                    detail_type.clear();
-                                    detail_class.clear();
-                                    detail_location.clear();
-                                    detail_date.clear();
+                                    detailType.clear();
+                                    detailClass.clear();
+                                    detailLocation.clear();
+                                    detailDate.clear();
 
                                     subjectLine = 0;
                                     detailLine = 0;
                                 } else {
-                                    detail_type.add(element.text());
+                                    detailType.add(element.text());
                                     detailLine++;
                                 }
                                 break;
                             case 1:
-                                detail_class.add(element.text());
+                                detailClass.add(element.text());
                                 detailLine++;
                                 break;
                             case 2:
-                                detail_location.add(element.text());
+                                detailLocation.add(element.text());
                                 detailLine++;
                                 break;
                             case 3:
-                                detail_date.add(element.text());
+                                detailDate.add(element.text());
                                 detailLine = 0;
                                 break;
+                            default:
                         }
                         subjectLine++;
                         break;
                 }
             }
 
-            if (detail_type.size() > 0) {
-                detail_type_arr.add(detail_type.toArray(new String[detail_type.size()]));
-                detail_class_arr.add(detail_class.toArray(new String[detail_class.size()]));
-                detail_location_arr.add(detail_location.toArray(new String[detail_location.size()]));
-                detail_date_arr.add(detail_date.toArray(new String[detail_date.size()]));
+            if (detailType.size() > 0) {
+                detailTypeArr.add(detailType.toArray(new String[detailType.size()]));
+                detailClassArr.add(detailClass.toArray(new String[detailClass.size()]));
+                detailLocationArr.add(detailLocation.toArray(new String[detailLocation.size()]));
+                detailDateArr.add(detailDate.toArray(new String[detailDate.size()]));
             }
 
             suspendCourse.setName(name.toArray(new String[name.size()]));
@@ -145,10 +146,10 @@ public class SuspendCourseMethod extends BaseInfoMethod<SuspendCourse> {
             suspendCourse.setTeacher(teacher.toArray(new String[teacher.size()]));
             suspendCourse.setCount(itemCount);
 
-            suspendCourse.setDetail_type(detail_type_arr.toArray(new String[detail_type_arr.size()][]));
-            suspendCourse.setDetail_class(detail_class_arr.toArray(new String[detail_class_arr.size()][]));
-            suspendCourse.setDetail_location(detail_location_arr.toArray(new String[detail_location_arr.size()][]));
-            suspendCourse.setDetail_date(detail_date_arr.toArray(new String[detail_date_arr.size()][]));
+            suspendCourse.setDetail_type(detailTypeArr.toArray(new String[detailTypeArr.size()][]));
+            suspendCourse.setDetail_class(detailClassArr.toArray(new String[detailClassArr.size()][]));
+            suspendCourse.setDetail_location(detailLocationArr.toArray(new String[detailLocationArr.size()][]));
+            suspendCourse.setDetail_date(detailDateArr.toArray(new String[detailDateArr.size()][]));
 
             suspendCourse.setDataVersionCode(Config.DATA_VERSION_SUSPEND_COURSE);
 

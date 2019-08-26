@@ -45,14 +45,17 @@ public class ScrollBehavior extends FloatingActionButton.Behavior {
     private void animateOut(final FloatingActionButton button) {
         ViewCompat.animate(button).scaleX(0.0F).scaleY(0.0F).alpha(0.0F).setInterpolator(INTERPOLATOR).withLayer()
                 .setListener(new ViewPropertyAnimatorListener() {
+                    @Override
                     public void onAnimationStart(View view) {
                         ScrollBehavior.this.mIsAnimatingOut = true;
                     }
 
+                    @Override
                     public void onAnimationCancel(View view) {
                         ScrollBehavior.this.mIsAnimatingOut = false;
                     }
 
+                    @Override
                     public void onAnimationEnd(View view) {
                         ScrollBehavior.this.mIsAnimatingOut = false;
                         view.setVisibility(View.INVISIBLE);

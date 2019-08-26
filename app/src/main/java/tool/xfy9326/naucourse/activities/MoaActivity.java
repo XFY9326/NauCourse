@@ -38,8 +38,8 @@ public class MoaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moa);
         BaseMethod.getApp(this).setMoaActivity(this);
-        ToolBarSet();
-        ViewSet();
+        toolBarSet();
+        viewSet();
     }
 
     @Override
@@ -58,7 +58,7 @@ public class MoaActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void ToolBarSet() {
+    private void toolBarSet() {
         setSupportActionBar(findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -67,7 +67,7 @@ public class MoaActivity extends AppCompatActivity {
         }
     }
 
-    private void ViewSet() {
+    private void viewSet() {
         ((TextView) findViewById(R.id.textView_moa_section_title)).setText(getString(R.string.moa_title, MoaMethod.MOA_PAST_SHOW_MONTH));
 
         recyclerView = findViewById(R.id.recyclerView_moa);

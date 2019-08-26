@@ -28,12 +28,12 @@ public class IO {
     public static boolean writeFile(@NonNull String content, @NonNull String path) {
         File file = new File(path);
         try {
-            if (CheckFile(file, true)) {
+            if (checkFile(file, true)) {
                 return false;
             }
             OutputStream writer = new FileOutputStream(file);
-            byte[] Bytes = content.getBytes();
-            writer.write(Bytes);
+            byte[] bytes = content.getBytes();
+            writer.write(bytes);
             writer.flush();
             writer.close();
             return true;
@@ -52,18 +52,18 @@ public class IO {
     public static String readFile(@NonNull String path) {
         File file = new File(path);
         try {
-            if (CheckFile(file, false)) {
+            if (checkFile(file, false)) {
                 return null;
             }
-            InputStream file_stream = new FileInputStream(file);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(file_stream));
+            InputStream fileInputStream = new FileInputStream(file);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream));
             String line;
             StringBuilder result = new StringBuilder();
             while ((line = reader.readLine()) != null) {
                 result.append(line).append("\n");
             }
             reader.close();
-            file_stream.close();
+            fileInputStream.close();
             return result.toString();
         } catch (IOException e) {
             e.printStackTrace();
@@ -81,7 +81,7 @@ public class IO {
         return true;
     }
 
-    private static boolean CheckFile(File file, boolean delete) throws IOException {
+    private static boolean checkFile(File file, boolean delete) throws IOException {
         if (file.exists()) {
             if (file.isFile()) {
                 if (delete && file.canWrite() && file.canRead()) {

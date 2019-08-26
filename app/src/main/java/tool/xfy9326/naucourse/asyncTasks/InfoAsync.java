@@ -34,7 +34,7 @@ import tool.xfy9326.naucourse.views.MainViewPagerAdapter;
 
 public class InfoAsync extends AsyncTask<Context, Void, Context> {
     private static final int INFO_GET_MAX_TIME = 2;
-    private int JwcLoadSuccess = -1;
+    private int jwcLoadSuccess = -1;
     private int rssLoadSuccess = -1;
     private int alstuLoadSuccess = -1;
     private int loadCode = Config.NET_WORK_GET_SUCCESS;
@@ -70,7 +70,7 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
                 //首次只加载离线数据
                 topicInfoList = DataMethod.getOfflineTopicInfo(context[0]);
 
-                JwcLoadSuccess = Config.NET_WORK_GET_SUCCESS;
+                jwcLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 alstuLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 rssLoadSuccess = Config.NET_WORK_GET_SUCCESS;
             } else {
@@ -118,20 +118,20 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
             try {
                 if (showJwcTopic) {
                     JwcInfoMethod jwcInfoMethod = new JwcInfoMethod(context);
-                    JwcLoadSuccess = jwcInfoMethod.load();
-                    if (JwcLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
+                    jwcLoadSuccess = jwcInfoMethod.load();
+                    if (jwcLoadSuccess == Config.NET_WORK_GET_SUCCESS) {
                         jwcTopic = jwcInfoMethod.getData(false);
                     }
                 } else {
                     jwcTopic = new JwcTopic();
-                    JwcLoadSuccess = Config.NET_WORK_GET_SUCCESS;
+                    jwcLoadSuccess = Config.NET_WORK_GET_SUCCESS;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 if (e instanceof SocketTimeoutException) {
-                    JwcLoadSuccess = Config.NET_WORK_ERROR_CODE_TIME_OUT;
+                    jwcLoadSuccess = Config.NET_WORK_ERROR_CODE_TIME_OUT;
                 } else {
-                    JwcLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
+                    jwcLoadSuccess = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
                 }
                 loadCode = Config.NET_WORK_ERROR_CODE_CONNECT_ERROR;
             }
@@ -191,8 +191,8 @@ public class InfoAsync extends AsyncTask<Context, Void, Context> {
         if (viewPagerAdapter != null) {
             HomeFragment homeFragment = viewPagerAdapter.getHomeFragment();
             if (homeFragment != null) {
-                if (NetMethod.checkNetWorkCode(context, new int[]{rssLoadSuccess, alstuLoadSuccess, JwcLoadSuccess}, loadCode, true)) {
-                    homeFragment.InfoSet(topicInfoList);
+                if (NetMethod.checkNetWorkCode(context, new int[]{rssLoadSuccess, alstuLoadSuccess, jwcLoadSuccess}, loadCode, true)) {
+                    homeFragment.infoSet(topicInfoList);
                 }
                 homeFragment.lastViewSet(context);
             }

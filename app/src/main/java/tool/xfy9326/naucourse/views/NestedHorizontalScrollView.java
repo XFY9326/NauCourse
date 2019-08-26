@@ -55,6 +55,7 @@ public class NestedHorizontalScrollView extends HorizontalScrollView {
                 case MotionEvent.ACTION_CANCEL:
                     mCanScroll = true;
                     break;
+                default:
             }
 
             if (this.mCanScroll) {

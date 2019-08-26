@@ -2,10 +2,10 @@ package tool.xfy9326.naucourse.methods.netInfoMethods;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -36,7 +36,7 @@ public class PersonMethod extends BaseNetMethod {
     public static final boolean IS_SCORE_ENCRYPT = true;
     public static final boolean IS_PROCESS_ENCRYPT = true;
     public static final boolean IS_DATA_ENCRYPT = true;
-    private static final String stu_photo_url = "http://jwc.nau.edu.cn/Students/StuPhotoView.ashx?t=1";
+    private static final String STU_PHOTO_URL = "http://jwc.nau.edu.cn/Students/StuPhotoView.ashx?t=1";
     @Nullable
     private Document document;
 
@@ -79,7 +79,7 @@ public class PersonMethod extends BaseNetMethod {
         }
         if (getPhoto) {
             try {
-                ImageMethod.downloadImage(context, stu_photo_url, ImageMethod.getStuPhotoPath(context), true);
+                ImageMethod.downloadImage(context, STU_PHOTO_URL, ImageMethod.getStuPhotoPath(context), true);
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.Calendar;
@@ -116,10 +116,10 @@ public class PersonFragment extends Fragment {
     public void onStart() {
         super.onStart();
         unlockFunction();
-        ViewSet();
+        viewSet();
     }
 
-    private void ViewSet() {
+    private void viewSet() {
         if (view != null) {
             swipeRefreshLayout = view.findViewById(R.id.swipeLayout_person);
             swipeRefreshLayout.setDistanceToTriggerSync(200);
@@ -136,44 +136,43 @@ public class PersonFragment extends Fragment {
             if (loadTime == 0) {
                 getData();
             }
-            CardView cardView_stdInfo = view.findViewById(R.id.cardView_stdInfo);
+            CardView cardViewStdInfo = view.findViewById(R.id.cardView_stdInfo);
 
-            CardView cardView_course_settings = view.findViewById(R.id.cardView_course_settings);
-            CardView cardView_global_settings = view.findViewById(R.id.cardView_global_settings);
-            CardView cardView_update_settings = view.findViewById(R.id.cardView_update);
-            CardView cardView_login_out = view.findViewById(R.id.cardView_login_out);
-            CardView cardView_about = view.findViewById(R.id.cardView_about);
+            CardView cardViewCourseSettings = view.findViewById(R.id.cardView_course_settings);
+            CardView cardViewGlobalSettings = view.findViewById(R.id.cardView_global_settings);
+            CardView cardViewUpdateSettings = view.findViewById(R.id.cardView_update);
+            CardView cardViewLoginOut = view.findViewById(R.id.cardView_login_out);
+            CardView cardViewAbout = view.findViewById(R.id.cardView_about);
 
-            CardView cardView_score = view.findViewById(R.id.cardView_score_search);
-            CardView cardView_exam = view.findViewById(R.id.cardView_exam);
-            CardView cardView_levelExam = view.findViewById(R.id.cardView_level_exam);
+            CardView cardViewScore = view.findViewById(R.id.cardView_score_search);
+            CardView cardViewExam = view.findViewById(R.id.cardView_exam);
+            CardView cardViewLevelExam = view.findViewById(R.id.cardView_level_exam);
 
-            CardView cardView_school_calendar = view.findViewById(R.id.cardView_school_calendar);
-            CardView cardView_suspend_course = view.findViewById(R.id.cardView_suspend_course);
-            CardView cardView_moa = view.findViewById(R.id.cardView_moa);
+            CardView cardViewSchoolCalendar = view.findViewById(R.id.cardView_school_calendar);
+            CardView cardViewSuspendCourse = view.findViewById(R.id.cardView_suspend_course);
+            CardView cardViewMoa = view.findViewById(R.id.cardView_moa);
 
-            CardView cardView_course_search = view.findViewById(R.id.cardView_course_search);
-            //CardView cardView_blank = view.findViewById(R.id.cardView_blank);
+            CardView cardViewCourseSearch = view.findViewById(R.id.cardView_course_search);
 
-            cardView_suspend_course.setOnClickListener(v -> {
+            cardViewSuspendCourse.setOnClickListener(v -> {
                 if (getActivity() != null && isAdded()) {
                     startActivity(new Intent(getActivity(), SuspendCourseActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                 }
             });
 
-            cardView_moa.setOnClickListener(v -> {
+            cardViewMoa.setOnClickListener(v -> {
                 if (getActivity() != null && isAdded()) {
                     startActivity(new Intent(getActivity(), MoaActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                 }
             });
 
-            cardView_school_calendar.setOnClickListener(v -> {
+            cardViewSchoolCalendar.setOnClickListener(v -> {
                 if (getActivity() != null && isAdded()) {
                     startActivity(new Intent(getActivity(), SchoolCalendarActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                 }
             });
 
-            cardView_stdInfo.setOnClickListener(v -> {
+            cardViewStdInfo.setOnClickListener(v -> {
                 if (getActivity() != null && isAdded()) {
                     if (studentInfo != null && studentLearnProcess != null) {
                         Intent intent = new Intent(getActivity(), StudentInfoActivity.class);
@@ -187,21 +186,21 @@ public class PersonFragment extends Fragment {
                 }
             });
 
-            cardView_score.setOnClickListener(v -> {
+            cardViewScore.setOnClickListener(v -> {
                 if (getActivity() != null && isAdded()) {
                     Intent intent = new Intent(getActivity(), ScoreActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     getActivity().startActivity(intent);
                 }
             });
-            cardView_exam.setOnClickListener(v -> {
+            cardViewExam.setOnClickListener(v -> {
                 if (getActivity() != null && isAdded()) {
                     Intent intent = new Intent(getActivity(), ExamActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     getActivity().startActivity(intent);
                 }
             });
-            cardView_levelExam.setOnClickListener(v -> {
+            cardViewLevelExam.setOnClickListener(v -> {
                 if (getActivity() != null && isAdded()) {
                     Intent intent = new Intent(getActivity(), LevelExamActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -209,28 +208,28 @@ public class PersonFragment extends Fragment {
                 }
             });
 
-            cardView_course_settings.setOnClickListener(v -> {
+            cardViewCourseSettings.setOnClickListener(v -> {
                 if (getActivity() != null && isAdded()) {
                     Intent intent = new Intent(getActivity(), CourseSettingsActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     getActivity().startActivity(intent);
                 }
             });
-            cardView_global_settings.setOnClickListener(v -> {
+            cardViewGlobalSettings.setOnClickListener(v -> {
                 if (getActivity() != null && isAdded()) {
                     Intent intent = new Intent(getActivity(), GlobalSettingsActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     getActivity().startActivity(intent);
                 }
             });
-            cardView_update_settings.setOnClickListener(v -> {
+            cardViewUpdateSettings.setOnClickListener(v -> {
                 if (getActivity() != null && isAdded()) {
                     Intent intent = new Intent(getActivity(), UpdateSettingsActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     getActivity().startActivity(intent);
                 }
             });
-            cardView_login_out.setOnClickListener(v -> {
+            cardViewLoginOut.setOnClickListener(v -> {
                 if (getActivity() != null && isAdded()) {
                     if (NetMethod.isNetworkConnected(getActivity())) {
                         loginOut(getActivity());
@@ -239,14 +238,14 @@ public class PersonFragment extends Fragment {
                     }
                 }
             });
-            cardView_about.setOnClickListener(v -> {
+            cardViewAbout.setOnClickListener(v -> {
                 if (getActivity() != null && isAdded()) {
                     Intent intent = new Intent(getActivity(), AboutActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     getActivity().startActivity(intent);
                 }
             });
-            cardView_course_search.setOnClickListener(v -> {
+            cardViewCourseSearch.setOnClickListener(v -> {
                 if (getActivity() != null && isAdded()) {
                     Intent intent = new Intent(getActivity(), CourseSearchActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -257,13 +256,13 @@ public class PersonFragment extends Fragment {
     }
 
     private void unlockFunction() {
-        if (isAdded() && view != null) {
-            CardView cardView_score = view.findViewById(R.id.cardView_score_search);
-            CardView cardView_exam = view.findViewById(R.id.cardView_exam);
+        if (isAdded() && view != null && context != null) {
+            CardView cardViewScore = view.findViewById(R.id.cardView_score_search);
+            CardView cardViewExam = view.findViewById(R.id.cardView_exam);
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             if (BuildConfig.DEBUG || sharedPreferences.getBoolean(Config.PREFERENCE_SHOW_HIDDEN_FUNCTION, Config.DEFAULT_PREFERENCE_SHOW_HIDDEN_FUNCTION)) {
-                cardView_score.setVisibility(View.VISIBLE);
-                cardView_exam.setVisibility(View.VISIBLE);
+                cardViewScore.setVisibility(View.VISIBLE);
+                cardViewExam.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -318,7 +317,7 @@ public class PersonFragment extends Fragment {
         }
     }
 
-    public void PersonViewSet(@Nullable StudentInfo studentInfo, @Nullable StudentLearnProcess
+    public void personViewSet(@Nullable StudentInfo studentInfo, @Nullable StudentLearnProcess
             studentLearnProcess, @Nullable Context context) {
         if (isAdded() && view != null) {
             if (context != null && studentInfo != null) {
@@ -332,7 +331,7 @@ public class PersonFragment extends Fragment {
         }
     }
 
-    public void TimeTextSet(@Nullable SchoolTime schoolTime, @Nullable Context context) {
+    public void timeTextSet(@Nullable SchoolTime schoolTime, @Nullable Context context) {
         if (isAdded() && view != null) {
             if (context != null && schoolTime != null) {
                 ((TextView) view.findViewById(R.id.textView_timeSchool)).setText(context.getString(R.string.time_school, schoolTime.getStartTime(), schoolTime.getEndTime()));
@@ -345,26 +344,26 @@ public class PersonFragment extends Fragment {
             //离线数据加载完成，开始拉取网络数据，数据每天更新
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             if (loadTime == 1 && NetMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
-                boolean update_day = true;
+                boolean updateDay = true;
 
                 if (!mustReload && sharedPreferences.getBoolean(Config.PREFERENCE_ASYNC_PERSONAL_INFO_BY_DAY, Config.DEFAULT_PREFERENCE_ASYNC_PERSONAL_INFO_BY_DAY)) {
                     Calendar calendar = Calendar.getInstance(Locale.CHINA);
-                    long personal_info_load_date = sharedPreferences.getLong(Config.PREFERENCE_PERSONAL_INFO_LOAD_DATE_TIME, 0);
-                    calendar.setTimeInMillis(personal_info_load_date);
-                    int load_day = calendar.get(Calendar.DAY_OF_YEAR);
-                    int load_year = calendar.get(Calendar.YEAR);
+                    long personalInfoLoadDate = sharedPreferences.getLong(Config.PREFERENCE_PERSONAL_INFO_LOAD_DATE_TIME, 0);
+                    calendar.setTimeInMillis(personalInfoLoadDate);
+                    int loadDay = calendar.get(Calendar.DAY_OF_YEAR);
+                    int loadYear = calendar.get(Calendar.YEAR);
                     calendar.setTimeInMillis(System.currentTimeMillis());
-                    int now_day = calendar.get(Calendar.DAY_OF_YEAR);
-                    int now_year = calendar.get(Calendar.YEAR);
+                    int nowDay = calendar.get(Calendar.DAY_OF_YEAR);
+                    int nowYear = calendar.get(Calendar.YEAR);
 
-                    if (load_year == now_year && now_day == load_day) {
-                        update_day = false;
+                    if (loadYear == nowYear && nowDay == loadDay) {
+                        updateDay = false;
                     } else {
                         sharedPreferences.edit().putLong(Config.PREFERENCE_PERSONAL_INFO_LOAD_DATE_TIME, System.currentTimeMillis()).apply();
                     }
                 }
 
-                if (update_day) {
+                if (updateDay) {
                     getData();
                 } else {
                     BaseMethod.setRefreshing(swipeRefreshLayout, false);

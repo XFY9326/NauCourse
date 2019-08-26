@@ -69,8 +69,8 @@ public class ScoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score);
         BaseMethod.getApp(this).setScoreActivity(this);
-        ToolBarSet();
-        ViewSet();
+        toolBarSet();
+        viewSet();
     }
 
     @Override
@@ -116,11 +116,11 @@ public class ScoreActivity extends AppCompatActivity {
             } else {
                 ArrayList<CreditCountCourse> courseList = CreditCountMethod.combineCreditCourse(current, historyCreditCourse);
                 float credit = CreditCountMethod.getCredit(courseList);
-                AlertDialog.Builder new_builder = new AlertDialog.Builder(this);
-                new_builder.setTitle(R.string.credit_calculator);
-                new_builder.setMessage(getString(R.string.credit_calculate_result, credit));
-                new_builder.setPositiveButton(android.R.string.yes, null);
-                new_builder.show();
+                AlertDialog.Builder newBuilder = new AlertDialog.Builder(this);
+                newBuilder.setTitle(R.string.credit_calculator);
+                newBuilder.setMessage(getString(R.string.credit_calculate_result, credit));
+                newBuilder.setPositiveButton(android.R.string.yes, null);
+                newBuilder.show();
             }
         });
         builder.setNegativeButton(android.R.string.cancel, null);
@@ -138,7 +138,7 @@ public class ScoreActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void ToolBarSet() {
+    private void toolBarSet() {
         setSupportActionBar(findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -147,7 +147,7 @@ public class ScoreActivity extends AppCompatActivity {
         }
     }
 
-    private void ViewSet() {
+    private void viewSet() {
         TabLayout tabLayout = findViewById(R.id.tabLayout_score);
         ViewPager viewPager = findViewById(R.id.viewPaper_score);
         if (scoreViewPagerAdapter == null) {
@@ -172,11 +172,11 @@ public class ScoreActivity extends AppCompatActivity {
             }
         });
         tabLayout.setupWithViewPager(viewPager);
-        TabLayout.Tab tabItem_0 = tabLayout.getTabAt(0);
-        TabLayout.Tab tabItem_1 = tabLayout.getTabAt(1);
-        if (tabItem_0 != null && tabItem_1 != null) {
-            tabItem_0.setText(R.string.current_score_detail);
-            tabItem_1.setText(R.string.history_score_detail);
+        TabLayout.Tab tabItem0 = tabLayout.getTabAt(0);
+        TabLayout.Tab tabItem1 = tabLayout.getTabAt(1);
+        if (tabItem0 != null && tabItem1 != null) {
+            tabItem0.setText(R.string.current_score_detail);
+            tabItem1.setText(R.string.history_score_detail);
         }
 
         swipeRefreshLayout = findViewById(R.id.swipeLayout_score);
@@ -200,21 +200,21 @@ public class ScoreActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.textView_scoreXF)).setText(getString(R.string.score_XF, studentScore.getScoreXF()));
             ((TextView) findViewById(R.id.textView_scoreJD)).setText(getString(R.string.score_JD, studentScore.getScoreJD()));
             ((TextView) findViewById(R.id.textView_scoreZP)).setText(getString(R.string.score_ZP, studentScore.getScoreZP() == null ? getString(R.string.data_loading) : studentScore.getScoreZP()));
-            TextView textView_scoreNP = findViewById(R.id.textView_scoreNP);
-            TextView textView_scoreBP = findViewById(R.id.textView_scoreBP);
+            TextView textViewScoreNP = findViewById(R.id.textView_scoreNP);
+            TextView textViewScoreBP = findViewById(R.id.textView_scoreBP);
 
             if (studentScore.getScoreNP() != null) {
-                textView_scoreNP.setText(getString(R.string.score_NP, studentScore.getScoreNP()));
-                textView_scoreNP.setVisibility(View.VISIBLE);
+                textViewScoreNP.setText(getString(R.string.score_NP, studentScore.getScoreNP()));
+                textViewScoreNP.setVisibility(View.VISIBLE);
             } else {
-                textView_scoreNP.setVisibility(View.GONE);
+                textViewScoreNP.setVisibility(View.GONE);
             }
 
             if (studentScore.getScoreBP() != null) {
-                textView_scoreBP.setText(getString(R.string.score_BP, studentScore.getScoreBP()));
-                textView_scoreNP.setVisibility(View.VISIBLE);
+                textViewScoreBP.setText(getString(R.string.score_BP, studentScore.getScoreBP()));
+                textViewScoreNP.setVisibility(View.VISIBLE);
             } else {
-                textView_scoreBP.setVisibility(View.GONE);
+                textViewScoreBP.setVisibility(View.GONE);
             }
 
             if (waitForEvaluate(courseScore)) {

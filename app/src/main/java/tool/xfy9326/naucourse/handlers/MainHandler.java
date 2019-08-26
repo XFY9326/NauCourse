@@ -47,6 +47,7 @@ public class MainHandler extends Handler {
                         }
                     }
                     break;
+                default:
             }
         } catch (NullPointerException e) {
             e.printStackTrace();

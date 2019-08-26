@@ -6,13 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.Random;
@@ -29,6 +29,7 @@ import tool.xfy9326.naucourse.R;
  */
 
 public class BaseMethod {
+    private static final Pattern INTEGER_PATTERN = Pattern.compile("^[-+]?[\\d]*$");
     private static long DoubleClickTime = 0;
 
     /**
@@ -38,8 +39,7 @@ public class BaseMethod {
      * @return 是否是数字
      */
     public static boolean isInteger(String str) {
-        Pattern pattern = Pattern.compile("^[-+]?[\\d]*$");
-        return pattern.matcher(str).matches();
+        return INTEGER_PATTERN.matcher(str).matches();
     }
 
     /**
@@ -136,10 +136,12 @@ public class BaseMethod {
     }
 
     public static void setRefreshing(final SwipeRefreshLayout swipeRefreshLayout, final boolean refreshing) {
-        if (swipeRefreshLayout != null && (refreshing && !swipeRefreshLayout.isRefreshing() || !refreshing && swipeRefreshLayout.isRefreshing())) {
-            swipeRefreshLayout.setRefreshing(refreshing);
+        if (swipeRefreshLayout != null) {
             if (refreshing && !swipeRefreshLayout.isRefreshing() || !refreshing && swipeRefreshLayout.isRefreshing()) {
-                swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(refreshing));
+                swipeRefreshLayout.setRefreshing(refreshing);
+                if (refreshing && !swipeRefreshLayout.isRefreshing() || !refreshing && swipeRefreshLayout.isRefreshing()) {
+                    swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(refreshing));
+                }
             }
         }
     }
@@ -172,8 +174,8 @@ public class BaseMethod {
     }
 
     public interface OnEULAListener {
-        void OnAccept();
+        void onAccept();
 
-        void OnReject();
+        void onReject();
     }
 }

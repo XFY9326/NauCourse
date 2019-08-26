@@ -33,11 +33,11 @@ public class SuspendCourseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_suspend_course);
         BaseMethod.getApp(this).setSuspendCourseActivity(this);
-        ToolBarSet();
-        ViewSet();
+        toolBarSet();
+        viewSet();
     }
 
-    private void ToolBarSet() {
+    private void toolBarSet() {
         setSupportActionBar(findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -46,7 +46,7 @@ public class SuspendCourseActivity extends AppCompatActivity {
         }
     }
 
-    private void ViewSet() {
+    private void viewSet() {
         recyclerView = findViewById(R.id.recyclerView_suspend_course_list);
         recyclerView.setFocusableInTouchMode(false);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

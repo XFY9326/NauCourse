@@ -43,8 +43,8 @@ public class ExamActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam);
         BaseMethod.getApp(this).setExamActivity(this);
-        ToolBarSet();
-        ViewSet();
+        toolBarSet();
+        viewSet();
     }
 
     @Override
@@ -91,7 +91,7 @@ public class ExamActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void ToolBarSet() {
+    private void toolBarSet() {
         setSupportActionBar(findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -100,7 +100,7 @@ public class ExamActivity extends AppCompatActivity {
         }
     }
 
-    private void ViewSet() {
+    private void viewSet() {
         recyclerView = findViewById(R.id.recyclerView_exam);
         recyclerView.setFocusableInTouchMode(false);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

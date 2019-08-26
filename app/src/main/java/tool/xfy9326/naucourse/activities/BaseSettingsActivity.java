@@ -15,13 +15,13 @@ public abstract class BaseSettingsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        ToolBarSet();
+        toolBarSet();
         setFragment(savedInstanceState);
     }
 
     protected abstract PreferenceFragmentCompat onCreateFragment();
 
-    private void ToolBarSet() {
+    private void toolBarSet() {
         setSupportActionBar(findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

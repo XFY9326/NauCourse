@@ -2,9 +2,9 @@ package tool.xfy9326.naucourse.methods;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -135,10 +135,10 @@ public class LoginMethod {
      * @param context Context
      */
     public static void cleanUserTemp(Context context) {
-        File cache_file = context.getCacheDir();
-        deleteAll(cache_file);
-        File data_file = context.getFilesDir();
-        deleteAll(data_file);
+        File cacheFile = context.getCacheDir();
+        deleteAll(cacheFile);
+        File dataFile = context.getFilesDir();
+        deleteAll(dataFile);
     }
 
     private static void deleteAll(File f) {

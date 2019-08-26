@@ -61,12 +61,12 @@ public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.Co
                 courseDetail.setWeekDay(1);
             }
             if (courseDetail.getWeeks() != null) {
-                String week_num = Arrays.toString(courseDetail.getWeeks());
-                holder.editText_course_edit_week_num.setText(week_num.substring(1, week_num.length() - 1));
+                String weekNum = Arrays.toString(courseDetail.getWeeks());
+                holder.editText_course_edit_week_num.setText(weekNum.substring(1, weekNum.length() - 1));
             }
             if (courseDetail.getCourseTime() != null) {
-                String course_time = Arrays.toString(courseDetail.getCourseTime());
-                holder.editText_course_edit_time.setText(course_time.substring(1, course_time.length() - 1));
+                String courseTime = Arrays.toString(courseDetail.getCourseTime());
+                holder.editText_course_edit_time.setText(courseTime.substring(1, courseTime.length() - 1));
             }
             if (courseDetail.getLocation() != null) {
                 holder.editText_course_edit_location.setText(courseDetail.getLocation());
@@ -197,65 +197,65 @@ public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.Co
         LayoutInflater layoutInflater = activity.getLayoutInflater();
         View view = layoutInflater.inflate(R.layout.dialog_course_time_set, activity.findViewById(R.id.layout_dialog_course_time_set));
 
-        final EditText editText_show = view.findViewById(R.id.editText_course_edit_time_now_list);
+        final EditText editTextShow = view.findViewById(R.id.editText_course_edit_time_now_list);
         if (isWeekNumber) {
             if (courseDetails.get(position).getWeeks() != null) {
-                String week_num = Arrays.toString(courseDetails.get(position).getWeeks());
-                editText_show.setText(week_num.substring(1, week_num.length() - 1));
+                String weekNum = Arrays.toString(courseDetails.get(position).getWeeks());
+                editTextShow.setText(weekNum.substring(1, weekNum.length() - 1));
             }
         } else {
             if (courseDetails.get(position).getCourseTime() != null) {
-                String course_time = Arrays.toString(courseDetails.get(position).getCourseTime());
-                editText_show.setText(course_time.substring(1, course_time.length() - 1));
+                String courseTime = Arrays.toString(courseDetails.get(position).getCourseTime());
+                editTextShow.setText(courseTime.substring(1, courseTime.length() - 1));
             }
         }
 
-        Button button_backspace = view.findViewById(R.id.button_course_edit_time_backspace);
-        button_backspace.setOnClickListener(v -> {
-            String str = editText_show.getText().toString();
+        Button buttonBackspace = view.findViewById(R.id.button_course_edit_time_backspace);
+        buttonBackspace.setOnClickListener(v -> {
+            String str = editTextShow.getText().toString();
             if (str.isEmpty()) {
                 Toast.makeText(activity, R.string.no_item_to_delete, Toast.LENGTH_SHORT).show();
             } else {
                 if (str.contains(", ")) {
-                    editText_show.setText(str.substring(0, str.lastIndexOf(", ")));
+                    editTextShow.setText(str.substring(0, str.lastIndexOf(", ")));
                 } else {
-                    editText_show.setText("");
+                    editTextShow.setText("");
                 }
             }
         });
 
-        final TextInputEditText editText_start = view.findViewById(R.id.editText_course_edit_time_start_time);
+        final TextInputEditText editTextStart = view.findViewById(R.id.editText_course_edit_time_start_time);
 
-        final TextInputEditText editText_end = view.findViewById(R.id.editText_course_edit_time_end_time);
+        final TextInputEditText editTextEnd = view.findViewById(R.id.editText_course_edit_time_end_time);
 
-        final CheckBox checkBox_single = view.findViewById(R.id.checkBox_course_edit_time_single_time);
-        checkBox_single.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        final CheckBox checkBoxSingle = view.findViewById(R.id.checkBox_course_edit_time_single_time);
+        checkBoxSingle.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                editText_end.setText("");
-                editText_end.setEnabled(false);
+                editTextEnd.setText("");
+                editTextEnd.setEnabled(false);
             } else {
-                editText_end.setEnabled(true);
+                editTextEnd.setEnabled(true);
             }
         });
 
-        Button button_add = view.findViewById(R.id.button_course_edit_time_add);
-        button_add.setOnClickListener(v -> {
-            Editable editable_start = editText_start.getText();
-            Editable editable_end = editText_end.getText();
-            if (editable_start != null && editable_end != null) {
-                String start = editable_start.toString();
-                String end = editable_end.toString();
-                boolean isSingle = checkBox_single.isChecked();
+        Button buttonAdd = view.findViewById(R.id.button_course_edit_time_add);
+        buttonAdd.setOnClickListener(v -> {
+            Editable editableStart = editTextStart.getText();
+            Editable editableEnd = editTextEnd.getText();
+            if (editableStart != null && editableEnd != null) {
+                String start = editableStart.toString();
+                String end = editableEnd.toString();
+                boolean isSingle = checkBoxSingle.isChecked();
                 if (isSingle) {
                     if (start.isEmpty()) {
                         Toast.makeText(activity, R.string.input_less, Toast.LENGTH_SHORT).show();
                     } else {
-                        String str = editText_show.getText().toString();
+                        String str = editTextShow.getText().toString();
                         if (str.isEmpty()) {
-                            editText_show.setText(start);
+                            editTextShow.setText(start);
                         } else {
                             String output = str + ", " + start;
-                            editText_show.setText(output);
+                            editTextShow.setText(output);
                         }
                     }
                 } else {
@@ -273,13 +273,13 @@ public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.Co
                         if (startInt >= endInt || startInt <= 0 || isWeekNumber && endInt > Config.DEFAULT_MAX_WEEK || (!isWeekNumber && endInt > Config.MAX_DAY_COURSE)) {
                             Toast.makeText(activity, R.string.input_error, Toast.LENGTH_SHORT).show();
                         } else {
-                            String str = editText_show.getText().toString();
+                            String str = editTextShow.getText().toString();
                             if (str.isEmpty()) {
                                 String output = start + "-" + end;
-                                editText_show.setText(output);
+                                editTextShow.setText(output);
                             } else {
                                 String output = str + ", " + start + "-" + end;
-                                editText_show.setText(output);
+                                editTextShow.setText(output);
                             }
                         }
                     }
@@ -294,7 +294,7 @@ public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.Co
             builder.setTitle(R.string.course_detail_edit_time);
         }
         builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
-            String str = editText_show.getText().toString();
+            String str = editTextShow.getText().toString();
             if (str.isEmpty()) {
                 if (isWeekNumber) {
                     courseDetails.get(position).setWeeks(null);

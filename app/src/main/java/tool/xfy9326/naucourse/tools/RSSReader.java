@@ -86,6 +86,7 @@ public class RSSReader {
                                 date = date.substring(0, date.indexOf("T"));
                             }
                             break;
+                        default:
                     }
                 } else if (eventType == XmlPullParser.END_TAG) {
                     switch (tagName) {
@@ -113,6 +114,7 @@ public class RSSReader {
                             rssObject = new RSSObject(rssChannelArrayList);
                             rssChannelArrayList.clear();
                             break;
+                        default:
                     }
                 }
                 eventType = parser.next();
