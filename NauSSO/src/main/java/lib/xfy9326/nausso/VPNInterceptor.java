@@ -26,7 +26,8 @@ class VPNInterceptor implements Interceptor {
 
     void setEnabled(boolean enabled) {
         this.enabled = enabled;
-        if (enabled && (userName == null || userPw == null)) {
+        boolean canNotEnable = enabled && (userName == null || userPw == null);
+        if (canNotEnable) {
             this.enabled = false;
         }
     }

@@ -221,8 +221,9 @@ public class CourseEditMethod {
         }
         int weekMode1 = courseDetail1.getWeekMode();
         int weekMode2 = courseDetail2.getWeekMode();
-        if (weekMode1 == Config.COURSE_DETAIL_WEEKMODE_SINGLE && weekMode2 == Config.COURSE_DETAIL_WEEKMODE_DOUBLE ||
-                weekMode2 == Config.COURSE_DETAIL_WEEKMODE_SINGLE && weekMode1 == Config.COURSE_DETAIL_WEEKMODE_DOUBLE) {
+        boolean isDifferentWeekMode = weekMode1 == Config.COURSE_DETAIL_WEEKMODE_SINGLE && weekMode2 == Config.COURSE_DETAIL_WEEKMODE_DOUBLE ||
+                weekMode2 == Config.COURSE_DETAIL_WEEKMODE_SINGLE && weekMode1 == Config.COURSE_DETAIL_WEEKMODE_DOUBLE;
+        if (isDifferentWeekMode) {
             return false;
         }
         if (courseDetail1.getWeekDay() != courseDetail2.getWeekDay()) {

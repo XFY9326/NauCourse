@@ -24,11 +24,6 @@ public class CourseScore extends BaseData {
     private int courseAmount;
 
     public CourseScore() {
-        this.scoreCourseName = null;
-        this.scoreCommon = null;
-        this.scoreMid = null;
-        this.scoreFinal = null;
-        this.scoreTotal = null;
         this.courseAmount = 0;
     }
 

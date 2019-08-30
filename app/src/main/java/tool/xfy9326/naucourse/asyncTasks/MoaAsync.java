@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 import java.net.SocketTimeoutException;
 
 import tool.xfy9326.naucourse.Config;
-import tool.xfy9326.naucourse.activities.MoaActivity;
+import tool.xfy9326.naucourse.activities.async.MoaActivity;
 import tool.xfy9326.naucourse.methods.BaseMethod;
 import tool.xfy9326.naucourse.methods.DataMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;

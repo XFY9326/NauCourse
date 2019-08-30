@@ -21,7 +21,7 @@ import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.methods.TempMethod;
 import tool.xfy9326.naucourse.methods.UpdateMethod;
 import tool.xfy9326.naucourse.views.FixedViewPager;
-import tool.xfy9326.naucourse.views.MainViewPagerAdapter;
+import tool.xfy9326.naucourse.views.viewPagerAdapters.MainViewPagerAdapter;
 
 /**
  * Created by xfy9326 on 18-2-20.

@@ -130,7 +130,8 @@ public class NetMethod {
         String data = BaseMethod.getApp(context).getClient().getData(url);
         boolean userLogin = NauSSOClient.checkUserLogin(data);
         boolean alstuLogin = NauSSOClient.checkAlstuLogin(data);
-        if (!(userLogin && alstuLogin) && tryReLogin) {
+        boolean needsLogin = !(userLogin && alstuLogin) && tryReLogin;
+        if (needsLogin) {
             if (userLogin) {
                 if (LoginMethod.doAlstuReLogin(context)) {
                     Thread.sleep(500);

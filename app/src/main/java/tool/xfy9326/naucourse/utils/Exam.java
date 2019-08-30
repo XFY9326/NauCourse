@@ -27,14 +27,6 @@ public class Exam extends BaseData {
     private int examMount;
 
     public Exam() {
-        this.examId = null;
-        this.examName = null;
-        this.examType = null;
-        this.examTime = null;
-        this.examScore = null;
-        this.examLocation = null;
-        this.last_time = null;
-        this.last_time_unit = null;
         this.examMount = 0;
     }
 

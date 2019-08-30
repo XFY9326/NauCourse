@@ -10,7 +10,7 @@ import java.net.SocketTimeoutException;
 import java.util.LinkedHashMap;
 
 import tool.xfy9326.naucourse.Config;
-import tool.xfy9326.naucourse.activities.SchoolCalendarActivity;
+import tool.xfy9326.naucourse.activities.async.SchoolCalendarActivity;
 import tool.xfy9326.naucourse.methods.BaseMethod;
 import tool.xfy9326.naucourse.methods.ImageMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;

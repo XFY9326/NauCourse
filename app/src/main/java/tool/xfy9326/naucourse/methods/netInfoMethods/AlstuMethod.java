@@ -22,6 +22,10 @@ import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.methods.VPNMethods;
 import tool.xfy9326.naucourse.utils.AlstuTopic;
 
+/**
+ * @author xfy9326
+ */
+
 public class AlstuMethod extends BaseInfoDetailMethod<AlstuTopic> {
     public static final String FILE_NAME = AlstuTopic.class.getSimpleName();
     public static final int TYPE_ALSTU = 5;

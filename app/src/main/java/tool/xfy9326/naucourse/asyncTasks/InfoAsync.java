@@ -14,7 +14,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import tool.xfy9326.naucourse.Config;
-import tool.xfy9326.naucourse.fragments.HomeFragment;
+import tool.xfy9326.naucourse.fragments.base.HomeFragment;
 import tool.xfy9326.naucourse.methods.BaseMethod;
 import tool.xfy9326.naucourse.methods.DataMethod;
 import tool.xfy9326.naucourse.methods.InfoMethod;
@@ -26,7 +26,7 @@ import tool.xfy9326.naucourse.tools.RSSReader;
 import tool.xfy9326.naucourse.utils.AlstuTopic;
 import tool.xfy9326.naucourse.utils.JwcTopic;
 import tool.xfy9326.naucourse.utils.TopicInfo;
-import tool.xfy9326.naucourse.views.MainViewPagerAdapter;
+import tool.xfy9326.naucourse.views.viewPagerAdapters.MainViewPagerAdapter;
 
 /**
  * Created by 10696 on 2018/3/2.

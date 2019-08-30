@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.fragments;
+package tool.xfy9326.naucourse.fragments.base;
 
 import android.content.Context;
 import android.content.Intent;

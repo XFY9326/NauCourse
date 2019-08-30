@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.fragments;
+package tool.xfy9326.naucourse.fragments.settings;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;

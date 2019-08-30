@@ -5,7 +5,7 @@
     android:id="@+id/layout_score_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.ScoreActivity">
+    tools:context=".activities.async.ScoreActivity">
 
     <include layout="@layout/widget_toolbar" />
 

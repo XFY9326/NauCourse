@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.activities;
+package tool.xfy9326.naucourse.activities.async;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -14,9 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,20 +36,19 @@ import tool.xfy9326.naucourse.utils.CreditCountCourse;
 import tool.xfy9326.naucourse.utils.HistoryScore;
 import tool.xfy9326.naucourse.utils.StudentScore;
 import tool.xfy9326.naucourse.views.ScoreSwipeRefreshLayout;
-import tool.xfy9326.naucourse.views.ScoreViewPagerAdapter;
 import tool.xfy9326.naucourse.views.recyclerAdapters.CreditCountAdapter;
+import tool.xfy9326.naucourse.views.viewPagerAdapters.ScoreViewPagerAdapter;
 
 /**
  * Created by 10696 on 2018/3/2.
  */
 
-public class ScoreActivity extends AppCompatActivity {
+public class ScoreActivity extends BaseAsyncActivity {
     private ScoreSwipeRefreshLayout swipeRefreshLayout;
     private ScoreViewPagerAdapter scoreViewPagerAdapter;
     private CourseScore courseScore;
     private List<CreditCountCourse> historyCreditCourse;
     private boolean isLoading = true;
-    private int loadTime = 0;
 
     private static boolean waitForEvaluate(CourseScore courseScore) {
         if (courseScore != null && courseScore.getScoreTotal() != null) {
@@ -136,15 +133,6 @@ public class ScoreActivity extends AppCompatActivity {
         BaseMethod.getApp(this).setScoreActivity(null);
         System.gc();
         super.onDestroy();
-    }
-
-    private void toolBarSet() {
-        setSupportActionBar(findViewById(R.id.toolbar));
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setHomeButtonEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
     }
 
     private void viewSet() {
@@ -237,20 +225,14 @@ public class ScoreActivity extends AppCompatActivity {
         }
     }
 
-    synchronized private void getData() {
+    @Override
+    synchronized protected void getData() {
         isLoading = true;
         BaseMethod.setRefreshing(swipeRefreshLayout, true);
         new ScoreAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
     }
 
-    public int getLoadTime() {
-        return loadTime;
-    }
-
-    public void setLoadTime(int loadTime) {
-        this.loadTime = loadTime;
-    }
-
+    @Override
     public void lastViewSet(Context context) {
         //离线数据加载完成，开始拉取网络数据
         if (loadTime == 1 && NetMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {

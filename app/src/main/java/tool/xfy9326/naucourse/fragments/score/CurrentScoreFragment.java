@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.fragments;
+package tool.xfy9326.naucourse.fragments.score;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

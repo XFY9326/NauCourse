@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.activities.MoaActivity;
+import tool.xfy9326.naucourse.activities.async.MoaActivity;
 import tool.xfy9326.naucourse.methods.netInfoMethods.MoaMethod;
 import tool.xfy9326.naucourse.utils.Moa;
 

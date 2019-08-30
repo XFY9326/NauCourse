@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.activities;
+package tool.xfy9326.naucourse.activities.async;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,9 +12,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
 
@@ -30,8 +28,7 @@ import tool.xfy9326.naucourse.methods.BaseMethod;
 import tool.xfy9326.naucourse.methods.DialogMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
 
-public class SchoolCalendarActivity extends AppCompatActivity {
-    private int loadTime = 0;
+public class SchoolCalendarActivity extends BaseAsyncActivity {
     private LinkedHashMap<String, String> calendarList;
     private SharedPreferences sharedPreferences;
     private Bitmap calendarBitmap;
@@ -45,15 +42,6 @@ public class SchoolCalendarActivity extends AppCompatActivity {
         toolBarSet();
         getData();
         showAlert();
-    }
-
-    private void toolBarSet() {
-        setSupportActionBar(findViewById(R.id.toolbar));
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setHomeButtonEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
     }
 
     @Override
@@ -149,6 +137,7 @@ public class SchoolCalendarActivity extends AppCompatActivity {
         }
     }
 
+    @Override
     synchronized public void lastViewSet(Context context) {
         //离线数据加载完成，开始拉取网络数据
         if (loadTime == 1 && NetMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
@@ -156,16 +145,9 @@ public class SchoolCalendarActivity extends AppCompatActivity {
         }
     }
 
-    synchronized private void getData() {
+    @Override
+    synchronized protected void getData() {
         new SchoolCalendarAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
-    }
-
-    public int getLoadTime() {
-        return loadTime;
-    }
-
-    public void setLoadTime(int loadTime) {
-        this.loadTime = loadTime;
     }
 
     @Override

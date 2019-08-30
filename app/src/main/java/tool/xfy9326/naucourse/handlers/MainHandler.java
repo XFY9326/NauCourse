@@ -10,9 +10,9 @@ import java.lang.ref.WeakReference;
 
 import tool.xfy9326.naucourse.BaseApplication;
 import tool.xfy9326.naucourse.Config;
-import tool.xfy9326.naucourse.fragments.TableFragment;
+import tool.xfy9326.naucourse.fragments.base.TableFragment;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.views.MainViewPagerAdapter;
+import tool.xfy9326.naucourse.views.viewPagerAdapters.MainViewPagerAdapter;
 
 /**
  * Created by 10696 on 2018/3/17.

@@ -6,6 +6,10 @@ import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * @author xfy9326
+ */
+
 public class AdvancedRecyclerView extends RecyclerView {
     private View emptyView;
 

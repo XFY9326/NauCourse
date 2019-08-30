@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.fragments;
+package tool.xfy9326.naucourse.fragments.base;
 
 import android.content.Context;
 import android.content.Intent;
@@ -53,8 +53,8 @@ import tool.xfy9326.naucourse.utils.Course;
 import tool.xfy9326.naucourse.utils.CourseDetail;
 import tool.xfy9326.naucourse.utils.NextCourse;
 import tool.xfy9326.naucourse.utils.SchoolTime;
-import tool.xfy9326.naucourse.views.MainViewPagerAdapter;
 import tool.xfy9326.naucourse.views.NestedHorizontalScrollView;
+import tool.xfy9326.naucourse.views.viewPagerAdapters.MainViewPagerAdapter;
 import tool.xfy9326.naucourse.widget.NextClassWidget;
 
 /**
@@ -186,6 +186,9 @@ public class TableFragment extends Fragment {
                 }
             });
 
+            NestedHorizontalScrollView horizontalScrollView = view.findViewById(R.id.nhScrollView_table);
+            horizontalScrollView.setFitWidthNestedScroll(true);
+
             getData();
         }
     }
@@ -243,7 +246,8 @@ public class TableFragment extends Fragment {
                 if (schoolTime.getWeekNum() != 0) {
                     int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK);
                     if (sharedPreferences != null && sharedPreferences.getBoolean(Config.PREFERENCE_SHOW_NEXT_WEEK, Config.DEFAULT_PREFERENCE_SHOW_NEXT_WEEK)) {
-                        if ((weekDayNum == Calendar.SUNDAY || weekDayNum == Calendar.SATURDAY) && weekNum + 1 <= TimeMethod.getMaxWeekNum(schoolTime) && !CourseMethod.hasWeekendCourse(courses)) {
+                        boolean showNextWeekTable = (weekDayNum == Calendar.SUNDAY || weekDayNum == Calendar.SATURDAY) && weekNum + 1 <= TimeMethod.getMaxWeekNum(schoolTime) && !CourseMethod.hasWeekendCourse(courses);
+                        if (showNextWeekTable) {
                             schoolTime.setWeekNum(++weekNum);
                         }
                     }
@@ -322,7 +326,7 @@ public class TableFragment extends Fragment {
         }
     }
 
-    int getTableWidth() {
+    public int getTableWidth() {
         if (view != null && isAdded()) {
             CardView cardViewCourse = view.findViewById(R.id.cardView_courseTable);
             return cardViewCourse.getWidth();
@@ -330,7 +334,7 @@ public class TableFragment extends Fragment {
         return -1;
     }
 
-    int getTableHeight() {
+    public int getTableHeight() {
         if (view != null && isAdded()) {
             CardView cardViewCourse = view.findViewById(R.id.cardView_courseTable);
             return cardViewCourse.getHeight();

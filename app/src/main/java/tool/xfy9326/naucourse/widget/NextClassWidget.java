@@ -106,8 +106,8 @@ public class NextClassWidget extends AppWidgetProvider {
         if (action != null) {
             if (action.equals(ACTION_ON_UPDATE)) {
                 ComponentName componentName = new ComponentName(context, NextClassWidget.class);
-                AppWidgetManager.getInstance(context).updateAppWidget(componentName, viewGet(context));
                 nextCourse = (NextCourse) intent.getSerializableExtra(Config.INTENT_NEXT_CLASS_DATA);
+                AppWidgetManager.getInstance(context).updateAppWidget(componentName, viewGet(context));
             }
         }
         super.onReceive(context, intent);

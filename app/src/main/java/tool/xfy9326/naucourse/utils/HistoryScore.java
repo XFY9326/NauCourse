@@ -13,14 +13,6 @@ public class HistoryScore extends BaseData {
     private int courseAmount;
 
     public HistoryScore() {
-        this.id = null;
-        this.name = null;
-        this.studyScore = null;
-        this.score = null;
-        this.creditWeight = null;
-        this.term = null;
-        this.courseProperty = null;
-        this.courseType = null;
         this.courseAmount = 0;
     }
 

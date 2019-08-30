@@ -1,12 +1,10 @@
-package tool.xfy9326.naucourse.activities;
+package tool.xfy9326.naucourse.activities.async;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,12 +19,11 @@ import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.utils.LevelExam;
 import tool.xfy9326.naucourse.views.recyclerAdapters.LevelExamAdapter;
 
-public class LevelExamActivity extends AppCompatActivity {
+public class LevelExamActivity extends BaseAsyncActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     @Nullable
     private LevelExamAdapter levelExamAdapter;
-    private int loadTime = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,15 +39,6 @@ public class LevelExamActivity extends AppCompatActivity {
         BaseMethod.getApp(this).setLevelExamActivity(null);
         System.gc();
         super.onDestroy();
-    }
-
-    private void toolBarSet() {
-        setSupportActionBar(findViewById(R.id.toolbar));
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setHomeButtonEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
     }
 
     private void viewSet() {
@@ -97,19 +85,13 @@ public class LevelExamActivity extends AppCompatActivity {
         }
     }
 
-    synchronized private void getData() {
+    @Override
+    synchronized protected void getData() {
         BaseMethod.setRefreshing(swipeRefreshLayout, true);
         new LevelExamAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
     }
 
-    public int getLoadTime() {
-        return loadTime;
-    }
-
-    public void setLoadTime(int loadTime) {
-        this.loadTime = loadTime;
-    }
-
+    @Override
     public void lastViewSet(Context context) {
         //离线数据加载完成，开始拉取网络数据
         if (loadTime == 1 && NetMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {

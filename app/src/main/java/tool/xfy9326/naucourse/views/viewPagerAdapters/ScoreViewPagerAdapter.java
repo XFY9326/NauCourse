@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.views;
+package tool.xfy9326.naucourse.views.viewPagerAdapters;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -7,8 +7,8 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import java.util.List;
 
-import tool.xfy9326.naucourse.fragments.CurrentScoreFragment;
-import tool.xfy9326.naucourse.fragments.HistoryScoreFragment;
+import tool.xfy9326.naucourse.fragments.score.CurrentScoreFragment;
+import tool.xfy9326.naucourse.fragments.score.HistoryScoreFragment;
 
 public class ScoreViewPagerAdapter extends FragmentPagerAdapter {
     public static final int ITEM_COUNT = 2;

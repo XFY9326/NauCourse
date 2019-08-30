@@ -18,6 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning"
         tools:targetApi="n">
 
@@ -40,7 +41,7 @@
             tools:ignore="InnerclassSeparator" />
 
         <activity
-            android:name=".activities.StudentInfoActivity"
+            android:name=".activities.async.StudentInfoActivity"
             android:label="@string/personal_detail"
             tools:ignore="InnerclassSeparator">
             <meta-data
@@ -67,7 +68,7 @@
         </activity>
 
         <activity
-            android:name=".activities.ExamActivity"
+            android:name=".activities.async.ExamActivity"
             android:label="@string/exam"
             tools:ignore="InnerclassSeparator">
             <meta-data
@@ -76,7 +77,7 @@
         </activity>
 
         <activity
-            android:name=".activities.ScoreActivity"
+            android:name=".activities.async.ScoreActivity"
             android:label="@string/score"
             tools:ignore="InnerclassSeparator">
             <meta-data
@@ -85,7 +86,7 @@
         </activity>
 
         <activity
-            android:name=".activities.LevelExamActivity"
+            android:name=".activities.async.LevelExamActivity"
             android:label="@string/level_exam"
             tools:ignore="InnerclassSeparator">
             <meta-data
@@ -103,7 +104,7 @@
         </activity>
 
         <activity
-            android:name=".activities.SchoolCalendarActivity"
+            android:name=".activities.async.SchoolCalendarActivity"
             android:label="@string/school_calendar"
             tools:ignore="InnerclassSeparator">
             <meta-data
@@ -112,7 +113,7 @@
         </activity>
 
         <activity
-            android:name=".activities.SuspendCourseActivity"
+            android:name=".activities.async.SuspendCourseActivity"
             android:label="@string/suspend_course"
             tools:ignore="InnerclassSeparator">
             <meta-data
@@ -121,7 +122,7 @@
         </activity>
 
         <activity
-            android:name=".activities.MoaActivity"
+            android:name=".activities.async.MoaActivity"
             android:label="@string/moa"
             tools:ignore="InnerclassSeparator">
             <meta-data
@@ -130,7 +131,7 @@
         </activity>
 
         <activity
-            android:name=".activities.GlobalSettingsActivity"
+            android:name=".activities.settings.GlobalSettingsActivity"
             android:label="@string/global_settings"
             tools:ignore="InnerclassSeparator">
             <meta-data
@@ -139,7 +140,7 @@
         </activity>
 
         <activity
-            android:name=".activities.CourseSettingsActivity"
+            android:name=".activities.settings.CourseSettingsActivity"
             android:label="@string/course_settings"
             tools:ignore="InnerclassSeparator">
             <meta-data
@@ -167,7 +168,7 @@
         </activity>
 
         <activity
-            android:name=".activities.UpdateSettingsActivity"
+            android:name=".activities.settings.UpdateSettingsActivity"
             android:label="@string/update_check"
             tools:ignore="InnerclassSeparator">
             <meta-data

@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.fragments;
+package tool.xfy9326.naucourse.fragments.settings;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -30,13 +30,14 @@ import java.util.Objects;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.fragments.base.TableFragment;
 import tool.xfy9326.naucourse.handlers.MainHandler;
 import tool.xfy9326.naucourse.methods.BaseMethod;
 import tool.xfy9326.naucourse.methods.ImageMethod;
 import tool.xfy9326.naucourse.methods.PermissionMethod;
 import tool.xfy9326.naucourse.receivers.CourseUpdateReceiver;
 import tool.xfy9326.naucourse.tools.IO;
-import tool.xfy9326.naucourse.views.MainViewPagerAdapter;
+import tool.xfy9326.naucourse.views.viewPagerAdapters.MainViewPagerAdapter;
 
 /**
  * Created by xfy9326 on 18-2-20.

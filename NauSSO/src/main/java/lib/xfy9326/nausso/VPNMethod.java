@@ -22,8 +22,9 @@ public class VPNMethod {
 
     static boolean needVPNHost(HttpUrl url) {
         for (String host : noVPNHost) {
-            if (url.host().equalsIgnoreCase(host) || url.host().equalsIgnoreCase(VPN_HOST) && url.toString().contains(host) ||
-                    url.toString().contains(NauSSOClient.JWC_HOST_URL)) {
+            boolean noNeedVPN = url.host().equalsIgnoreCase(host) || url.host().equalsIgnoreCase(VPN_HOST) && url.toString().contains(host) ||
+                    url.toString().contains(NauSSOClient.JWC_HOST_URL);
+            if (noNeedVPN) {
                 return false;
             }
         }

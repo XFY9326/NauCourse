@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.views;
+package tool.xfy9326.naucourse.views.viewPagerAdapters;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -7,9 +7,9 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import java.util.List;
 
-import tool.xfy9326.naucourse.fragments.HomeFragment;
-import tool.xfy9326.naucourse.fragments.PersonFragment;
-import tool.xfy9326.naucourse.fragments.TableFragment;
+import tool.xfy9326.naucourse.fragments.base.HomeFragment;
+import tool.xfy9326.naucourse.fragments.base.PersonFragment;
+import tool.xfy9326.naucourse.fragments.base.TableFragment;
 
 /**
  * Created by xfy9326 on 18-2-20.

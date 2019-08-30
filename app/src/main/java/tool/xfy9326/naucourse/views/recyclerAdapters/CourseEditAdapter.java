@@ -270,7 +270,8 @@ public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.Co
                         } catch (NumberFormatException e) {
                             e.printStackTrace();
                         }
-                        if (startInt >= endInt || startInt <= 0 || isWeekNumber && endInt > Config.DEFAULT_MAX_WEEK || (!isWeekNumber && endInt > Config.MAX_DAY_COURSE)) {
+                        boolean hasParamError = startInt >= endInt || startInt <= 0 || isWeekNumber && endInt > Config.DEFAULT_MAX_WEEK || (!isWeekNumber && endInt > Config.MAX_DAY_COURSE);
+                        if (hasParamError) {
                             Toast.makeText(activity, R.string.input_error, Toast.LENGTH_SHORT).show();
                         } else {
                             String str = editTextShow.getText().toString();

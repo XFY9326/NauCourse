@@ -54,7 +54,8 @@ public class UpdateMethod {
                         if (!activity.isDestroyed()) {
                             final String versionNew = String.format(Locale.CHINA, "%s.%d(%d) %s", versionName, subVersion, versionCode, updateType);
                             String lastCheckVersion = sharedPreferences.getString(Config.PREFERENCE_LAST_CHECK_VERSION, null);
-                            if (manualCheck || (lastCheckVersion == null || !lastCheckVersion.equalsIgnoreCase(versionNew))) {
+                            boolean needsShowUpdate = manualCheck || (lastCheckVersion == null || !lastCheckVersion.equalsIgnoreCase(versionNew));
+                            if (needsShowUpdate) {
                                 String versionNow = String.format(Locale.CHINA, "%s.%d(%d) %s", BuildConfig.VERSION_NAME, Config.SUB_VERSION, BuildConfig.VERSION_CODE, Config.VERSION_TYPE);
                                 String showVersion = String.format("%sv%s\n%sv%s", activity.getString(R.string.application_version), versionNow, activity.getString(R.string.new_application_version), versionNew);
                                 showVersion = showVersion.replace(Updater.UPDATE_TYPE_BETA, activity.getString(R.string.beta)).replace(Updater.UPDATE_TYPE_RELEASE, activity.getString(R.string.release)).replace(Config.DEBUG, activity.getString(R.string.debug));

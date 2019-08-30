@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.activities;
+package tool.xfy9326.naucourse.activities.settings;
 
 import android.os.Bundle;
 
@@ -10,7 +10,7 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import tool.xfy9326.naucourse.R;
 
-public abstract class BaseSettingsActivity extends AppCompatActivity {
+abstract class BaseSettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

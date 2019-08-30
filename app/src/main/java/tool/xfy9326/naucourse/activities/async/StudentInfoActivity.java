@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.activities;
+package tool.xfy9326.naucourse.activities.async;
 
 import android.content.Intent;
 import android.graphics.Bitmap;

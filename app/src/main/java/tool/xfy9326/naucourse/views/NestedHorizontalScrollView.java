@@ -48,9 +48,8 @@ public class NestedHorizontalScrollView extends HorizontalScrollView {
                     break;
                 case MotionEvent.ACTION_MOVE:
                     int scrollX = getScrollX();
-                    if ((scrollX == 0 && mDownX - ev.getX() <= -10) || (getChildAt(0).getMeasuredWidth() <= (scrollX + ((ViewGroup) getParent()).getWidth()) && mDownX - ev.getX() >= 10)) {
-                        mCanScroll = false;
-                    }
+                    boolean scrollOutOfRange = (scrollX == 0 && mDownX - ev.getX() <= -10) || (getChildAt(0).getMeasuredWidth() <= (scrollX + ((ViewGroup) getParent()).getWidth()) && mDownX - ev.getX() >= 10);
+                    mCanScroll = !scrollOutOfRange;
                     break;
                 case MotionEvent.ACTION_CANCEL:
                     mCanScroll = true;

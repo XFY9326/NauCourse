@@ -5,7 +5,7 @@
     android:id="@+id/layout_moa_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MoaActivity">
+    tools:context=".activities.async.MoaActivity">
 
     <include layout="@layout/widget_toolbar" />
 

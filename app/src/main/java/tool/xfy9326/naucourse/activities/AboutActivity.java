@@ -32,6 +32,7 @@ import tool.xfy9326.naucourse.methods.NetMethod;
 
 /**
  * Created by xfy9326 on 18-2-20.
+ * @author xfy9326
  */
 
 public class AboutActivity extends AppCompatActivity {

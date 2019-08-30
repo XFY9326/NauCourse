@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.activities;
+package tool.xfy9326.naucourse.activities.settings;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -6,7 +6,7 @@ import android.content.pm.PackageManager;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceFragmentCompat;
 
-import tool.xfy9326.naucourse.fragments.CourseSettingsFragment;
+import tool.xfy9326.naucourse.fragments.settings.CourseSettingsFragment;
 
 /**
  * Created by xfy9326 on 18-2-20.
