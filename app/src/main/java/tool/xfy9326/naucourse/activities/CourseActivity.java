@@ -71,7 +71,7 @@ public class CourseActivity extends AppCompatActivity {
     public boolean activityDestroy = true;
     private RecyclerView recyclerView;
     private CourseAdapter courseAdapter;
-    private ArrayList<Course> courseArrayList = new ArrayList<>();
+    private final ArrayList<Course> courseArrayList = new ArrayList<>();
     private int lastOffset = 0;
     private int lastPosition = 0;
     private boolean needSave = false;

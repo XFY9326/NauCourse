@@ -35,7 +35,7 @@ import tool.xfy9326.naucourse.utils.CourseDetail;
 
 public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.CourseEditViewHolder> {
     private final CourseEditActivity activity;
-    private ArrayList<CourseDetail> courseDetails;
+    private final ArrayList<CourseDetail> courseDetails;
 
     public CourseEditAdapter(CourseEditActivity activity, ArrayList<CourseDetail> courseDetails) {
         this.activity = activity;
