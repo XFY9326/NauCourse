@@ -26,7 +26,6 @@ import tool.xfy9326.naucourse.methods.netInfoMethods.ExamMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.HistoryScoreMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.JwcInfoMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.LevelExamMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.MoaMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.PersonMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.SchoolTimeMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.ScoreMethod;
@@ -232,8 +231,6 @@ public class DataMethod {
             nowVersionCode = Config.DATA_VERSION_STUDENT_SCORE;
         } else if (simpleName.equals(LevelExamMethod.FILE_NAME)) {
             nowVersionCode = Config.DATA_VERSION_LEVEL_EXAM;
-        } else if (simpleName.equals(MoaMethod.FILE_NAME)) {
-            nowVersionCode = Config.DATA_VERSION_MOA;
         } else if (simpleName.equals(SuspendCourseMethod.FILE_NAME)) {
             nowVersionCode = Config.DATA_VERSION_SUSPEND_COURSE;
         } else if (simpleName.equals(AlstuMethod.FILE_NAME)) {

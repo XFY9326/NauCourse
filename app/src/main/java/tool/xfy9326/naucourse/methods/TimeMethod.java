@@ -26,15 +26,10 @@ import tool.xfy9326.naucourse.utils.SchoolTime;
 public class TimeMethod {
     private static final SimpleDateFormat SDF_YMD = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
     private static final SimpleDateFormat SDF_YMD_HM = new SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.CHINA);
-    private static final SimpleDateFormat SDF_YMD_HM_2 = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
     private static String[] weekArray = null;
 
     static synchronized String getDateSDF(long time) {
         return SDF_YMD.format(new Date(time));
-    }
-
-    public static synchronized Date parseDateSDFHM2(String str) throws Exception {
-        return SDF_YMD_HM_2.parse(str);
     }
 
     public static synchronized Date parseDateSDFHM(String str) throws Exception {

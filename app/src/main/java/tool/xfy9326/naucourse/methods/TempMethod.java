@@ -8,7 +8,6 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.methods.netInfoMethods.ExamMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.HistoryScoreMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.LevelExamMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.MoaMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.PersonMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.ScoreMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.SuspendCourseMethod;
@@ -72,16 +71,6 @@ public class TempMethod {
                 SuspendCourseMethod suspendCourseMethod = new SuspendCourseMethod(context);
                 if (suspendCourseMethod.load() == Config.NET_WORK_GET_SUCCESS) {
                     suspendCourseMethod.saveTemp();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        executorService.submit(() -> {
-            try {
-                MoaMethod moaMethod = new MoaMethod(context);
-                if (moaMethod.load() == Config.NET_WORK_GET_SUCCESS) {
-                    moaMethod.saveTemp();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

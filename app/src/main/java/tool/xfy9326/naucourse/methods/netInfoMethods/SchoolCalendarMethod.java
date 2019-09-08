@@ -30,8 +30,6 @@ public class SchoolCalendarMethod extends BaseNetMethod {
     private static final String CALENDAR_LIST = "https://www.nau.edu.cn/p141c89/list.htm";
     private final SharedPreferences sharedPreferences;
     @Nullable
-    private Document document;
-    @Nullable
     private Document documentList;
 
     public SchoolCalendarMethod(@NonNull Context context) {
@@ -41,15 +39,6 @@ public class SchoolCalendarMethod extends BaseNetMethod {
 
     @Override
     public int load() throws Exception {
-        String data = NetMethod.loadUrl(context, CALENDAR_URL_CURRENT);
-        if (data != null) {
-            document = Jsoup.parse(data);
-            return Config.NET_WORK_GET_SUCCESS;
-        }
-        return Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR;
-    }
-
-    public int loadCalendarList() throws Exception {
         String data = NetMethod.loadUrl(context, CALENDAR_LIST);
         if (data != null) {
             documentList = Jsoup.parse(data);

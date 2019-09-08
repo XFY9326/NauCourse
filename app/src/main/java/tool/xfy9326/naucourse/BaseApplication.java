@@ -17,7 +17,6 @@ import tool.xfy9326.naucourse.activities.CourseSearchActivity;
 import tool.xfy9326.naucourse.activities.InfoDetailActivity;
 import tool.xfy9326.naucourse.activities.async.ExamActivity;
 import tool.xfy9326.naucourse.activities.async.LevelExamActivity;
-import tool.xfy9326.naucourse.activities.async.MoaActivity;
 import tool.xfy9326.naucourse.activities.async.SchoolCalendarActivity;
 import tool.xfy9326.naucourse.activities.async.ScoreActivity;
 import tool.xfy9326.naucourse.activities.async.SuspendCourseActivity;
@@ -39,7 +38,6 @@ public class BaseApplication extends Application {
     private WeakReference<CourseActivity> courseActivity;
     private WeakReference<SchoolCalendarActivity> schoolCalendarActivity;
     private WeakReference<SuspendCourseActivity> suspendCourseActivity;
-    private WeakReference<MoaActivity> moaActivity;
     private WeakReference<CourseSearchActivity> courseSearchActivity;
 
     @Override
@@ -120,14 +118,6 @@ public class BaseApplication extends Application {
 
     public void setSuspendCourseActivity(SuspendCourseActivity suspendCourseActivity) {
         this.suspendCourseActivity = new WeakReference<>(suspendCourseActivity);
-    }
-
-    public MoaActivity getMoaActivity() {
-        return moaActivity.get();
-    }
-
-    public void setMoaActivity(MoaActivity moaActivity) {
-        this.moaActivity = new WeakReference<>(moaActivity);
     }
 
     @Override

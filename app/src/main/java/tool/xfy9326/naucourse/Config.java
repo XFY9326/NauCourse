@@ -194,7 +194,6 @@ public class Config {
     public static final int DATA_VERSION_STUDENT_LEARN_PROCESS = 1;
     public static final int DATA_VERSION_STUDENT_SCORE = 1;
     public static final int DATA_VERSION_LEVEL_EXAM = 1;
-    public static final int DATA_VERSION_MOA = 1;
     public static final int DATA_VERSION_ALSTU_TOPIC = 1;
     public static final int DATA_VERSION_SUSPEND_COURSE = 1;
 

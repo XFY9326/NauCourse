@@ -31,7 +31,6 @@ import tool.xfy9326.naucourse.activities.CourseSearchActivity;
 import tool.xfy9326.naucourse.activities.LoginActivity;
 import tool.xfy9326.naucourse.activities.async.ExamActivity;
 import tool.xfy9326.naucourse.activities.async.LevelExamActivity;
-import tool.xfy9326.naucourse.activities.async.MoaActivity;
 import tool.xfy9326.naucourse.activities.async.SchoolCalendarActivity;
 import tool.xfy9326.naucourse.activities.async.ScoreActivity;
 import tool.xfy9326.naucourse.activities.async.StudentInfoActivity;
@@ -150,19 +149,12 @@ public class PersonFragment extends Fragment {
 
             CardView cardViewSchoolCalendar = view.findViewById(R.id.cardView_school_calendar);
             CardView cardViewSuspendCourse = view.findViewById(R.id.cardView_suspend_course);
-            CardView cardViewMoa = view.findViewById(R.id.cardView_moa);
 
             CardView cardViewCourseSearch = view.findViewById(R.id.cardView_course_search);
 
             cardViewSuspendCourse.setOnClickListener(v -> {
                 if (getActivity() != null && isAdded()) {
                     startActivity(new Intent(getActivity(), SuspendCourseActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-                }
-            });
-
-            cardViewMoa.setOnClickListener(v -> {
-                if (getActivity() != null && isAdded()) {
-                    startActivity(new Intent(getActivity(), MoaActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                 }
             });
 
@@ -257,12 +249,11 @@ public class PersonFragment extends Fragment {
 
     private void unlockFunction() {
         if (isAdded() && view != null && context != null) {
-            CardView cardViewScore = view.findViewById(R.id.cardView_score_search);
-            CardView cardViewExam = view.findViewById(R.id.cardView_exam);
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             if (BuildConfig.DEBUG || sharedPreferences.getBoolean(Config.PREFERENCE_SHOW_HIDDEN_FUNCTION, Config.DEFAULT_PREFERENCE_SHOW_HIDDEN_FUNCTION)) {
-                cardViewScore.setVisibility(View.VISIBLE);
-                cardViewExam.setVisibility(View.VISIBLE);
+                view.findViewById(R.id.layout_fragment_function_list2).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.cardView_score_search).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.cardView_exam).setVisibility(View.VISIBLE);
             }
         }
     }
