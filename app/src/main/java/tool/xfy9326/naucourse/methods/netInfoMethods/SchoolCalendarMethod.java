@@ -25,7 +25,7 @@ import tool.xfy9326.naucourse.methods.NetMethod;
  */
 
 public class SchoolCalendarMethod extends BaseNetMethod {
-    private static final String SERVER_URL = "http://jw.nau.edu.cn";
+    private static final String CALENDAR_URL_CURRENT = "http://nau.edu.cn/5825/list.htm";
     private static final String CALENDAR_SERVER_URL = "https://www.nau.edu.cn";
     private static final String CALENDAR_LIST = "https://www.nau.edu.cn/p141c89/list.htm";
     private final SharedPreferences sharedPreferences;
@@ -41,7 +41,7 @@ public class SchoolCalendarMethod extends BaseNetMethod {
 
     @Override
     public int load() throws Exception {
-        String data = NetMethod.loadUrl(context, SERVER_URL);
+        String data = NetMethod.loadUrl(context, CALENDAR_URL_CURRENT);
         if (data != null) {
             document = Jsoup.parse(data);
             return Config.NET_WORK_GET_SUCCESS;
@@ -77,29 +77,8 @@ public class SchoolCalendarMethod extends BaseNetMethod {
     }
 
     public int loadSchoolCalendarImage(boolean checkTemp) throws Exception {
-        String url = sharedPreferences.getString(Config.PREFERENCE_SCHOOL_CALENDAR_PAGE_URL, null);
-        if (url == null) {
-            return loadCurrentSchoolCalendarImage(checkTemp);
-        } else {
-            return saveImageUrl(url, checkTemp);
-        }
-    }
-
-    private int loadCurrentSchoolCalendarImage(boolean checkTemp) throws Exception {
-        if (document != null) {
-            String url = null;
-            Elements elements = document.getElementsByTag("a");
-            for (Element element : elements) {
-                if (element.hasText() && element.text().contains("校历") && element.hasAttr("href")) {
-                    url = element.attr("href");
-                    break;
-                }
-            }
-            if (url != null) {
-                return saveImageUrl(url, checkTemp);
-            }
-        }
-        return Config.NET_WORK_ERROR_CODE_GET_DATA_ERROR;
+        String url = sharedPreferences.getString(Config.PREFERENCE_SCHOOL_CALENDAR_PAGE_URL, CALENDAR_URL_CURRENT);
+        return saveImageUrl(url, checkTemp);
     }
 
     private int saveImageUrl(String imagePageUrl, boolean checkTemp) throws Exception {

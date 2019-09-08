@@ -209,7 +209,12 @@ public class CourseMethod {
         this.weekNum = weekNum;
     }
 
-    //设置表格的上课时间列与上课日期行
+    /**
+     * 设置表格的上课时间列与上课日期行
+     *
+     * @param courseTime    课程时间
+     * @param courseWeekDay 课程星期
+     */
     private void setTableTimeLine(List<String> courseTime, @NonNull List<String> courseWeekDay) {
         table[0][0] = context.getString(R.string.date);
         for (int i = 0; i < courseTime.size(); i++) {
@@ -220,7 +225,12 @@ public class CourseMethod {
         }
     }
 
-    //获取该周信息表格
+    /**
+     * 获取该周信息表格
+     *
+     * @param weekNum         星期数
+     * @param startSchoolDate 开学日期
+     */
     synchronized private void getTable(int weekNum, String startSchoolDate) {
         boolean isDoubleWeek = weekNum % 2 == 0;
         boolean showAllWeekMode = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_NO_THIS_WEEK_CLASS, Config.DEFAULT_PREFERENCE_SHOW_NO_THIS_WEEK_CLASS);

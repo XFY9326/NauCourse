@@ -45,7 +45,6 @@ public class RSSInfoMethod {
     private boolean hasFailedLoad = false;
     private boolean isLoginError = false;
 
-
     public RSSInfoMethod(@NonNull Context context, ExecutorService executorService) {
         this.context = context.getApplicationContext();
         this.executorService = executorService;

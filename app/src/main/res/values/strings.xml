@@ -373,8 +373,9 @@
     <string name="night_mode_follow_system">跟随系统设置</string>
     <string name="table_loading_tip">如果长时间无法加载课表\n可以尝试手动导入</string>
     <string name="credit_count_course_empty">没有可供选择计算的课程</string>
+    <string name="society">南审Natal信息与技术协会</string>
 
-    <string name="new_version_info_content">欢迎使用NAU课程表\n\n反馈QQ群：704668624\n\n如果在校外无法查看校内通知，可以尝试通用设置里的校园VPN模式\n\n如果想要提前查看下学期课程必须在课程编辑里手动导入\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
+    <string name="new_version_info_content">欢迎使用NAU课程表\n\n欢迎加入南审Natal信息技术协会 QQ：815499234\n\n反馈QQ群：704668624\n\n如果在校外无法查看校内通知，可以尝试通用设置里的校园VPN模式\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>
