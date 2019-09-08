@@ -71,7 +71,7 @@ public class CourseActivity extends AppCompatActivity {
     public boolean activityDestroy = true;
     private RecyclerView recyclerView;
     private CourseAdapter courseAdapter;
-    private ArrayList<Course> courseArrayList;
+    private ArrayList<Course> courseArrayList = new ArrayList<>();
     private int lastOffset = 0;
     private int lastPosition = 0;
     private boolean needSave = false;
@@ -168,10 +168,8 @@ public class CourseActivity extends AppCompatActivity {
     synchronized private void getData() {
         loadingDialog = DialogMethod.showLoadingDialog(CourseActivity.this, true, dialog -> finish());
         new Thread(() -> {
-            courseArrayList = DataMethod.getOfflineTableData(CourseActivity.this);
-            if (courseArrayList == null) {
-                courseArrayList = new ArrayList<>();
-            }
+            courseArrayList.clear();
+            courseArrayList.addAll(DataMethod.getOfflineTableData(CourseActivity.this));
             runOnUiThread(() -> {
                 if (loadingDialog != null && loadingDialog.isShowing()) {
                     loadingDialog.dismiss();
@@ -181,7 +179,7 @@ public class CourseActivity extends AppCompatActivity {
                         courseAdapter = new CourseAdapter(CourseActivity.this, courseArrayList);
                         recyclerView.setAdapter(courseAdapter);
                     } else {
-                        courseAdapter.updateList(courseArrayList);
+                        courseAdapter.updateList();
                     }
                 }
             });
@@ -204,7 +202,7 @@ public class CourseActivity extends AppCompatActivity {
             }
         });
         if (courseAdapter == null) {
-            courseAdapter = new CourseAdapter(CourseActivity.this);
+            courseAdapter = new CourseAdapter(CourseActivity.this, courseArrayList);
         }
         recyclerView.setAdapter(courseAdapter);
         scrollToPosition();
@@ -385,7 +383,7 @@ public class CourseActivity extends AppCompatActivity {
                             courseAdapter = new CourseAdapter(CourseActivity.this, courseArrayList);
                             recyclerView.setAdapter(courseAdapter);
                         } else {
-                            courseAdapter.updateList(courseArrayList);
+                            courseAdapter.updateList();
                         }
                         if (!found) {
                             courseAdapter.notifyItemRangeInserted(courseArrayList.size() - 1, 1);
@@ -510,8 +508,7 @@ public class CourseActivity extends AppCompatActivity {
             courseArrayList.clear();
             courseArrayList.addAll(list);
 
-            courseAdapter.updateList(courseArrayList);
-            courseAdapter.notifyDataSetChanged();
+            courseAdapter.updateList();
             needSave = true;
         }
         if (isBackup) {
@@ -669,8 +666,7 @@ public class CourseActivity extends AppCompatActivity {
         for (Course course : courseArrayList) {
             course.setCourseColor(BaseMethod.getRandomColor(CourseActivity.this));
         }
-        courseAdapter.updateList(courseArrayList);
-        courseAdapter.notifyDataSetChanged();
+        courseAdapter.updateList();
         Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.random_course_color_success, Snackbar.LENGTH_SHORT).show();
     }
 

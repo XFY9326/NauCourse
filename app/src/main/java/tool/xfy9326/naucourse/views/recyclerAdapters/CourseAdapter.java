@@ -43,10 +43,6 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     private boolean singleColor;
     private ColorPickerDialog colorPickerDialog;
 
-    public CourseAdapter(CourseActivity activity) {
-        this(activity, new ArrayList<>());
-    }
-
     public CourseAdapter(CourseActivity activity, ArrayList<Course> courseArrayList) {
         this.activity = activity;
         this.courseArrayList = courseArrayList;
@@ -60,9 +56,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         notifyDataSetChanged();
     }
 
-    public void updateList(ArrayList<Course> courseArrayList) {
-        this.courseArrayList.clear();
-        this.courseArrayList.addAll(courseArrayList);
+    public void updateList() {
         updateColor();
         notifyDataSetChanged();
     }

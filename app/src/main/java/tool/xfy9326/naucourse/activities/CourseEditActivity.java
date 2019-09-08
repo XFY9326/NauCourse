@@ -45,7 +45,7 @@ import tool.xfy9326.naucourse.views.recyclerAdapters.CourseEditAdapter;
 public class CourseEditActivity extends AppCompatActivity {
     private boolean needSave = false;
     private Course course;
-    private ArrayList<CourseDetail> courseDetailArrayList;
+    private ArrayList<CourseDetail> courseDetailArrayList = new ArrayList<>();
     private CourseEditAdapter courseEditAdapter;
     private Dialog loadingDialog = null;
     private boolean activityDestroy = true;
@@ -94,7 +94,7 @@ public class CourseEditActivity extends AppCompatActivity {
 
     private void viewSet() {
         if (course != null) {
-            courseDetailArrayList = getCourseDetailArrayList();
+            getCourseDetailArrayList();
             TextInputEditText editTextCourseEditName = findViewById(R.id.editText_course_edit_name);
             TextInputEditText editTextCourseEditTeacher = findViewById(R.id.editText_course_edit_teacher);
             TextInputEditText editTextCourseEditType = findViewById(R.id.editText_course_edit_type);
@@ -137,7 +137,6 @@ public class CourseEditActivity extends AppCompatActivity {
             FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton_course_edit_add);
             floatingActionButton.setOnClickListener(v -> {
                 courseDetailArrayList.add(new CourseDetail());
-                courseEditAdapter.setData(courseDetailArrayList);
                 courseEditAdapter.notifyItemRangeInserted(courseDetailArrayList.size() - 1, 1);
                 needSave = true;
             });
@@ -336,20 +335,18 @@ public class CourseEditActivity extends AppCompatActivity {
     }
 
     //获取课程详细信息的列表
-    private ArrayList<CourseDetail> getCourseDetailArrayList() {
+    private void getCourseDetailArrayList() {
         if (course == null) {
             getData();
         }
         if (course != null) {
             CourseDetail[] courseDetails = course.getCourseDetail();
             if (courseDetails != null) {
-                courseDetailArrayList = new ArrayList<>(Arrays.asList(courseDetails));
+                courseDetailArrayList.addAll(Arrays.asList(courseDetails));
             } else {
-                courseDetailArrayList = new ArrayList<>();
                 courseDetailArrayList.add(new CourseDetail());
             }
         }
-        return courseDetailArrayList;
     }
 
     @Override

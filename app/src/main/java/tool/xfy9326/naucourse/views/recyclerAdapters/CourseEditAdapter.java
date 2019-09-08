@@ -42,10 +42,6 @@ public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.Co
         this.courseDetails = courseDetails;
     }
 
-    public void setData(ArrayList<CourseDetail> courseDetails) {
-        this.courseDetails = courseDetails;
-    }
-
     @Override
     public void onBindViewHolder(@NonNull final CourseEditViewHolder holder, int position) {
         //设置初始化的布局
