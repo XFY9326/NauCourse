@@ -38,6 +38,7 @@ import tool.xfy9326.naucourse.methods.DialogMethod;
 import tool.xfy9326.naucourse.methods.ImageMethod;
 import tool.xfy9326.naucourse.methods.InfoMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
+import tool.xfy9326.naucourse.methods.ShareMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.AlstuMethod;
 import tool.xfy9326.naucourse.utils.TopicInfo;
 
@@ -135,8 +136,6 @@ public class InfoDetailActivity extends AppCompatActivity {
     }
 
     private void shareInfo(String url, int shareType) {
-        final Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_SEND);
         if (shareType == SHARE_TYPE_URL || shareType == SHARE_TYPE_TEXT) {
             String infoTag = getString(R.string.unknown_post);
             if (infoSource != null) {
@@ -164,10 +163,7 @@ public class InfoDetailActivity extends AppCompatActivity {
                     return;
                 }
             }
-            intent.setType("text/plain");
-            intent.putExtra(Intent.EXTRA_SUBJECT, infoType);
-            intent.putExtra(Intent.EXTRA_TEXT, shareText);
-            BaseMethod.runIntent(InfoDetailActivity.this, Intent.createChooser(intent, getString(R.string.share)));
+            ShareMethod.shareText(InfoDetailActivity.this, infoType, shareText);
         } else if (shareType == SHARE_TYPE_IMAGE) {
             Bitmap bitmap = ImageMethod.getViewsBitmap(InfoDetailActivity.this, new View[]{findViewById(R.id.cardView_info_detail_title), findViewById(R.id.layout_info_detail_data)}, true, ResourcesCompat.getColor(getResources(), R.color.info_detail_share_background, getTheme()));
             DialogMethod.showImageShareDialog(InfoDetailActivity.this,

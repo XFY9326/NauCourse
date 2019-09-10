@@ -28,7 +28,6 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.methods.BaseMethod;
 import tool.xfy9326.naucourse.methods.DialogMethod;
-import tool.xfy9326.naucourse.methods.NetMethod;
 
 /**
  * Created by xfy9326 on 18-2-20.
@@ -74,9 +73,6 @@ public class AboutActivity extends AppCompatActivity {
                 break;
             case R.id.menu_about_donate:
                 DialogMethod.showDonateDialog(this);
-                break;
-            case R.id.menu_about_donate_list:
-                NetMethod.viewUrlInBrowser(AboutActivity.this, Config.DONATE_PERSON_URL);
                 break;
             case R.id.menu_about_new_version_info:
                 BaseMethod.showNewVersionInfo(AboutActivity.this, false);

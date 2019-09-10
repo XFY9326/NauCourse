@@ -6,6 +6,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -137,6 +142,28 @@ public class CourseMethod {
             }
         }
         return false;
+    }
+
+    @Nullable
+    static String getCourseJson(@NonNull Course course) {
+        try {
+            return new Gson().toJson(course);
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Nullable
+    static Course getCourseByJson(@NonNull String json) {
+        try {
+            Type type = new TypeToken<Course>() {
+            }.getType();
+            return new Gson().fromJson(json, type);
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -357,5 +384,4 @@ public class CourseMethod {
         }
         return 1;
     }
-
 }

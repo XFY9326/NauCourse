@@ -32,21 +32,38 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/menu_course_backup"
+        android:id="@+id/menu_course_share_import"
         android:orderInCategory="4"
-        android:title="@string/backup_course"
+        android:title="@string/import_share_course_form_clip_board"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/menu_course_recover"
         android:orderInCategory="5"
-        android:title="@string/recover_course"
-        app:showAsAction="never" />
+        android:title="@string/backup_and_recover"
+        app:showAsAction="never">
 
-    <item
-        android:id="@+id/menu_course_choose_recover"
-        android:orderInCategory="6"
-        android:title="@string/recover_choose_course"
-        app:showAsAction="never" />
+        <menu>
+
+            <item
+                android:id="@+id/menu_course_backup"
+                android:orderInCategory="0"
+                android:title="@string/backup_course"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/menu_course_recover"
+                android:orderInCategory="1"
+                android:title="@string/recover_course"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/menu_course_choose_recover"
+                android:orderInCategory="2"
+                android:title="@string/recover_choose_course"
+                app:showAsAction="never" />
+
+        </menu>
+
+    </item>
 
 </menu>

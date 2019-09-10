@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -47,6 +48,7 @@ import tool.xfy9326.naucourse.methods.DialogMethod;
 import tool.xfy9326.naucourse.methods.ImageMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.methods.NextClassMethod;
+import tool.xfy9326.naucourse.methods.ShareMethod;
 import tool.xfy9326.naucourse.methods.TimeMethod;
 import tool.xfy9326.naucourse.receivers.CourseUpdateReceiver;
 import tool.xfy9326.naucourse.utils.Course;
@@ -386,10 +388,16 @@ public class TableFragment extends Fragment {
     }
 
     //表格中的课程详细信息显示
-    private void courseCardSet(@NonNull Course course) {
+    private void courseCardSet(@NonNull final Course course) {
         if (getActivity() != null) {
             LayoutInflater layoutInflater = getLayoutInflater();
             View viewDialog = layoutInflater.inflate(R.layout.dialog_course_card, getActivity().findViewById(R.id.layout_course_card));
+            Button button_share = viewDialog.findViewById(R.id.button_dialog_course_card_share);
+            button_share.setOnClickListener(view -> {
+                if (isAdded() && getActivity() != null) {
+                    ShareMethod.shareCourse(getActivity(), course);
+                }
+            });
 
             LinearLayout linearLayoutContent = viewDialog.findViewById(R.id.layout_course_card_content);
             TextView textViewName = viewDialog.findViewById(R.id.textView_course_card_name);
@@ -426,7 +434,7 @@ public class TableFragment extends Fragment {
                 textViewClassCombined.setVisibility(View.GONE);
             }
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
 
             CourseDetail[] details = course.getCourseDetail();
             if (details != null) {
@@ -512,9 +520,9 @@ public class TableFragment extends Fragment {
             DialogMethod.showImageShareDialog(getActivity(),
                     bitmap,
                     Config.COURSE_TABLE_IMAGE_FILE_NAME,
-                    R.string.share_course_table,
+                    R.string.share_this_week_course_table,
                     R.string.course_table_share_error,
-                    R.string.share_course_table);
+                    R.string.share_this_week_course_table);
         }
     }
 

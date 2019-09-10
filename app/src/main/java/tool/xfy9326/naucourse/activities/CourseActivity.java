@@ -53,6 +53,7 @@ import tool.xfy9326.naucourse.methods.CourseEditMethod;
 import tool.xfy9326.naucourse.methods.DataMethod;
 import tool.xfy9326.naucourse.methods.DialogMethod;
 import tool.xfy9326.naucourse.methods.PermissionMethod;
+import tool.xfy9326.naucourse.methods.ShareMethod;
 import tool.xfy9326.naucourse.methods.TimeMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.SchoolTimeMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.TableMethod;
@@ -68,10 +69,10 @@ public class CourseActivity extends AppCompatActivity {
     private static final int RECOVER_WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE = 4;
     private static final int CHOOSE_RECOVER_WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE = 5;
     private static final int CHOOSE_RECOVER_FILE_REQUEST_CODE = 6;
+    private final ArrayList<Course> courseArrayList = new ArrayList<>();
     public boolean activityDestroy = true;
     private RecyclerView recyclerView;
     private CourseAdapter courseAdapter;
-    private final ArrayList<Course> courseArrayList = new ArrayList<>();
     private int lastOffset = 0;
     private int lastPosition = 0;
     private boolean needSave = false;
@@ -116,6 +117,9 @@ public class CourseActivity extends AppCompatActivity {
 
             case R.id.menu_course_random_course_color:
                 randomSetCourseColor();
+                break;
+            case R.id.menu_course_share_import:
+                importSharedCourse();
                 break;
             //清空课程
             case R.id.menu_course_delete_all:
@@ -228,6 +232,22 @@ public class CourseActivity extends AppCompatActivity {
         });
 
         autoUpdateCourseAlert();
+    }
+
+    private void importSharedCourse() {
+        String shareStr = ShareMethod.getStringFromClipBoard(this);
+        if (shareStr != null && !shareStr.isEmpty() && shareStr.startsWith(Config.SHARE_COURSE_PREFIX)) {
+            Course course = ShareMethod.getShareCourse(shareStr);
+            if (course != null && courseAdapter != null) {
+                courseArrayList.add(course);
+                courseAdapter.updateList();
+                needSave = true;
+            } else {
+                Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.import_share_course_error, Snackbar.LENGTH_SHORT).show();
+            }
+        } else {
+            Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.import_share_course_empty, Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     private void createNewCourse() {
