@@ -226,9 +226,7 @@ public class HomeFragment extends Fragment {
     private void setNextCourse() {
         if (context != null) {
             NextCourse nextCourse = NextClassMethod.getNextClassArray(Objects.requireNonNull(getActivity()));
-            DataMethod.saveOfflineData(context, nextCourse, NextClassMethod.NEXT_COURSE_FILE_NAME, false, NextClassMethod.IS_ENCRYPT);
             setNextCourse(nextCourse);
-            System.gc();
         }
     }
 

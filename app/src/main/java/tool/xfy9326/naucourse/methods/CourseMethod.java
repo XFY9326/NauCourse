@@ -73,7 +73,7 @@ public class CourseMethod {
         boolean[] todayNoShow = thisWeekNoShowTable[weekDayNum];
         String[] startTimes = context.getResources().getStringArray(R.array.course_start_time);
         String[] finishTimes = context.getResources().getStringArray(R.array.course_finish_time);
-        long nowTime = calendar.getTimeInMillis();
+        long nowTime = System.currentTimeMillis();
         String lastId = "";
         String findCourseId = "";
         String courseStartTime = "";
@@ -112,7 +112,7 @@ public class CourseMethod {
 
         nextCourse.setDataVersionCode(Config.DATA_VERSION_NEXT_COURSE);
 
-        if (nowTime > todayFinalCourseTime) {
+        if (nowTime >= todayFinalCourseTime) {
             return nextCourse;
         }
 
