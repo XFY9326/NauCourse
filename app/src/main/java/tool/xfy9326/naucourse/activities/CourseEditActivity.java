@@ -43,9 +43,9 @@ import tool.xfy9326.naucourse.utils.CourseDetail;
 import tool.xfy9326.naucourse.views.recyclerAdapters.CourseEditAdapter;
 
 public class CourseEditActivity extends AppCompatActivity {
+    private final ArrayList<CourseDetail> courseDetailArrayList = new ArrayList<>();
     private boolean needSave = false;
     private Course course;
-    private final ArrayList<CourseDetail> courseDetailArrayList = new ArrayList<>();
     private CourseEditAdapter courseEditAdapter;
     private Dialog loadingDialog = null;
     private boolean activityDestroy = true;

@@ -35,7 +35,7 @@ public class UpdateMethod {
                 updater.checkUpdate(BuildConfig.VERSION_CODE, Config.SUB_VERSION, type, new Updater.OnUpdateListener() {
                     @Override
                     public void noUpdate() {
-                        if (manualCheck) {
+                        if (manualCheck && !activity.isDestroyed()) {
                             activity.runOnUiThread(() -> Toast.makeText(activity, activity.getString(R.string.no_update), Toast.LENGTH_SHORT).show());
                         }
                         isCheckingUpdate = false;
@@ -43,7 +43,7 @@ public class UpdateMethod {
 
                     @Override
                     public void onError() {
-                        if (manualCheck) {
+                        if (manualCheck && !activity.isDestroyed()) {
                             activity.runOnUiThread(() -> Toast.makeText(activity, activity.getString(R.string.check_update_error), Toast.LENGTH_SHORT).show());
                         }
                         isCheckingUpdate = false;
@@ -107,7 +107,7 @@ public class UpdateMethod {
                     }
                 });
             } else {
-                if (manualCheck) {
+                if (manualCheck && !activity.isDestroyed()) {
                     activity.runOnUiThread(() -> Toast.makeText(activity, activity.getString(R.string.network_error), Toast.LENGTH_SHORT).show());
                 }
                 isCheckingUpdate = false;

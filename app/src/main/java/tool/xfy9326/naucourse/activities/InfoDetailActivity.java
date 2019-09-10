@@ -226,14 +226,22 @@ public class InfoDetailActivity extends AppCompatActivity {
     public void infoDetailSet(@Nullable String content) {
         if (content != null) {
             TextView textViewContent = findViewById(R.id.textView_info_detail_content);
-            Spanned spanned;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                spanned = Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY);
+            if (!content.isEmpty()) {
+                try {
+                    Spanned spanned;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        spanned = Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY);
+                    } else {
+                        spanned = Html.fromHtml(content);
+                    }
+                    infoContent = spanned.toString();
+                    textViewContent.setText(spanned);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else {
-                spanned = Html.fromHtml(content);
+                textViewContent.setText(content);
             }
-            infoContent = spanned.toString();
-            textViewContent.setText(spanned);
             textViewContent.setMovementMethod(LinkMovementMethod.getInstance());
             textViewContent.setVisibility(View.VISIBLE);
             ProgressBar progressBarLoading = findViewById(R.id.progressBar_info_detail_loading);

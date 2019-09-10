@@ -308,17 +308,21 @@ public class CourseMethod {
     //检查是否在该周上课
     private boolean weekCheck(CourseDetail detail, int weekNum) {
         String[] weeks = detail.getWeeks();
-        for (String week : Objects.requireNonNull(weeks)) {
-            if (week.contains("-")) {
-                String[] weekdays = week.split("-");
-                int start = Integer.valueOf(weekdays[0]);
-                int end = Integer.valueOf(weekdays[1]);
-                if (weekNum >= start && weekNum <= end) {
-                    return true;
-                }
-            } else {
-                if (weekNum == Integer.valueOf(week)) {
-                    return true;
+        if (weeks != null) {
+            for (String week : weeks) {
+                if (week != null) {
+                    if (week.contains("-")) {
+                        String[] weekdays = week.split("-");
+                        int start = Integer.valueOf(weekdays[0]);
+                        int end = Integer.valueOf(weekdays[1]);
+                        if (weekNum >= start && weekNum <= end) {
+                            return true;
+                        }
+                    } else {
+                        if (weekNum == Integer.valueOf(week)) {
+                            return true;
+                        }
+                    }
                 }
             }
         }
