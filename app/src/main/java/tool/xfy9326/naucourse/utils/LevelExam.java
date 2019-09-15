@@ -11,13 +11,6 @@ public class LevelExam extends BaseData {
     private int examAmount;
 
     public LevelExam() {
-        this.examType = null;
-        this.examName = null;
-        this.score1 = null;
-        this.score2 = null;
-        this.term = null;
-        this.ticketId = null;
-        this.certificateId = null;
         this.examAmount = 0;
     }
 

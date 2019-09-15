@@ -3,7 +3,8 @@ package tool.xfy9326.naucourse.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.preference.PreferenceManager;
+
+import androidx.preference.PreferenceManager;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.widget.NextClassWidget;

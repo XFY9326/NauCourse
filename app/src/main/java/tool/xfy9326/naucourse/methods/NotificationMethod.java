@@ -8,10 +8,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.preference.PreferenceManager;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
@@ -59,7 +59,7 @@ public class NotificationMethod {
         if (notificationManager != null) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
 
-            CreateNotificationChannel(context, notificationManager);
+            createNotificationChannel(context, notificationManager);
 
             builder.setSmallIcon(R.mipmap.ic_launcher_foreground);
             builder.setContentTitle(title);
@@ -79,7 +79,7 @@ public class NotificationMethod {
      * @param context             Context
      * @param notificationManager NotificationManager
      */
-    private static void CreateNotificationChannel(@NonNull Context context, @NonNull NotificationManager notificationManager) {
+    private static void createNotificationChannel(@NonNull Context context, @NonNull NotificationManager notificationManager) {
         if (Build.VERSION.SDK_INT >= 26) {
             NotificationChannel notificationChannel = notificationManager.getNotificationChannel(CHANNEL_ID);
             if (notificationChannel == null) {

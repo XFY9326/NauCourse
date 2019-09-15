@@ -2,7 +2,8 @@ package tool.xfy9326.naucourse.methods;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+
+import androidx.preference.PreferenceManager;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.tools.AES;

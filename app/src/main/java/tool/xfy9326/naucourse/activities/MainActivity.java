@@ -3,12 +3,12 @@ package tool.xfy9326.naucourse.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -21,7 +21,7 @@ import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.methods.TempMethod;
 import tool.xfy9326.naucourse.methods.UpdateMethod;
 import tool.xfy9326.naucourse.views.FixedViewPager;
-import tool.xfy9326.naucourse.views.MainViewPagerAdapter;
+import tool.xfy9326.naucourse.views.viewPagerAdapters.MainViewPagerAdapter;
 
 /**
  * Created by xfy9326 on 18-2-20.
@@ -41,22 +41,22 @@ public class MainActivity extends AppCompatActivity {
         loginCheck();
         if (hasLogin) {
             setContentView(R.layout.activity_main);
-            ToolBarSet();
+            toolBarSet();
             if (savedInstanceState != null) {
-                ViewSet(savedInstanceState.getInt(CURRENT_FRAGMENT_INDEX, -1));
+                viewSet(savedInstanceState.getInt(CURRENT_FRAGMENT_INDEX, -1));
             } else {
-                ViewSet(-1);
+                viewSet(-1);
             }
             tempLoad();
             BaseMethod.showNewVersionInfo(this, true);
             DialogMethod.showEULADialog(this, true, new BaseMethod.OnEULAListener() {
                 @Override
-                public void OnAccept() {
+                public void onAccept() {
                     sharedPreferences.edit().putBoolean(Config.PREFERENCE_EULA_ACCEPT, true).apply();
                 }
 
                 @Override
-                public void OnReject() {
+                public void onReject() {
                     Toast.makeText(MainActivity.this, R.string.eula_not_accept, Toast.LENGTH_SHORT).show();
                     finish();
                 }
@@ -116,11 +116,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void ToolBarSet() {
+    private void toolBarSet() {
         setSupportActionBar(findViewById(R.id.toolbar));
     }
 
-    private void ViewSet(int fragment_current_index) {
+    private void viewSet(int fragmentCurrentIndex) {
         viewPager = findViewById(R.id.viewPaper_main);
         final BottomNavigationView bnv = findViewById(R.id.bnv_main);
         if (viewPagerAdapter == null) {
@@ -132,17 +132,17 @@ public class MainActivity extends AppCompatActivity {
         if (getIntent() != null) {
             int position = getIntent().getIntExtra(Config.INTENT_VIEW_PAGER_POSITION, -1);
             if (position >= 0 && position <= MainViewPagerAdapter.ITEM_COUNT) {
-                fragment_current_index = position;
+                fragmentCurrentIndex = position;
             }
         }
-        if (fragment_current_index < 0) {
+        if (fragmentCurrentIndex < 0) {
             if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Config.PREFERENCE_DEFAULT_SHOW_TABLE_PAGE, Config.DEFAULT_PREFERENCE_DEFAULT_SHOW_TABLE_PAGE)) {
                 viewPager.setCurrentItem(Config.VIEWPAGER_TABLE_PAGE, true);
                 bnv.getMenu().getItem(Config.VIEWPAGER_TABLE_PAGE).setChecked(true);
             }
         } else {
-            viewPager.setCurrentItem(fragment_current_index, true);
-            bnv.getMenu().getItem(fragment_current_index).setChecked(true);
+            viewPager.setCurrentItem(fragmentCurrentIndex, true);
+            bnv.getMenu().getItem(fragmentCurrentIndex).setChecked(true);
         }
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -173,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.bnv_item_person:
                     viewPager.setCurrentItem(2);
                     return true;
+                default:
             }
             return false;
         });
@@ -184,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
     private void tempLoad() {
         if (getIntent() != null) {
             if (getIntent().getBooleanExtra(Config.INTENT_JUST_LOGIN, false)) {
+                getIntent().removeExtra(Config.INTENT_JUST_LOGIN);
                 Toast.makeText(this, R.string.login_success, Toast.LENGTH_SHORT).show();
                 Toast.makeText(this, R.string.init_data_loading, Toast.LENGTH_SHORT).show();
                 if (NetMethod.isNetworkConnected(this)) {

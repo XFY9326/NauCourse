@@ -2,9 +2,9 @@ package tool.xfy9326.naucourse.methods;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 
 import java.util.ArrayList;
 

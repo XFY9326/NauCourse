@@ -21,7 +21,6 @@
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardView_course_search_panel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
@@ -172,6 +171,7 @@
                     android:id="@+id/textView_empty_data"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="@string/empty_search_data"
                     android:visibility="gone" />
 

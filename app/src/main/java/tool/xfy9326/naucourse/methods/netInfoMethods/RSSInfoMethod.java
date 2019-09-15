@@ -45,7 +45,6 @@ public class RSSInfoMethod {
     private boolean hasFailedLoad = false;
     private boolean isLoginError = false;
 
-
     public RSSInfoMethod(@NonNull Context context, ExecutorService executorService) {
         this.context = context.getApplicationContext();
         this.executorService = executorService;
@@ -131,8 +130,8 @@ public class RSSInfoMethod {
 
     @NonNull
     public static String getDetail(Context context) {
-        Element article_content = Objects.requireNonNull(document_detail).body().getElementsByClass("Article_Content").get(0);
-        Elements ps = article_content.getElementsByTag("p");
+        Element articleContent = Objects.requireNonNull(document_detail).body().getElementsByClass("Article_Content").get(0);
+        Elements ps = articleContent.getElementsByTag("p");
         for (int i = ps.size() - 1; i >= 0; i--) {
             Element p = ps.get(i);
             if ("".equals(p.text())) {

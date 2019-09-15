@@ -182,35 +182,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layout_fragment_function_list2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center">
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardView_moa"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    app:cardCornerRadius="4dp"
-                    app:cardElevation="3dp"
-                    app:cardPreventCornerOverlap="true">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="5dp"
-                        android:drawableTop="@drawable/ic_moa"
-                        android:drawablePadding="8dp"
-                        android:gravity="center"
-                        android:padding="5dp"
-                        android:text="@string/moa"
-                        android:textSize="13sp" />
-
-                </androidx.cardview.widget.CardView>
+                android:gravity="center"
+                android:visibility="gone">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardView_score_search"
@@ -267,7 +243,6 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cardView_blank"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
@@ -288,7 +263,31 @@
                         android:drawablePadding="8dp"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="@string/alstu_system"
+                        android:textSize="13sp" />
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:visibility="invisible"
+                    app:cardCornerRadius="4dp"
+                    app:cardElevation="3dp"
+                    app:cardPreventCornerOverlap="true">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:drawableTop="@drawable/ic_alstu"
+                        android:drawablePadding="8dp"
+                        android:gravity="center"
+                        android:padding="5dp"
                         android:textSize="13sp" />
 
                 </androidx.cardview.widget.CardView>

@@ -60,7 +60,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/layout_about_author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -117,9 +116,15 @@
                 android:id="@+id/textView_about_copy_right"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="10dp"
                 android:gravity="center"
-                android:textSize="16sp" />
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/society"
+                android:textSize="14sp" />
 
             <TextView
                 android:layout_width="match_parent"

@@ -2,9 +2,9 @@ package tool.xfy9326.naucourse.methods;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +27,7 @@ public class LoginMethod {
      * @return ReLogin状态值
      * @throws IOException 重新登陆时的网络错误
      */
-    static int reLogin(@NonNull Context context) throws IOException, InterruptedException {
+    synchronized static int reLogin(@NonNull Context context) throws IOException, InterruptedException {
         if (!isTryingReLogin) {
             isTryingReLogin = true;
             int result = doReLogin(context);
@@ -51,8 +51,8 @@ public class LoginMethod {
     synchronized public static int doReLogin(@NonNull Context context, String id, String pw, SharedPreferences sharedPreferences) throws IOException, InterruptedException {
         NauSSOClient nauSSOClient = BaseMethod.getApp(context).getClient();
         nauSSOClient.jwcLoginOut();
-        nauSSOClient.VPNLoginOut();
-        nauSSOClient.loginOut();
+//        nauSSOClient.VPNLoginOut();
+//        nauSSOClient.loginOut();
         Thread.sleep(2000);
         if (nauSSOClient.login(id, pw)) {
             nauSSOClient.alstuLogin(id, pw);
@@ -135,10 +135,10 @@ public class LoginMethod {
      * @param context Context
      */
     public static void cleanUserTemp(Context context) {
-        File cache_file = context.getCacheDir();
-        deleteAll(cache_file);
-        File data_file = context.getFilesDir();
-        deleteAll(data_file);
+        File cacheFile = context.getCacheDir();
+        deleteAll(cacheFile);
+        File dataFile = context.getFilesDir();
+        deleteAll(dataFile);
     }
 
     private static void deleteAll(File f) {

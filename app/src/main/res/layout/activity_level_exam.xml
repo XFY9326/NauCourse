@@ -5,7 +5,7 @@
     android:id="@+id/layout_level_exam_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.LevelExamActivity">
+    tools:context=".activities.async.LevelExamActivity">
 
     <include layout="@layout/widget_toolbar" />
 

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +21,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,9 +43,9 @@ import tool.xfy9326.naucourse.utils.CourseDetail;
 import tool.xfy9326.naucourse.views.recyclerAdapters.CourseEditAdapter;
 
 public class CourseEditActivity extends AppCompatActivity {
+    private final ArrayList<CourseDetail> courseDetailArrayList = new ArrayList<>();
     private boolean needSave = false;
     private Course course;
-    private ArrayList<CourseDetail> courseDetailArrayList;
     private CourseEditAdapter courseEditAdapter;
     private Dialog loadingDialog = null;
     private boolean activityDestroy = true;
@@ -55,12 +55,12 @@ public class CourseEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_edit);
         activityDestroy = false;
-        ToolBarSet();
+        toolBarSet();
         getData();
-        ViewSet();
+        viewSet();
     }
 
-    private void ToolBarSet() {
+    private void toolBarSet() {
         setSupportActionBar(findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -92,9 +92,9 @@ public class CourseEditActivity extends AppCompatActivity {
         }
     }
 
-    private void ViewSet() {
+    private void viewSet() {
         if (course != null) {
-            courseDetailArrayList = getCourseDetailArrayList();
+            getCourseDetailArrayList();
             TextInputEditText editTextCourseEditName = findViewById(R.id.editText_course_edit_name);
             TextInputEditText editTextCourseEditTeacher = findViewById(R.id.editText_course_edit_teacher);
             TextInputEditText editTextCourseEditType = findViewById(R.id.editText_course_edit_type);
@@ -137,7 +137,6 @@ public class CourseEditActivity extends AppCompatActivity {
             FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton_course_edit_add);
             floatingActionButton.setOnClickListener(v -> {
                 courseDetailArrayList.add(new CourseDetail());
-                courseEditAdapter.setData(courseDetailArrayList);
                 courseEditAdapter.notifyItemRangeInserted(courseDetailArrayList.size() - 1, 1);
                 needSave = true;
             });
@@ -187,6 +186,7 @@ public class CourseEditActivity extends AppCompatActivity {
             case R.id.menu_course_term_date:
                 setTerm();
                 break;
+            default:
         }
         return super.onOptionsItemSelected(item);
     }
@@ -216,32 +216,32 @@ public class CourseEditActivity extends AppCompatActivity {
         LayoutInflater layoutInflater = getLayoutInflater();
         final View view = layoutInflater.inflate(R.layout.dialog_course_term_set, findViewById(R.id.layout_dialog_course_term_set));
 
-        final EditText editText_year = view.findViewById(R.id.editText_course_school_year);
-        final RadioButton radioButton_term_one = view.findViewById(R.id.radioButton_term_one);
-        final RadioButton radioButton_term_two = view.findViewById(R.id.radioButton_term_two);
+        final EditText editTextYear = view.findViewById(R.id.editText_course_school_year);
+        final RadioButton radioButtonTermOne = view.findViewById(R.id.radioButton_term_one);
+        final RadioButton radioButtonTermTwo = view.findViewById(R.id.radioButton_term_two);
         long courseTerm = Long.valueOf(course.getCourseTerm());
         if (courseTerm > 0) {
-            editText_year.setText(String.valueOf(courseTerm / (10 * 10000)));
+            editTextYear.setText(String.valueOf(courseTerm / (10 * 10000)));
             if (courseTerm % 10 == 1) {
-                radioButton_term_one.setChecked(true);
-                radioButton_term_two.setChecked(false);
+                radioButtonTermOne.setChecked(true);
+                radioButtonTermTwo.setChecked(false);
             } else if (courseTerm % 10 == 2) {
-                radioButton_term_one.setChecked(false);
-                radioButton_term_two.setChecked(true);
+                radioButtonTermOne.setChecked(false);
+                radioButtonTermTwo.setChecked(true);
             }
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(CourseEditActivity.this);
         builder.setTitle(R.string.course_term_set);
         builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
-            String str_year = editText_year.getText().toString();
-            if (!str_year.isEmpty() && BaseMethod.isInteger(str_year)) {
-                long year = Long.valueOf(str_year);
+            String strYear = editTextYear.getText().toString();
+            if (!strYear.isEmpty() && BaseMethod.isInteger(strYear)) {
+                long year = Long.valueOf(strYear);
                 if (year >= 1983L && year < 10000L) {
                     //仅支持四位数的年份，仅支持一年两学期制
-                    long term = (year * 10000L + year + 1L) * 10L + (radioButton_term_one.isChecked() ? 1L : 2L);
+                    long term = (year * 10000L + year + 1L) * 10L + (radioButtonTermOne.isChecked() ? 1L : 2L);
                     course.setCourseTerm(String.valueOf(term));
-                    ((TextView) findViewById(R.id.textView_course_edit_term)).setText(getString(R.string.course_edit_course_time_detail, year, year + 1, (radioButton_term_one.isChecked() ? 1 : 2)));
+                    ((TextView) findViewById(R.id.textView_course_edit_term)).setText(getString(R.string.course_edit_course_time_detail, year, year + 1, (radioButtonTermOne.isChecked() ? 1 : 2)));
                     needSave = true;
                 } else {
                     Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.input_error, Snackbar.LENGTH_LONG).show();
@@ -265,20 +265,20 @@ public class CourseEditActivity extends AppCompatActivity {
         TextInputEditText editTextCourseEditClass = findViewById(R.id.editText_course_edit_class);
         TextInputEditText editTextCourseEditCombineClass = findViewById(R.id.editText_course_edit_combine_class);
 
-        Editable editable_name = editTextCourseEditName.getText();
-        Editable editable_teacher = editTextCourseEditTeacher.getText();
-        Editable editable_type = editTextCourseEditType.getText();
-        Editable editable_score = editTextCourseEditScore.getText();
-        Editable editable_class = editTextCourseEditClass.getText();
-        Editable editable_combineClass = editTextCourseEditCombineClass.getText();
+        Editable editableName = editTextCourseEditName.getText();
+        Editable editableTeacher = editTextCourseEditTeacher.getText();
+        Editable editableType = editTextCourseEditType.getText();
+        Editable editableScore = editTextCourseEditScore.getText();
+        Editable editableClass = editTextCourseEditClass.getText();
+        Editable editableCombineClass = editTextCourseEditCombineClass.getText();
 
-        if (editable_name != null && editable_teacher != null && editable_type != null && editable_score != null && editable_class != null && editable_combineClass != null) {
-            course.setCourseName(editable_name.toString());
-            course.setCourseTeacher(editable_teacher.toString());
-            course.setCourseType(editable_type.toString());
-            course.setCourseScore(editable_score.toString());
-            course.setCourseClass(editable_class.toString());
-            course.setCourseCombinedClass(editable_combineClass.toString());
+        if (editableName != null && editableTeacher != null && editableType != null && editableScore != null && editableClass != null && editableCombineClass != null) {
+            course.setCourseName(editableName.toString());
+            course.setCourseTeacher(editableTeacher.toString());
+            course.setCourseType(editableType.toString());
+            course.setCourseScore(editableScore.toString());
+            course.setCourseClass(editableClass.toString());
+            course.setCourseCombinedClass(editableCombineClass.toString());
 
             new Thread(() -> {
                 course.setCourseDetail(courseDetailArrayList.toArray(new CourseDetail[0]));
@@ -335,20 +335,18 @@ public class CourseEditActivity extends AppCompatActivity {
     }
 
     //获取课程详细信息的列表
-    private ArrayList<CourseDetail> getCourseDetailArrayList() {
+    private void getCourseDetailArrayList() {
         if (course == null) {
             getData();
         }
         if (course != null) {
             CourseDetail[] courseDetails = course.getCourseDetail();
             if (courseDetails != null) {
-                courseDetailArrayList = new ArrayList<>(Arrays.asList(courseDetails));
+                courseDetailArrayList.addAll(Arrays.asList(courseDetails));
             } else {
-                courseDetailArrayList = new ArrayList<>();
                 courseDetailArrayList.add(new CourseDetail());
             }
         }
-        return courseDetailArrayList;
     }
 
     @Override

@@ -38,8 +38,8 @@ public class CourseSearchMethod {
     private Document document;
 
     public CourseSearchMethod() {
-        OkHttpClient.Builder client_builder = new OkHttpClient.Builder();
-        client_builder.cookieJar(new CookieJar() {
+        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+        clientBuilder.cookieJar(new CookieJar() {
             @Override
             public void saveFromResponse(HttpUrl httpUrl, List<Cookie> list) {
                 cookieStore.put(httpUrl.host(), list);
@@ -51,7 +51,7 @@ public class CourseSearchMethod {
                 return cookies != null ? cookies : new ArrayList<>();
             }
         });
-        client = client_builder.build();
+        client = clientBuilder.build();
     }
 
     @NonNull
@@ -85,7 +85,7 @@ public class CourseSearchMethod {
     }
 
     public int load() throws Exception {
-        HashMap<String, String> head = new HashMap<>();
+        HashMap<String, String> head = new HashMap<>(10);
         head.put("Referer", "http://jwc.nau.edu.cn/Login.aspx");
         String data = NetMethod.loadUrl(client, PAGE_URL, head);
         System.gc();
@@ -160,9 +160,9 @@ public class CourseSearchMethod {
         ArrayList<String> classNameList = new ArrayList<>();
         String data;
         try {
-            HashMap<String, String> hashMap = new HashMap<>();
+            HashMap<String, String> hashMap = new HashMap<>(10);
             hashMap.put("term", term);
-            HashMap<String, String> head = new HashMap<>();
+            HashMap<String, String> head = new HashMap<>(10);
             head.put("Referer", "http://jwc.nau.edu.cn/coursearrangeInfosearch.aspx");
             head.put("Origin", "http://jwc.nau.edu.cn");
             data = NetMethod.postUrl(client, CLASS_NAME_URL, hashMap, head);
@@ -193,13 +193,13 @@ public class CourseSearchMethod {
         }
         String data;
         try {
-            HashMap<String, String> hashMap = new HashMap<>();
+            HashMap<String, String> hashMap = new HashMap<>(10);
             hashMap.put("term", courseSearchInfo.getTerm());
             hashMap.put("searchType", courseSearchInfo.getSearchType());
             hashMap.put("value", courseSearchInfo.getValue());
             hashMap.put("tk", tk);
 
-            HashMap<String, String> head = new HashMap<>();
+            HashMap<String, String> head = new HashMap<>(10);
             head.put("Referer", "http://jwc.nau.edu.cn/coursearrangeInfosearch.aspx");
             head.put("Origin", "http://jwc.nau.edu.cn");
             data = NetMethod.postUrl(client, SEARCH_URL, hashMap, head);

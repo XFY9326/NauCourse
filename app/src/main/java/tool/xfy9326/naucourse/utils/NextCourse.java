@@ -21,11 +21,6 @@ public class NextCourse extends BaseData {
     private boolean inVacation;
 
     public NextCourse() {
-        this.courseId = null;
-        this.courseName = null;
-        this.courseTeacher = null;
-        this.courseLocation = null;
-        this.courseTime = null;
         this.inVacation = true;
     }
 

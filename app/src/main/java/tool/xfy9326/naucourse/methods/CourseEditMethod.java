@@ -153,19 +153,19 @@ public class CourseEditMethod {
                         if (courses.get(i).getCourseTerm() != null && !courses.get(i).getCourseTerm().equals(courses.get(j).getCourseTerm())) {
                             continue;
                         }
-                        CourseDetail[] courseDetail_list_check = courses.get(i).getCourseDetail();
-                        if (courseDetail_list_check != null) {
-                            for (CourseDetail courseDetail_check : courseDetail_list_check) {
-                                if (courseDetail_check == null) {
+                        CourseDetail[] courseDetailListCheck = courses.get(i).getCourseDetail();
+                        if (courseDetailListCheck != null) {
+                            for (CourseDetail courseDetailCheck : courseDetailListCheck) {
+                                if (courseDetailCheck == null) {
                                     continue;
                                 }
-                                CourseDetail[] courseDetail_list = courses.get(j).getCourseDetail();
-                                if (courseDetail_list != null) {
-                                    for (CourseDetail courseDetail : courseDetail_list) {
+                                CourseDetail[] courseDetailList = courses.get(j).getCourseDetail();
+                                if (courseDetailList != null) {
+                                    for (CourseDetail courseDetail : courseDetailList) {
                                         if (courseDetail == null) {
                                             continue;
                                         }
-                                        if (isCourseDetailTimeError(courseDetail, courseDetail_check)) {
+                                        if (isCourseDetailTimeError(courseDetail, courseDetailCheck)) {
                                             courseCheckResult.setHasError();
                                             courseCheckResult.setCheckCourseName(courses.get(i).getCourseName());
                                             courseCheckResult.setConflictCourseName(courses.get(j).getCourseName());
@@ -221,8 +221,9 @@ public class CourseEditMethod {
         }
         int weekMode1 = courseDetail1.getWeekMode();
         int weekMode2 = courseDetail2.getWeekMode();
-        if (weekMode1 == Config.COURSE_DETAIL_WEEKMODE_SINGLE && weekMode2 == Config.COURSE_DETAIL_WEEKMODE_DOUBLE ||
-                weekMode2 == Config.COURSE_DETAIL_WEEKMODE_SINGLE && weekMode1 == Config.COURSE_DETAIL_WEEKMODE_DOUBLE) {
+        boolean isDifferentWeekMode = weekMode1 == Config.COURSE_DETAIL_WEEKMODE_SINGLE && weekMode2 == Config.COURSE_DETAIL_WEEKMODE_DOUBLE ||
+                weekMode2 == Config.COURSE_DETAIL_WEEKMODE_SINGLE && weekMode1 == Config.COURSE_DETAIL_WEEKMODE_DOUBLE;
+        if (isDifferentWeekMode) {
             return false;
         }
         if (courseDetail1.getWeekDay() != courseDetail2.getWeekDay()) {

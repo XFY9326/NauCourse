@@ -9,14 +9,14 @@ import androidx.annotation.Nullable;
 import java.net.SocketTimeoutException;
 
 import tool.xfy9326.naucourse.Config;
-import tool.xfy9326.naucourse.fragments.PersonFragment;
+import tool.xfy9326.naucourse.fragments.base.PersonFragment;
 import tool.xfy9326.naucourse.methods.BaseMethod;
 import tool.xfy9326.naucourse.methods.DataMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.PersonMethod;
 import tool.xfy9326.naucourse.utils.StudentInfo;
 import tool.xfy9326.naucourse.utils.StudentLearnProcess;
-import tool.xfy9326.naucourse.views.MainViewPagerAdapter;
+import tool.xfy9326.naucourse.views.viewPagerAdapters.MainViewPagerAdapter;
 
 /**
  * Created by 10696 on 2018/3/2.
@@ -85,7 +85,7 @@ public class StudentAsync extends AsyncTask<Context, Void, Context> {
             PersonFragment personFragment = viewPagerAdapter.getPersonFragment();
             if (personFragment != null) {
                 if (NetMethod.checkNetWorkCode(context, new int[]{personLoadSuccess}, loadCode, false)) {
-                    personFragment.PersonViewSet(studentInfo, studentLearnProcess, context);
+                    personFragment.personViewSet(studentInfo, studentLearnProcess, context);
                 }
                 personFragment.lastViewSet(context, studentInfo == null || studentLearnProcess == null);
             }

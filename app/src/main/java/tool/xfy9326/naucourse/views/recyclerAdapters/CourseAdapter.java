@@ -3,7 +3,6 @@ package tool.xfy9326.naucourse.views.recyclerAdapters;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,10 @@ import android.widget.TextView;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.ViewCompat;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -37,18 +38,16 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     private final CourseActivity activity;
     private final SharedPreferences sharedPreferences;
     private final ArrayList<Course> courseArrayList;
+    private final int courseCellBackgroundColor;
     private boolean showCellColor;
     private boolean singleColor;
     private ColorPickerDialog colorPickerDialog;
-
-    public CourseAdapter(CourseActivity activity) {
-        this(activity, new ArrayList<>());
-    }
 
     public CourseAdapter(CourseActivity activity, ArrayList<Course> courseArrayList) {
         this.activity = activity;
         this.courseArrayList = courseArrayList;
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
+        this.courseCellBackgroundColor = ResourcesCompat.getColor(activity.getResources(), R.color.course_cell_background, activity.getTheme());
         updateColor();
     }
 
@@ -57,9 +56,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         notifyDataSetChanged();
     }
 
-    public void updateList(ArrayList<Course> courseArrayList) {
-        this.courseArrayList.clear();
-        this.courseArrayList.addAll(courseArrayList);
+    public void updateList() {
         updateColor();
         notifyDataSetChanged();
     }
@@ -119,7 +116,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         if (showCellColor) {
             int color = course.getCourseColor();
             if (color == -1 || singleColor) {
-                color = activity.getResources().getColor(R.color.course_cell_background);
+                color = courseCellBackgroundColor;
             }
             holder.cardView_course_edit.setCardBackgroundColor(color);
         }
@@ -144,14 +141,14 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
      * @param position 位置
      */
     private void editColor(final int position) {
-        int default_color = courseArrayList.get(position).getCourseColor();
-        if (default_color == -1) {
-            default_color = activity.getResources().getColor(R.color.course_cell_background);
+        int defaultColor = courseArrayList.get(position).getCourseColor();
+        if (defaultColor == -1) {
+            defaultColor = courseCellBackgroundColor;
         }
         int[] preset = BaseMethod.getColorArray(activity);
-        preset[preset.length - 1] = activity.getResources().getColor(R.color.course_cell_background);
+        preset[preset.length - 1] = courseCellBackgroundColor;
         colorPickerDialog = ColorPickerDialog.newBuilder()
-                .setColor(default_color)
+                .setColor(defaultColor)
                 .setDialogTitle(R.string.course_color)
                 .setDialogId(COLOR_PICKER_DIALOG_ID)
                 .setPresets(preset)

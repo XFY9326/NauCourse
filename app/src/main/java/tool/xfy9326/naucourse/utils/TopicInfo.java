@@ -24,13 +24,6 @@ public class TopicInfo extends BaseData {
     private long dateLong;
 
     public TopicInfo() {
-        this.title = null;
-        this.date = null;
-        this.click = null;
-        this.post = null;
-        this.source = null;
-        this.url = null;
-        this.type = null;
         this.dateLong = -1;
     }
 

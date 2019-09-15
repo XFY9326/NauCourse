@@ -2,10 +2,10 @@ package tool.xfy9326.naucourse.methods.netInfoMethods;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -22,6 +22,10 @@ import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.methods.VPNMethods;
 import tool.xfy9326.naucourse.utils.AlstuTopic;
 
+/**
+ * @author xfy9326
+ */
+
 public class AlstuMethod extends BaseInfoDetailMethod<AlstuTopic> {
     public static final String FILE_NAME = AlstuTopic.class.getSimpleName();
     public static final int TYPE_ALSTU = 5;
@@ -36,16 +40,16 @@ public class AlstuMethod extends BaseInfoDetailMethod<AlstuTopic> {
 
     private static String getDownloadFileText(Context context, Document detailDocument) {
         StringBuilder result = new StringBuilder();
-        Element element_data = Objects.requireNonNull(detailDocument).body().getElementById("MyDataList");
-        if (element_data != null) {
-            Elements elements_td = element_data.getElementsByTag("td");
+        Element elementData = Objects.requireNonNull(detailDocument).body().getElementById("MyDataList");
+        if (elementData != null) {
+            Elements elementsTd = elementData.getElementsByTag("td");
 
             result.append("<br/><br/><br/><p>附件：</p>");
 
-            Element element_tjsj = Objects.requireNonNull(detailDocument).body().getElementById("tjsj");
-            String year = element_tjsj.text().substring(0, 4);
+            Element elementTjsj = Objects.requireNonNull(detailDocument).body().getElementById("tjsj");
+            String year = elementTjsj.text().substring(0, 4);
 
-            for (Element elementChild : elements_td) {
+            for (Element elementChild : elementsTd) {
                 Element a = elementChild.getElementsByTag("a").first();
                 if (a.hasAttr("onclick")) {
                     String fileDownloadName = a.attr("onclick");
@@ -102,8 +106,8 @@ public class AlstuMethod extends BaseInfoDetailMethod<AlstuTopic> {
                 switch (counter) {
                     case 1:
                         title.add(text);
-                        Elements elements_a = elementChild.getElementsByTag("a");
-                        String href = elements_a.get(0).attr("href");
+                        Elements elementsA = elementChild.getElementsByTag("a");
+                        String href = elementsA.get(0).attr("href");
                         if (href.startsWith("../")) {
                             href = href.substring(3);
                         }
@@ -113,6 +117,7 @@ public class AlstuMethod extends BaseInfoDetailMethod<AlstuTopic> {
                         date.add(text);
                         counter = 0;
                         break;
+                    default:
                 }
             }
             alstuTopic.setTopic_length(title.size());
@@ -144,10 +149,10 @@ public class AlstuMethod extends BaseInfoDetailMethod<AlstuTopic> {
     @NonNull
     @Override
     public String getDetailData() {
-        Element element_body = Objects.requireNonNull(detailDocument).body();
-        Elements elements_p = element_body.getElementById("nr").getElementsByTag("p");
-        elements_p.remove(0);
-        String result = elements_p.html().replaceAll("<img.*?/?>", context.getResources().getString(R.string.image_replace));
+        Element elementBody = Objects.requireNonNull(detailDocument).body();
+        Elements elementsP = elementBody.getElementById("nr").getElementsByTag("p");
+        elementsP.remove(0);
+        String result = elementsP.html().replaceAll("<img.*?/?>", context.getResources().getString(R.string.image_replace));
         result += getDownloadFileText(context, detailDocument);
         return result;
     }

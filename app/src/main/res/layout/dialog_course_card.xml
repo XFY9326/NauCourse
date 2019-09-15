@@ -7,12 +7,27 @@
     android:orientation="vertical"
     android:padding="15dp">
 
-    <TextView
-        android:id="@+id/textView_course_card_name"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:textSize="20sp" />
+        android:layout_marginEnd="10dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/textView_course_card_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/button_dialog_course_card_share"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/ic_share_dark" />
+
+    </LinearLayout>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

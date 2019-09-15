@@ -26,7 +26,6 @@ import tool.xfy9326.naucourse.methods.netInfoMethods.ExamMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.HistoryScoreMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.JwcInfoMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.LevelExamMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.MoaMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.PersonMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.SchoolTimeMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.ScoreMethod;
@@ -67,18 +66,18 @@ public class DataMethod {
     /**
      * 获取离线数据
      *
-     * @param context    Context
-     * @param file_class JavaBean Class
-     * @param FILE_NAME  缓存数据文件名
+     * @param context   Context
+     * @param fileClass JavaBean Class
+     * @param fileName  缓存数据文件名
      * @return JavaBean对象
      */
-    public static <T> Object getOfflineData(Context context, @NonNull Class<T> file_class, String FILE_NAME, boolean needDecrypt) {
+    public static <T> Object getOfflineData(Context context, @NonNull Class<T> fileClass, String fileName, boolean needDecrypt) {
         Object object = null;
-        String content = getOfflineContent(context, FILE_NAME, needDecrypt);
+        String content = getOfflineContent(context, fileName, needDecrypt);
         if (content != null) {
-            if (checkDataVersionCode(content, file_class)) {
+            if (checkDataVersionCode(content, fileClass)) {
                 try {
-                    object = new Gson().fromJson(content, file_class);
+                    object = new Gson().fromJson(content, fileClass);
                 } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                 }
@@ -87,8 +86,8 @@ public class DataMethod {
         return object;
     }
 
-    private static String getOfflineContent(Context context, String FILE_NAME, boolean needDecrypt) {
-        String path = getOfflineDataFilePath(context, FILE_NAME, needDecrypt);
+    private static String getOfflineContent(Context context, String fileName, boolean needDecrypt) {
+        String path = getOfflineDataFilePath(context, fileName, needDecrypt);
         File file = new File(path);
         if (file.exists()) {
             String data = IO.readFile(path);
@@ -142,21 +141,21 @@ public class DataMethod {
      *
      * @param context     Context
      * @param o           JavaBean对象
-     * @param FILE_NAME   储存的文件名
+     * @param fileName    储存的文件名
      * @param checkTemp   是否检测缓存与要储存的数据相同
      * @param needEncrypt 需要加密
      * @return 是否保存成功
      */
-    public static boolean saveOfflineData(final Context context, final Object o, final String FILE_NAME, boolean checkTemp, boolean needEncrypt) {
+    public static boolean saveOfflineData(final Context context, final Object o, final String fileName, boolean checkTemp, boolean needEncrypt) {
         if (o == null) {
             return false;
         } else {
-            return saveOfflineContent(context, new Gson().toJson(o), FILE_NAME, checkTemp, needEncrypt);
+            return saveOfflineContent(context, new Gson().toJson(o), fileName, checkTemp, needEncrypt);
         }
     }
 
-    private static boolean saveOfflineContent(final Context context, final String data, final String FILE_NAME, boolean checkTemp, boolean needEncrypt) {
-        String path = getOfflineDataFilePath(context, FILE_NAME, needEncrypt);
+    private static boolean saveOfflineContent(final Context context, final String data, final String fileName, boolean checkTemp, boolean needEncrypt) {
+        String path = getOfflineDataFilePath(context, fileName, needEncrypt);
         String content = data;
         if (needEncrypt) {
             content = SecurityMethod.encryptData(context, data);
@@ -199,21 +198,21 @@ public class DataMethod {
     /**
      * 删除离线数据
      *
-     * @param context   Context
-     * @param FILE_NAME 离线数据的文件名
+     * @param context  Context
+     * @param fileName 离线数据的文件名
      */
     @SuppressWarnings("SameParameterValue")
-    public static void deleteOfflineData(final Context context, final String FILE_NAME, boolean isEncrypt) {
-        File file = new File(getOfflineDataFilePath(context, FILE_NAME, isEncrypt));
+    public static void deleteOfflineData(final Context context, final String fileName, boolean isEncrypt) {
+        File file = new File(getOfflineDataFilePath(context, fileName, isEncrypt));
         if (file.exists()) {
             //noinspection ResultOfMethodCallIgnored
             file.delete();
         }
     }
 
-    private static boolean checkDataVersionCode(String content, Class file_class) {
+    private static boolean checkDataVersionCode(String content, Class fileClass) {
         int nowVersionCode;
-        String simpleName = file_class.getSimpleName();
+        String simpleName = fileClass.getSimpleName();
         if (simpleName.equals(ScoreMethod.FILE_NAME)) {
             nowVersionCode = Config.DATA_VERSION_COURSE_SCORE;
         } else if (simpleName.equals(ExamMethod.FILE_NAME)) {
@@ -232,8 +231,6 @@ public class DataMethod {
             nowVersionCode = Config.DATA_VERSION_STUDENT_SCORE;
         } else if (simpleName.equals(LevelExamMethod.FILE_NAME)) {
             nowVersionCode = Config.DATA_VERSION_LEVEL_EXAM;
-        } else if (simpleName.equals(MoaMethod.FILE_NAME)) {
-            nowVersionCode = Config.DATA_VERSION_MOA;
         } else if (simpleName.equals(SuspendCourseMethod.FILE_NAME)) {
             nowVersionCode = Config.DATA_VERSION_SUSPEND_COURSE;
         } else if (simpleName.equals(AlstuMethod.FILE_NAME)) {
@@ -260,8 +257,8 @@ public class DataMethod {
         return false;
     }
 
-    private static String getOfflineDataFilePath(Context context, String FILE_NAME, boolean encryptAble) {
-        return context.getFilesDir() + File.separator + FILE_NAME + (encryptAble ? ENCRYPTED_FILE_PREFIX : NOT_ENCRYPTED_FILE_PREFIX);
+    private static String getOfflineDataFilePath(Context context, String fileName, boolean encryptAble) {
+        return context.getFilesDir() + File.separator + fileName + (encryptAble ? ENCRYPTED_FILE_PREFIX : NOT_ENCRYPTED_FILE_PREFIX);
     }
 
     public static class InfoData {

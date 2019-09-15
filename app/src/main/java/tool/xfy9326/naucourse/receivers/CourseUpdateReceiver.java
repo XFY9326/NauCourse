@@ -6,10 +6,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.AlarmManagerCompat;
+import androidx.preference.PreferenceManager;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -75,31 +75,31 @@ public class CourseUpdateReceiver extends BroadcastReceiver {
         String[] startTime = context.getResources().getStringArray(R.array.course_start_time);
         long nowTime = calendar.getTimeInMillis();
 
-        String[] time_end = startTime[startTime.length - 1].split(":");
-        calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time_end[0]));
-        calendar.set(Calendar.MINUTE, Integer.valueOf(time_end[1]));
+        String[] timeEnd = startTime[startTime.length - 1].split(":");
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(timeEnd[0]));
+        calendar.set(Calendar.MINUTE, Integer.valueOf(timeEnd[1]));
         boolean todayCourseFinish = nowTime >= calendar.getTimeInMillis();
 
         //一天的上课结束后
         if (todayCourseFinish || nextCourse.getCourseId() == null) {
-            String[] time_temp = startTime[0].split(":");
-            calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time_temp[0]));
-            calendar.set(Calendar.MINUTE, Integer.valueOf(time_temp[1]));
+            String[] timeTemp = startTime[0].split(":");
+            calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(timeTemp[0]));
+            calendar.set(Calendar.MINUTE, Integer.valueOf(timeTemp[1]));
             calendar.add(Calendar.DATE, 1);
             calendar.add(Calendar.MINUTE, -30);
             time = calendar.getTimeInMillis();
             isClassBeforeNotify = false;
         } else {
-            String[] time_temp = Objects.requireNonNull(nextCourse.getCourseTime()).split("~")[0].split(":");
-            calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time_temp[0]));
-            calendar.set(Calendar.MINUTE, Integer.valueOf(time_temp[1]));
+            String[] timeTemp = Objects.requireNonNull(nextCourse.getCourseTime()).split("~")[0].split(":");
+            calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(timeTemp[0]));
+            calendar.set(Calendar.MINUTE, Integer.valueOf(timeTemp[1]));
             calendar.add(Calendar.MINUTE, -10);
 
             if (nowTime >= calendar.getTimeInMillis()) {
                 //过了上课时间
-                time_temp = nextCourse.getCourseTime().split("~")[1].split(":");
-                calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time_temp[0]));
-                calendar.set(Calendar.MINUTE, Integer.valueOf(time_temp[1]) + 1);
+                timeTemp = nextCourse.getCourseTime().split("~")[1].split(":");
+                calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(timeTemp[0]));
+                calendar.set(Calendar.MINUTE, Integer.valueOf(timeTemp[1]) + 1);
                 time = calendar.getTimeInMillis();
                 isClassBeforeNotify = false;
             } else {

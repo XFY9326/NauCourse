@@ -2,10 +2,10 @@ package tool.xfy9326.naucourse.methods.netInfoMethods;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -43,8 +43,8 @@ public class ExamMethod extends BaseInfoMethod<Exam> {
             try {
                 long examTime = TimeMethod.parseDateSDFHM(startTime).getTime() / 1000L;
                 TimeMethod.CountingDown countingDown = TimeMethod.getCountingDownStr(context, now, examTime);
-                examLastTime.add(countingDown.Time);
-                examLastTimeUnit.add(countingDown.TimeUnit);
+                examLastTime.add(countingDown.time);
+                examLastTimeUnit.add(countingDown.timeUnit);
                 return;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -89,7 +89,7 @@ public class ExamMethod extends BaseInfoMethod<Exam> {
         ArrayList<String> examLastTimeUnit = new ArrayList<>();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean hide_exam = sharedPreferences.getBoolean(Config.PREFERENCE_HIDE_OUT_OF_DATE_EXAM, Config.DEFAULT_PREFERENCE_HIDE_OUT_OF_DATE_EXAM);
+        boolean hideExam = sharedPreferences.getBoolean(Config.PREFERENCE_HIDE_OUT_OF_DATE_EXAM, Config.DEFAULT_PREFERENCE_HIDE_OUT_OF_DATE_EXAM);
         long now = System.currentTimeMillis();
         long lastTimeNow = now / 1000L;
 
@@ -135,7 +135,7 @@ public class ExamMethod extends BaseInfoMethod<Exam> {
                             startDateTime = null;
                             endTime = null;
                         }
-                        if (hide_exam) {
+                        if (hideExam) {
                             long examEnd = -1;
                             if (endTime != null && str.contains(" ")) {
                                 String time = str.substring(0, str.indexOf(" ") + 1) + endTime;
@@ -175,6 +175,7 @@ public class ExamMethod extends BaseInfoMethod<Exam> {
                             needJump = false;
                         }
                         break;
+                    default:
                 }
                 if (count == 8) {
                     count = 0;

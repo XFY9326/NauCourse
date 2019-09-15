@@ -16,6 +16,8 @@ public class Config {
     @SuppressWarnings("unused")
     public static final String VERSION_TYPE = BuildConfig.VERSION_TYPE;
 
+    public static final String SHARE_COURSE_PREFIX = "ncc://";
+
     //单周
     public static final int COURSE_DETAIL_WEEKMODE_SINGLE = 1;
     //双周
@@ -124,6 +126,7 @@ public class Config {
     public static final String PREFERENCE_SCHOOL_CALENDAR_NAME = "SCHOOL_CALENDAR_NAME";
     public static final String PREFERENCE_NEED_CUSTOM_TERM_ALERT = "NEED_CUSTOM_TERM_ALERT";
     public static final String PREFERENCE_NIGHT_MODE = "NIGHT_MODE";
+    public static final String PREFERENCE_NOTIFY_SHOW_ATTENTION = "NOTIFY_SHOW_ATTENTION";
 
     public static final String PREFERENCE_INFO_CHANNEL_SELECTED_JWC_SYSTEM = "INFO_CHANNEL_SELECTED_JWC_SYSTEM";
     public static final String PREFERENCE_INFO_CHANNEL_SELECTED_JW = "INFO_CHANNEL_SELECTED_JW";
@@ -165,6 +168,7 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_CAN_ADD_COURSE_WARNING = true;
     public static final boolean DEFAULT_PREFERENCE_NEED_CUSTOM_TERM_ALERT = true;
     public static final int DEFAULT_PREFERENCE_NIGHT_MODE = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+    public static final boolean DEFAULT_PREFERENCE_NOTIFY_SHOW_ATTENTION = true;
 
     public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_JWC_SYSTEM = true;
     public static final boolean DEFAULT_PREFERENCE_INFO_CHANNEL_SELECTED_JW = true;
@@ -192,13 +196,10 @@ public class Config {
     public static final int DATA_VERSION_STUDENT_LEARN_PROCESS = 1;
     public static final int DATA_VERSION_STUDENT_SCORE = 1;
     public static final int DATA_VERSION_LEVEL_EXAM = 1;
-    public static final int DATA_VERSION_MOA = 1;
     public static final int DATA_VERSION_ALSTU_TOPIC = 1;
     public static final int DATA_VERSION_SUSPEND_COURSE = 1;
 
     public static final String DONATE_URL_ALIPAY = "https://www.xfy9326.top/api/donate/alipay.jpg";
     public static final String DONATE_URL_WECHAT = "https://www.xfy9326.top/api/donate/wechat.png";
     public static final String DONATE_URL_QQ_WALLET = "https://www.xfy9326.top/api/donate/qq_wallet.png";
-
-    public static final String DONATE_PERSON_URL = "https://www.xfy9326.top/api/donate/naucourse/personList.php";
 }

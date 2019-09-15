@@ -11,7 +11,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +28,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -53,6 +53,7 @@ import tool.xfy9326.naucourse.methods.CourseEditMethod;
 import tool.xfy9326.naucourse.methods.DataMethod;
 import tool.xfy9326.naucourse.methods.DialogMethod;
 import tool.xfy9326.naucourse.methods.PermissionMethod;
+import tool.xfy9326.naucourse.methods.ShareMethod;
 import tool.xfy9326.naucourse.methods.TimeMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.SchoolTimeMethod;
 import tool.xfy9326.naucourse.methods.netInfoMethods.TableMethod;
@@ -68,10 +69,10 @@ public class CourseActivity extends AppCompatActivity {
     private static final int RECOVER_WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE = 4;
     private static final int CHOOSE_RECOVER_WRITE_AND_READ_EXTERNAL_STORAGE_REQUEST_CODE = 5;
     private static final int CHOOSE_RECOVER_FILE_REQUEST_CODE = 6;
+    private final ArrayList<Course> courseArrayList = new ArrayList<>();
     public boolean activityDestroy = true;
     private RecyclerView recyclerView;
     private CourseAdapter courseAdapter;
-    private ArrayList<Course> courseArrayList;
     private int lastOffset = 0;
     private int lastPosition = 0;
     private boolean needSave = false;
@@ -90,8 +91,8 @@ public class CourseActivity extends AppCompatActivity {
         activityDestroy = false;
         BaseMethod.getApp(this).setCourseActivity(this);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        ToolBarSet();
-        ViewSet();
+        toolBarSet();
+        viewSet();
         getData();
     }
 
@@ -116,6 +117,9 @@ public class CourseActivity extends AppCompatActivity {
 
             case R.id.menu_course_random_course_color:
                 randomSetCourseColor();
+                break;
+            case R.id.menu_course_share_import:
+                importSharedCourse();
                 break;
             //清空课程
             case R.id.menu_course_delete_all:
@@ -151,11 +155,12 @@ public class CourseActivity extends AppCompatActivity {
                     chooseRecoverCourse();
                 }
                 break;
+            default:
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void ToolBarSet() {
+    private void toolBarSet() {
         setSupportActionBar(findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -167,10 +172,8 @@ public class CourseActivity extends AppCompatActivity {
     synchronized private void getData() {
         loadingDialog = DialogMethod.showLoadingDialog(CourseActivity.this, true, dialog -> finish());
         new Thread(() -> {
-            courseArrayList = DataMethod.getOfflineTableData(CourseActivity.this);
-            if (courseArrayList == null) {
-                courseArrayList = new ArrayList<>();
-            }
+            courseArrayList.clear();
+            courseArrayList.addAll(DataMethod.getOfflineTableData(CourseActivity.this));
             runOnUiThread(() -> {
                 if (loadingDialog != null && loadingDialog.isShowing()) {
                     loadingDialog.dismiss();
@@ -180,14 +183,14 @@ public class CourseActivity extends AppCompatActivity {
                         courseAdapter = new CourseAdapter(CourseActivity.this, courseArrayList);
                         recyclerView.setAdapter(courseAdapter);
                     } else {
-                        courseAdapter.updateList(courseArrayList);
+                        courseAdapter.updateList();
                     }
                 }
             });
         }).start();
     }
 
-    private void ViewSet() {
+    private void viewSet() {
         recyclerView = findViewById(R.id.recyclerView_course_list);
         recyclerView.setFocusableInTouchMode(false);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -203,7 +206,7 @@ public class CourseActivity extends AppCompatActivity {
             }
         });
         if (courseAdapter == null) {
-            courseAdapter = new CourseAdapter(CourseActivity.this);
+            courseAdapter = new CourseAdapter(CourseActivity.this, courseArrayList);
         }
         recyclerView.setAdapter(courseAdapter);
         scrollToPosition();
@@ -222,12 +225,29 @@ public class CourseActivity extends AppCompatActivity {
                     case 2:
                         importDataFromJwcNext();
                         break;
+                    default:
                 }
             });
             builder.show();
         });
 
         autoUpdateCourseAlert();
+    }
+
+    private void importSharedCourse() {
+        String shareStr = ShareMethod.getStringFromClipBoard(this);
+        if (shareStr != null && !shareStr.isEmpty() && shareStr.startsWith(Config.SHARE_COURSE_PREFIX)) {
+            Course course = ShareMethod.getShareCourse(shareStr);
+            if (course != null && courseAdapter != null) {
+                courseArrayList.add(course);
+                courseAdapter.updateList();
+                needSave = true;
+            } else {
+                Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.import_share_course_error, Snackbar.LENGTH_SHORT).show();
+            }
+        } else {
+            Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.import_share_course_empty, Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     private void createNewCourse() {
@@ -237,14 +257,14 @@ public class CourseActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(CourseActivity.this);
         builder.setTitle(R.string.course_term_set);
         builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
-            EditText editText_year = view.findViewById(R.id.editText_course_school_year);
-            RadioButton radioButton_term_one = view.findViewById(R.id.radioButton_term_one);
-            String str_year = editText_year.getText().toString();
-            if (!str_year.isEmpty() && BaseMethod.isInteger(str_year)) {
-                long year = Long.valueOf(str_year);
+            EditText editTextYear = view.findViewById(R.id.editText_course_school_year);
+            RadioButton radioButtonTermOne = view.findViewById(R.id.radioButton_term_one);
+            String strYear = editTextYear.getText().toString();
+            if (!strYear.isEmpty() && BaseMethod.isInteger(strYear)) {
+                long year = Long.valueOf(strYear);
                 if (year >= 1983L && year < 10000L) {
                     //仅支持四位数的年份，仅支持一年两学期制
-                    long term = (year * 10000L + year + 1L) * 10L + (radioButton_term_one.isChecked() ? 1L : 2L);
+                    long term = (year * 10000L + year + 1L) * 10L + (radioButtonTermOne.isChecked() ? 1L : 2L);
                     Intent intent = new Intent(CourseActivity.this, CourseEditActivity.class);
                     intent.putExtra(Config.INTENT_ADD_COURSE, true);
                     intent.putExtra(Config.INTENT_ADD_COURSE_TERM, term);
@@ -383,7 +403,7 @@ public class CourseActivity extends AppCompatActivity {
                             courseAdapter = new CourseAdapter(CourseActivity.this, courseArrayList);
                             recyclerView.setAdapter(courseAdapter);
                         } else {
-                            courseAdapter.updateList(courseArrayList);
+                            courseAdapter.updateList();
                         }
                         if (!found) {
                             courseAdapter.notifyItemRangeInserted(courseArrayList.size() - 1, 1);
@@ -497,19 +517,18 @@ public class CourseActivity extends AppCompatActivity {
     }
 
     private void chooseCourseAdd(boolean[] checked, ArrayList<Course> courses, boolean termCheck, boolean isBackup, boolean combineColor) {
-        ArrayList<Course> courses_choose = new ArrayList<>();
+        ArrayList<Course> coursesChoose = new ArrayList<>();
         for (int i = 0; i < checked.length; i++) {
             if (checked[i]) {
-                courses_choose.add(courses.get(i));
+                coursesChoose.add(courses.get(i));
             }
         }
-        ArrayList<Course> list = CourseEditMethod.combineCourseList(courses_choose, courseArrayList, termCheck, false, combineColor);
+        ArrayList<Course> list = CourseEditMethod.combineCourseList(coursesChoose, courseArrayList, termCheck, false, combineColor);
         if (list != null) {
             courseArrayList.clear();
             courseArrayList.addAll(list);
 
-            courseAdapter.updateList(courseArrayList);
-            courseAdapter.notifyDataSetChanged();
+            courseAdapter.updateList();
             needSave = true;
         }
         if (isBackup) {
@@ -556,14 +575,14 @@ public class CourseActivity extends AppCompatActivity {
         LayoutInflater layoutInflater = activity.getLayoutInflater();
         View view = layoutInflater.inflate(R.layout.dialog_term_time_set, activity.findViewById(R.id.layout_dialog_term_time_set));
 
-        TextView textView_start = view.findViewById(R.id.textView_custom_start_date);
-        textView_start.setText(activity.getString(R.string.custom_term_start_date, customStartTermDate));
+        TextView textViewStart = view.findViewById(R.id.textView_custom_start_date);
+        textViewStart.setText(activity.getString(R.string.custom_term_start_date, customStartTermDate));
 
-        TextView textView_end = view.findViewById(R.id.textView_custom_end_date);
-        textView_end.setText(activity.getString(R.string.custom_term_end_date, customEndTermDate));
+        TextView textViewEnd = view.findViewById(R.id.textView_custom_end_date);
+        textViewEnd.setText(activity.getString(R.string.custom_term_end_date, customEndTermDate));
 
-        Button button_start = view.findViewById(R.id.button_custom_start_date);
-        button_start.setOnClickListener(v -> {
+        Button buttonStart = view.findViewById(R.id.button_custom_start_date);
+        buttonStart.setOnClickListener(v -> {
             if (termSetDialog != null) {
                 if (termSetDialog.isShowing()) {
                     termSetDialog.cancel();
@@ -572,8 +591,8 @@ public class CourseActivity extends AppCompatActivity {
             showDatePickDialog(activity, true, calendarStart.get(Calendar.YEAR), calendarStart.get(Calendar.MONTH), calendarStart.get(Calendar.DAY_OF_MONTH));
         });
 
-        Button button_end = view.findViewById(R.id.button_custom_end_date);
-        button_end.setOnClickListener(v -> {
+        Button buttonEnd = view.findViewById(R.id.button_custom_end_date);
+        buttonEnd.setOnClickListener(v -> {
             if (termSetDialog != null) {
                 if (termSetDialog.isShowing()) {
                     termSetDialog.cancel();
@@ -667,8 +686,7 @@ public class CourseActivity extends AppCompatActivity {
         for (Course course : courseArrayList) {
             course.setCourseColor(BaseMethod.getRandomColor(CourseActivity.this));
         }
-        courseAdapter.updateList(courseArrayList);
-        courseAdapter.notifyDataSetChanged();
+        courseAdapter.updateList();
         Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.random_course_color_success, Snackbar.LENGTH_SHORT).show();
     }
 

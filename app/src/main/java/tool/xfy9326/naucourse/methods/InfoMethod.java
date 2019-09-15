@@ -21,11 +21,11 @@ public class InfoMethod {
     public static final String TOPIC_SOURCE_ALSTU = "ALSTU";
     public static final String FILE_NAME = "TopicInfo";
     public static final boolean IS_ENCRYPT = false;
-    private static Comparator<TopicInfo> date_comparator;
+    private static Comparator<TopicInfo> dateComparator;
 
     //设置数据（多来源数据整合）
     synchronized public static ArrayList<TopicInfo> combineData(final Context context, final JwcTopic jwcTopic, final AlstuTopic alstuTopic, final SparseArray<RSSReader.RSSObject> rssObjects) {
-        ArrayList<TopicInfo> topic_data = new ArrayList<>();
+        ArrayList<TopicInfo> topicData = new ArrayList<>();
         if (jwcTopic != null) {
             for (int i = 0; i < jwcTopic.getTopic_length(); i++) {
                 long date = TimeMethod.getInfoDateLong(Objects.requireNonNull(jwcTopic.getTopic_date())[i]);
@@ -40,7 +40,7 @@ public class InfoMethod {
                     infoDetail.setUrl(Objects.requireNonNull(jwcTopic.getTopic_url())[i]);
                     infoDetail.setType(Objects.requireNonNull(jwcTopic.getTopic_type())[i]);
 
-                    topic_data.add(infoDetail);
+                    topicData.add(infoDetail);
                 }
             }
         }
@@ -59,7 +59,7 @@ public class InfoMethod {
                     infoDetail.setUrl(Objects.requireNonNull(alstuTopic.getTopicUrl())[i]);
                     infoDetail.setType(context.getString(R.string.alstu_msg));
 
-                    topic_data.add(infoDetail);
+                    topicData.add(infoDetail);
                 }
             }
         }
@@ -85,7 +85,7 @@ public class InfoMethod {
                                 infoDetail.setUrl(rssItem.getLink());
                                 infoDetail.setType(rssItem.getType() == null ? defaultType : rssItem.getType());
 
-                                topic_data.add(infoDetail);
+                                topicData.add(infoDetail);
                             }
                         }
                     }
@@ -93,9 +93,9 @@ public class InfoMethod {
             }
         }
 
-        sort(topic_data);
+        sort(topicData);
 
-        return topic_data;
+        return topicData;
     }
 
     //删除超过三个月的消息
@@ -117,9 +117,9 @@ public class InfoMethod {
         return false;
     }
 
-    synchronized private static void sort(ArrayList<TopicInfo> topic_data) {
-        if (date_comparator == null) {
-            date_comparator = (o1, o2) -> {
+    synchronized private static void sort(ArrayList<TopicInfo> topicData) {
+        if (dateComparator == null) {
+            dateComparator = (o1, o2) -> {
                 int result = 0;
                 if (o1.getDateLong() > 0 && o2.getDateLong() > 0) {
                     result = Long.compare(o2.getDateLong(), o1.getDateLong());
@@ -127,9 +127,9 @@ public class InfoMethod {
                 return result;
             };
         }
-        if (!topic_data.isEmpty()) {
+        if (!topicData.isEmpty()) {
             try {
-                Collections.sort(topic_data, date_comparator);
+                Collections.sort(topicData, dateComparator);
             } catch (Exception e) {
                 e.printStackTrace();
             }

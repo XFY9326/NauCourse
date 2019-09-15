@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,6 +15,8 @@ import android.widget.Spinner;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -49,7 +50,7 @@ public class CourseSearchActivity extends AppCompatActivity {
     private int lastSelectTypePosition = 0;
     private boolean isDefaultTypeSet = false;
     private boolean hasTableUpdate = false;
-    private ArrayAdapter<String> value_adapter = null;
+    private ArrayAdapter<String> valueAdapter = null;
     private List<String> termList;
     private AdvancedRecyclerView recyclerView;
     private String lastSelectClassName = null;
@@ -59,12 +60,12 @@ public class CourseSearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_search);
         BaseMethod.getApp(this).setCourseSearchActivity(this);
-        ToolBarSet();
+        toolBarSet();
         this.courseSearchMethod = new CourseSearchMethod();
-        ViewSet();
+        viewSet();
     }
 
-    private void ToolBarSet() {
+    private void toolBarSet() {
         setSupportActionBar(findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -73,10 +74,10 @@ public class CourseSearchActivity extends AppCompatActivity {
         }
     }
 
-    private void ViewSet() {
-        if (value_adapter == null) {
-            value_adapter = new ArrayAdapter<>(CourseSearchActivity.this, android.R.layout.simple_list_item_1);
-            value_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    private void viewSet() {
+        if (valueAdapter == null) {
+            valueAdapter = new ArrayAdapter<>(CourseSearchActivity.this, android.R.layout.simple_list_item_1);
+            valueAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         }
 
         recyclerView = findViewById(R.id.recyclerView_course_search);
@@ -137,16 +138,16 @@ public class CourseSearchActivity extends AppCompatActivity {
             final String[] typeValueList = searchTypeList.keySet().toArray(new String[]{});
             final String[] typeTextList = searchTypeList.values().toArray(new String[]{});
 
-            final Spinner spinner_term = findViewById(R.id.spinner_course_search_term);
-            final Spinner spinner_search_type = findViewById(R.id.spinner_course_search_type);
-            final Spinner spinner_search_value = findViewById(R.id.spinner_course_search_value);
-            final EditText editText_value = findViewById(R.id.editText_course_search_value);
+            final Spinner spinnerTerm = findViewById(R.id.spinner_course_search_term);
+            final Spinner spinnerSearchType = findViewById(R.id.spinner_course_search_type);
+            final Spinner spinnerSearchValue = findViewById(R.id.spinner_course_search_value);
+            final EditText editTextValue = findViewById(R.id.editText_course_search_value);
 
-            spinner_search_value.setAdapter(value_adapter);
-            spinner_search_value.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            spinnerSearchValue.setAdapter(valueAdapter);
+            spinnerSearchValue.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    lastSelectClassName = (String) spinner_search_value.getSelectedItem();
+                    lastSelectClassName = (String) spinnerSearchValue.getSelectedItem();
                     if (courseSearchAdapter != null) {
                         courseSearchAdapter.clearSearchResult();
                     }
@@ -157,15 +158,15 @@ public class CourseSearchActivity extends AppCompatActivity {
                 }
             });
 
-            ArrayAdapter<String> term_adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, termList);
-            term_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner_term.setAdapter(term_adapter);
-            spinner_term.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            ArrayAdapter<String> termAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, termList);
+            termAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerTerm.setAdapter(termAdapter);
+            spinnerTerm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (lastSelectTermPosition != position) {
-                        if ("class".equals(typeValueList[spinner_search_type.getSelectedItemPosition()])) {
-                            getClassListData(termList.get(spinner_term.getSelectedItemPosition()));
+                        if ("class".equals(typeValueList[spinnerSearchType.getSelectedItemPosition()])) {
+                            getClassListData(termList.get(spinnerTerm.getSelectedItemPosition()));
                         }
                         lastSelectTermPosition = position;
                         if (courseSearchAdapter != null) {
@@ -179,44 +180,44 @@ public class CourseSearchActivity extends AppCompatActivity {
                 }
             });
 
-            ArrayAdapter<String> type_adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, typeTextList);
-            type_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner_search_type.setAdapter(type_adapter);
-            spinner_search_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, typeTextList);
+            typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerSearchType.setAdapter(typeAdapter);
+            spinnerSearchType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (lastSelectTypePosition != position || !isDefaultTypeSet) {
                         isDefaultTypeSet = true;
                         isSpinnerMode = false;
                         isWeekTypeSearch = false;
-                        value_adapter.clear();
+                        valueAdapter.clear();
 
                         if ("class".equals(typeValueList[position])) {
                             isSpinnerMode = true;
-                            getClassListData(termList.get(spinner_term.getSelectedItemPosition()));
+                            getClassListData(termList.get(spinnerTerm.getSelectedItemPosition()));
                         } else if ("room".equals(typeValueList[position])) {
                             isSpinnerMode = true;
-                            value_adapter.addAll(roomList);
+                            valueAdapter.addAll(roomList);
                         } else if ("dept".equals(typeValueList[position])) {
                             isSpinnerMode = true;
-                            value_adapter.addAll(deptList);
+                            valueAdapter.addAll(deptList);
                         } else if ("week".equals(typeValueList[position])) {
                             isSpinnerMode = true;
                             isWeekTypeSearch = true;
-                            value_adapter.addAll(TimeMethod.getWeekStrArray(CourseSearchActivity.this));
+                            valueAdapter.addAll(TimeMethod.getWeekStrArray(CourseSearchActivity.this));
                         } else {
                             Snackbar.make(findViewById(R.id.layout_course_search_content), R.string.search_use_full_name_warning, Snackbar.LENGTH_SHORT).show();
                         }
 
                         if (isSpinnerMode) {
-                            value_adapter.notifyDataSetChanged();
+                            valueAdapter.notifyDataSetChanged();
                             BaseMethod.hideKeyBoard(CourseSearchActivity.this);
-                            spinner_search_value.setPrompt(typeTextList[position]);
-                            spinner_search_value.setVisibility(View.VISIBLE);
-                            editText_value.setVisibility(View.GONE);
+                            spinnerSearchValue.setPrompt(typeTextList[position]);
+                            spinnerSearchValue.setVisibility(View.VISIBLE);
+                            editTextValue.setVisibility(View.GONE);
                         } else {
-                            spinner_search_value.setVisibility(View.GONE);
-                            editText_value.setVisibility(View.VISIBLE);
+                            spinnerSearchValue.setVisibility(View.GONE);
+                            editTextValue.setVisibility(View.VISIBLE);
                         }
 
                         if (courseSearchAdapter != null) {
@@ -232,21 +233,21 @@ public class CourseSearchActivity extends AppCompatActivity {
             });
 
             final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            Button button_search = findViewById(R.id.button_course_search);
-            button_search.setOnClickListener(v -> {
+            Button buttonSearch = findViewById(R.id.button_course_search);
+            buttonSearch.setOnClickListener(v -> {
                 CourseSearchInfo courseSearchInfo = new CourseSearchInfo();
-                courseSearchInfo.setTerm(termList.get(spinner_term.getSelectedItemPosition()));
-                courseSearchInfo.setSearchType(typeValueList[spinner_search_type.getSelectedItemPosition()]);
+                courseSearchInfo.setTerm(termList.get(spinnerTerm.getSelectedItemPosition()));
+                courseSearchInfo.setSearchType(typeValueList[spinnerSearchType.getSelectedItemPosition()]);
 
                 String value = null;
                 if (isSpinnerMode) {
                     if (isWeekTypeSearch) {
-                        value = String.valueOf(spinner_search_value.getSelectedItemPosition() + 1);
+                        value = String.valueOf(spinnerSearchValue.getSelectedItemPosition() + 1);
                     } else {
-                        value = String.valueOf(spinner_search_value.getSelectedItem());
+                        value = String.valueOf(spinnerSearchValue.getSelectedItem());
                     }
                 } else {
-                    Editable editable = editText_value.getText();
+                    Editable editable = editTextValue.getText();
                     if (editable != null) {
                         value = editable.toString();
                     }
@@ -259,10 +260,10 @@ public class CourseSearchActivity extends AppCompatActivity {
                         courseSearchInfo.setValue(value);
                         searchDetail(courseSearchInfo);
 
-                        if (spinner_term.getSelectedItemPosition() == 0 && sharedPreferences.getBoolean(Config.PREFERENCE_CAN_ADD_COURSE_WARNING, Config.DEFAULT_PREFERENCE_CAN_ADD_COURSE_WARNING)) {
+                        if (spinnerTerm.getSelectedItemPosition() == 0 && sharedPreferences.getBoolean(Config.PREFERENCE_CAN_ADD_COURSE_WARNING, Config.DEFAULT_PREFERENCE_CAN_ADD_COURSE_WARNING)) {
                             Snackbar.make(findViewById(R.id.layout_course_search_content), R.string.click_to_add_course, Snackbar.LENGTH_LONG)
                                     .setAction(R.string.no_alert_again, view -> sharedPreferences.edit().putBoolean(Config.PREFERENCE_CAN_ADD_COURSE_WARNING, false).apply())
-                                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                                    .setActionTextColor(ResourcesCompat.getColor(getResources(), android.R.color.holo_red_light, getTheme()))
                                     .show();
                         }
                     }
@@ -291,10 +292,10 @@ public class CourseSearchActivity extends AppCompatActivity {
 
     synchronized public void setClassNameList(List<String> classNameList) {
         if (classNameList != null && classNameList.size() > 0) {
-            value_adapter.clear();
-            value_adapter.addAll(classNameList);
-            value_adapter.notifyDataSetChanged();
-            Spinner spinner_search_value = findViewById(R.id.spinner_course_search_value);
+            valueAdapter.clear();
+            valueAdapter.addAll(classNameList);
+            valueAdapter.notifyDataSetChanged();
+            Spinner spinnerSearchValue = findViewById(R.id.spinner_course_search_value);
             int index = 0;
             for (int i = 0; i < classNameList.size(); i++) {
                 if (classNameList.get(i) != null && classNameList.get(i).equals(lastSelectClassName)) {
@@ -302,7 +303,7 @@ public class CourseSearchActivity extends AppCompatActivity {
                     break;
                 }
             }
-            spinner_search_value.setSelection(index);
+            spinnerSearchValue.setSelection(index);
         }
     }
 

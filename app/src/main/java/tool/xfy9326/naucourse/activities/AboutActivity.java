@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -28,10 +28,11 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.methods.BaseMethod;
 import tool.xfy9326.naucourse.methods.DialogMethod;
-import tool.xfy9326.naucourse.methods.NetMethod;
 
 /**
  * Created by xfy9326 on 18-2-20.
+ *
+ * @author xfy9326
  */
 
 public class AboutActivity extends AppCompatActivity {
@@ -42,11 +43,11 @@ public class AboutActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
-        ToolBarSet();
-        ViewSet();
+        toolBarSet();
+        viewSet();
     }
 
-    private void ToolBarSet() {
+    private void toolBarSet() {
         setSupportActionBar(findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -73,50 +74,50 @@ public class AboutActivity extends AppCompatActivity {
             case R.id.menu_about_donate:
                 DialogMethod.showDonateDialog(this);
                 break;
-            case R.id.menu_about_donate_list:
-                NetMethod.viewUrlInBrowser(AboutActivity.this, Config.DONATE_PERSON_URL);
-                break;
             case R.id.menu_about_new_version_info:
                 BaseMethod.showNewVersionInfo(AboutActivity.this, false);
                 break;
+            default:
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void ViewSet() {
+    private void viewSet() {
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(AboutActivity.this);
 
-        TextView textView_version = findViewById(R.id.textView_about_version);
-        TextView textView_copy_right = findViewById(R.id.textView_about_copy_right);
+        TextView textViewVersion = findViewById(R.id.textView_about_version);
+        TextView textViewCopyRight = findViewById(R.id.textView_about_copy_right);
 
-        textView_copy_right.setText(getString(R.string.copyright, Calendar.getInstance().get(Calendar.YEAR)));
+        textViewCopyRight.setText(getString(R.string.copyright, Calendar.getInstance().get(Calendar.YEAR)));
 
         String version = String.format(Locale.CHINA, "v%s.%d (%d) %s", BuildConfig.VERSION_NAME, Config.SUB_VERSION, BuildConfig.VERSION_CODE, Config.VERSION_TYPE);
         version = version.replace(Updater.UPDATE_TYPE_BETA, getString(R.string.beta)).replace(Updater.UPDATE_TYPE_RELEASE, getString(R.string.release)).replace(Config.DEBUG, getString(R.string.debug));
 
-        textView_version.setText(version);
+        textViewVersion.setText(version);
 
-        findViewById(R.id.imageView_about_app_icon).setOnClickListener(v -> {
-            if (!sharedPreferences.getBoolean(Config.PREFERENCE_SHOW_HIDDEN_FUNCTION, Config.DEFAULT_PREFERENCE_SHOW_HIDDEN_FUNCTION)) {
-                iconClickCount++;
-                if (iconClickCount >= ICON_CLICK_MAX_COUNT) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(AboutActivity.this);
-                    builder.setTitle(R.string.attention);
-                    builder.setCancelable(false);
-                    builder.setMessage(R.string.unlock_attention);
-                    builder.setPositiveButton(R.string.accept, (dialog, which) -> {
-                        Toast.makeText(AboutActivity.this, R.string.unlock_success, Toast.LENGTH_SHORT).show();
-                        sharedPreferences.edit().putBoolean(Config.PREFERENCE_SHOW_HIDDEN_FUNCTION, true).apply();
-                    });
-                    builder.setNegativeButton(R.string.reject, null);
-                    builder.show();
+        if (!BuildConfig.DEBUG) {
+            findViewById(R.id.imageView_about_app_icon).setOnClickListener(v -> {
+                if (!sharedPreferences.getBoolean(Config.PREFERENCE_SHOW_HIDDEN_FUNCTION, Config.DEFAULT_PREFERENCE_SHOW_HIDDEN_FUNCTION)) {
+                    iconClickCount++;
+                    if (iconClickCount >= ICON_CLICK_MAX_COUNT) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(AboutActivity.this);
+                        builder.setTitle(R.string.attention);
+                        builder.setCancelable(false);
+                        builder.setMessage(R.string.unlock_attention);
+                        builder.setPositiveButton(R.string.accept, (dialog, which) -> {
+                            Toast.makeText(AboutActivity.this, R.string.unlock_success, Toast.LENGTH_SHORT).show();
+                            sharedPreferences.edit().putBoolean(Config.PREFERENCE_SHOW_HIDDEN_FUNCTION, true).apply();
+                        });
+                        builder.setNegativeButton(R.string.reject, null);
+                        builder.show();
+                    } else {
+                        Toast.makeText(AboutActivity.this, String.format(Locale.CHINA, "%d/%d", iconClickCount, ICON_CLICK_MAX_COUNT), Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(AboutActivity.this, String.format(Locale.CHINA, "%d/%d", iconClickCount, ICON_CLICK_MAX_COUNT), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AboutActivity.this, R.string.unlock_already_success, Toast.LENGTH_SHORT).show();
                 }
-            } else {
-                Toast.makeText(AboutActivity.this, R.string.unlock_already_success, Toast.LENGTH_SHORT).show();
-            }
-        });
+            });
+        }
 
         findViewById(R.id.textView_about_feedback).setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(AboutActivity.this);

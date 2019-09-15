@@ -1,11 +1,16 @@
 package tool.xfy9326.naucourse.methods;
 
 import android.content.Context;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -31,17 +36,19 @@ public class CourseMethod {
     private SchoolTime schoolTime;
     private int weekNum;
 
-    // 列 行
+    /**
+     * 列 行
+     */
     private String[][] table;
-    private String[][] id_table;
-    private boolean[][] this_week_no_show_table;
+    private String[][] idTable;
+    private boolean[][] thisWeekNoShowTable;
     @Nullable
-    private List<String> course_time;
+    private List<String> courseTime;
 
     public CourseMethod(Context context, ArrayList<Course> courses, @NonNull SchoolTime schoolTime) {
         this.context = context;
         this.courses = courses;
-        this.course_time = null;
+        this.courseTime = null;
         updateTableCourse(courses, schoolTime, false);
     }
 
@@ -49,43 +56,43 @@ public class CourseMethod {
      * 获取下一节课的信息
      * 仅在内部使用
      *
-     * @param context            Context
-     * @param this_week_table    课程信息二维数组
-     * @param this_week_id_table 课程ID二维数组
-     * @param courses            课程信息列表
+     * @param context         Context
+     * @param thisWeekTable   课程信息二维数组
+     * @param thisWeekIdTable 课程ID二维数组
+     * @param courses         课程信息列表
      * @return NextCourse对象
      */
     @NonNull
-    private static NextCourse getNextClass(@NonNull Context context, String[][] this_week_table, String[][] this_week_id_table, boolean[][] this_week_no_show_table, @NonNull ArrayList<Course> courses) {
+    private static NextCourse getNextClass(@NonNull Context context, String[][] thisWeekTable, String[][] thisWeekIdTable, boolean[][] thisWeekNoShowTable, @NonNull ArrayList<Course> courses) {
         NextCourse nextCourse = new NextCourse();
         Calendar calendar = Calendar.getInstance(Locale.CHINA);
         int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY ? 7 : calendar.get(Calendar.DAY_OF_WEEK) - 1;
 
-        String[] today = this_week_table[weekDayNum];
-        String[] todayId = this_week_id_table[weekDayNum];
-        boolean[] todayNoShow = this_week_no_show_table[weekDayNum];
+        String[] today = thisWeekTable[weekDayNum];
+        String[] todayId = thisWeekIdTable[weekDayNum];
+        boolean[] todayNoShow = thisWeekNoShowTable[weekDayNum];
         String[] startTimes = context.getResources().getStringArray(R.array.course_start_time);
         String[] finishTimes = context.getResources().getStringArray(R.array.course_finish_time);
-        long nowTime = calendar.getTimeInMillis();
+        long nowTime = System.currentTimeMillis();
         String lastId = "";
         String findCourseId = "";
-        String course_startTime = "";
-        String course_endTime = "";
+        String courseStartTime = "";
+        String courseEndTime = "";
         long todayFinalCourseTime = 0;
 
         for (int i = 0; i < finishTimes.length; i++) {
             if (today[i + 1] != null && !todayNoShow[i + 1]) {
-                String[] time_temp = finishTimes[i].split(":");
-                calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(time_temp[0]));
-                calendar.set(Calendar.MINUTE, Integer.valueOf(time_temp[1]));
+                String[] timeTemp = finishTimes[i].split(":");
+                calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(timeTemp[0]));
+                calendar.set(Calendar.MINUTE, Integer.valueOf(timeTemp[1]));
                 long courseTime = calendar.getTimeInMillis();
                 if (courseTime > nowTime) {
-                    if (!findCourseId.equals(todayId[i + 1]) && !findCourseId.equals("")) {
+                    if (!findCourseId.equals(todayId[i + 1]) && !"".equals(findCourseId)) {
                         break;
                     }
                     nextCourse.setCourseLocation(today[i + 1].substring(today[i + 1].indexOf("@") + 1));
                     nextCourse.setCourseId(todayId[i + 1]);
-                    course_endTime = finishTimes[i];
+                    courseEndTime = finishTimes[i];
                     if (!lastId.equals(todayId[i + 1])) {
                         findCourseId = todayId[i + 1];
                     }
@@ -98,18 +105,18 @@ public class CourseMethod {
         //课程开始时间回溯
         for (int i = 0; i < finishTimes.length; i++) {
             if (todayId[i + 1] != null && !todayNoShow[i + 1] && todayId[i + 1].equalsIgnoreCase(nextCourse.getCourseId())) {
-                course_startTime = startTimes[i];
+                courseStartTime = startTimes[i];
                 break;
             }
         }
 
         nextCourse.setDataVersionCode(Config.DATA_VERSION_NEXT_COURSE);
 
-        if (nowTime > todayFinalCourseTime) {
+        if (nowTime >= todayFinalCourseTime) {
             return nextCourse;
         }
 
-        nextCourse.setCourseTime(course_startTime + "~" + course_endTime);
+        nextCourse.setCourseTime(courseStartTime + "~" + courseEndTime);
 
         if (nextCourse.getCourseId() != null) {
             for (Course course : courses) {
@@ -137,6 +144,28 @@ public class CourseMethod {
         return false;
     }
 
+    @Nullable
+    static String getCourseJson(@NonNull Course course) {
+        try {
+            return new Gson().toJson(course);
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Nullable
+    static Course getCourseByJson(@NonNull String json) {
+        try {
+            Type type = new TypeToken<Course>() {
+            }.getType();
+            return new Gson().fromJson(json, type);
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /**
      * 获取下一节课的信息
      * 对外接口
@@ -149,7 +178,7 @@ public class CourseMethod {
         if (this.weekNum != weekNum || table == null) {
             getTable(weekNum, schoolTime.getStartTime());
         }
-        return getNextClass(context, table, id_table, this_week_no_show_table, courses);
+        return getNextClass(context, table, idTable, thisWeekNoShowTable, courses);
     }
 
     /**
@@ -167,7 +196,7 @@ public class CourseMethod {
      * @return 对应ID的二维数组
      */
     public String[][] getTableIdData() {
-        return id_table;
+        return idTable;
     }
 
     /**
@@ -176,7 +205,7 @@ public class CourseMethod {
      * @return 对应的二维数组
      */
     public boolean[][] getTableShowData() {
-        return this_week_no_show_table;
+        return thisWeekNoShowTable;
     }
 
     /**
@@ -198,34 +227,44 @@ public class CourseMethod {
                 return;
             }
         }
-        List<String> week_day = TimeMethod.getWeekDayArray(context, weekNum, schoolTime.getStartTime());
+        List<String> weekDayArray = TimeMethod.getWeekDayArray(context, weekNum, schoolTime.getStartTime());
         getTable(weekNum, schoolTime.getStartTime());
-        if (course_time == null) {
-            course_time = TimeMethod.getCourseTimeArray(context);
+        if (courseTime == null) {
+            courseTime = TimeMethod.getCourseTimeArray(context);
         }
-        setTableTimeLine(course_time, week_day);
+        setTableTimeLine(courseTime, weekDayArray);
         this.weekNum = weekNum;
     }
 
-    //设置表格的上课时间列与上课日期行
-    private void setTableTimeLine(List<String> course_time, @NonNull List<String> course_weekDay) {
+    /**
+     * 设置表格的上课时间列与上课日期行
+     *
+     * @param courseTime    课程时间
+     * @param courseWeekDay 课程星期
+     */
+    private void setTableTimeLine(List<String> courseTime, @NonNull List<String> courseWeekDay) {
         table[0][0] = context.getString(R.string.date);
-        for (int i = 0; i < course_time.size(); i++) {
-            table[0][i + 1] = course_time.get(i).trim();
+        for (int i = 0; i < courseTime.size(); i++) {
+            table[0][i + 1] = courseTime.get(i).trim();
         }
         for (int i = 0; i < Config.MAX_WEEK_DAY; i++) {
-            table[i + 1][0] = course_weekDay.get(i).trim();
+            table[i + 1][0] = courseWeekDay.get(i).trim();
         }
     }
 
-    //获取该周信息表格
+    /**
+     * 获取该周信息表格
+     *
+     * @param weekNum         星期数
+     * @param startSchoolDate 开学日期
+     */
     synchronized private void getTable(int weekNum, String startSchoolDate) {
         boolean isDoubleWeek = weekNum % 2 == 0;
         boolean showAllWeekMode = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Config.PREFERENCE_SHOW_NO_THIS_WEEK_CLASS, Config.DEFAULT_PREFERENCE_SHOW_NO_THIS_WEEK_CLASS);
 
         table = new String[Config.MAX_WEEK_DAY + 1][Config.MAX_DAY_COURSE + 1];
-        id_table = new String[Config.MAX_WEEK_DAY + 1][Config.MAX_DAY_COURSE + 1];
-        this_week_no_show_table = new boolean[Config.MAX_WEEK_DAY + 1][Config.MAX_DAY_COURSE + 1];
+        idTable = new String[Config.MAX_WEEK_DAY + 1][Config.MAX_DAY_COURSE + 1];
+        thisWeekNoShowTable = new boolean[Config.MAX_WEEK_DAY + 1][Config.MAX_DAY_COURSE + 1];
         String termCode = TimeMethod.getNowShowTerm(context, schoolTime);
         for (Course course : courses) {
             //过滤非显示的学期的课程
@@ -269,17 +308,21 @@ public class CourseMethod {
     //检查是否在该周上课
     private boolean weekCheck(CourseDetail detail, int weekNum) {
         String[] weeks = detail.getWeeks();
-        for (String week : Objects.requireNonNull(weeks)) {
-            if (week.contains("-")) {
-                String[] weekdays = week.split("-");
-                int start = Integer.valueOf(weekdays[0]);
-                int end = Integer.valueOf(weekdays[1]);
-                if (weekNum >= start && weekNum <= end) {
-                    return true;
-                }
-            } else {
-                if (weekNum == Integer.valueOf(week)) {
-                    return true;
+        if (weeks != null) {
+            for (String week : weeks) {
+                if (week != null) {
+                    if (week.contains("-")) {
+                        String[] weekdays = week.split("-");
+                        int start = Integer.valueOf(weekdays[0]);
+                        int end = Integer.valueOf(weekdays[1]);
+                        if (weekNum >= start && weekNum <= end) {
+                            return true;
+                        }
+                    } else {
+                        if (weekNum == Integer.valueOf(week)) {
+                            return true;
+                        }
+                    }
                 }
             }
         }
@@ -296,15 +339,15 @@ public class CourseMethod {
             }
             if (courseTime.contains("-")) {
                 String[] time = courseTime.split("-");
-                int t_start = Integer.valueOf(time[0]);
-                int t_end = Integer.valueOf(time[1]);
-                for (int t = t_start; t <= t_end; t++) {
+                int tStart = Integer.valueOf(time[0]);
+                int tEnd = Integer.valueOf(time[1]);
+                for (int t = tStart; t <= tEnd; t++) {
                     if (table[detail.getWeekDay()][t] != null && defaultNoShowClass) {
                         continue;
                     }
                     table[detail.getWeekDay()][t] = getShowDetail(course, detail);
-                    id_table[detail.getWeekDay()][t] = course.getCourseId();
-                    this_week_no_show_table[detail.getWeekDay()][t] = defaultNoShowClass;
+                    idTable[detail.getWeekDay()][t] = course.getCourseId();
+                    thisWeekNoShowTable[detail.getWeekDay()][t] = defaultNoShowClass;
                 }
             } else {
                 int courseTimeInt = Integer.valueOf(courseTime);
@@ -313,8 +356,8 @@ public class CourseMethod {
                         continue;
                     }
                     table[detail.getWeekDay()][courseTimeInt] = getShowDetail(course, detail);
-                    id_table[detail.getWeekDay()][courseTimeInt] = course.getCourseId();
-                    this_week_no_show_table[detail.getWeekDay()][courseTimeInt] = defaultNoShowClass;
+                    idTable[detail.getWeekDay()][courseTimeInt] = course.getCourseId();
+                    thisWeekNoShowTable[detail.getWeekDay()][courseTimeInt] = defaultNoShowClass;
                 }
             }
         }
@@ -345,5 +388,4 @@ public class CourseMethod {
         }
         return 1;
     }
-
 }

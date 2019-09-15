@@ -29,7 +29,6 @@ public class ScrollBehavior extends FloatingActionButton.Behavior {
 
     @Override
     public boolean onStartNestedScroll(@NonNull CoordinatorLayout coordinatorLayout, @NonNull FloatingActionButton child, @NonNull View directTargetChild, @NonNull View target, int axes, int type) {
-
         return axes == ViewCompat.SCROLL_AXIS_VERTICAL || super.onStartNestedScroll(coordinatorLayout, child, directTargetChild, target, axes, type);
     }
 
@@ -46,14 +45,17 @@ public class ScrollBehavior extends FloatingActionButton.Behavior {
     private void animateOut(final FloatingActionButton button) {
         ViewCompat.animate(button).scaleX(0.0F).scaleY(0.0F).alpha(0.0F).setInterpolator(INTERPOLATOR).withLayer()
                 .setListener(new ViewPropertyAnimatorListener() {
+                    @Override
                     public void onAnimationStart(View view) {
                         ScrollBehavior.this.mIsAnimatingOut = true;
                     }
 
+                    @Override
                     public void onAnimationCancel(View view) {
                         ScrollBehavior.this.mIsAnimatingOut = false;
                     }
 
+                    @Override
                     public void onAnimationEnd(View view) {
                         ScrollBehavior.this.mIsAnimatingOut = false;
                         view.setVisibility(View.INVISIBLE);

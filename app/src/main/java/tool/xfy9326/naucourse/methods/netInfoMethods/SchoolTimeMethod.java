@@ -2,16 +2,17 @@ package tool.xfy9326.naucourse.methods.netInfoMethods;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,7 +38,7 @@ public class SchoolTimeMethod extends BaseInfoMethod<SchoolTime> {
     }
 
     @Override
-    public int load() throws Exception {
+    public int load() throws IOException, InterruptedException {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
             String url = sharedPreferences.getString(Config.PREFERENCE_LOGIN_URL, null);
@@ -66,7 +67,7 @@ public class SchoolTimeMethod extends BaseInfoMethod<SchoolTime> {
             for (int i = 0; i < text.size(); i++) {
                 switch (i) {
                     case 2:
-                        if (!text.get(i).equals("放假中")) {
+                        if (!"放假中".equals(text.get(i))) {
                             schoolTime.setWeekNum(Integer.valueOf(text.get(i).trim().substring(1, 2)));
                         }
                         break;
@@ -76,6 +77,7 @@ public class SchoolTimeMethod extends BaseInfoMethod<SchoolTime> {
                     case 4:
                         schoolTime.setEndTime(text.get(i));
                         break;
+                    default:
                 }
             }
 

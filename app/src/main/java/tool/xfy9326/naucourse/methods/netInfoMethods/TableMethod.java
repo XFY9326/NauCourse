@@ -2,15 +2,16 @@ package tool.xfy9326.naucourse.methods.netInfoMethods;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class TableMethod extends BaseInfoMethod<ArrayList<Course>> {
     }
 
     @Override
-    public int load() throws Exception {
+    public int load() throws IOException, InterruptedException {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
             String data = NetMethod.loadUrlFromLoginClient(context, NauSSOClient.JWC_SERVER_URL + "/Students/MyCourseScheduleTable.aspx", true);
@@ -72,9 +73,9 @@ public class TableMethod extends BaseInfoMethod<ArrayList<Course>> {
                         year = year * 10000L + year + 1L;
                         long term = 0;
                         String termStr = termData[0].substring(termData[0].indexOf("第") + 1, termData[0].indexOf("第") + 2);
-                        if (termStr.equalsIgnoreCase("一")) {
+                        if ("一".equalsIgnoreCase(termStr)) {
                             term = 1;
-                        } else if (termStr.equalsIgnoreCase("二")) {
+                        } else if ("二".equalsIgnoreCase(termStr)) {
                             term = 2;
                         }
                         allCourseTerm = year * 10L + term;
@@ -83,7 +84,7 @@ public class TableMethod extends BaseInfoMethod<ArrayList<Course>> {
                 }
             }
 
-            Elements tags = document.body().getElementsByTag("tr");
+            Elements tags = document.body().getElementById("content").getElementsByTag("tr");
             List<String> data = tags.eachText();
             for (String str : data) {
                 //同步的课程学期数必定一致
@@ -97,11 +98,11 @@ public class TableMethod extends BaseInfoMethod<ArrayList<Course>> {
 
                 course.setCourseTerm(String.valueOf(allCourseTerm));
 
-                String course_Info = str.substring(2, str.indexOf(" 上课地点")).trim();
-                String course_Detail = str.substring(str.indexOf("上课地点") + 5).trim();
+                String courseInfo = str.substring(2, str.indexOf(" 上课地点")).trim();
+                String courseDetail = str.substring(str.indexOf("上课地点") + 5).trim();
 
-                String[] info = course_Info.split(" ");
-                String[] detail = course_Detail.split("上课地点：");
+                String[] info = courseInfo.split(" ");
+                String[] detail = courseDetail.split("上课地点：");
 
                 if (info.length >= 7) {
                     course.setCourseId(info[0]);
@@ -118,47 +119,47 @@ public class TableMethod extends BaseInfoMethod<ArrayList<Course>> {
                     return courseList;
                 }
 
-                CourseDetail[] courseDetail_list = new CourseDetail[detail.length];
+                CourseDetail[] courseDetailList = new CourseDetail[detail.length];
 
                 for (int i = 0; i < detail.length; i++) {
-                    CourseDetail courseDetail = new CourseDetail();
+                    CourseDetail courseDetailNew = new CourseDetail();
                     String[] temp = detail[i].trim().split("上课时间：");
-                    courseDetail.setLocation(temp[0].trim());
-                    String[] time_temp = temp[1].trim().split(" ");
+                    courseDetailNew.setLocation(temp[0].trim());
+                    String[] timeTemp = temp[1].trim().split(" ");
 
-                    courseDetail.setWeekDay(Integer.valueOf(time_temp[2]));
+                    courseDetailNew.setWeekDay(Integer.valueOf(timeTemp[2]));
 
-                    if (time_temp[0].contains("单")) {
-                        courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_SINGLE);
-                        courseDetail.setWeeks(new String[]{time_temp[0].substring(0, time_temp[0].indexOf("之"))});
-                    } else if (time_temp[0].contains("双")) {
-                        courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_DOUBLE);
-                        courseDetail.setWeeks(new String[]{time_temp[0].substring(0, time_temp[0].indexOf("之"))});
-                    } else if (time_temp[0].trim().startsWith("第")) {
-                        courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_ONCE_MORE);
-                        String weekStr = time_temp[0].substring(1, time_temp[0].indexOf("周")).trim();
+                    if (timeTemp[0].contains("单")) {
+                        courseDetailNew.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_SINGLE);
+                        courseDetailNew.setWeeks(new String[]{timeTemp[0].substring(0, timeTemp[0].indexOf("之"))});
+                    } else if (timeTemp[0].contains("双")) {
+                        courseDetailNew.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_DOUBLE);
+                        courseDetailNew.setWeeks(new String[]{timeTemp[0].substring(0, timeTemp[0].indexOf("之"))});
+                    } else if (timeTemp[0].trim().startsWith("第")) {
+                        courseDetailNew.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_ONCE_MORE);
+                        String weekStr = timeTemp[0].substring(1, timeTemp[0].indexOf("周")).trim();
                         if (weekStr.contains(",")) {
                             String[] weekArr = weekStr.split(",");
-                            courseDetail.setWeeks(weekArr);
+                            courseDetailNew.setWeeks(weekArr);
                         } else {
-                            courseDetail.setWeeks(new String[]{weekStr});
+                            courseDetailNew.setWeeks(new String[]{weekStr});
                         }
                     } else {
-                        courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_ONCE);
-                        courseDetail.setWeeks(new String[]{time_temp[0].substring(0, time_temp[0].indexOf("周")).trim()});
+                        courseDetailNew.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_ONCE);
+                        courseDetailNew.setWeeks(new String[]{timeTemp[0].substring(0, timeTemp[0].indexOf("周")).trim()});
                     }
 
-                    String courseTime = time_temp[4].substring(0, time_temp[4].indexOf("节"));
+                    String courseTime = timeTemp[4].substring(0, timeTemp[4].indexOf("节"));
                     if (courseTime.contains(",")) {
-                        courseDetail.setCourseTime(courseTime.split(","));
+                        courseDetailNew.setCourseTime(courseTime.split(","));
                     } else {
-                        courseDetail.setCourseTime(new String[]{courseTime.trim()});
+                        courseDetailNew.setCourseTime(new String[]{courseTime.trim()});
                     }
 
-                    courseDetail_list[i] = courseDetail;
+                    courseDetailList[i] = courseDetailNew;
                 }
 
-                course.setCourseDetail(courseDetail_list);
+                course.setCourseDetail(courseDetailList);
 
 
                 course.setCourseColor(BaseMethod.getRandomColor(context));

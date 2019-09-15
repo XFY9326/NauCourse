@@ -2,10 +2,10 @@ package tool.xfy9326.naucourse.methods.netInfoMethods;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -107,9 +107,9 @@ public class TableNextMethod extends BaseNetMethod {
         return courseList;
     }
 
-    private CourseDetail[] getCourseDetailList(String[] data, int detail_length) {
-        int detail_count = 0;
-        CourseDetail[] courseDetail_list = new CourseDetail[detail_length];
+    private CourseDetail[] getCourseDetailList(String[] data, int detailLength) {
+        int detailCount = 0;
+        CourseDetail[] courseDetailList = new CourseDetail[detailLength];
         CourseDetail courseDetail = null;
         for (int i = 8; i < data.length - 1; i++) {
             if (courseDetail == null) {
@@ -155,13 +155,13 @@ public class TableNextMethod extends BaseNetMethod {
                         courseDetail.setCourseTime(new String[]{courseTime.trim()});
                     }
 
-                    courseDetail_list[detail_count++] = courseDetail;
+                    courseDetailList[detailCount++] = courseDetail;
                     courseDetail = null;
                 }
             } else {
                 break;
             }
         }
-        return courseDetail_list;
+        return courseDetailList;
     }
 }

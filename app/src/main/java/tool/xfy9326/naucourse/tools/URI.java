@@ -11,8 +11,9 @@ import android.provider.MediaStore;
 public class URI {
 
     public static String getAbsolutePath(Context context, Uri uri) {
-        if (context == null || uri == null)
+        if (context == null || uri == null) {
             return null;
+        }
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(context, uri)) {
             if (isExternalStorageDocument(uri)) {
                 String docId = DocumentsContract.getDocumentId(uri);
@@ -42,8 +43,9 @@ public class URI {
                 return getDataColumn(context, contentUri, selection, selectionArgs);
             }
         } else if ("content".equalsIgnoreCase(uri.getScheme())) {
-            if (isGooglePhotosUri(uri))
+            if (isGooglePhotosUri(uri)) {
                 return uri.getLastPathSegment();
+            }
             return getDataColumn(context, uri, null, null);
         } else if ("file".equalsIgnoreCase(uri.getScheme())) {
             return uri.getPath();

@@ -74,7 +74,7 @@ class PersistentCookieStore {
         //将cookies缓存到内存中 如果缓存过期 就重置此cookie
         if (!cookie.persistent()) {
             if (!cookies.containsKey(url.host())) {
-                cookies.put(url.host(), new ConcurrentHashMap<>());
+                cookies.put(url.host(), new ConcurrentHashMap<>(10));
             }
             ConcurrentHashMap<String, Cookie> concurrentHashMap = cookies.get(url.host());
             if (concurrentHashMap != null) {
@@ -165,8 +165,9 @@ class PersistentCookieStore {
      */
     @Nullable
     private String encodeCookie(@Nullable SerializableOkHttpCookies cookie) {
-        if (cookie == null)
+        if (cookie == null) {
             return null;
+        }
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(os);

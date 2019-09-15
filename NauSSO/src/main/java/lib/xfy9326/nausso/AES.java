@@ -42,8 +42,8 @@ class AES {
     private static String byte2hex(byte[] b) {
         StringBuilder hs = new StringBuilder();
         String sTmp;
-        for (byte aB : b) {
-            sTmp = (Integer.toHexString(aB & 0XFF));
+        for (byte ab : b) {
+            sTmp = (Integer.toHexString(ab & 0XFF));
             if (sTmp.length() == 1) {
                 hs.append("0").append(sTmp);
             } else {

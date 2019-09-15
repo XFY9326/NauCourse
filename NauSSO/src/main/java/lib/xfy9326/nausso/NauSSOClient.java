@@ -35,10 +35,10 @@ public class NauSSOClient {
     public static final String JWC_SERVER_URL = "http://jwc.nau.edu.cn";
     static final String JWC_HOST_URL = "jwc.nau.edu.cn";
     private static final int LOGIN_SUCCESS = 0;
-    private static final String single_server_url = "http://sso.nau.edu.cn/sso/login?service=http%3a%2f%2fjwc.nau.edu.cn%2fLogin_Single.aspx";
+    private static final String SINGLE_SERVER_URL = "http://sso.nau.edu.cn/sso/login?service=http%3a%2f%2fjwc.nau.edu.cn%2fLogin_Single.aspx";
     private static final String ALSTU_LOGIN_SSO_URL = "http://sso.nau.edu.cn/sso/login?service=http%3a%2f%2falstu.nau.edu.cn%2flogin.aspx";
     private static final String ALSTU_TICKET_URL = "http://alstu.nau.edu.cn/login.aspx?cas_login=true&ticket=";
-    private static final String single_login_out_url = "http://sso.nau.edu.cn/sso/logout";
+    private static final String SINGLE_LOGIN_OUT_URL = "http://sso.nau.edu.cn/sso/logout";
     @NonNull
     private final OkHttpClient main_client;
     @NonNull
@@ -55,11 +55,11 @@ public class NauSSOClient {
         cookieStore = new CookieStore(context);
         main_client = buildSSOClient(context, cookieStore, vpnInterceptor);
 
-        OkHttpClient.Builder client_clean_builder = new OkHttpClient.Builder();
-        client_clean_builder.connectTimeout(8, TimeUnit.SECONDS);
-        client_clean_builder.readTimeout(4, TimeUnit.SECONDS);
-        client_clean_builder.writeTimeout(4, TimeUnit.SECONDS);
-        clean_client = client_clean_builder.build();
+        OkHttpClient.Builder clientCleanBuilder = new OkHttpClient.Builder();
+        clientCleanBuilder.connectTimeout(8, TimeUnit.SECONDS);
+        clientCleanBuilder.readTimeout(4, TimeUnit.SECONDS);
+        clientCleanBuilder.writeTimeout(4, TimeUnit.SECONDS);
+        clean_client = clientCleanBuilder.build();
     }
 
     /**
@@ -77,18 +77,18 @@ public class NauSSOClient {
     }
 
     private static OkHttpClient buildSSOClient(Context context, CookieStore cookieStore, @Nullable Interceptor interceptor) {
-        OkHttpClient.Builder client_builder = new OkHttpClient.Builder();
-        client_builder.cookieJar(cookieStore);
-        client_builder.cache(getCache(context));
-        client_builder.connectTimeout(15, TimeUnit.SECONDS);
-        client_builder.readTimeout(8, TimeUnit.SECONDS);
-        client_builder.writeTimeout(8, TimeUnit.SECONDS);
-        client_builder.retryOnConnectionFailure(true);
-        client_builder.connectionPool(new ConnectionPool(15, 3, TimeUnit.MINUTES));
+        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+        clientBuilder.cookieJar(cookieStore);
+        clientBuilder.cache(getCache(context));
+        clientBuilder.connectTimeout(15, TimeUnit.SECONDS);
+        clientBuilder.readTimeout(8, TimeUnit.SECONDS);
+        clientBuilder.writeTimeout(8, TimeUnit.SECONDS);
+        clientBuilder.retryOnConnectionFailure(true);
+        clientBuilder.connectionPool(new ConnectionPool(15, 3, TimeUnit.MINUTES));
         if (interceptor != null) {
-            client_builder.addInterceptor(interceptor);
+            clientBuilder.addInterceptor(interceptor);
         }
-        return client_builder.build();
+        return clientBuilder.build();
     }
 
     private static Cache getCache(Context context) {
@@ -96,15 +96,15 @@ public class NauSSOClient {
     }
 
     private static String loadUrl(OkHttpClient client, @NonNull String url, HashMap<String, String> header) throws IOException {
-        Request.Builder request_builder = new Request.Builder();
-        request_builder.url(url);
+        Request.Builder requestBuilder = new Request.Builder();
+        requestBuilder.url(url);
         if (header != null) {
             for (String key : header.keySet()) {
                 String value = header.get(key);
-                request_builder.header(key, value == null ? "" : value);
+                requestBuilder.header(key, value == null ? "" : value);
             }
         }
-        Response response = client.newCall(request_builder.build()).execute();
+        Response response = client.newCall(requestBuilder.build()).execute();
         if (response.isSuccessful()) {
             ResponseBody responseBody = response.body();
             if (responseBody != null) {
@@ -166,7 +166,7 @@ public class NauSSOClient {
 
     synchronized public void loginOut() throws IOException {
         Request.Builder builder = new Request.Builder();
-        builder.url(single_login_out_url);
+        builder.url(SINGLE_LOGIN_OUT_URL);
         main_client.newCall(builder.build()).execute().close();
         cookieStore.clearCookies();
     }
@@ -261,9 +261,9 @@ public class NauSSOClient {
     private void VPNLogin(@NonNull String userName, @NonNull String userPw) throws IOException {
         String ssoContent = null;
 
-        Request.Builder request_builder = new Request.Builder();
-        request_builder.url(VPNMethod.VPN_LOGIN_URL);
-        Response dataResponse = main_client.newCall(request_builder.build()).execute();
+        Request.Builder requestBuilder = new Request.Builder();
+        requestBuilder.url(VPNMethod.VPN_LOGIN_URL);
+        Response dataResponse = main_client.newCall(requestBuilder.build()).execute();
         if (dataResponse.isSuccessful()) {
             ResponseBody responseBody = dataResponse.body();
             if (responseBody != null) {
@@ -300,27 +300,27 @@ public class NauSSOClient {
 
         //缓存SSO的Cookies
         String ssoContent = null;
-        Request.Builder sso_request_builder = new Request.Builder();
-        sso_request_builder.url(single_server_url);
+        Request.Builder ssoRequestBuilder = new Request.Builder();
+        ssoRequestBuilder.url(SINGLE_SERVER_URL);
 
-        Response sso_response = main_client.newCall(sso_request_builder.build()).execute();
-        if (sso_response.isSuccessful()) {
-            ResponseBody responseBody = sso_response.body();
+        Response ssoResponse = main_client.newCall(ssoRequestBuilder.build()).execute();
+        if (ssoResponse.isSuccessful()) {
+            ResponseBody responseBody = ssoResponse.body();
             if (responseBody != null) {
                 ssoContent = responseBody.string();
             }
         }
-        sso_response.close();
+        ssoResponse.close();
 
         if (ssoContent != null) {
             if (!ssoContent.contains("南京审计大学统一身份认证登录")) {
                 loginErrorCode = LOGIN_SUCCESS;
-                loginUrl = sso_response.request().url().query();
+                loginUrl = ssoResponse.request().url().query();
                 return true;
             } else {
                 FormBody formBody = NauNetData.getSSOPostForm(userId, userPw, ssoContent);
                 Request.Builder builder = new Request.Builder();
-                builder.url(single_server_url);
+                builder.url(SINGLE_SERVER_URL);
                 builder.post(formBody);
 
                 Response response = main_client.newCall(builder.build()).execute();
@@ -363,25 +363,25 @@ public class NauSSOClient {
     }
 
     public void checkServer(final OnAvailableListener availableListener) {
-        Request.Builder request_builder = new Request.Builder();
+        Request.Builder requestBuilder = new Request.Builder();
         if (isVPNEnabled()) {
-            request_builder.url(VPNMethod.VPN_SERVER);
+            requestBuilder.url(VPNMethod.VPN_SERVER);
         } else {
-            request_builder.url(JWC_SERVER_URL);
+            requestBuilder.url(JWC_SERVER_URL);
         }
-        request_builder.header("Cache-Control", "max-age=0");
-        clean_client.newCall(request_builder.build()).enqueue(new Callback() {
+        requestBuilder.header("Cache-Control", "max-age=0");
+        clean_client.newCall(requestBuilder.build()).enqueue(new Callback() {
             @Override
             @EverythingIsNonNull
             public void onFailure(Call call, IOException e) {
-                availableListener.OnError();
+                availableListener.onError();
             }
 
             @Override
             @EverythingIsNonNull
             public void onResponse(Call call, Response response) {
                 if (response.code() != 200) {
-                    availableListener.OnError();
+                    availableListener.onError();
                 }
                 response.close();
             }
@@ -389,6 +389,6 @@ public class NauSSOClient {
     }
 
     public interface OnAvailableListener {
-        void OnError();
+        void onError();
     }
 }

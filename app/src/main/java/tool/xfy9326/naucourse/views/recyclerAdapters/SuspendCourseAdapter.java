@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.activities.SuspendCourseActivity;
+import tool.xfy9326.naucourse.activities.async.SuspendCourseActivity;
 import tool.xfy9326.naucourse.utils.SuspendCourse;
 
 public class SuspendCourseAdapter extends RecyclerView.Adapter<SuspendCourseAdapter.SuspendCourseViewHolder> {

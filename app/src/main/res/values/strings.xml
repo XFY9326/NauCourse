@@ -129,7 +129,7 @@
     <string name="share">分享</string>
     <string name="permission_error">未给予相关权限！</string>
     <string name="no_available_application">无可用APP</string>
-    <string name="ask_lock_background">在后台锁定本应用以带来更好的使用体验！</string>
+    <string name="ask_lock_background">为了能够在后台运行并及时提示，你可以在后台锁定本应用并且允许开机启动</string>
     <string name="feedback">问题反馈</string>
     <string name="feedback_by_mail">您可以通过发送反馈邮件或加入QQ群的方式反馈您遇到的问题或者提出好的建议,您的所有建议与反馈都会得到认真的查阅。\n\n邮箱：%1$s\n\nQQ群：%2$s</string>
     <string name="mail" translatable="false">1069665464@qq.com</string>
@@ -191,8 +191,6 @@
     <string name="add">添加</string>
     <string name="single_color_warn">请在设置中关闭只显示默认颜色后再设置！</string>
     <string name="wait_for_evaluate">当前存在课程待测评！</string>
-    <string name="academic_report">学术报告会</string>
-    <string name="large_academic_conference">大型学术会议</string>
     <string name="suspend_course_class_class">教学班：%1$s</string>
     <string name="suspend_course_class_teacher">教师：%1$s</string>
     <string name="suspend_course_class_time">节次：%1$s</string>
@@ -203,20 +201,12 @@
     <string name="suspend_course_title_short">◈ 调停课程</string>
     <string name="suspend_course_title">◈ 调停课程&#160;&#160;&#160;学期：%1$s</string>
     <string name="suspend_course">调停课程</string>
-    <string name="moa">学术日程</string>
     <string name="suspend_course_empty">暂无调停课信息</string>
-    <string name="moa_title">◈ 学术日程&#160;&#160;&#160;(历史学术活动仅显示过去%1$d个月)</string>
-    <string name="moa_type">类型：%1$s</string>
-    <string name="moa_reporter">报告人：%1$s</string>
-    <string name="moa_time">时间：%1$s</string>
-    <string name="moa_location">地点：%1$s</string>
-    <string name="moa_apply_unit">举办单位：%1$s</string>
-    <string name="moa_empty">暂无学术讲座</string>
     <string name="async_personal_info_by_day">每天自动同步个人信息与成绩</string>
     <string name="async_personal_info_by_day_sum">减少个人数据更新频率，节约流量</string>
-    <string name="share_course_table">分享本周的课程表:</string>
+    <string name="share_this_week_course_table">分享本周的课程表:</string>
+    <string name="share_course">分享该课程至:</string>
     <string name="share_info">分享文章:</string>
-    <string name="moa_jump">跳转到今天的讲座</string>
     <string name="reset">重置</string>
     <string name="auto_update_course_table">智能覆盖更新教务课程表数据</string>
     <string name="auto_update_course_table_sum">课程时间重复或存在新学期课程时不会更新\n无修改课程的情况下每天只会自动更新一次数据</string>
@@ -224,6 +214,7 @@
     <string name="show_no_this_week_class">显示非本周课程</string>
     <string name="show_no_this_week_class_sum">每周课表都显示所有课程</string>
     <string name="course_table_share_error">课程表分享失败！</string>
+    <string name="course_share_error">课程分享失败！</string>
     <string name="no_alert_again">不再提示</string>
     <string name="attention">提示</string>
     <string name="auto_update_course_table_alert">当前已开启智能覆盖更新教务课程表数据功能，非最新学期的教务系统中的课程有可能会被自动覆盖更新\n\n对导入的本学期课表所做的所有修改都会失效！\n\n如果需要关闭可以前往设置进行更改！</string>
@@ -270,7 +261,6 @@
     <string name="alstu_system">奥兰系统</string>
     <string name="alstu_msg">奥兰通知</string>
     <string name="jw_system">教务系统</string>
-    <string name="donate_list">捐赠列表</string>
     <string name="beta">测试版</string>
     <string name="release">稳定版</string>
     <string name="debug">内测版</string>
@@ -319,7 +309,7 @@
     <string name="search_use_full_name_warning">请使用完整名称进行该类型的搜索！</string>
     <string name="search_no_result">搜索结果为空！</string>
     <string name="import_success">导入成功！</string>
-    <string name="empty_search_data">暂无搜索结果</string>
+    <string name="empty_search_data">暂无搜索结果\n请点击搜索按钮开始搜索</string>
     <string name="empty_list">列表为空</string>
     <string name="course_search_result_title">◈ 搜索结果</string>
     <string name="random_course_color">随机设置课程颜色</string>
@@ -345,7 +335,7 @@
     <string name="reject">拒绝</string>
     <string name="unlock_success">解锁成功！</string>
     <string name="unlock_already_success">你已经解锁成功了！</string>
-    <string name="unlock_attention">该功能理论不对外开放，若要开启，出现任何问题开发者无需负责！</string>
+    <string name="unlock_attention">该功能不对外开放，若要开启，出现任何问题开发者无需负责！</string>
     <string name="download_vpn_file">校园VPN模式下，点击链接下载文件时需要登录VPN，之后再次点击链接即可下载！</string>
     <string name="click_to_add_course">点击当前学期搜索的课程可以尝试导入</string>
     <string name="stu_photo">个人证件照</string>
@@ -371,8 +361,15 @@
     <string name="night_mode_on">开启夜间模式</string>
     <string name="night_mode_off">关闭夜间模式</string>
     <string name="night_mode_follow_system">跟随系统设置</string>
+    <string name="table_loading_tip">如果长时间无法加载课表\n可以尝试手动编辑课程导入</string>
+    <string name="credit_count_course_empty">没有可供选择计算的课程</string>
+    <string name="society">南审Natal信息与技术协会</string>
+    <string name="backup_and_recover">备份与恢复</string>
+    <string name="import_share_course_form_clip_board">从剪切板导入分享课程</string>
+    <string name="import_share_course_error">分享的课程导入失败！</string>
+    <string name="import_share_course_empty">没有找到分享的课程！</string>
 
-    <string name="new_version_info_content">欢迎使用NAU课程表\n\n反馈QQ群：704668624\n\n如果新生在使用过程中有出现特定页面或者程序崩溃问题，请及时上报\n\n如果在校外无法查看校内通知，可以尝试通用设置里的校园VPN模式\n\n如果想要提前查看下学期课程必须在课程编辑里手动导入\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
+    <string name="new_version_info_content">欢迎使用NAU课程表\n\n欢迎加入南审Natal信息技术协会 QQ：815499234\n\n反馈QQ群：704668624\n\n如果在校外无法查看校内通知，可以尝试通用设置里的校园VPN模式\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>

@@ -2,10 +2,10 @@ package tool.xfy9326.naucourse.methods.netInfoMethods;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -103,6 +103,7 @@ public class ScoreMethod extends BaseInfoMethod<CourseScore> {
                     case 8:
                         scoreTotal.add(str);
                         break;
+                    default:
                 }
                 if (count == 8) {
                     count = 0;

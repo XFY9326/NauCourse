@@ -5,7 +5,7 @@
     android:id="@+id/layout_school_calendar_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.SchoolCalendarActivity">
+    tools:context=".activities.async.SchoolCalendarActivity">
 
     <include layout="@layout/widget_toolbar" />
 

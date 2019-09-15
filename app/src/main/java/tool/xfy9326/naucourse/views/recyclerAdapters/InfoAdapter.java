@@ -34,9 +34,9 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
         this.topic_data = new ArrayList<>();
     }
 
-    public InfoAdapter(@NonNull Context context, @NonNull ArrayList<TopicInfo> topic_data) {
+    public InfoAdapter(@NonNull Context context, @NonNull ArrayList<TopicInfo> topicData) {
         this.context = context;
-        this.topic_data = topic_data;
+        this.topic_data = topicData;
     }
 
     @NonNull

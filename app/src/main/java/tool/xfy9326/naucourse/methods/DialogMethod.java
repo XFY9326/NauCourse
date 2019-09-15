@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
@@ -18,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
+import androidx.preference.PreferenceManager;
 
 import com.github.chrisbanes.photoview.PhotoView;
 
@@ -60,14 +60,14 @@ public class DialogMethod {
             builder.setMessage(eulaText);
             if (checkAccept) {
                 builder.setCancelable(false);
-                builder.setPositiveButton(R.string.accept, (dialog, which) -> eulaListener.OnAccept());
-                builder.setNegativeButton(R.string.reject, (dialog, which) -> eulaListener.OnReject());
+                builder.setPositiveButton(R.string.accept, (dialog, which) -> eulaListener.onAccept());
+                builder.setNegativeButton(R.string.reject, (dialog, which) -> eulaListener.onReject());
             } else {
                 builder.setPositiveButton(android.R.string.yes, null);
             }
             builder.show();
         } else {
-            eulaListener.OnReject();
+            eulaListener.onReject();
         }
     }
 

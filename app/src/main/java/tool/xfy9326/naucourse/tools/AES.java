@@ -13,10 +13,12 @@ import javax.crypto.spec.SecretKeySpec;
 /**
  * Created by xfy9326 on 18-2-20.
  * AES加密解密
+ *
+ * @author xfy9326
  */
 
 public class AES {
-    private static final String CipherMode = "AES";
+    private static final String CIPHER_MODE = "AES";
 
     private static SecretKeySpec createKey(@Nullable String password) {
         byte[] data;
@@ -39,7 +41,7 @@ public class AES {
     private static byte[] encrypt(byte[] content, String password) {
         try {
             SecretKeySpec key = createKey(password);
-            @SuppressLint("GetInstance") Cipher cipher = Cipher.getInstance(CipherMode);
+            @SuppressLint("GetInstance") Cipher cipher = Cipher.getInstance(CIPHER_MODE);
             cipher.init(Cipher.ENCRYPT_MODE, key);
             return cipher.doFinal(content);
         } catch (Exception e) {
@@ -71,7 +73,7 @@ public class AES {
     private static byte[] decrypt(byte[] content, String password) {
         try {
             SecretKeySpec key = createKey(password);
-            @SuppressLint("GetInstance") Cipher cipher = Cipher.getInstance(CipherMode);
+            @SuppressLint("GetInstance") Cipher cipher = Cipher.getInstance(CIPHER_MODE);
             cipher.init(Cipher.DECRYPT_MODE, key);
             return cipher.doFinal(content);
         } catch (Exception e) {
@@ -97,8 +99,9 @@ public class AES {
                 e.printStackTrace();
             }
             data = decrypt(data, password);
-            if (data == null)
+            if (data == null) {
                 return null;
+            }
             return new String(data, StandardCharsets.UTF_8);
         } else {
             return null;
@@ -108,8 +111,8 @@ public class AES {
     private static String byte2hex(byte[] b) {
         StringBuilder sb = new StringBuilder(b.length * 2);
         String tmp;
-        for (byte aB : b) {
-            tmp = (Integer.toHexString(aB & 0XFF));
+        for (byte ab : b) {
+            tmp = (Integer.toHexString(ab & 0XFF));
             if (tmp.length() == 1) {
                 sb.append("0");
             }
