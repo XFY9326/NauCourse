@@ -361,7 +361,7 @@
     <string name="night_mode_on">开启夜间模式</string>
     <string name="night_mode_off">关闭夜间模式</string>
     <string name="night_mode_follow_system">跟随系统设置</string>
-    <string name="table_loading_tip">如果长时间无法加载课表\n可以尝试手动导入</string>
+    <string name="table_loading_tip">如果长时间无法加载课表\n可以尝试手动编辑课程导入</string>
     <string name="credit_count_course_empty">没有可供选择计算的课程</string>
     <string name="society">南审Natal信息与技术协会</string>
     <string name="backup_and_recover">备份与恢复</string>

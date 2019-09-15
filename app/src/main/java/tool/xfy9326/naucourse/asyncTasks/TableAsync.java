@@ -62,7 +62,7 @@ public class TableAsync extends AsyncTask<Context, Void, Context> {
                     }
 
                     //首次加载没有课程数据时或者打开自动更新时自动联网获取
-                    if (course == null || course.size() == 0) {
+                    if (course == null || course.isEmpty()) {
                         TableMethod tableMethod = new TableMethod(context[0]);
                         tableLoadSuccess = tableMethod.load();
                         if (tableLoadSuccess == Config.NET_WORK_GET_SUCCESS) {

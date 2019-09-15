@@ -84,7 +84,7 @@ public class TableMethod extends BaseInfoMethod<ArrayList<Course>> {
                 }
             }
 
-            Elements tags = document.body().getElementsByTag("tr");
+            Elements tags = document.body().getElementById("content").getElementsByTag("tr");
             List<String> data = tags.eachText();
             for (String str : data) {
                 //同步的课程学期数必定一致
