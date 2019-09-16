@@ -211,7 +211,7 @@ public class PersonFragment extends Fragment {
                 if (getActivity() != null && isAdded()) {
                     Intent intent = new Intent(getActivity(), GlobalSettingsActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    getActivity().startActivity(intent);
+                    getActivity().startActivityForResult(intent, Config.REQUEST_GLOBAL_SETTINGS);
                 }
             });
             cardViewUpdateSettings.setOnClickListener(v -> {

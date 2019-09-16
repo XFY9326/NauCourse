@@ -24,6 +24,7 @@ import tool.xfy9326.naucourse.methods.DialogMethod;
 import tool.xfy9326.naucourse.methods.LoginMethod;
 import tool.xfy9326.naucourse.methods.NetMethod;
 import tool.xfy9326.naucourse.methods.SecurityMethod;
+import tool.xfy9326.naucourse.methods.TempMethod;
 import tool.xfy9326.naucourse.methods.UpdateMethod;
 import tool.xfy9326.naucourse.methods.VPNMethods;
 
@@ -114,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
             final String pw = editTextUserPw.getText().toString().trim();
             final NauSSOClient nauSSOClient = BaseMethod.getApp(LoginActivity.this).getClient();
             showLoadingDialog();
-            LoginMethod.cleanUserTemp(LoginActivity.this);
+            TempMethod.cleanUserTemp(LoginActivity.this);
             login(nauSSOClient, id, pw);
             SecurityMethod.saveUserInfo(LoginActivity.this, id, pw);
         } else {

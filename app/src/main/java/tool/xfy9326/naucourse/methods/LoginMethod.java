@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
-import java.io.File;
 import java.io.IOException;
 
 import lib.xfy9326.nausso.NauSSOClient;
@@ -121,39 +120,11 @@ public class LoginMethod {
                     .remove(Config.PREFERENCE_NEW_VERSION_INFO)
                     .putBoolean(Config.PREFERENCE_HAS_LOGIN, false)
                     .apply();
-            cleanUserTemp(context);
+            TempMethod.cleanUserTemp(context);
             return false;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return true;
-    }
-
-    /**
-     * 清空用户缓存的数据
-     *
-     * @param context Context
-     */
-    public static void cleanUserTemp(Context context) {
-        File cacheFile = context.getCacheDir();
-        deleteAll(cacheFile);
-        File dataFile = context.getFilesDir();
-        deleteAll(dataFile);
-    }
-
-    private static void deleteAll(File f) {
-        if (f.exists()) {
-            if (f.isFile()) {
-                //noinspection ResultOfMethodCallIgnored
-                f.delete();
-            } else if (f.isDirectory()) {
-                File[] fileList = f.listFiles();
-                if (fileList != null) {
-                    for (File file : fileList) {
-                        deleteAll(file);
-                    }
-                }
-            }
-        }
     }
 }

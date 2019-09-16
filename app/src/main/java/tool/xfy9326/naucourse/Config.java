@@ -32,6 +32,7 @@ public class Config {
     public static final int RE_LOGIN_TRYING = 2;
 
     public static final int REQUEST_ACTIVITY_LOGIN = 1;
+    public static final int REQUEST_GLOBAL_SETTINGS = 2;
 
     public static final int HANDLER_RELOAD_TABLE = 0;
     public static final int HANDLER_RELOAD_TABLE_DATA = 1;
@@ -67,6 +68,7 @@ public class Config {
     public static final String INTENT_ADD_COURSE_TERM = "ADD_COURSE_TERM";
     public static final String INTENT_EDIT_COURSE = "EDIT_COURSE";
     public static final String INTENT_VIEW_PAGER_POSITION = "VIEW_PAGER_POSITION";
+    public static final String INTENT_CLOSE_APPLICATION = "CLOSE_APPLICATION";
 
     public static final int DEFAULT_MAX_WEEK = 21;
     public static final int MAX_WEEK_DAY = 7;
@@ -127,6 +129,7 @@ public class Config {
     public static final String PREFERENCE_NEED_CUSTOM_TERM_ALERT = "NEED_CUSTOM_TERM_ALERT";
     public static final String PREFERENCE_NIGHT_MODE = "NIGHT_MODE";
     public static final String PREFERENCE_NOTIFY_SHOW_ATTENTION = "NOTIFY_SHOW_ATTENTION";
+    public static final String PREFERENCE_CLEAN_TEMP_AND_EXIT = "CLEAN_TEMP_AND_EXIT";
 
     public static final String PREFERENCE_INFO_CHANNEL_SELECTED_JWC_SYSTEM = "INFO_CHANNEL_SELECTED_JWC_SYSTEM";
     public static final String PREFERENCE_INFO_CHANNEL_SELECTED_JW = "INFO_CHANNEL_SELECTED_JW";

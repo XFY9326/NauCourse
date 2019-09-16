@@ -173,7 +173,10 @@ public class CourseActivity extends AppCompatActivity {
         loadingDialog = DialogMethod.showLoadingDialog(CourseActivity.this, true, dialog -> finish());
         new Thread(() -> {
             courseArrayList.clear();
-            courseArrayList.addAll(DataMethod.getOfflineTableData(CourseActivity.this));
+            ArrayList<Course> temp = DataMethod.getOfflineTableData(CourseActivity.this);
+            if (temp != null && !temp.isEmpty()) {
+                courseArrayList.addAll(temp);
+            }
             runOnUiThread(() -> {
                 if (loadingDialog != null && loadingDialog.isShowing()) {
                     loadingDialog.dismiss();

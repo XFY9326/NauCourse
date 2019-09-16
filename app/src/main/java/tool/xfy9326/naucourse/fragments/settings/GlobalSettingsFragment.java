@@ -13,6 +13,8 @@ import java.util.Objects;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.activities.settings.GlobalSettingsActivity;
+import tool.xfy9326.naucourse.methods.TempMethod;
 import tool.xfy9326.naucourse.methods.VPNMethods;
 
 public class GlobalSettingsFragment extends PreferenceFragmentCompat {
@@ -35,6 +37,10 @@ public class GlobalSettingsFragment extends PreferenceFragmentCompat {
             showNightModeChooseDialog();
             return true;
         });
+        ((Preference) Objects.requireNonNull(findPreference(Config.PREFERENCE_CLEAN_TEMP_AND_EXIT))).setOnPreferenceClickListener(preference -> {
+            showCleanTempDialog();
+            return true;
+        });
         ((Preference) Objects.requireNonNull(findPreference(Config.PREFERENCE_SCHOOL_VPN_MODE))).setOnPreferenceChangeListener((preference, newValue) -> {
             VPNMethods.setVPNMode(getActivity(), (boolean) newValue);
             return true;
@@ -44,6 +50,22 @@ public class GlobalSettingsFragment extends PreferenceFragmentCompat {
             VPNMethods.setVPNSmartMode(getActivity(), (boolean) newValue);
             return true;
         });
+    }
+
+    private void showCleanTempDialog() {
+        if (isAdded() && getActivity() != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(R.string.attention);
+            builder.setMessage(R.string.attention_clean_temp_and_exit);
+            builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                if (isAdded() && getActivity() != null) {
+                    TempMethod.cleanUserTemp(getActivity());
+                    ((GlobalSettingsActivity) getActivity()).closeApplication();
+                }
+            });
+            builder.setNegativeButton(android.R.string.cancel, null);
+            builder.show();
+        }
     }
 
     private void showNightModeChooseDialog() {

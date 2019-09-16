@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.methods;
 
 import android.content.Context;
 
+import java.io.File;
 import java.util.concurrent.ExecutorService;
 
 import tool.xfy9326.naucourse.Config;
@@ -76,5 +77,33 @@ public class TempMethod {
                 e.printStackTrace();
             }
         });
+    }
+
+    /**
+     * 清空用户缓存的数据
+     *
+     * @param context Context
+     */
+    public static void cleanUserTemp(Context context) {
+        File cacheFile = context.getCacheDir();
+        deleteAll(cacheFile);
+        File dataFile = context.getFilesDir();
+        deleteAll(dataFile);
+    }
+
+    private static void deleteAll(File f) {
+        if (f.exists()) {
+            if (f.isFile()) {
+                //noinspection ResultOfMethodCallIgnored
+                f.delete();
+            } else if (f.isDirectory()) {
+                File[] fileList = f.listFiles();
+                if (fileList != null) {
+                    for (File file : fileList) {
+                        deleteAll(file);
+                    }
+                }
+            }
+        }
     }
 }
