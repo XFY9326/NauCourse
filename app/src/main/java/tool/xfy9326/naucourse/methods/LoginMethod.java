@@ -117,7 +117,6 @@ public class LoginMethod {
                     .remove(Config.PREFERENCE_SCHOOL_VPN_SMART_MODE)
                     .remove(Config.PREFERENCE_EULA_ACCEPT)
                     .remove(Config.PREFERENCE_SHOW_HIDDEN_FUNCTION)
-                    .remove(Config.PREFERENCE_NEW_VERSION_INFO)
                     .putBoolean(Config.PREFERENCE_HAS_LOGIN, false)
                     .apply();
             TempMethod.cleanUserTemp(context);

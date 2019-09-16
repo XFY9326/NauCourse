@@ -129,13 +129,14 @@ public class TableMethod extends BaseInfoMethod<ArrayList<Course>> {
 
                     courseDetailNew.setWeekDay(Integer.valueOf(timeTemp[2]));
 
+                    timeTemp[0] = timeTemp[0].trim();
                     if (timeTemp[0].contains("单")) {
                         courseDetailNew.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_SINGLE);
                         courseDetailNew.setWeeks(new String[]{timeTemp[0].substring(0, timeTemp[0].indexOf("之"))});
                     } else if (timeTemp[0].contains("双")) {
                         courseDetailNew.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_DOUBLE);
                         courseDetailNew.setWeeks(new String[]{timeTemp[0].substring(0, timeTemp[0].indexOf("之"))});
-                    } else if (timeTemp[0].trim().startsWith("第")) {
+                    } else if (timeTemp[0].startsWith("第")) {
                         courseDetailNew.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_ONCE_MORE);
                         String weekStr = timeTemp[0].substring(1, timeTemp[0].indexOf("周")).trim();
                         if (weekStr.contains(",")) {
