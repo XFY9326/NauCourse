@@ -197,7 +197,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Config.REQUEST_ACTIVITY_LOGIN) {
+        if (requestCode == Config.REQUEST_GLOBAL_SETTINGS) {
+            if (data != null && data.getBooleanExtra(Config.INTENT_CLOSE_APPLICATION, false)) {
+                finish();
+            }
+        } else if (requestCode == Config.REQUEST_ACTIVITY_LOGIN) {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
             if (!sharedPreferences.getBoolean(Config.PREFERENCE_HAS_LOGIN, Config.DEFAULT_PREFERENCE_HAS_LOGIN)) {
                 finish();

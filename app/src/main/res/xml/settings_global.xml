@@ -50,4 +50,10 @@
             android:summary="@string/update_table_every_time_sum"
             android:title="@string/update_table_every_time" />
     </androidx.preference.PreferenceCategory>
+    <androidx.preference.PreferenceCategory android:title="@string/temp_settings">
+        <androidx.preference.Preference
+            android:key="CLEAN_TEMP_AND_EXIT"
+            android:summary="@string/clean_temp_and_exit_sum"
+            android:title="@string/clean_temp_and_exit" />
+    </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>
