@@ -270,9 +270,10 @@ public class PersonFragment extends Fragment {
                 }
                 new Thread(() -> {
                     if (LoginMethod.loginOut(context)) {
-                        if (getActivity() != null) {
+                        if (isAdded() && getActivity() != null) {
                             getActivity().runOnUiThread(() -> {
                                 if (isAdded()) {
+                                    closeLoadingDialog();
                                     Toast.makeText(getActivity(), R.string.login_out_error, Toast.LENGTH_SHORT).show();
                                 }
                             });
@@ -283,28 +284,29 @@ public class PersonFragment extends Fragment {
                                 //小部件清空
                                 if (getActivity() != null) {
                                     getActivity().sendBroadcast(new Intent(NextClassWidget.ACTION_ON_UPDATE));
-                                }
-                                //重启当前程序
-                                Intent intent = new Intent(context, LoginActivity.class);
-                                startActivityForResult(intent, Config.REQUEST_ACTIVITY_LOGIN);
-                                if (getActivity() != null) {
+                                    if (isAdded()) {
+                                        closeLoadingDialog();
+                                    }
+                                    //重启当前程序
+                                    Intent intent = new Intent(context, LoginActivity.class);
+                                    startActivityForResult(intent, Config.REQUEST_ACTIVITY_LOGIN);
                                     getActivity().finish();
                                 }
+
                             });
                         }
-                    }
-                    if (isAdded() && getActivity() != null) {
-                        getActivity().runOnUiThread(() -> {
-                            if (loadingDialog != null && loadingDialog.isShowing()) {
-                                loadingDialog.cancel();
-                                loadingDialog = null;
-                            }
-                        });
                     }
                 }).start();
             });
             builder.setNegativeButton(android.R.string.cancel, null);
             builder.show();
+        }
+    }
+
+    private void closeLoadingDialog() {
+        if (isAdded() && loadingDialog != null && loadingDialog.isShowing()) {
+            loadingDialog.cancel();
+            loadingDialog = null;
         }
     }
 
