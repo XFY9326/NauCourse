@@ -71,10 +71,12 @@ public class NextClassWidget extends AppWidgetProvider {
                 remoteViews.setViewVisibility(R.id.textView_app_widget_noNextClass, View.GONE);
                 remoteViews.setViewVisibility(R.id.layout_app_widget_nextClass, View.VISIBLE);
             } else {
+                remoteViews.setTextViewText(R.id.textView_app_widget_noNextClass, context.getString(R.string.class_info_empty));
                 remoteViews.setViewVisibility(R.id.textView_app_widget_noNextClass, View.VISIBLE);
                 remoteViews.setViewVisibility(R.id.layout_app_widget_nextClass, View.GONE);
             }
         } else {
+            remoteViews.setTextViewText(R.id.textView_app_widget_noNextClass, context.getString(R.string.class_info_empty));
             remoteViews.setViewVisibility(R.id.textView_app_widget_noNextClass, View.VISIBLE);
             remoteViews.setViewVisibility(R.id.layout_app_widget_nextClass, View.GONE);
         }
