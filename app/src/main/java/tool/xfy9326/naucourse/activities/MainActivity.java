@@ -13,7 +13,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import tool.xfy9326.naucourse.BaseApplication;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.methods.BaseMethod;
@@ -80,9 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        BaseApplication app = BaseMethod.getApp(this);
-        app.setViewPagerAdapter(null);
-        app.finishAllThread();
+        BaseMethod.getApp(this).setViewPagerAdapter(null);
         System.gc();
         super.onDestroy();
     }

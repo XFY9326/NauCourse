@@ -120,7 +120,7 @@ public class BaseApplication extends Application {
         this.suspendCourseActivity = new WeakReference<>(suspendCourseActivity);
     }
 
-    public void finishAllThread() {
+    private void finishAllThread() {
         if (!executorService.isShutdown()) {
             executorService.shutdownNow();
         }

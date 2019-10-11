@@ -374,7 +374,7 @@
     <string name="clean_temp_and_exit_sum">清空网络数据缓存可以解决一些问题</string>
     <string name="class_info_empty">暂无课程数据\n请登录或添加数据后刷新重试</string>
 
-    <string name="new_version_info_content">欢迎使用NAU课程表\n\n欢迎加入南审Natal信息技术协会 QQ：815499234\n\n反馈QQ群：704668624\n\n如果在校外无法查看校内通知，可以尝试通用设置里的校园VPN模式\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
+    <string name="new_version_info_content">欢迎使用NAU课程表\n\n近期校园网络波动较大，如果无法刷新信息可以尝试连接校园内网。\n\n反馈QQ群：704668624\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>
