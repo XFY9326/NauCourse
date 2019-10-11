@@ -146,7 +146,7 @@ public class NetMethod {
                     data = BaseMethod.getApp(context).getClient().getData(url);
                     break;
                 case Config.RE_LOGIN_TRYING:
-                    while (LoginMethod.isTryingReLogin) {
+                    while (LoginMethod.reLoginLock.isLocked()) {
                         Thread.sleep(500);
                     }
                     Thread.sleep(500);
@@ -264,7 +264,7 @@ public class NetMethod {
      * @param context Context
      * @param url     地址
      */
-    public static void viewUrlInBrowser(Context context, String url) {
+    static void viewUrlInBrowser(Context context, String url) {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

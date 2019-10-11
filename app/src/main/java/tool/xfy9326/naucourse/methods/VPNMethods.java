@@ -9,7 +9,7 @@ import lib.xfy9326.nausso.NauSSOClient;
 import lib.xfy9326.nausso.VPNMethod;
 
 public class VPNMethods {
-    static final String[] NON_VPN_HOST = new String[]{"jw.nau.edu.cn", "www.nau.edu.cn", "jwc.nau.edu.cn", "tw.nau.edu.cn", "xgc.nau.edu.cn", "my.nau.edu.cn"};
+    static final String[] NON_VPN_HOST = new String[]{"jw.nau.edu.cn", "www.nau.edu.cn", "jwc.nau.edu.cn", "tw.nau.edu.cn", "xxb.nau.edu.cn", "xgc.nau.edu.cn", "my.nau.edu.cn"};
     private static final String SCHOOL_MAIN_HOST = "nau.edu.cn";
 
     public static void setVPNMode(Context context, boolean enabled) {

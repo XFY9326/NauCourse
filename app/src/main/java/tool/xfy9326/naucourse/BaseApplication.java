@@ -28,8 +28,8 @@ import tool.xfy9326.naucourse.views.viewPagerAdapters.MainViewPagerAdapter;
  */
 
 public class BaseApplication extends Application {
+    private final static ExecutorService executorService = Executors.newCachedThreadPool();
     private NauSSOClient client;
-    private ExecutorService executorService;
     private MainViewPagerAdapter viewPagerAdapter;
     private WeakReference<InfoDetailActivity> infoDetailActivity;
     private WeakReference<ScoreActivity> scoreActivity;
@@ -47,7 +47,7 @@ public class BaseApplication extends Application {
             Bugly.init(this, "7b78d5ccdc", false);
         }
         client = NetMethod.getNewSSOClient(this);
-        executorService = Executors.newCachedThreadPool();
+
         int currentNightMode = PreferenceManager.getDefaultSharedPreferences(this).getInt(Config.PREFERENCE_NIGHT_MODE, Config.DEFAULT_PREFERENCE_NIGHT_MODE);
         AppCompatDelegate.setDefaultNightMode(currentNightMode);
     }
@@ -120,19 +120,20 @@ public class BaseApplication extends Application {
         this.suspendCourseActivity = new WeakReference<>(suspendCourseActivity);
     }
 
-    @Override
-    public void onTerminate() {
-        client = null;
+    public void finishAllThread() {
         if (!executorService.isShutdown()) {
             executorService.shutdownNow();
         }
+    }
+
+    @Override
+    public void onTerminate() {
+        client = null;
+        finishAllThread();
         super.onTerminate();
     }
 
     public ExecutorService getExecutorService() {
-        if (executorService == null) {
-            executorService = Executors.newCachedThreadPool();
-        }
         return executorService;
     }
 

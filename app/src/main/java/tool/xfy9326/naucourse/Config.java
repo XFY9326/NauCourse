@@ -161,8 +161,8 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT = true;
     public static final boolean DEFAULT_PREFERENCE_HIDE_OUT_OF_DATE_EXAM = false;
     public static final boolean DEFAULT_PREFERENCE_UPDATE_TABLE_EVERY_TIME = false;
-    public static final boolean DEFAULT_PREFERENCE_SCHOOL_VPN_MODE = false;
-    public static final boolean DEFAULT_PREFERENCE_SCHOOL_VPN_SMART_MODE = true;
+    public static final boolean DEFAULT_PREFERENCE_SCHOOL_VPN_MODE = true;
+    public static final boolean DEFAULT_PREFERENCE_SCHOOL_VPN_SMART_MODE = false;
     public static final int DEFAULT_PREFERENCE_NEW_VERSION_INFO = 0;
     public static final boolean DEFAULT_PREFERENCE_EULA_ACCEPT = false;
     public static final boolean DEFAULT_PREFERENCE_NO_SHOW_LOGIN_ATTENTION = false;

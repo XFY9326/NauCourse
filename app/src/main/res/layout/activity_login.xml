@@ -113,6 +113,7 @@
                         android:id="@+id/checkBox_login_vpn_accept"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:checked="true"
                         android:text="@string/login_with_vpn_mode"
                         android:textColor="@android:color/white"
                         android:textSize="12sp" />

@@ -134,16 +134,18 @@ public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.Co
             holder.button_course_edit_time.setOnClickListener(v -> editNumberItem(holder.getAdapterPosition(), false));
             holder.button_course_edit_location.setOnClickListener(v -> editLocation(holder.getAdapterPosition()));
             holder.button_delete.setOnClickListener(v -> Snackbar.make(activity.findViewById(R.id.layout_course_edit_content), R.string.delete_confirm, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(android.R.string.yes, v1 -> {
-                courseDetails.remove(holder.getAdapterPosition());
-                notifyItemRemoved(holder.getAdapterPosition());
-                activity.setArrayChanged();
+                if (courseDetails.size() > holder.getAdapterPosition()) {
+                    courseDetails.remove(holder.getAdapterPosition());
+                    notifyItemRemoved(holder.getAdapterPosition());
+                    activity.setArrayChanged();
 
-                FloatingActionButton floatingActionButton = activity.findViewById(R.id.floatingActionButton_course_edit_add);
-                if (floatingActionButton.getVisibility() != View.VISIBLE) {
-                    floatingActionButton.setVisibility(View.VISIBLE);
-                    ViewCompat.animate(floatingActionButton).scaleX(1.0F).scaleY(1.0F).alpha(1.0F)
-                            .setInterpolator(new FastOutSlowInInterpolator()).withLayer().setListener(null)
-                            .start();
+                    FloatingActionButton floatingActionButton = activity.findViewById(R.id.floatingActionButton_course_edit_add);
+                    if (floatingActionButton.getVisibility() != View.VISIBLE) {
+                        floatingActionButton.setVisibility(View.VISIBLE);
+                        ViewCompat.animate(floatingActionButton).scaleX(1.0F).scaleY(1.0F).alpha(1.0F)
+                                .setInterpolator(new FastOutSlowInInterpolator()).withLayer().setListener(null)
+                                .start();
+                    }
                 }
             }).show());
         }

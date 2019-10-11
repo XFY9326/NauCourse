@@ -259,46 +259,46 @@ public class PersonFragment extends Fragment {
     }
 
     private void loginOut(final Context context) {
-        if (getActivity() != null) {
-            String userId = SecurityMethod.getUserId(context);
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle(R.string.login_out);
-            builder.setMessage(getString(R.string.ask_login_out, userId));
-            builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                if (getActivity() != null) {
-                    loadingDialog = DialogMethod.showLoadingDialog(getActivity(), false, null);
-                }
-                new Thread(() -> {
-                    if (LoginMethod.loginOut(context)) {
-                        if (isAdded() && getActivity() != null) {
-                            getActivity().runOnUiThread(() -> {
+        String userId = SecurityMethod.getUserId(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(R.string.login_out);
+        builder.setMessage(getString(R.string.ask_login_out, userId));
+        builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
+            if (getActivity() != null) {
+                loadingDialog = DialogMethod.showLoadingDialog(getActivity(), false, null);
+            }
+            new Thread(() -> {
+                if (LoginMethod.loginOut(context)) {
+                    if (isAdded() && getActivity() != null) {
+                        getActivity().runOnUiThread(() -> {
+                            if (isAdded()) {
+                                closeLoadingDialog();
+                                Toast.makeText(getActivity(), R.string.login_out_error, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                } else {
+                    if (isAdded() && getActivity() != null) {
+                        getActivity().runOnUiThread(() -> {
+                            //小部件清空
+                            if (getActivity() != null) {
+                                getActivity().sendBroadcast(new Intent(NextClassWidget.ACTION_ON_UPDATE));
                                 if (isAdded()) {
                                     closeLoadingDialog();
-                                    Toast.makeText(getActivity(), R.string.login_out_error, Toast.LENGTH_SHORT).show();
                                 }
-                            });
-                        }
-                    } else {
-                        if (isAdded() && getActivity() != null) {
-                            getActivity().runOnUiThread(() -> {
-                                //小部件清空
-                                if (getActivity() != null) {
-                                    getActivity().sendBroadcast(new Intent(NextClassWidget.ACTION_ON_UPDATE));
-                                    if (isAdded()) {
-                                        closeLoadingDialog();
-                                    }
-                                    //重启当前程序
-                                    Intent intent = new Intent(context, LoginActivity.class);
-                                    startActivityForResult(intent, Config.REQUEST_ACTIVITY_LOGIN);
-                                    getActivity().finish();
-                                }
+                                //重启当前程序
+                                Intent intent = new Intent(context, LoginActivity.class);
+                                startActivityForResult(intent, Config.REQUEST_ACTIVITY_LOGIN);
+                                getActivity().finish();
+                            }
 
-                            });
-                        }
+                        });
                     }
-                }).start();
-            });
-            builder.setNegativeButton(android.R.string.cancel, null);
+                }
+            }).start();
+        });
+        builder.setNegativeButton(android.R.string.cancel, null);
+        if (isAdded() && getActivity() != null) {
             builder.show();
         }
     }
