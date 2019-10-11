@@ -446,16 +446,18 @@ public class TableFragment extends Fragment {
                     } else if (detail.getWeekMode() == Config.COURSE_DETAIL_WEEKMODE_DOUBLE) {
                         weekmode = context.getString(R.string.course_card_time_week_mode, context.getString(R.string.double_week_mode));
                     }
-                    for (String courseWeek : Objects.requireNonNull(courseWeeks)) {
-                        String[] courseTimes = detail.getCourseTime();
-                        String[] weekNum = context.getResources().getStringArray(R.array.week_number);
-                        for (String courseTime : Objects.requireNonNull(courseTimes)) {
-                            View viewCard = layoutInflater.inflate(R.layout.item_course_card, getActivity().findViewById(R.id.layout_course_card_item));
-                            String time = context.getString(R.string.course_card_time, courseWeek, weekmode, weekNum[detail.getWeekDay() - 1], courseTime);
-                            String location = context.getString(R.string.course_card_location, detail.getLocation());
-                            ((TextView) viewCard.findViewById(R.id.textView_course_card_time)).setText(time);
-                            ((TextView) viewCard.findViewById(R.id.textView_course_card_location)).setText(location);
-                            linearLayoutContent.addView(viewCard);
+                    if (courseWeeks != null) {
+                        for (String courseWeek : courseWeeks) {
+                            String[] courseTimes = detail.getCourseTime();
+                            String[] weekNum = context.getResources().getStringArray(R.array.week_number);
+                            for (String courseTime : Objects.requireNonNull(courseTimes)) {
+                                View viewCard = layoutInflater.inflate(R.layout.item_course_card, getActivity().findViewById(R.id.layout_course_card_item));
+                                String time = context.getString(R.string.course_card_time, courseWeek, weekmode, weekNum[detail.getWeekDay() - 1], courseTime);
+                                String location = context.getString(R.string.course_card_location, detail.getLocation());
+                                ((TextView) viewCard.findViewById(R.id.textView_course_card_time)).setText(time);
+                                ((TextView) viewCard.findViewById(R.id.textView_course_card_location)).setText(location);
+                                linearLayoutContent.addView(viewCard);
+                            }
                         }
                     }
                 }

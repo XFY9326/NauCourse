@@ -71,7 +71,10 @@ public class ShareMethod {
             ClipData data = clipboardManager.getPrimaryClip();
             if (data != null && data.getItemCount() > 0) {
                 ClipData.Item item = data.getItemAt(0);
-                return item.getText().toString();
+                CharSequence charSequence = item.getText();
+                if (charSequence != null) {
+                    return charSequence.toString();
+                }
             }
         }
         return null;

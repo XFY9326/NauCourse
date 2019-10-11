@@ -313,7 +313,7 @@ public class NauSSOClient {
         ssoResponse.close();
 
         if (ssoContent != null) {
-            if (!ssoContent.contains("南京审计大学统一身份认证登录")) {
+            if (!ssoContent.contains("统一身份认证登录")) {
                 loginErrorCode = LOGIN_SUCCESS;
                 loginUrl = ssoResponse.request().url().query();
                 return true;
@@ -328,7 +328,7 @@ public class NauSSOClient {
                     ResponseBody responseBody = response.body();
                     if (responseBody != null) {
                         String body = responseBody.string();
-                        if (body.contains("密码错误") || body.contains("用户名不存在")) {
+                        if (body.contains("密码错误") || body.contains("用户名不存在") || body.contains("统一身份认证登录")) {
                             loginErrorCode = LOGIN_USER_INFO_WRONG;
                         } else if (body.startsWith("当前你已经登录")) {
                             loginErrorCode = LOGIN_ALREADY_LOGIN;

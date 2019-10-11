@@ -8,12 +8,12 @@
     </androidx.preference.PreferenceCategory>
     <androidx.preference.PreferenceCategory android:title="@string/school_vpn">
         <androidx.preference.CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="SCHOOL_VPN_MODE"
             android:summary="@string/school_vpn_mode_sum"
             android:title="@string/school_vpn_mode" />
         <androidx.preference.CheckBoxPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:dependency="SCHOOL_VPN_MODE"
             android:key="SCHOOL_VPN_SMART_MODE"
             android:summary="@string/school_vpn_smart_mode_sum"

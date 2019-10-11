@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import java.io.IOException;
+import java.util.concurrent.locks.ReentrantLock;
 
 import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
@@ -17,7 +18,7 @@ import tool.xfy9326.naucourse.Config;
  */
 
 public class LoginMethod {
-    static boolean isTryingReLogin = false;
+    static volatile ReentrantLock reLoginLock = new ReentrantLock();
 
     /**
      * 用户Cookie过期后尝试重新登陆
@@ -26,12 +27,13 @@ public class LoginMethod {
      * @return ReLogin状态值
      * @throws IOException 重新登陆时的网络错误
      */
-    synchronized static int reLogin(@NonNull Context context) throws IOException, InterruptedException {
-        if (!isTryingReLogin) {
-            isTryingReLogin = true;
-            int result = doReLogin(context);
-            isTryingReLogin = false;
-            return result;
+    static int reLogin(@NonNull Context context) throws IOException, InterruptedException {
+        if (reLoginLock.tryLock()) {
+            try {
+                return doReLogin(context);
+            } finally {
+                reLoginLock.unlock();
+            }
         } else {
             return Config.RE_LOGIN_TRYING;
         }
@@ -117,7 +119,6 @@ public class LoginMethod {
                     .remove(Config.PREFERENCE_SCHOOL_VPN_SMART_MODE)
                     .remove(Config.PREFERENCE_EULA_ACCEPT)
                     .remove(Config.PREFERENCE_SHOW_HIDDEN_FUNCTION)
-                    .remove(Config.PREFERENCE_NEW_VERSION_INFO)
                     .putBoolean(Config.PREFERENCE_HAS_LOGIN, false)
                     .apply();
             TempMethod.cleanUserTemp(context);
