@@ -131,20 +131,28 @@ public class RSSInfoMethod {
     @NonNull
     public static String getDetail(Context context) {
         Element articleContent = Objects.requireNonNull(document_detail).body().getElementsByClass("Article_Content").get(0);
-        Elements ps = articleContent.getElementsByTag("p");
-        for (int i = ps.size() - 1; i >= 0; i--) {
-            Element p = ps.get(i);
-            if ("".equals(p.text())) {
-                ps.remove(i);
+        Elements image = articleContent.getElementsByTag("img");
+
+        for (Element element : image) {
+            if (element.hasAttr("src") && !element.attr("src").isEmpty()) {
+                String baseUrl = element.attr("src");
+                if (baseUrl.contains("/_ueditor/themes/default/images/icon")) {
+                    element.remove();
+                } else {
+                    element.clearAttributes();
+                    element.tagName("a")
+                            .attr("style", "\"text-align: center;\"")
+                            .attr("href", baseUrl)
+                            .text(context.getResources().getString(R.string.image_replace));
+                }
             }
         }
-        String html = ps.outerHtml();
+        String html = articleContent.html();
         html = html.replace("&nbsp;&nbsp;", "");
         if (lastLoadInfoDetailHost != null) {
-            html = html.replace("href=\"/", "href=\"" + VPNMethods.vpnLinkUrlFix(context, lastLoadInfoDetailHost, "/"))
-                    .replaceAll("<img src=\".*?/_ueditor/themes/default/images/icon_.*?.gif.*?\">", "")
-                    .replaceAll("<img.*?/?>", "<div><p>" + context.getResources().getString(R.string.image_replace)) + "</p></div>";
+            html = html.replace("href=\"/", "href=\"" + VPNMethods.vpnLinkUrlFix(context, lastLoadInfoDetailHost, "/"));
         }
+
         return html;
     }
 

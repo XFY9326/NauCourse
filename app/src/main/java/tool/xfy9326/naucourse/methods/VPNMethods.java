@@ -70,10 +70,11 @@ public class VPNMethods {
 
     private static String buildVPNHost(String host) {
         String realHost = getRealHost(host);
+        String encryptHost = VPNMethod.encryptHost(realHost);
         if (host.startsWith("https")) {
-            return VPNMethod.VPN_SERVER + "/https/" + realHost;
+            return VPNMethod.VPN_SERVER + "/https/" + encryptHost;
         } else {
-            return VPNMethod.VPN_SERVER + "/http/" + realHost;
+            return VPNMethod.VPN_SERVER + "/http/" + encryptHost;
         }
     }
 

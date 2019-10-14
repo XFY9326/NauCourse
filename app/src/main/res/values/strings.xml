@@ -314,7 +314,7 @@
     <string name="course_search_result_title">◈ 搜索结果</string>
     <string name="random_course_color">随机设置课程颜色</string>
     <string name="random_course_color_success">随机设置颜色成功！</string>
-    <string name="image_replace">[请前往原网页查看图片]</string>
+    <string name="image_replace">[请点击前往网页查看图片]</string>
     <string name="save_file_success">保存成功！\n文件位于%1$s</string>
     <string name="school_vpn_mode">校园VPN模式</string>
     <string name="school_vpn_mode_sum">使用校园VPN连接校内网络\n（避免校外访问校内失败）</string>

@@ -108,12 +108,16 @@ public class InfoDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.menu_info_detail_open_in_browser || item.getItemId() == R.id.menu_info_detail_share) {
             String url = null;
-            if (Objects.equals(infoSource, InfoMethod.TOPIC_SOURCE_RSS)) {
-                url = infoUrl;
-            } else if (Objects.equals(infoSource, InfoMethod.TOPIC_SOURCE_JWC)) {
-                url = NauSSOClient.JWC_SERVER_URL + infoUrl;
-            } else if (Objects.equals(infoSource, InfoMethod.TOPIC_SOURCE_ALSTU)) {
-                url = AlstuMethod.ALSTU_SERVER_URL + infoUrl;
+            if (infoUrl != null) {
+                if (infoUrl.startsWith("http")) {
+                    url = infoUrl;
+                } else if (Objects.equals(infoSource, InfoMethod.TOPIC_SOURCE_RSS)) {
+                    url = infoUrl;
+                } else if (Objects.equals(infoSource, InfoMethod.TOPIC_SOURCE_JWC)) {
+                    url = NauSSOClient.JWC_SERVER_URL + infoUrl;
+                } else if (Objects.equals(infoSource, InfoMethod.TOPIC_SOURCE_ALSTU)) {
+                    url = AlstuMethod.ALSTU_SERVER_URL + infoUrl;
+                }
             }
 
             if (url != null) {
