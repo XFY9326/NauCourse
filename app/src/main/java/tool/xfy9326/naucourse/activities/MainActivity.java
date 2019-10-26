@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity {
         BaseMethod.doubleClickExit(this);
     }
 
-    private void netCheck() {
-        NetMethod.checkJwcAvailable(MainActivity.this);
+    synchronized private void netCheck() {
+        NetMethod.checkServerAvailable(MainActivity.this);
     }
 
     private void loginCheck() {

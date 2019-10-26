@@ -68,7 +68,7 @@ public class CourseSearchInfoAsync extends AsyncTask<Object, Void, Context> {
                 if (NetMethod.checkNetWorkCode(context, new int[]{courseSearchLoadSuccess}, loadCode, false)) {
                     courseSearchActivity.setBaseSearchView(searchTypeList, termList, roomList, deptList);
                 }
-                courseSearchActivity.lastBaseViewSet();
+                courseSearchActivity.lastViewSet();
             }
         }
         System.gc();

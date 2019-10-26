@@ -38,7 +38,7 @@ public class CourseSearchAsync extends AsyncTask<Object, Void, Context> {
             CourseSearchActivity courseSearchActivity = BaseMethod.getApp(context).getCourseSearchActivity();
             if (courseSearchActivity != null) {
                 courseSearchActivity.setSearchResult(courseSearchDetail);
-                courseSearchActivity.lastSearchViewSet();
+                courseSearchActivity.lastViewSet();
             }
             System.gc();
         }

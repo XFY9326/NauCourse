@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         viewSet();
         BaseMethod.showNewVersionInfo(this, true);
         updateCheck();
-        netCheck();
+        NetMethod.checkServerAvailable(LoginActivity.this);
     }
 
     @Override
@@ -135,7 +135,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 loginErrorCode = nauSSOClient.getLoginErrorCode();
                 if (loginErrorCode == NauSSOClient.LOGIN_ALREADY_LOGIN) {
-                    if (LoginMethod.doReLogin(LoginActivity.this, id, pw, sharedPreferences) == Config.RE_LOGIN_SUCCESS) {
+                    if (LoginMethod.reLogin(LoginActivity.this, id, pw, sharedPreferences) == Config.RE_LOGIN_SUCCESS) {
                         loginSuccess = true;
                         loginURL = nauSSOClient.getJwcLoginUrl();
                     }
@@ -208,10 +208,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
         loadingDialog = DialogMethod.showLoadingDialog(LoginActivity.this, true, cancelListener);
-    }
-
-    private void netCheck() {
-        NetMethod.checkJwcAvailable(LoginActivity.this);
     }
 
     synchronized private void updateCheck() {

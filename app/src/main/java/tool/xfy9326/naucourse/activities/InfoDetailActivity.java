@@ -242,6 +242,7 @@ public class InfoDetailActivity extends AppCompatActivity {
                     textViewContent.setText(spanned);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    textViewContent.setText(content);
                 }
             } else {
                 textViewContent.setText(content);
@@ -258,5 +259,4 @@ public class InfoDetailActivity extends AppCompatActivity {
         infoDetailAsync.setData(infoSource, infoUrl);
         infoDetailAsync.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getApplicationContext());
     }
-
 }

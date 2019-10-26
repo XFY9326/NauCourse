@@ -18,7 +18,7 @@ import tool.xfy9326.naucourse.Config;
  */
 
 public class LoginMethod {
-    static volatile ReentrantLock reLoginLock = new ReentrantLock();
+    static final ReentrantLock reLoginLock = new ReentrantLock();
 
     /**
      * 用户Cookie过期后尝试重新登陆
@@ -39,6 +39,18 @@ public class LoginMethod {
         }
     }
 
+    public static int reLogin(@NonNull Context context, String id, String pw, SharedPreferences sharedPreferences) throws IOException, InterruptedException {
+        if (reLoginLock.tryLock()) {
+            try {
+                return doReLogin(context, id, pw, sharedPreferences);
+            } finally {
+                reLoginLock.unlock();
+            }
+        } else {
+            return Config.RE_LOGIN_TRYING;
+        }
+    }
+
     private static int doReLogin(@NonNull Context context) throws IOException, InterruptedException {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String id = SecurityMethod.getUserId(sharedPreferences);
@@ -49,11 +61,9 @@ public class LoginMethod {
         return Config.RE_LOGIN_FAILED;
     }
 
-    synchronized public static int doReLogin(@NonNull Context context, String id, String pw, SharedPreferences sharedPreferences) throws IOException, InterruptedException {
+    private static int doReLogin(@NonNull Context context, String id, String pw, SharedPreferences sharedPreferences) throws IOException, InterruptedException {
         NauSSOClient nauSSOClient = BaseMethod.getApp(context).getClient();
         nauSSOClient.jwcLoginOut();
-//        nauSSOClient.VPNLoginOut();
-//        nauSSOClient.loginOut();
         Thread.sleep(2000);
         if (nauSSOClient.login(id, pw)) {
             nauSSOClient.alstuLogin(id, pw);
@@ -87,6 +97,7 @@ public class LoginMethod {
         try {
             NauSSOClient nauSSOClient = BaseMethod.getApp(context).getClient();
             nauSSOClient.jwcLoginOut();
+            nauSSOClient.VPNLoginOut();
             nauSSOClient.loginOut();
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             sharedPreferences.edit().remove(Config.PREFERENCE_LOGIN_URL)

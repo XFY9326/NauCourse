@@ -102,6 +102,7 @@ public class CourseSearchActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        closeLoadingDialog();
         if (hasTableUpdate) {
             MainHandler mainHandler = new MainHandler(this);
             mainHandler.sendEmptyMessage(Config.HANDLER_RELOAD_TABLE_DATA);
@@ -311,15 +312,7 @@ public class CourseSearchActivity extends AppCompatActivity {
         return termList;
     }
 
-    public void lastBaseViewSet() {
-        closeLoadingDialog();
-    }
-
-    public void lastSearchViewSet() {
-        closeLoadingDialog();
-    }
-
-    public void lastClassListViewSet() {
+    public void lastViewSet() {
         closeLoadingDialog();
     }
 

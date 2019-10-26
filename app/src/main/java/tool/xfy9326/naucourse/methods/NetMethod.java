@@ -16,6 +16,7 @@ import androidx.preference.PreferenceManager;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.concurrent.locks.ReentrantLock;
 
 import lib.xfy9326.nausso.NauSSOClient;
 import okhttp3.FormBody;
@@ -31,6 +32,7 @@ import tool.xfy9326.naucourse.R;
  */
 
 public class NetMethod {
+    private static final ReentrantLock tryConnectLock = new ReentrantLock();
     public static boolean showConnectErrorOnce = false;
     private static boolean showLoginErrorOnce = false;
 
@@ -282,10 +284,20 @@ public class NetMethod {
      *
      * @param activity Activity
      */
-    public static void checkJwcAvailable(Activity activity) {
-        NauSSOClient client = BaseMethod.getApp(activity).getClient();
-        if (client != null) {
-            client.checkServer(() -> activity.runOnUiThread(() -> Toast.makeText(activity, R.string.school_net_no_connection, Toast.LENGTH_SHORT).show()));
+    public static void checkServerAvailable(Activity activity) {
+        checkServerAvailable(activity, () -> activity.runOnUiThread(() -> Toast.makeText(activity, R.string.school_net_no_connection, Toast.LENGTH_LONG).show()));
+    }
+
+    private static void checkServerAvailable(Activity activity, NauSSOClient.OnAvailableListener availableListener) {
+        if (tryConnectLock.tryLock()) {
+            try {
+                NauSSOClient client = BaseMethod.getApp(activity).getClient();
+                if (client != null) {
+                    client.checkServer(availableListener);
+                }
+            } finally {
+                tryConnectLock.unlock();
+            }
         }
     }
 }
