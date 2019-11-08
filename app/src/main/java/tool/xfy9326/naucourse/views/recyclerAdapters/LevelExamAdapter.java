@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.utils.LevelExam;
+import tool.xfy9326.naucourse.beans.exam.LevelExam;
 
 public class LevelExamAdapter extends RecyclerView.Adapter<LevelExamAdapter.LevelExamViewHolder> {
     private final Context context;

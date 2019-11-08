@@ -10,10 +10,10 @@ import java.util.ArrayList;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.activities.CourseActivity;
+import tool.xfy9326.naucourse.beans.course.Course;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.NetMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.TableNextMethod;
-import tool.xfy9326.naucourse.utils.Course;
+import tool.xfy9326.naucourse.methods.async.TableNextMethod;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
 
 public class CourseNextListAsync extends AsyncTask<Context, Void, Context> {
     private int tableLoadSuccess = -1;

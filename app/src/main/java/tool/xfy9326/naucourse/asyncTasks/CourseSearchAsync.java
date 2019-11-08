@@ -7,10 +7,10 @@ import java.util.List;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.activities.CourseSearchActivity;
+import tool.xfy9326.naucourse.beans.course.CourseSearchDetail;
+import tool.xfy9326.naucourse.beans.course.CourseSearchInfo;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.CourseSearchMethod;
-import tool.xfy9326.naucourse.utils.CourseSearchDetail;
-import tool.xfy9326.naucourse.utils.CourseSearchInfo;
+import tool.xfy9326.naucourse.methods.async.CourseSearchMethod;
 
 public class CourseSearchAsync extends AsyncTask<Object, Void, Context> {
     private List<CourseSearchDetail> courseSearchDetail = null;

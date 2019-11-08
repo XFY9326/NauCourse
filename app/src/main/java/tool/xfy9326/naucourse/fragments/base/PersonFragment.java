@@ -39,14 +39,14 @@ import tool.xfy9326.naucourse.activities.settings.CourseSettingsActivity;
 import tool.xfy9326.naucourse.activities.settings.GlobalSettingsActivity;
 import tool.xfy9326.naucourse.activities.settings.UpdateSettingsActivity;
 import tool.xfy9326.naucourse.asyncTasks.StudentAsync;
+import tool.xfy9326.naucourse.beans.SchoolTime;
+import tool.xfy9326.naucourse.beans.student.StudentInfo;
+import tool.xfy9326.naucourse.beans.student.StudentLearnProcess;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.DialogMethod;
-import tool.xfy9326.naucourse.methods.LoginMethod;
-import tool.xfy9326.naucourse.methods.NetMethod;
-import tool.xfy9326.naucourse.methods.SecurityMethod;
-import tool.xfy9326.naucourse.utils.SchoolTime;
-import tool.xfy9326.naucourse.utils.StudentInfo;
-import tool.xfy9326.naucourse.utils.StudentLearnProcess;
+import tool.xfy9326.naucourse.methods.net.LoginMethod;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
+import tool.xfy9326.naucourse.methods.net.SecurityMethod;
+import tool.xfy9326.naucourse.methods.view.DialogMethod;
 import tool.xfy9326.naucourse.widget.NextClassWidget;
 
 /**

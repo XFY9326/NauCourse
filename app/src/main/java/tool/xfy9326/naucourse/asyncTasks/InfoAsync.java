@@ -14,18 +14,18 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.beans.info.AlstuTopic;
+import tool.xfy9326.naucourse.beans.info.JwcTopic;
+import tool.xfy9326.naucourse.beans.info.TopicInfo;
 import tool.xfy9326.naucourse.fragments.base.HomeFragment;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.DataMethod;
-import tool.xfy9326.naucourse.methods.InfoMethod;
-import tool.xfy9326.naucourse.methods.NetMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.AlstuMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.JwcInfoMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.RSSInfoMethod;
+import tool.xfy9326.naucourse.methods.async.AlstuMethod;
+import tool.xfy9326.naucourse.methods.async.JwcInfoMethod;
+import tool.xfy9326.naucourse.methods.async.RSSInfoMethod;
+import tool.xfy9326.naucourse.methods.compute.InfoMethod;
+import tool.xfy9326.naucourse.methods.io.DataMethod;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
 import tool.xfy9326.naucourse.tools.RSSReader;
-import tool.xfy9326.naucourse.utils.AlstuTopic;
-import tool.xfy9326.naucourse.utils.JwcTopic;
-import tool.xfy9326.naucourse.utils.TopicInfo;
 import tool.xfy9326.naucourse.views.viewPagerAdapters.MainViewPagerAdapter;
 
 /**

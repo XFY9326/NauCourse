@@ -36,7 +36,7 @@ import tool.xfy9326.naucourse.methods.BaseMethod;
 import tool.xfy9326.naucourse.methods.ImageMethod;
 import tool.xfy9326.naucourse.methods.PermissionMethod;
 import tool.xfy9326.naucourse.receivers.CourseUpdateReceiver;
-import tool.xfy9326.naucourse.tools.IO;
+import tool.xfy9326.naucourse.tools.FileUtils;
 import tool.xfy9326.naucourse.views.viewPagerAdapters.MainViewPagerAdapter;
 
 /**
@@ -267,7 +267,7 @@ public class CourseSettingsFragment extends PreferenceFragmentCompat {
                 }
             } else if (requestCode == CROP_IMAGE_ACTIVITY_REQUEST_CODE && data != null) {
                 if (resultCode == Activity.RESULT_OK && getActivity() != null && imageTempPath != null) {
-                    if (IO.copyFile(imageTempPath, ImageMethod.getCourseTableBackgroundImagePath(getActivity()), true)) {
+                    if (FileUtils.copyFile(imageTempPath, ImageMethod.getCourseTableBackgroundImagePath(getActivity()), true)) {
                         cropSuccess = true;
                         ((CheckBoxPreference) Objects.requireNonNull(findPreference(Config.PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND))).setChecked(true);
                         PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean(Config.PREFERENCE_COURSE_TABLE_SHOW_BACKGROUND, true).apply();

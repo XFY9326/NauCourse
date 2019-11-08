@@ -20,9 +20,9 @@ import com.google.android.material.snackbar.Snackbar;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.asyncTasks.ExamAsync;
+import tool.xfy9326.naucourse.beans.exam.Exam;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.NetMethod;
-import tool.xfy9326.naucourse.utils.Exam;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
 import tool.xfy9326.naucourse.views.recyclerAdapters.ExamAdapter;
 
 /**

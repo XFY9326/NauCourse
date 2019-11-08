@@ -20,13 +20,13 @@ import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.DialogMethod;
-import tool.xfy9326.naucourse.methods.LoginMethod;
-import tool.xfy9326.naucourse.methods.NetMethod;
-import tool.xfy9326.naucourse.methods.SecurityMethod;
-import tool.xfy9326.naucourse.methods.TempMethod;
-import tool.xfy9326.naucourse.methods.UpdateMethod;
-import tool.xfy9326.naucourse.methods.VPNMethods;
+import tool.xfy9326.naucourse.methods.net.LoginMethod;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
+import tool.xfy9326.naucourse.methods.net.SecurityMethod;
+import tool.xfy9326.naucourse.methods.net.TempMethod;
+import tool.xfy9326.naucourse.methods.net.UpdateMethod;
+import tool.xfy9326.naucourse.methods.net.VPNMethods;
+import tool.xfy9326.naucourse.methods.view.DialogMethod;
 
 /**
  * Created by xfy9326 on 18-2-20.

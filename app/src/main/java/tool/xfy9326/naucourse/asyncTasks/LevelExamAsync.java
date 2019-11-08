@@ -10,11 +10,11 @@ import java.net.SocketTimeoutException;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.activities.async.LevelExamActivity;
+import tool.xfy9326.naucourse.beans.exam.LevelExam;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.DataMethod;
-import tool.xfy9326.naucourse.methods.NetMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.LevelExamMethod;
-import tool.xfy9326.naucourse.utils.LevelExam;
+import tool.xfy9326.naucourse.methods.async.LevelExamMethod;
+import tool.xfy9326.naucourse.methods.io.DataMethod;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
 
 public class LevelExamAsync extends AsyncTask<Context, Void, Context> {
     private int levelExamLoadSuccess = -1;

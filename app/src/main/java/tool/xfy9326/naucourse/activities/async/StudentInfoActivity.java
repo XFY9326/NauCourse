@@ -19,10 +19,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.methods.DialogMethod;
+import tool.xfy9326.naucourse.beans.student.StudentInfo;
+import tool.xfy9326.naucourse.beans.student.StudentLearnProcess;
 import tool.xfy9326.naucourse.methods.ImageMethod;
-import tool.xfy9326.naucourse.utils.StudentInfo;
-import tool.xfy9326.naucourse.utils.StudentLearnProcess;
+import tool.xfy9326.naucourse.methods.view.DialogMethod;
 
 public class StudentInfoActivity extends AppCompatActivity {
     private StudentInfo studentInfo;

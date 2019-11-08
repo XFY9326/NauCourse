@@ -27,13 +27,13 @@ import java.util.Objects;
 
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.asyncTasks.InfoAsync;
+import tool.xfy9326.naucourse.beans.course.NextCourse;
+import tool.xfy9326.naucourse.beans.info.TopicInfo;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.DataMethod;
-import tool.xfy9326.naucourse.methods.NetMethod;
-import tool.xfy9326.naucourse.methods.NextClassMethod;
-import tool.xfy9326.naucourse.methods.TimeMethod;
-import tool.xfy9326.naucourse.utils.NextCourse;
-import tool.xfy9326.naucourse.utils.TopicInfo;
+import tool.xfy9326.naucourse.methods.compute.NextClassMethod;
+import tool.xfy9326.naucourse.methods.compute.TimeMethod;
+import tool.xfy9326.naucourse.methods.io.DataMethod;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
 import tool.xfy9326.naucourse.views.recyclerAdapters.InfoAdapter;
 import tool.xfy9326.naucourse.widget.NextClassWidget;
 

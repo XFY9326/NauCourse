@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.utils.HistoryScore;
+import tool.xfy9326.naucourse.beans.score.HistoryScore;
 import tool.xfy9326.naucourse.views.AdvancedRecyclerView;
 import tool.xfy9326.naucourse.views.recyclerAdapters.HistoryScoreAdapter;
 

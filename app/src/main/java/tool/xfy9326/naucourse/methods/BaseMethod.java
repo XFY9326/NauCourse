@@ -22,6 +22,7 @@ import tool.xfy9326.naucourse.BaseApplication;
 import tool.xfy9326.naucourse.BuildConfig;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
 
 /**
  * Created by xfy9326 on 18-2-20.

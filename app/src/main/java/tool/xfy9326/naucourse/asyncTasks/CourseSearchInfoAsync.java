@@ -12,8 +12,8 @@ import java.util.List;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.activities.CourseSearchActivity;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.NetMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.CourseSearchMethod;
+import tool.xfy9326.naucourse.methods.async.CourseSearchMethod;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
 
 public class CourseSearchInfoAsync extends AsyncTask<Object, Void, Context> {
     private int courseSearchLoadSuccess = -1;

@@ -30,13 +30,13 @@ import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.asyncTasks.CourseSearchAsync;
 import tool.xfy9326.naucourse.asyncTasks.CourseSearchClassNameAsync;
 import tool.xfy9326.naucourse.asyncTasks.CourseSearchInfoAsync;
+import tool.xfy9326.naucourse.beans.course.CourseSearchDetail;
+import tool.xfy9326.naucourse.beans.course.CourseSearchInfo;
 import tool.xfy9326.naucourse.handlers.MainHandler;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.DialogMethod;
-import tool.xfy9326.naucourse.methods.TimeMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.CourseSearchMethod;
-import tool.xfy9326.naucourse.utils.CourseSearchDetail;
-import tool.xfy9326.naucourse.utils.CourseSearchInfo;
+import tool.xfy9326.naucourse.methods.async.CourseSearchMethod;
+import tool.xfy9326.naucourse.methods.compute.TimeMethod;
+import tool.xfy9326.naucourse.methods.view.DialogMethod;
 import tool.xfy9326.naucourse.views.AdvancedRecyclerView;
 import tool.xfy9326.naucourse.views.recyclerAdapters.CourseSearchAdapter;
 

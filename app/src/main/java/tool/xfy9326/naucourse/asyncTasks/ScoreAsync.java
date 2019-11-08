@@ -10,15 +10,15 @@ import java.net.SocketTimeoutException;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.activities.async.ScoreActivity;
+import tool.xfy9326.naucourse.beans.score.CourseScore;
+import tool.xfy9326.naucourse.beans.score.HistoryScore;
+import tool.xfy9326.naucourse.beans.score.StudentScore;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.DataMethod;
-import tool.xfy9326.naucourse.methods.NetMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.HistoryScoreMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.PersonMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.ScoreMethod;
-import tool.xfy9326.naucourse.utils.CourseScore;
-import tool.xfy9326.naucourse.utils.HistoryScore;
-import tool.xfy9326.naucourse.utils.StudentScore;
+import tool.xfy9326.naucourse.methods.async.HistoryScoreMethod;
+import tool.xfy9326.naucourse.methods.async.PersonMethod;
+import tool.xfy9326.naucourse.methods.async.ScoreMethod;
+import tool.xfy9326.naucourse.methods.io.DataMethod;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
 
 /**
  * Created by 10696 on 2018/3/2.

@@ -29,8 +29,8 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.activities.CourseActivity;
 import tool.xfy9326.naucourse.activities.CourseEditActivity;
+import tool.xfy9326.naucourse.beans.course.Course;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.utils.Course;
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseViewHolder> {
     private static final String COLOR_PICKER_DIALOG_TAG = "COLOR_PICKER_DIALOG";

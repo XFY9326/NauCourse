@@ -35,11 +35,11 @@ import java.util.Arrays;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.beans.course.Course;
+import tool.xfy9326.naucourse.beans.course.CourseDetail;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.CourseEditMethod;
-import tool.xfy9326.naucourse.methods.DialogMethod;
-import tool.xfy9326.naucourse.utils.Course;
-import tool.xfy9326.naucourse.utils.CourseDetail;
+import tool.xfy9326.naucourse.methods.compute.CourseEditMethod;
+import tool.xfy9326.naucourse.methods.view.DialogMethod;
 import tool.xfy9326.naucourse.views.recyclerAdapters.CourseEditAdapter;
 
 public class CourseEditActivity extends AppCompatActivity {

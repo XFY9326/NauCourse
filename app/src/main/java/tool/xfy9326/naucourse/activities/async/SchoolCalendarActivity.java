@@ -25,8 +25,8 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.asyncTasks.SchoolCalendarAsync;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.DialogMethod;
-import tool.xfy9326.naucourse.methods.NetMethod;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
+import tool.xfy9326.naucourse.methods.view.DialogMethod;
 
 public class SchoolCalendarActivity extends BaseAsyncActivity {
     private LinkedHashMap<String, String> calendarList;

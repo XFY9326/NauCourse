@@ -10,11 +10,11 @@ import java.net.SocketTimeoutException;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.activities.async.ExamActivity;
+import tool.xfy9326.naucourse.beans.exam.Exam;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.DataMethod;
-import tool.xfy9326.naucourse.methods.NetMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.ExamMethod;
-import tool.xfy9326.naucourse.utils.Exam;
+import tool.xfy9326.naucourse.methods.async.ExamMethod;
+import tool.xfy9326.naucourse.methods.io.DataMethod;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
 
 /**
  * Created by 10696 on 2018/3/3.

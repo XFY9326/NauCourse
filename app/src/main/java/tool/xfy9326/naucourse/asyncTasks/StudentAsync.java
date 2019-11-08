@@ -9,13 +9,13 @@ import androidx.annotation.Nullable;
 import java.net.SocketTimeoutException;
 
 import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.beans.student.StudentInfo;
+import tool.xfy9326.naucourse.beans.student.StudentLearnProcess;
 import tool.xfy9326.naucourse.fragments.base.PersonFragment;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.DataMethod;
-import tool.xfy9326.naucourse.methods.NetMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.PersonMethod;
-import tool.xfy9326.naucourse.utils.StudentInfo;
-import tool.xfy9326.naucourse.utils.StudentLearnProcess;
+import tool.xfy9326.naucourse.methods.async.PersonMethod;
+import tool.xfy9326.naucourse.methods.io.DataMethod;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
 import tool.xfy9326.naucourse.views.viewPagerAdapters.MainViewPagerAdapter;
 
 /**

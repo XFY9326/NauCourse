@@ -13,7 +13,6 @@ import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,14 +32,14 @@ import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.asyncTasks.InfoDetailAsync;
+import tool.xfy9326.naucourse.beans.info.TopicInfo;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.DialogMethod;
 import tool.xfy9326.naucourse.methods.ImageMethod;
-import tool.xfy9326.naucourse.methods.InfoMethod;
-import tool.xfy9326.naucourse.methods.NetMethod;
-import tool.xfy9326.naucourse.methods.ShareMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.AlstuMethod;
-import tool.xfy9326.naucourse.utils.TopicInfo;
+import tool.xfy9326.naucourse.methods.async.AlstuMethod;
+import tool.xfy9326.naucourse.methods.compute.InfoMethod;
+import tool.xfy9326.naucourse.methods.io.ShareMethod;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
+import tool.xfy9326.naucourse.methods.view.DialogMethod;
 
 /**
  * Created by 10696 on 2018/2/25.
@@ -249,9 +248,10 @@ public class InfoDetailActivity extends AppCompatActivity {
             }
             textViewContent.setMovementMethod(LinkMovementMethod.getInstance());
             textViewContent.setVisibility(View.VISIBLE);
-            ProgressBar progressBarLoading = findViewById(R.id.progressBar_info_detail_loading);
-            progressBarLoading.setVisibility(View.GONE);
+        } else {
+            Toast.makeText(this, R.string.data_get_error, Toast.LENGTH_SHORT).show();
         }
+        findViewById(R.id.progressBar_info_detail_loading).setVisibility(View.GONE);
     }
 
     synchronized private void getData() {

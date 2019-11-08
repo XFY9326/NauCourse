@@ -10,17 +10,17 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.beans.SchoolTime;
+import tool.xfy9326.naucourse.beans.course.Course;
 import tool.xfy9326.naucourse.fragments.base.PersonFragment;
 import tool.xfy9326.naucourse.fragments.base.TableFragment;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.CourseEditMethod;
-import tool.xfy9326.naucourse.methods.DataMethod;
-import tool.xfy9326.naucourse.methods.NetMethod;
-import tool.xfy9326.naucourse.methods.TimeMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.SchoolTimeMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.TableMethod;
-import tool.xfy9326.naucourse.utils.Course;
-import tool.xfy9326.naucourse.utils.SchoolTime;
+import tool.xfy9326.naucourse.methods.async.SchoolTimeMethod;
+import tool.xfy9326.naucourse.methods.async.TableMethod;
+import tool.xfy9326.naucourse.methods.compute.CourseEditMethod;
+import tool.xfy9326.naucourse.methods.compute.TimeMethod;
+import tool.xfy9326.naucourse.methods.io.DataMethod;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
 import tool.xfy9326.naucourse.views.viewPagerAdapters.MainViewPagerAdapter;
 
 public class TableAsync extends AsyncTask<Context, Void, Context> {
