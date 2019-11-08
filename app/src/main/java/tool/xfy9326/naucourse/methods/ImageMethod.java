@@ -19,7 +19,7 @@ import java.io.IOException;
 import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.tools.IO;
+import tool.xfy9326.naucourse.tools.FileUtils;
 
 public class ImageMethod {
 
@@ -176,14 +176,14 @@ public class ImageMethod {
         canvas.restore();
     }
 
-    static boolean saveBitmap(Bitmap bitmap, String path, boolean recycle) throws IOException {
+    public static boolean saveBitmap(Bitmap bitmap, String path, boolean recycle) throws IOException {
         if (bitmap != null && !bitmap.isRecycled()) {
             File file = new File(path);
             if (file.exists()) {
                 //noinspection ResultOfMethodCallIgnored
                 file.delete();
             }
-            if (IO.createPath(file)) {
+            if (FileUtils.createPath(file)) {
                 if (file.createNewFile()) {
                     FileOutputStream fileOutputStream = new FileOutputStream(file);
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fileOutputStream);

@@ -45,15 +45,19 @@ public class VPNMethod {
             newUrl.append("-").append(url.port());
         }
         String urlHost = url.host();
-        String encryptHost = urlHost;
-        try {
-            encryptHost = AES.encrypt(encryptHost, VPN_URL_ENCRYPT_KEY, VPN_URL_ENCRYPT_IV);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        String encryptHost = encryptHost(urlHost);
         String oldUrl = url.toString();
         newUrl.append("/").append(encryptHost).append(oldUrl.substring(oldUrl.indexOf(urlHost) + urlHost.length()));
         return newUrl.toString();
+    }
+
+    public static String encryptHost(String host) {
+        try {
+            return AES.encrypt(host, VPN_URL_ENCRYPT_KEY, VPN_URL_ENCRYPT_IV);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     static boolean checkVPNLogin(String data) {

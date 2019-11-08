@@ -19,10 +19,10 @@ import java.util.Date;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.activities.MainActivity;
-import tool.xfy9326.naucourse.methods.NextClassMethod;
-import tool.xfy9326.naucourse.methods.TimeMethod;
+import tool.xfy9326.naucourse.beans.course.NextCourse;
+import tool.xfy9326.naucourse.methods.compute.NextClassMethod;
+import tool.xfy9326.naucourse.methods.compute.TimeMethod;
 import tool.xfy9326.naucourse.receivers.CourseUpdateReceiver;
-import tool.xfy9326.naucourse.utils.NextCourse;
 
 /**
  * Created by 10696 on 2018/2/27.

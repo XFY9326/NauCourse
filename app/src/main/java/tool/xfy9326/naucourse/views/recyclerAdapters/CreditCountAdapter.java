@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.utils.CreditCountCourse;
+import tool.xfy9326.naucourse.beans.score.CreditCountCourse;
 
 public class CreditCountAdapter extends RecyclerView.Adapter<CreditCountAdapter.CreditCountViewHolder> {
     private final Context context;

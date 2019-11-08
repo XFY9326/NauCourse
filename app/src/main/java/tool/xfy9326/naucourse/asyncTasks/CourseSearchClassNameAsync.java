@@ -7,7 +7,7 @@ import java.util.List;
 
 import tool.xfy9326.naucourse.activities.CourseSearchActivity;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.CourseSearchMethod;
+import tool.xfy9326.naucourse.methods.async.CourseSearchMethod;
 
 public class CourseSearchClassNameAsync extends AsyncTask<Object, Void, Context> {
     private List<String> classNameList = null;
@@ -33,7 +33,7 @@ public class CourseSearchClassNameAsync extends AsyncTask<Object, Void, Context>
             CourseSearchActivity courseSearchActivity = BaseMethod.getApp(context).getCourseSearchActivity();
             if (courseSearchActivity != null) {
                 courseSearchActivity.setClassNameList(classNameList);
-                courseSearchActivity.lastClassListViewSet();
+                courseSearchActivity.lastViewSet();
             }
             System.gc();
         }

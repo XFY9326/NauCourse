@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.Objects;
 
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.utils.HistoryScore;
+import tool.xfy9326.naucourse.beans.score.HistoryScore;
 
 public class HistoryScoreAdapter extends RecyclerView.Adapter<HistoryScoreAdapter.HistoryScoreViewHolder> {
     private final Context context;

@@ -14,8 +14,8 @@ import java.util.Objects;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.activities.settings.GlobalSettingsActivity;
-import tool.xfy9326.naucourse.methods.TempMethod;
-import tool.xfy9326.naucourse.methods.VPNMethods;
+import tool.xfy9326.naucourse.methods.net.TempMethod;
+import tool.xfy9326.naucourse.methods.net.VPNMethods;
 
 public class GlobalSettingsFragment extends PreferenceFragmentCompat {
     private int nightModeValue = 0;

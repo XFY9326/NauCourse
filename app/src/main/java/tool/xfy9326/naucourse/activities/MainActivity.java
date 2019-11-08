@@ -16,10 +16,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.DialogMethod;
-import tool.xfy9326.naucourse.methods.NetMethod;
-import tool.xfy9326.naucourse.methods.TempMethod;
-import tool.xfy9326.naucourse.methods.UpdateMethod;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
+import tool.xfy9326.naucourse.methods.net.TempMethod;
+import tool.xfy9326.naucourse.methods.net.UpdateMethod;
+import tool.xfy9326.naucourse.methods.view.DialogMethod;
 import tool.xfy9326.naucourse.views.FixedViewPager;
 import tool.xfy9326.naucourse.views.viewPagerAdapters.MainViewPagerAdapter;
 
@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity {
         BaseMethod.doubleClickExit(this);
     }
 
-    private void netCheck() {
-        NetMethod.checkJwcAvailable(MainActivity.this);
+    synchronized private void netCheck() {
+        NetMethod.checkServerAvailable(MainActivity.this);
     }
 
     private void loginCheck() {
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
         BaseMethod.getApp(this).setViewPagerAdapter(viewPagerAdapter);
     }
 
-    //首次登陆提前加载考试与成绩的数据
+    //首次登陆提前缓存数据
     private void tempLoad() {
         if (getIntent() != null) {
             if (getIntent().getBooleanExtra(Config.INTENT_JUST_LOGIN, false)) {

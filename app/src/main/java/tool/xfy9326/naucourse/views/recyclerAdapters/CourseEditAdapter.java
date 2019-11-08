@@ -29,9 +29,9 @@ import java.util.Arrays;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.activities.CourseEditActivity;
-import tool.xfy9326.naucourse.methods.CourseEditMethod;
-import tool.xfy9326.naucourse.methods.TimeMethod;
-import tool.xfy9326.naucourse.utils.CourseDetail;
+import tool.xfy9326.naucourse.beans.course.CourseDetail;
+import tool.xfy9326.naucourse.methods.compute.CourseEditMethod;
+import tool.xfy9326.naucourse.methods.compute.TimeMethod;
 
 public class CourseEditAdapter extends RecyclerView.Adapter<CourseEditAdapter.CourseEditViewHolder> {
     private final CourseEditActivity activity;

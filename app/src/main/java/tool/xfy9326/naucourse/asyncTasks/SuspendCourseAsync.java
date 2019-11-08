@@ -9,11 +9,11 @@ import java.net.SocketTimeoutException;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.activities.async.SuspendCourseActivity;
+import tool.xfy9326.naucourse.beans.course.SuspendCourse;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.DataMethod;
-import tool.xfy9326.naucourse.methods.NetMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.SuspendCourseMethod;
-import tool.xfy9326.naucourse.utils.SuspendCourse;
+import tool.xfy9326.naucourse.methods.async.SuspendCourseMethod;
+import tool.xfy9326.naucourse.methods.io.DataMethod;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
 
 public class SuspendCourseAsync extends AsyncTask<Context, Void, Context> {
     private int loadSuccess = -1;

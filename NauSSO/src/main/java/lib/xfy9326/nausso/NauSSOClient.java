@@ -35,8 +35,9 @@ public class NauSSOClient {
     public static final String JWC_SERVER_URL = "http://jwc.nau.edu.cn";
     static final String JWC_HOST_URL = "jwc.nau.edu.cn";
     private static final int LOGIN_SUCCESS = 0;
-    private static final String SINGLE_SERVER_URL = "http://sso.nau.edu.cn/sso/login?service=http%3a%2f%2fjwc.nau.edu.cn%2fLogin_Single.aspx";
-    private static final String ALSTU_LOGIN_SSO_URL = "http://sso.nau.edu.cn/sso/login?service=http%3a%2f%2falstu.nau.edu.cn%2flogin.aspx";
+    private static final String SSO_SERVER_LOGIN_URL = "http://sso.nau.edu.cn/sso/login";
+    private static final String SINGLE_SERVER_URL = SSO_SERVER_LOGIN_URL + "?service=http%3a%2f%2fjwc.nau.edu.cn%2fLogin_Single.aspx";
+    private static final String ALSTU_LOGIN_SSO_URL = SSO_SERVER_LOGIN_URL + "?service=http%3a%2f%2falstu.nau.edu.cn%2flogin.aspx";
     private static final String ALSTU_TICKET_URL = "http://alstu.nau.edu.cn/login.aspx?cas_login=true&ticket=";
     private static final String SINGLE_LOGIN_OUT_URL = "http://sso.nau.edu.cn/sso/logout";
     @NonNull
@@ -364,11 +365,7 @@ public class NauSSOClient {
 
     public void checkServer(final OnAvailableListener availableListener) {
         Request.Builder requestBuilder = new Request.Builder();
-        if (isVPNEnabled()) {
-            requestBuilder.url(VPNMethod.VPN_SERVER);
-        } else {
-            requestBuilder.url(JWC_SERVER_URL);
-        }
+        requestBuilder.url(SSO_SERVER_LOGIN_URL);
         requestBuilder.header("Cache-Control", "max-age=0");
         clean_client.newCall(requestBuilder.build()).enqueue(new Callback() {
             @Override
@@ -382,6 +379,28 @@ public class NauSSOClient {
             public void onResponse(Call call, Response response) {
                 if (response.code() != 200) {
                     availableListener.onError();
+                } else {
+                    if (isVPNEnabled()) {
+                        requestBuilder.url(VPNMethod.VPN_SERVER);
+                    } else {
+                        requestBuilder.url(JWC_SERVER_URL);
+                    }
+                    clean_client.newCall(requestBuilder.build()).enqueue(new Callback() {
+                        @Override
+                        @EverythingIsNonNull
+                        public void onFailure(Call call, IOException e) {
+                            availableListener.onError();
+                        }
+
+                        @Override
+                        @EverythingIsNonNull
+                        public void onResponse(Call call, Response response) {
+                            if (response.code() != 200) {
+                                availableListener.onError();
+                            }
+                            response.close();
+                        }
+                    });
                 }
                 response.close();
             }

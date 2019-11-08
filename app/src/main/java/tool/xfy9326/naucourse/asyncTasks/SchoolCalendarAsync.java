@@ -13,8 +13,8 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.activities.async.SchoolCalendarActivity;
 import tool.xfy9326.naucourse.methods.BaseMethod;
 import tool.xfy9326.naucourse.methods.ImageMethod;
-import tool.xfy9326.naucourse.methods.NetMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.SchoolCalendarMethod;
+import tool.xfy9326.naucourse.methods.async.SchoolCalendarMethod;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
 
 public class SchoolCalendarAsync extends AsyncTask<Context, Void, Context> {
     private int imageLoadSuccess = -1;

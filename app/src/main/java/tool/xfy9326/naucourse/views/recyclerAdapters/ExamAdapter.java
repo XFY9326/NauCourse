@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.Objects;
 
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.utils.Exam;
+import tool.xfy9326.naucourse.beans.exam.Exam;
 
 /**
  * Created by 10696 on 2018/3/3.

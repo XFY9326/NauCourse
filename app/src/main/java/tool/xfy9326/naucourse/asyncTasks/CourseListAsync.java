@@ -11,10 +11,10 @@ import java.util.ArrayList;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.activities.CourseActivity;
+import tool.xfy9326.naucourse.beans.course.Course;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.NetMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.TableMethod;
-import tool.xfy9326.naucourse.utils.Course;
+import tool.xfy9326.naucourse.methods.async.TableMethod;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
 
 /**
  * Created by 10696 on 2018/3/2.

@@ -17,8 +17,8 @@ import java.util.Locale;
 
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.activities.CourseSearchActivity;
-import tool.xfy9326.naucourse.methods.CourseEditMethod;
-import tool.xfy9326.naucourse.utils.CourseSearchDetail;
+import tool.xfy9326.naucourse.beans.course.CourseSearchDetail;
+import tool.xfy9326.naucourse.methods.compute.CourseEditMethod;
 
 public class CourseSearchAdapter extends RecyclerView.Adapter<CourseSearchAdapter.CourseSearchViewHolder> {
     @NonNull

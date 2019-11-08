@@ -18,9 +18,9 @@ import java.util.Objects;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.methods.NextClassMethod;
-import tool.xfy9326.naucourse.methods.NotificationMethod;
-import tool.xfy9326.naucourse.utils.NextCourse;
+import tool.xfy9326.naucourse.beans.course.NextCourse;
+import tool.xfy9326.naucourse.methods.compute.NextClassMethod;
+import tool.xfy9326.naucourse.methods.io.NotificationMethod;
 import tool.xfy9326.naucourse.widget.NextClassWidget;
 
 /**

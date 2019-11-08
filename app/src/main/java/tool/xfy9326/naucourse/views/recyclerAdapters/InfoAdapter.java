@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.activities.InfoDetailActivity;
-import tool.xfy9326.naucourse.utils.TopicInfo;
+import tool.xfy9326.naucourse.beans.info.TopicInfo;
 
 /**
  * Created by xfy9326 on 18-2-20.

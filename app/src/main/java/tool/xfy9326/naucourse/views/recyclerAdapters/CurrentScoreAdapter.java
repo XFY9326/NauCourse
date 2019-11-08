@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.Objects;
 
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.utils.CourseScore;
+import tool.xfy9326.naucourse.beans.score.CourseScore;
 
 /**
  * Created by 10696 on 2018/3/2.

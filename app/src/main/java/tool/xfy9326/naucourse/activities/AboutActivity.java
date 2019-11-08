@@ -27,7 +27,7 @@ import tool.xfy9326.naucourse.BuildConfig;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.DialogMethod;
+import tool.xfy9326.naucourse.methods.view.DialogMethod;
 
 /**
  * Created by xfy9326 on 18-2-20.

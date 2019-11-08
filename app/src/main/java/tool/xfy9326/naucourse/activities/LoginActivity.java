@@ -20,13 +20,13 @@ import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.DialogMethod;
-import tool.xfy9326.naucourse.methods.LoginMethod;
-import tool.xfy9326.naucourse.methods.NetMethod;
-import tool.xfy9326.naucourse.methods.SecurityMethod;
-import tool.xfy9326.naucourse.methods.TempMethod;
-import tool.xfy9326.naucourse.methods.UpdateMethod;
-import tool.xfy9326.naucourse.methods.VPNMethods;
+import tool.xfy9326.naucourse.methods.net.LoginMethod;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
+import tool.xfy9326.naucourse.methods.net.SecurityMethod;
+import tool.xfy9326.naucourse.methods.net.TempMethod;
+import tool.xfy9326.naucourse.methods.net.UpdateMethod;
+import tool.xfy9326.naucourse.methods.net.VPNMethods;
+import tool.xfy9326.naucourse.methods.view.DialogMethod;
 
 /**
  * Created by xfy9326 on 18-2-20.
@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         viewSet();
         BaseMethod.showNewVersionInfo(this, true);
         updateCheck();
-        netCheck();
+        NetMethod.checkServerAvailable(LoginActivity.this);
     }
 
     @Override
@@ -135,7 +135,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 loginErrorCode = nauSSOClient.getLoginErrorCode();
                 if (loginErrorCode == NauSSOClient.LOGIN_ALREADY_LOGIN) {
-                    if (LoginMethod.doReLogin(LoginActivity.this, id, pw, sharedPreferences) == Config.RE_LOGIN_SUCCESS) {
+                    if (LoginMethod.reLogin(LoginActivity.this, id, pw, sharedPreferences) == Config.RE_LOGIN_SUCCESS) {
                         loginSuccess = true;
                         loginURL = nauSSOClient.getJwcLoginUrl();
                     }
@@ -208,10 +208,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
         loadingDialog = DialogMethod.showLoadingDialog(LoginActivity.this, true, cancelListener);
-    }
-
-    private void netCheck() {
-        NetMethod.checkJwcAvailable(LoginActivity.this);
     }
 
     synchronized private void updateCheck() {

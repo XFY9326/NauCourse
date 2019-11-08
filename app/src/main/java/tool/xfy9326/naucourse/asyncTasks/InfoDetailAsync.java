@@ -12,11 +12,11 @@ import java.util.Objects;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.activities.InfoDetailActivity;
 import tool.xfy9326.naucourse.methods.BaseMethod;
-import tool.xfy9326.naucourse.methods.InfoMethod;
-import tool.xfy9326.naucourse.methods.NetMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.AlstuMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.JwcInfoMethod;
-import tool.xfy9326.naucourse.methods.netInfoMethods.RSSInfoMethod;
+import tool.xfy9326.naucourse.methods.async.AlstuMethod;
+import tool.xfy9326.naucourse.methods.async.JwcInfoMethod;
+import tool.xfy9326.naucourse.methods.async.RSSInfoMethod;
+import tool.xfy9326.naucourse.methods.compute.InfoMethod;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
 
 /**
  * Created by 10696 on 2018/3/2.

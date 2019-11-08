@@ -20,7 +20,7 @@ import tool.xfy9326.naucourse.activities.async.LevelExamActivity;
 import tool.xfy9326.naucourse.activities.async.SchoolCalendarActivity;
 import tool.xfy9326.naucourse.activities.async.ScoreActivity;
 import tool.xfy9326.naucourse.activities.async.SuspendCourseActivity;
-import tool.xfy9326.naucourse.methods.NetMethod;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
 import tool.xfy9326.naucourse.views.viewPagerAdapters.MainViewPagerAdapter;
 
 /**

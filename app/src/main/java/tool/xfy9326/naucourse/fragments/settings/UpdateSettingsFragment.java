@@ -9,7 +9,7 @@ import java.util.Objects;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
-import tool.xfy9326.naucourse.methods.UpdateMethod;
+import tool.xfy9326.naucourse.methods.net.UpdateMethod;
 
 public class UpdateSettingsFragment extends PreferenceFragmentCompat {
 
