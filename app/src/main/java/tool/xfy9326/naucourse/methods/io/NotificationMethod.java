@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
@@ -65,6 +66,12 @@ public class NotificationMethod {
             builder.setContentTitle(title);
             builder.setContentText(text);
             builder.setAutoCancel(true);
+            builder.setDefaults(NotificationCompat.DEFAULT_ALL);
+            builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+            builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+            builder.setCategory(NotificationCompat.CATEGORY_MESSAGE);
+            builder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                    R.mipmap.ic_launcher));
 
             PendingIntent pendingIntent = PendingIntent.getActivity(context, ACTIVITY_REQUEST_CODE, new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra(Config.INTENT_VIEW_PAGER_POSITION, Config.VIEWPAGER_TABLE_PAGE), PendingIntent.FLAG_UPDATE_CURRENT);
             builder.setContentIntent(pendingIntent);

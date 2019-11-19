@@ -363,8 +363,8 @@ public class NauSSOClient {
         return getBitmapFromUrl(main_client, URL);
     }
 
-    public void checkServer(final OnAvailableListener availableListener) {
-        Request.Builder requestBuilder = new Request.Builder();
+    public synchronized void checkServer(final OnAvailableListener availableListener) {
+        final Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.url(SSO_SERVER_LOGIN_URL);
         requestBuilder.header("Cache-Control", "max-age=0");
         clean_client.newCall(requestBuilder.build()).enqueue(new Callback() {
@@ -380,11 +380,7 @@ public class NauSSOClient {
                 if (response.code() != 200) {
                     availableListener.onError();
                 } else {
-                    if (isVPNEnabled()) {
-                        requestBuilder.url(VPNMethod.VPN_SERVER);
-                    } else {
-                        requestBuilder.url(JWC_SERVER_URL);
-                    }
+                    requestBuilder.url(JWC_SERVER_URL);
                     clean_client.newCall(requestBuilder.build()).enqueue(new Callback() {
                         @Override
                         @EverythingIsNonNull
