@@ -80,7 +80,7 @@ public class MainActivity extends WearableActivity implements DataApi.DataListen
         recyclerView.setOnBottomCallback(new AdvancedRecyclerView.OnBottomCallback() {
             @Override
             public void onBottom() {
-                if (actionDrawer.isClosed()) {
+                if (actionDrawer.isClosed() && !actionDrawer.isPeeking()) {
                     actionDrawer.getController().peekDrawer();
                 }
             }
