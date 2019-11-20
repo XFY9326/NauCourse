@@ -2,7 +2,6 @@ package tool.xfy9326.naucourse.activities;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.wearable.activity.WearableActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -25,8 +24,8 @@ import tool.xfy9326.naucourse.BuildConfig;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.beans.course.TodayCourses;
-import tool.xfy9326.naucourse.methods.AppSupport;
 import tool.xfy9326.naucourse.methods.CourseListUpdate;
+import tool.xfy9326.naucourse.methods.DeviceSupport;
 import tool.xfy9326.naucourse.methods.DialogBuilder;
 import tool.xfy9326.naucourse.methods.StorageCache;
 import tool.xfy9326.naucourse.views.AdvancedRecyclerView;
@@ -166,24 +165,28 @@ public class MainActivity extends WearableActivity implements DataApi.DataListen
             Uri uri = event.getDataItem().getUri();
             String path = uri != null ? uri.getPath() : null;
 
-            if (Config.TODAY_COURSE_LIST_PATH.equals(path)) {
+            if (Config.WEAR_TODAY_COURSE_LIST_PATH.equals(path)) {
                 waitingForAnswer = false;
                 DataMap map = DataMapItem.fromDataItem(event.getDataItem()).getDataMap();
-                if (map.getInt(Config.SUPPORT_APP_VERSION_CODE, 0) >= BuildConfig.SUPPORT_MIN_VERSION_CODE &&
-                        map.getInt(Config.SUPPORT_APP_SUB_VERSION, 0) >= BuildConfig.SUPPORT_MIN_SUB_VERSION) {
-                    byte[] data = map.getByteArray(Config.TODAY_COURSE_LIST);
-                    if (data != null) {
-                        TodayCourses todayCourses = CourseListUpdate.readTodayCourseFromBytes(data);
-                        if (todayCourses != null) {
-                            todayCourseAdapter.updateTodayCourses(todayCourses);
-                            resetMenuIcon();
-                            setCourseListEmptyView(todayCourses);
-                            StorageCache.saveTodayCoursesCache(this, todayCourses);
+                if (map.getInt(Config.WEAR_MSG_SUPPORT_APP_VERSION_CODE, 0) >= BuildConfig.SUPPORT_MIN_VERSION_CODE &&
+                        map.getInt(Config.WEAR_MSG_SUPPORT_APP_SUB_VERSION, 0) >= BuildConfig.SUPPORT_MIN_SUB_VERSION) {
+                    if (map.getBoolean(Config.WEAR_MSG_NO_COURSE_DATA, false)) {
+                        Toast.makeText(this, R.string.get_no_course_data, Toast.LENGTH_SHORT).show();
+                    } else {
+                        byte[] data = map.getByteArray(Config.WEAR_MSG_TODAY_COURSE_LIST);
+                        if (data != null) {
+                            TodayCourses todayCourses = CourseListUpdate.readTodayCourseFromBytes(data);
+                            if (todayCourses != null) {
+                                todayCourseAdapter.updateTodayCourses(todayCourses);
+                                resetMenuIcon();
+                                setCourseListEmptyView(todayCourses);
+                                StorageCache.saveTodayCoursesCache(this, todayCourses);
+                            } else {
+                                Toast.makeText(this, R.string.data_sync_error, Toast.LENGTH_SHORT).show();
+                            }
                         } else {
                             Toast.makeText(this, R.string.data_sync_error, Toast.LENGTH_SHORT).show();
                         }
-                    } else {
-                        Toast.makeText(this, R.string.data_sync_error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     DialogBuilder.buildSupportVersionCodeDialog(this).show();
@@ -205,10 +208,13 @@ public class MainActivity extends WearableActivity implements DataApi.DataListen
                     e.printStackTrace();
                 }
                 if (waitingForAnswer) {
-                    Looper.prepare();
-                    Toast.makeText(MainActivity.this, R.string.phone_connect_error, Toast.LENGTH_SHORT).show();
-                    stopRefreshing();
-                    Looper.loop();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, R.string.data_get_error, Toast.LENGTH_SHORT).show();
+                            stopRefreshing();
+                        }
+                    });
                 }
             }
         }).start();
@@ -243,7 +249,7 @@ public class MainActivity extends WearableActivity implements DataApi.DataListen
 
     private void getTodayCourseFromPhone() {
         if (googleApiClient != null && googleApiClient.isConnected()) {
-            AppSupport.hasSupportApp(MainActivity.this, googleApiClient, new AppSupport.onCheckAppSupportListener() {
+            DeviceSupport.checkDeviceSupport(MainActivity.this, googleApiClient, new DeviceSupport.onCheckAppSupportListener() {
                 @Override
                 public void onChecked(boolean hasConnectedDevice, boolean isSupportSystem, boolean hasSupportApp, final String nodeId) {
                     boolean needCancelRefresh = true;

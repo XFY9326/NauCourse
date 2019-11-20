@@ -1,6 +1,7 @@
 package tool.xfy9326.naucourse.services;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -13,6 +14,7 @@ import com.google.android.gms.wearable.WearableListenerService;
 
 import tool.xfy9326.naucourse.BuildConfig;
 import tool.xfy9326.naucourse.Config;
+import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.beans.course.TodayCourses;
 import tool.xfy9326.naucourse.methods.compute.CourseMethod;
 import tool.xfy9326.naucourse.methods.compute.TodayCourseMethod;
@@ -27,7 +29,7 @@ public class WearListenerService extends WearableListenerService {
         googleApiClient = new GoogleApiClient.Builder(this).addApi(Wearable.API).addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
             @Override
             public void onConnected(@Nullable Bundle bundle) {
-                Wearable.CapabilityApi.addLocalCapability(googleApiClient, Config.WEAR_MSG_UPDATE_TODAY_COURSE_LIST);
+                Wearable.CapabilityApi.addLocalCapability(googleApiClient, Config.WEAR_CAPABILITY_UPDATE_TODAY_COURSE_LIST);
             }
 
             @Override
@@ -46,7 +48,7 @@ public class WearListenerService extends WearableListenerService {
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        if (messageEvent.getPath().equals(Config.WEAR_MSG_UPDATE_TODAY_COURSE_LIST)) {
+        if (messageEvent.getPath().equals(Config.WEAR_CAPABILITY_UPDATE_TODAY_COURSE_LIST)) {
             sendTodayCourseData();
         }
         super.onMessageReceived(messageEvent);
@@ -54,19 +56,26 @@ public class WearListenerService extends WearableListenerService {
 
     private void sendTodayCourseData() {
         TodayCourses todayCourses = TodayCourseMethod.getTodayCourseList(this);
-        if (todayCourses != null) {
-            byte[] data = CourseMethod.writeTodayCourseInBytes(todayCourses);
-            if (data != null) {
-                if (googleApiClient.isConnected()) {
-                    PutDataMapRequest dataMapRequest = PutDataMapRequest.create(Config.TODAY_COURSE_LIST_PATH);
-                    DataMap dataMap = dataMapRequest.getDataMap();
-                    dataMap.putByteArray(Config.TODAY_COURSE_LIST, data);
-                    dataMap.putLong(Config.TODAY_COURSE_UPDATE_TIME, System.currentTimeMillis());
-                    dataMap.putInt(Config.SUPPORT_APP_VERSION_CODE, BuildConfig.VERSION_CODE);
-                    dataMap.putInt(Config.SUPPORT_APP_SUB_VERSION, BuildConfig.SUB_VERSION);
-                    Wearable.DataApi.putDataItem(googleApiClient, dataMapRequest.asPutDataRequest().setUrgent());
+        if (googleApiClient.isConnected()) {
+            PutDataMapRequest dataMapRequest = PutDataMapRequest.create(Config.WEAR_TODAY_COURSE_LIST_PATH);
+            DataMap dataMap = dataMapRequest.getDataMap();
+            dataMap.putLong(Config.WEAR_MSG_TODAY_COURSE_UPDATE_TIME, System.currentTimeMillis());
+            dataMap.putInt(Config.WEAR_MSG_SUPPORT_APP_VERSION_CODE, BuildConfig.VERSION_CODE);
+            dataMap.putInt(Config.WEAR_MSG_SUPPORT_APP_SUB_VERSION, BuildConfig.SUB_VERSION);
+
+            if (todayCourses != null) {
+                byte[] data = CourseMethod.writeTodayCourseInBytes(todayCourses);
+                if (data != null) {
+                    dataMap.putByteArray(Config.WEAR_MSG_TODAY_COURSE_LIST, data);
+                } else {
+                    Toast.makeText(this, R.string.transfer_data_to_watch_error, Toast.LENGTH_SHORT).show();
                 }
             }
+
+            dataMap.putBoolean(Config.WEAR_MSG_NO_COURSE_DATA, todayCourses == null);
+            Wearable.DataApi.putDataItem(googleApiClient, dataMapRequest.asPutDataRequest().setUrgent());
+        } else {
+            Toast.makeText(this, R.string.transfer_data_to_watch_error, Toast.LENGTH_SHORT).show();
         }
     }
 }

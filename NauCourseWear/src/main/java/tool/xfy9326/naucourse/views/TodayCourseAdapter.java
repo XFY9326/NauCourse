@@ -51,58 +51,82 @@ public class TodayCourseAdapter extends RecyclerView.Adapter<TodayCourseAdapter.
     public void updateTodayCourses(TodayCourses todayCourses) {
         setExpand(false);
         this.todayCourses = todayCourses;
+        if (todayCourses != null) {
+            recyclerView.setUseBottomListener(todayCourses.getNextCourse().getCourseName() != null);
+        }
         notifyDataSetChanged();
     }
 
     @Override
     public void onBindViewHolder(@NonNull TodayCourseViewHolder holder, int position) {
         if (holder.getAdapterPosition() == 0) {
-            //下一节课
-            holder.layout_box_border.setVisibility(View.VISIBLE);
-            holder.layout_box_border.setPadding(boxPadding, 0, boxPadding, 0);
-            holder.layout_today_courses.setVisibility(View.GONE);
-
-            if (todayCourses.getNextCourse().getCourseName() == null) {
-                holder.layout_box_border.setPadding(boxPadding, 0, boxPadding, 0);
-                holder.layout_course_item.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-                holder.layout_next_course.setVisibility(View.GONE);
-                holder.textView_no_next_course.setVisibility(View.VISIBLE);
-            } else {
-                holder.layout_box_border.setPadding(boxPadding, boxPadding, boxPadding, boxPadding);
-                holder.layout_course_item.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-
-                holder.layout_next_course.setVisibility(View.VISIBLE);
-                holder.textView_no_next_course.setVisibility(View.GONE);
-
-                holder.textView_next_course_name.setText(todayCourses.getNextCourse().getCourseName());
-                holder.textView_next_course_time.setText(todayCourses.getNextCourse().getCourseTime());
-                holder.textView_next_course_location.setText(todayCourses.getNextCourse().getCourseLocation());
-            }
+            setNextCourseCard(holder);
         } else if (holder.getAdapterPosition() == getItemCount() - 1) {
-            //预留下拉空间
             if (todayCourses.getNextCourse().getCourseName() != null) {
-                holder.layout_box_border.setVisibility(View.GONE);
-                if (!expanded) {
-                    holder.layout_course_item.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, screenHeight / 6));
-                }
+                setPreScrollSpace(holder);
+            } else {
+                setTodayCourseCardView(holder);
             }
         } else {
-            //今日课程
-            if (holder.getAdapterPosition() == getItemCount() - 2) {
-                holder.layout_box_border.setPadding(boxPadding, 0, boxPadding, boxPadding);
-            } else {
-                holder.layout_box_border.setPadding(boxPadding, 0, boxPadding, 0);
-            }
-            holder.layout_box_border.setVisibility(View.VISIBLE);
-            holder.layout_course_item.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            holder.layout_next_course.setVisibility(View.GONE);
-            holder.textView_no_next_course.setVisibility(View.GONE);
-            holder.layout_today_courses.setVisibility(View.VISIBLE);
-
-            holder.textView_course_info.setText(todayCourses.getCourses()[holder.getAdapterPosition() - 1].replace("\n\n", "\n"));
-            holder.textView_course_time.setText(todayCourses.getCoursesTime()[holder.getAdapterPosition() - 1]);
+            setTodayCourseCardView(holder);
         }
+    }
+
+    private void setNextCourseCard(TodayCourseViewHolder holder) {
+        //下一节课
+        holder.layout_box_border.setVisibility(View.VISIBLE);
+        holder.layout_box_border.setPadding(boxPadding, 0, boxPadding, 0);
+        holder.layout_today_courses.setVisibility(View.GONE);
+
+        if (todayCourses.getNextCourse().getCourseName() == null) {
+            holder.layout_box_border.setPadding(boxPadding, boxPadding, boxPadding, 0);
+            holder.layout_course_item.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+            holder.layout_next_course.setVisibility(View.GONE);
+            holder.textView_no_next_course.setVisibility(View.VISIBLE);
+        } else {
+            holder.layout_box_border.setPadding(boxPadding, boxPadding, boxPadding, boxPadding);
+            holder.layout_course_item.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+
+            holder.layout_next_course.setVisibility(View.VISIBLE);
+            holder.textView_no_next_course.setVisibility(View.GONE);
+
+            holder.textView_next_course_name.setText(todayCourses.getNextCourse().getCourseName());
+            holder.textView_next_course_time.setText(todayCourses.getNextCourse().getCourseTime());
+            holder.textView_next_course_location.setText(todayCourses.getNextCourse().getCourseLocation());
+        }
+    }
+
+    private void setPreScrollSpace(TodayCourseViewHolder holder) {
+        //预留下拉空间
+        if (todayCourses.getNextCourse().getCourseName() != null) {
+            holder.layout_box_border.setVisibility(View.GONE);
+            holder.layout_course_item.setVisibility(View.VISIBLE);
+            if (!expanded) {
+                holder.layout_course_item.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, screenHeight / 6));
+            }
+        } else {
+            holder.layout_box_border.setVisibility(View.GONE);
+            holder.layout_course_item.setVisibility(View.GONE);
+        }
+    }
+
+    private void setTodayCourseCardView(TodayCourseViewHolder holder) {
+        //今日课程
+        int offset = todayCourses.getNextCourse().getCourseName() != null ? 2 : 1;
+        if (holder.getAdapterPosition() == getItemCount() - offset) {
+            holder.layout_box_border.setPadding(boxPadding, 0, boxPadding, boxPadding);
+        } else {
+            holder.layout_box_border.setPadding(boxPadding, 0, boxPadding, 0);
+        }
+        holder.layout_box_border.setVisibility(View.VISIBLE);
+        holder.layout_course_item.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        holder.layout_next_course.setVisibility(View.GONE);
+        holder.textView_no_next_course.setVisibility(View.GONE);
+        holder.layout_today_courses.setVisibility(View.VISIBLE);
+
+        holder.textView_course_info.setText(todayCourses.getCourses()[holder.getAdapterPosition() - 1].replace("\n\n", "\n"));
+        holder.textView_course_time.setText(todayCourses.getCoursesTime()[holder.getAdapterPosition() - 1]);
     }
 
     @SuppressWarnings("SameParameterValue")

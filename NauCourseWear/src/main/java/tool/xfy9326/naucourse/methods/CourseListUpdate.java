@@ -50,7 +50,7 @@ public class CourseListUpdate {
     }
 
     private static String getBestNode(@NonNull GoogleApiClient googleApiClient) {
-        CapabilityApi.GetCapabilityResult result = Wearable.CapabilityApi.getCapability(googleApiClient, Config.WEAR_MSG_UPDATE_TODAY_COURSE_LIST, CapabilityApi.FILTER_REACHABLE).await();
+        CapabilityApi.GetCapabilityResult result = Wearable.CapabilityApi.getCapability(googleApiClient, Config.WEAR_CAPABILITY_UPDATE_TODAY_COURSE_LIST, CapabilityApi.FILTER_REACHABLE).await();
         String bestNodeId = null;
         for (Node node : result.getCapability().getNodes()) {
             if (node.isNearby()) {
@@ -68,7 +68,7 @@ public class CourseListUpdate {
                 public void run() {
                     String nodeId = getBestNode(googleApiClient);
                     if (nodeId != null) {
-                        MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(googleApiClient, nodeId, Config.WEAR_MSG_UPDATE_TODAY_COURSE_LIST, new byte[0]).await();
+                        MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(googleApiClient, nodeId, Config.WEAR_CAPABILITY_UPDATE_TODAY_COURSE_LIST, new byte[0]).await();
                         listener.onResult(nodeId, result.getRequestId() != MessageApi.UNKNOWN_REQUEST_ID);
                     } else {
                         listener.onResult(null, false);

@@ -19,13 +19,14 @@ import java.util.concurrent.TimeUnit;
 
 import tool.xfy9326.naucourse.Config;
 
-public class AppSupport {
-    public static void hasSupportApp(@NonNull final Context context, @NonNull final GoogleApiClient googleApiClient, @NonNull final onCheckAppSupportListener listener) {
+public class DeviceSupport {
+    public static void checkDeviceSupport(@NonNull final Context context, @NonNull final GoogleApiClient googleApiClient, @NonNull final onCheckAppSupportListener listener) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 NodeApi.GetConnectedNodesResult nodesResult = Wearable.NodeApi.getConnectedNodes(googleApiClient).await(3, TimeUnit.SECONDS);
-                CapabilityApi.GetCapabilityResult capabilityResult = Wearable.CapabilityApi.getCapability(googleApiClient, Config.WEAR_MSG_UPDATE_TODAY_COURSE_LIST, CapabilityApi.FILTER_ALL).await(3, TimeUnit.SECONDS);
+                CapabilityApi.GetCapabilityResult capabilityResult = Wearable.CapabilityApi.getCapability(googleApiClient, Config.WEAR_CAPABILITY_UPDATE_TODAY_COURSE_LIST, CapabilityApi.FILTER_REACHABLE).await(3, TimeUnit.SECONDS);
+
                 if (nodesResult.getNodes().size() > 0) {
                     String bestNodeId = null;
                     for (Node node : nodesResult.getNodes()) {
@@ -57,7 +58,9 @@ public class AppSupport {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addCategory(Intent.CATEGORY_BROWSABLE);
         intent.setData(Uri.parse(Config.APP_DOWNLOAD_URL));
+
         RemoteIntent.startRemoteActivity(context, intent, null, nodeId);
     }
 

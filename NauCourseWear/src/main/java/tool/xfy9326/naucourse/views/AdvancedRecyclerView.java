@@ -28,6 +28,7 @@ public class AdvancedRecyclerView extends WearableRecyclerView {
             checkIfEmpty();
         }
     };
+    private boolean useBottomListener = true;
     private OnBottomCallback mOnBottomCallback;
 
     public AdvancedRecyclerView(Context context) {
@@ -46,6 +47,7 @@ public class AdvancedRecyclerView extends WearableRecyclerView {
         this.mOnBottomCallback = onBottomCallback;
     }
 
+    @SuppressWarnings("SameParameterValue")
     private boolean isSlideToNearBottom(int offset) {
         return this.computeVerticalScrollExtent() + this.computeVerticalScrollOffset() + offset >= this.computeVerticalScrollRange();
     }
@@ -66,7 +68,7 @@ public class AdvancedRecyclerView extends WearableRecyclerView {
 
     @Override
     public void onScrolled(int dx, int dy) {
-        if (mOnBottomCallback != null) {
+        if (useBottomListener && mOnBottomCallback != null) {
             if (isSlideToNearBottom(5)) {
                 mOnBottomCallback.onBottom();
             } else {
@@ -87,6 +89,10 @@ public class AdvancedRecyclerView extends WearableRecyclerView {
             emptyView.setVisibility(emptyViewVisible ? VISIBLE : GONE);
             setVisibility(emptyViewVisible ? GONE : VISIBLE);
         }
+    }
+
+    public void setUseBottomListener(boolean useBottomListener) {
+        this.useBottomListener = useBottomListener;
     }
 
     public interface OnBottomCallback {

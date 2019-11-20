@@ -27,7 +27,7 @@ public class DialogBuilder {
         builder.setPositiveButton(R.string.go_to_install, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                AppSupport.runInstallWebsite(context, nodeId);
+                DeviceSupport.runInstallWebsite(context, nodeId);
             }
         });
         builder.setNegativeButton(android.R.string.cancel, null);

@@ -18,8 +18,8 @@ public class StorageCache {
     public static TodayCourses readTodayCoursesCache(Context context) {
         File cacheFile = getTodayCoursesCacheFile(context);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        if (sharedPreferences.getInt(Config.SUPPORT_APP_VERSION_CODE, 0) == BuildConfig.SUPPORT_MIN_VERSION_CODE &&
-                sharedPreferences.getInt(Config.SUPPORT_APP_SUB_VERSION, 0) == BuildConfig.SUPPORT_MIN_SUB_VERSION) {
+        if (sharedPreferences.getInt(Config.WEAR_MSG_SUPPORT_APP_VERSION_CODE, 0) == BuildConfig.SUPPORT_MIN_VERSION_CODE &&
+                sharedPreferences.getInt(Config.WEAR_MSG_SUPPORT_APP_SUB_VERSION, 0) == BuildConfig.SUPPORT_MIN_SUB_VERSION) {
             byte[] data = readBytesFromFile(cacheFile);
             if (data != null) {
                 return CourseListUpdate.readTodayCourseFromBytes(data);
@@ -34,8 +34,8 @@ public class StorageCache {
     public static boolean saveTodayCoursesCache(Context context, TodayCourses todayCourses) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         sharedPreferences.edit()
-                .putInt(Config.SUPPORT_APP_VERSION_CODE, BuildConfig.SUPPORT_MIN_VERSION_CODE)
-                .putInt(Config.SUPPORT_APP_SUB_VERSION, BuildConfig.SUPPORT_MIN_SUB_VERSION).apply();
+                .putInt(Config.WEAR_MSG_SUPPORT_APP_VERSION_CODE, BuildConfig.SUPPORT_MIN_VERSION_CODE)
+                .putInt(Config.WEAR_MSG_SUPPORT_APP_SUB_VERSION, BuildConfig.SUPPORT_MIN_SUB_VERSION).apply();
 
         byte[] data = CourseListUpdate.writeTodayCourseInBytes(todayCourses);
         File cacheFile = getTodayCoursesCacheFile(context);

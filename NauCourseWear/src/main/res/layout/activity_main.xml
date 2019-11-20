@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_grey"
+    android:background="@color/course_list_activity_background"
     tools:deviceIds="wear">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
