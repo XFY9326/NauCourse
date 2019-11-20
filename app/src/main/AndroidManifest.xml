@@ -1,7 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="tool.xfy9326.naucourse">
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -23,6 +25,14 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning"
         tools:targetApi="n">
 
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <meta-data
+            android:name="com.google.android.wearable.values"
+            android:value="@integer/google_play_services_version" />
+
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name"
@@ -31,16 +41,15 @@
             tools:ignore="InnerclassSeparator">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/login"
             android:theme="@style/LoginActivityTheme"
             tools:ignore="InnerclassSeparator" />
-
         <activity
             android:name=".activities.async.StudentInfoActivity"
             android:label="@string/personal_detail"
@@ -49,7 +58,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
         </activity>
-
         <activity
             android:name=".activities.CourseActivity"
             android:label="@string/course_manage"
@@ -58,7 +66,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
         </activity>
-
         <activity
             android:name=".activities.CourseEditActivity"
             android:label="@string/course_edit"
@@ -67,7 +74,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.CourseActivity" />
         </activity>
-
         <activity
             android:name=".activities.async.ExamActivity"
             android:label="@string/exam"
@@ -76,7 +82,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
         </activity>
-
         <activity
             android:name=".activities.async.ScoreActivity"
             android:label="@string/score"
@@ -85,7 +90,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
         </activity>
-
         <activity
             android:name=".activities.async.LevelExamActivity"
             android:label="@string/level_exam"
@@ -94,7 +98,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
         </activity>
-
         <activity
             android:name=".activities.InfoDetailActivity"
             android:label="@string/info_label"
@@ -103,7 +106,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
         </activity>
-
         <activity
             android:name=".activities.async.SchoolCalendarActivity"
             android:label="@string/school_calendar"
@@ -112,7 +114,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
         </activity>
-
         <activity
             android:name=".activities.async.SuspendCourseActivity"
             android:label="@string/suspend_course"
@@ -121,7 +122,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
         </activity>
-
         <activity
             android:name=".activities.settings.GlobalSettingsActivity"
             android:label="@string/global_settings"
@@ -130,7 +130,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
         </activity>
-
         <activity
             android:name=".activities.settings.CourseSettingsActivity"
             android:label="@string/course_settings"
@@ -139,7 +138,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
         </activity>
-
         <activity
             android:name=".activities.AboutActivity"
             android:label="@string/about"
@@ -149,7 +147,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
         </activity>
-
         <activity
             android:name=".activities.CourseSearchActivity"
             android:label="@string/course_search"
@@ -158,7 +155,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
         </activity>
-
         <activity
             android:name=".activities.settings.UpdateSettingsActivity"
             android:label="@string/update_check"
@@ -168,6 +164,17 @@
                 android:value=".activities.MainActivity" />
         </activity>
 
+        <service
+            android:name=".services.WearListenerService"
+            tools:ignore="InnerclassSeparator">
+            <intent-filter>
+                <action
+                    android:name="com.google.android.gms.wearable.BIND_LISTENER"
+                    tools:ignore="WearableBindListener" />
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+            </intent-filter>
+        </service>
+
         <receiver
             android:name=".receivers.BootCompleteReceiver"
             tools:ignore="InnerclassSeparator">
@@ -175,7 +182,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
         <receiver
             android:name=".receivers.CourseUpdateReceiver"
             android:exported="false"
@@ -184,13 +190,13 @@
                 <action android:name="tool.xfy9326.naucourse.Receivers.UpdateReceiver.Update" />
             </intent-filter>
         </receiver>
-
         <receiver
             android:name=".widget.NextClassWidget"
             tools:ignore="InnerclassSeparator">
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/app_widget_next_class_provider" />
+
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="tool.xfy9326.naucourse.Widget.NextClassWidget.OnUpdate" />
@@ -206,7 +212,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-
     </application>
 
 </manifest>

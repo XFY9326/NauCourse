@@ -17,7 +17,6 @@ android {
                     outputFileName = "${variant.buildType.name}_${defaultConfig.versionCode}_${defaultConfig.versionName}_${rootProject.ext.subVersion}.apk"
                 }
         }
-
     }
 
     buildTypes {
@@ -71,6 +70,10 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation 'androidx.preference:preference:1.1.0'
+
+    //中国版 Wear OS 应用要求使用 10.2.0 版的客户端库
+    //noinspection GradleDependency
+    implementation 'com.google.android.gms:play-services-wearable:10.2.0'
 
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 }

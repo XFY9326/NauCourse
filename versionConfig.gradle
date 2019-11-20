@@ -1,9 +1,20 @@
 ext {
-    versionCode = 64
+    versionCode = 65
     subVersion = 0
-    versionName = "6.6"
+    versionName = "6.7"
+
+    wearVersionCode = 1
+    wearVersionName = "1.0"
+
+    wearSupportMinVersionCode = 65
+    wearSupportMinVersionName = "6.7"
+    wearSupportMinSubVersion = 0
 
     projectCompileSdkVersion = 29
     projectMinSdkVersion = 19
     projectTargetSdkVersion = 29
+
+    wearProjectCompileSdkVersion = 29
+    wearProjectMinSdkVersion = 26
+    wearProjectTargetSdkVersion = 29
 }

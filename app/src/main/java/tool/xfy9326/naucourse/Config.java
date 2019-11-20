@@ -205,4 +205,11 @@ public class Config {
     public static final String DONATE_URL_ALIPAY = "https://www.xfy9326.top/api/donate/alipay.jpg";
     public static final String DONATE_URL_WECHAT = "https://www.xfy9326.top/api/donate/wechat.png";
     public static final String DONATE_URL_QQ_WALLET = "https://www.xfy9326.top/api/donate/qq_wallet.png";
+
+    public static final String TODAY_COURSE_LIST = "TODAY_COURSE_LIST";
+    public static final String TODAY_COURSE_UPDATE_TIME = "TODAY_COURSE_UPDATE_TIME";
+    public static final String SUPPORT_APP_VERSION_CODE = "SUPPORT_APP_VERSION_CODE";
+    public static final String SUPPORT_APP_SUB_VERSION = "SUPPORT_APP_SUB_VERSION";
+    public static final String TODAY_COURSE_LIST_PATH = "/todayCourseList";
+    public static final String WEAR_MSG_UPDATE_TODAY_COURSE_LIST = "phone_update_today_course_list";
 }

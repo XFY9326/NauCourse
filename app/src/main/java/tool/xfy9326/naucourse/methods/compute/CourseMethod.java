@@ -10,6 +10,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,6 +27,7 @@ import tool.xfy9326.naucourse.beans.SchoolTime;
 import tool.xfy9326.naucourse.beans.course.Course;
 import tool.xfy9326.naucourse.beans.course.CourseDetail;
 import tool.xfy9326.naucourse.beans.course.NextCourse;
+import tool.xfy9326.naucourse.beans.course.TodayCourses;
 
 /**
  * Created by xfy9326 on 18-2-22.
@@ -57,16 +61,16 @@ public class CourseMethod {
      * 仅在内部使用
      *
      * @param context         Context
+     * @param weekDayNum      星期几
      * @param thisWeekTable   课程信息二维数组
      * @param thisWeekIdTable 课程ID二维数组
      * @param courses         课程信息列表
      * @return NextCourse对象
      */
     @NonNull
-    private static NextCourse getNextClass(@NonNull Context context, String[][] thisWeekTable, String[][] thisWeekIdTable, boolean[][] thisWeekNoShowTable, @NonNull ArrayList<Course> courses) {
-        NextCourse nextCourse = new NextCourse();
+    private static NextCourse getNextCourse(@NonNull Context context, int weekDayNum, String[][] thisWeekTable, String[][] thisWeekIdTable, boolean[][] thisWeekNoShowTable, @NonNull ArrayList<Course> courses) {
         Calendar calendar = Calendar.getInstance(Locale.CHINA);
-        int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY ? 7 : calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        NextCourse nextCourse = new NextCourse();
 
         String[] today = thisWeekTable[weekDayNum];
         String[] todayId = thisWeekIdTable[weekDayNum];
@@ -131,6 +135,44 @@ public class CourseMethod {
         return nextCourse;
     }
 
+    private static TodayCourses getTodayCourses(@NonNull Context context, int weekDayNum, String[][] thisWeekTable, String[][] thisWeekIdTable, boolean[][] thisWeekNoShowTable, @NonNull ArrayList<Course> courses) {
+        TodayCourses todayCourses = new TodayCourses();
+        todayCourses.setNextCourse(getNextCourse(context, weekDayNum, thisWeekTable, thisWeekIdTable, thisWeekNoShowTable, courses));
+
+        String[] today = thisWeekTable[weekDayNum];
+        boolean[] todayNoShow = thisWeekNoShowTable[weekDayNum];
+
+        String[] startTimes = context.getResources().getStringArray(R.array.course_start_time);
+        String[] finishTimes = context.getResources().getStringArray(R.array.course_finish_time);
+
+        ArrayList<String> resultCourse = new ArrayList<>(5);
+        ArrayList<String> resultTime = new ArrayList<>(5);
+
+        for (int i = 1; i < today.length; i++) {
+            if (!todayNoShow[i] && today[i] != null) {
+                if (!resultCourse.contains(today[i])) {
+                    resultCourse.add(today[i]);
+
+                    for (int j = i; j < today.length; j++) {
+                        if (j == today.length - 1) {
+                            resultTime.add(startTimes[i - 1] + "~" + finishTimes[j - 1]);
+                            break;
+                        } else if (!today[i].equals(today[j])) {
+                            resultTime.add(startTimes[i - 1] + "~" + finishTimes[j - 2]);
+                            i = j - 1;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        todayCourses.setCourses(resultCourse.toArray(new String[0]));
+        todayCourses.setCoursesTime(resultTime.toArray(new String[0]));
+
+        return todayCourses;
+    }
+
     public static boolean hasWeekendCourse(ArrayList<Course> courses) {
         for (Course course : courses) {
             if (course != null && course.getCourseDetail() != null) {
@@ -166,6 +208,21 @@ public class CourseMethod {
         return null;
     }
 
+    public static byte[] writeTodayCourseInBytes(TodayCourses todayCourses) {
+        byte[] bytes = null;
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ObjectOutputStream sOut;
+        try {
+            sOut = new ObjectOutputStream(out);
+            sOut.writeObject(todayCourses);
+            sOut.flush();
+            bytes = out.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bytes;
+    }
+
     /**
      * 获取下一节课的信息
      * 对外接口
@@ -174,11 +231,30 @@ public class CourseMethod {
      * @return 下一节课的信息
      */
     @NonNull
-    public NextCourse getNextClass(int weekNum) {
+    public NextCourse getNextCourse(int weekNum) {
         if (this.weekNum != weekNum || table == null) {
             getTable(weekNum, schoolTime.getStartTime());
         }
-        return getNextClass(context, table, idTable, thisWeekNoShowTable, courses);
+        Calendar calendar = Calendar.getInstance(Locale.CHINA);
+        int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY ? 7 : calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        return getNextCourse(context, weekDayNum, table, idTable, thisWeekNoShowTable, courses);
+    }
+
+    /**
+     * 获取今天的课程的信息
+     * 对外接口
+     *
+     * @param weekNum 周数
+     * @return 今天的课程的信息
+     */
+    @NonNull
+    TodayCourses getTodayCourse(int weekNum) {
+        if (this.weekNum != weekNum || table == null) {
+            getTable(weekNum, schoolTime.getStartTime());
+        }
+        Calendar calendar = Calendar.getInstance(Locale.CHINA);
+        int weekDayNum = calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY ? 7 : calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        return getTodayCourses(context, weekDayNum, table, idTable, thisWeekNoShowTable, courses);
     }
 
     /**

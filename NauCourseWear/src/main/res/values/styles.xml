@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ExpandButton">
+        <item name="android:radius">25dp</item>
+    </style>
+</resources>

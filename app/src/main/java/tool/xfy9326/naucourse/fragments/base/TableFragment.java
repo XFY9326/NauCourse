@@ -311,7 +311,7 @@ public class TableFragment extends Fragment {
                     nextCourse = new NextCourse();
                     homeFragment.setNextCourse(nextCourse);
                 } else if (courseMethod != null) {
-                    nextCourse = courseMethod.getNextClass(lastSetWeekNumber);
+                    nextCourse = courseMethod.getNextCourse(lastSetWeekNumber);
                     nextCourse.setInVacation(false);
                     homeFragment.setNextCourse(nextCourse);
                 }

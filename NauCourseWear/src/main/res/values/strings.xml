@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">NAU课程表</string>
+    <string name="phone_connect_error">手机连接失败！</string>
+    <string name="google_client_connect_error">通信服务连接失败！</string>
+    <string name="not_support_system">只支持安卓系统的手机！</string>
+    <string name="support_app_not_installed">NAU课程表并没有在手机上安装，你需要安装后才能运行本应用！</string>
+    <string name="go_to_install">前去安装</string>
+    <string name="no_course_data">暂无课程数据\n请下拉刷新</string>
+    <string name="no_course_today">今日无课</string>
+    <string name="data_sync_error">数据同步时出错！</string>
+    <string name="support_version_error">当前Wear OS应用仅支持%1$s.%2$d(%3$d)版本及以上的NAU课程表！</string>
+    <string name="next_course">下一节课：</string>
+    <string name="no_next_course">今日课程已结束</string>
+</resources>
