@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourse.activities;
 
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
@@ -94,6 +95,8 @@ public class MainActivity extends WearableActivity implements DataApi.DataListen
         });
 
         refreshLayout.setDistanceToTriggerSync(80);
+        refreshLayout.setProgressBackgroundColorSchemeResource(R.color.dark_blue);
+        refreshLayout.setColorSchemeColors(Color.WHITE);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
