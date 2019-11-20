@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+@SuppressWarnings("unused")
 abstract class BaseInfoMethod<T> extends BaseNetMethod {
 
     BaseInfoMethod(@NonNull Context context) {

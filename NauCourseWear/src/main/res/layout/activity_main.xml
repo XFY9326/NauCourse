@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/course_list_activity_background"
     tools:deviceIds="wear">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -24,7 +23,7 @@
                 android:layout_height="match_parent"
                 android:scrollbars="vertical" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textView_empty_course_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -42,6 +41,7 @@
         android:id="@+id/actionDrawer_expand_course_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/dark_blue"
         app:actionMenu="@menu/action_drawer"
         app:enableAutoPeek="false" />
 

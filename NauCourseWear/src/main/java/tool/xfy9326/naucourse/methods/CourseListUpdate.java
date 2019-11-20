@@ -81,6 +81,7 @@ public class CourseListUpdate {
     }
 
     public interface onRequestCourseListUpdateListener {
+        @SuppressWarnings({"unused", "EmptyMethod"})
         void onResult(@Nullable String nodeId, boolean isSuccess);
     }
 }

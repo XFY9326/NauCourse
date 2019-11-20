@@ -4,10 +4,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.wear.widget.drawer.WearableActionDrawerView;
@@ -34,8 +34,8 @@ import tool.xfy9326.naucourse.views.TodayCourseAdapter;
 public class MainActivity extends WearableActivity implements DataApi.DataListener {
     private static final int REFRESH_TIME_OUT = 5000;
     private GoogleApiClient googleApiClient;
-    private TodayCourseAdapter todayCourseAdapter;
     private SwipeRefreshLayout refreshLayout;
+    private TodayCourseAdapter todayCourseAdapter;
     private boolean waitingForAnswer = false;
 
     @Override
@@ -56,7 +56,6 @@ public class MainActivity extends WearableActivity implements DataApi.DataListen
                     public void onConnected(@Nullable Bundle bundle) {
                         Wearable.DataApi.addListener(googleApiClient, MainActivity.this);
 
-                        refreshLayout.setRefreshing(true);
                         getTodayCourseFromPhone();
                     }
 
@@ -70,9 +69,8 @@ public class MainActivity extends WearableActivity implements DataApi.DataListen
 
     private void ViewSet() {
         AdvancedRecyclerView recyclerView = findViewById(R.id.recyclerView_course_list);
-        final WearableActionDrawerView actionDrawer = findViewById(R.id.actionDrawer_expand_course_list);
         refreshLayout = findViewById(R.id.swipeLayout_course_list);
-
+        final WearableActionDrawerView actionDrawer = findViewById(R.id.actionDrawer_expand_course_list);
         todayCourseAdapter = new TodayCourseAdapter(this, recyclerView);
 
         recyclerView.setFocusableInTouchMode(false);
@@ -151,7 +149,7 @@ public class MainActivity extends WearableActivity implements DataApi.DataListen
     }
 
     private void setCourseListEmptyView(TodayCourses todayCourses) {
-        TextView emptyView = findViewById(R.id.textView_empty_course_list);
+        AppCompatTextView emptyView = findViewById(R.id.textView_empty_course_list);
         if (todayCourses.getCourses().length == 0) {
             emptyView.setText(R.string.no_course_today);
         } else {
@@ -249,6 +247,7 @@ public class MainActivity extends WearableActivity implements DataApi.DataListen
 
     private void getTodayCourseFromPhone() {
         if (googleApiClient != null && googleApiClient.isConnected()) {
+            refreshLayout.setRefreshing(true);
             DeviceSupport.checkDeviceSupport(MainActivity.this, googleApiClient, new DeviceSupport.onCheckAppSupportListener() {
                 @Override
                 public void onChecked(boolean hasConnectedDevice, boolean isSupportSystem, boolean hasSupportApp, final String nodeId) {
@@ -289,7 +288,6 @@ public class MainActivity extends WearableActivity implements DataApi.DataListen
                 @Override
                 public void run() {
                     Toast.makeText(MainActivity.this, R.string.google_client_connect_error, Toast.LENGTH_SHORT).show();
-                    stopRefreshing();
                 }
             });
         }

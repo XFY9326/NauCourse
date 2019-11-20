@@ -4,6 +4,7 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+@SuppressWarnings("unused")
 abstract class BaseNetMethod {
     final Context context;
 

@@ -6,9 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.wear.widget.BoxInsetLayout;
@@ -79,7 +79,7 @@ public class TodayCourseAdapter extends RecyclerView.Adapter<TodayCourseAdapter.
         holder.layout_today_courses.setVisibility(View.GONE);
 
         if (todayCourses.getNextCourse().getCourseName() == null) {
-            holder.layout_box_border.setPadding(boxPadding, boxPadding, boxPadding, 0);
+            holder.layout_box_border.setPadding(boxPadding, boxPadding + 10, boxPadding, 0);
             holder.layout_course_item.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
             holder.layout_next_course.setVisibility(View.GONE);
@@ -187,12 +187,12 @@ public class TodayCourseAdapter extends RecyclerView.Adapter<TodayCourseAdapter.
     }
 
     static class TodayCourseViewHolder extends RecyclerView.ViewHolder {
-        final TextView textView_course_info;
-        final TextView textView_course_time;
-        final TextView textView_next_course_name;
-        final TextView textView_next_course_location;
-        final TextView textView_next_course_time;
-        final TextView textView_no_next_course;
+        final AppCompatTextView textView_course_info;
+        final AppCompatTextView textView_course_time;
+        final AppCompatTextView textView_next_course_name;
+        final AppCompatTextView textView_next_course_location;
+        final AppCompatTextView textView_next_course_time;
+        final AppCompatTextView textView_no_next_course;
         final LinearLayout layout_next_course;
         final LinearLayout layout_today_courses;
         final LinearLayout layout_course_item;

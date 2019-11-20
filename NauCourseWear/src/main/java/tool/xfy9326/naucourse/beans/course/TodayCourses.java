@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.beans.course;
 
 import java.io.Serializable;
 
+@SuppressWarnings("unused")
 public class TodayCourses implements Serializable {
     private String[] courses;
     private String[] coursesTime;

@@ -9,6 +9,7 @@ import tool.xfy9326.naucourse.beans.BaseData;
  * 储存下一节课的信息
  */
 
+@SuppressWarnings("unused")
 public class NextCourse extends BaseData {
     @Nullable
     private String courseId;

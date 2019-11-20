@@ -4,6 +4,7 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+@SuppressWarnings("unused")
 abstract class BaseInfoDetailMethod<T> extends BaseInfoMethod<T> {
     BaseInfoDetailMethod(@NonNull Context context) {
         super(context);

@@ -34,7 +34,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/shape_corner_square_item"
+                    android:background="@color/course_card_background"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -50,14 +50,14 @@
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical">
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/next_course"
                                 android:textSize="11sp"
                                 tools:ignore="SmallSp" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/textView_next_course_time"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
 
                         </LinearLayout>
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/textView_next_course_name"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
@@ -77,7 +77,7 @@
                             android:gravity="center_vertical"
                             android:textSize="13sp" />
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/textView_next_course_location"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
 
                     </LinearLayout>
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/textView_no_next_course"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="10dp">
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/textView_course_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -116,7 +116,7 @@
                             android:gravity="center"
                             android:textSize="12sp" />
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/textView_course_info"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
