@@ -377,9 +377,7 @@ public class NauSSOClient {
             @Override
             @EverythingIsNonNull
             public void onResponse(Call call, Response response) {
-                if (response.code() != 200) {
-                    availableListener.onError();
-                } else {
+                if (response.isSuccessful()) {
                     requestBuilder.url(JWC_SERVER_URL);
                     clean_client.newCall(requestBuilder.build()).enqueue(new Callback() {
                         @Override
@@ -391,12 +389,14 @@ public class NauSSOClient {
                         @Override
                         @EverythingIsNonNull
                         public void onResponse(Call call, Response response) {
-                            if (response.code() != 200) {
+                            if (!response.isSuccessful()) {
                                 availableListener.onError();
                             }
                             response.close();
                         }
                     });
+                } else {
+                    availableListener.onError();
                 }
                 response.close();
             }

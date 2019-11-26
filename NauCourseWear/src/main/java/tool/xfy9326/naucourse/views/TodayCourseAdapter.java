@@ -21,7 +21,7 @@ public class TodayCourseAdapter extends RecyclerView.Adapter {
     private final AdvancedRecyclerView recyclerView;
     private final int screenHeight;
     private final RecyclerView.SmoothScroller smoothCenterScroller;
-    private LayoutInflater inflater;
+    private final LayoutInflater inflater;
     private TodayCourses todayCourses;
     private boolean expanded = false;
 

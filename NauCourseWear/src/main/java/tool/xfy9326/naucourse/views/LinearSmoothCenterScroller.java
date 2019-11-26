@@ -5,7 +5,7 @@ import android.util.DisplayMetrics;
 
 import androidx.recyclerview.widget.LinearSmoothScroller;
 
-public class LinearSmoothCenterScroller extends LinearSmoothScroller {
+class LinearSmoothCenterScroller extends LinearSmoothScroller {
 
     LinearSmoothCenterScroller(Context context) {
         super(context);

@@ -230,22 +230,27 @@ public class MainActivity extends WearableActivity implements DataApi.DataListen
     }
 
     private void requestNewCourseData() {
-        CourseListUpdate.requestNewCourseData(googleApiClient, new CourseListUpdate.onRequestCourseListUpdateListener() {
-            @Override
-            public void onResult(@Nullable String nodeId, boolean isSuccess) {
-                if (!isSuccess) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(MainActivity.this, R.string.phone_connect_error, Toast.LENGTH_SHORT).show();
-                            stopRefreshing();
-                        }
-                    });
-                } else {
-                    beginWaitingForAnswer();
+        if (googleApiClient != null && googleApiClient.isConnected()) {
+            CourseListUpdate.requestNewCourseData(googleApiClient, new CourseListUpdate.onRequestCourseListUpdateListener() {
+                @Override
+                public void onResult(@Nullable String nodeId, boolean isSuccess) {
+                    if (!isSuccess) {
+                        beginWaitingForAnswer();
+                    } else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(MainActivity.this, R.string.phone_connect_error, Toast.LENGTH_SHORT).show();
+                                stopRefreshing();
+                            }
+                        });
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            Toast.makeText(MainActivity.this, R.string.phone_connect_error, Toast.LENGTH_SHORT).show();
+            stopRefreshing();
+        }
     }
 
     private void getTodayCourseFromPhone() {

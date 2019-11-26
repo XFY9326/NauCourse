@@ -124,7 +124,6 @@ public class Config {
     public static final String PREFERENCE_NO_SHOW_LOGIN_ATTENTION = "NO_SHOW_LOGIN_ATTENTION";
     public static final String PREFERENCE_SHOW_HIDDEN_FUNCTION = "SHOW_HIDDEN_FUNCTION";
     public static final String PREFERENCE_DOWNLOAD_VPN_FILE_WARNING = "DOWNLOAD_VPN_FILE_WARNING";
-    public static final String PREFERENCE_CAN_ADD_COURSE_WARNING = "CAN_ADD_COURSE_WARNING";
     public static final String PREFERENCE_SCHOOL_CALENDAR_NAME = "SCHOOL_CALENDAR_NAME";
     public static final String PREFERENCE_NEED_CUSTOM_TERM_ALERT = "NEED_CUSTOM_TERM_ALERT";
     public static final String PREFERENCE_NIGHT_MODE = "NIGHT_MODE";
@@ -168,7 +167,6 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_NO_SHOW_LOGIN_ATTENTION = false;
     public static final boolean DEFAULT_PREFERENCE_SHOW_HIDDEN_FUNCTION = false;
     public static final boolean DEFAULT_PREFERENCE_DOWNLOAD_VPN_FILE_WARNING = true;
-    public static final boolean DEFAULT_PREFERENCE_CAN_ADD_COURSE_WARNING = true;
     public static final boolean DEFAULT_PREFERENCE_NEED_CUSTOM_TERM_ALERT = true;
     public static final int DEFAULT_PREFERENCE_NIGHT_MODE = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
     public static final boolean DEFAULT_PREFERENCE_NOTIFY_SHOW_ATTENTION = true;

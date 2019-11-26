@@ -62,22 +62,18 @@ public class CourseListUpdate {
     }
 
     public static void requestNewCourseData(final GoogleApiClient googleApiClient, @NonNull final onRequestCourseListUpdateListener listener) {
-        if (googleApiClient != null && googleApiClient.isConnected()) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    String nodeId = getBestNode(googleApiClient);
-                    if (nodeId != null) {
-                        MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(googleApiClient, nodeId, Config.WEAR_CAPABILITY_UPDATE_TODAY_COURSE_LIST, new byte[0]).await();
-                        listener.onResult(nodeId, result.getRequestId() != MessageApi.UNKNOWN_REQUEST_ID);
-                    } else {
-                        listener.onResult(null, false);
-                    }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String nodeId = getBestNode(googleApiClient);
+                if (nodeId != null) {
+                    MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(googleApiClient, nodeId, Config.WEAR_CAPABILITY_UPDATE_TODAY_COURSE_LIST, new byte[0]).await();
+                    listener.onResult(nodeId, result.getRequestId() != MessageApi.UNKNOWN_REQUEST_ID);
+                } else {
+                    listener.onResult(null, false);
                 }
-            }).start();
-        } else {
-            listener.onResult(null, false);
-        }
+            }
+        }).start();
     }
 
     public interface onRequestCourseListUpdateListener {

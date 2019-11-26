@@ -148,14 +148,6 @@
                 android:value=".activities.MainActivity" />
         </activity>
         <activity
-            android:name=".activities.CourseSearchActivity"
-            android:label="@string/course_search"
-            tools:ignore="InnerclassSeparator">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.MainActivity" />
-        </activity>
-        <activity
             android:name=".activities.settings.UpdateSettingsActivity"
             android:label="@string/update_check"
             tools:ignore="InnerclassSeparator">

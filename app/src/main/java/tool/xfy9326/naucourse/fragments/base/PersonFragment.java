@@ -27,7 +27,6 @@ import tool.xfy9326.naucourse.BuildConfig;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.activities.AboutActivity;
-import tool.xfy9326.naucourse.activities.CourseSearchActivity;
 import tool.xfy9326.naucourse.activities.LoginActivity;
 import tool.xfy9326.naucourse.activities.async.ExamActivity;
 import tool.xfy9326.naucourse.activities.async.LevelExamActivity;
@@ -150,8 +149,6 @@ public class PersonFragment extends Fragment {
             CardView cardViewSchoolCalendar = view.findViewById(R.id.cardView_school_calendar);
             CardView cardViewSuspendCourse = view.findViewById(R.id.cardView_suspend_course);
 
-            CardView cardViewCourseSearch = view.findViewById(R.id.cardView_course_search);
-
             cardViewSuspendCourse.setOnClickListener(v -> {
                 if (getActivity() != null && isAdded()) {
                     startActivity(new Intent(getActivity(), SuspendCourseActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
@@ -233,13 +230,6 @@ public class PersonFragment extends Fragment {
             cardViewAbout.setOnClickListener(v -> {
                 if (getActivity() != null && isAdded()) {
                     Intent intent = new Intent(getActivity(), AboutActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    getActivity().startActivity(intent);
-                }
-            });
-            cardViewCourseSearch.setOnClickListener(v -> {
-                if (getActivity() != null && isAdded()) {
-                    Intent intent = new Intent(getActivity(), CourseSearchActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     getActivity().startActivity(intent);
                 }

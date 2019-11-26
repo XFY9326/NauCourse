@@ -296,22 +296,7 @@
     <string name="school_calendar_share_error">校历分享失败！</string>
     <string name="share_school_calendar">分享校历</string>
     <string name="save_failed">保存失败</string>
-    <string name="course_search">课程搜索</string>
-    <string name="course_search_college">开课学院：%1$s</string>
-    <string name="course_search_time">上课时间：%1$s</string>
-    <string name="course_search_person">上课人数：%1$d</string>
-    <string name="import_course">导入该课程</string>
-    <string name="search_type">检索类型：</string>
-    <string name="search">搜索</string>
-    <string name="search_empty">搜索值为空！</string>
-    <string name="search_value_error">搜索值错误！</string>
-    <string name="search_other_value">其他搜索：</string>
-    <string name="search_use_full_name_warning">请使用完整名称进行该类型的搜索！</string>
-    <string name="search_no_result">搜索结果为空！</string>
-    <string name="import_success">导入成功！</string>
-    <string name="empty_search_data">暂无搜索结果\n请点击搜索按钮开始搜索</string>
     <string name="empty_list">列表为空</string>
-    <string name="course_search_result_title">◈ 搜索结果</string>
     <string name="random_course_color">随机设置课程颜色</string>
     <string name="random_course_color_success">随机设置颜色成功！</string>
     <string name="image_replace">[请点击前往网页查看图片]</string>
@@ -337,7 +322,6 @@
     <string name="unlock_already_success">你已经解锁成功了！</string>
     <string name="unlock_attention">该功能不对外开放，若要开启，出现任何问题开发者无需负责！</string>
     <string name="download_vpn_file">校园VPN模式下，点击链接下载文件时需要登录VPN，之后再次点击链接即可下载！</string>
-    <string name="click_to_add_course">点击当前学期搜索的课程可以尝试导入</string>
     <string name="stu_photo">个人证件照</string>
     <string name="stu_photo_not_found">暂无个人证件照数据\n请刷新个人页面后重试</string>
     <string name="share_stu_photo">分享个人证件照：</string>
@@ -376,7 +360,7 @@
     <string name="not_this_week">[非本周]</string>
     <string name="transfer_data_to_watch_error">向Wear OS设备传输数据时出错！</string>
 
-    <string name="new_version_info_content">欢迎使用NAU课程表\n\n近期校园网络波动较大，如果无法刷新信息可以尝试连接校园内网。\n\n反馈QQ群：704668624\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
+    <string name="new_version_info_content">欢迎使用NAU课程表\n\n由于课程搜索网站接口变化，故不再提供支持。\n\n反馈QQ群：704668624\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>
