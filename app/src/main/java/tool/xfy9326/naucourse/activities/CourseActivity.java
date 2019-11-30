@@ -59,7 +59,6 @@ import tool.xfy9326.naucourse.methods.io.BackupMethod;
 import tool.xfy9326.naucourse.methods.io.DataMethod;
 import tool.xfy9326.naucourse.methods.io.ShareMethod;
 import tool.xfy9326.naucourse.methods.view.DialogMethod;
-import tool.xfy9326.naucourse.tools.URI;
 import tool.xfy9326.naucourse.views.recyclerAdapters.CourseAdapter;
 
 public class CourseActivity extends AppCompatActivity {
@@ -419,15 +418,21 @@ public class CourseActivity extends AppCompatActivity {
                 if (data != null) {
                     Uri uri = data.getData();
                     if (uri != null) {
-                        String path = URI.getAbsolutePath(this, uri);
-                        if (path != null) {
-                            ArrayList<Course> courses = BackupMethod.restoreCourse(path);
-                            if (courses != null) {
-                                addCourseList(courses, false, true, false, false);
-                                super.onActivityResult(requestCode, resultCode, data);
-                                return;
-                            }
+                        ArrayList<Course> courses = BackupMethod.restoreCourse(CourseActivity.this, uri);
+                        if (courses != null) {
+                            addCourseList(courses, false, true, false, false);
+                            super.onActivityResult(requestCode, resultCode, data);
+                            return;
                         }
+//                        String path = URI.getAbsolutePath(this, uri);
+//                        if (path != null) {
+//                            ArrayList<Course> courses = BackupMethod.restoreCourse(path);
+//                            if (courses != null) {
+//                                addCourseList(courses, false, true, false, false);
+//                                super.onActivityResult(requestCode, resultCode, data);
+//                                return;
+//                            }
+//                        }
                     }
                 }
                 Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.recover_failed, Snackbar.LENGTH_SHORT).show();
@@ -660,7 +665,7 @@ public class CourseActivity extends AppCompatActivity {
     }
 
     private void backupCourse() {
-        if (BackupMethod.backupCourse(courseArrayList)) {
+        if (BackupMethod.backupCourse(CourseActivity.this, courseArrayList)) {
             Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.backup_success, Snackbar.LENGTH_SHORT).show();
         } else {
             Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.backup_failed, Snackbar.LENGTH_SHORT).show();
@@ -676,7 +681,7 @@ public class CourseActivity extends AppCompatActivity {
     }
 
     private void recoverCourse() {
-        ArrayList<Course> courses = BackupMethod.restoreCourse();
+        ArrayList<Course> courses = BackupMethod.restoreCourse(CourseActivity.this);
         if (courses == null) {
             Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.recover_failed, Snackbar.LENGTH_SHORT).show();
         } else {

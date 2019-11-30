@@ -256,7 +256,7 @@
     <string name="term_set_success">学期修改成功！</string>
     <string name="term_set_failed">学期周数错误，过长或过短！</string>
     <string name="course_table_reloading">正在重新加载课表中… …</string>
-    <string name="school_net_no_connection">学校网站无法连接！</string>
+    <string name="school_net_no_connection">与学校网站连接时出现错误！</string>
     <string name="not_publish">未发布</string>
     <string name="alstu_system">奥兰系统</string>
     <string name="alstu_msg">奥兰通知</string>

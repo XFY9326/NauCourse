@@ -3,4 +3,7 @@
     <external-path
         name="external_files"
         path="." />
+    <external-files-path
+        name="external_private_files"
+        path="Documents/NauCourse/picture/" />
 </paths>

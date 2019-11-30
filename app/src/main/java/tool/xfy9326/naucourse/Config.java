@@ -1,7 +1,5 @@
 package tool.xfy9326.naucourse;
 
-import android.os.Environment;
-
 import androidx.appcompat.app.AppCompatDelegate;
 
 import java.io.File;
@@ -43,8 +41,7 @@ public class Config {
 
     public static final int WATER_PRINT_TEXT_SIZE = 14;
 
-    public static final String DATA_DIR_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "NauCourse" + File.separator;
-    public static final String PICTURE_DICTIONARY_PATH = DATA_DIR_PATH + "picture" + File.separator;
+    public static final String PICTURE_DICTIONARY_PATH = "picture" + File.separator;
     public static final String PICTURE_TEMP_DICTIONARY_PATH = PICTURE_DICTIONARY_PATH + ".temp" + File.separator;
     public static final String COURSE_TABLE_IMAGE_FILE_NAME = "CourseTable.jpeg";
     public static final String INFO_STU_PHOTO_FILE_NAME = "StuPhoto.jpeg";
