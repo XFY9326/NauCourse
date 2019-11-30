@@ -96,7 +96,6 @@ public class NotificationMethod {
                 notificationChannel.setShowBadge(true);
                 notificationChannel.enableLights(true);
                 notificationChannel.enableVibration(true);
-                notificationChannel.setShowBadge(false);
                 notificationManager.createNotificationChannel(notificationChannel);
             }
         }

@@ -13,8 +13,6 @@ import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.ConnectionPool;
 import okhttp3.FormBody;
 import okhttp3.Interceptor;
@@ -22,7 +20,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import okhttp3.internal.annotations.EverythingIsNonNull;
 
 /**
  * Created by xfy9326 on 18-2-20.
@@ -366,41 +363,26 @@ public class NauSSOClient {
     public synchronized void checkServer(final OnAvailableListener availableListener) {
         final Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.url(SSO_SERVER_LOGIN_URL);
-        requestBuilder.header("Cache-Control", "max-age=0");
-        clean_client.newCall(requestBuilder.build()).enqueue(new Callback() {
-            @Override
-            @EverythingIsNonNull
-            public void onFailure(Call call, IOException e) {
-                availableListener.onError();
-            }
-
-            @Override
-            @EverythingIsNonNull
-            public void onResponse(Call call, Response response) {
-                if (response.isSuccessful()) {
-                    requestBuilder.url(JWC_SERVER_URL);
-                    clean_client.newCall(requestBuilder.build()).enqueue(new Callback() {
-                        @Override
-                        @EverythingIsNonNull
-                        public void onFailure(Call call, IOException e) {
-                            availableListener.onError();
-                        }
-
-                        @Override
-                        @EverythingIsNonNull
-                        public void onResponse(Call call, Response response) {
-                            if (!response.isSuccessful()) {
-                                availableListener.onError();
-                            }
-                            response.close();
-                        }
-                    });
-                } else {
+        new Thread(() -> {
+            Response response1 = null, response2 = null;
+            try {
+                response1 = clean_client.newCall(requestBuilder.build()).execute();
+                requestBuilder.url(JWC_SERVER_URL);
+                response2 = clean_client.newCall(requestBuilder.build()).execute();
+                if (!response1.isSuccessful() || !response2.isSuccessful()) {
                     availableListener.onError();
                 }
-                response.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (response1 != null) {
+                    response1.close();
+                }
+                if (response2 != null) {
+                    response2.close();
+                }
             }
-        });
+        }).start();
     }
 
     public interface OnAvailableListener {

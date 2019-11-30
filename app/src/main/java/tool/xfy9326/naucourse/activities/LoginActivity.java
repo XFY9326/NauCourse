@@ -49,7 +49,9 @@ public class LoginActivity extends AppCompatActivity {
         viewSet();
         BaseMethod.showNewVersionInfo(this, true);
         updateCheck();
-        NetMethod.checkServerAvailable(LoginActivity.this);
+        if (savedInstanceState == null) {
+            NetMethod.checkServerAvailable(LoginActivity.this);
+        }
     }
 
     @Override
