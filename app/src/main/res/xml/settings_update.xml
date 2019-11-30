@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.preference.PreferenceCategory android:title="@string/wear_os">
+        <androidx.preference.Preference
+            android:key="WEAR_OS_SUPPORT_APP"
+            android:summary="@string/download_wear_os_support_app_sum"
+            android:title="@string/download_wear_os_support_app" />
+    </androidx.preference.PreferenceCategory>
     <androidx.preference.PreferenceCategory android:title="@string/update_check">
         <androidx.preference.Preference
             android:key="UPDATE_NOW"

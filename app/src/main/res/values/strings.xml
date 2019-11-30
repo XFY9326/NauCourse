@@ -358,6 +358,9 @@
     <string name="clean_temp_and_exit_sum">清空网络数据缓存可以解决一些问题</string>
     <string name="class_info_empty">暂无课程数据\n请登录或添加数据后刷新重试</string>
     <string name="not_this_week">[非本周]</string>
+    <string name="wear_os">Wear OS支持</string>
+    <string name="download_wear_os_support_app">下载Wear OS支持程序</string>
+    <string name="download_wear_os_support_app_sum">请手动通过ADB安装到Wear OS的手表上</string>
     <string name="transfer_data_to_watch_error">向Wear OS设备传输数据时出错！</string>
 
     <string name="new_version_info_content">欢迎使用NAU课程表\n\n由于课程搜索网站接口变化，故不再提供支持。\n\n反馈QQ群：704668624\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>

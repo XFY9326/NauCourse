@@ -9,6 +9,7 @@ import java.util.Objects;
 
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
 import tool.xfy9326.naucourse.methods.net.UpdateMethod;
 
 public class UpdateSettingsFragment extends PreferenceFragmentCompat {
@@ -30,6 +31,10 @@ public class UpdateSettingsFragment extends PreferenceFragmentCompat {
             if (isAdded()) {
                 UpdateMethod.checkUpdate(getActivity(), true);
             }
+            return false;
+        });
+        ((Preference) Objects.requireNonNull(findPreference(Config.PREFERENCE_WEAR_OS_SUPPORT_APP))).setOnPreferenceClickListener(preference -> {
+            NetMethod.viewUrlInBrowser(getActivity(), Config.WEAR_OS_SUPPORT_APP_DOWNLOAD_URL);
             return false;
         });
     }
