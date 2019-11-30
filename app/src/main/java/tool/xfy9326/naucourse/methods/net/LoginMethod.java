@@ -19,7 +19,7 @@ import tool.xfy9326.naucourse.methods.BaseMethod;
  */
 
 public class LoginMethod {
-    static final ReentrantLock reLoginLock = new ReentrantLock();
+    static final ReentrantLock RE_LOGIN_LOCK = new ReentrantLock();
 
     /**
      * 用户Cookie过期后尝试重新登陆
@@ -29,11 +29,11 @@ public class LoginMethod {
      * @throws IOException 重新登陆时的网络错误
      */
     static int reLogin(@NonNull Context context) throws IOException, InterruptedException {
-        if (reLoginLock.tryLock()) {
+        if (RE_LOGIN_LOCK.tryLock()) {
             try {
                 return doReLogin(context);
             } finally {
-                reLoginLock.unlock();
+                RE_LOGIN_LOCK.unlock();
             }
         } else {
             return Config.RE_LOGIN_TRYING;
@@ -41,11 +41,11 @@ public class LoginMethod {
     }
 
     public static int reLogin(@NonNull Context context, String id, String pw, SharedPreferences sharedPreferences) throws IOException, InterruptedException {
-        if (reLoginLock.tryLock()) {
+        if (RE_LOGIN_LOCK.tryLock()) {
             try {
                 return doReLogin(context, id, pw, sharedPreferences);
             } finally {
-                reLoginLock.unlock();
+                RE_LOGIN_LOCK.unlock();
             }
         } else {
             return Config.RE_LOGIN_TRYING;

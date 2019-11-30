@@ -424,15 +424,6 @@ public class CourseActivity extends AppCompatActivity {
                             super.onActivityResult(requestCode, resultCode, data);
                             return;
                         }
-//                        String path = URI.getAbsolutePath(this, uri);
-//                        if (path != null) {
-//                            ArrayList<Course> courses = BackupMethod.restoreCourse(path);
-//                            if (courses != null) {
-//                                addCourseList(courses, false, true, false, false);
-//                                super.onActivityResult(requestCode, resultCode, data);
-//                                return;
-//                            }
-//                        }
                     }
                 }
                 Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.recover_failed, Snackbar.LENGTH_SHORT).show();
