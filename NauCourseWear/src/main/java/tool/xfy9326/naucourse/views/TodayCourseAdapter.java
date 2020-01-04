@@ -123,8 +123,8 @@ public class TodayCourseAdapter extends RecyclerView.Adapter {
             if (!expand && expanded) {
                 expanded = false;
                 notifyItemChanged(0);
-                notifyItemRangeRemoved(1, todayCourses.getCourses().length);
                 recyclerView.smoothScrollToPosition(0);
+                notifyItemRangeRemoved(1, todayCourses.getCourses().length);
             }
         }
     }

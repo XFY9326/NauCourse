@@ -18,7 +18,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import okhttp3.internal.annotations.EverythingIsNonNull;
 
 public class API {
     @SuppressWarnings("WeakerAccess")
@@ -70,21 +69,19 @@ public class API {
             requestJson.put("time", System.currentTimeMillis() / 1000);
             requestJson.put("api_key", API_KEY);
 
-            final RequestBody requestBody = FormBody.create(MediaType.parse("application/json; charset=utf-8"), requestJson.toString());
+            final RequestBody requestBody = FormBody.create(requestJson.toString(), MediaType.parse("application/json; charset=utf-8"));
             Request.Builder builder = new Request.Builder();
             builder.url(SERVER_URL + "/" + API_TYPE + "/" + API_FUNCTION + ".php");
             builder.post(requestBody);
 
             client.newCall(builder.build()).enqueue(new Callback() {
                 @Override
-                @EverythingIsNonNull
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
                     requestListener.onError(ERROR_TYPE_REQUEST_FAILED, e.getMessage());
                 }
 
                 @Override
-                @EverythingIsNonNull
-                public void onResponse(Call call, Response response) throws IOException {
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                     ResponseBody responseBody = response.body();
                     if (responseBody != null) {
                         String body = responseBody.string();

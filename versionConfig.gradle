@@ -11,7 +11,7 @@ ext {
     wearSupportMinSubVersion = 0
 
     projectCompileSdkVersion = 29
-    projectMinSdkVersion = 19
+    projectMinSdkVersion = 21
     projectTargetSdkVersion = 29
 
     wearProjectCompileSdkVersion = 29

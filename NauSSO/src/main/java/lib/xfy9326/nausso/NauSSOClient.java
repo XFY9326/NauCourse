@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
@@ -54,9 +55,9 @@ public class NauSSOClient {
         main_client = buildSSOClient(context, cookieStore, vpnInterceptor);
 
         OkHttpClient.Builder clientCleanBuilder = new OkHttpClient.Builder();
-        clientCleanBuilder.connectTimeout(8, TimeUnit.SECONDS);
-        clientCleanBuilder.readTimeout(4, TimeUnit.SECONDS);
-        clientCleanBuilder.writeTimeout(4, TimeUnit.SECONDS);
+        clientCleanBuilder.connectTimeout(20, TimeUnit.SECONDS);
+        clientCleanBuilder.readTimeout(10, TimeUnit.SECONDS);
+        clientCleanBuilder.writeTimeout(10, TimeUnit.SECONDS);
         clean_client = clientCleanBuilder.build();
     }
 
@@ -78,9 +79,9 @@ public class NauSSOClient {
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
         clientBuilder.cookieJar(cookieStore);
         clientBuilder.cache(getCache(context));
-        clientBuilder.connectTimeout(15, TimeUnit.SECONDS);
-        clientBuilder.readTimeout(8, TimeUnit.SECONDS);
-        clientBuilder.writeTimeout(8, TimeUnit.SECONDS);
+        clientBuilder.connectTimeout(20, TimeUnit.SECONDS);
+        clientBuilder.readTimeout(10, TimeUnit.SECONDS);
+        clientBuilder.writeTimeout(10, TimeUnit.SECONDS);
         clientBuilder.retryOnConnectionFailure(true);
         clientBuilder.connectionPool(new ConnectionPool(15, 3, TimeUnit.MINUTES));
         if (interceptor != null) {
@@ -198,7 +199,7 @@ public class NauSSOClient {
         builder.url(ALSTU_LOGIN_SSO_URL);
         Response response = main_client.newCall(builder.build()).execute();
         if (response.isSuccessful() && response.body() != null) {
-            ssoContent = response.body().string();
+            ssoContent = Objects.requireNonNull(response.body()).string();
             if (ssoContent.contains("南京审计大学统一身份认证登录")) {
                 needLogin = true;
             }
@@ -228,7 +229,7 @@ public class NauSSOClient {
             builder.url(ALSTU_TICKET_URL + ssoTicket);
             Response responseIndex = main_client.newCall(builder.build()).execute();
             if (responseIndex.isSuccessful() && responseIndex.body() != null) {
-                String data = responseIndex.body().toString();
+                String data = Objects.requireNonNull(responseIndex.body()).toString();
                 responseIndex.close();
                 return checkAlstuLogin(data);
             }

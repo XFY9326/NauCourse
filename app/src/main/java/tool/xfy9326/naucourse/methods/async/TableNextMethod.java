@@ -115,11 +115,11 @@ public class TableNextMethod extends BaseNetMethod {
             if (courseDetail == null) {
                 courseDetail = new CourseDetail();
             }
-            if (data[i].contains("上课地点：")) {
+            if (data[i].contains("上课地点")) {
                 if (data[i].length() > 5) {
                     courseDetail.setLocation(data[i].substring(5));
                 }
-            } else if (data[i].contains("上课时间：")) {
+            } else if (data[i].contains("上课时间")) {
                 if (data[i].length() > 5) {
                     String mainTimeStr = data[i].substring(5).trim();
                     if (mainTimeStr.contains("单")) {

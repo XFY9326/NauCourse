@@ -202,7 +202,7 @@ public class Config {
     public static final String DONATE_URL_WECHAT = "https://www.xfy9326.top/api/donate/wechat.png";
     public static final String DONATE_URL_QQ_WALLET = "https://www.xfy9326.top/api/donate/qq_wallet.png";
 
-    public static final String WEAR_OS_SUPPORT_APP_DOWNLOAD_URL = "https://dev.tencent.com/s/ae1e4fd8-182c-42fc-9da6-8d0a0a718d75";
+    public static final String WEAR_OS_SUPPORT_APP_DOWNLOAD_URL = "https://xfy9326.gitee.io/naucourse-downloadlib/Watch/Release/";
 
     public static final String WEAR_MSG_TODAY_COURSE_LIST = "TODAY_COURSE_LIST";
     public static final String WEAR_MSG_NO_COURSE_DATA = "NO_COURSE_DATA";

@@ -177,7 +177,7 @@ public class CourseMethod {
         for (Course course : courses) {
             if (course != null && course.getCourseDetail() != null) {
                 for (CourseDetail courseDetail : course.getCourseDetail()) {
-                    if (courseDetail.getWeekDay() == 6 || courseDetail.getWeekDay() == 7) {
+                    if (courseDetail != null && (courseDetail.getWeekDay() == 6 || courseDetail.getWeekDay() == 7)) {
                         return true;
                     }
                 }

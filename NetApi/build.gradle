@@ -26,7 +26,6 @@ android {
 }
 
 dependencies {
-    //noinspection GradleDependency
-    implementation 'com.squareup.okhttp3:okhttp:3.12.3'
+    implementation 'com.squareup.okhttp3:okhttp:4.2.2'
     implementation 'androidx.annotation:annotation:1.1.0'
 }
