@@ -14,10 +14,9 @@ android {
         applicationVariants.all {
             variant ->
                 variant.outputs.all {
-                    outputFileName = "${variant.buildType.name}_${defaultConfig.versionCode}_${defaultConfig.versionName}_${rootProject.ext.subVersion}.apk"
+                    outputFileName = "${variant.buildType.name}_${defaultConfig.versionName}.${rootProject.ext.subVersion}(${defaultConfig.versionCode}).apk"
                 }
         }
-
     }
 
     buildTypes {
@@ -57,8 +56,7 @@ dependencies {
     implementation project(':AppUpdater')
 
     implementation 'org.jsoup:jsoup:1.12.1'
-    //noinspection GradleDependency
-    implementation 'com.squareup.okhttp3:okhttp:3.12.3'
+    implementation 'com.squareup.okhttp3:okhttp:4.2.2'
 
     implementation 'com.google.code.gson:gson:2.8.6'
 
@@ -66,11 +64,15 @@ dependencies {
 
     implementation 'com.tencent.bugly:crashreport:3.0.0'
 
-    implementation 'com.google.android.material:material:1.2.0-alpha01'
+    implementation 'com.google.android.material:material:1.2.0-alpha03'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation 'androidx.preference:preference:1.1.0'
+
+    //中国版 Wear OS 应用要求使用 10.2.0 版的客户端库
+    //noinspection GradleDependency
+    implementation 'com.google.android.gms:play-services-wearable:10.2.0'
 
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 }

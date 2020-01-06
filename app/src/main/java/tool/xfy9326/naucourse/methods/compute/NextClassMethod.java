@@ -44,7 +44,7 @@ public class NextClassMethod {
                 if (weekNum != 0) {
                     schoolTime.setWeekNum(weekNum);
                     CourseMethod courseMethod = new CourseMethod(context, courses, schoolTime);
-                    nextCourse = courseMethod.getNextClass(weekNum);
+                    nextCourse = courseMethod.getNextCourse(weekNum);
                     nextCourse.setInVacation(false);
                 } else {
                     nextCourse = new NextCourse();

@@ -30,6 +30,7 @@ import tool.xfy9326.naucourse.methods.BaseMethod;
 import tool.xfy9326.naucourse.methods.ImageMethod;
 import tool.xfy9326.naucourse.methods.PermissionMethod;
 import tool.xfy9326.naucourse.methods.io.DataMethod;
+import tool.xfy9326.naucourse.methods.io.DataPath;
 import tool.xfy9326.naucourse.methods.net.NetMethod;
 
 public class DialogMethod {
@@ -109,13 +110,13 @@ public class DialogMethod {
                 builder.setView(view);
                 builder.setTitle(shareTitleId);
                 builder.setPositiveButton(R.string.share, (dialog, which) -> {
-                    String tempPath = Config.PICTURE_TEMP_DICTIONARY_PATH + saveImgName;
+                    String tempPath = DataPath.getInstance(activity).getDataDirPath() + Config.PICTURE_TEMP_DICTIONARY_PATH + saveImgName;
                     try {
                         if (ImageMethod.saveBitmap(bitmap, tempPath, false)) {
                             Intent intent = new Intent();
                             intent.setAction(Intent.ACTION_SEND);
                             Uri photoURI = FileProvider.getUriForFile(activity, Config.FILE_PROVIDER_AUTH, new File(tempPath));
-                            intent.setType("image/*");
+                            intent.setDataAndType(photoURI, "image/*");
                             intent.putExtra(Intent.EXTRA_STREAM, photoURI);
                             intent.addCategory(Intent.CATEGORY_DEFAULT);
                             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -127,7 +128,7 @@ public class DialogMethod {
                     }
                 });
                 builder.setNeutralButton(R.string.save, (dialog, which) -> {
-                    String savePath = Config.PICTURE_DICTIONARY_PATH + saveImgName;
+                    String savePath = DataPath.getInstance(activity).getDataDirPath() + Config.PICTURE_DICTIONARY_PATH + saveImgName;
                     try {
                         if (ImageMethod.saveBitmap(bitmap, savePath, false)) {
                             Toast.makeText(activity, activity.getString(R.string.save_file_success, savePath), Toast.LENGTH_SHORT).show();

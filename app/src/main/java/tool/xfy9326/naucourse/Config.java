@@ -1,7 +1,5 @@
 package tool.xfy9326.naucourse;
 
-import android.os.Environment;
-
 import androidx.appcompat.app.AppCompatDelegate;
 
 import java.io.File;
@@ -43,8 +41,7 @@ public class Config {
 
     public static final int WATER_PRINT_TEXT_SIZE = 14;
 
-    public static final String DATA_DIR_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "NauCourse" + File.separator;
-    public static final String PICTURE_DICTIONARY_PATH = DATA_DIR_PATH + "picture" + File.separator;
+    public static final String PICTURE_DICTIONARY_PATH = "picture" + File.separator;
     public static final String PICTURE_TEMP_DICTIONARY_PATH = PICTURE_DICTIONARY_PATH + ".temp" + File.separator;
     public static final String COURSE_TABLE_IMAGE_FILE_NAME = "CourseTable.jpeg";
     public static final String INFO_STU_PHOTO_FILE_NAME = "StuPhoto.jpeg";
@@ -124,12 +121,12 @@ public class Config {
     public static final String PREFERENCE_NO_SHOW_LOGIN_ATTENTION = "NO_SHOW_LOGIN_ATTENTION";
     public static final String PREFERENCE_SHOW_HIDDEN_FUNCTION = "SHOW_HIDDEN_FUNCTION";
     public static final String PREFERENCE_DOWNLOAD_VPN_FILE_WARNING = "DOWNLOAD_VPN_FILE_WARNING";
-    public static final String PREFERENCE_CAN_ADD_COURSE_WARNING = "CAN_ADD_COURSE_WARNING";
     public static final String PREFERENCE_SCHOOL_CALENDAR_NAME = "SCHOOL_CALENDAR_NAME";
     public static final String PREFERENCE_NEED_CUSTOM_TERM_ALERT = "NEED_CUSTOM_TERM_ALERT";
     public static final String PREFERENCE_NIGHT_MODE = "NIGHT_MODE";
     public static final String PREFERENCE_NOTIFY_SHOW_ATTENTION = "NOTIFY_SHOW_ATTENTION";
     public static final String PREFERENCE_CLEAN_TEMP_AND_EXIT = "CLEAN_TEMP_AND_EXIT";
+    public static final String PREFERENCE_WEAR_OS_SUPPORT_APP = "WEAR_OS_SUPPORT_APP";
 
     public static final String PREFERENCE_INFO_CHANNEL_SELECTED_JWC_SYSTEM = "INFO_CHANNEL_SELECTED_JWC_SYSTEM";
     public static final String PREFERENCE_INFO_CHANNEL_SELECTED_JW = "INFO_CHANNEL_SELECTED_JW";
@@ -168,7 +165,6 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_NO_SHOW_LOGIN_ATTENTION = false;
     public static final boolean DEFAULT_PREFERENCE_SHOW_HIDDEN_FUNCTION = false;
     public static final boolean DEFAULT_PREFERENCE_DOWNLOAD_VPN_FILE_WARNING = true;
-    public static final boolean DEFAULT_PREFERENCE_CAN_ADD_COURSE_WARNING = true;
     public static final boolean DEFAULT_PREFERENCE_NEED_CUSTOM_TERM_ALERT = true;
     public static final int DEFAULT_PREFERENCE_NIGHT_MODE = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
     public static final boolean DEFAULT_PREFERENCE_NOTIFY_SHOW_ATTENTION = true;
@@ -205,4 +201,14 @@ public class Config {
     public static final String DONATE_URL_ALIPAY = "https://www.xfy9326.top/api/donate/alipay.jpg";
     public static final String DONATE_URL_WECHAT = "https://www.xfy9326.top/api/donate/wechat.png";
     public static final String DONATE_URL_QQ_WALLET = "https://www.xfy9326.top/api/donate/qq_wallet.png";
+
+    public static final String WEAR_OS_SUPPORT_APP_DOWNLOAD_URL = "https://xfy9326.coding.me/NauCourse-DownloadLib/Pages/Watch/Default/";
+
+    public static final String WEAR_MSG_TODAY_COURSE_LIST = "TODAY_COURSE_LIST";
+    public static final String WEAR_MSG_NO_COURSE_DATA = "NO_COURSE_DATA";
+    public static final String WEAR_MSG_TODAY_COURSE_UPDATE_TIME = "TODAY_COURSE_UPDATE_TIME";
+    public static final String WEAR_MSG_SUPPORT_APP_VERSION_CODE = "SUPPORT_APP_VERSION_CODE";
+    public static final String WEAR_MSG_SUPPORT_APP_SUB_VERSION = "SUPPORT_APP_SUB_VERSION";
+    public static final String WEAR_TODAY_COURSE_LIST_PATH = "/todayCourseList";
+    public static final String WEAR_CAPABILITY_UPDATE_TODAY_COURSE_LIST = "phone_update_today_course_list";
 }

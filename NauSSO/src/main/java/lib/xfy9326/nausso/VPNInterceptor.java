@@ -1,5 +1,7 @@
 package lib.xfy9326.nausso;
 
+import androidx.annotation.NonNull;
+
 import java.io.IOException;
 
 import okhttp3.FormBody;
@@ -45,6 +47,7 @@ class VPNInterceptor implements Interceptor {
         this.userPw = userPw;
     }
 
+    @NonNull
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();

@@ -1,5 +1,9 @@
 package tool.xfy9326.naucourse.tools;
 
+import android.content.ContentResolver;
+import android.content.Context;
+import android.net.Uri;
+
 import androidx.annotation.NonNull;
 
 import java.io.BufferedReader;
@@ -56,19 +60,36 @@ public class FileUtils {
                 return null;
             }
             InputStream fileInputStream = new FileInputStream(file);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream));
-            String line;
-            StringBuilder result = new StringBuilder();
-            while ((line = reader.readLine()) != null) {
-                result.append(line).append("\n");
-            }
-            reader.close();
-            fileInputStream.close();
-            return result.toString();
-        } catch (IOException e) {
+            return readFile(fileInputStream);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static String readFile(@NonNull Context context, @NonNull Uri uri) {
+        ContentResolver resolver = context.getContentResolver();
+        try {
+            InputStream inputStream = resolver.openInputStream(uri);
+            if (inputStream != null) {
+                return readFile(inputStream);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static String readFile(@NonNull InputStream inputStream) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        String line;
+        StringBuilder result = new StringBuilder();
+        while ((line = reader.readLine()) != null) {
+            result.append(line).append("\n");
+        }
+        reader.close();
+        inputStream.close();
+        return result.toString();
     }
 
     public static boolean createPath(File file) {

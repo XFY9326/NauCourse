@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="course_list_activity_background">#12153A</color>
+    <color name="course_card_background">#191D57</color>
+</resources>

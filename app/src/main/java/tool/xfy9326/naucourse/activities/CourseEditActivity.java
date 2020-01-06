@@ -244,10 +244,10 @@ public class CourseEditActivity extends AppCompatActivity {
                     ((TextView) findViewById(R.id.textView_course_edit_term)).setText(getString(R.string.course_edit_course_time_detail, year, year + 1, (radioButtonTermOne.isChecked() ? 1 : 2)));
                     needSave = true;
                 } else {
-                    Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.input_error, Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(findViewById(R.id.layout_course_edit_content), R.string.input_error, Snackbar.LENGTH_LONG).show();
                 }
             } else {
-                Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.input_error, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.layout_course_edit_content), R.string.input_error, Snackbar.LENGTH_LONG).show();
             }
         });
         builder.setNegativeButton(android.R.string.cancel, null);
@@ -317,7 +317,7 @@ public class CourseEditActivity extends AppCompatActivity {
                 && course.getCourseDetail() != null
                 && course.getCourseDetail().length > 0) {
             for (CourseDetail courseDetail : course.getCourseDetail()) {
-                if (!(courseDetail.getWeeks() != null
+                if (courseDetail == null || !(courseDetail.getWeeks() != null
                         && courseDetail.getWeekMode() != 0
                         && courseDetail.getLocation() != null
                         && courseDetail.getWeekDay() != 0

@@ -10,11 +10,10 @@ import androidx.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.ConnectionPool;
 import okhttp3.FormBody;
 import okhttp3.Interceptor;
@@ -22,7 +21,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import okhttp3.internal.annotations.EverythingIsNonNull;
 
 /**
  * Created by xfy9326 on 18-2-20.
@@ -57,9 +55,9 @@ public class NauSSOClient {
         main_client = buildSSOClient(context, cookieStore, vpnInterceptor);
 
         OkHttpClient.Builder clientCleanBuilder = new OkHttpClient.Builder();
-        clientCleanBuilder.connectTimeout(8, TimeUnit.SECONDS);
-        clientCleanBuilder.readTimeout(4, TimeUnit.SECONDS);
-        clientCleanBuilder.writeTimeout(4, TimeUnit.SECONDS);
+        clientCleanBuilder.connectTimeout(20, TimeUnit.SECONDS);
+        clientCleanBuilder.readTimeout(10, TimeUnit.SECONDS);
+        clientCleanBuilder.writeTimeout(10, TimeUnit.SECONDS);
         clean_client = clientCleanBuilder.build();
     }
 
@@ -81,9 +79,9 @@ public class NauSSOClient {
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
         clientBuilder.cookieJar(cookieStore);
         clientBuilder.cache(getCache(context));
-        clientBuilder.connectTimeout(15, TimeUnit.SECONDS);
-        clientBuilder.readTimeout(8, TimeUnit.SECONDS);
-        clientBuilder.writeTimeout(8, TimeUnit.SECONDS);
+        clientBuilder.connectTimeout(20, TimeUnit.SECONDS);
+        clientBuilder.readTimeout(10, TimeUnit.SECONDS);
+        clientBuilder.writeTimeout(10, TimeUnit.SECONDS);
         clientBuilder.retryOnConnectionFailure(true);
         clientBuilder.connectionPool(new ConnectionPool(15, 3, TimeUnit.MINUTES));
         if (interceptor != null) {
@@ -201,7 +199,7 @@ public class NauSSOClient {
         builder.url(ALSTU_LOGIN_SSO_URL);
         Response response = main_client.newCall(builder.build()).execute();
         if (response.isSuccessful() && response.body() != null) {
-            ssoContent = response.body().string();
+            ssoContent = Objects.requireNonNull(response.body()).string();
             if (ssoContent.contains("南京审计大学统一身份认证登录")) {
                 needLogin = true;
             }
@@ -231,7 +229,7 @@ public class NauSSOClient {
             builder.url(ALSTU_TICKET_URL + ssoTicket);
             Response responseIndex = main_client.newCall(builder.build()).execute();
             if (responseIndex.isSuccessful() && responseIndex.body() != null) {
-                String data = responseIndex.body().toString();
+                String data = Objects.requireNonNull(responseIndex.body()).toString();
                 responseIndex.close();
                 return checkAlstuLogin(data);
             }
@@ -363,48 +361,29 @@ public class NauSSOClient {
         return getBitmapFromUrl(main_client, URL);
     }
 
-    public void checkServer(final OnAvailableListener availableListener) {
-        Request.Builder requestBuilder = new Request.Builder();
+    public synchronized void checkServer(final OnAvailableListener availableListener) {
+        final Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.url(SSO_SERVER_LOGIN_URL);
-        requestBuilder.header("Cache-Control", "max-age=0");
-        clean_client.newCall(requestBuilder.build()).enqueue(new Callback() {
-            @Override
-            @EverythingIsNonNull
-            public void onFailure(Call call, IOException e) {
-                availableListener.onError();
-            }
-
-            @Override
-            @EverythingIsNonNull
-            public void onResponse(Call call, Response response) {
-                if (response.code() != 200) {
+        new Thread(() -> {
+            Response response1 = null, response2 = null;
+            try {
+                response1 = clean_client.newCall(requestBuilder.build()).execute();
+                requestBuilder.url(JWC_SERVER_URL);
+                response2 = clean_client.newCall(requestBuilder.build()).execute();
+                if (!response1.isSuccessful() || !response2.isSuccessful()) {
                     availableListener.onError();
-                } else {
-                    if (isVPNEnabled()) {
-                        requestBuilder.url(VPNMethod.VPN_SERVER);
-                    } else {
-                        requestBuilder.url(JWC_SERVER_URL);
-                    }
-                    clean_client.newCall(requestBuilder.build()).enqueue(new Callback() {
-                        @Override
-                        @EverythingIsNonNull
-                        public void onFailure(Call call, IOException e) {
-                            availableListener.onError();
-                        }
-
-                        @Override
-                        @EverythingIsNonNull
-                        public void onResponse(Call call, Response response) {
-                            if (response.code() != 200) {
-                                availableListener.onError();
-                            }
-                            response.close();
-                        }
-                    });
                 }
-                response.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (response1 != null) {
+                    response1.close();
+                }
+                if (response2 != null) {
+                    response2.close();
+                }
             }
-        });
+        }).start();
     }
 
     public interface OnAvailableListener {

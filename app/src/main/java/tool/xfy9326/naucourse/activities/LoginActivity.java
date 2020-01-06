@@ -16,6 +16,8 @@ import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.concurrent.ExecutorService;
+
 import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
@@ -49,7 +51,9 @@ public class LoginActivity extends AppCompatActivity {
         viewSet();
         BaseMethod.showNewVersionInfo(this, true);
         updateCheck();
-        NetMethod.checkServerAvailable(LoginActivity.this);
+        if (savedInstanceState == null) {
+            NetMethod.checkServerAvailable(LoginActivity.this);
+        }
     }
 
     @Override
@@ -124,7 +128,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login(final NauSSOClient nauSSOClient, final String id, final String pw) {
-        new Thread(() -> {
+        ExecutorService executorService = BaseMethod.getApp(LoginActivity.this).getExecutorService();
+        executorService.submit(() -> {
             try {
                 if (nauSSOClient.login(id, pw)) {
                     nauSSOClient.alstuLogin(id, pw);
@@ -160,7 +165,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
             }
-        }).start();
+        });
     }
 
     private void showLoginAttentionDialog() {

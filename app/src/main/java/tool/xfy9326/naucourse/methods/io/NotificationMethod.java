@@ -7,10 +7,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.preference.PreferenceManager;
 
 import tool.xfy9326.naucourse.Config;
@@ -55,31 +57,35 @@ public class NotificationMethod {
      */
     @SuppressWarnings("SameParameterValue")
     private static void showNotification(Context context, int code, String title, String text) {
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (notificationManager != null) {
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
 
-            createNotificationChannel(context, notificationManager);
+        createNotificationChannel(context, notificationManager);
 
-            builder.setSmallIcon(R.mipmap.ic_launcher_foreground);
-            builder.setContentTitle(title);
-            builder.setContentText(text);
-            builder.setAutoCancel(true);
+        builder.setSmallIcon(R.mipmap.ic_launcher_foreground);
+        builder.setContentTitle(title);
+        builder.setContentText(text);
+        builder.setAutoCancel(true);
+        builder.setDefaults(NotificationCompat.DEFAULT_ALL);
+        builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        builder.setCategory(NotificationCompat.CATEGORY_MESSAGE);
+        builder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                R.mipmap.ic_launcher));
 
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, ACTIVITY_REQUEST_CODE, new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra(Config.INTENT_VIEW_PAGER_POSITION, Config.VIEWPAGER_TABLE_PAGE), PendingIntent.FLAG_UPDATE_CURRENT);
-            builder.setContentIntent(pendingIntent);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, ACTIVITY_REQUEST_CODE, new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra(Config.INTENT_VIEW_PAGER_POSITION, Config.VIEWPAGER_TABLE_PAGE), PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
 
-            notificationManager.notify(code, builder.build());
-        }
+        notificationManager.notify(code, builder.build());
     }
 
     /**
      * 设置通知渠道
      *
      * @param context             Context
-     * @param notificationManager NotificationManager
+     * @param notificationManager NotificationManagerCompat
      */
-    private static void createNotificationChannel(@NonNull Context context, @NonNull NotificationManager notificationManager) {
+    private static void createNotificationChannel(@NonNull Context context, @NonNull NotificationManagerCompat notificationManager) {
         if (Build.VERSION.SDK_INT >= 26) {
             NotificationChannel notificationChannel = notificationManager.getNotificationChannel(CHANNEL_ID);
             if (notificationChannel == null) {
@@ -89,7 +95,6 @@ public class NotificationMethod {
                 notificationChannel.setShowBadge(true);
                 notificationChannel.enableLights(true);
                 notificationChannel.enableVibration(true);
-                notificationChannel.setShowBadge(false);
                 notificationManager.createNotificationChannel(notificationChannel);
             }
         }

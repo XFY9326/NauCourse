@@ -13,6 +13,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import lib.xfy9326.nausso.NauSSOClient;
@@ -51,7 +52,7 @@ public class TableNextMethod extends BaseNetMethod {
         ArrayList<Course> courseList = new ArrayList<>();
         if (document != null) {
             boolean startCourse = false;
-            Elements tags = document.body().getElementsByTag("tr");
+            Elements tags = document.body().getElementById("content").getElementsByTag("tr");
             for (Element element : tags) {
                 String courseStr = element.text();
                 Elements detailElements = element.getElementsByTag("td");
@@ -71,16 +72,16 @@ public class TableNextMethod extends BaseNetMethod {
                     //可能会出问题的解决课程名称空格的方式
                     int i = 3;
                     for (; !data[i].contains("."); i++) {
-                        data[2] += data[i];
+                        data[2] += " " + data[i];
                     }
-                    course.setCourseName(data[2]);
+                    course.setCourseName(data[2].trim());
                     //无教学班信息
                     course.setCourseScore(data[i]);
                     course.setCourseCombinedClass(data[i + 1]);
                     course.setCourseType(data[i + 3]);
                     course.setCourseTeacher(data[i + 4]);
 
-                    CourseDetail[] courseDetails = getCourseDetailList(data, (data.length - 1 - 8) / 2);
+                    CourseDetail[] courseDetails = getCourseDetailList(Arrays.copyOfRange(data, i + 5, data.length - 1), (data.length - 1 - i - 5) / 2);
                     if (courseDetails == null) {
                         courseList = null;
                         continue;
@@ -111,17 +112,17 @@ public class TableNextMethod extends BaseNetMethod {
         int detailCount = 0;
         CourseDetail[] courseDetailList = new CourseDetail[detailLength];
         CourseDetail courseDetail = null;
-        for (int i = 8; i < data.length - 1; i++) {
+        for (String datum : data) {
             if (courseDetail == null) {
                 courseDetail = new CourseDetail();
             }
-            if (data[i].contains("上课地点：")) {
-                if (data[i].length() > 5) {
-                    courseDetail.setLocation(data[i].substring(5));
+            if (datum.contains("上课地点")) {
+                if (datum.length() > 5) {
+                    courseDetail.setLocation(datum.substring(5));
                 }
-            } else if (data[i].contains("上课时间：")) {
-                if (data[i].length() > 5) {
-                    String mainTimeStr = data[i].substring(5).trim();
+            } else if (datum.contains("上课时间")) {
+                if (datum.length() > 5) {
+                    String mainTimeStr = datum.substring(5).trim();
                     if (mainTimeStr.contains("单")) {
                         courseDetail.setWeekMode(Config.COURSE_DETAIL_WEEKMODE_SINGLE);
 

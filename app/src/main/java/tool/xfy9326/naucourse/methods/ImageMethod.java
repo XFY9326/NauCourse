@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Environment;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -19,6 +18,7 @@ import java.io.IOException;
 import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.methods.io.DataPath;
 import tool.xfy9326.naucourse.tools.FileUtils;
 
 public class ImageMethod {
@@ -45,7 +45,7 @@ public class ImageMethod {
         if (path != null) {
             return path.getAbsolutePath() + File.separator + "CourseTableBackgroundImage";
         } else {
-            return Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "CourseTableBackgroundImage";
+            return DataPath.getInstance(context) + File.separator + "CourseTableBackgroundImage";
         }
     }
 

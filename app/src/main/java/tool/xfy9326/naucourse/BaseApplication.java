@@ -13,7 +13,6 @@ import java.util.concurrent.Executors;
 
 import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.activities.CourseActivity;
-import tool.xfy9326.naucourse.activities.CourseSearchActivity;
 import tool.xfy9326.naucourse.activities.InfoDetailActivity;
 import tool.xfy9326.naucourse.activities.async.ExamActivity;
 import tool.xfy9326.naucourse.activities.async.LevelExamActivity;
@@ -38,7 +37,6 @@ public class BaseApplication extends Application {
     private WeakReference<CourseActivity> courseActivity;
     private WeakReference<SchoolCalendarActivity> schoolCalendarActivity;
     private WeakReference<SuspendCourseActivity> suspendCourseActivity;
-    private WeakReference<CourseSearchActivity> courseSearchActivity;
 
     @Override
     public void onCreate() {
@@ -135,13 +133,5 @@ public class BaseApplication extends Application {
 
     public ExecutorService getExecutorService() {
         return executorService;
-    }
-
-    public CourseSearchActivity getCourseSearchActivity() {
-        return courseSearchActivity.get();
-    }
-
-    public void setCourseSearchActivity(CourseSearchActivity courseSearchActivity) {
-        this.courseSearchActivity = new WeakReference<>(courseSearchActivity);
     }
 }

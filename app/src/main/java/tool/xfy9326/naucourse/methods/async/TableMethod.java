@@ -107,9 +107,9 @@ public class TableMethod extends BaseInfoMethod<ArrayList<Course>> {
                 if (info.length >= 7) {
                     course.setCourseId(info[0]);
                     for (int i = 2; i < info.length - 5; i++) {
-                        info[1] += info[i];
+                        info[1] += " " + info[i];
                     }
-                    course.setCourseName(info[1]);
+                    course.setCourseName(info[1].trim());
                     course.setCourseClass(info[info.length - 5]);
                     course.setCourseScore(info[info.length - 4]);
                     course.setCourseCombinedClass(info[info.length - 3]);

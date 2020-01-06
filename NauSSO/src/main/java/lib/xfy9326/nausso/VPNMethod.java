@@ -8,7 +8,6 @@ import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import okhttp3.internal.Util;
 import okio.Buffer;
 import okio.BufferedSource;
 
@@ -70,10 +69,10 @@ public class VPNMethod {
             MediaType contentType = responseBody.contentType();
             BufferedSource source = responseBody.source();
             source.request(Long.MAX_VALUE);
-            Buffer buffer = source.buffer();
-            Charset charset = Util.bomAwareCharset(source, contentType != null ? contentType.charset(StandardCharsets.UTF_8) : StandardCharsets.UTF_8);
+            Buffer buffer = source.getBuffer();
+            Charset charSet = contentType != null ? contentType.charset(StandardCharsets.UTF_8) : StandardCharsets.UTF_8;
             Buffer bufferClone = buffer.clone();
-            String result = bufferClone.readString(charset);
+            String result = bufferClone.readString(charSet != null ? charSet : StandardCharsets.UTF_8);
             bufferClone.close();
             return result;
         }

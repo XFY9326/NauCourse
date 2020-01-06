@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,15 +16,9 @@ import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
 import lib.xfy9326.nausso.NauSSOClient;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.methods.BaseMethod;
@@ -33,7 +28,7 @@ import tool.xfy9326.naucourse.methods.BaseMethod;
  */
 
 public class NetMethod {
-    private static final ReentrantLock tryConnectLock = new ReentrantLock();
+    private static final ReentrantLock TRY_CONNECT_LOCK = new ReentrantLock();
     public static boolean showConnectErrorOnce = false;
     private static boolean showLoginErrorOnce = false;
 
@@ -58,64 +53,6 @@ public class NetMethod {
         if (client != null) {
             return client.loadRawUrl(url, null);
         }
-        return null;
-    }
-
-    public static String loadUrl(OkHttpClient client, @NonNull String url, HashMap<String, String> header) throws IOException {
-        Request.Builder requestBuilder = new Request.Builder();
-        requestBuilder.url(url);
-        if (header != null) {
-            for (String key : header.keySet()) {
-                String value = header.get(key);
-                requestBuilder.header(key, value == null ? "" : value);
-            }
-        }
-        Response response = client.newCall(requestBuilder.build()).execute();
-        if (response.isSuccessful()) {
-            ResponseBody responseBody = response.body();
-            if (responseBody != null) {
-                String result = responseBody.string();
-                response.close();
-                return result;
-            }
-        }
-        response.close();
-        return null;
-    }
-
-    /**
-     * POST一个网页
-     *
-     * @param client Client
-     * @param url    网页URL
-     * @param form   POST Form
-     * @param header Header
-     * @return 页面内容
-     * @throws IOException 网页获取错误
-     */
-    public static String postUrl(@NonNull OkHttpClient client, @NonNull String url, @NonNull HashMap<String, String> form, @NonNull HashMap<String, String> header) throws IOException {
-        FormBody.Builder formBuilder = new FormBody.Builder();
-        for (String key : form.keySet()) {
-            String value = form.get(key);
-            formBuilder.add(key, value == null ? "" : value);
-        }
-        Request.Builder requestBuilder = new Request.Builder();
-        requestBuilder.url(url);
-        requestBuilder.post(formBuilder.build());
-        for (String key : header.keySet()) {
-            String value = header.get(key);
-            requestBuilder.header(key, value == null ? "" : value);
-        }
-        Response response = client.newCall(requestBuilder.build()).execute();
-        if (response.isSuccessful()) {
-            ResponseBody responseBody = response.body();
-            if (responseBody != null) {
-                String result = responseBody.string();
-                response.close();
-                return result;
-            }
-        }
-        response.close();
         return null;
     }
 
@@ -149,7 +86,7 @@ public class NetMethod {
                     data = BaseMethod.getApp(context).getClient().getData(url);
                     break;
                 case Config.RE_LOGIN_TRYING:
-                    while (LoginMethod.reLoginLock.isLocked()) {
+                    while (LoginMethod.RE_LOGIN_LOCK.isLocked()) {
                         Thread.sleep(500);
                     }
                     return loadUrlFromLoginClient(context, url, false);
@@ -225,10 +162,18 @@ public class NetMethod {
         if (context != null) {
             ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             if (connectivityManager != null) {
-                NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-                if (networkInfo != null) {
-                    return networkInfo.isConnected();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    NetworkCapabilities networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
+                    if (networkCapabilities != null) {
+                        return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+                    }
+                } else {
+                    NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+                    if (networkInfo != null) {
+                        return networkInfo.isConnected();
+                    }
                 }
+
             }
         }
         return false;
@@ -244,7 +189,7 @@ public class NetMethod {
         if (context != null) {
             ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             if (connectivityManager != null) {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     NetworkCapabilities networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
                     if (networkCapabilities != null) {
                         return networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
@@ -289,14 +234,14 @@ public class NetMethod {
     }
 
     private static void checkServerAvailable(Activity activity, NauSSOClient.OnAvailableListener availableListener) {
-        if (tryConnectLock.tryLock()) {
+        if (TRY_CONNECT_LOCK.tryLock()) {
             try {
                 NauSSOClient client = BaseMethod.getApp(activity).getClient();
                 if (client != null) {
                     client.checkServer(availableListener);
                 }
             } finally {
-                tryConnectLock.unlock();
+                TRY_CONNECT_LOCK.unlock();
             }
         }
     }

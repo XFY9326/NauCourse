@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.methods.io;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
@@ -184,8 +185,17 @@ public class DataMethod {
     }
 
     static ArrayList<Course> readExtraTableData(String path) {
-        ArrayList<Course> o = null;
         String content = FileUtils.readFile(path);
+        return readExtraTableDataFromContent(content);
+    }
+
+    static ArrayList<Course> readExtraTableData(Context context, Uri uri) {
+        String content = FileUtils.readFile(context, uri);
+        return readExtraTableDataFromContent(content);
+    }
+
+    private static ArrayList<Course> readExtraTableDataFromContent(String content) {
+        ArrayList<Course> o = null;
         Type type = new TypeToken<ArrayList<Course>>() {
         }.getType();
         if (content != null) {

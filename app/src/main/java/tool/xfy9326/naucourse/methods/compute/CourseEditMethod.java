@@ -1,7 +1,5 @@
 package tool.xfy9326.naucourse.methods.compute;
 
-import android.content.Context;
-
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
@@ -11,52 +9,8 @@ import java.util.Iterator;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.beans.course.Course;
 import tool.xfy9326.naucourse.beans.course.CourseDetail;
-import tool.xfy9326.naucourse.beans.course.CourseSearchDetail;
-import tool.xfy9326.naucourse.methods.async.CourseSearchMethod;
-import tool.xfy9326.naucourse.methods.async.TableMethod;
-import tool.xfy9326.naucourse.methods.io.DataMethod;
 
 public class CourseEditMethod {
-
-    /**
-     * 添加并保存搜索到的课程
-     *
-     * @param context            Context
-     * @param termCheck          新学期的课程强制替换(以最新的学期为准，课表中只会存在一种学期的课程)
-     * @param courseSearchDetail 搜索课程的信息
-     * @return 添加结果
-     */
-    public static AddSearchCourseResult addSearchCourse(Context context, boolean termCheck, CourseSearchDetail courseSearchDetail) {
-        AddSearchCourseResult addSearchCourseResult = new AddSearchCourseResult();
-        ArrayList<Course> courseSearchArrayList = new ArrayList<>();
-        courseSearchArrayList.add(CourseSearchMethod.convertToCourse(context, courseSearchDetail));
-        ArrayList<Course> courseArrayList = DataMethod.getOfflineTableData(context);
-        if (courseArrayList == null) {
-            courseArrayList = new ArrayList<>();
-        }
-        courseArrayList = combineCourseList(courseSearchArrayList, courseArrayList, termCheck, true, true);
-        boolean detailTimeCheck = true;
-        for (Course course : courseArrayList) {
-            if (!checkCourseDetail(course.getCourseDetail())) {
-                detailTimeCheck = false;
-                break;
-            }
-        }
-        CourseCheckResult courseCheckResult;
-        if (detailTimeCheck) {
-            courseCheckResult = checkCourseList(courseArrayList);
-        } else {
-            courseCheckResult = new CourseCheckResult();
-            courseCheckResult.setHasError();
-        }
-        if (!courseCheckResult.isHasError()) {
-            addSearchCourseResult.setSaveSuccess(DataMethod.saveOfflineData(context, courseArrayList, TableMethod.FILE_NAME, false, TableMethod.IS_ENCRYPT));
-        }
-        addSearchCourseResult.setCourseCheckResult(courseCheckResult);
-        addSearchCourseResult.setAddSuccess(!courseCheckResult.isHasError());
-
-        return addSearchCourseResult;
-    }
 
     /**
      * 课程信息列表按照ID拼接
@@ -346,41 +300,6 @@ public class CourseEditMethod {
             return true;
         }
         return false;
-    }
-
-    public static class AddSearchCourseResult {
-        private CourseCheckResult courseCheckResult;
-        private boolean saveSuccess;
-        private boolean addSuccess;
-
-        AddSearchCourseResult() {
-            this.saveSuccess = false;
-            this.addSuccess = false;
-        }
-
-        public CourseCheckResult getCourseCheckResult() {
-            return courseCheckResult;
-        }
-
-        void setCourseCheckResult(CourseCheckResult courseCheckResult) {
-            this.courseCheckResult = courseCheckResult;
-        }
-
-        public boolean isSaveSuccess() {
-            return saveSuccess;
-        }
-
-        void setSaveSuccess(boolean saveSuccess) {
-            this.saveSuccess = saveSuccess;
-        }
-
-        public boolean isAddSuccess() {
-            return addSuccess;
-        }
-
-        void setAddSuccess(boolean addSuccess) {
-            this.addSuccess = addSuccess;
-        }
     }
 
     public static class CourseCheckResult {

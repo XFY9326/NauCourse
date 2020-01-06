@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:windowBackground">@color/course_list_activity_background</item>
+    </style>
+</resources>

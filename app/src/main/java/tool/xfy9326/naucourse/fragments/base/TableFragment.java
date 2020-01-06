@@ -311,7 +311,7 @@ public class TableFragment extends Fragment {
                     nextCourse = new NextCourse();
                     homeFragment.setNextCourse(nextCourse);
                 } else if (courseMethod != null) {
-                    nextCourse = courseMethod.getNextClass(lastSetWeekNumber);
+                    nextCourse = courseMethod.getNextCourse(lastSetWeekNumber);
                     nextCourse.setInVacation(false);
                     homeFragment.setNextCourse(nextCourse);
                 }
@@ -392,8 +392,8 @@ public class TableFragment extends Fragment {
         if (getActivity() != null) {
             LayoutInflater layoutInflater = getLayoutInflater();
             View viewDialog = layoutInflater.inflate(R.layout.dialog_course_card, getActivity().findViewById(R.id.layout_course_card));
-            Button button_share = viewDialog.findViewById(R.id.button_dialog_course_card_share);
-            button_share.setOnClickListener(view -> {
+            Button buttonShare = viewDialog.findViewById(R.id.button_dialog_course_card_share);
+            buttonShare.setOnClickListener(view -> {
                 if (isAdded() && getActivity() != null) {
                     ShareMethod.shareCourse(getActivity(), course);
                 }

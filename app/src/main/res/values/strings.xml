@@ -256,7 +256,7 @@
     <string name="term_set_success">学期修改成功！</string>
     <string name="term_set_failed">学期周数错误，过长或过短！</string>
     <string name="course_table_reloading">正在重新加载课表中… …</string>
-    <string name="school_net_no_connection">学校网站无法连接！</string>
+    <string name="school_net_no_connection">与学校网站连接时出现错误！</string>
     <string name="not_publish">未发布</string>
     <string name="alstu_system">奥兰系统</string>
     <string name="alstu_msg">奥兰通知</string>
@@ -296,22 +296,7 @@
     <string name="school_calendar_share_error">校历分享失败！</string>
     <string name="share_school_calendar">分享校历</string>
     <string name="save_failed">保存失败</string>
-    <string name="course_search">课程搜索</string>
-    <string name="course_search_college">开课学院：%1$s</string>
-    <string name="course_search_time">上课时间：%1$s</string>
-    <string name="course_search_person">上课人数：%1$d</string>
-    <string name="import_course">导入该课程</string>
-    <string name="search_type">检索类型：</string>
-    <string name="search">搜索</string>
-    <string name="search_empty">搜索值为空！</string>
-    <string name="search_value_error">搜索值错误！</string>
-    <string name="search_other_value">其他搜索：</string>
-    <string name="search_use_full_name_warning">请使用完整名称进行该类型的搜索！</string>
-    <string name="search_no_result">搜索结果为空！</string>
-    <string name="import_success">导入成功！</string>
-    <string name="empty_search_data">暂无搜索结果\n请点击搜索按钮开始搜索</string>
     <string name="empty_list">列表为空</string>
-    <string name="course_search_result_title">◈ 搜索结果</string>
     <string name="random_course_color">随机设置课程颜色</string>
     <string name="random_course_color_success">随机设置颜色成功！</string>
     <string name="image_replace">[请点击前往网页查看图片]</string>
@@ -337,7 +322,6 @@
     <string name="unlock_already_success">你已经解锁成功了！</string>
     <string name="unlock_attention">该功能不对外开放，若要开启，出现任何问题开发者无需负责！</string>
     <string name="download_vpn_file">校园VPN模式下，点击链接下载文件时需要登录VPN，之后再次点击链接即可下载！</string>
-    <string name="click_to_add_course">点击当前学期搜索的课程可以尝试导入</string>
     <string name="stu_photo">个人证件照</string>
     <string name="stu_photo_not_found">暂无个人证件照数据\n请刷新个人页面后重试</string>
     <string name="share_stu_photo">分享个人证件照：</string>
@@ -374,8 +358,14 @@
     <string name="clean_temp_and_exit_sum">清空网络数据缓存可以解决一些问题</string>
     <string name="class_info_empty">暂无课程数据\n请登录或添加数据后刷新重试</string>
     <string name="not_this_week">[非本周]</string>
+    <string name="wear_os">Wear OS支持</string>
+    <string name="download_wear_os_support_app">下载Wear OS支持程序</string>
+    <string name="download_wear_os_support_app_sum">请手动通过ADB安装到Wear OS的手表上</string>
+    <string name="download_wear_os_support_app_attention">请自行通过手表可用的第三方应用安装的方式，将Apk安装到手表上。\n\n由于手表App无法自动更新，请尽量下载最新版本的安装包！</string>
+    <string name="transfer_data_to_watch_error">向Wear OS设备传输数据时出错！</string>
+    <string name="need_set_course_term">当前所有课程并非设置学期的课程，请手动设置课程学期！</string>
 
-    <string name="new_version_info_content">欢迎使用NAU课程表\n\n近期校园网络波动较大，如果无法刷新信息可以尝试连接校园内网。\n\n反馈QQ群：704668624\n\n注意：2020年早些时候将不再更新支持系统版本低于安卓5.0的设备！</string>
+    <string name="new_version_info_content">欢迎使用NAU课程表\n\n如果出现网络问题，一般是学校网络连接错误，可以尝试更换网络。\n\n由于课程搜索网站接口变化，故不再提供支持。\n\n反馈QQ群：704668624</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>
