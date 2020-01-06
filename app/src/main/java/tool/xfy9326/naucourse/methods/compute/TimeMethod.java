@@ -29,7 +29,7 @@ public class TimeMethod {
     private static final SimpleDateFormat SDF_YMD_HM = new SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.CHINA);
     private static String[] weekArray = null;
 
-    public static synchronized String getDateSDF(long time) {
+    static synchronized String getDateSDF(long time) {
         return SDF_YMD.format(new Date(time));
     }
 
@@ -45,7 +45,7 @@ public class TimeMethod {
         return SDF_YMD.format(date);
     }
 
-    public static long getInfoDateLong(String date) {
+    static long getInfoDateLong(String date) {
         if (date != null) {
             date = date.trim();
             try {

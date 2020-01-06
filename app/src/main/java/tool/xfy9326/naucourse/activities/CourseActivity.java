@@ -1,6 +1,5 @@
 package tool.xfy9326.naucourse.activities;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -535,21 +534,34 @@ public class CourseActivity extends AppCompatActivity {
         } else {
             Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.add_success, Snackbar.LENGTH_SHORT).show();
         }
+
+        boolean needTermSet = true;
+        String nowTerm = TimeMethod.getNowShowTerm(this);
+        for (Course course : courseArrayList) {
+            if (course.getCourseTerm().equals(nowTerm)) {
+                needTermSet = false;
+                break;
+            }
+        }
+        if (needTermSet) {
+            Snackbar.make(findViewById(R.id.layout_course_manage_content), R.string.need_set_course_term, Snackbar.LENGTH_LONG)
+                    .setActionTextColor(Color.RED)
+                    .setAction(R.string.course_term_set, v -> setTermDate())
+                    .show();
+        }
     }
 
     private void setTermDate() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         customStartTermDate = sharedPreferences.getString(Config.PREFERENCE_CUSTOM_TERM_START_DATE, null);
         customEndTermDate = sharedPreferences.getString(Config.PREFERENCE_CUSTOM_TERM_END_DATE, null);
-        showTermSetDialog(CourseActivity.this);
+        showTermSetDialog();
     }
 
-    private void showTermSetDialog(final Activity activity) {
+    private void showTermSetDialog() {
         final Calendar calendarStart = Calendar.getInstance(Locale.CHINA);
         final Calendar calendarEnd = Calendar.getInstance(Locale.CHINA);
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
 
-        final SchoolTime schoolTime = (SchoolTime) DataMethod.getOfflineData(activity, SchoolTime.class, SchoolTimeMethod.FILE_NAME, SchoolTimeMethod.IS_ENCRYPT);
+        final SchoolTime schoolTime = (SchoolTime) DataMethod.getOfflineData(this, SchoolTime.class, SchoolTimeMethod.FILE_NAME, SchoolTimeMethod.IS_ENCRYPT);
         if (schoolTime != null) {
             try {
                 calendarStart.setTime(TimeMethod.parseDateSDF(schoolTime.getStartTime()));
@@ -571,14 +583,14 @@ public class CourseActivity extends AppCompatActivity {
             customEndTermDate = TimeMethod.formatDateSDF(calendarEnd.getTime());
         }
 
-        LayoutInflater layoutInflater = activity.getLayoutInflater();
-        View view = layoutInflater.inflate(R.layout.dialog_term_time_set, activity.findViewById(R.id.layout_dialog_term_time_set));
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View view = layoutInflater.inflate(R.layout.dialog_term_time_set, findViewById(R.id.layout_dialog_term_time_set));
 
         TextView textViewStart = view.findViewById(R.id.textView_custom_start_date);
-        textViewStart.setText(activity.getString(R.string.custom_term_start_date, customStartTermDate));
+        textViewStart.setText(getString(R.string.custom_term_start_date, customStartTermDate));
 
         TextView textViewEnd = view.findViewById(R.id.textView_custom_end_date);
-        textViewEnd.setText(activity.getString(R.string.custom_term_end_date, customEndTermDate));
+        textViewEnd.setText(getString(R.string.custom_term_end_date, customEndTermDate));
 
         Button buttonStart = view.findViewById(R.id.button_custom_start_date);
         buttonStart.setOnClickListener(v -> {
@@ -587,7 +599,7 @@ public class CourseActivity extends AppCompatActivity {
                     termSetDialog.cancel();
                 }
             }
-            showDatePickDialog(activity, true, calendarStart.get(Calendar.YEAR), calendarStart.get(Calendar.MONTH), calendarStart.get(Calendar.DAY_OF_MONTH));
+            showDatePickDialog(true, calendarStart.get(Calendar.YEAR), calendarStart.get(Calendar.MONTH), calendarStart.get(Calendar.DAY_OF_MONTH));
         });
 
         Button buttonEnd = view.findViewById(R.id.button_custom_end_date);
@@ -597,10 +609,10 @@ public class CourseActivity extends AppCompatActivity {
                     termSetDialog.cancel();
                 }
             }
-            showDatePickDialog(activity, false, calendarEnd.get(Calendar.YEAR), calendarEnd.get(Calendar.MONTH), calendarEnd.get(Calendar.DAY_OF_MONTH));
+            showDatePickDialog(false, calendarEnd.get(Calendar.YEAR), calendarEnd.get(Calendar.MONTH), calendarEnd.get(Calendar.DAY_OF_MONTH));
         });
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.custom_term);
         builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
             if (customStartTermDate != null && customEndTermDate != null) {
@@ -636,8 +648,8 @@ public class CourseActivity extends AppCompatActivity {
         termSetDialog = builder.show();
     }
 
-    private void showDatePickDialog(Activity activity, final boolean isStartDate, int year, int month, int day) {
-        final DatePickerDialog pickerDialog = new DatePickerDialog(activity, null, year, month, day);
+    private void showDatePickDialog(final boolean isStartDate, int year, int month, int day) {
+        final DatePickerDialog pickerDialog = new DatePickerDialog(this, null, year, month, day);
         pickerDialog.setCancelable(false);
         pickerDialog.setCanceledOnTouchOutside(false);
         pickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(android.R.string.yes), (dialog, which) -> {
@@ -649,9 +661,9 @@ public class CourseActivity extends AppCompatActivity {
             } else {
                 customEndTermDate = getDate;
             }
-            showTermSetDialog(CourseActivity.this);
+            showTermSetDialog();
         });
-        pickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), (dialog, which) -> showTermSetDialog(CourseActivity.this));
+        pickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), (dialog, which) -> showTermSetDialog());
         pickerDialog.show();
     }
 
