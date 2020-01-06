@@ -66,7 +66,6 @@
     <string name="on_start_data_get">数据自动更新</string>
     <string name="on_start_data_get_sum">在联网情况下每次开启时自动更新数据</string>
     <string name="web" translatable="false">https://xfy9326.github.io/NauCourse/</string>
-    <string name="download_web" translatable="false">https://xfy9326.gitee.io/naucourse-downloadlib/</string>
     <string name="jw_system_info">教务系统通知</string>
     <string name="jwc">教务委员会</string>
     <string name="xw">学务委员会</string>
@@ -365,7 +364,7 @@
     <string name="download_wear_os_support_app_attention">请自行通过手表可用的第三方应用安装的方式，将Apk安装到手表上。\n\n由于手表App无法自动更新，请尽量下载最新版本的安装包！</string>
     <string name="transfer_data_to_watch_error">向Wear OS设备传输数据时出错！</string>
 
-    <string name="new_version_info_content">欢迎使用NAU课程表\n\n由于课程搜索网站接口变化，故不再提供支持。\n\n反馈QQ群：704668624</string>
+    <string name="new_version_info_content">欢迎使用NAU课程表\n\n如果出现网络问题，一般是学校网络连接错误，可以尝试重启应用。\n\n由于课程搜索网站接口变化，故不再提供支持。\n\n反馈QQ群：704668624</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>

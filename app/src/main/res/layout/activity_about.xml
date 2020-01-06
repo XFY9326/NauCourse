@@ -136,17 +136,10 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:autoLink="web"
-                android:gravity="center"
-                android:text="@string/web" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:autoLink="web"
                 android:gravity="center"
-                android:text="@string/download_web" />
+                android:text="@string/web" />
 
         </LinearLayout>
 
