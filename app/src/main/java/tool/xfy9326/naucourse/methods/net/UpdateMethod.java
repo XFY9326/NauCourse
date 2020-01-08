@@ -88,6 +88,11 @@ public class UpdateMethod {
                                 if (!forceUpdate) {
                                     builder.setNegativeButton(R.string.update_later, null);
                                     builder.setNeutralButton(R.string.version_no_mention, (dialog, which) -> sharedPreferences.edit().putString(Config.PREFERENCE_LAST_CHECK_VERSION, versionNew).apply());
+                                } else {
+                                    builder.setNeutralButton(R.string.feedback_platform, (dialog, which) -> {
+                                        NetMethod.viewUrlInBrowser(activity, Config.APP_FEEDBACK_URL);
+                                        activity.finish();
+                                    });
                                 }
 
                                 builder.setView(view);

@@ -1,7 +1,7 @@
 ext {
-    versionCode = 66
+    versionCode = 67
     subVersion = 0
-    versionName = "6.8"
+    versionName = "6.9"
 
     wearVersionCode = 1
     wearVersionName = "1.0"

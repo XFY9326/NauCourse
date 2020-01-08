@@ -205,6 +205,8 @@ public class Config {
 
     public static final String APP_DOWNLOAD_LIB_URL = "https://xfy9326.coding.me/NauCourse-DownloadLib/";
 
+    public static final String APP_FEEDBACK_URL = "https://support.qq.com/products/114856";
+
     public static final String WEAR_OS_SUPPORT_APP_DOWNLOAD_URL = "https://xfy9326.coding.me/NauCourse-DownloadLib/Pages/Watch/Default/";
 
     public static final String WEAR_MSG_TODAY_COURSE_LIST = "TODAY_COURSE_LIST";
