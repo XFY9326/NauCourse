@@ -128,6 +128,7 @@ public class Config {
     public static final String PREFERENCE_CLEAN_TEMP_AND_EXIT = "CLEAN_TEMP_AND_EXIT";
     public static final String PREFERENCE_WEAR_OS_SUPPORT_APP = "WEAR_OS_SUPPORT_APP";
     public static final String PREFERENCE_APP_DOWNLOAD_LIB = "APP_DOWNLOAD_LIB";
+    public static final String PREFERENCE_STUDENT_CARD_MONEY = "STUDENT_CARD_MONEY";
 
     public static final String PREFERENCE_INFO_CHANNEL_SELECTED_JWC_SYSTEM = "INFO_CHANNEL_SELECTED_JWC_SYSTEM";
     public static final String PREFERENCE_INFO_CHANNEL_SELECTED_JW = "INFO_CHANNEL_SELECTED_JW";

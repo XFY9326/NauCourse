@@ -37,6 +37,7 @@ import tool.xfy9326.naucourse.activities.async.SuspendCourseActivity;
 import tool.xfy9326.naucourse.activities.settings.CourseSettingsActivity;
 import tool.xfy9326.naucourse.activities.settings.GlobalSettingsActivity;
 import tool.xfy9326.naucourse.activities.settings.UpdateSettingsActivity;
+import tool.xfy9326.naucourse.asyncTasks.CardMoneyAsync;
 import tool.xfy9326.naucourse.asyncTasks.StudentAsync;
 import tool.xfy9326.naucourse.beans.SchoolTime;
 import tool.xfy9326.naucourse.beans.student.StudentInfo;
@@ -65,6 +66,7 @@ public class PersonFragment extends Fragment {
     @Nullable
     private StudentLearnProcess studentLearnProcess;
     private Dialog loadingDialog;
+    private SharedPreferences sharedPreferences;
 
     public PersonFragment() {
         this.view = null;
@@ -83,6 +85,7 @@ public class PersonFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         this.context = context;
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         super.onAttach(context);
     }
 
@@ -239,13 +242,17 @@ public class PersonFragment extends Fragment {
 
     private void unlockFunction() {
         if (isAdded() && view != null && context != null) {
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-            if (BuildConfig.DEBUG || sharedPreferences.getBoolean(Config.PREFERENCE_SHOW_HIDDEN_FUNCTION, Config.DEFAULT_PREFERENCE_SHOW_HIDDEN_FUNCTION)) {
+            if (canUnlockFunction()) {
                 view.findViewById(R.id.layout_fragment_function_list2).setVisibility(View.VISIBLE);
                 view.findViewById(R.id.cardView_score_search).setVisibility(View.VISIBLE);
                 view.findViewById(R.id.cardView_exam).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.textView_stdMoney).setVisibility(View.VISIBLE);
             }
         }
+    }
+
+    private boolean canUnlockFunction() {
+        return BuildConfig.DEBUG || sharedPreferences.getBoolean(Config.PREFERENCE_SHOW_HIDDEN_FUNCTION, Config.DEFAULT_PREFERENCE_SHOW_HIDDEN_FUNCTION);
     }
 
     private void loginOut(final Context context) {
@@ -300,6 +307,20 @@ public class PersonFragment extends Fragment {
         }
     }
 
+    public void moneyTextSet(@Nullable String money) {
+        if (isAdded() && view != null) {
+            if (canUnlockFunction()) {
+                TextView stdMoney = view.findViewById(R.id.textView_stdMoney);
+                if (money != null) {
+                    stdMoney.setVisibility(View.VISIBLE);
+                    stdMoney.setText(getString(R.string.left_money, money));
+                } else {
+                    stdMoney.setVisibility(View.GONE);
+                }
+            }
+        }
+    }
+
     public void personViewSet(@Nullable StudentInfo studentInfo, @Nullable StudentLearnProcess
             studentLearnProcess, @Nullable Context context) {
         if (isAdded() && view != null) {
@@ -322,10 +343,20 @@ public class PersonFragment extends Fragment {
         }
     }
 
+    public void lastViewSet(Context context) {
+        if (isAdded()) {
+            //离线数据加载完成，开始拉取网络数据
+            if (loadTime == 1 && NetMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
+                new CardMoneyAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getApplicationContext());
+            } else {
+                BaseMethod.setRefreshing(swipeRefreshLayout, false);
+            }
+        }
+    }
+
     public void lastViewSet(Context context, boolean mustReload) {
         if (isAdded()) {
             //离线数据加载完成，开始拉取网络数据，数据每天更新
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             if (loadTime == 1 && NetMethod.isNetworkConnected(context) && BaseMethod.isDataAutoUpdate(context)) {
                 boolean updateDay = true;
 
@@ -347,7 +378,8 @@ public class PersonFragment extends Fragment {
                 }
 
                 if (updateDay) {
-                    getData();
+                    BaseMethod.setRefreshing(swipeRefreshLayout, true);
+                    new StudentAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getApplicationContext());
                 } else {
                     BaseMethod.setRefreshing(swipeRefreshLayout, false);
                 }
@@ -361,6 +393,9 @@ public class PersonFragment extends Fragment {
         BaseMethod.setRefreshing(swipeRefreshLayout, true);
         if (context != null) {
             new StudentAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getApplicationContext());
+            if (canUnlockFunction()) {
+                new CardMoneyAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, context.getApplicationContext());
+            }
         }
     }
 

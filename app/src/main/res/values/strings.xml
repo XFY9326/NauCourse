@@ -367,6 +367,7 @@
     <string name="app_download_lib">前往应用安装包库</string>
     <string name="app_download_lib_sum">查看所有可用的历史应用安装包</string>
     <string name="feedback_platform">反馈平台</string>
+    <string name="left_money">余额：%1$s</string>
 
     <string name="new_version_info_content">欢迎使用NAU课程表\n\n新的反馈平台已经搭建好了，在关于见面中可以看到，大家也可以在上面反馈意见。\n\n反馈QQ群：704668624</string>
 
