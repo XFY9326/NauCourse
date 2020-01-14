@@ -78,19 +78,31 @@ public class ScoreActivity extends BaseAsyncActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.menu_score_credit) {
-            if (!isLoading && courseScore != null && historyCreditCourse != null) {
-                ArrayList<CreditCountCourse> countCourses = CreditCountMethod.getCreditCountCourse(courseScore);
-                if (countCourses.size() > 0) {
+        if (!isLoading && courseScore != null && historyCreditCourse != null) {
+            ArrayList<CreditCountCourse> countCourses = CreditCountMethod.getCreditCountCourse(courseScore);
+            if (countCourses.size() > 0) {
+                if (item.getItemId() == R.id.menu_score_credit) {
                     showCreditCountDialog(countCourses);
-                } else {
-                    Snackbar.make(findViewById(R.id.layout_score_content), R.string.credit_count_course_empty, Snackbar.LENGTH_SHORT).show();
+                } else if (item.getItemId() == R.id.menu_score_recalculate_credit) {
+                    showCreditReCountDialog();
                 }
             } else {
-                Snackbar.make(findViewById(R.id.layout_score_content), R.string.data_is_loading, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(findViewById(R.id.layout_score_content), R.string.credit_count_course_empty, Snackbar.LENGTH_SHORT).show();
             }
+        } else {
+            Snackbar.make(findViewById(R.id.layout_score_content), R.string.data_is_loading, Snackbar.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showCreditReCountDialog() {
+        float credit = CreditCountMethod.getCredit(historyCreditCourse);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.score_calculate_JD);
+        builder.setMessage(getString(R.string.score_calculate_JD_attention, credit));
+        builder.setPositiveButton(android.R.string.yes, null);
+        builder.show();
     }
 
     private void showCreditCountDialog(final ArrayList<CreditCountCourse> creditCountCourses) {
