@@ -24,7 +24,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.asyncTasks.ScoreAsync;
@@ -47,7 +47,7 @@ public class ScoreActivity extends BaseAsyncActivity {
     private ScoreSwipeRefreshLayout swipeRefreshLayout;
     private ScoreViewPagerAdapter scoreViewPagerAdapter;
     private CourseScore courseScore;
-    private List<CreditCountCourse> historyCreditCourse;
+    private Set<CreditCountCourse> historyCreditCourse;
     private boolean isLoading = true;
 
     private static boolean waitForEvaluate(CourseScore courseScore) {
@@ -123,7 +123,7 @@ public class ScoreActivity extends BaseAsyncActivity {
             if (current.size() == 0) {
                 Snackbar.make(findViewById(R.id.layout_score_content), R.string.credit_no_select, Snackbar.LENGTH_SHORT).show();
             } else {
-                ArrayList<CreditCountCourse> courseList = CreditCountMethod.combineCreditCourse(current, historyCreditCourse);
+                Set<CreditCountCourse> courseList = CreditCountMethod.combineCreditCourse(current, historyCreditCourse);
                 float credit = CreditCountMethod.getCredit(courseList);
                 AlertDialog.Builder newBuilder = new AlertDialog.Builder(this);
                 newBuilder.setTitle(R.string.credit_calculator);

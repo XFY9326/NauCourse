@@ -1,8 +1,10 @@
 package tool.xfy9326.naucourse.methods.compute;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import tool.xfy9326.naucourse.beans.score.CourseScore;
@@ -34,8 +36,8 @@ public class CreditCountMethod {
         return countCourses;
     }
 
-    public static ArrayList<CreditCountCourse> getHistoryCreditCourse(HistoryScore historyScore) {
-        ArrayList<CreditCountCourse> courses = new ArrayList<>();
+    public static Set<CreditCountCourse> getHistoryCreditCourse(HistoryScore historyScore) {
+        HashSet<CreditCountCourse> courses = new HashSet<>();
         for (int i = 0; i < historyScore.getCourseAmount(); i++) {
             float creditWeight = Float.parseFloat(historyScore.getCreditWeight()[i]);
             if (creditWeight > 0 && isDouble(historyScore.getScore()[i])) {
@@ -51,32 +53,16 @@ public class CreditCountMethod {
         return courses;
     }
 
-    public static ArrayList<CreditCountCourse> combineCreditCourse(List<CreditCountCourse> a, List<CreditCountCourse> b) {
-        ArrayList<CreditCountCourse> result = new ArrayList<>(a);
-        for (CreditCountCourse bCourse : b) {
-            boolean foundSame = false;
-            for (CreditCountCourse aCourse : a) {
-                if (bCourse.getCourseId() != null && aCourse.getCourseId() != null && bCourse.getCourseId().equals(aCourse.getCourseId())) {
-                    foundSame = true;
-                    break;
-                }
-                if (bCourse.getCourseName() != null && aCourse.getCourseName() != null && bCourse.getCourseName().equals(aCourse.getCourseName())) {
-                    foundSame = true;
-                    break;
-                }
-            }
-            if (!foundSame) {
-                result.add(bCourse);
-            }
-        }
+    public static Set<CreditCountCourse> combineCreditCourse(List<CreditCountCourse> currentTerm, Set<CreditCountCourse> historyTerm) {
+        HashSet<CreditCountCourse> result = new HashSet<>(currentTerm);
+        result.addAll(historyTerm);
         return result;
     }
 
-    public static float getCredit(List<CreditCountCourse> courseList) {
+    public static float getCredit(Set<CreditCountCourse> courseSet) {
         float temp = 0;
         float totalStudyScore = 0;
-        for (int i = 0; i < courseList.size(); i++) {
-            CreditCountCourse course = courseList.get(i);
+        for (CreditCountCourse course : courseSet) {
             if (course.getScore() < 60) {
                 temp += 0;
             } else {

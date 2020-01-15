@@ -1,5 +1,7 @@
 package tool.xfy9326.naucourse.beans.score;
 
+import androidx.annotation.Nullable;
+
 public class CreditCountCourse {
     private String courseId;
     private String courseName;
@@ -45,5 +47,19 @@ public class CreditCountCourse {
 
     public void setCourseName(String courseName) {
         this.courseName = courseName;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj instanceof CreditCountCourse) {
+            CreditCountCourse course = (CreditCountCourse) obj;
+            return course.courseId.equalsIgnoreCase(courseId) && course.courseName.equalsIgnoreCase(courseName);
+        }
+        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return (courseId + courseName).hashCode();
     }
 }
