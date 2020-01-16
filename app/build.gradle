@@ -22,7 +22,8 @@ android {
     buildTypes {
         debug {
             zipAlignEnabled false
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             buildConfigField("String", "VERSION_TYPE", "\"debug\"")
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -31,14 +32,16 @@ android {
         beta {
             debuggable true
             zipAlignEnabled true
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             buildConfigField("String", "VERSION_TYPE", "\"beta\"")
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
         release {
             zipAlignEnabled true
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             buildConfigField("String", "VERSION_TYPE", "\"release\"")
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -53,10 +56,9 @@ android {
 dependencies {
     implementation project(':NauSSO')
     implementation project(':NetApi')
-    implementation project(':AppUpdater')
 
     implementation 'org.jsoup:jsoup:1.12.1'
-    implementation 'com.squareup.okhttp3:okhttp:4.2.2'
+    implementation 'com.squareup.okhttp3:okhttp:4.3.1'
 
     implementation 'com.google.code.gson:gson:2.8.6'
 

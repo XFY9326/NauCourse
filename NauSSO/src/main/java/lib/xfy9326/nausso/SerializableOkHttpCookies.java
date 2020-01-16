@@ -13,9 +13,10 @@ import okhttp3.Cookie;
  */
 
 class SerializableOkHttpCookies implements Serializable {
-
     private transient final Cookie cookies;
     private transient Cookie clientCookies;
+
+    private static final long serialVersionUID = 635902741497569370L;
 
     SerializableOkHttpCookies(Cookie cookies) {
         this.cookies = cookies;

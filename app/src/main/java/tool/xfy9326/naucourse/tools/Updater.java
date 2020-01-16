@@ -1,4 +1,4 @@
-package lib.xfy9326.updater;
+package tool.xfy9326.naucourse.tools;
 
 import android.os.Build;
 import android.util.Log;

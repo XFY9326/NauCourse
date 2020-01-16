@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AppUpdater/AppUpdater.iml" filepath="$PROJECT_DIR$/AppUpdater/AppUpdater.iml" />
       <module fileurl="file://$PROJECT_DIR$/NauCourse.iml" filepath="$PROJECT_DIR$/NauCourse.iml" />
       <module fileurl="file://$PROJECT_DIR$/NauCourseWear/NauCourseWear.iml" filepath="$PROJECT_DIR$/NauCourseWear/NauCourseWear.iml" />
       <module fileurl="file://$PROJECT_DIR$/NauSSO/NauSSO.iml" filepath="$PROJECT_DIR$/NauSSO/NauSSO.iml" />

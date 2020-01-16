@@ -14,10 +14,10 @@ import androidx.preference.PreferenceManager;
 
 import java.util.Locale;
 
-import lib.xfy9326.updater.Updater;
 import tool.xfy9326.naucourse.BuildConfig;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
+import tool.xfy9326.naucourse.tools.Updater;
 
 public class UpdateMethod {
     private static boolean isCheckingUpdate = false;

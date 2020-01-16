@@ -20,13 +20,13 @@ import androidx.preference.PreferenceManager;
 import java.util.Calendar;
 import java.util.Locale;
 
-import lib.xfy9326.updater.Updater;
 import tool.xfy9326.naucourse.BuildConfig;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.methods.BaseMethod;
 import tool.xfy9326.naucourse.methods.net.NetMethod;
 import tool.xfy9326.naucourse.methods.view.DialogMethod;
+import tool.xfy9326.naucourse.tools.Updater;
 
 /**
  * Created by xfy9326 on 18-2-20.
