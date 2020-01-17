@@ -18,7 +18,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.concurrent.ExecutorService;
 
-import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.methods.BaseMethod;
@@ -29,6 +28,7 @@ import tool.xfy9326.naucourse.methods.net.TempMethod;
 import tool.xfy9326.naucourse.methods.net.UpdateMethod;
 import tool.xfy9326.naucourse.methods.net.VPNMethods;
 import tool.xfy9326.naucourse.methods.view.DialogMethod;
+import tool.xfy9326.naucourse.nausso.NauSSOClient;
 
 /**
  * Created by xfy9326 on 18-2-20.

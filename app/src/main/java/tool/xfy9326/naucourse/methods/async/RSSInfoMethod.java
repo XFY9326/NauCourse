@@ -17,12 +17,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.methods.io.DataMethod;
 import tool.xfy9326.naucourse.methods.net.NetMethod;
 import tool.xfy9326.naucourse.methods.net.VPNMethods;
+import tool.xfy9326.naucourse.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.tools.RSSReader;
 
 public class RSSInfoMethod {

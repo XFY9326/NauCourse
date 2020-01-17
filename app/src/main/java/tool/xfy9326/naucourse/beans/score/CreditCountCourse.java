@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.beans.score;
 
 import androidx.annotation.Nullable;
 
+@SuppressWarnings("unused")
 public class CreditCountCourse {
     private String courseId;
     private String courseName;

@@ -9,11 +9,6 @@ import java.io.File;
  */
 
 public class Config {
-    @SuppressWarnings("unused")
-    public static final int SUB_VERSION = BuildConfig.SUB_VERSION;
-    @SuppressWarnings("unused")
-    public static final String VERSION_TYPE = BuildConfig.VERSION_TYPE;
-
     public static final String SHARE_COURSE_PREFIX = "ncc://";
 
     //单周
@@ -48,8 +43,6 @@ public class Config {
     public static final String SCHOOL_CALENDAR_IMAGE_FILE_NAME = "SchoolCalendar.jpeg";
 
     public static final String FILE_PROVIDER_AUTH = "tool.xfy9326.naucourse.provider";
-
-    public static final String DEBUG = "debug";
 
     public static final String ASSETS_EULA_PATH = "EULA.txt";
     public static final String ASSETS_LICENSE_PATH = "LICENSE.txt";
@@ -103,10 +96,8 @@ public class Config {
     public static final String PREFERENCE_SHOW_NO_THIS_WEEK_CLASS = "SHOW_NO_THIS_WEEK_CLASS";
     public static final String PREFERENCE_AUTO_UPDATE_COURSE_TABLE_ALERT = "AUTO_UPDATE_COURSE_TABLE_ALERT";
     public static final String PREFERENCE_AUTO_CHECK_UPDATE = "AUTO_CHECK_UPDATE";
-    public static final String PREFERENCE_CHECK_BETA_UPDATE = "CHECK_BETA_UPDATE";
     public static final String PREFERENCE_UPDATE_NOW = "UPDATE_NOW";
     public static final String PREFERENCE_ONLY_UPDATE_APPLICATION_UNDER_WIFI = "ONLY_UPDATE_APPLICATION_UNDER_WIFI";
-    public static final String PREFERENCE_LAST_CHECK_VERSION = "LAST_CHECK_VERSION";
     public static final String PREFERENCE_CUSTOM_TERM_START_DATE = "CUSTOM_TERM_START_DATE";
     public static final String PREFERENCE_CUSTOM_TERM_END_DATE = "CUSTOM_TERM_END_DATE";
     public static final String PREFERENCE_OLD_TERM_START_DATE = "OLD_TERM_START_DATE";
@@ -155,7 +146,6 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_SHOW_NO_THIS_WEEK_CLASS = true;
     public static final boolean DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE_ALERT = false;
     public static final boolean DEFAULT_PREFERENCE_AUTO_CHECK_UPDATE = true;
-    public static final boolean DEFAULT_PREFERENCE_CHECK_BETA_UPDATE = false;
     public static final boolean DEFAULT_PREFERENCE_ONLY_UPDATE_APPLICATION_UNDER_WIFI = false;
     public static final boolean DEFAULT_PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT = true;
     public static final boolean DEFAULT_PREFERENCE_HIDE_OUT_OF_DATE_EXAM = false;

@@ -10,15 +10,15 @@ import androidx.preference.PreferenceManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.methods.net.NetMethod;
+import tool.xfy9326.naucourse.nausso.NauSSOClient;
 
 public class StudentCardMethod extends BaseInfoMethod<String> {
     private static final String MAIN_URL = "http://my1.nau.edu.cn/";
     private static final String API_URL = "http://my1.nau.edu.cn/_web/_plugs/notes/selectNotesDefById.rst?id=1";
     private String cardContent = null;
-    private SharedPreferences sharedPreferences;
+    private final SharedPreferences sharedPreferences;
 
     public StudentCardMethod(@NonNull Context context) {
         super(context);

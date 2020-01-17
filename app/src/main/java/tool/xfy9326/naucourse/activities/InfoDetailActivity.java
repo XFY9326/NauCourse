@@ -28,7 +28,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
-import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.asyncTasks.InfoDetailAsync;
@@ -40,6 +39,7 @@ import tool.xfy9326.naucourse.methods.compute.InfoMethod;
 import tool.xfy9326.naucourse.methods.io.ShareMethod;
 import tool.xfy9326.naucourse.methods.net.NetMethod;
 import tool.xfy9326.naucourse.methods.view.DialogMethod;
+import tool.xfy9326.naucourse.nausso.NauSSOClient;
 
 /**
  * Created by 10696 on 2018/2/25.

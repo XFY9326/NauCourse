@@ -22,7 +22,7 @@
 
 # NauCourse
 -keep class tool.xfy9326.naucourse.beans.** { *; }
--keep class lib.xfy9326.nausso.SerializableOkHttpCookies { *; }
+-keep class tool.xfy9326.naucourse.nausso.SerializableOkHttpCookies { *; }
 
 # -----------------------------
 

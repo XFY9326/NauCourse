@@ -1,76 +1,92 @@
 package tool.xfy9326.naucourse.tools;
 
-import android.os.Build;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.jetbrains.annotations.NotNull;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
-import lib.xfy9326.net.api.API;
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class Updater {
-    @SuppressWarnings("unused")
-    public static final String UPDATE_TYPE_BETA = "beta";
-    @SuppressWarnings("unused")
-    public static final String UPDATE_TYPE_RELEASE = "release";
-    private static final String API_TYPE = "nau_course";
-    private static final String API_FUNCTION = "update";
-    private static final String LOG_TAG = "APP_UPDATER";
-    private final API api;
+    private static final String checkUrl = "https://www.coolapk.com/apk/178329";
+    private static Updater INSTANCE = null;
+    private final OkHttpClient client;
 
-    public Updater(@NonNull String key, @NonNull String iv) {
-        api = new API(API_TYPE, API_FUNCTION, key, iv);
+    private Updater() {
+        client = new OkHttpClient();
     }
 
-    public void checkUpdate(int versionCode, int subVersion, @NonNull String updateType, @NonNull final OnUpdateListener updateListener) {
-        JSONObject updateJson = new JSONObject();
-        try {
-            updateJson.put("nowVersionCode", versionCode);
-            updateJson.put("updateType", updateType);
-            updateJson.put("subVersion", subVersion);
-            updateJson.put("deviceSDK", Build.VERSION.SDK_INT);
+    public static Updater getInstance() {
+        synchronized (Updater.class) {
+            if (INSTANCE == null) {
+                INSTANCE = new Updater();
+            }
+        }
+        return INSTANCE;
+    }
 
-            api.call(updateJson, new API.OnRequestListener() {
-                @SuppressWarnings("unused")
-                @Override
-                public void onResponse(String status, @Nullable JSONObject jsonObject) {
-                    if (jsonObject == null) {
-                        updateListener.onError();
-                        Log.d(LOG_TAG, "DATA NO FOUND");
-                    } else {
-                        try {
-                            if (jsonObject.getBoolean("latestVersion")) {
-                                updateListener.noUpdate();
-                            } else {
-                                updateListener.findUpdate(jsonObject.getInt("newVersionCode"),
-                                        jsonObject.getString("newVersionName"),
-                                        jsonObject.getInt("subVersion"),
-                                        jsonObject.getString("updateInfo"),
-                                        jsonObject.getString("updateType"),
-                                        jsonObject.getString("updateUrl"),
-                                        jsonObject.getBoolean("forceUpdate"),
-                                        jsonObject.getString("updateTime"));
+    public void checkUpdate(@NonNull String versionName, @NonNull final OnUpdateListener updateListener) {
+        client.newCall(new Request.Builder().url(checkUrl).build()).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                updateListener.onError();
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                ResponseBody body = response.body();
+                if (body != null) {
+                    String content = body.string();
+
+                    Document document = Jsoup.parse(content);
+                    Element newVersion = document.selectFirst("body > div > div:nth-child(2) > div.app_left > div.apk_left_one > div > div > div.apk_topbar_mss > p.detail_app_title > span");
+                    Element updateInfo = document.selectFirst("body > div > div:nth-child(2) > div.app_left > div.apk_left_two > div > div:nth-child(2) > p.apk_left_title_info");
+                    if (newVersion != null && updateInfo != null) {
+                        String name = newVersion.text().trim();
+                        if (name.contains(".") && versionName.contains(".")) {
+                            String[] newTemp = name.split("\\.");
+                            String[] nowTemp = versionName.split("\\.");
+                            boolean hasUpdate = false;
+                            try {
+                                for (int i = 0; i < Math.max(newTemp.length, nowTemp.length) && !hasUpdate; i++) {
+                                    if (i < newTemp.length && i < nowTemp.length) {
+                                        if (Integer.valueOf(newTemp[i]) > Integer.valueOf(nowTemp[i])) {
+                                            hasUpdate = true;
+                                        }
+                                    } else {
+                                        hasUpdate = newTemp.length > nowTemp.length;
+                                    }
+                                }
+                                if (hasUpdate) {
+                                    updateListener.findUpdate(newVersion.text().trim(), updateInfo.html().replace("<br>", "\n"), checkUrl);
+                                } else {
+                                    updateListener.noUpdate();
+                                }
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+                                updateListener.onError();
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            Log.d(LOG_TAG, "DATA ERROR -> " + e.getMessage());
+                        } else {
                             updateListener.onError();
                         }
+                    } else {
+                        updateListener.onError();
                     }
-                }
-
-                @Override
-                public void onError(int errorCode, @Nullable String errorMsg) {
-                    Log.d(LOG_TAG, "API ERROR -> Code:" + errorCode + " Msg:" + errorMsg);
+                } else {
                     updateListener.onError();
                 }
-            });
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+                response.close();
+            }
+        });
     }
 
     public interface OnUpdateListener {
@@ -78,6 +94,6 @@ public class Updater {
 
         void onError();
 
-        void findUpdate(int versionCode, String versionName, int subVersion, String updateInfo, String updateType, String updateUrl, boolean forceUpdate, String updateTime);
+        void findUpdate(String versionName, String updateInfo, String updateUrl);
     }
 }

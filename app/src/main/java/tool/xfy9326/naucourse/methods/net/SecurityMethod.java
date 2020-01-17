@@ -9,9 +9,6 @@ import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.tools.AES;
 
 public class SecurityMethod {
-    static final String API_KEY = "4B885B0EDE2EF94F";
-    static final String API_IV = "163D738C67E431B3";
-
     public static void saveUserInfo(Context context, String id, String pw) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         sharedPreferences.edit().putString(Config.PREFERENCE_USER_ID, id).apply();

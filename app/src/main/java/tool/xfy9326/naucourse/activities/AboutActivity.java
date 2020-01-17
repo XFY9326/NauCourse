@@ -26,7 +26,6 @@ import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.methods.BaseMethod;
 import tool.xfy9326.naucourse.methods.net.NetMethod;
 import tool.xfy9326.naucourse.methods.view.DialogMethod;
-import tool.xfy9326.naucourse.tools.Updater;
 
 /**
  * Created by xfy9326 on 18-2-20.
@@ -89,8 +88,7 @@ public class AboutActivity extends AppCompatActivity {
 
         textViewCopyRight.setText(getString(R.string.copyright, Calendar.getInstance().get(Calendar.YEAR)));
 
-        String version = String.format(Locale.CHINA, "v%s.%d (%d) %s", BuildConfig.VERSION_NAME, Config.SUB_VERSION, BuildConfig.VERSION_CODE, Config.VERSION_TYPE);
-        version = version.replace(Updater.UPDATE_TYPE_BETA, getString(R.string.beta)).replace(Updater.UPDATE_TYPE_RELEASE, getString(R.string.release)).replace(Config.DEBUG, getString(R.string.debug));
+        String version = String.format(Locale.CHINA, "v%s(%d)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
 
         textViewVersion.setText(version);
 

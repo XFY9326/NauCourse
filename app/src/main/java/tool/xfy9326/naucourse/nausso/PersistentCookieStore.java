@@ -1,4 +1,4 @@
-package lib.xfy9326.nausso;
+package tool.xfy9326.naucourse.nausso;
 
 import android.app.Activity;
 import android.content.Context;
@@ -32,7 +32,7 @@ import okhttp3.HttpUrl;
 
 class PersistentCookieStore {
     private static final String LOG_TAG = "PersistentCookieStore";
-    private static final String COOKIE_PREFS = "Cookies_Prefs";
+    private static final String COOKIE_PREFS = "CookiesPrefs";
 
     @NonNull
     private final Map<String, ConcurrentHashMap<String, Cookie>> cookies;

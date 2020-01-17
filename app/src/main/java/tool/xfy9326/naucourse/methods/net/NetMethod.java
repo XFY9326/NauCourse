@@ -18,10 +18,10 @@ import androidx.preference.PreferenceManager;
 import java.io.IOException;
 import java.util.concurrent.locks.ReentrantLock;
 
-import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.methods.BaseMethod;
+import tool.xfy9326.naucourse.nausso.NauSSOClient;
 
 /**
  * Created by 10696 on 2018/4/17.

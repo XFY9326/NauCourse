@@ -61,7 +61,7 @@ public class WearListenerService extends WearableListenerService {
             DataMap dataMap = dataMapRequest.getDataMap();
             dataMap.putLong(Config.WEAR_MSG_TODAY_COURSE_UPDATE_TIME, System.currentTimeMillis());
             dataMap.putInt(Config.WEAR_MSG_SUPPORT_APP_VERSION_CODE, BuildConfig.VERSION_CODE);
-            dataMap.putInt(Config.WEAR_MSG_SUPPORT_APP_SUB_VERSION, BuildConfig.SUB_VERSION);
+            dataMap.putInt(Config.WEAR_MSG_SUPPORT_APP_SUB_VERSION, 0);
 
             if (todayCourses != null) {
                 byte[] data = CourseMethod.writeTodayCourseInBytes(todayCourses);

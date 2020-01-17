@@ -15,12 +15,12 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.beans.info.AlstuTopic;
 import tool.xfy9326.naucourse.methods.net.NetMethod;
 import tool.xfy9326.naucourse.methods.net.VPNMethods;
+import tool.xfy9326.naucourse.nausso.NauSSOClient;
 
 /**
  * @author xfy9326

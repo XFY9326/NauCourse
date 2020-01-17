@@ -13,11 +13,11 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.beans.score.HistoryScore;
 import tool.xfy9326.naucourse.methods.io.DataMethod;
 import tool.xfy9326.naucourse.methods.net.NetMethod;
+import tool.xfy9326.naucourse.nausso.NauSSOClient;
 
 public class HistoryScoreMethod extends BaseInfoMethod<HistoryScore> {
     public static final String FILE_NAME = HistoryScore.class.getSimpleName();

@@ -1,4 +1,4 @@
-package lib.xfy9326.nausso;
+package tool.xfy9326.naucourse.nausso;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
