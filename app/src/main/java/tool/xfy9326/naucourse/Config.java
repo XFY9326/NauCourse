@@ -204,11 +204,11 @@ public class Config {
     public static final String DONATE_URL_WECHAT = "https://www.xfy9326.top/api/donate/wechat.png";
     public static final String DONATE_URL_QQ_WALLET = "https://www.xfy9326.top/api/donate/qq_wallet.png";
 
-    public static final String APP_DOWNLOAD_LIB_URL = "https://xfy9326.coding.me/NauCourse-DownloadLib/";
+    public static final String APP_DOWNLOAD_LIB_URL = "https://xfy9326.github.io/NauCourse-DownloadLib/";
 
     public static final String APP_FEEDBACK_URL = "https://support.qq.com/products/114856";
 
-    public static final String WEAR_OS_SUPPORT_APP_DOWNLOAD_URL = "https://xfy9326.coding.me/NauCourse-DownloadLib/Pages/Watch/Default/";
+    public static final String WEAR_OS_SUPPORT_APP_DOWNLOAD_URL = "https://xfy9326.github.io/NauCourse-DownloadLib/Pages/Watch/Release/";
 
     public static final String WEAR_MSG_TODAY_COURSE_LIST = "TODAY_COURSE_LIST";
     public static final String WEAR_MSG_NO_COURSE_DATA = "NO_COURSE_DATA";
