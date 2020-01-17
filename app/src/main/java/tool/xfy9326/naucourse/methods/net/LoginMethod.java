@@ -73,6 +73,13 @@ public class LoginMethod {
                 sharedPreferences.edit().putString(Config.PREFERENCE_LOGIN_URL, loginURL).apply();
                 return Config.RE_LOGIN_SUCCESS;
             }
+        } else if (nauSSOClient.login(id, pw)) {
+            nauSSOClient.alstuLogin(id, pw);
+            String loginURL = nauSSOClient.getJwcLoginUrl();
+            if (loginURL != null) {
+                sharedPreferences.edit().putString(Config.PREFERENCE_LOGIN_URL, loginURL).apply();
+                return Config.RE_LOGIN_SUCCESS;
+            }
         }
         return Config.RE_LOGIN_FAILED;
     }
@@ -129,7 +136,6 @@ public class LoginMethod {
                     .remove(Config.PREFERENCE_INFO_CHANNEL_SELECTED_XXB)
                     .remove(Config.PREFERENCE_HIDE_OUT_OF_DATE_EXAM)
                     .remove(Config.PREFERENCE_SCHOOL_VPN_SMART_MODE)
-                    .remove(Config.PREFERENCE_EULA_ACCEPT)
                     .remove(Config.PREFERENCE_SHOW_HIDDEN_FUNCTION)
                     .putBoolean(Config.PREFERENCE_HAS_LOGIN, false)
                     .apply();
