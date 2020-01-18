@@ -361,7 +361,7 @@
     <string name="feedback_platform">反馈平台</string>
     <string name="left_money">余额：%1$s</string>
 
-    <string name="new_version_info_content">欢迎使用NAU课程表\n\n目前阶段的维护已经进入尾声，接下来除非遇到重大问题不会再更新\n\n新一代的NAU课程表目前正在筹划中，如果你对跨平台应用开发有兴趣了解并想加入NAU课程表的开发，可以加入QQ群找到我。\n\n反馈平台在关于见面中可以看到，大家也可以在上面反馈意见，我会尽快修复问题。\n\n或者也可以加入反馈QQ群：704668624</string>
+    <string name="new_version_info_content">欢迎使用NAU课程表\n\n目前阶段的维护已经进入尾声，接下来除非遇到重大问题不会再更新\n\n新一代的NAU课程表目前正在筹划中，如果你对应用开发有兴趣了解并想加入NAU课程表的开发，可以加入QQ群找到我。\n\n反馈平台在关于见面中可以看到，大家也可以在上面反馈意见，我会尽快修复问题。\n\n或者也可以加入反馈QQ群：704668624</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>

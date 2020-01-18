@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 
 /**
  * Created by 10696 on 2018/2/27.
@@ -35,12 +36,12 @@ public class FileUtils {
             if (checkFile(file, true)) {
                 return false;
             }
-            OutputStream writer = new FileOutputStream(file);
-            byte[] bytes = content.getBytes();
-            writer.write(bytes);
-            writer.flush();
-            writer.close();
-            return true;
+            try (OutputStream writer = new FileOutputStream(file)) {
+                byte[] bytes = content.getBytes();
+                writer.write(bytes);
+                writer.flush();
+                return true;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -69,8 +70,8 @@ public class FileUtils {
 
     public static String readFile(@NonNull Context context, @NonNull Uri uri) {
         ContentResolver resolver = context.getContentResolver();
-        try {
-            InputStream inputStream = resolver.openInputStream(uri);
+        try (InputStream inputStream = resolver.openInputStream(uri)) {
+
             if (inputStream != null) {
                 return readFile(inputStream);
             }
@@ -81,15 +82,14 @@ public class FileUtils {
     }
 
     private static String readFile(@NonNull InputStream inputStream) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        String line;
-        StringBuilder result = new StringBuilder();
-        while ((line = reader.readLine()) != null) {
-            result.append(line).append("\n");
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            StringBuilder result = new StringBuilder();
+            while ((line = reader.readLine()) != null) {
+                result.append(line).append("\n");
+            }
+            return result.toString();
         }
-        reader.close();
-        inputStream.close();
-        return result.toString();
     }
 
     public static boolean createPath(File file) {
@@ -125,16 +125,16 @@ public class FileUtils {
                 return false;
             }
 
-            FileInputStream fileInputStream = new FileInputStream(oldPath);
-            FileOutputStream fileOutputStream = new FileOutputStream(newPath);
-            byte[] buffer = new byte[1024];
-            int byteRead;
-            while (-1 != (byteRead = fileInputStream.read(buffer))) {
-                fileOutputStream.write(buffer, 0, byteRead);
+            try (FileChannel inputChannel = new FileInputStream(oldPath).getChannel();
+                 FileChannel outputChannel = new FileOutputStream(newPath).getChannel()) {
+                long size = inputChannel.size();
+                while (size > 0) {
+                    long count = outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
+                    if (count > 0) {
+                        size -= count;
+                    }
+                }
             }
-            fileInputStream.close();
-            fileOutputStream.flush();
-            fileOutputStream.close();
             if (deleteOldFile) {
                 return oldFile.delete();
             }
