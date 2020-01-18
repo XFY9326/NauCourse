@@ -16,7 +16,7 @@ android {
         applicationVariants.all {
             variant ->
                 variant.outputs.all {
-                    outputFileName = "wear_${variant.buildType.name}_${defaultConfig.versionName}(${defaultConfig.versionCode})-${rootProject.ext.versionName}.${rootProject.ext.subVersion}(${rootProject.ext.versionCode}).apk"
+                    outputFileName = "wear_${variant.buildType.name}_${defaultConfig.versionName}(${defaultConfig.versionCode})-${rootProject.ext.versionName}(${rootProject.ext.versionCode}).apk"
                 }
         }
     }

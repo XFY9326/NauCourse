@@ -45,5 +45,11 @@ public class UpdateSettingsFragment extends PreferenceFragmentCompat {
             }
             return false;
         });
+        ((Preference) Objects.requireNonNull(findPreference(Config.PREFERENCE_APP_DOWNLOAD_LIB))).setOnPreferenceClickListener(preference -> {
+            if (getActivity() != null) {
+                NetMethod.viewUrlInBrowser(getActivity(), Config.APP_DOWNLOAD_LIB_URL);
+            }
+            return false;
+        });
     }
 }

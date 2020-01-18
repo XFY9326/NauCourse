@@ -15,13 +15,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.beans.course.Course;
 import tool.xfy9326.naucourse.beans.course.CourseDetail;
 import tool.xfy9326.naucourse.methods.BaseMethod;
 import tool.xfy9326.naucourse.methods.io.DataMethod;
 import tool.xfy9326.naucourse.methods.net.NetMethod;
+import tool.xfy9326.naucourse.nausso.NauSSOClient;
 
 /**
  * Created by xfy9326 on 18-2-20.

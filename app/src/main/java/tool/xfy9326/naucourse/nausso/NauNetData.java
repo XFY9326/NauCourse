@@ -1,4 +1,4 @@
-package lib.xfy9326.nausso;
+package tool.xfy9326.naucourse.nausso;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

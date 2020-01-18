@@ -15,10 +15,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.methods.io.DataPath;
+import tool.xfy9326.naucourse.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.tools.FileUtils;
 
 public class ImageMethod {

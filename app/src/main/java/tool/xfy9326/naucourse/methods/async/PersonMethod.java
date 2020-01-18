@@ -15,7 +15,6 @@ import java.io.File;
 import java.util.List;
 import java.util.Objects;
 
-import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.beans.score.StudentScore;
 import tool.xfy9326.naucourse.beans.student.StudentInfo;
@@ -23,6 +22,7 @@ import tool.xfy9326.naucourse.beans.student.StudentLearnProcess;
 import tool.xfy9326.naucourse.methods.ImageMethod;
 import tool.xfy9326.naucourse.methods.io.DataMethod;
 import tool.xfy9326.naucourse.methods.net.NetMethod;
+import tool.xfy9326.naucourse.nausso.NauSSOClient;
 
 /**
  * Created by xfy9326 on 18-2-21.

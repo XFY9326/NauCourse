@@ -1,8 +1,6 @@
 package tool.xfy9326.naucourse.activities;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,11 +20,11 @@ import androidx.preference.PreferenceManager;
 import java.util.Calendar;
 import java.util.Locale;
 
-import lib.xfy9326.updater.Updater;
 import tool.xfy9326.naucourse.BuildConfig;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.methods.BaseMethod;
+import tool.xfy9326.naucourse.methods.net.NetMethod;
 import tool.xfy9326.naucourse.methods.view.DialogMethod;
 
 /**
@@ -90,8 +88,7 @@ public class AboutActivity extends AppCompatActivity {
 
         textViewCopyRight.setText(getString(R.string.copyright, Calendar.getInstance().get(Calendar.YEAR)));
 
-        String version = String.format(Locale.CHINA, "v%s.%d (%d) %s", BuildConfig.VERSION_NAME, Config.SUB_VERSION, BuildConfig.VERSION_CODE, Config.VERSION_TYPE);
-        version = version.replace(Updater.UPDATE_TYPE_BETA, getString(R.string.beta)).replace(Updater.UPDATE_TYPE_RELEASE, getString(R.string.release)).replace(Config.DEBUG, getString(R.string.debug));
+        String version = String.format(Locale.CHINA, "v%s(%d)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
 
         textViewVersion.setText(version);
 
@@ -122,20 +119,9 @@ public class AboutActivity extends AppCompatActivity {
         findViewById(R.id.textView_about_feedback).setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(AboutActivity.this);
             builder.setTitle(R.string.feedback);
-            builder.setMessage(getString(R.string.feedback_by_mail, getString(R.string.mail), getString(R.string.qq_group)));
+            builder.setMessage(getString(R.string.feedback_methods, getString(R.string.mail), getString(R.string.qq_group)));
             builder.setPositiveButton(android.R.string.yes, null);
-            builder.setNeutralButton(R.string.send_email, (dialog, which) -> {
-                Intent intent = new Intent(Intent.ACTION_SENDTO);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.feedback_mail_title));
-                intent.setData(Uri.parse("mailto:" + getString(R.string.mail)));
-                try {
-                    startActivity(intent);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(AboutActivity.this, R.string.launch_failed, Toast.LENGTH_SHORT).show();
-                }
-            });
+            builder.setNeutralButton(R.string.feedback_platform, (dialog, which) -> NetMethod.viewUrlInBrowser(AboutActivity.this, Config.APP_FEEDBACK_URL));
             builder.show();
         });
 

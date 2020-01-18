@@ -10,6 +10,10 @@
         <androidx.preference.Preference
             android:key="UPDATE_NOW"
             android:title="@string/update_now" />
+        <androidx.preference.Preference
+            android:key="APP_DOWNLOAD_LIB"
+            android:summary="@string/app_download_lib_sum"
+            android:title="@string/app_download_lib" />
         <androidx.preference.CheckBoxPreference
             android:defaultValue="true"
             android:key="AUTO_CHECK_UPDATE"
@@ -21,10 +25,5 @@
             android:key="ONLY_UPDATE_APPLICATION_UNDER_WIFI"
             android:summary="@string/only_update_application_under_wifi_sum"
             android:title="@string/only_update_application_under_wifi" />
-        <androidx.preference.CheckBoxPreference
-            android:defaultValue="false"
-            android:key="CHECK_BETA_UPDATE"
-            android:summary="@string/beta_version_check_sum"
-            android:title="@string/beta_version_check" />
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>

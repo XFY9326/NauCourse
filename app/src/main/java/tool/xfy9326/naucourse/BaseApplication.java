@@ -11,7 +11,6 @@ import java.lang.ref.WeakReference;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.activities.CourseActivity;
 import tool.xfy9326.naucourse.activities.InfoDetailActivity;
 import tool.xfy9326.naucourse.activities.async.ExamActivity;
@@ -20,6 +19,7 @@ import tool.xfy9326.naucourse.activities.async.SchoolCalendarActivity;
 import tool.xfy9326.naucourse.activities.async.ScoreActivity;
 import tool.xfy9326.naucourse.activities.async.SuspendCourseActivity;
 import tool.xfy9326.naucourse.methods.net.NetMethod;
+import tool.xfy9326.naucourse.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.views.viewPagerAdapters.MainViewPagerAdapter;
 
 /**

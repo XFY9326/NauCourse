@@ -16,11 +16,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.beans.SchoolTime;
 import tool.xfy9326.naucourse.methods.io.DataMethod;
 import tool.xfy9326.naucourse.methods.net.NetMethod;
+import tool.xfy9326.naucourse.nausso.NauSSOClient;
 
 /**
  * Created by xfy9326 on 18-2-22.

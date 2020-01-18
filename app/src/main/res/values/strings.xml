@@ -27,6 +27,8 @@
     <string name="score">成绩查询</string>
     <string name="score_XF">总学分：%1$s</string>
     <string name="score_JD">总绩点：%1$s</string>
+    <string name="score_calculate_JD">重算教务绩点</string>
+    <string name="score_calculate_JD_attention">\u3000\u3000根据教务提供的历史课程成绩计算出精确的绩点，计算出的绩点仅供参考！\n\n当前绩点：%1$f</string>
     <string name="score_NP">年级排名：%1$s</string>
     <string name="score_ZP">专业排名：%1$s</string>
     <string name="score_BP">班级排名：%1$s</string>
@@ -45,7 +47,6 @@
     <string name="double_click_exit">再按一次返回键退出</string>
     <string name="date">日期</string>
     <string name="application_version">版本：</string>
-    <string name="new_application_version">更新版本：</string>
     <string name="application_author">作者：</string>
     <string name="author" translatable="false">XFY9326（逸雪飞扬）</string>
     <string name="copyright" translatable="false">Copyright © %1$d XFY9326</string>
@@ -131,7 +132,7 @@
     <string name="no_available_application">无可用APP</string>
     <string name="ask_lock_background">为了能够在后台运行并及时提示，你可以在后台锁定本应用并且允许开机启动</string>
     <string name="feedback">问题反馈</string>
-    <string name="feedback_by_mail">您可以通过发送反馈邮件或加入QQ群的方式反馈您遇到的问题或者提出好的建议,您的所有建议与反馈都会得到认真的查阅。\n\n邮箱：%1$s\n\nQQ群：%2$s</string>
+    <string name="feedback_methods">您可以通过发送反馈邮件，加入QQ群或者在线反馈的方式反馈您遇到的问题或者提出好的建议。\n\n邮箱：%1$s\n\nQQ群：%2$s</string>
     <string name="mail" translatable="false">1069665464@qq.com</string>
     <string name="qq_group" translatable="false">704668624</string>
     <string name="level_exam">等级考试</string>
@@ -229,8 +230,6 @@
     <string name="add_course_only">仅添加</string>
     <string name="add_course_and_clean">添加并清空旧学期的课程</string>
     <string name="update_check">应用更新</string>
-    <string name="beta_version_check">检查测试版的应用更新</string>
-    <string name="beta_version_check_sum">较不稳定但更快修复错误并体验新功能</string>
     <string name="auto_check_update">自动检查应用更新</string>
     <string name="auto_check_update_sum">每次启动应用自动检查应用更新，不建议关闭</string>
     <string name="update_now">立即检查应用更新</string>
@@ -242,10 +241,7 @@
     <string name="find_update">检测到应用更新！</string>
     <string name="update_immediately">立即更新</string>
     <string name="update_later">稍后更新</string>
-    <string name="version_no_mention">不再提示</string>
-    <string name="important_update">这是一个重要更新版本，建议立即升级！</string>
     <string name="update_info">更新日志：</string>
-    <string name="update_time">更新时间：%1$s</string>
     <string name="checking_update">正在检查更新… …</string>
     <string name="next_term_course_error">该学期课程信息不全，导入失败！</string>
     <string name="custom_term">自定义学期</string>
@@ -261,9 +257,6 @@
     <string name="alstu_system">奥兰系统</string>
     <string name="alstu_msg">奥兰通知</string>
     <string name="jw_system">教务系统</string>
-    <string name="beta">测试版</string>
-    <string name="release">稳定版</string>
-    <string name="debug">内测版</string>
     <string name="enlarge_alert">注：可使用手势放大查看图片</string>
     <string name="donate">请开发者喝一杯咖啡</string>
     <string name="donate_content">开发者为南审的学生，开发软件不易，如果你希望能够给开发者一些私人的赞助，可以通过如下渠道：</string>
@@ -277,9 +270,7 @@
     <string name="minute">分钟</string>
     <string name="exam_last_time">距考试开始:</string>
     <string name="hide_out_of_date_exam">隐藏过时的考试</string>
-    <string name="send_email">发送邮件</string>
     <string name="launch_failed">相关应用启动失败！</string>
-    <string name="feedback_mail_title">NauCourse 问题反馈</string>
     <string name="image_chooser_no_found">没有找到可用的图片选择器！</string>
     <string name="image_crop_no_found">没有找到可用的图片裁剪器！</string>
     <string name="image_get_error">图片获取错误！</string>
@@ -297,6 +288,7 @@
     <string name="share_school_calendar">分享校历</string>
     <string name="save_failed">保存失败</string>
     <string name="empty_list">列表为空</string>
+    <string name="new_version">最新版本：%1$s</string>
     <string name="random_course_color">随机设置课程颜色</string>
     <string name="random_course_color_success">随机设置颜色成功！</string>
     <string name="image_replace">[请点击前往网页查看图片]</string>
@@ -364,8 +356,12 @@
     <string name="download_wear_os_support_app_attention">请自行通过手表可用的第三方应用安装的方式，将Apk安装到手表上。\n\n由于手表App无法自动更新，请尽量下载最新版本的安装包！</string>
     <string name="transfer_data_to_watch_error">向Wear OS设备传输数据时出错！</string>
     <string name="need_set_course_term">当前所有课程并非设置学期的课程，请手动设置课程学期！</string>
+    <string name="app_download_lib">前往应用安装包库</string>
+    <string name="app_download_lib_sum">查看所有可用的历史应用安装包</string>
+    <string name="feedback_platform">反馈平台</string>
+    <string name="left_money">余额：%1$s</string>
 
-    <string name="new_version_info_content">欢迎使用NAU课程表\n\n如果出现网络问题，一般是学校网络连接错误，可以尝试更换网络。\n\n由于课程搜索网站接口变化，故不再提供支持。\n\n反馈QQ群：704668624</string>
+    <string name="new_version_info_content">欢迎使用NAU课程表\n\n目前阶段的维护已经进入尾声，接下来除非遇到重大问题不会再更新\n\n新一代的NAU课程表目前正在筹划中，如果你对跨平台应用开发有兴趣了解并想加入NAU课程表的开发，可以加入QQ群找到我。\n\n反馈平台在关于见面中可以看到，大家也可以在上面反馈意见，我会尽快修复问题。\n\n或者也可以加入反馈QQ群：704668624</string>
 
     <string name="cpv_default_title">选择一种颜色</string>
     <string name="cpv_presets">预设</string>

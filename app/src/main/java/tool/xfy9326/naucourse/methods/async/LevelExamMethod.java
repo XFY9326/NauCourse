@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.beans.exam.LevelExam;
 import tool.xfy9326.naucourse.methods.io.DataMethod;
 import tool.xfy9326.naucourse.methods.net.NetMethod;
+import tool.xfy9326.naucourse.nausso.NauSSOClient;
 
 public class LevelExamMethod extends BaseInfoMethod<LevelExam> {
     public static final String FILE_NAME = LevelExam.class.getSimpleName();

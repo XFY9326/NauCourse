@@ -9,11 +9,6 @@ import java.io.File;
  */
 
 public class Config {
-    @SuppressWarnings("unused")
-    public static final int SUB_VERSION = BuildConfig.SUB_VERSION;
-    @SuppressWarnings("unused")
-    public static final String VERSION_TYPE = BuildConfig.VERSION_TYPE;
-
     public static final String SHARE_COURSE_PREFIX = "ncc://";
 
     //单周
@@ -48,8 +43,6 @@ public class Config {
     public static final String SCHOOL_CALENDAR_IMAGE_FILE_NAME = "SchoolCalendar.jpeg";
 
     public static final String FILE_PROVIDER_AUTH = "tool.xfy9326.naucourse.provider";
-
-    public static final String DEBUG = "debug";
 
     public static final String ASSETS_EULA_PATH = "EULA.txt";
     public static final String ASSETS_LICENSE_PATH = "LICENSE.txt";
@@ -103,10 +96,8 @@ public class Config {
     public static final String PREFERENCE_SHOW_NO_THIS_WEEK_CLASS = "SHOW_NO_THIS_WEEK_CLASS";
     public static final String PREFERENCE_AUTO_UPDATE_COURSE_TABLE_ALERT = "AUTO_UPDATE_COURSE_TABLE_ALERT";
     public static final String PREFERENCE_AUTO_CHECK_UPDATE = "AUTO_CHECK_UPDATE";
-    public static final String PREFERENCE_CHECK_BETA_UPDATE = "CHECK_BETA_UPDATE";
     public static final String PREFERENCE_UPDATE_NOW = "UPDATE_NOW";
     public static final String PREFERENCE_ONLY_UPDATE_APPLICATION_UNDER_WIFI = "ONLY_UPDATE_APPLICATION_UNDER_WIFI";
-    public static final String PREFERENCE_LAST_CHECK_VERSION = "LAST_CHECK_VERSION";
     public static final String PREFERENCE_CUSTOM_TERM_START_DATE = "CUSTOM_TERM_START_DATE";
     public static final String PREFERENCE_CUSTOM_TERM_END_DATE = "CUSTOM_TERM_END_DATE";
     public static final String PREFERENCE_OLD_TERM_START_DATE = "OLD_TERM_START_DATE";
@@ -127,6 +118,8 @@ public class Config {
     public static final String PREFERENCE_NOTIFY_SHOW_ATTENTION = "NOTIFY_SHOW_ATTENTION";
     public static final String PREFERENCE_CLEAN_TEMP_AND_EXIT = "CLEAN_TEMP_AND_EXIT";
     public static final String PREFERENCE_WEAR_OS_SUPPORT_APP = "WEAR_OS_SUPPORT_APP";
+    public static final String PREFERENCE_APP_DOWNLOAD_LIB = "APP_DOWNLOAD_LIB";
+    public static final String PREFERENCE_STUDENT_CARD_MONEY = "STUDENT_CARD_MONEY";
 
     public static final String PREFERENCE_INFO_CHANNEL_SELECTED_JWC_SYSTEM = "INFO_CHANNEL_SELECTED_JWC_SYSTEM";
     public static final String PREFERENCE_INFO_CHANNEL_SELECTED_JW = "INFO_CHANNEL_SELECTED_JW";
@@ -153,7 +146,6 @@ public class Config {
     public static final boolean DEFAULT_PREFERENCE_SHOW_NO_THIS_WEEK_CLASS = true;
     public static final boolean DEFAULT_PREFERENCE_AUTO_UPDATE_COURSE_TABLE_ALERT = false;
     public static final boolean DEFAULT_PREFERENCE_AUTO_CHECK_UPDATE = true;
-    public static final boolean DEFAULT_PREFERENCE_CHECK_BETA_UPDATE = false;
     public static final boolean DEFAULT_PREFERENCE_ONLY_UPDATE_APPLICATION_UNDER_WIFI = false;
     public static final boolean DEFAULT_PREFERENCE_SCHOOL_CALENDAR_ENLARGE_ALERT = true;
     public static final boolean DEFAULT_PREFERENCE_HIDE_OUT_OF_DATE_EXAM = false;
@@ -202,7 +194,11 @@ public class Config {
     public static final String DONATE_URL_WECHAT = "https://www.xfy9326.top/api/donate/wechat.png";
     public static final String DONATE_URL_QQ_WALLET = "https://www.xfy9326.top/api/donate/qq_wallet.png";
 
-    public static final String WEAR_OS_SUPPORT_APP_DOWNLOAD_URL = "https://xfy9326.coding.me/NauCourse-DownloadLib/Pages/Watch/Default/";
+    public static final String APP_DOWNLOAD_LIB_URL = "https://xfy9326.github.io/NauCourse-DownloadLib/";
+
+    public static final String APP_FEEDBACK_URL = "https://support.qq.com/products/114856";
+
+    public static final String WEAR_OS_SUPPORT_APP_DOWNLOAD_URL = "https://xfy9326.github.io/NauCourse-DownloadLib/Pages/Watch/Release/";
 
     public static final String WEAR_MSG_TODAY_COURSE_LIST = "TODAY_COURSE_LIST";
     public static final String WEAR_MSG_NO_COURSE_DATA = "NO_COURSE_DATA";

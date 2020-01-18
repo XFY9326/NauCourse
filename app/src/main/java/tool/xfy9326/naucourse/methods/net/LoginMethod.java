@@ -9,9 +9,9 @@ import androidx.preference.PreferenceManager;
 import java.io.IOException;
 import java.util.concurrent.locks.ReentrantLock;
 
-import lib.xfy9326.nausso.NauSSOClient;
 import tool.xfy9326.naucourse.Config;
 import tool.xfy9326.naucourse.methods.BaseMethod;
+import tool.xfy9326.naucourse.nausso.NauSSOClient;
 
 /**
  * Created by xfy9326 on 18-2-20.
@@ -67,6 +67,13 @@ public class LoginMethod {
         nauSSOClient.jwcLoginOut();
         Thread.sleep(2000);
         if (nauSSOClient.login(id, pw)) {
+            nauSSOClient.alstuLogin(id, pw);
+            String loginURL = nauSSOClient.getJwcLoginUrl();
+            if (loginURL != null) {
+                sharedPreferences.edit().putString(Config.PREFERENCE_LOGIN_URL, loginURL).apply();
+                return Config.RE_LOGIN_SUCCESS;
+            }
+        } else if (nauSSOClient.login(id, pw)) {
             nauSSOClient.alstuLogin(id, pw);
             String loginURL = nauSSOClient.getJwcLoginUrl();
             if (loginURL != null) {
@@ -129,7 +136,6 @@ public class LoginMethod {
                     .remove(Config.PREFERENCE_INFO_CHANNEL_SELECTED_XXB)
                     .remove(Config.PREFERENCE_HIDE_OUT_OF_DATE_EXAM)
                     .remove(Config.PREFERENCE_SCHOOL_VPN_SMART_MODE)
-                    .remove(Config.PREFERENCE_EULA_ACCEPT)
                     .remove(Config.PREFERENCE_SHOW_HIDDEN_FUNCTION)
                     .putBoolean(Config.PREFERENCE_HAS_LOGIN, false)
                     .apply();

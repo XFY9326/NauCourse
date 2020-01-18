@@ -1,1 +1,1 @@
-include ':app', ':NauSSO', ':AppUpdater', ':NetApi', ':NauCourseWear'
+include ':app', ':NauCourseWear'

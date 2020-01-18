@@ -11,4 +11,10 @@
         android:title="@string/credit_calculator"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/menu_score_recalculate_credit"
+        android:orderInCategory="0"
+        android:title="@string/score_calculate_JD"
+        app:showAsAction="never" />
+
 </menu>

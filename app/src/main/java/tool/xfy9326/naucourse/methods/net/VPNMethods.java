@@ -5,9 +5,9 @@ import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
-import lib.xfy9326.nausso.NauSSOClient;
-import lib.xfy9326.nausso.VPNMethod;
 import tool.xfy9326.naucourse.methods.BaseMethod;
+import tool.xfy9326.naucourse.nausso.NauSSOClient;
+import tool.xfy9326.naucourse.nausso.VPNMethod;
 
 public class VPNMethods {
     static final String[] NON_VPN_HOST = new String[]{"jw.nau.edu.cn", "www.nau.edu.cn", "jwc.nau.edu.cn", "tw.nau.edu.cn", "xxb.nau.edu.cn", "xgc.nau.edu.cn", "my.nau.edu.cn"};

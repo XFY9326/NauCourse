@@ -24,7 +24,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import tool.xfy9326.naucourse.R;
 import tool.xfy9326.naucourse.asyncTasks.ScoreAsync;
@@ -47,7 +47,7 @@ public class ScoreActivity extends BaseAsyncActivity {
     private ScoreSwipeRefreshLayout swipeRefreshLayout;
     private ScoreViewPagerAdapter scoreViewPagerAdapter;
     private CourseScore courseScore;
-    private List<CreditCountCourse> historyCreditCourse;
+    private Set<CreditCountCourse> historyCreditCourse;
     private boolean isLoading = true;
 
     private static boolean waitForEvaluate(CourseScore courseScore) {
@@ -78,19 +78,31 @@ public class ScoreActivity extends BaseAsyncActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.menu_score_credit) {
-            if (!isLoading && courseScore != null && historyCreditCourse != null) {
-                ArrayList<CreditCountCourse> countCourses = CreditCountMethod.getCreditCountCourse(courseScore);
-                if (countCourses.size() > 0) {
+        if (!isLoading && courseScore != null && historyCreditCourse != null) {
+            ArrayList<CreditCountCourse> countCourses = CreditCountMethod.getCreditCountCourse(courseScore);
+            if (countCourses.size() > 0) {
+                if (item.getItemId() == R.id.menu_score_credit) {
                     showCreditCountDialog(countCourses);
-                } else {
-                    Snackbar.make(findViewById(R.id.layout_score_content), R.string.credit_count_course_empty, Snackbar.LENGTH_SHORT).show();
+                } else if (item.getItemId() == R.id.menu_score_recalculate_credit) {
+                    showCreditReCountDialog();
                 }
             } else {
-                Snackbar.make(findViewById(R.id.layout_score_content), R.string.data_is_loading, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(findViewById(R.id.layout_score_content), R.string.credit_count_course_empty, Snackbar.LENGTH_SHORT).show();
             }
+        } else {
+            Snackbar.make(findViewById(R.id.layout_score_content), R.string.data_is_loading, Snackbar.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showCreditReCountDialog() {
+        float credit = CreditCountMethod.getCredit(historyCreditCourse);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.score_calculate_JD);
+        builder.setMessage(getString(R.string.score_calculate_JD_attention, credit));
+        builder.setPositiveButton(android.R.string.yes, null);
+        builder.show();
     }
 
     private void showCreditCountDialog(final ArrayList<CreditCountCourse> creditCountCourses) {
@@ -111,7 +123,7 @@ public class ScoreActivity extends BaseAsyncActivity {
             if (current.size() == 0) {
                 Snackbar.make(findViewById(R.id.layout_score_content), R.string.credit_no_select, Snackbar.LENGTH_SHORT).show();
             } else {
-                ArrayList<CreditCountCourse> courseList = CreditCountMethod.combineCreditCourse(current, historyCreditCourse);
+                Set<CreditCountCourse> courseList = CreditCountMethod.combineCreditCourse(current, historyCreditCourse);
                 float credit = CreditCountMethod.getCredit(courseList);
                 AlertDialog.Builder newBuilder = new AlertDialog.Builder(this);
                 newBuilder.setTitle(R.string.credit_calculator);

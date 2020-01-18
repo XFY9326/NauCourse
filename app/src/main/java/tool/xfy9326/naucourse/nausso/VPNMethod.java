@@ -1,4 +1,4 @@
-package lib.xfy9326.nausso;
+package tool.xfy9326.naucourse.nausso;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -52,7 +52,7 @@ public class VPNMethod {
 
     public static String encryptHost(String host) {
         try {
-            return AES.encrypt(host, VPN_URL_ENCRYPT_KEY, VPN_URL_ENCRYPT_IV);
+            return VPNAES.encrypt(host, VPN_URL_ENCRYPT_KEY, VPN_URL_ENCRYPT_IV);
         } catch (Exception e) {
             e.printStackTrace();
         }

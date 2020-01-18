@@ -1,4 +1,4 @@
-package lib.xfy9326.nausso;
+package tool.xfy9326.naucourse.nausso;
 
 import android.app.Activity;
 import android.content.Context;
@@ -32,7 +32,7 @@ import okhttp3.HttpUrl;
 
 class PersistentCookieStore {
     private static final String LOG_TAG = "PersistentCookieStore";
-    private static final String COOKIE_PREFS = "Cookies_Prefs";
+    private static final String COOKIE_PREFS = "CookiesPrefs";
 
     @NonNull
     private final Map<String, ConcurrentHashMap<String, Cookie>> cookies;
@@ -168,16 +168,14 @@ class PersistentCookieStore {
         if (cookie == null) {
             return null;
         }
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(os);
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream();
+             ObjectOutputStream outputStream = new ObjectOutputStream(os)) {
             outputStream.writeObject(cookie);
+            return byteArrayToHexString(os.toByteArray());
         } catch (IOException e) {
             Log.d(LOG_TAG, "IOException in encodeCookie", e);
             return null;
         }
-
-        return byteArrayToHexString(os.toByteArray());
     }
 
     /**
@@ -189,10 +187,8 @@ class PersistentCookieStore {
     @Nullable
     private Cookie decodeCookie(@NonNull String cookieString) {
         byte[] bytes = hexStringToByteArray(cookieString);
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
         Cookie cookie = null;
-        try {
-            ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
             cookie = ((SerializableOkHttpCookies) objectInputStream.readObject()).getCookies();
         } catch (IOException e) {
             Log.d(LOG_TAG, "IOException in decodeCookie", e);

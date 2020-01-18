@@ -1,4 +1,4 @@
-package lib.xfy9326.nausso;
+package tool.xfy9326.naucourse.nausso;
 
 import java.nio.charset.StandardCharsets;
 
@@ -7,7 +7,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 @SuppressWarnings("SameParameterValue")
-class AES {
+class VPNAES {
     private static String textRightAppend(String text, String mode) {
         int segmentByteSize = "utf8".equals(mode) ? 16 : 32;
         if (text.length() % segmentByteSize == 0) {

@@ -39,20 +39,37 @@
                         android:padding="10dp"
                         android:textSize="12sp" />
 
-                    <TextView
-                        android:id="@+id/textView_stdName"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="25dp"
-                        android:layout_marginTop="50dp"
-                        android:textColor="@color/student_name"
-                        android:textSize="22sp" />
+                        android:layout_marginTop="70dp">
+
+                        <TextView
+                            android:id="@+id/textView_stdName"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom|start"
+                            android:layout_marginStart="25dp"
+                            android:layout_weight="1"
+                            android:textColor="@color/student_name"
+                            android:textSize="22sp" />
+
+                        <TextView
+                            android:id="@+id/textView_stdMoney"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom|end"
+                            android:layout_marginEnd="10dp"
+                            android:text="@string/left_money"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
                         android:layout_marginStart="5dp"
-                        android:layout_marginTop="15dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginEnd="5dp"
                         android:background="@android:color/darker_gray" />
 
