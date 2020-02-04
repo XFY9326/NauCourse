@@ -1,8 +1,6 @@
 ## 欢迎使用NAU课程表
 你可以在 [酷安](https://www.coolapk.com/apk/178329) 下载到本应用最新的版本  
-你也可以直接在[仓库](https://xfy9326.coding.me/NauCourse-DownloadLib/Pages/Project/Default/)中寻找所有的可用版本 
 
-#### 本仓库仅会同步稳定版本迭代的更新 
 
     NauCourse Android Application
     Copyright (C) 2020  XFY9326
