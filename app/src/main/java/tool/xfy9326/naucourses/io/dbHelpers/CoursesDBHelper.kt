@@ -6,7 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.io.dbHelpers.db.CoursesDB
-import tool.xfy9326.naucourses.providers.contents.beans.jwc.*
+import tool.xfy9326.naucourses.providers.beans.jwc.*
 
 object CoursesDBHelper {
     const val COURSES_TABLE_NAME = "Courses"
@@ -26,7 +26,7 @@ object CoursesDBHelper {
         putTerm(courseSet.term)
         putCourses(*courseSet.courses.toTypedArray())
         courseSet.courses.forEach {
-            val putArray = it.timeSet!!.toTypedArray()
+            val putArray = it.timeSet.toTypedArray()
             putArray.forEach { courseTime ->
                 courseTime.courseId = it.id
             }
@@ -45,7 +45,7 @@ object CoursesDBHelper {
         if (dbCourseList.isNotEmpty() && term.isNotEmpty()) {
             val courseSet = HashSet<Course>(dbCourseList.size)
             dbCourseList.forEach {
-                it.timeSet = getCoursesTime(it.id).toSet()
+                it.timeSet = getCoursesTime(it.id).toHashSet()
                 courseSet.add(it)
             }
             CourseSet(courseSet, term[0])
@@ -75,16 +75,16 @@ object CoursesDBHelper {
         clearCourseScores()
     }
 
-    fun putCourseHistoryArr(courseHistoryArr: Array<CourseHistory>) = with(courseDB.getCousesHistoryDao()) {
+    fun putCourseHistoryArr(courseHistoryArr: Array<CourseHistory>) = with(courseDB.getCoursesHistoryDao()) {
         putCourseHistory(*courseHistoryArr)
     }
 
-    fun getCourseHistoryArr(): Array<CourseHistory> = with(courseDB.getCousesHistoryDao()) {
+    fun getCourseHistoryArr(): Array<CourseHistory> = with(courseDB.getCoursesHistoryDao()) {
         getCourseHistory()
     }
 
     @Synchronized
-    fun clearAllCourseHistory() = with(courseDB.getCousesHistoryDao()) {
+    fun clearAllCourseHistory() = with(courseDB.getCoursesHistoryDao()) {
         clearCourseHistory()
         clearIndex()
     }

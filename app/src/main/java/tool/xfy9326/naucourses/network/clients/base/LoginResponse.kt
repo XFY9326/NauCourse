@@ -6,9 +6,9 @@ data class LoginResponse(
     val isSuccess: Boolean,
     val url: HttpUrl? = null,
     val htmlContent: String? = null,
-    val loginErrorResult: ErrorResult = ErrorResult.NONE
+    val loginErrorReason: ErrorReason = ErrorReason.NONE
 ) {
-    enum class ErrorResult {
+    enum class ErrorReason {
         NONE,
         UNKNOWN,
         PASSWORD_ERROR,

@@ -1,8 +1,8 @@
 package tool.xfy9326.naucourses.providers.contents.methods.rss
 
 import tool.xfy9326.naucourses.Constants
+import tool.xfy9326.naucourses.providers.beans.GeneralNews
 import tool.xfy9326.naucourses.providers.contents.base.BaseRSSContent
-import tool.xfy9326.naucourses.providers.contents.beans.GeneralNews
 
 object JwRSS : BaseRSSContent() {
     override val siteId: Int = 126

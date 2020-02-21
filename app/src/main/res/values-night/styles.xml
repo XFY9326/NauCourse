@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.TranslucentStatusBar" parent="AppTheme.TranslucentStatusBar.Base">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="AppTheme.TranslucentStatusBar.DarkActionBar" parent="AppTheme.TranslucentStatusBar.Base">
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="AppTheme.LaunchScreen" parent="AppTheme.LaunchScreen.Base">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+</resources>

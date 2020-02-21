@@ -4,9 +4,9 @@ import android.util.Xml
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.xmlpull.v1.XmlPullParser
-import tool.xfy9326.naucourses.providers.contents.beans.rss.RSSChannel
-import tool.xfy9326.naucourses.providers.contents.beans.rss.RSSItem
-import tool.xfy9326.naucourses.providers.contents.beans.rss.RSSObject
+import tool.xfy9326.naucourses.providers.beans.rss.RSSChannel
+import tool.xfy9326.naucourses.providers.beans.rss.RSSItem
+import tool.xfy9326.naucourses.providers.beans.rss.RSSObject
 import java.io.StringReader
 import java.text.SimpleDateFormat
 import java.util.*

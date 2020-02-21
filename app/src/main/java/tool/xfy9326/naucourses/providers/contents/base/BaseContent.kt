@@ -2,7 +2,7 @@ package tool.xfy9326.naucourses.providers.contents.base
 
 import okhttp3.Response
 import org.jsoup.HttpStatusException
-import tool.xfy9326.naucourses.network.NauNetworkManager
+import tool.xfy9326.naucourses.network.SSONetworkManager
 import tool.xfy9326.naucourses.network.SimpleNetworkManager
 import tool.xfy9326.naucourses.network.clients.SSOClient
 import java.io.IOException
@@ -10,10 +10,10 @@ import java.net.SocketTimeoutException
 
 abstract class BaseContent<T> {
     @Suppress("UNCHECKED_CAST")
-    protected fun <E : SSOClient> getSSOClient(type: NauNetworkManager.ClientType): E =
-        NauNetworkManager.getInstance().getClient(type) as E
+    protected fun <E : SSOClient> getSSOClient(type: SSONetworkManager.ClientType): E =
+        SSONetworkManager.getInstance().getClient(type) as E
 
-    protected fun getSimpleClient() = SimpleNetworkManager.getInstance().getClient()
+    protected fun getSimpleClient() = SimpleNetworkManager.getClient()
 
     private fun requestData(): RequestResult = try {
         onRequestData().use {
@@ -51,7 +51,7 @@ abstract class BaseContent<T> {
             if (parseResult.isParseSuccess) {
                 ContentResult(true, contentData = parseResult.parseData)
             } else {
-                ContentResult(false, ContentErrorReason.PRASE_FAILED)
+                ContentResult(false, ContentErrorReason.PARSE_FAILED)
             }
         } else {
             ContentResult(false, requestResult.requestContentErrorResult)

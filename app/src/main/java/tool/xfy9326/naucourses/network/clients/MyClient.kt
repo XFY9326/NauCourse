@@ -1,11 +1,10 @@
 package tool.xfy9326.naucourses.network.clients
 
-import android.content.Context
 import okhttp3.HttpUrl
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.network.clients.base.LoginInfo
 
-class MyClient(context: Context, loginInfo: LoginInfo) : SSOClient(context, loginInfo, MY_SSO_LOGIN_URL) {
+class MyClient(loginInfo: LoginInfo) : SSOClient(loginInfo, MY_SSO_LOGIN_URL) {
     companion object {
         const val MY_HOST = "my1.nau.edu.cn"
         private val MY_SSO_LOGIN_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(MY_HOST).build()

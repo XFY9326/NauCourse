@@ -2,8 +2,8 @@ package tool.xfy9326.naucourses.providers.contents.methods.rss
 
 import okhttp3.HttpUrl
 import okhttp3.Response
+import tool.xfy9326.naucourses.providers.beans.GeneralNews
 import tool.xfy9326.naucourses.providers.contents.base.BaseRSSContent
-import tool.xfy9326.naucourses.providers.contents.beans.GeneralNews
 
 object XxbRSS : BaseRSSContent() {
     private const val XXB_HOST = "xxb.nau.edu.cn"

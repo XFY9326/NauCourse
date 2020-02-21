@@ -5,17 +5,17 @@ import okhttp3.Response
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import tool.xfy9326.naucourses.Constants
-import tool.xfy9326.naucourses.network.NauNetworkManager
+import tool.xfy9326.naucourses.network.SSONetworkManager
 import tool.xfy9326.naucourses.network.clients.JwcClient
+import tool.xfy9326.naucourses.providers.beans.GeneralNews
+import tool.xfy9326.naucourses.providers.beans.GeneralNewsDetail
+import tool.xfy9326.naucourses.providers.beans.jwc.JwcTopic
 import tool.xfy9326.naucourses.providers.contents.base.BaseNewsContent
-import tool.xfy9326.naucourses.providers.contents.beans.GeneralNews
-import tool.xfy9326.naucourses.providers.contents.beans.GeneralNewsDetail
-import tool.xfy9326.naucourses.providers.contents.beans.jwc.JwcTopic
 import java.util.*
 import kotlin.collections.HashSet
 
 object TopicList : BaseNewsContent<JwcTopic>() {
-    private val jwcClient = getSSOClient<JwcClient>(NauNetworkManager.ClientType.JWC)
+    private val jwcClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
 
     private const val JWC_TOPIC_ASPX = "TopicList.aspx"
     private val JWC_TOPIC_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(JwcClient.JWC_HOST)

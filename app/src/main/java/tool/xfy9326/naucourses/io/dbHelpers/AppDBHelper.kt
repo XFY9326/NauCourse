@@ -3,9 +3,9 @@ package tool.xfy9326.naucourses.io.dbHelpers
 import androidx.room.*
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.io.dbHelpers.db.AppDB
-import tool.xfy9326.naucourses.providers.contents.beans.GeneralNews
-import tool.xfy9326.naucourses.providers.contents.beans.jwc.Exam
-import tool.xfy9326.naucourses.providers.contents.beans.jwc.TermDate
+import tool.xfy9326.naucourses.providers.beans.GeneralNews
+import tool.xfy9326.naucourses.providers.beans.jwc.Exam
+import tool.xfy9326.naucourses.providers.beans.jwc.TermDate
 
 object AppDBHelper {
     const val NEWS_TABLE_NAME = "News"
@@ -18,7 +18,7 @@ object AppDBHelper {
 
     private val appDB = AppDB.getInstance().db
 
-    fun putGeneralNewsSet(newsSet: Set<GeneralNews>) = with(appDB.getNewsDataDao()) {
+    fun putGeneralNewsSet(newsSet: List<GeneralNews>) = with(appDB.getNewsDataDao()) {
         putNews(*newsSet.toTypedArray())
     }
 

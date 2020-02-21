@@ -1,6 +1,5 @@
 package tool.xfy9326.naucourses.network.clients
 
-import android.content.Context
 import okhttp3.Headers
 import okhttp3.HttpUrl
 import okhttp3.Request
@@ -9,7 +8,7 @@ import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.network.clients.base.LoginInfo
 import tool.xfy9326.naucourses.network.clients.base.LoginResponse
 
-class JwcClient(context: Context, loginInfo: LoginInfo) : SSOClient(context, loginInfo, JWC_SSO_LOGIN_URL) {
+class JwcClient(loginInfo: LoginInfo) : SSOClient(loginInfo, JWC_SSO_LOGIN_URL) {
     @Volatile
     private var jwcMainUrl: HttpUrl? = null
 
@@ -41,11 +40,11 @@ class JwcClient(context: Context, loginInfo: LoginInfo) : SSOClient(context, log
             "X-Requested-With", "XMLHttpRequest;"
         )
 
-        private fun getJwcLoginStatus(htmlContent: String): LoginResponse.ErrorResult = when {
-            JWC_PASSWORD_ERROR_STR in htmlContent -> LoginResponse.ErrorResult.PASSWORD_ERROR
-            JWC_SERVER_ERROR_STR in htmlContent -> LoginResponse.ErrorResult.SERVER_ERROR
-            JWC_LOGIN_PAGE_STR in htmlContent || JWC_ALREADY_LOGIN_STR in htmlContent -> LoginResponse.ErrorResult.ALREADY_LOGIN
-            else -> LoginResponse.ErrorResult.NONE
+        private fun getJwcLoginStatus(htmlContent: String): LoginResponse.ErrorReason = when {
+            JWC_PASSWORD_ERROR_STR in htmlContent -> LoginResponse.ErrorReason.PASSWORD_ERROR
+            JWC_SERVER_ERROR_STR in htmlContent -> LoginResponse.ErrorReason.SERVER_ERROR
+            JWC_LOGIN_PAGE_STR in htmlContent || JWC_ALREADY_LOGIN_STR in htmlContent -> LoginResponse.ErrorReason.ALREADY_LOGIN
+            else -> LoginResponse.ErrorReason.NONE
         }
 
         private fun validateJwcLoginUrl(url: HttpUrl): Boolean =
@@ -61,20 +60,20 @@ class JwcClient(context: Context, loginInfo: LoginInfo) : SSOClient(context, log
         val ssoResult = super.login()
         if (ssoResult.isSuccess) {
             val status = getJwcLoginStatus(ssoResult.htmlContent!!)
-            return if (status == LoginResponse.ErrorResult.NONE && validateJwcLoginUrl(ssoResult.url!!)) {
+            return if (status == LoginResponse.ErrorReason.NONE && validateJwcLoginUrl(ssoResult.url!!)) {
                 jwcMainUrl = ssoResult.url
                 ssoResult
-            } else if (!loginOnce && status == LoginResponse.ErrorResult.ALREADY_LOGIN) {
+            } else if (!loginOnce && status == LoginResponse.ErrorReason.ALREADY_LOGIN) {
                 if (jwcLogout()) {
                     jwcLogin(true)
                 } else {
                     LoginResponse(
                         false,
-                        loginErrorResult = LoginResponse.ErrorResult.ALREADY_LOGIN
+                        loginErrorReason = LoginResponse.ErrorReason.ALREADY_LOGIN
                     )
                 }
             } else {
-                LoginResponse(false, loginErrorResult = status)
+                LoginResponse(false, loginErrorReason = status)
             }
         }
         return ssoResult
@@ -88,7 +87,7 @@ class JwcClient(context: Context, loginInfo: LoginInfo) : SSOClient(context, log
 
     override fun validateLoginWithResponse(responseContent: String, responseUrl: HttpUrl): Boolean {
         return super.validateLoginWithResponse(responseContent, responseUrl) &&
-                getJwcLoginStatus(responseContent) == LoginResponse.ErrorResult.NONE
+                getJwcLoginStatus(responseContent) == LoginResponse.ErrorReason.NONE
     }
 
     fun requestJwcMainContent(): Response {
@@ -97,7 +96,7 @@ class JwcClient(context: Context, loginInfo: LoginInfo) : SSOClient(context, log
             if (result.isSuccess) {
                 newAutoLoginCall(jwcMainUrl!!)
             } else {
-                throw IllegalStateException("Client Login Failed! Reason: ${result.loginErrorResult}")
+                throw IllegalStateException("Client Login Failed! Reason: ${result.loginErrorReason}")
             }
         } else {
             newAutoLoginCall(jwcMainUrl!!)

@@ -7,6 +7,9 @@ object Constants {
     const val EMPTY = ""
     const val SPACE = " "
 
+    const val KEEP_TWO_DECIMAL_PLACES = "%.2f"
+    const val KEEP_TWO_NUMBER_PLACES = "%02d"
+
     object News {
         const val NEWS_STORE_DAY_LENGTH = 180
     }
@@ -58,13 +61,13 @@ object Constants {
         val DATE_FORMAT_YMD = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)
         val DATE_FORMAT_YMD_HM_CH = SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.CHINA)
 
-        const val MIN_WEEK_DAY = 0
-        const val MAX_WEEK_DAY = 6
+        const val MIN_WEEK_DAY = 1
+        const val MAX_WEEK_DAY = 7
     }
 
     object Course {
-        const val MIN_WEEKS_SIZE = 1
-        const val MAX_WEEKS_SIZE = 24
+        const val MIN_WEEK_NUM_SIZE = 1
+        const val MAX_WEEK_NUM_SIZE = 24
         const val MIN_COURSE_LENGTH = 1
         const val MAX_COURSE_LENGTH = 13
     }
@@ -76,5 +79,10 @@ object Constants {
         const val COLUMN_NAME = "name"
 
         const val DEFAULT_ID = 0
+    }
+
+    object Url {
+        // const val GITHUB_PROJECT = ""
+        const val FORGET_PASSWORD = "http://sso.nau.edu.cn/sso/login"
     }
 }

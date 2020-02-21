@@ -1,7 +1,7 @@
 package tool.xfy9326.naucourses.providers.contents.methods.rss
 
+import tool.xfy9326.naucourses.providers.beans.GeneralNews
 import tool.xfy9326.naucourses.providers.contents.base.BaseRSSContent
-import tool.xfy9326.naucourses.providers.contents.beans.GeneralNews
 
 object TwRSS : BaseRSSContent() {
     private const val TW_HOST = "tw.nau.edu.cn"

@@ -8,10 +8,10 @@ import androidx.room.TypeConverters
 import tool.xfy9326.naucourses.io.dbHelpers.AppDBHelper
 import tool.xfy9326.naucourses.io.dbHelpers.base.BaseDB
 import tool.xfy9326.naucourses.io.dbHelpers.base.DBTypeConverter
-import tool.xfy9326.naucourses.providers.contents.beans.GeneralNews
-import tool.xfy9326.naucourses.providers.contents.beans.jwc.Exam
-import tool.xfy9326.naucourses.providers.contents.beans.jwc.LevelExam
-import tool.xfy9326.naucourses.providers.contents.beans.jwc.TermDate
+import tool.xfy9326.naucourses.providers.beans.GeneralNews
+import tool.xfy9326.naucourses.providers.beans.jwc.Exam
+import tool.xfy9326.naucourses.providers.beans.jwc.LevelExam
+import tool.xfy9326.naucourses.providers.beans.jwc.TermDate
 
 class AppDB private constructor(context: Context) : BaseDB() {
     override val db = Room.databaseBuilder(

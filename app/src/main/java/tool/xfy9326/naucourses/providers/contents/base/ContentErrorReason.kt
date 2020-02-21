@@ -5,6 +5,7 @@ enum class ContentErrorReason {
     TIMEOUT,
     SERVER_ERROR,
     OPERATION,
-    PRASE_FAILED,
+    PARSE_FAILED,
+    EMPTY_DATA,
     UNKNOWN
 }

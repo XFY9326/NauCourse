@@ -6,8 +6,8 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.network.clients.JwcClient
+import tool.xfy9326.naucourses.providers.beans.jw.SuspendCourse
 import tool.xfy9326.naucourses.providers.contents.base.BaseNoParamContent
-import tool.xfy9326.naucourses.providers.contents.beans.jw.SuspendCourse
 
 object SuspendCourseInfo : BaseNoParamContent<Array<SuspendCourse>>() {
     private const val JWC_SUSPEND_COURSE_ASPX = "SuspendCourseInfo.aspx"

@@ -8,19 +8,19 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import tool.xfy9326.naucourses.Constants
-import tool.xfy9326.naucourses.network.NauNetworkManager
+import tool.xfy9326.naucourses.network.SSONetworkManager
 import tool.xfy9326.naucourses.network.clients.AlstuClient
 import tool.xfy9326.naucourses.network.clients.VPNClient
 import tool.xfy9326.naucourses.network.clients.tools.VPNTools
+import tool.xfy9326.naucourses.providers.beans.GeneralNews
+import tool.xfy9326.naucourses.providers.beans.GeneralNewsDetail
+import tool.xfy9326.naucourses.providers.beans.alstu.AlstuMessage
 import tool.xfy9326.naucourses.providers.contents.base.BaseNewsContent
-import tool.xfy9326.naucourses.providers.contents.beans.GeneralNews
-import tool.xfy9326.naucourses.providers.contents.beans.GeneralNewsDetail
-import tool.xfy9326.naucourses.providers.contents.beans.alstu.AlstuMessage
 import java.util.*
 import kotlin.collections.HashSet
 
 object DefaultMessage : BaseNewsContent<AlstuMessage>() {
-    private val alstuClient = getSSOClient<AlstuClient>(NauNetworkManager.ClientType.ALSTU)
+    private val alstuClient = getSSOClient<AlstuClient>(SSONetworkManager.ClientType.ALSTU)
 
     private const val ALSTU_MESSAGE_PATH = "MESSAGE"
     private const val ALSTU_DEFAULT_ASPX = "DEFAULT.ASPX"

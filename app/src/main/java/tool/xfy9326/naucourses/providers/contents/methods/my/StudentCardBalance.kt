@@ -4,14 +4,14 @@ import okhttp3.HttpUrl
 import okhttp3.Response
 import org.json.JSONObject
 import tool.xfy9326.naucourses.Constants
-import tool.xfy9326.naucourses.network.NauNetworkManager
+import tool.xfy9326.naucourses.network.SSONetworkManager
 import tool.xfy9326.naucourses.network.clients.MyClient
 import tool.xfy9326.naucourses.providers.contents.base.BaseNoParamContent
 import java.io.IOException
 
 
 object StudentCardBalance : BaseNoParamContent<Float>() {
-    private val myClient = getSSOClient<MyClient>(NauNetworkManager.ClientType.MY)
+    private val myClient = getSSOClient<MyClient>(SSONetworkManager.ClientType.MY)
 
     private const val MY_WEB_PATH = "_web"
     private const val MY_PLUGS_PATH = "_plugs"

@@ -1,6 +1,5 @@
 package tool.xfy9326.naucourses.network.clients.utils
 
-import android.util.Log
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -14,7 +13,7 @@ class UAInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
 //        Log.d("SSONetwork", "UA: $globalUA")
-        Log.d("SSONetwork", "Method: ${request.method} Url: ${request.url}")
+//        Log.d("SSONetwork", "Method: ${request.method} Url: ${request.url}")
 //        if (request.headers.size > 0) {
 //            Log.d("SSONetwork", "Header: ${request.headers}")
 //        }
@@ -22,8 +21,9 @@ class UAInterceptor : Interceptor {
         val headerBuilder = request.headers.newBuilder()
         headerBuilder[USER_AGENT] = globalUA
         requestBuilder.headers(headerBuilder.build())
-        val response = chain.proceed(requestBuilder.build())
-        Log.d("SSONetwork", "Turn To: ${response.request.url} Status: ${response.code}")
-        return response
+        return chain.proceed(requestBuilder.build())
+//        val response = chain.proceed(requestBuilder.build())
+//        Log.d("SSONetwork", "Turn To: ${response.request.url} Status: ${response.code}")
+//        return response
     }
 }

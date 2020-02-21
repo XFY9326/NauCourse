@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="login_panel_btn_login_margin_top">30dp</dimen>
+</resources>

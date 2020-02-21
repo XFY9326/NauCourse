@@ -25,7 +25,9 @@ object NetworkDBHelper {
     @Synchronized
     fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) = with(netWorkDB.getCookiesDataDao()) {
         for (cookie in cookies) {
-            if (!cookie.persistent) {
+            if (cookie.persistent) {
+                deleteCookieData(url.host, cookie.name)
+            } else {
                 putCookieData(CookieData.parse(url, cookie))
             }
         }
@@ -85,6 +87,9 @@ object NetworkDBHelper {
 
         @Query("select * from $TABLE_NAME where $COLUMN_HOST = :host")
         fun getCookieData(host: String): Array<CookieData>
+
+        @Query("delete from $TABLE_NAME where $COLUMN_HOST = :host and $COLUMN_NAME = :name")
+        fun deleteCookieData(host: String, name: String)
 
         @Query("delete from $TABLE_NAME where persistent = 1")
         fun clearPersistentCookieData()

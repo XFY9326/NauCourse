@@ -1,6 +1,5 @@
 package tool.xfy9326.naucourses.network.clients
 
-import android.content.Context
 import androidx.annotation.CallSuper
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -9,12 +8,13 @@ import okhttp3.Response
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.network.clients.base.LoginInfo
 import tool.xfy9326.naucourses.network.clients.base.LoginResponse
-import tool.xfy9326.naucourses.network.clients.tools.SSONetworkTools.hasSameHost
+import tool.xfy9326.naucourses.network.clients.tools.SSONetworkTools
+import tool.xfy9326.naucourses.network.clients.tools.SSONetworkTools.Companion.hasSameHost
 import tool.xfy9326.naucourses.network.clients.tools.VPNTools
 import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 
-open class VPNClient(context: Context, loginInfo: LoginInfo) : SSOClient(context, loginInfo, VPN_LOGIN_URL) {
+open class VPNClient(loginInfo: LoginInfo) : SSOClient(loginInfo, VPN_LOGIN_URL) {
     var forceUseVPN: Boolean = false
 
     companion object {
@@ -49,7 +49,7 @@ open class VPNClient(context: Context, loginInfo: LoginInfo) : SSOClient(context
         return if (ssoResult.isSuccess && VPN_LOGIN_PAGE_STR !in ssoResult.htmlContent!!) {
             LoginResponse(
                 false,
-                loginErrorResult = LoginResponse.ErrorResult.SERVER_ERROR
+                loginErrorReason = LoginResponse.ErrorReason.SERVER_ERROR
             )
         } else {
             ssoResult
@@ -97,6 +97,11 @@ open class VPNClient(context: Context, loginInfo: LoginInfo) : SSOClient(context
             }
         }
         requestBuilder.url(vpnUrl)
-        return newVPNCall(requestBuilder.build())
+        val callResult = newVPNCall(requestBuilder.build())
+        return if (VPN_LOGIN_PAGE_STR in SSONetworkTools.getResponseContent(callResult)) {
+            newVPNCall(requestBuilder.build())
+        } else {
+            callResult
+        }
     }
 }

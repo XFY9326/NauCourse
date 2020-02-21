@@ -5,19 +5,19 @@ import okhttp3.Response
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import tool.xfy9326.naucourses.Constants
-import tool.xfy9326.naucourses.network.NauNetworkManager
+import tool.xfy9326.naucourses.network.SSONetworkManager
 import tool.xfy9326.naucourses.network.clients.VPNClient
+import tool.xfy9326.naucourses.providers.beans.GeneralNews
+import tool.xfy9326.naucourses.providers.beans.GeneralNewsDetail
+import tool.xfy9326.naucourses.providers.beans.rss.RSSObject
 import tool.xfy9326.naucourses.providers.contents.base.rss.NauRSSTools
 import tool.xfy9326.naucourses.providers.contents.base.rss.RSSReader
-import tool.xfy9326.naucourses.providers.contents.beans.GeneralNews
-import tool.xfy9326.naucourses.providers.contents.beans.GeneralNewsDetail
-import tool.xfy9326.naucourses.providers.contents.beans.rss.RSSObject
 import java.io.IOException
 import java.util.*
 import kotlin.collections.HashSet
 
 abstract class BaseRSSContent : BaseNewsContent<RSSObject>() {
-    protected val vpnClient = getSSOClient<VPNClient>(NauNetworkManager.ClientType.VPN)
+    protected val vpnClient = getSSOClient<VPNClient>(SSONetworkManager.ClientType.VPN)
 
     abstract val siteId: Int
     abstract val templateId: Int

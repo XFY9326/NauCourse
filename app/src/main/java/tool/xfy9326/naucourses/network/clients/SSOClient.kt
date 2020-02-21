@@ -1,6 +1,5 @@
 package tool.xfy9326.naucourses.network.clients
 
-import android.content.Context
 import androidx.annotation.CallSuper
 import okhttp3.*
 import okhttp3.internal.closeQuietly
@@ -10,13 +9,13 @@ import tool.xfy9326.naucourses.network.clients.base.BaseLoginClient
 import tool.xfy9326.naucourses.network.clients.base.LoginInfo
 import tool.xfy9326.naucourses.network.clients.base.LoginResponse
 import tool.xfy9326.naucourses.network.clients.tools.SSONetworkTools
-import tool.xfy9326.naucourses.network.clients.tools.SSONetworkTools.hasSameHost
+import tool.xfy9326.naucourses.network.clients.tools.SSONetworkTools.Companion.hasSameHost
 import java.io.IOException
 
-open class SSOClient(context: Context, private val loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = null) :
+open class SSOClient(private val loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = null) :
     BaseLoginClient(loginInfo) {
-    private val okHttpClient = SSONetworkTools.getClient(context)
-    private val cookieStore = SSONetworkTools.getCookieStore()
+    private val okHttpClient = SSONetworkTools.instance.getClient()
+    private val cookieStore = SSONetworkTools.instance.getCookieStore()
     private val isServiceLogin = serviceUrl != null
 
     private val loginUrl: HttpUrl
@@ -55,6 +54,8 @@ open class SSOClient(context: Context, private val loginInfo: LoginInfo, private
         private const val SSO_LOGIN_INPUT_ERROR_STR = "请勿输入非法字符"
         const val SSO_LOGIN_PAGE_STR = "南京审计大学统一身份认证登录"
 
+        private const val AUTO_TRY_LOGIN_TIME_WHEN_CALL = 2
+
         private val SSO_HEADER = Headers.headersOf(
             "Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
             "Accept-Language", "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7",
@@ -63,11 +64,11 @@ open class SSOClient(context: Context, private val loginInfo: LoginInfo, private
             "Upgrade-Insecure-Requests", "1"
         )
 
-        private fun getSSOLoginStatus(htmlContent: String): LoginResponse.ErrorResult = when {
-            SSO_LOGIN_SUCCESS_STR in htmlContent -> LoginResponse.ErrorResult.NONE
-            SSO_LOGIN_PASSWORD_ERROR_STR in htmlContent -> LoginResponse.ErrorResult.PASSWORD_ERROR
-            SSO_LOGIN_INPUT_ERROR_STR in htmlContent -> LoginResponse.ErrorResult.INPUT_ERROR
-            else -> LoginResponse.ErrorResult.UNKNOWN
+        private fun getSSOLoginStatus(htmlContent: String): LoginResponse.ErrorReason = when {
+            SSO_LOGIN_SUCCESS_STR in htmlContent -> LoginResponse.ErrorReason.NONE
+            SSO_LOGIN_PASSWORD_ERROR_STR in htmlContent -> LoginResponse.ErrorReason.PASSWORD_ERROR
+            SSO_LOGIN_INPUT_ERROR_STR in htmlContent -> LoginResponse.ErrorReason.INPUT_ERROR
+            else -> LoginResponse.ErrorReason.UNKNOWN
         }
 
         private fun getLoginPostForm(userId: String, userPw: String, ssoResponseContent: String): FormBody = FormBody.Builder().apply {
@@ -90,7 +91,7 @@ open class SSOClient(context: Context, private val loginInfo: LoginInfo, private
         ssoResponse.closeQuietly()
         when {
             SSO_LOGIN_PAGE_STR in ssoResponseContent || ssoResponseUrl.hasSameHost(SSO_HOST) -> {
-                if (!isServiceLogin && getSSOLoginStatus(ssoResponseContent) == LoginResponse.ErrorResult.NONE) {
+                if (!isServiceLogin && getSSOLoginStatus(ssoResponseContent) == LoginResponse.ErrorReason.NONE) {
                     return LoginResponse(true, ssoResponseUrl, ssoResponseContent)
                 }
                 val postForm = getLoginPostForm(loginInfo.userId, loginInfo.userPw, ssoResponseContent)
@@ -109,24 +110,24 @@ open class SSOClient(context: Context, private val loginInfo: LoginInfo, private
                                 url.hasSameHost(SSO_HOST) -> {
                                     LoginResponse(
                                         false,
-                                        loginErrorResult = getSSOLoginStatus(content)
+                                        loginErrorReason = getSSOLoginStatus(content)
                                     )
                                 }
                                 else -> {
                                     LoginResponse(
                                         false,
-                                        loginErrorResult = LoginResponse.ErrorResult.SERVER_ERROR
+                                        loginErrorReason = LoginResponse.ErrorReason.SERVER_ERROR
                                     )
                                 }
                             }
                         } else {
                             val status = getSSOLoginStatus(content)
-                            if (status == LoginResponse.ErrorResult.NONE) {
+                            if (status == LoginResponse.ErrorReason.NONE) {
                                 LoginResponse(true, url, content)
                             } else {
                                 LoginResponse(
                                     false,
-                                    loginErrorResult = getSSOLoginStatus(content)
+                                    loginErrorReason = getSSOLoginStatus(content)
                                 )
                             }
                         }
@@ -161,7 +162,7 @@ open class SSOClient(context: Context, private val loginInfo: LoginInfo, private
         if (isServiceLogin) {
             responseUrl.hasSameHost(serviceUrl)
         } else {
-            getSSOLoginStatus(responseContent) == LoginResponse.ErrorResult.NONE
+            getSSOLoginStatus(responseContent) == LoginResponse.ErrorReason.NONE
         }
 
     override fun newClientCall(request: Request): Response = newSSOCall(request)

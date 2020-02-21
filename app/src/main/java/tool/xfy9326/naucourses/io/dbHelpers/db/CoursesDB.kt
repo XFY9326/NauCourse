@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 import tool.xfy9326.naucourses.io.dbHelpers.CoursesDBHelper
 import tool.xfy9326.naucourses.io.dbHelpers.base.BaseDB
 import tool.xfy9326.naucourses.io.dbHelpers.base.DBTypeConverter
-import tool.xfy9326.naucourses.providers.contents.beans.jwc.*
+import tool.xfy9326.naucourses.providers.beans.jwc.*
 
 class CoursesDB private constructor(context: Context) : BaseDB() {
     override val db = Room.databaseBuilder(
@@ -45,6 +45,6 @@ class CoursesDB private constructor(context: Context) : BaseDB() {
 
         abstract fun getCourseScoreDao(): CoursesDBHelper.CourseScoreDao
 
-        abstract fun getCousesHistoryDao(): CoursesDBHelper.CourseHistoryDao
+        abstract fun getCoursesHistoryDao(): CoursesDBHelper.CourseHistoryDao
     }
 }

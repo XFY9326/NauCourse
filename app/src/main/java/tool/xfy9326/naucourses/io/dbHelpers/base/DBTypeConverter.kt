@@ -3,8 +3,10 @@ package tool.xfy9326.naucourses.io.dbHelpers.base
 import androidx.room.TypeConverter
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
-import tool.xfy9326.naucourses.providers.contents.beans.GeneralNews
-import tool.xfy9326.naucourses.providers.contents.beans.jwc.Term
+import tool.xfy9326.naucourses.providers.beans.GeneralNews
+import tool.xfy9326.naucourses.providers.beans.jwc.Term
+import tool.xfy9326.naucourses.providers.beans.jwc.TimePeriodList
+import tool.xfy9326.naucourses.providers.beans.jwc.WeekMode
 import java.util.*
 
 class DBTypeConverter {
@@ -21,6 +23,9 @@ class DBTypeConverter {
     fun httpUrlToUrl(httpUrl: HttpUrl?): String? = httpUrl?.toString()
 
     @TypeConverter
+    fun postSourceToPostSourceName(postSource: GeneralNews.PostSource): String = postSource.name
+
+    @TypeConverter
     fun fromPostSourceName(value: String): GeneralNews.PostSource = try {
         GeneralNews.PostSource.valueOf(value)
     } catch (e: IllegalArgumentException) {
@@ -34,5 +39,18 @@ class DBTypeConverter {
     fun termToTermString(term: Term?): String? = term?.toString()
 
     @TypeConverter
-    fun postSourceToPostSourceName(postSource: GeneralNews.PostSource): String = postSource.name
+    fun timePeriodListToTimePeriodListString(timePeriodList: TimePeriodList?): String? = timePeriodList?.toString()
+
+    @TypeConverter
+    fun fromTimePeriodListString(value: String?): TimePeriodList? = value?.let { TimePeriodList.parse(it) }
+
+    @TypeConverter
+    fun weekModeToWeekModeName(weekMode: WeekMode): String = weekMode.name
+
+    @TypeConverter
+    fun fromWeekModeName(value: String): WeekMode = try {
+        WeekMode.valueOf(value)
+    } catch (e: IllegalArgumentException) {
+        WeekMode.ALL_WEEKS
+    }
 }

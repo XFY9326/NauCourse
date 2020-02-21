@@ -1,7 +1,7 @@
 package tool.xfy9326.naucourses.providers.contents.methods.rss
 
+import tool.xfy9326.naucourses.providers.beans.GeneralNews
 import tool.xfy9326.naucourses.providers.contents.base.BaseRSSContent
-import tool.xfy9326.naucourses.providers.contents.beans.GeneralNews
 
 object XgcRSS : BaseRSSContent() {
     private const val XGC_HOST = "xgc.nau.edu.cn"
@@ -11,5 +11,5 @@ object XgcRSS : BaseRSSContent() {
     override val columnId: Int = 3439
 
     override val rssDetailServerHost: String = XGC_HOST
-    override val postSource: GeneralNews.PostSource = GeneralNews.PostSource.RSS_XW
+    override val postSource: GeneralNews.PostSource = GeneralNews.PostSource.RSS_XGC
 }

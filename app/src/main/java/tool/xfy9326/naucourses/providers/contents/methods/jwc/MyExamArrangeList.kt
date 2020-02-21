@@ -5,14 +5,14 @@ import okhttp3.Response
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import tool.xfy9326.naucourses.Constants
-import tool.xfy9326.naucourses.network.NauNetworkManager
+import tool.xfy9326.naucourses.network.SSONetworkManager
 import tool.xfy9326.naucourses.network.clients.JwcClient
+import tool.xfy9326.naucourses.providers.beans.jwc.Exam
 import tool.xfy9326.naucourses.providers.contents.base.BaseNoParamContent
-import tool.xfy9326.naucourses.providers.contents.beans.jwc.Exam
 import java.util.*
 
 object MyExamArrangeList : BaseNoParamContent<Array<Exam>>() {
-    private val jwcClient = getSSOClient<JwcClient>(NauNetworkManager.ClientType.JWC)
+    private val jwcClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
 
     private const val JWC_MY_EXAM_ARRANGE_LIST_ASPX = "MyExamArrangeList.aspx"
     private const val TIME_SPLIT_SYMBOL = "-"

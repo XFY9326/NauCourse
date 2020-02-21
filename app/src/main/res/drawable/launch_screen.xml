@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:opacity="opaque">
+    <item android:drawable="@color/colorWindowsBackground" />
+
+    <item
+        android:width="110dp"
+        android:height="110dp"
+        android:drawable="@drawable/launch_screen_logo"
+        android:gravity="center_horizontal|top"
+        android:top="100dp" />
+
+    <item
+        android:width="180dp"
+        android:height="60dp"
+        android:bottom="50dp"
+        android:drawable="@drawable/launch_screen_text"
+        android:gravity="center_horizontal|bottom" />
+</layer-list>

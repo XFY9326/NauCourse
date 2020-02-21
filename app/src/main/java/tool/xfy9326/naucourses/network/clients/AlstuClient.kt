@@ -1,11 +1,10 @@
 package tool.xfy9326.naucourses.network.clients
 
-import android.content.Context
 import okhttp3.HttpUrl
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.network.clients.base.LoginInfo
 
-class AlstuClient(context: Context, loginInfo: LoginInfo) : VPNClient(context, loginInfo) {
+class AlstuClient(loginInfo: LoginInfo) : VPNClient(loginInfo) {
     companion object {
         const val ALSTU_HOST = "alstu.nau.edu.cn"
         private const val ALSTU_DEFAULT_ASPX = "default.aspx"

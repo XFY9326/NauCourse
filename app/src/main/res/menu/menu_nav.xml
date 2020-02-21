@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/menu_groupBase">
+        <item
+            android:id="@+id/menu_navTodayCourse"
+            android:icon="@drawable/ic_today_course"
+            android:title="@string/today_course" />
+
+        <item
+            android:id="@+id/menu_navCourseTable"
+            android:icon="@drawable/ic_table"
+            android:title="@string/course_table" />
+
+        <item
+            android:id="@+id/menu_navNews"
+            android:icon="@drawable/ic_news"
+            android:title="@string/news" />
+    </group>
+    <group android:id="@+id/menu_groupOthers">
+        <item
+            android:id="@+id/menu_navSettings"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/settings" />
+
+        <item
+            android:id="@+id/menu_navNightMode"
+            android:icon="@drawable/ic_night_mode"
+            android:title="@string/night_mode" />
+
+        <item
+            android:id="@+id/menu_navExit"
+            android:icon="@drawable/ic_exit"
+            android:title="@string/exit" />
+    </group>
+</menu>

@@ -3,8 +3,8 @@ package tool.xfy9326.naucourses.providers.contents.base
 import okhttp3.HttpUrl
 import okhttp3.Response
 import org.jsoup.HttpStatusException
-import tool.xfy9326.naucourses.providers.contents.beans.GeneralNews
-import tool.xfy9326.naucourses.providers.contents.beans.GeneralNewsDetail
+import tool.xfy9326.naucourses.providers.beans.GeneralNews
+import tool.xfy9326.naucourses.providers.beans.GeneralNewsDetail
 import java.io.IOException
 import java.net.SocketTimeoutException
 
@@ -52,7 +52,7 @@ abstract class BaseNewsContent<T> : BaseNoParamContent<Set<GeneralNews>>() {
             if (parseResult.isParseSuccess) {
                 ContentResult(true, contentData = parseResult.parseData)
             } else {
-                ContentResult(false, ContentErrorReason.PRASE_FAILED)
+                ContentResult(false, ContentErrorReason.PARSE_FAILED)
             }
         } else {
             ContentResult(false, requestResult.requestContentErrorResult)

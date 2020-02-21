@@ -3,10 +3,16 @@
     package="tool.xfy9326.naucourses">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
-        android:name="tool.xfy9326.naucourses.BaseApplication"
+        android:name="tool.xfy9326.naucourses.App"
         android:allowBackup="true"
+        android:extractNativeLibs="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
@@ -17,14 +23,35 @@
         tools:targetApi="n">
 
         <activity
-            android:name="tool.xfy9326.naucourses.activities.MainActivity"
+            android:name=".ui.activities.SplashActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop"
-            tools:ignore="InnerclassSeparator">
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.LaunchScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.activities.MainDrawerActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:theme="@style/AppTheme.TranslucentStatusBar.DarkActionBar" />
+
+        <activity
+            android:name=".ui.activities.LoginActivity"
+            android:launchMode="singleTask"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:theme="@style/AppTheme.TranslucentStatusBar" />
+
+        <activity
+            android:name=".ui.activities.UserInfoActivity"
+            android:label="@string/user_info">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.MainDrawerActivity" />
         </activity>
 
     </application>
