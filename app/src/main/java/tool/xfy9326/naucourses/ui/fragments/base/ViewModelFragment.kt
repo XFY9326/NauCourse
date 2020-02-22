@@ -9,27 +9,37 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import tool.xfy9326.naucourses.ui.models.base.BaseViewModel
 
+
 abstract class ViewModelFragment<T : BaseViewModel> : Fragment() {
     private lateinit var contentViewModel: T
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        contentViewModel = onCreateViewModel()
+        onSetInstance(arguments)
     }
 
     @CallSuper
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-        inflater.inflate(onCreateContentView(), container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return if (view == null) {
+            inflater.inflate(onCreateContentView(), container, false)
+        } else {
+            val parent = view!!.parent as ViewGroup?
+            parent?.removeView(view)
+            view
+        }
+    }
 
     @CallSuper
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        contentViewModel.onActivityCreate()
+        contentViewModel = onCreateViewModel(savedInstanceState)
 
         bindViewModel(contentViewModel)
+        contentViewModel.onActivityCreate()
         initView(contentViewModel)
         contentViewModel.onInitView()
+        setView(savedInstanceState)
     }
 
     fun getViewModel(): T = contentViewModel
@@ -37,9 +47,13 @@ abstract class ViewModelFragment<T : BaseViewModel> : Fragment() {
     @LayoutRes
     protected abstract fun onCreateContentView(): Int
 
-    protected abstract fun onCreateViewModel(): T
+    protected abstract fun onCreateViewModel(savedInstanceState: Bundle?): T
 
     protected open fun initView(viewModel: T) {}
 
+    protected open fun setView(savedInstanceState: Bundle?) {}
+
     protected open fun bindViewModel(viewModel: T) {}
+
+    protected open fun onSetInstance(args: Bundle?) {}
 }

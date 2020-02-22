@@ -3,7 +3,7 @@ package tool.xfy9326.naucourses.io.prefs
 import tool.xfy9326.naucourses.io.prefs.base.BasePref
 
 object GsonStoreVersionPref : BasePref() {
-    override val prefName: String = "JsonStoreVersion"
+    override val prefName: String = "GsonStoreVersion"
 
     fun saveStoredVersion(key: String, storedVersion: Int) = pref.edit().putInt(key, storedVersion).apply()
 

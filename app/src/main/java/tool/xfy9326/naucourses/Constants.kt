@@ -6,6 +6,7 @@ import java.util.*
 object Constants {
     const val EMPTY = ""
     const val SPACE = " "
+    const val CHANGE_LINE = "\n"
 
     const val KEEP_TWO_DECIMAL_PLACES = "%.2f"
     const val KEEP_TWO_NUMBER_PLACES = "%02d"

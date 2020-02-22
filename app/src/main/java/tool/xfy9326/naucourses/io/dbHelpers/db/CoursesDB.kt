@@ -45,6 +45,6 @@ class CoursesDB private constructor(context: Context) : BaseDB() {
 
         abstract fun getCourseScoreDao(): CoursesDBHelper.CourseScoreDao
 
-        abstract fun getCoursesHistoryDao(): CoursesDBHelper.CourseHistoryDao
+        abstract fun getCoursesHistoryDao(): CoursesDBHelper.CoursesHistoryDao
     }
 }

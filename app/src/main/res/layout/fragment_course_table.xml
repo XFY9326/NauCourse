@@ -1,16 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nsv_courseTable"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
     android:orientation="vertical">
 
-    <androidx.gridlayout.widget.GridLayout
-        android:id="@+id/gl_courseTable"
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_courseTable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_dateInfoBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_todayDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimaryTextDark"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_nowShowWeekNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimaryTextDark"
+                    android:textSize="13sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_todayDate" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_notCurrentWeek"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textColor="@color/colorPrimaryTextDark"
+                    android:textSize="13sp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@id/tv_nowShowWeekNum"
+                    app:layout_constraintTop_toBottomOf="@id/tv_todayDate" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_courseTablePanel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:orientation="vertical" />
+        android:orientation="horizontal" />
 
-</androidx.core.widget.NestedScrollView>
+    <View
+        android:id="@+id/v_courseTableCornerCompat"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:visibility="gone" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

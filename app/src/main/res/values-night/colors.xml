@@ -5,6 +5,10 @@
     <color name="colorAccent">#363636</color>
     <color name="colorPrimaryText">#DBDBDB</color>
     <color name="colorSecondaryText">#C7C7C7</color>
+    <color name="colorPrimaryTextDark">#212121</color>
+    <color name="colorSecondaryTextDark">#757575</color>
+    <color name="colorCourseTimeDefault">#858585</color>
+    <color name="colorCourseTimeHighLight">#FFFFFF</color>
     <color name="colorBaseIcon">#DBDBDB</color>
     <color name="colorWindowsBackground">@color/design_dark_default_color_background</color>
 </resources>

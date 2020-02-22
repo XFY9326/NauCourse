@@ -2,11 +2,13 @@ package tool.xfy9326.naucourses.utils.compute
 
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.beans.CourseCell
+import tool.xfy9326.naucourses.beans.CourseCellStyle
 import tool.xfy9326.naucourses.beans.CourseTable
 import tool.xfy9326.naucourses.beans.CourseTimeDuration
 import tool.xfy9326.naucourses.providers.beans.jwc.Course
 import tool.xfy9326.naucourses.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourses.providers.beans.jwc.CourseTime
+import tool.xfy9326.naucourses.providers.store.CourseCellStyleStore
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -67,6 +69,20 @@ object CourseUtils {
         return courseTable.toTypedArray()
     }
 
+    @Synchronized
+    fun asyncCellStyle(courseSet: CourseSet, styleMap: Array<CourseCellStyle>? = null, saveStyle: Boolean = true): Array<CourseCellStyle> {
+        val oldStyles = styleMap ?: emptyArray()
+        val newStyles = ArrayList<CourseCellStyle>(courseSet.courses.size)
+        for (course in courseSet.courses) {
+            newStyles.add(CourseCellStyle.getStyleByCourseId(course.id, oldStyles) ?: CourseCellStyle.getDefaultCellStyle(course.id))
+        }
+        val result = newStyles.toTypedArray()
+        if (saveStyle) {
+            CourseCellStyleStore.saveStore(result)
+        }
+        return result
+    }
+
     fun getTodayNextCourse(
         todayCourse: Array<Triple<Course, CourseTime, CourseTimeDuration>>,
         nowTime: Date = Date()
@@ -90,6 +106,4 @@ object CourseUtils {
             position
         }
     }
-
-
 }

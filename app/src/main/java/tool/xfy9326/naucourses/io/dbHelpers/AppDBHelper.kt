@@ -4,17 +4,11 @@ import androidx.room.*
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.io.dbHelpers.db.AppDB
 import tool.xfy9326.naucourses.providers.beans.GeneralNews
-import tool.xfy9326.naucourses.providers.beans.jwc.Exam
-import tool.xfy9326.naucourses.providers.beans.jwc.TermDate
 
 object AppDBHelper {
     const val NEWS_TABLE_NAME = "News"
-    const val TERM_DATE_TABLE_NAME = "TermDate"
-    const val LEVEL_EXAM_TABLE_NAME = "LevelExam"
-    const val EXAM_TABLE_NAME = "Exam"
     const val COLUMN_POST_DATE = "postDate"
-    const val COLUMN_HASH_ID = "hashId"
-    const val COLUMN_START_DATE = "startDate"
+    const val COLUMN_ID = "id"
 
     private val appDB = AppDB.getInstance().db
 
@@ -42,47 +36,12 @@ object AppDBHelper {
     fun clearGeneralNewsSet() = with(appDB.getNewsDataDao()) {
         clearAllNews()
     }
-
-    fun putTermDate(termDate: TermDate) = with(appDB.getTermDateDataDao()) {
-        putTermDate(termDate)
-    }
-
-    @Synchronized
-    fun getTermDate(): TermDate? = with(appDB.getTermDateDataDao()) {
-        val termArr = getTermDate()
-        if (termArr.isNotEmpty()) {
-            termArr[0]
-        } else {
-            null
-        }
-    }
-
-    @Synchronized
-    fun clearTermDate() = with(AppDB.getInstance().db.getTermDateDataDao()) {
-        clearTermDate()
-        clearIndex()
-    }
-
-    fun putExam(examArr: Array<Exam>) = with(appDB.getExamDataDao()) {
-        putExam(*examArr)
-    }
-
-    fun getExam(): Array<Exam> = with(appDB.getExamDataDao()) {
-        getExam()
-    }
-
-    @Synchronized
-    fun clearExam() = with(AppDB.getInstance().db.getExamDataDao()) {
-        clearExam()
-        clearIndex()
-    }
-
     @Dao
     interface NewsDataDao {
         @Insert(onConflict = OnConflictStrategy.REPLACE)
         fun putNews(vararg news: GeneralNews)
 
-        @Query("select * from $NEWS_TABLE_NAME order by $COLUMN_POST_DATE desc, $COLUMN_HASH_ID desc")
+        @Query("select * from $NEWS_TABLE_NAME order by $COLUMN_POST_DATE desc")
         fun getAllNews(): MutableList<GeneralNews>
 
         @Delete
@@ -96,35 +55,5 @@ object AppDBHelper {
 
         @Query("delete from $NEWS_TABLE_NAME")
         fun clearAllNews()
-    }
-
-    @Dao
-    interface TermDateDataDao {
-        @Insert(onConflict = OnConflictStrategy.REPLACE)
-        fun putTermDate(termDate: TermDate)
-
-        @Query("select * from $TERM_DATE_TABLE_NAME limit 1")
-        fun getTermDate(): Array<TermDate>
-
-        @Query("delete from $TERM_DATE_TABLE_NAME")
-        fun clearTermDate()
-
-        @Query("delete from ${Constants.DB.SQL_LITE_TABLE} where ${Constants.DB.COLUMN_NAME} = '$TERM_DATE_TABLE_NAME'")
-        fun clearIndex()
-    }
-
-    @Dao
-    interface ExamDataDao {
-        @Insert(onConflict = OnConflictStrategy.REPLACE)
-        fun putExam(vararg exam: Exam)
-
-        @Query("select * from $EXAM_TABLE_NAME order by $COLUMN_START_DATE desc")
-        fun getExam(): Array<Exam>
-
-        @Query("delete from $EXAM_TABLE_NAME")
-        fun clearExam()
-
-        @Query("delete from ${Constants.DB.SQL_LITE_TABLE} where ${Constants.DB.COLUMN_NAME} = '$EXAM_TABLE_NAME'")
-        fun clearIndex()
     }
 }

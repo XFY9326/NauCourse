@@ -2,6 +2,7 @@ package tool.xfy9326.naucourses.io.json
 
 import android.content.Context
 import com.google.gson.Gson
+import tool.xfy9326.naucourses.beans.CourseCellStyle
 import tool.xfy9326.naucourses.beans.CourseTable
 import tool.xfy9326.naucourses.io.prefs.GsonStoreVersionPref
 import tool.xfy9326.naucourses.providers.beans.jwc.StudentInfo
@@ -19,6 +20,10 @@ class GsonStoreManager private constructor(context: Context) {
         COURSE_TABLE {
             override val versionCode: Int = 1
             override val storeClass: Class<*> = Array<CourseTable>::class.java
+        },
+        COURSE_STYLE {
+            override val versionCode: Int = 1
+            override val storeClass: Class<*> = Array<CourseCellStyle>::class.java
         };
 
         abstract val storeClass: Class<*>

@@ -25,6 +25,10 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
     override fun onCreateViewModel() = ViewModelProvider(this)[LoginViewModel::class.java]
 
     override fun initView(savedInstanceState: Bundle?, viewModel: LoginViewModel) {
+        //TODO
+        et_userId.setText("17013209")
+        et_userPassword.setText("262010")
+
         tv_EULALicense.setOnClickListener {
             DialogUtils.createUsingLicenseDialog(this).show()
         }

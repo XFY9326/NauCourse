@@ -10,9 +10,9 @@ import java.util.*
 
 @Entity(tableName = AppDBHelper.NEWS_TABLE_NAME)
 data class GeneralNews(
-    @PrimaryKey
-    @ColumnInfo(name = AppDBHelper.COLUMN_HASH_ID)
-    var hashId: Int,
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = AppDBHelper.COLUMN_ID)
+    var id: Int,
     val title: String,
     @ColumnInfo(name = AppDBHelper.COLUMN_POST_DATE)
     val postDate: Date,
@@ -21,10 +21,6 @@ data class GeneralNews(
     val postSource: PostSource,
     val clickAmount: Int?
 ) {
-    init {
-        hashId = hashCode()
-    }
-
     // For RSSObject
     constructor(title: String, postDate: Date, detailUrl: HttpUrl, type: String?, postSource: PostSource) :
             this(Constants.DB.DEFAULT_ID, title, postDate, detailUrl, type, postSource, null)

@@ -12,6 +12,7 @@ object CoursesDBHelper {
     const val COURSES_TABLE_NAME = "Courses"
     const val TERM_TABLE_NAME = "Term"
     const val COURSES_TIME_TABLE_NAME = "CoursesTime"
+    const val COURSES_STYLE_TABLE_NAME = "CoursesStyle"
     const val COURSES_SCORE_TABLE_NAME = "CoursesScore"
     const val COURSES_HISTORY_TABLE_NAME = "CourseHistory"
 
@@ -63,6 +64,7 @@ object CoursesDBHelper {
         clearCourses()
     }
 
+
     fun putCourseScores(courseScoreSet: Array<CourseScore>) = with(courseDB.getCourseScoreDao()) {
         putCourseScore(*courseScoreSet)
     }
@@ -74,6 +76,7 @@ object CoursesDBHelper {
     fun clearCourseScore() = with(courseDB.getCourseScoreDao()) {
         clearCourseScores()
     }
+
 
     fun putCourseHistoryArr(courseHistoryArr: Array<CourseHistory>) = with(courseDB.getCoursesHistoryDao()) {
         putCourseHistory(*courseHistoryArr)
@@ -135,7 +138,7 @@ object CoursesDBHelper {
     }
 
     @Dao
-    interface CourseHistoryDao {
+    interface CoursesHistoryDao {
         @Insert(onConflict = OnConflictStrategy.REPLACE)
         fun putCourseHistory(vararg courseHistory: CourseHistory)
 

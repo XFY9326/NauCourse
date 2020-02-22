@@ -39,5 +39,10 @@
     <string name="friday">五</string>
     <string name="saturday">六</string>
     <string name="sunday">日</string>
-    <string name="month">月</string>
+    <string name="month">%1$d月</string>
+    <string name="today_date">%1$d月%2$d日</string>
+    <string name="week_num">第%1$d周</string>
+    <string name="not_current_week">非本周</string>
+    <string name="not_current_week_course">[非本周]</string>
+    <string name="in_vacation">放假中</string>
 </resources>

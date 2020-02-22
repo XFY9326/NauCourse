@@ -7,9 +7,16 @@ import kotlinx.coroutines.launch
 import tool.xfy9326.naucourses.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourses.providers.info.methods.CardBalanceInfo
 import tool.xfy9326.naucourses.providers.info.methods.PersonalInfo
+import tool.xfy9326.naucourses.ui.activities.MainDrawerActivity
 import tool.xfy9326.naucourses.ui.models.base.BaseViewModel
 
 class MainDrawerViewModel : BaseViewModel() {
+
+    companion object {
+        private val DEFAULT_FRAGMENT = MainDrawerActivity.Companion.FragmentType.COURSE_TABLE
+    }
+
+    var nowShowFragmentType = DEFAULT_FRAGMENT
     val studentCardBalance = MutableLiveData<Float>()
     val studentInfo = MutableLiveData<StudentInfo>()
 

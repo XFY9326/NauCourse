@@ -4,9 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import tool.xfy9326.naucourses.Constants
-import tool.xfy9326.naucourses.io.dbHelpers.AppDBHelper
+import tool.xfy9326.naucourses.io.dbHelpers.JwcDBHelper
 
-@Entity(tableName = AppDBHelper.LEVEL_EXAM_TABLE_NAME)
+@Entity(tableName = JwcDBHelper.LEVEL_EXAM_TABLE_NAME)
 data class LevelExam(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = Constants.DB.COLUMN_ID)

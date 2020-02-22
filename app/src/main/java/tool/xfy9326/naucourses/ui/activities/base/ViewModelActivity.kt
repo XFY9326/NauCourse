@@ -16,13 +16,13 @@ abstract class ViewModelActivity<T : BaseViewModel> : AppCompatActivity() {
 
     private fun initActivity(savedInstanceState: Bundle?) {
         contentViewModel = onCreateViewModel()
+        contentViewModel.onActivityCreate()
         bindViewModel(contentViewModel)
         initView(savedInstanceState, contentViewModel)
-        contentViewModel.onActivityCreate()
-        if (savedInstanceState == null) {
-            contentViewModel.onInitView()
-        }
+        contentViewModel.onInitView()
     }
+
+    protected fun getViewModel(): T = contentViewModel
 
     @LayoutRes
     protected abstract fun onCreateContentView(): Int

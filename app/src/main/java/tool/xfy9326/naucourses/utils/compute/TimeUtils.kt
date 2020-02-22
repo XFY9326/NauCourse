@@ -68,6 +68,12 @@ object TimeUtils {
         return DateTimePeriod(startDateTime, endDateTime)
     }
 
+    fun getTodayDate(): Pair<Int, Int> {
+        getNewCalendar().apply {
+            return Pair(get(Calendar.MONTH) + 1, get(Calendar.DATE))
+        }
+    }
+
     fun getCourseDateTimePeriod(termStartDate: Date, weekNum: Int, weekDay: Short, timePeriod: TimePeriod): DateTimePeriod =
         getCourseDateTimePeriod(
             getCourseDate(

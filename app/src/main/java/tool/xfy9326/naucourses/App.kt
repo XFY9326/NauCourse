@@ -5,6 +5,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import tool.xfy9326.naucourses.io.dbHelpers.db.AppDB
 import tool.xfy9326.naucourses.io.dbHelpers.db.CoursesDB
+import tool.xfy9326.naucourses.io.dbHelpers.db.JwcDB
 import tool.xfy9326.naucourses.io.dbHelpers.db.NetworkDB
 import tool.xfy9326.naucourses.io.json.GsonStoreManager
 import tool.xfy9326.naucourses.io.prefs.UserPref
@@ -33,6 +34,7 @@ class App : Application() {
 
     private fun initDBInstance() {
         AppDB.initInstance(this)
+        JwcDB.initInstance(this)
         NetworkDB.initInstance(this)
         CoursesDB.initInstance(this)
     }

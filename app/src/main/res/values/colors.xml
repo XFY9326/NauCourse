@@ -5,6 +5,13 @@
     <color name="colorAccent">#536DFE</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
+    <color name="colorPrimaryTextDark">#FFFFFF</color>
+    <color name="colorSecondaryTextDark">#C7C7C7</color>
+    <color name="colorCourseTimeDefault">#ACACAC</color>
+    <color name="colorCourseTimeHighLight">#000000</color>
     <color name="colorBaseIcon">#858585</color>
     <color name="colorWindowsBackground">@color/design_default_color_background</color>
+
+    <color name="colorCourseTextLight">#FFFFFF</color>
+    <color name="colorCourseTextDark">#2E2E2E</color>
 </resources>

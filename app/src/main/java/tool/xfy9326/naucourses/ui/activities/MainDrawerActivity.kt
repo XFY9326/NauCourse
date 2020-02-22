@@ -15,18 +15,15 @@ import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourses.ui.activities.base.ViewModelActivity
-import tool.xfy9326.naucourses.ui.fragments.CourseTablePanelFragment
+import tool.xfy9326.naucourses.ui.fragments.CourseTableFragment
 import tool.xfy9326.naucourses.ui.fragments.NewsFragment
 import tool.xfy9326.naucourses.ui.fragments.TodayCourseFragment
 import tool.xfy9326.naucourses.ui.fragments.base.DrawerToolbarFragment
 import tool.xfy9326.naucourses.ui.models.activity.MainDrawerViewModel
 
 class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationView.OnNavigationItemSelectedListener {
-    @Volatile
-    private var nowFragmentType: FragmentType = DEFAULT_FRAGMENT
-
     companion object {
-        private val DEFAULT_FRAGMENT = FragmentType.COURSE_TABLE
+        private const val DEFAULT_NAV_HEADER_INDEX = 0
 
         enum class FragmentType {
             COURSE_TABLE,
@@ -35,10 +32,10 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         }
     }
 
-    private val fragmentMap = mapOf<FragmentType, Lazy<DrawerToolbarFragment<*>>>(
-        FragmentType.COURSE_TABLE to lazy { CourseTablePanelFragment(this, R.id.drawer_main) },
-        FragmentType.TODAY_COURSE to lazy { TodayCourseFragment(this, R.id.drawer_main) },
-        FragmentType.NEWS to lazy { NewsFragment(this, R.id.drawer_main) }
+    private val fragmentMap = mapOf<FragmentType, DrawerToolbarFragment<*>>(
+        FragmentType.COURSE_TABLE to CourseTableFragment(),
+        FragmentType.TODAY_COURSE to TodayCourseFragment(),
+        FragmentType.NEWS to NewsFragment()
     )
 
     override fun onCreateContentView(): Int = R.layout.activity_main
@@ -46,20 +43,51 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     override fun onCreateViewModel(): MainDrawerViewModel = ViewModelProvider(this)[MainDrawerViewModel::class.java]
 
     override fun initView(savedInstanceState: Bundle?, viewModel: MainDrawerViewModel) {
+        drawer_main.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerStateChanged(newState: Int) {}
+
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+
+            override fun onDrawerClosed(drawerView: View) {}
+
+            override fun onDrawerOpened(drawerView: View) = viewModel.updateBalance()
+        })
         nav_main.setNavigationItemSelectedListener(this)
         nav_main.getHeaderView(0).setOnClickListener {
             startActivity(Intent(this, UserInfoActivity::class.java))
         }
-        showFragment(DEFAULT_FRAGMENT)
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        showFragment(getViewModel().nowShowFragmentType, false)
     }
 
     @Synchronized
-    private fun showFragment(type: FragmentType) {
-        val fragment = (fragmentMap[type] ?: error("Fragment Not Found!!")).value
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.fg_mainContent, fragment)
-        }.commit()
-        nowFragmentType = type
+    private fun showFragment(type: FragmentType, showAnim: Boolean = true) {
+        val newFragment = supportFragmentManager.findFragmentByTag(type.name) ?: when (type) {
+            FragmentType.COURSE_TABLE -> CourseTableFragment()
+            FragmentType.TODAY_COURSE -> TodayCourseFragment()
+            FragmentType.NEWS -> NewsFragment()
+        }
+        val oldFragment = supportFragmentManager.findFragmentByTag(getViewModel().nowShowFragmentType.name)
+        if (newFragment != oldFragment) {
+            supportFragmentManager.beginTransaction().apply {
+                if (oldFragment != null) hide(oldFragment)
+                if (newFragment.isAdded) {
+                    show(newFragment)
+                } else {
+                    add(R.id.fg_mainContent, newFragment.apply {
+                        arguments = Bundle().apply {
+                            putInt(DrawerToolbarFragment.DRAWER_ID, R.id.drawer_main)
+                        }
+                    }, type.name)
+                }
+                if (showAnim) setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+            }.commitNow()
+            getViewModel().nowShowFragmentType = type
+        }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -75,20 +103,12 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
 
     override fun bindViewModel(viewModel: MainDrawerViewModel) {
         viewModel.studentCardBalance.observe(this, Observer {
-            nav_main.getHeaderView(0).tv_cardBalance.text = getString(R.string.balance, String.format(Constants.KEEP_TWO_DECIMAL_PLACES, it))
+            nav_main.getHeaderView(DEFAULT_NAV_HEADER_INDEX).tv_cardBalance.text =
+                getString(R.string.balance, String.format(Constants.KEEP_TWO_DECIMAL_PLACES, it))
         })
         viewModel.studentInfo.observe(this, Observer {
-            nav_main.getHeaderView(0).tv_userId.text = it.personalInfo.stuId.second
-            nav_main.getHeaderView(0).tv_userName.text = StudentInfo.trimExtra(it.personalInfo.name.second)
-        })
-        drawer_main.addDrawerListener(object : DrawerLayout.DrawerListener {
-            override fun onDrawerStateChanged(newState: Int) {}
-
-            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
-
-            override fun onDrawerClosed(drawerView: View) {}
-
-            override fun onDrawerOpened(drawerView: View) = viewModel.updateBalance()
+            nav_main.getHeaderView(DEFAULT_NAV_HEADER_INDEX).tv_userId.text = it.personalInfo.stuId.second
+            nav_main.getHeaderView(DEFAULT_NAV_HEADER_INDEX).tv_userName.text = StudentInfo.trimExtra(it.personalInfo.name.second)
         })
     }
 

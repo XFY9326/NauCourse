@@ -9,9 +9,6 @@ import tool.xfy9326.naucourses.io.dbHelpers.AppDBHelper
 import tool.xfy9326.naucourses.io.dbHelpers.base.BaseDB
 import tool.xfy9326.naucourses.io.dbHelpers.base.DBTypeConverter
 import tool.xfy9326.naucourses.providers.beans.GeneralNews
-import tool.xfy9326.naucourses.providers.beans.jwc.Exam
-import tool.xfy9326.naucourses.providers.beans.jwc.LevelExam
-import tool.xfy9326.naucourses.providers.beans.jwc.TermDate
 
 class AppDB private constructor(context: Context) : BaseDB() {
     override val db = Room.databaseBuilder(
@@ -36,16 +33,12 @@ class AppDB private constructor(context: Context) : BaseDB() {
     }
 
     @Database(
-        entities = [GeneralNews::class, TermDate::class, LevelExam::class, Exam::class],
+        entities = [GeneralNews::class],
         version = APP_DB_VERSION,
         exportSchema = false
     )
     @TypeConverters(DBTypeConverter::class)
     abstract class AppDataBase : RoomDatabase() {
         abstract fun getNewsDataDao(): AppDBHelper.NewsDataDao
-
-        abstract fun getTermDateDataDao(): AppDBHelper.TermDateDataDao
-
-        abstract fun getExamDataDao(): AppDBHelper.ExamDataDao
     }
 }
