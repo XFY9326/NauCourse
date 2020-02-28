@@ -1,12 +1,13 @@
 package tool.xfy9326.naucourses.providers.beans.jwc
 
+import java.io.Serializable
 import java.util.*
 import kotlin.math.max
 
 data class TimePeriod(
     val start: Int,
     val end: Int? = null
-) {
+) : Serializable {
     init {
         if (end != null && start > end) {
             throw IllegalArgumentException("Time Period Error! Start is Larger than End! Start: $start End: $end")

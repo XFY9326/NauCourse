@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourses.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -10,11 +11,15 @@ import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.fragment_news.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourses.R
+import tool.xfy9326.naucourses.beans.SerializableNews
+import tool.xfy9326.naucourses.io.prefs.AppPref
 import tool.xfy9326.naucourses.providers.beans.GeneralNews
+import tool.xfy9326.naucourses.ui.activities.NewsDetailActivity
 import tool.xfy9326.naucourses.ui.dialogs.NewsTypeChoiceDialog
 import tool.xfy9326.naucourses.ui.fragments.base.DrawerToolbarFragment
 import tool.xfy9326.naucourses.ui.models.fragment.NewsViewModel
 import tool.xfy9326.naucourses.ui.views.recyclerview.adapters.NewsAdapter
+import tool.xfy9326.naucourses.utils.IntentUtils
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.showSnackBar
 import tool.xfy9326.naucourses.utils.views.I18NUtils
 
@@ -55,21 +60,21 @@ class NewsFragment : DrawerToolbarFragment<NewsViewModel>(), NewsAdapter.OnNewsI
     }
 
     override fun bindViewModel(viewModel: NewsViewModel) {
-        viewModel.isRefreshing.observe(this, Observer {
+        viewModel.isRefreshing.observe(viewLifecycleOwner, Observer {
             asl_newsRefreshLayout.post {
                 asl_newsRefreshLayout.isRefreshing = it
             }
         })
-        viewModel.newsList.observe(this, Observer {
+        viewModel.newsList.observe(viewLifecycleOwner, Observer {
             newsAdapter.updateNewsList(it)
         })
-        viewModel.errorMsg.observe(this, Observer {
+        viewModel.errorMsg.observeSingle(viewLifecycleOwner, Observer {
             showSnackBar(layout_news, I18NUtils.getContentErrorResId(it)!!)
         })
     }
 
     override fun initView(viewModel: NewsViewModel) {
-        newsAdapter = NewsAdapter(context!!, this)
+        newsAdapter = NewsAdapter(requireContext(), this)
 
         arv_newsList.adapter = newsAdapter
         asl_newsRefreshLayout.setOnRefreshListener {
@@ -78,6 +83,15 @@ class NewsFragment : DrawerToolbarFragment<NewsViewModel>(), NewsAdapter.OnNewsI
     }
 
     override fun onNewsItemClick(news: GeneralNews) {
-        println(news)
+        if (AppPref.DefaultShowNewsInBrowser) {
+            IntentUtils.launchUrlInBrowser(requireContext(), news.detailUrl.toString())
+        } else {
+            startActivity(
+                Intent(requireContext(), NewsDetailActivity::class.java).putExtra(
+                    NewsDetailActivity.NEWS_DATA,
+                    SerializableNews.parse(news)
+                )
+            )
+        }
     }
 }

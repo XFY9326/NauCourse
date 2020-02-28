@@ -14,6 +14,7 @@ data class LoginResponse(
         PASSWORD_ERROR,
         INPUT_ERROR,
         SERVER_ERROR,
-        ALREADY_LOGIN
+        ALREADY_LOGIN,
+        CONNECTION_ERROR
     }
 }

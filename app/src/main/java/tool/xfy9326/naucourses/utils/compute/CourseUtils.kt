@@ -31,6 +31,7 @@ object CourseUtils {
                             course.name,
                             time.location,
                             time.weekDay,
+                            weekNum,
                             CourseTimeDuration.parseTimePeriod(it),
                             thisWeekCourse
                         )

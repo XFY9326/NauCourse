@@ -9,11 +9,11 @@ import android.view.animation.AnimationUtils
 object AnimUtils {
     fun getAnimationFadeVisible(context: Context) = AnimationUtils.loadAnimation(context, android.R.anim.fade_in).apply {
         duration = context.resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
-    }
+    }!!
 
     fun getAnimationFadeGone(context: Context) = AnimationUtils.loadAnimation(context, android.R.anim.fade_out).apply {
         duration = context.resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
-    }
+    }!!
 
     fun getAnimationLoopCallback() = object : Animatable2.AnimationCallback() {
         override fun onAnimationEnd(drawable: Drawable?) {

@@ -52,10 +52,10 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
     }
 
     override fun bindViewModel(viewModel: LoginViewModel) {
-        viewModel.cachedUserId.observe(this, Observer {
+        viewModel.cachedUserId.observeSingle(this, Observer {
             et_userId.setText(it)
         })
-        viewModel.isLoginLoading.observe(this, Observer {
+        viewModel.isLoginLoading.observeSingle(this, Observer {
             tv_loadingMsg.clear()
             et_userId.isEnabled = !it
             et_userPassword.isEnabled = !it
@@ -66,17 +66,18 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
 
             setLoadingAnimation(it)
         })
-        viewModel.errorReasonType.observe(this, Observer {
+        viewModel.errorReasonType.observeSingle(this, Observer {
             showSnackBar(layout_activityLogin, I18NUtils.getErrorMsgResId(it)!!)
         })
-        viewModel.loginSuccess.observe(this, Observer {
+        viewModel.loginSuccess.observeSingle(this, Observer {
             if (it) {
+                System.gc()
                 startActivity(Intent(this, MainDrawerActivity::class.java))
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                 finishAfterTransition()
             }
         })
-        viewModel.loginProcess.observe(this, Observer {
+        viewModel.loginProcess.observeSingle(this, Observer {
             val resId = I18NUtils.getLoadingProcessResId(it)
             if (resId != null) {
                 tv_loadingMsg.setText(resId)

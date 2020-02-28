@@ -11,7 +11,7 @@ object AppDBHelper {
     const val COLUMN_POST_DATE = "postDate"
     const val COLUMN_ID = "id"
 
-    private val appDB = AppDB.getInstance().db
+    private val appDB = AppDB.db
 
     fun putGeneralNewsSet(newsSet: List<GeneralNews>) = with(appDB.getNewsDataDao()) {
         putNews(*newsSet.toTypedArray())
@@ -60,6 +60,7 @@ object AppDBHelper {
         @Query("delete from $NEWS_TABLE_NAME")
         fun clearAllNews()
 
+        @Suppress("AndroidUnresolvedRoomSqlReference")
         @Query("delete from ${Constants.DB.SQL_LITE_TABLE} where ${Constants.DB.COLUMN_NAME} = '${NEWS_TABLE_NAME}'")
         fun clearIndex()
     }

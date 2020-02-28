@@ -7,5 +7,6 @@ enum class ContentErrorReason {
     OPERATION,
     PARSE_FAILED,
     EMPTY_DATA,
+    CONNECTION_ERROR,
     UNKNOWN
 }

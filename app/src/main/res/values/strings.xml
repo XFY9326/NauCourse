@@ -14,6 +14,7 @@
     <string name="application_launch_failed">相关应用启动失败！</string>
     <string name="login_info_empty">请输入用户名或密码！</string>
     <string name="server_error">服务器错误！</string>
+    <string name="connection_error">网络连接时出错！</string>
     <string name="eula_not_accept">您还没有同意使用协议！</string>
     <string name="already_login">您当前已登录教务，请十分钟后重试！</string>
     <string name="unknown_error">未知错误！</string>
@@ -55,10 +56,18 @@
     <string name="news_source_rss_xxb">信息化办公室</string>
     <string name="news_source_rss_xgc">学务委员会</string>
     <string name="content_error_timeout">请求超时！</string>
-    <string name="content_error_server_error">系统错误！</string>
     <string name="content_error_operation">数据处理错误！</string>
     <string name="content_error_parse_failed">数据转换错误！</string>
     <string name="content_error_empty_data">暂无可用数据</string>
-    <string name="content_error_unknown">未知错误！</string>
     <string name="news_show_type">显示的通知类别</string>
+    <string name="course_id">ID：%1$s</string>
+    <string name="course_teacher">教师：%1$s</string>
+    <string name="course_class">班级：%1$s</string>
+    <string name="course_credit">学分：%1$.2f</string>
+    <string name="course_type">类型：%1$s</string>
+    <string name="course_location">地点：%1$s</string>
+    <string name="course_time">时间：%1$s 周%2$s %3$s</string>
+    <string name="news_detail_info">发布：%1$s</string>
+    <string name="news_detail_info_with_click_amount">发布：%1$s 浏览量：%2$d</string>
+    <string name="refresh">刷新</string>
 </resources>

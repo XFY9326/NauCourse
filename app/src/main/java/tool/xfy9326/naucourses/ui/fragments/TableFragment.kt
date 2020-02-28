@@ -40,21 +40,21 @@ class TableFragment : ViewModelFragment<CourseTableViewModel>() {
         weekNum = args?.getInt(CourseTableViewPagerAdapter.COURSE_TABLE_WEEK_NUM)!!
     }
 
-    override fun onCreateViewModel(): CourseTableViewModel = ViewModelProvider(activity!!)[CourseTableViewModel::class.java]
+    override fun onCreateViewModel(): CourseTableViewModel = ViewModelProvider(requireParentFragment())[CourseTableViewModel::class.java]
 
     override fun prepareCacheInit(viewModel: CourseTableViewModel, isRestored: Boolean) {
         viewModel.apply {
-            courseTablePkg[weekNum - 1].observe(this@TableFragment, Observer {
+            courseTablePkg[weekNum - 1].observe(viewLifecycleOwner, Observer {
                 coursePkgHash = it.hashCode()
-                coursePkgSavedTemp[weekNum - 1] = it
                 buildCourseTableView(it)
             })
             if (!isRestored) {
-                if (coursePkgSavedTemp[weekNum - 1] == null) {
+                val temp = coursePkgSavedTemp[weekNum - 1]
+                if (temp == null) {
                     requestCourseTable(weekNum, coursePkgHash)
                 } else {
-                    coursePkgHash = coursePkgSavedTemp[weekNum - 1]!!.hashCode()
-                    buildCourseTableView(coursePkgSavedTemp[weekNum - 1]!!)
+                    coursePkgHash = temp.hashCode()
+                    buildCourseTableView(temp)
                 }
             }
         }
@@ -77,7 +77,7 @@ class TableFragment : ViewModelFragment<CourseTableViewModel>() {
 
                     val width = calculateTableHeaderWidth(weekDayShowSize)
                     CourseTableViewBuilder.createCourseTableView(
-                        context!!,
+                        requireContext(),
                         coursePkg.courseTable,
                         hasWeekendCourse,
                         coursePkg.styles,
@@ -98,7 +98,7 @@ class TableFragment : ViewModelFragment<CourseTableViewModel>() {
 
     private fun calculateTableHeaderWidth(weekDayShowSize: Int): Pair<Int, Int> {
         val timeRowWidth = resources.getDimensionPixelSize(R.dimen.course_table_course_time_row_size)
-        return Pair(timeRowWidth, floor((CourseTableViewBuilder.getWindowsWidth(context!!) - timeRowWidth) * 1f / weekDayShowSize).toInt())
+        return Pair(timeRowWidth, floor((CourseTableViewBuilder.getWindowsWidth(requireContext()) - timeRowWidth) * 1f / weekDayShowSize).toInt())
     }
 
     private suspend fun buildCourseTableHeader(

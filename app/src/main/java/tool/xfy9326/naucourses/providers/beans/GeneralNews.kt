@@ -62,29 +62,4 @@ data class GeneralNews(
             return result
         }
     }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as GeneralNews
-
-        if (title != other.title) return false
-        if (postDate != other.postDate) return false
-        if (detailUrl != other.detailUrl) return false
-        if (type != other.type) return false
-        if (postSource != other.postSource) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = title.hashCode()
-        result = 31 * result + postDate.hashCode()
-        result = 31 * result + detailUrl.hashCode()
-        result = 31 * result + (type?.hashCode() ?: 0)
-        result = 31 * result + postSource.name.hashCode()
-        return result
-    }
-
 }

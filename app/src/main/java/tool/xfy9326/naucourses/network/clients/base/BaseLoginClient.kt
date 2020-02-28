@@ -3,7 +3,10 @@ package tool.xfy9326.naucourses.network.clients.base
 import okhttp3.HttpUrl
 import okhttp3.Request
 import okhttp3.Response
+import org.jsoup.HttpStatusException
 import java.io.IOException
+import java.net.ConnectException
+import java.net.SocketTimeoutException
 
 /**
  * 基础网络客户端
@@ -29,11 +32,21 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
      */
     @Synchronized
     open fun login(): LoginResponse {
-        getBeforeLoginResponse().use {
-            return if (it.isSuccessful) {
-                login(it)
-            } else {
-                throw IOException("Request Server Error!")
+        return try {
+            getBeforeLoginResponse().use {
+                if (it.isSuccessful) {
+                    login(it)
+                } else {
+                    LoginResponse(false, loginErrorReason = LoginResponse.ErrorReason.SERVER_ERROR)
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            when (e) {
+                is SocketTimeoutException, is IOException, is NullPointerException, is ConnectException ->
+                    LoginResponse(false, loginErrorReason = LoginResponse.ErrorReason.CONNECTION_ERROR)
+                is HttpStatusException -> LoginResponse(false, loginErrorReason = LoginResponse.ErrorReason.SERVER_ERROR)
+                else -> LoginResponse(false, loginErrorReason = LoginResponse.ErrorReason.UNKNOWN)
             }
         }
     }

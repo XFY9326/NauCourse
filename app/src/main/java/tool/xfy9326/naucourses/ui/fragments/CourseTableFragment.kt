@@ -9,7 +9,10 @@ import androidx.viewpager2.widget.ViewPager2
 import kotlinx.android.synthetic.main.fragment_course_table.*
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.R
+import tool.xfy9326.naucourses.beans.CourseCell
+import tool.xfy9326.naucourses.beans.CourseCellStyle
 import tool.xfy9326.naucourses.io.prefs.CourseTablePref
+import tool.xfy9326.naucourses.ui.dialogs.CourseDetailDialog
 import tool.xfy9326.naucourses.ui.fragments.base.DrawerToolbarFragment
 import tool.xfy9326.naucourses.ui.models.fragment.CourseTableViewModel
 import tool.xfy9326.naucourses.ui.views.table.CourseTableViewBuilder
@@ -26,16 +29,16 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
 
     override fun onCreateContentView(): Int = R.layout.fragment_course_table
 
-    override fun onCreateViewModel(): CourseTableViewModel = ViewModelProvider(activity!!)[CourseTableViewModel::class.java]
+    override fun onCreateViewModel(): CourseTableViewModel = ViewModelProvider(this)[CourseTableViewModel::class.java]
 
     override fun onBindToolbar(): Toolbar = tb_courseTable
 
     override fun bindViewModel(viewModel: CourseTableViewModel) {
-        viewModel.nowShowWeekNum.observe(this, Observer {
+        viewModel.nowShowWeekNum.observe(viewLifecycleOwner, Observer {
             tv_nowShowWeekNum.text = getString(R.string.week_num, it)
             viewModel.requestShowWeekStatus(it)
         })
-        viewModel.currentWeekStatus.observe(this, Observer {
+        viewModel.currentWeekStatus.observe(viewLifecycleOwner, Observer {
             when (it!!) {
                 CourseTableViewModel.CurrentWeekStatus.IN_VACATION -> {
                     tv_notCurrentWeek.visibility = View.VISIBLE
@@ -51,14 +54,14 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
                 }
             }
         })
-        viewModel.todayDate.observe(this, Observer {
+        viewModel.todayDate.observe(viewLifecycleOwner, Observer {
             tv_todayDate.text = getString(R.string.today_date, it.first, it.second)
         })
-        viewModel.maxWeekNum.observe(this, Observer {
+        viewModel.maxWeekNum.observe(viewLifecycleOwner, Observer {
             courseTableViewPagerAdapter.updateMaxWeekNum(it)
             viewModel.maxWeekNumTemp = it
         })
-        viewModel.nowWeekNum.observe(this, Observer {
+        viewModel.nowWeekNum.observe(viewLifecycleOwner, Observer {
             synchronized(this) {
                 if (!viewModel.hasInitWithNowWeekNum) {
                     viewModel.hasInitWithNowWeekNum = true
@@ -68,13 +71,17 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
                 }
             }
         })
-        viewModel.courseDetailInfo.observe(this, Observer {
-            println(it)
+        viewModel.courseDetailInfo.observeSingle(viewLifecycleOwner, Observer {
+            CourseDetailDialog().apply {
+                arguments = Bundle().apply {
+                    putSerializable(CourseDetailDialog.COURSE_DETAIL_DATA, it)
+                }
+            }.show(childFragmentManager, null)
         })
     }
 
     override fun initView(viewModel: CourseTableViewModel) {
-        CourseTableViewBuilder.initBuilder(context!!, this)
+        CourseTableViewBuilder.initBuilder(requireActivity(), this)
         courseTableViewPagerAdapter = CourseTableViewPagerAdapter(this, viewModel.maxWeekNumTemp ?: Constants.Course.MAX_WEEK_NUM_SIZE)
 
         vp_courseTablePanel.offscreenPageLimit = 2
@@ -102,8 +109,8 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
         }
     }
 
-    override fun onCourseCellClick(courseId: String) {
-        getViewModel().requestCourseDetailInfo(courseId)
+    override fun onCourseCellClick(courseCell: CourseCell, cellStyle: CourseCellStyle) {
+        getViewModel().requestCourseDetailInfo(courseCell, cellStyle)
     }
 
     override fun onDestroyView() {

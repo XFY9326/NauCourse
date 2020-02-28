@@ -3,11 +3,13 @@ package tool.xfy9326.naucourses.ui.models.fragment
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import tool.xfy9326.naucourses.io.prefs.AppPref
 import tool.xfy9326.naucourses.providers.beans.GeneralNews
 import tool.xfy9326.naucourses.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourses.providers.info.methods.NewsInfo
+import tool.xfy9326.naucourses.tools.SingleLiveData
 import tool.xfy9326.naucourses.ui.models.base.BaseViewModel
 
 class NewsViewModel : BaseViewModel() {
@@ -18,13 +20,12 @@ class NewsViewModel : BaseViewModel() {
 
     val newsList = MutableLiveData<List<GeneralNews>>()
     val isRefreshing = MutableLiveData<Boolean>()
-    val errorMsg = MutableLiveData<ContentErrorReason>()
+    val errorMsg = SingleLiveData<ContentErrorReason>()
 
     override fun onInitView(isRestored: Boolean) {
         if (!isRestored) {
             isRefreshing.postValue(true)
-            viewModelScope.launch {
-                NewsInfo.initCache()
+            viewModelScope.launch(Dispatchers.Default) {
                 val newsInfoResult = NewsInfo.getInfo(loadCache = true)
                 if (newsInfoResult.isSuccess) {
                     lastNewsHash = newsInfoResult.data!!.hashCode()
@@ -42,7 +43,7 @@ class NewsViewModel : BaseViewModel() {
     @Synchronized
     fun refreshNewsList() {
         isRefreshing.postValue(true)
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             val newsInfoResult = NewsInfo.getInfo(AppPref.readShowNewsType())
             if (newsInfoResult.isSuccess) {
                 val newsHashCode = newsInfoResult.data!!.hashCode()
@@ -53,7 +54,7 @@ class NewsViewModel : BaseViewModel() {
                     Log.i(logTag, "New Info Don't Need Update")
                 }
             } else {
-                errorMsg.postValue(newsInfoResult.errorReason)
+                errorMsg.postSingleValue(newsInfoResult.errorReason)
             }
             isRefreshing.postValue(false)
         }

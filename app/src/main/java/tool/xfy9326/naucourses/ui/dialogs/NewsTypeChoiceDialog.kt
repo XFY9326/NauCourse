@@ -2,6 +2,9 @@ package tool.xfy9326.naucourses.ui.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import tool.xfy9326.naucourses.R
@@ -69,7 +72,12 @@ class NewsTypeChoiceDialog : DialogFragment() {
         AppPref.saveShowNewsType(typesStringSet)
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = AlertDialog.Builder(activity!!).apply {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        dialog?.window?.setBackgroundDrawable(resources.getDrawable(R.drawable.bg_dialog, null))
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = AlertDialog.Builder(requireActivity()).apply {
         setTitle(R.string.news_show_type)
         setMultiChoiceItems(newsTypeTextArray, choiceStatus) { _, which, isChecked ->
             choiceStatus[which] = isChecked

@@ -11,18 +11,18 @@ import java.util.*
 
 abstract class BaseContentInfo<T : Enum<*>, P : Enum<*>> {
     private val cacheMap = Hashtable<T, Any>(1)
+    private var hasInit = false
     private val infoMutex = Mutex()
 
     companion object {
         private const val KEY_JOIN_SYMBOL = "_"
     }
 
-    suspend fun initCache() = withContext(Dispatchers.IO) {
-        synchronized(this@BaseContentInfo) {
-            val stored = loadStoredInfo()
-            cacheMap.clear()
-            cacheMap.putAll(stored)
-        }
+    private fun initCache() {
+        val stored = loadStoredInfo()
+        cacheMap.clear()
+        cacheMap.putAll(stored)
+        hasInit = true
     }
 
     protected open fun <E : Any> updateCache(type: T, data: E) {
@@ -52,9 +52,23 @@ abstract class BaseContentInfo<T : Enum<*>, P : Enum<*>> {
 
     abstract fun clearStoredInfo(type: T)
 
-    protected open fun hasCachedItem(type: T) = cacheMap.containsKey(type) && cacheMap[type] != null
+    protected open fun hasCachedItem(type: T): Boolean {
+        synchronized(this) {
+            if (!hasInit) {
+                initCache()
+            }
+        }
+        return cacheMap.containsKey(type) && cacheMap[type] != null
+    }
 
-    protected open fun getCachedItem(type: T) = cacheMap[type]
+    protected open fun getCachedItem(type: T): Any? {
+        synchronized(this) {
+            if (!hasInit) {
+                initCache()
+            }
+        }
+        return cacheMap[type]
+    }
 
     @Synchronized
     protected open fun isCacheExpired(type: T, params: Set<P>, cacheExpire: CacheExpire): Boolean {
@@ -106,7 +120,6 @@ abstract class BaseContentInfo<T : Enum<*>, P : Enum<*>> {
             }
         }
 
-    fun clearCacheInfo() = synchronized(this) {
-        cacheMap.clear()
-    }
+    @Synchronized
+    fun clearCacheInfo() = cacheMap.clear()
 }

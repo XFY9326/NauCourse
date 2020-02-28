@@ -1,6 +1,5 @@
 package tool.xfy9326.naucourses.network
 
-import android.content.Context
 import tool.xfy9326.naucourses.App
 import tool.xfy9326.naucourses.io.prefs.UserPref
 import tool.xfy9326.naucourses.network.clients.*
@@ -9,9 +8,21 @@ import tool.xfy9326.naucourses.network.clients.base.LoginInfo
 import tool.xfy9326.naucourses.network.clients.base.LoginResponse
 import tool.xfy9326.naucourses.network.clients.tools.SSONetworkTools
 import tool.xfy9326.naucourses.utils.secure.AccountUtils
+import kotlin.properties.Delegates
 
-class SSONetworkManager private constructor(context: Context, private var hasLogin: Boolean, savedLoginInfo: LoginInfo? = null) {
+object SSONetworkManager {
+    private var hasLogin by Delegates.notNull<Boolean>()
     private lateinit var loginInfo: LoginInfo
+
+    init {
+        hasLogin = if (UserPref.HasLogin) {
+            loginInfo = AccountUtils.readUserInfo().toLoginInfo()
+            true
+        } else {
+            false
+        }
+        SSONetworkTools.initInstance(App.instance.cacheDir.absolutePath)
+    }
 
     private val clientMap = mapOf(
         ClientType.SSO to lazy { SSOClient(loginInfo) },
@@ -21,35 +32,12 @@ class SSONetworkManager private constructor(context: Context, private var hasLog
         ClientType.MY to lazy { MyClient(loginInfo) }
     )
 
-    init {
-        if (savedLoginInfo != null) {
-            loginInfo = savedLoginInfo
-        }
-        SSONetworkTools.initInstance(context.cacheDir.absolutePath)
-    }
-
     enum class ClientType {
         SSO,
         VPN,
         JWC,
         ALSTU,
         MY
-    }
-
-    companion object {
-        @Volatile
-        private lateinit var instance: SSONetworkManager
-
-        fun getInstance(): SSONetworkManager = synchronized(this) {
-            if (!::instance.isInitialized) {
-                instance = if (UserPref.HasLogin) {
-                    SSONetworkManager(App.instance, true, AccountUtils.readUserInfo().toLoginInfo())
-                } else {
-                    SSONetworkManager(App.instance, false)
-                }
-            }
-            return instance
-        }
     }
 
     fun getClient(clientType: ClientType) = synchronized(this) {

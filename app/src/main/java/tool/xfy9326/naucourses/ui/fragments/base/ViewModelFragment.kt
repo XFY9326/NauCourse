@@ -24,7 +24,7 @@ abstract class ViewModelFragment<T : BaseViewModel> : Fragment() {
         return if (view == null) {
             inflater.inflate(onCreateContentView(), container, false)
         } else {
-            val parent = view!!.parent as ViewGroup?
+            val parent = requireView().parent as ViewGroup?
             parent?.removeView(view)
             view
         }

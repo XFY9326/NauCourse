@@ -14,6 +14,7 @@ object I18NUtils {
             ErrorReason.PASSWORD_ERROR -> R.string.password_error
             ErrorReason.SERVER_ERROR -> R.string.server_error
             ErrorReason.UNKNOWN -> R.string.unknown_error
+            ErrorReason.CONNECTION_ERROR -> R.string.connection_error
             ErrorReason.NONE -> null
         }
 
@@ -40,10 +41,11 @@ object I18NUtils {
         when (contentErrorReason) {
             ContentErrorReason.NONE -> null
             ContentErrorReason.TIMEOUT -> R.string.content_error_timeout
-            ContentErrorReason.SERVER_ERROR -> R.string.content_error_server_error
+            ContentErrorReason.SERVER_ERROR -> R.string.server_error
             ContentErrorReason.OPERATION -> R.string.content_error_operation
             ContentErrorReason.PARSE_FAILED -> R.string.content_error_parse_failed
             ContentErrorReason.EMPTY_DATA -> R.string.content_error_empty_data
-            ContentErrorReason.UNKNOWN -> R.string.content_error_unknown
+            ContentErrorReason.CONNECTION_ERROR -> R.string.connection_error
+            ContentErrorReason.UNKNOWN -> R.string.unknown_error
         }
 }

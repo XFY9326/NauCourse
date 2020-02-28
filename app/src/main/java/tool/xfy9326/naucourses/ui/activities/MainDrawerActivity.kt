@@ -28,7 +28,21 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         enum class FragmentType {
             COURSE_TABLE,
             TODAY_COURSE,
-            NEWS
+            NEWS,
+            NONE
+        }
+
+        private val FRAGMENTS = mapOf<FragmentType, DrawerToolbarFragment<*>>(
+            FragmentType.COURSE_TABLE to CourseTableFragment(),
+            FragmentType.TODAY_COURSE to TodayCourseFragment(),
+            FragmentType.NEWS to NewsFragment()
+        )
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (savedInstanceState == null) {
+            preloadFragments()
         }
     }
 
@@ -47,38 +61,47 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
             override fun onDrawerOpened(drawerView: View) = viewModel.updateBalance()
         })
         nav_main.setNavigationItemSelectedListener(this)
-        nav_main.getHeaderView(0).setOnClickListener {
+        nav_main.getHeaderView(DEFAULT_NAV_HEADER_INDEX).setOnClickListener {
             startActivity(Intent(this, UserInfoActivity::class.java))
         }
     }
 
     override fun onResume() {
         super.onResume()
-        showFragment(getViewModel().nowShowFragmentType, false)
+        showFragment(getViewModel().nowShowFragmentType)
     }
 
-    @Synchronized
-    private fun showFragment(type: FragmentType, showAnim: Boolean = true) {
-        if (type != getViewModel().nowShowFragmentType || supportFragmentManager.fragments.size == 0) {
-            val oldFragment = supportFragmentManager.findFragmentByTag(getViewModel().nowShowFragmentType.name)
-            supportFragmentManager.beginTransaction().apply {
-                if (oldFragment != null) hide(oldFragment)
-                val newFragment = supportFragmentManager.findFragmentByTag(type.name) ?: when (type) {
-                    FragmentType.COURSE_TABLE -> CourseTableFragment()
-                    FragmentType.TODAY_COURSE -> TodayCourseFragment()
-                    FragmentType.NEWS -> NewsFragment()
-                }
-                if (newFragment in supportFragmentManager.fragments) {
-                    show(newFragment)
-                } else {
-                    add(R.id.fg_mainContent, newFragment.apply {
+    private fun preloadFragments() {
+        supportFragmentManager.beginTransaction().apply {
+            for ((type, fragment) in FRAGMENTS) {
+                if (fragment !in supportFragmentManager.fragments) {
+                    add(R.id.fg_mainContent, fragment.apply {
                         arguments = Bundle().apply {
                             putInt(DrawerToolbarFragment.DRAWER_ID, R.id.drawer_main)
                         }
                     }, type.name)
+                    attach(fragment)
+                    hide(fragment)
                 }
-                if (showAnim) setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-            }.commitNow()
+            }
+        }.commitNow()
+    }
+
+    @Synchronized
+    private fun showFragment(type: FragmentType) {
+        if (type != getViewModel().nowShowFragmentType || !getViewModel().initFragmentShow()) {
+            val oldFragment = supportFragmentManager.findFragmentByTag(getViewModel().nowShowFragmentType.name)
+            supportFragmentManager.beginTransaction().apply {
+                if (oldFragment != null) {
+                    hide(oldFragment)
+                }
+                val newFragment = supportFragmentManager.findFragmentByTag(type.name)
+                if (newFragment != null && newFragment in supportFragmentManager.fragments) {
+                    show(newFragment)
+                } else {
+                    error("Fragment Not Preload Before Show!")
+                }
+            }.commit()
             getViewModel().nowShowFragmentType = type
         }
     }

@@ -9,7 +9,7 @@
     tools:context=".ui.activities.MainDrawerActivity"
     tools:openDrawer="start">
 
-    <FrameLayout
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fg_mainContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

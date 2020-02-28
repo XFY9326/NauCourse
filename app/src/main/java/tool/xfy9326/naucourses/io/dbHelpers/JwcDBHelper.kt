@@ -15,7 +15,7 @@ object JwcDBHelper {
     const val EXAM_TABLE_NAME = "Exam"
     const val COLUMN_START_DATE = "startDate"
 
-    private val jwcDB = JwcDB.getInstance().db
+    private val jwcDB = JwcDB.db
 
     fun putTermDate(termDate: TermDate) = with(jwcDB.getTermDateDataDao()) {
         putTermDate(termDate)
@@ -62,6 +62,7 @@ object JwcDBHelper {
         @Query("delete from $TERM_DATE_TABLE_NAME")
         fun clearTermDate()
 
+        @Suppress("AndroidUnresolvedRoomSqlReference")
         @Query("delete from ${Constants.DB.SQL_LITE_TABLE} where ${Constants.DB.COLUMN_NAME} = '$TERM_DATE_TABLE_NAME'")
         fun clearIndex()
     }
@@ -77,6 +78,7 @@ object JwcDBHelper {
         @Query("delete from $EXAM_TABLE_NAME")
         fun clearExam()
 
+        @Suppress("AndroidUnresolvedRoomSqlReference")
         @Query("delete from ${Constants.DB.SQL_LITE_TABLE} where ${Constants.DB.COLUMN_NAME} = '$EXAM_TABLE_NAME'")
         fun clearIndex()
     }

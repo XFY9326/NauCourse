@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import tool.xfy9326.naucourses.ui.fragments.TableFragment
 
-class CourseTableViewPagerAdapter(private val context: Fragment, private var maxWeekNum: Int) : FragmentStateAdapter(context) {
+class CourseTableViewPagerAdapter(context: Fragment, private var maxWeekNum: Int) : FragmentStateAdapter(context) {
 
     companion object {
         const val COURSE_TABLE_WEEK_NUM = "COURSE_TABLE_WEEK_NUM"

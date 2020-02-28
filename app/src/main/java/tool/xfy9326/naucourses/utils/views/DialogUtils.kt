@@ -20,6 +20,7 @@ object DialogUtils {
                 )
             )
             setPositiveButton(android.R.string.yes, null)
+            background = context.getDrawable(R.drawable.bg_dialog)
         }.create()
 
     fun createForgetPasswordDialog(context: Context): AlertDialog =
@@ -30,5 +31,6 @@ object DialogUtils {
                 IntentUtils.launchUrlInBrowser(context, Constants.Url.FORGET_PASSWORD)
             }
             setPositiveButton(android.R.string.yes, null)
+            background = context.getDrawable(R.drawable.bg_dialog)
         }.create()
 }

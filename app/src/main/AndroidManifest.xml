@@ -19,6 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning"
+        android:extractNativeLibs="false"
         tools:targetApi="n">
 
         <activity
@@ -48,6 +49,12 @@
         <activity
             android:name=".ui.activities.UserInfoActivity"
             android:label="@string/user_info">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.MainDrawerActivity" />
+        </activity>
+
+        <activity android:name=".ui.activities.NewsDetailActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activities.MainDrawerActivity" />

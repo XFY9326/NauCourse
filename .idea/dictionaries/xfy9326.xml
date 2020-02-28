@@ -15,9 +15,11 @@
       <w>cppcoreguidelines</w>
       <w>ecaf</w>
       <w>fdbaaf</w>
+      <w>filesize</w>
       <w>goulder</w>
       <w>hicpp</w>
       <w>infotitle</w>
+      <w>intellisense</w>
       <w>keil</w>
       <w>keylen</w>
       <w>khtml</w>

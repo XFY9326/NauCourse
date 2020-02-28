@@ -1,6 +1,5 @@
 package tool.xfy9326.naucourses.io.dbHelpers.db
 
-import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -11,26 +10,14 @@ import tool.xfy9326.naucourses.io.dbHelpers.base.BaseDB
 import tool.xfy9326.naucourses.io.dbHelpers.base.DBTypeConverter
 import tool.xfy9326.naucourses.providers.beans.GeneralNews
 
-class AppDB private constructor(context: Context) : BaseDB() {
+object AppDB : BaseDB() {
+    private const val APP_DB_NAME = "App.db"
+    private const val APP_DB_VERSION = 1
+
     override val db = Room.databaseBuilder(
-        context, AppDataBase::class.java,
+        App.instance, AppDataBase::class.java,
         APP_DB_NAME
     ).build()
-
-    companion object {
-        @Volatile
-        private lateinit var instance: AppDB
-
-        private const val APP_DB_NAME = "App.db"
-        private const val APP_DB_VERSION = 1
-
-        fun getInstance(): AppDB = synchronized(this) {
-            if (!Companion::instance.isInitialized) {
-                instance = AppDB(App.instance)
-            }
-            instance
-        }
-    }
 
     @Database(
         entities = [GeneralNews::class],

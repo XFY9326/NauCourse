@@ -6,12 +6,13 @@ import tool.xfy9326.naucourses.network.SSONetworkManager
 import tool.xfy9326.naucourses.network.SimpleNetworkManager
 import tool.xfy9326.naucourses.network.clients.SSOClient
 import java.io.IOException
+import java.net.ConnectException
 import java.net.SocketTimeoutException
 
 abstract class BaseContent<T> {
     @Suppress("UNCHECKED_CAST")
     protected fun <E : SSOClient> getSSOClient(type: SSONetworkManager.ClientType): E =
-        SSONetworkManager.getInstance().getClient(type) as E
+        SSONetworkManager.getClient(type) as E
 
     protected fun getSimpleClient() = SimpleNetworkManager.getClient()
 
@@ -29,6 +30,7 @@ abstract class BaseContent<T> {
             is SocketTimeoutException -> RequestResult(false, ContentErrorReason.TIMEOUT)
             is HttpStatusException -> RequestResult(false, ContentErrorReason.SERVER_ERROR)
             is IOException, is NullPointerException -> RequestResult(false, ContentErrorReason.OPERATION)
+            is ConnectException -> RequestResult(false, ContentErrorReason.CONNECTION_ERROR)
             else -> RequestResult(false, ContentErrorReason.UNKNOWN)
         }
     }

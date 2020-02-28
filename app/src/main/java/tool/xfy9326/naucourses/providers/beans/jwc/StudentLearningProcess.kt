@@ -19,27 +19,4 @@ data class StudentLearningProcess(
         BONUS,
         BALANCE
     }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as StudentLearningProcess
-
-        if (courseType != other.courseType) return false
-        if (title != other.title) return false
-        if (progress != other.progress) return false
-        if (subjects != other.subjects) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = courseType.hashCode()
-        result = 31 * result + title.hashCode()
-        result = 31 * result + progress
-        result = 31 * result + subjects.hashCode()
-        return result
-    }
-
 }

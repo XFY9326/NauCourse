@@ -20,4 +20,6 @@ object AppPref : BasePref() {
     fun saveShowNewsType(set: Set<String>) {
         ShowNewsType = set
     }
+
+    var DefaultShowNewsInBrowser by pref.boolean(defValue = false)
 }

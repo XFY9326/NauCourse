@@ -3,12 +3,13 @@ package tool.xfy9326.naucourses.beans
 import tool.xfy9326.naucourses.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourses.providers.store.CourseCellStyleStore
 import tool.xfy9326.naucourses.utils.views.ColorUtils
+import java.io.Serializable
 
 data class CourseCellStyle(
     val courseId: String,
     val color: Int,
     val textSize: Float
-) {
+) : Serializable {
     companion object {
         private const val DEFAULT_COURSE_CELL_TEXT_SIZE = 13f
 
@@ -57,20 +58,5 @@ data class CourseCellStyle(
             }
             return result
         }
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as CourseCellStyle
-
-        if (courseId != other.courseId) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        return courseId.hashCode()
     }
 }

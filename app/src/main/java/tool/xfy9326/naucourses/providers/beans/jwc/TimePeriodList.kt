@@ -1,9 +1,11 @@
 package tool.xfy9326.naucourses.providers.beans.jwc
 
+import java.io.Serializable
+
 data class TimePeriodList(
     val timePeriods: Array<TimePeriod>,
     val size: Int = timePeriods.size
-) {
+) : Serializable {
 
     companion object {
         private const val TIME_PERIOD_ARRAY_JOIN_SYMBOL = ","

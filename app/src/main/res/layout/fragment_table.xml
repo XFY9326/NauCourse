@@ -7,7 +7,7 @@
 
     <include layout="@layout/view_course_table_header" />
 
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -17,12 +17,11 @@
         <tool.xfy9326.naucourses.ui.views.widgets.CourseTableView
             android:id="@+id/gl_courseTable"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:clipChildren="true"
-            android:scrollbars="none"
             app:orientation="vertical" />
 
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
 </androidx.appcompat.widget.LinearLayoutCompat>
 

@@ -28,6 +28,7 @@
                     android:id="@+id/arv_newsList"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:overScrollMode="never"
                     app:empty_view="@id/view_list_empty"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 

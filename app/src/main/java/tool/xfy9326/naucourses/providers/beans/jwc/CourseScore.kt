@@ -31,19 +31,4 @@ data class CourseScore(
         const val DEFAULT_MEASURE = false
         const val DEFAULT_PUBLISH = false
     }
-
-    override fun hashCode(): Int {
-        return courseId.hashCode()
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as CourseScore
-
-        if (courseId != other.courseId) return false
-
-        return true
-    }
 }

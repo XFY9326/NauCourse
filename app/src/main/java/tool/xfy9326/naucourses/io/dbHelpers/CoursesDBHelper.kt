@@ -18,7 +18,7 @@ object CoursesDBHelper {
     const val COLUMN_COURSE_ID = "courseId"
     const val COLUMN_WEEK_DAY = "weekDay"
 
-    private val courseDB = CoursesDB.getInstance().db
+    private val courseDB = CoursesDB.db
 
     @Synchronized
     fun storeNewCourseSet(courseSet: CourseSet) = with(courseDB.getCoursesDataDao()) {
@@ -34,8 +34,9 @@ object CoursesDBHelper {
         }
     }
 
-    fun updateCourses(courseSet: Set<Course>) = with(courseDB.getCoursesDataDao()) {
+    fun updateCourses(courseSet: Set<Course>): CourseSet? = with(courseDB.getCoursesDataDao()) {
         putCourses(*courseSet.toTypedArray())
+        readCourseSet()
     }
 
     @Synchronized
@@ -120,6 +121,7 @@ object CoursesDBHelper {
         @Query("delete from $COURSES_TIME_TABLE_NAME")
         fun clearCoursesTime()
 
+        @Suppress("AndroidUnresolvedRoomSqlReference")
         @Query("delete from ${Constants.DB.SQL_LITE_TABLE} where ${Constants.DB.COLUMN_NAME} = :tableName")
         fun clearTableIndex(tableName: String)
     }
@@ -147,6 +149,7 @@ object CoursesDBHelper {
         @Query("delete from $COURSES_HISTORY_TABLE_NAME")
         fun clearCourseHistory()
 
+        @Suppress("AndroidUnresolvedRoomSqlReference")
         @Query("delete from ${Constants.DB.SQL_LITE_TABLE} where ${Constants.DB.COLUMN_NAME} = '$COURSES_HISTORY_TABLE_NAME'")
         fun clearIndex()
     }

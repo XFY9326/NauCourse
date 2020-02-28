@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.io.dbHelpers.JwcDBHelper
+import java.io.Serializable
 import java.util.*
 
 @Entity(tableName = JwcDBHelper.TERM_DATE_TABLE_NAME)
@@ -17,7 +18,7 @@ data class TermDate(
     val startDate: Date,
     val endDate: Date,
     val inVacation: Boolean
-) {
+) : Serializable {
     constructor(currentWeekNum: Int, startDate: Date, endDate: Date, inVacation: Boolean = (currentWeekNum <= 0)) :
             this(Constants.DB.DEFAULT_ID, currentWeekNum, startDate, endDate, inVacation)
 

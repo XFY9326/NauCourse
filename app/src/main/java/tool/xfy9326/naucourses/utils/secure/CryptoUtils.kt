@@ -7,7 +7,6 @@ import java.util.*
 object CryptoUtils {
     init {
         System.loadLibrary("Secure")
-        UUIDStore.initStore()
     }
 
     @Synchronized

@@ -66,20 +66,20 @@ object CourseTableViewBuilder {
     fun initBuilder(context: Context, listener: OnCourseCellClickListener) {
         this.listener = listener
         layoutInflater = LayoutInflater.from(context)
-        with(context.resources) {
+        with(context) {
             defaultValues = CourseBuilderDefaultValues(
                 getString(R.string.not_current_week_course),
-                getStringArray(R.array.weekday_num),
-                getColor(R.color.colorCourseTimeDefault, null),
-                getColor(R.color.colorCourseTimeHighLight, null),
-                getColor(R.color.colorCourseTextLight, null),
-                getColor(R.color.colorCourseTextDark, null)
+                resources.getStringArray(R.array.weekday_num),
+                getColor(R.color.colorCourseTimeDefault),
+                getColor(R.color.colorCourseTimeHighLight),
+                getColor(R.color.colorCourseTextLight),
+                getColor(R.color.colorCourseTextDark)
             )
         }
     }
 
     interface OnCourseCellClickListener {
-        fun onCourseCellClick(courseId: String)
+        fun onCourseCellClick(courseCell: CourseCell, cellStyle: CourseCellStyle)
     }
 
     @Suppress("ArrayInDataClass")
@@ -205,7 +205,7 @@ object CourseTableViewBuilder {
                 gravity = Gravity.TOP or Gravity.START
                 isClickable = true
                 setOnClickListener {
-                    listener.onCourseCellClick(courseInfo.courseId)
+                    listener.onCourseCellClick(courseInfo, cellStyle)
                 }
             })
         }

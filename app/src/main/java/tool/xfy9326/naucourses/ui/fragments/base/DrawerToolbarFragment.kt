@@ -26,14 +26,15 @@ abstract class DrawerToolbarFragment<T : BaseViewModel> : ViewModelFragment<T>()
         super.onActivityCreated(savedInstanceState)
     }
 
+    @Suppress("SameParameterValue")
     protected fun setToolbarTitleEnabled(enabled: Boolean) {
-        (activity!! as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(enabled)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(enabled)
     }
 
     private fun bindToolbarWithDrawer(toolbar: Toolbar) {
-        val drawer = activity!!.findViewById<DrawerLayout>(drawerIdRes)
-        (activity!! as AppCompatActivity).setSupportActionBar(toolbar)
-        ActionBarDrawerToggle(activity!!, drawer, toolbar, R.string.drawer_layout_open, R.string.drawer_layout_close).apply {
+        val drawer = requireActivity().findViewById<DrawerLayout>(drawerIdRes)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+        ActionBarDrawerToggle(requireActivity(), drawer, toolbar, R.string.drawer_layout_open, R.string.drawer_layout_close).apply {
             isDrawerIndicatorEnabled = true
             syncState()
             drawer.addDrawerListener(this)

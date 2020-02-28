@@ -3,6 +3,7 @@ package tool.xfy9326.naucourses.providers.beans.jwc
 import androidx.room.*
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.io.dbHelpers.CoursesDBHelper
+import java.io.Serializable
 
 @Entity(
     tableName = CoursesDBHelper.COURSES_TIME_TABLE_NAME,
@@ -24,7 +25,7 @@ data class CourseTime(
     val courseNumStr: String,
     val coursesNumArray: TimePeriodList,
     val rawCourseNumStr: String
-) {
+) : Serializable {
     constructor(
         courseId: String,
         location: String,
@@ -59,38 +60,4 @@ data class CourseTime(
 
     fun isCourseNumTrue(courseNum: Int): Boolean =
         TimePeriod.isStrIndexTrue(courseNumStr, courseNum - 1)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as CourseTime
-
-        if (courseId != other.courseId) return false
-        if (location != other.location) return false
-        if (weeksStr != other.weeksStr) return false
-        if (weekMode != other.weekMode) return false
-        if (weeksArray != other.weeksArray) return false
-        if (rawWeeksStr != other.rawWeeksStr) return false
-        if (weekDay != other.weekDay) return false
-        if (courseNumStr != other.courseNumStr) return false
-        if (coursesNumArray != other.coursesNumArray) return false
-        if (rawCourseNumStr != other.rawCourseNumStr) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = courseId.hashCode()
-        result = 31 * result + location.hashCode()
-        result = 31 * result + weeksStr.hashCode()
-        result = 31 * result + weekMode.hashCode()
-        result = 31 * result + weeksArray.hashCode()
-        result = 31 * result + rawWeeksStr.hashCode()
-        result = 31 * result + weekDay
-        result = 31 * result + courseNumStr.hashCode()
-        result = 31 * result + coursesNumArray.hashCode()
-        result = 31 * result + rawCourseNumStr.hashCode()
-        return result
-    }
 }

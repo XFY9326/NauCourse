@@ -10,7 +10,7 @@ object NetworkDBHelper {
     private const val COLUMN_HOST = "host"
     private const val COLUMN_NAME = "name"
 
-    private val netWorkDB = NetworkDB.getInstance().db
+    private val netWorkDB = NetworkDB.db
 
     @Synchronized
     fun loadForRequest(url: HttpUrl): List<Cookie> = with(netWorkDB.getCookiesDataDao()) {

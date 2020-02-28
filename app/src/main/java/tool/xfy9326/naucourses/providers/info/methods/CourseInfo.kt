@@ -39,7 +39,7 @@ object CourseInfo : BaseSimpleContentInfo<CourseSet, CourseInfo.OperationType>()
     override fun isSimpleCacheExpired(params: Set<OperationType>, cacheExpire: CacheExpire): Boolean =
         when {
             OperationType.ASYNC_COURSE in params -> super.isSimpleCacheExpired(params, cacheExpire)
-            OperationType.INIT_DATA in params -> false
+            OperationType.INIT_DATA in params -> true
             else -> true
         }
 
@@ -88,8 +88,7 @@ object CourseInfo : BaseSimpleContentInfo<CourseSet, CourseInfo.OperationType>()
     }
 
     suspend fun updateCourses(courseSet: Set<Course>) = withContext(Dispatchers.Default) {
-        CoursesDBHelper.updateCourses(courseSet)
-        initCache()
+        updateSimpleCache(CoursesDBHelper.updateCourses(courseSet)!!)
     }
 
     override fun saveSimpleInfo(info: CourseSet) = CoursesDBHelper.storeNewCourseSet(info)
