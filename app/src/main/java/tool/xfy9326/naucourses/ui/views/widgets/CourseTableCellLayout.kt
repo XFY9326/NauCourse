@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourses.ui.views.table
+package tool.xfy9326.naucourses.ui.views.widgets
 
 import android.content.Context
 import android.util.AttributeSet

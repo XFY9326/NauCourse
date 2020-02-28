@@ -14,12 +14,11 @@
         android:overScrollMode="never"
         android:scrollbars="none">
 
-        <tool.xfy9326.naucourses.ui.views.table.CourseTableView
+        <tool.xfy9326.naucourses.ui.views.widgets.CourseTableView
             android:id="@+id/gl_courseTable"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipChildren="true"
-            android:clipToPadding="true"
             android:scrollbars="none"
             app:orientation="vertical" />
 

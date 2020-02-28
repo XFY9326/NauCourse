@@ -4,6 +4,7 @@ import androidx.room.*
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.io.dbHelpers.db.AppDB
 import tool.xfy9326.naucourses.providers.beans.GeneralNews
+import tool.xfy9326.naucourses.providers.info.methods.NewsInfo
 
 object AppDBHelper {
     const val NEWS_TABLE_NAME = "News"
@@ -18,7 +19,7 @@ object AppDBHelper {
 
     @Synchronized
     fun getGeneralNewsArray(): List<GeneralNews> = with(appDB.getNewsDataDao()) {
-        clearOutOfDateNews(System.currentTimeMillis() - Constants.News.NEWS_STORE_DAY_LENGTH * 24 * 60 * 60 * 1000L)
+        clearOutOfDateNews(NewsInfo.isNewsOutOfDateTimeStamp())
         val newsArray = getAllNews()
         newsArray.forEach {
             if (it.postSource == GeneralNews.PostSource.UNKNOWN) {
@@ -33,9 +34,12 @@ object AppDBHelper {
         clearNewsByType(type.name)
     }
 
+    @Synchronized
     fun clearGeneralNewsSet() = with(appDB.getNewsDataDao()) {
         clearAllNews()
+        clearIndex()
     }
+
     @Dao
     interface NewsDataDao {
         @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -55,5 +59,8 @@ object AppDBHelper {
 
         @Query("delete from $NEWS_TABLE_NAME")
         fun clearAllNews()
+
+        @Query("delete from ${Constants.DB.SQL_LITE_TABLE} where ${Constants.DB.COLUMN_NAME} = '${NEWS_TABLE_NAME}'")
+        fun clearIndex()
     }
 }

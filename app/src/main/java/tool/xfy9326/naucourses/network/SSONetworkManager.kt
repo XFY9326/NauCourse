@@ -1,13 +1,16 @@
 package tool.xfy9326.naucourses.network
 
 import android.content.Context
+import tool.xfy9326.naucourses.App
+import tool.xfy9326.naucourses.io.prefs.UserPref
 import tool.xfy9326.naucourses.network.clients.*
 import tool.xfy9326.naucourses.network.clients.base.BaseLoginClient
 import tool.xfy9326.naucourses.network.clients.base.LoginInfo
 import tool.xfy9326.naucourses.network.clients.base.LoginResponse
 import tool.xfy9326.naucourses.network.clients.tools.SSONetworkTools
+import tool.xfy9326.naucourses.utils.secure.AccountUtils
 
-class SSONetworkManager private constructor(context: Context, private var hasLogin: Boolean, savedLoginInfo: LoginInfo?) {
+class SSONetworkManager private constructor(context: Context, private var hasLogin: Boolean, savedLoginInfo: LoginInfo? = null) {
     private lateinit var loginInfo: LoginInfo
 
     private val clientMap = mapOf(
@@ -37,13 +40,16 @@ class SSONetworkManager private constructor(context: Context, private var hasLog
         @Volatile
         private lateinit var instance: SSONetworkManager
 
-        fun initInstance(context: Context, hasLogin: Boolean = false, savedLoginInfo: LoginInfo? = null) = synchronized(this) {
+        fun getInstance(): SSONetworkManager = synchronized(this) {
             if (!::instance.isInitialized) {
-                instance = SSONetworkManager(context, hasLogin, savedLoginInfo)
+                instance = if (UserPref.HasLogin) {
+                    SSONetworkManager(App.instance, true, AccountUtils.readUserInfo().toLoginInfo())
+                } else {
+                    SSONetworkManager(App.instance, false)
+                }
             }
+            return instance
         }
-
-        fun getInstance(): SSONetworkManager = instance
     }
 
     fun getClient(clientType: ClientType) = synchronized(this) {

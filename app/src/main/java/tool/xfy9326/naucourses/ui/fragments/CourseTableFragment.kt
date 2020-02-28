@@ -16,21 +16,17 @@ import tool.xfy9326.naucourses.ui.views.table.CourseTableViewBuilder
 import tool.xfy9326.naucourses.ui.views.viewpager.CourseTableViewPagerAdapter
 
 class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), CourseTableViewBuilder.OnCourseCellClickListener {
-    @Volatile
     private lateinit var courseTableViewPagerAdapter: CourseTableViewPagerAdapter
     private lateinit var viewPagerCallback: ViewPager2.OnPageChangeCallback
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         retainInstance = true
     }
 
     override fun onCreateContentView(): Int = R.layout.fragment_course_table
 
-    override fun onCreateViewModel(savedInstanceState: Bundle?): CourseTableViewModel =
-        ViewModelProvider(activity!!)[CourseTableViewModel::class.java].apply {
-            if (savedInstanceState == null) initData()
-        }
+    override fun onCreateViewModel(): CourseTableViewModel = ViewModelProvider(activity!!)[CourseTableViewModel::class.java]
 
     override fun onBindToolbar(): Toolbar = tb_courseTable
 
@@ -84,6 +80,8 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
         vp_courseTablePanel.offscreenPageLimit = 2
         vp_courseTablePanel.adapter = courseTableViewPagerAdapter
 
+        setToolbarTitleEnabled(false)
+
         viewPagerCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 viewModel.nowShowWeekNum.postValue(position + 1)
@@ -109,7 +107,7 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         vp_courseTablePanel.unregisterOnPageChangeCallback(viewPagerCallback)
+        super.onDestroyView()
     }
 }

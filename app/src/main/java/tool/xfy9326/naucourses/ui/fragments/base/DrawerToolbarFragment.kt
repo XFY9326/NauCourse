@@ -2,6 +2,7 @@ package tool.xfy9326.naucourses.ui.fragments.base
 
 import android.os.Bundle
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import tool.xfy9326.naucourses.R
@@ -19,14 +20,19 @@ abstract class DrawerToolbarFragment<T : BaseViewModel> : ViewModelFragment<T>()
         drawerIdRes = args?.getInt(DRAWER_ID)!!
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
         val toolbar = onBindToolbar()
         bindToolbarWithDrawer(toolbar)
+        super.onActivityCreated(savedInstanceState)
+    }
+
+    protected fun setToolbarTitleEnabled(enabled: Boolean) {
+        (activity!! as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(enabled)
     }
 
     private fun bindToolbarWithDrawer(toolbar: Toolbar) {
         val drawer = activity!!.findViewById<DrawerLayout>(drawerIdRes)
+        (activity!! as AppCompatActivity).setSupportActionBar(toolbar)
         ActionBarDrawerToggle(activity!!, drawer, toolbar, R.string.drawer_layout_open, R.string.drawer_layout_close).apply {
             isDrawerIndicatorEnabled = true
             syncState()

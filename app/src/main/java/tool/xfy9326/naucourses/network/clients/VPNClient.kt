@@ -66,7 +66,7 @@ open class VPNClient(loginInfo: LoginInfo) : SSOClient(loginInfo, VPN_LOGIN_URL)
 
     override fun validateLoginWithResponse(responseContent: String, responseUrl: HttpUrl): Boolean =
         super.validateLoginWithResponse(responseContent, responseUrl) &&
-                (VPN_LOGIN_PAGE_STR in responseContent || (SSO_LOGIN_PAGE_STR !in responseContent && VPN_HOST_DATA_STR in responseContent))
+                (VPN_LOGIN_PAGE_STR !in responseContent || (SSO_LOGIN_PAGE_STR !in responseContent && VPN_HOST_DATA_STR in responseContent))
 
     private fun newVPNCall(request: Request): Response = getNetworkClient().newCall(request).execute()
 

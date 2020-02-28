@@ -7,12 +7,17 @@ import android.graphics.PorterDuffColorFilter
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.AbsoluteSizeSpan
+import android.text.style.StyleSpan
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.setPadding
 import androidx.gridlayout.widget.GridLayout
 import kotlinx.android.synthetic.main.view_table_cell_date.view.*
 import kotlinx.coroutines.Deferred
@@ -24,8 +29,11 @@ import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.beans.CourseCell
 import tool.xfy9326.naucourses.beans.CourseCellStyle
 import tool.xfy9326.naucourses.beans.CourseTable
+import tool.xfy9326.naucourses.ui.views.widgets.CourseTableCellLayout
+import tool.xfy9326.naucourses.ui.views.widgets.CourseTableView
 import tool.xfy9326.naucourses.utils.BaseUtils.dpToPx
 import tool.xfy9326.naucourses.utils.compute.TimeUtils
+import tool.xfy9326.naucourses.utils.views.ColorUtils
 import kotlin.math.ceil
 import kotlin.math.max
 
@@ -40,13 +48,16 @@ object CourseTableViewBuilder {
     private lateinit var defaultValues: CourseBuilderDefaultValues
     private lateinit var listener: OnCourseCellClickListener
 
-    private val COURSE_CELL_PADDING = 3.dpToPx()
+    private val CELL_HEIGHT_OFFSET = 3.dpToPx()
+
+    private val COURSE_CELL_PADDING = 2.dpToPx()
     private val COURSE_CELL_TEXT_PADDING = 5.dpToPx()
 
-    private val TIME_CELL_LAYOUT_PADDING = 1.dpToPx()
-    private const val TIME_CELL_TIME_NUM_TEXT_SIZE = 17f
-    private val TIME_CELL_TIME_MARGIN_TOP = 1.dpToPx()
-    private const val TIME_CELL_TIME_TEXT_SIZE = 10f
+    private const val DEFAULT_COURSE_CELL_BACKGROUND_ALPHA = 0.6f
+    private val DEFAULT_COURSE_CELL_BACKGROUND_RADIUS = 6f.dpToPx()
+
+    private const val TIME_CELL_TIME_NUM_TEXT_SIZE = 17
+    private const val TIME_CELL_TIME_TEXT_SIZE = 10
 
     private val courseTimeStrArr = Array(TimeUtils.CLASS_TIME_ARR.size) {
         Pair(TimeUtils.CLASS_TIME_ARR[it].getStartTimeStr(), TimeUtils.CLASS_TIME_ARR[it].getEndTimeStr())
@@ -72,7 +83,7 @@ object CourseTableViewBuilder {
     }
 
     @Suppress("ArrayInDataClass")
-    data class CourseBuilderDefaultValues(
+    private data class CourseBuilderDefaultValues(
         val notThisWeekCourseStr: String,
         val weekDayNumStrArr: Array<String>,
         val defaultTextColor: Int,
@@ -132,6 +143,7 @@ object CourseTableViewBuilder {
         val result = Array(resultDeferred.size) {
             resultDeferred[it].await()
         }
+        maxHeight += CELL_HEIGHT_OFFSET
         result.forEach {
             it.layoutParams.height = maxHeight
         }
@@ -159,32 +171,37 @@ object CourseTableViewBuilder {
                 rowSpec = rowMerge
                 width = headerWidth
             }
-            setPadding(COURSE_CELL_PADDING, COURSE_CELL_PADDING, COURSE_CELL_PADDING, COURSE_CELL_PADDING)
+            setPadding(COURSE_CELL_PADDING)
 
             gravity = Gravity.TOP or Gravity.CENTER
 
-            alpha = cellStyle.alpha
+            alpha = DEFAULT_COURSE_CELL_BACKGROUND_ALPHA
 
             // 课程信息文字
             addViewWithoutRequestLayout(TextView(context).apply {
                 layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
                 textSize = cellStyle.textSize
-                background = buildCourseCellBackground(cellStyle.color, cellStyle.cornerRadius)
+                background = buildCourseCellBackground(cellStyle.color, DEFAULT_COURSE_CELL_BACKGROUND_RADIUS)
                 setTextColor(
-                    if (isLightColor(cellStyle.color)) {
+                    if (ColorUtils.isLightColor(cellStyle.color)) {
                         defaultValues.courseTextColorDark
                     } else {
                         defaultValues.courseTextColorLight
                     }
                 )
-                setPadding(COURSE_CELL_TEXT_PADDING, COURSE_CELL_TEXT_PADDING, COURSE_CELL_TEXT_PADDING, COURSE_CELL_TEXT_PADDING)
+                setPadding(COURSE_CELL_TEXT_PADDING)
+
+                val baseShowText = "${courseInfo.courseName}$COURSE_INFO_JOIN_SYMBOL${courseInfo.courseLocation}"
+
                 text = if (courseInfo.thisWeekCourse) {
-                    "${courseInfo.courseName}$COURSE_INFO_JOIN_SYMBOL${courseInfo.courseLocation}"
+                    baseShowText
                 } else {
-                    "${defaultValues.notThisWeekCourseStr}${Constants.CHANGE_LINE}" +
-                            "${courseInfo.courseName}$COURSE_INFO_JOIN_SYMBOL${courseInfo.courseLocation}"
+                    val notThisWeekText = "${defaultValues.notThisWeekCourseStr}${Constants.CHANGE_LINE}"
+                    SpannableStringBuilder(notThisWeekText + baseShowText).apply {
+                        setSpan(StyleSpan(Typeface.BOLD), 0, notThisWeekText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                    }
                 }
-                typeface = Typeface.defaultFromStyle(Typeface.BOLD)
+
                 gravity = Gravity.TOP or Gravity.START
                 isClickable = true
                 setOnClickListener {
@@ -206,36 +223,30 @@ object CourseTableViewBuilder {
 
             gravity = Gravity.CENTER
             orientation = LinearLayout.VERTICAL
-            setPadding(TIME_CELL_LAYOUT_PADDING, TIME_CELL_LAYOUT_PADDING, TIME_CELL_LAYOUT_PADDING, TIME_CELL_LAYOUT_PADDING)
 
-            // 课程节次
             addViewWithoutRequestLayout(TextView(context).apply {
                 layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 typeface = Typeface.defaultFromStyle(Typeface.BOLD)
-                textSize = TIME_CELL_TIME_NUM_TEXT_SIZE
-                text = courseTimeNum.toString()
                 gravity = Gravity.CENTER
-            })
 
-            // 课程开始与结束时间
-            addViewWithoutRequestLayout(TextView(context).apply {
-                layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
-                    setMargins(0, TIME_CELL_TIME_MARGIN_TOP, 0, 0)
+                val courseTimeNumText = "${courseTimeNum}${Constants.CHANGE_LINE}"
+                val courseTimeText =
+                    "${courseTimeStrArr[courseTimeNum - 1].first}${Constants.CHANGE_LINE}${courseTimeStrArr[courseTimeNum - 1].second}"
+                text = SpannableStringBuilder(courseTimeNumText + courseTimeText).apply {
+                    // 课程节次
+                    setSpan(AbsoluteSizeSpan(TIME_CELL_TIME_NUM_TEXT_SIZE, true), 0, courseTimeNumText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                    // 课程开始与结束时间
+                    setSpan(
+                        AbsoluteSizeSpan(TIME_CELL_TIME_TEXT_SIZE, true),
+                        courseTimeNumText.length,
+                        courseTimeNumText.length + courseTimeText.length,
+                        Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    )
                 }
-                textSize = TIME_CELL_TIME_TEXT_SIZE
-                text = "${courseTimeStrArr[courseTimeNum - 1].first}${Constants.CHANGE_LINE}${courseTimeStrArr[courseTimeNum - 1].second}"
-                gravity = Gravity.CENTER
             })
         }
 
-    private fun isLightColor(color: Int): Boolean {
-        val r = color and 0xff0000 shr 16
-        val g = color and 0x00ff00 shr 8
-        val b = color and 0x0000ff
-        val total = 0.299 * r + 0.587 * g + 0.114 * b
-        return total >= 220
-    }
-
+    @Suppress("SameParameterValue")
     private fun buildCourseCellBackground(colorInt: Int, radius: Float): Drawable =
         GradientDrawable().apply {
             cornerRadius = radius

@@ -11,7 +11,7 @@ import tool.xfy9326.naucourses.providers.info.base.CacheExpireTimeUnit
 
 object PersonalInfo : BaseSimpleContentInfo<StudentInfo, Nothing>() {
     private const val CACHE_EXPIRE_DAY = 1
-    private val jsonStore = GsonStoreManager.getInstance()
+    private val gsonStore = GsonStoreManager.getInstance()
 
     override fun onGetCacheExpire(): CacheExpire = CacheExpire(
         CacheExpireRule.PER_TIME,
@@ -19,15 +19,15 @@ object PersonalInfo : BaseSimpleContentInfo<StudentInfo, Nothing>() {
     )
 
     override fun loadSimpleStoredInfo(): StudentInfo? =
-        jsonStore.readData(GsonStoreManager.StoreType.STUDENT_INFO, true)
+        gsonStore.readData(GsonStoreManager.StoreType.STUDENT_INFO, true)
 
-    override fun getSimpleInfoContent(params: Set<Nothing>): ContentResult<StudentInfo> = StudentIndex.getContentData()
+    override suspend fun getSimpleInfoContent(params: Set<Nothing>): ContentResult<StudentInfo> = StudentIndex.getContentData()
 
     override fun saveSimpleInfo(info: StudentInfo) {
-        jsonStore.writeData(GsonStoreManager.StoreType.STUDENT_INFO, info, true)
+        gsonStore.writeData(GsonStoreManager.StoreType.STUDENT_INFO, info, true)
     }
 
     override fun clearSimpleStoredInfo() {
-        jsonStore.clearData(GsonStoreManager.StoreType.STUDENT_INFO)
+        gsonStore.clearData(GsonStoreManager.StoreType.STUDENT_INFO)
     }
 }

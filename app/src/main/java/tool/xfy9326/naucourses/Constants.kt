@@ -1,8 +1,5 @@
 package tool.xfy9326.naucourses
 
-import java.text.SimpleDateFormat
-import java.util.*
-
 object Constants {
     const val EMPTY = ""
     const val SPACE = " "
@@ -12,7 +9,7 @@ object Constants {
     const val KEEP_TWO_NUMBER_PLACES = "%02d"
 
     object News {
-        const val NEWS_STORE_DAY_LENGTH = 180
+        const val NEWS_STORE_DAY_LENGTH = 90
     }
 
     object Network {
@@ -59,8 +56,8 @@ object Constants {
     }
 
     object Time {
-        val DATE_FORMAT_YMD = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)
-        val DATE_FORMAT_YMD_HM_CH = SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.CHINA)
+        const val FORMAT_YMD = "yyyy-MM-dd"
+        const val FORMAT_YMD_HM_CH = "yyyy年MM月dd日 HH:mm"
 
         const val MIN_WEEK_DAY = 1
         const val MAX_WEEK_DAY = 7

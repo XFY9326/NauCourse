@@ -2,21 +2,19 @@ package tool.xfy9326.naucourses.utils.compute
 
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.beans.CourseCell
-import tool.xfy9326.naucourses.beans.CourseCellStyle
 import tool.xfy9326.naucourses.beans.CourseTable
 import tool.xfy9326.naucourses.beans.CourseTimeDuration
 import tool.xfy9326.naucourses.providers.beans.jwc.Course
 import tool.xfy9326.naucourses.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourses.providers.beans.jwc.CourseTime
-import tool.xfy9326.naucourses.providers.store.CourseCellStyleStore
 import java.util.*
 import kotlin.collections.ArrayList
 
 object CourseUtils {
     private const val NEXT_COURSE_BEFORE_COURSE_END_BASED_MINUTE = 10
 
-    fun getCourseTableByWeekNum(courseSet: CourseSet, weekNum: Int): CourseTable {
-        if (weekNum < Constants.Course.MIN_WEEK_NUM_SIZE || weekNum > Constants.Course.MAX_WEEK_NUM_SIZE) {
+    fun getCourseTableByWeekNum(courseSet: CourseSet, weekNum: Int, maxWeekNum: Int, startWeekDayNum: Int, endWeekDayNum: Int): CourseTable {
+        if (weekNum < Constants.Course.MIN_WEEK_NUM_SIZE || weekNum > maxWeekNum) {
             throw IllegalArgumentException("Week Num Error! Num: $weekNum")
         }
         val courses = courseSet.courses
@@ -29,9 +27,10 @@ object CourseUtils {
                 time.coursesNumArray.timePeriods.forEach {
                     if (thisWeekCourse || temp[time.weekDay - 1][it.start - 1] == null) {
                         temp[time.weekDay - 1][it.start - 1] = CourseCell(
+                            course.id,
                             course.name,
                             time.location,
-                            course.id,
+                            time.weekDay,
                             CourseTimeDuration.parseTimePeriod(it),
                             thisWeekCourse
                         )
@@ -40,12 +39,23 @@ object CourseUtils {
             }
         }
         val courseTable = ArrayList<Array<CourseCell>>(Constants.Time.MAX_WEEK_DAY)
-        for (weekDayCourse in temp) {
-            val coursesArr = ArrayList<CourseCell>()
-            for (cell in weekDayCourse) {
-                if (cell != null) coursesArr.add(cell)
+        var startP = 0
+        var endP = temp.size - 1
+        if (weekNum == Constants.Course.MIN_WEEK_NUM_SIZE) {
+            startP = startWeekDayNum - 1
+        } else if (weekNum == maxWeekNum) {
+            endP = endWeekDayNum - 1
+        }
+        for ((i, weekDayCourse) in temp.withIndex()) {
+            if (i < startP || i > endP) {
+                courseTable.add(emptyArray())
+            } else {
+                val coursesArr = ArrayList<CourseCell>()
+                for (cell in weekDayCourse) {
+                    if (cell != null) coursesArr.add(cell)
+                }
+                courseTable.add(coursesArr.toTypedArray())
             }
-            courseTable.add(coursesArr.toTypedArray())
         }
         return CourseTable(courseTable.toTypedArray())
     }
@@ -67,20 +77,6 @@ object CourseUtils {
             }
         }
         return courseTable.toTypedArray()
-    }
-
-    @Synchronized
-    fun asyncCellStyle(courseSet: CourseSet, styleMap: Array<CourseCellStyle>? = null, saveStyle: Boolean = true): Array<CourseCellStyle> {
-        val oldStyles = styleMap ?: emptyArray()
-        val newStyles = ArrayList<CourseCellStyle>(courseSet.courses.size)
-        for (course in courseSet.courses) {
-            newStyles.add(CourseCellStyle.getStyleByCourseId(course.id, oldStyles) ?: CourseCellStyle.getDefaultCellStyle(course.id))
-        }
-        val result = newStyles.toTypedArray()
-        if (saveStyle) {
-            CourseCellStyleStore.saveStore(result)
-        }
-        return result
     }
 
     fun getTodayNextCourse(

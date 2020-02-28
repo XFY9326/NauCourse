@@ -18,9 +18,10 @@ import kotlin.math.floor
 import kotlin.properties.Delegates
 
 class TableFragment : ViewModelFragment<CourseTableViewModel>() {
-    private val courseTableScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+    private val tableScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+    private val courseUpdateLock = Any()
     private var weekNum by Delegates.notNull<Int>()
-    private var coursePkgHash = 0
+    private var coursePkgHash = CourseTableViewModel.DEFAULT_COURSE_PKG_HASH
     private val courseTableHeaderDate by lazy {
         arrayOf(
             layout_cellDateMon,
@@ -39,45 +40,52 @@ class TableFragment : ViewModelFragment<CourseTableViewModel>() {
         weekNum = args?.getInt(CourseTableViewPagerAdapter.COURSE_TABLE_WEEK_NUM)!!
     }
 
-    override fun onCreateViewModel(savedInstanceState: Bundle?): CourseTableViewModel =
-        ViewModelProvider(activity!!)[CourseTableViewModel::class.java].apply {
+    override fun onCreateViewModel(): CourseTableViewModel = ViewModelProvider(activity!!)[CourseTableViewModel::class.java]
+
+    override fun prepareCacheInit(viewModel: CourseTableViewModel, isRestored: Boolean) {
+        viewModel.apply {
             courseTablePkg[weekNum - 1].observe(this@TableFragment, Observer {
                 coursePkgHash = it.hashCode()
                 coursePkgSavedTemp[weekNum - 1] = it
-                updateCourseTableView(it)
+                buildCourseTableView(it)
             })
-            if (savedInstanceState == null) {
+            if (!isRestored) {
                 if (coursePkgSavedTemp[weekNum - 1] == null) {
                     requestCourseTable(weekNum, coursePkgHash)
                 } else {
                     coursePkgHash = coursePkgSavedTemp[weekNum - 1]!!.hashCode()
-                    updateCourseTableView(coursePkgSavedTemp[weekNum - 1]!!)
+                    buildCourseTableView(coursePkgSavedTemp[weekNum - 1]!!)
                 }
             }
         }
+    }
 
     override fun onDestroy() {
         super.onDestroy()
-        courseTableScope.cancel()
+        tableScope.cancel()
     }
 
-    private fun updateCourseTableView(coursePkg: CoursePkg) {
-        courseTableScope.launch {
-            val dateInfo = async { TimeUtils.getWeekNumDateArray(coursePkg.termDate.startDate, weekNum) }
-            val today = async { TimeUtils.getTodayDate() }
-            val hasWeekendCourse = CourseTableViewBuilder.hasWeekendCourse(coursePkg.courseTable)
-            val weekDayShowSize = getWeekDayShowSize(hasWeekendCourse)
-            updateCourseTableHeader(today.await(), dateInfo.await(), weekDayShowSize, hasWeekendCourse)
+    private fun buildCourseTableView(coursePkg: CoursePkg) {
+        tableScope.launch {
+            synchronized(courseUpdateLock) {
+                launch {
+                    val dateInfo = async { TimeUtils.getWeekNumDateArray(coursePkg.termDate.startDate, weekNum) }
+                    val today = async { TimeUtils.getTodayDate() }
+                    val hasWeekendCourse = CourseTableViewBuilder.hasWeekendCourse(coursePkg.courseTable)
+                    val weekDayShowSize = getWeekDayShowSize(hasWeekendCourse)
+                    buildCourseTableHeader(today.await(), dateInfo.await(), weekDayShowSize, hasWeekendCourse)
 
-            val width = calculateTableHeaderWidth(weekDayShowSize)
-            CourseTableViewBuilder.createCourseTableView(
-                context!!,
-                coursePkg.courseTable,
-                hasWeekendCourse,
-                coursePkg.styles,
-                gl_courseTable,
-                width
-            )
+                    val width = calculateTableHeaderWidth(weekDayShowSize)
+                    CourseTableViewBuilder.createCourseTableView(
+                        context!!,
+                        coursePkg.courseTable,
+                        hasWeekendCourse,
+                        coursePkg.styles,
+                        gl_courseTable,
+                        width
+                    )
+                }
+            }
         }
     }
 
@@ -93,7 +101,7 @@ class TableFragment : ViewModelFragment<CourseTableViewModel>() {
         return Pair(timeRowWidth, floor((CourseTableViewBuilder.getWindowsWidth(context!!) - timeRowWidth) * 1f / weekDayShowSize).toInt())
     }
 
-    private suspend fun updateCourseTableHeader(
+    private suspend fun buildCourseTableHeader(
         today: Pair<Int, Int>, dateInfo: Pair<Int, Array<Int>>, weekDayShowSize: Int,
         hasWeekendCourse: Boolean
     ) =

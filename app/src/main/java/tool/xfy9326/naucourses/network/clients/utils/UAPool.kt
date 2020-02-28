@@ -1,7 +1,5 @@
 package tool.xfy9326.naucourses.network.clients.utils
 
-import kotlin.random.Random
-
 /**
  * User Agent池
  * @author XFY9326
@@ -34,5 +32,5 @@ object UAPool {
      * 获取随机的UA
      * @return UA
      */
-    fun getRandomUA() = UA[Random(System.currentTimeMillis()).nextInt(0, UA.size)]
+    fun getRandomUA() = UA.random()
 }

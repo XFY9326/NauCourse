@@ -1,6 +1,8 @@
 package tool.xfy9326.naucourses.providers.info.base
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import tool.xfy9326.naucourses.io.prefs.InfoStoredTimePref
 import tool.xfy9326.naucourses.providers.contents.base.ContentErrorReason
@@ -9,15 +11,18 @@ import java.util.*
 
 abstract class BaseContentInfo<T : Enum<*>, P : Enum<*>> {
     private val cacheMap = Hashtable<T, Any>(1)
+    private val infoMutex = Mutex()
 
     companion object {
         private const val KEY_JOIN_SYMBOL = "_"
     }
 
-    fun initCache() = synchronized(this) {
-        val stored = loadStoredInfo()
-        cacheMap.clear()
-        cacheMap.putAll(stored)
+    suspend fun initCache() = withContext(Dispatchers.IO) {
+        synchronized(this@BaseContentInfo) {
+            val stored = loadStoredInfo()
+            cacheMap.clear()
+            cacheMap.putAll(stored)
+        }
     }
 
     protected open fun <E : Any> updateCache(type: T, data: E) {
@@ -41,7 +46,7 @@ abstract class BaseContentInfo<T : Enum<*>, P : Enum<*>> {
 
     protected abstract fun loadStoredInfo(): Map<T, Any>
 
-    protected abstract fun getInfoContent(type: T, params: Set<P>): ContentResult<*>
+    protected abstract suspend fun getInfoContent(type: T, params: Set<P>): ContentResult<*>
 
     protected abstract fun saveInfo(type: T, info: Any)
 
@@ -77,7 +82,7 @@ abstract class BaseContentInfo<T : Enum<*>, P : Enum<*>> {
             if (loadCachedData && forceRefresh) {
                 throw IllegalArgumentException("You Can't Do Load Cache And Refresh At The Same Time!")
             }
-            synchronized(this) {
+            infoMutex.withLock {
                 val hasCachedData = hasCachedItem(type)
                 val cacheExpire = onGetCacheExpire()
                 if (loadCachedData) {

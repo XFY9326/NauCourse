@@ -26,11 +26,13 @@ class LoginViewModel : BaseViewModel() {
         NONE
     }
 
-    override fun onInitView() {
-        viewModelScope.launch {
-            val id = AccountUtils.readSavedCacheUserId()
-            if (id != null) {
-                cachedUserId.postValue(id)
+    override fun onInitView(isRestored: Boolean) {
+        if (!isRestored) {
+            viewModelScope.launch {
+                val id = AccountUtils.readSavedCacheUserId()
+                if (id != null) {
+                    cachedUserId.postValue(id)
+                }
             }
         }
     }

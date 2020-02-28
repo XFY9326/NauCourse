@@ -11,11 +11,14 @@ import tool.xfy9326.naucourses.providers.beans.GeneralNews
 import tool.xfy9326.naucourses.providers.beans.GeneralNewsDetail
 import tool.xfy9326.naucourses.providers.beans.jwc.JwcTopic
 import tool.xfy9326.naucourses.providers.contents.base.BaseNewsContent
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashSet
 
 object TopicList : BaseNewsContent<JwcTopic>() {
     private val jwcClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
+
+    private val DATE_FORMAT_YMD = SimpleDateFormat(Constants.Time.FORMAT_YMD, Locale.CHINA)
 
     private const val JWC_TOPIC_ASPX = "TopicList.aspx"
     private val JWC_TOPIC_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(JwcClient.JWC_HOST)
@@ -58,7 +61,7 @@ object TopicList : BaseNewsContent<JwcTopic>() {
             detailUrl = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(JwcClient.JWC_HOST)
                 .addPathSegment(JwcClient.JWC_ISSUE_PATH).addEncodedPathSegment(urlTemp[0]).query(urlTemp[1]).build()
 
-            postDate = Constants.Time.DATE_FORMAT_YMD.parse(tdElement[3].text())!!
+            postDate = readTime(tdElement[3].text())!!
             clickAmount = tdElement[5].text().toInt()
             type = tdElement[6].text()
 
@@ -102,11 +105,15 @@ object TopicList : BaseNewsContent<JwcTopic>() {
 
         val detailTemp = trElements[1].text().split(Constants.SPACE)
         val postAdmin = detailTemp[0].split(INFO_DIVIDE_SYMBOL)[1]
-        val postDate = Constants.Time.DATE_FORMAT_YMD.parse(detailTemp[1].split(INFO_DIVIDE_SYMBOL)[1])!!
+        val postDate = readTime(detailTemp[1].split(INFO_DIVIDE_SYMBOL)[1])!!
         val clickAmount = detailTemp[2].split(INFO_DIVIDE_SYMBOL)[1].toInt()
 
         val html = trElements[2].html()
 
         return GeneralNewsDetail(title, postAdmin, postDate, clickAmount, html)
     }
+
+    // 解决SimpleDateFormat线程不安全问题
+    @Synchronized
+    private fun readTime(text: String) = DATE_FORMAT_YMD.parse(text)
 }

@@ -6,15 +6,28 @@ object UserPref : BasePref() {
     override val prefName: String = "User"
 
     const val USER_PASSWORD = "UserPassword"
-    const val CARD_BALANCE = "CardBalance"
+    const val CARD_BALANCE = "CardBalance_"
+    const val CARD_BALANCE_DEFAULT_VALUE = -1f
 
-    var UserId by pref.string()
+    var UserId by pref.string(encrypted = true)
 
-    var UserPassword by pref.string(USER_PASSWORD)
-
-    var UUID by pref.string()
+    var UserPassword by pref.string(USER_PASSWORD, encrypted = true)
 
     var HasLogin by pref.boolean(defValue = false)
 
-    var CardBalance by pref.float(CARD_BALANCE, defValue = -1f)
+    // 解决Float类型无法被加密的问题
+    private var CardBalance_ by pref.string(CARD_BALANCE, encrypted = true)
+
+    var CardBalance: Float
+        get() {
+            val readValue = CardBalance_
+            return if (readValue == null) {
+                CARD_BALANCE_DEFAULT_VALUE
+            } else {
+                readValue.toFloatOrNull() ?: CARD_BALANCE_DEFAULT_VALUE
+            }
+        }
+        set(value) {
+            CardBalance_ = value.toString()
+        }
 }

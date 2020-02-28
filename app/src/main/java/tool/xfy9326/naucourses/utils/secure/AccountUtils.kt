@@ -17,11 +17,7 @@ object AccountUtils {
         val userId = UserPref.UserId
         val userPw = UserPref.UserPassword
         return if (hasLogin && userId != null && userPw != null) {
-            val uuid = EncryptUtils.readUUID()
-            UserInfo(
-                EncryptUtils.decryptText(userId, uuid),
-                EncryptUtils.decryptText(userPw, uuid)
-            )
+            UserInfo(userId, userPw)
         } else {
             throw IllegalStateException("You Can't Read User Info While Not Login or Not Completely Saved!")
         }
@@ -30,9 +26,8 @@ object AccountUtils {
     fun clearUserPw() = UserPref.remove(UserPref.USER_PASSWORD)
 
     fun saveUserInfo(userInfo: UserInfo) {
-        val uuid = EncryptUtils.readUUID()
-        UserPref.UserId = EncryptUtils.encryptText(userInfo.userId, uuid)
-        UserPref.UserPassword = EncryptUtils.encryptText(userInfo.userPw, uuid)
+        UserPref.UserId = userInfo.userId
+        UserPref.UserPassword = userInfo.userPw
     }
 
     data class UserInfo(

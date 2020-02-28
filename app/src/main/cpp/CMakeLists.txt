@@ -3,16 +3,14 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
+aux_source_directory(src DIR_MAIN)
+
 add_library(
         Secure
 
         SHARED
 
-        src/aes/aes.c
-        src/aes/aes.h
-        src/aes/base64.c
-        src/aes/base64.h
-        src/encryptUtils.cpp
+        ${DIR_MAIN}
 )
 
 find_library(

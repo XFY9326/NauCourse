@@ -33,12 +33,14 @@ abstract class ViewModelFragment<T : BaseViewModel> : Fragment() {
     @CallSuper
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        contentViewModel = onCreateViewModel(savedInstanceState)
+        contentViewModel = onCreateViewModel()
+        prepareCacheInit(contentViewModel, savedInstanceState != null)
+        contentViewModel.onInitCache(savedInstanceState != null)
 
         bindViewModel(contentViewModel)
-        contentViewModel.onActivityCreate()
         initView(contentViewModel)
-        contentViewModel.onInitView()
+
+        contentViewModel.onInitView(savedInstanceState != null)
         setView(savedInstanceState)
     }
 
@@ -47,7 +49,9 @@ abstract class ViewModelFragment<T : BaseViewModel> : Fragment() {
     @LayoutRes
     protected abstract fun onCreateContentView(): Int
 
-    protected abstract fun onCreateViewModel(savedInstanceState: Bundle?): T
+    protected abstract fun onCreateViewModel(): T
+
+    protected open fun prepareCacheInit(viewModel: T, isRestored: Boolean) {}
 
     protected open fun initView(viewModel: T) {}
 

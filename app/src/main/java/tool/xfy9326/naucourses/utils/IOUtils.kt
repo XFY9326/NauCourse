@@ -1,8 +1,7 @@
 package tool.xfy9326.naucourses.utils
 
 import android.content.Context
-import okio.internal.commonToUtf8String
-import tool.xfy9326.naucourses.utils.secure.EncryptUtils
+import tool.xfy9326.naucourses.utils.secure.CryptoUtils
 import java.io.*
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
@@ -19,7 +18,7 @@ object IOUtils {
     fun saveTextToFile(text: String, path: String, encrypt: Boolean = false, zipStore: Boolean = false): Boolean =
         try {
             val storeText = if (encrypt) {
-                EncryptUtils.encryptText(text, EncryptUtils.readUUID())
+                CryptoUtils.encryptText(text)
             } else {
                 text
             }
@@ -61,10 +60,10 @@ object IOUtils {
                     } else {
                         it.readBytes()
                     }
-                    bytes.commonToUtf8String()
+                    String(bytes)
                 }
                 if (encrypt) {
-                    EncryptUtils.decryptText(rawText, EncryptUtils.readUUID())
+                    CryptoUtils.decryptText(rawText)
                 } else {
                     rawText
                 }

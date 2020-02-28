@@ -12,7 +12,6 @@ object CoursesDBHelper {
     const val COURSES_TABLE_NAME = "Courses"
     const val TERM_TABLE_NAME = "Term"
     const val COURSES_TIME_TABLE_NAME = "CoursesTime"
-    const val COURSES_STYLE_TABLE_NAME = "CoursesStyle"
     const val COURSES_SCORE_TABLE_NAME = "CoursesScore"
     const val COURSES_HISTORY_TABLE_NAME = "CourseHistory"
 

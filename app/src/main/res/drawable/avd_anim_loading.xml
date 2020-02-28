@@ -1,0 +1,301 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="256dp"
+            android:height="100dp"
+            android:viewportWidth="256"
+            android:viewportHeight="100">
+            <group android:name="_R_G">
+                <group
+                    android:name="_R_G_L_4_G_T_1"
+                    android:scaleX="0.75"
+                    android:scaleY="0.75"
+                    android:translateX="49.6"
+                    android:translateY="67.469">
+                    <group
+                        android:name="_R_G_L_4_G"
+                        android:translateX="70"
+                        android:translateY="0.5">
+                        <path
+                            android:name="_R_G_L_4_G_D_0_P_0"
+                            android:fillAlpha="1"
+                            android:fillColor="#e53935"
+                            android:fillType="nonZero"
+                            android:pathData=" M-70.12 -17.75 C-60.81,-17.75 -53.25,-10.02 -53.25,-0.5 C-53.25,9.02 -60.81,16.75 -70.12,16.75 C-79.44,16.75 -87,9.02 -87,-0.5 C-87,-10.02 -79.44,-17.75 -70.12,-17.75c " />
+                    </group>
+                </group>
+                <group
+                    android:name="_R_G_L_3_G_T_1"
+                    android:scaleX="0.75"
+                    android:scaleY="0.75"
+                    android:translateX="89.6"
+                    android:translateY="67.469">
+                    <group
+                        android:name="_R_G_L_3_G"
+                        android:translateX="70"
+                        android:translateY="0.5">
+                        <path
+                            android:name="_R_G_L_3_G_D_0_P_0"
+                            android:fillAlpha="1"
+                            android:fillColor="#1e88e5"
+                            android:fillType="nonZero"
+                            android:pathData=" M-70.12 -17.75 C-60.81,-17.75 -53.25,-10.02 -53.25,-0.5 C-53.25,9.02 -60.81,16.75 -70.12,16.75 C-79.44,16.75 -87,9.02 -87,-0.5 C-87,-10.02 -79.44,-17.75 -70.12,-17.75c " />
+                    </group>
+                </group>
+                <group
+                    android:name="_R_G_L_2_G_T_1"
+                    android:scaleX="0.75"
+                    android:scaleY="0.75"
+                    android:translateX="129.594"
+                    android:translateY="67.469">
+                    <group
+                        android:name="_R_G_L_2_G"
+                        android:translateX="70"
+                        android:translateY="0.5">
+                        <path
+                            android:name="_R_G_L_2_G_D_0_P_0"
+                            android:fillAlpha="1"
+                            android:fillColor="#43a047"
+                            android:fillType="nonZero"
+                            android:pathData=" M-70.12 -17.75 C-60.81,-17.75 -53.25,-10.02 -53.25,-0.5 C-53.25,9.02 -60.81,16.75 -70.12,16.75 C-79.44,16.75 -87,9.02 -87,-0.5 C-87,-10.02 -79.44,-17.75 -70.12,-17.75c " />
+                    </group>
+                </group>
+                <group
+                    android:name="_R_G_L_1_G_T_1"
+                    android:scaleX="0.75"
+                    android:scaleY="0.75"
+                    android:translateX="169.6"
+                    android:translateY="67.5">
+                    <group
+                        android:name="_R_G_L_1_G"
+                        android:translateX="70"
+                        android:translateY="0.5">
+                        <path
+                            android:name="_R_G_L_1_G_D_0_P_0"
+                            android:fillAlpha="1"
+                            android:fillColor="#fdd835"
+                            android:fillType="nonZero"
+                            android:pathData=" M-70.12 -17.75 C-60.81,-17.75 -53.25,-10.02 -53.25,-0.5 C-53.25,9.02 -60.81,16.75 -70.12,16.75 C-79.44,16.75 -87,9.02 -87,-0.5 C-87,-10.02 -79.44,-17.75 -70.12,-17.75c " />
+                    </group>
+                </group>
+                <group
+                    android:name="_R_G_L_0_G_T_1"
+                    android:scaleX="0.75"
+                    android:scaleY="0.75"
+                    android:translateX="209.6"
+                    android:translateY="67.469">
+                    <group
+                        android:name="_R_G_L_0_G"
+                        android:translateX="70"
+                        android:translateY="0.5">
+                        <path
+                            android:name="_R_G_L_0_G_D_0_P_0"
+                            android:fillAlpha="1"
+                            android:fillColor="#fb8c00"
+                            android:fillType="nonZero"
+                            android:pathData=" M-70.12 -17.75 C-60.81,-17.75 -53.25,-10.02 -53.25,-0.5 C-53.25,9.02 -60.81,16.75 -70.12,16.75 C-79.44,16.75 -87,9.02 -87,-0.5 C-87,-10.02 -79.44,-17.75 -70.12,-17.75c " />
+                    </group>
+                </group>
+            </group>
+            <group android:name="time_group" />
+        </vector>
+    </aapt:attr>
+    <target android:name="_R_G_L_4_G_T_1">
+        <aapt:attr name="android:animation">
+            <set android:ordering="together">
+                <objectAnimator
+                    android:duration="334"
+                    android:pathData="M 49.6,67.469C 49.6,60.80799999999999 48.6,26.995 48.6,27"
+                    android:propertyName="translateXY"
+                    android:propertyXName="translateX"
+                    android:propertyYName="translateY"
+                    android:startOffset="0">
+                    <aapt:attr name="android:interpolator">
+                        <pathInterpolator android:pathData="M 0.0,0.0 c0.333,0 0.667,1 1.0,1.0" />
+                    </aapt:attr>
+                </objectAnimator>
+                <objectAnimator
+                    android:duration="334"
+                    android:pathData="M 48.6,27C 48.6,27.005 48.6,60.333 48.6,67"
+                    android:propertyName="translateXY"
+                    android:propertyXName="translateX"
+                    android:propertyYName="translateY"
+                    android:startOffset="334">
+                    <aapt:attr name="android:interpolator">
+                        <pathInterpolator android:pathData="M 0.0,0.0 c0.333,0 0.667,1 1.0,1.0" />
+                    </aapt:attr>
+                </objectAnimator>
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="_R_G_L_3_G_T_1">
+        <aapt:attr name="android:animation">
+            <set android:ordering="together">
+                <objectAnimator
+                    android:duration="167"
+                    android:pathData="M 89.6,67.469C 89.6,67.386 88.6,66.969 88.6,66.969"
+                    android:propertyName="translateXY"
+                    android:propertyXName="translateX"
+                    android:propertyYName="translateY"
+                    android:startOffset="0">
+                    <aapt:attr name="android:interpolator">
+                        <pathInterpolator android:pathData="M 0.0,0.0 c0.333,0 0.99,0.999 1.0,1.0" />
+                    </aapt:attr>
+                </objectAnimator>
+                <objectAnimator
+                    android:duration="334"
+                    android:pathData="M 88.6,66.969C 88.6,60.30799999999999 88.6,26.995 88.6,27"
+                    android:propertyName="translateXY"
+                    android:propertyXName="translateX"
+                    android:propertyYName="translateY"
+                    android:startOffset="167">
+                    <aapt:attr name="android:interpolator">
+                        <pathInterpolator android:pathData="M 0.0,0.0 c0.333,0 0.667,1 1.0,1.0" />
+                    </aapt:attr>
+                </objectAnimator>
+                <objectAnimator
+                    android:duration="334"
+                    android:pathData="M 88.6,27C 88.6,27.005 88.6,60.333 88.6,67"
+                    android:propertyName="translateXY"
+                    android:propertyXName="translateX"
+                    android:propertyYName="translateY"
+                    android:startOffset="501">
+                    <aapt:attr name="android:interpolator">
+                        <pathInterpolator android:pathData="M 0.0,0.0 c0.333,0 0.667,1 1.0,1.0" />
+                    </aapt:attr>
+                </objectAnimator>
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="_R_G_L_2_G_T_1">
+        <aapt:attr name="android:animation">
+            <set android:ordering="together">
+                <objectAnimator
+                    android:duration="334"
+                    android:pathData="M 129.594,67.469C 129.594,67.386 128.594,66.969 128.594,66.969"
+                    android:propertyName="translateXY"
+                    android:propertyXName="translateX"
+                    android:propertyYName="translateY"
+                    android:startOffset="0">
+                    <aapt:attr name="android:interpolator">
+                        <pathInterpolator android:pathData="M 0.0,0.0 c0.333,0 0.99,0.997 1.0,1.0" />
+                    </aapt:attr>
+                </objectAnimator>
+                <objectAnimator
+                    android:duration="334"
+                    android:pathData="M 128.594,66.969C 128.594,60.30799999999999 128.594,26.995 128.594,27"
+                    android:propertyName="translateXY"
+                    android:propertyXName="translateX"
+                    android:propertyYName="translateY"
+                    android:startOffset="334">
+                    <aapt:attr name="android:interpolator">
+                        <pathInterpolator android:pathData="M 0.0,0.0 c0.333,0 0.667,1 1.0,1.0" />
+                    </aapt:attr>
+                </objectAnimator>
+                <objectAnimator
+                    android:duration="334"
+                    android:pathData="M 128.594,27C 128.594,27.005 128.594,60.333 128.594,67"
+                    android:propertyName="translateXY"
+                    android:propertyXName="translateX"
+                    android:propertyYName="translateY"
+                    android:startOffset="667">
+                    <aapt:attr name="android:interpolator">
+                        <pathInterpolator android:pathData="M 0.0,0.0 c0.333,0 0.667,1 1.0,1.0" />
+                    </aapt:attr>
+                </objectAnimator>
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="_R_G_L_1_G_T_1">
+        <aapt:attr name="android:animation">
+            <set android:ordering="together">
+                <objectAnimator
+                    android:duration="501"
+                    android:pathData="M 169.6,67.5C 169.6,67.417 168.6,67 168.6,67"
+                    android:propertyName="translateXY"
+                    android:propertyXName="translateX"
+                    android:propertyYName="translateY"
+                    android:startOffset="0">
+                    <aapt:attr name="android:interpolator">
+                        <pathInterpolator android:pathData="M 0.0,0.0 c0.333,0 0.99,0.996 1.0,1.0" />
+                    </aapt:attr>
+                </objectAnimator>
+                <objectAnimator
+                    android:duration="334"
+                    android:pathData="M 168.6,67C 168.6,60.333 168.6,27 168.6,27"
+                    android:propertyName="translateXY"
+                    android:propertyXName="translateX"
+                    android:propertyYName="translateY"
+                    android:startOffset="501">
+                    <aapt:attr name="android:interpolator">
+                        <pathInterpolator android:pathData="M 0.0,0.0 c0.333,0 0.667,1 1.0,1.0" />
+                    </aapt:attr>
+                </objectAnimator>
+                <objectAnimator
+                    android:duration="334"
+                    android:pathData="M 168.6,27C 168.6,27 168.6,60.333 168.6,67"
+                    android:propertyName="translateXY"
+                    android:propertyXName="translateX"
+                    android:propertyYName="translateY"
+                    android:startOffset="834">
+                    <aapt:attr name="android:interpolator">
+                        <pathInterpolator android:pathData="M 0.0,0.0 c0.333,0 0.667,1 1.0,1.0" />
+                    </aapt:attr>
+                </objectAnimator>
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="_R_G_L_0_G_T_1">
+        <aapt:attr name="android:animation">
+            <set android:ordering="together">
+                <objectAnimator
+                    android:duration="667"
+                    android:pathData="M 209.6,67.469C 209.6,67.386 208.6,66.969 208.6,66.969"
+                    android:propertyName="translateXY"
+                    android:propertyXName="translateX"
+                    android:propertyYName="translateY"
+                    android:startOffset="0">
+                    <aapt:attr name="android:interpolator">
+                        <pathInterpolator android:pathData="M 0.0,0.0 c0.333,0 0.99,0.994 1.0,1.0" />
+                    </aapt:attr>
+                </objectAnimator>
+                <objectAnimator
+                    android:duration="334"
+                    android:pathData="M 208.6,66.969C 208.6,60.30799999999999 208.6,26.995 208.6,27"
+                    android:propertyName="translateXY"
+                    android:propertyXName="translateX"
+                    android:propertyYName="translateY"
+                    android:startOffset="667">
+                    <aapt:attr name="android:interpolator">
+                        <pathInterpolator android:pathData="M 0.0,0.0 c0.333,0 0.667,1 1.0,1.0" />
+                    </aapt:attr>
+                </objectAnimator>
+                <objectAnimator
+                    android:duration="334"
+                    android:pathData="M 208.6,27C 208.6,27.005 208.6,60.333 208.6,67"
+                    android:propertyName="translateXY"
+                    android:propertyXName="translateX"
+                    android:propertyYName="translateY"
+                    android:startOffset="1001">
+                    <aapt:attr name="android:interpolator">
+                        <pathInterpolator android:pathData="M 0.0,0.0 c0.333,0 0.667,1 1.0,1.0" />
+                    </aapt:attr>
+                </objectAnimator>
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="time_group">
+        <aapt:attr name="android:animation">
+            <set android:ordering="together">
+                <objectAnimator
+                    android:duration="1335"
+                    android:propertyName="translateX"
+                    android:startOffset="0"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:valueType="floatType" />
+            </set>
+        </aapt:attr>
+    </target>
+</animated-vector>

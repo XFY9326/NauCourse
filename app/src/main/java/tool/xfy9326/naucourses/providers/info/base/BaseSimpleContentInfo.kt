@@ -18,7 +18,7 @@ abstract class BaseSimpleContentInfo<T : Any, P : Enum<*>> : BaseContentInfo<Bas
     @Suppress("UNCHECKED_CAST")
     final override fun onReadCache(data: Any): Any = onReadSimpleCache(data as T)
 
-    final override fun getInfoContent(type: SimpleType, params: Set<P>): ContentResult<*> = getSimpleInfoContent(params)
+    final override suspend fun getInfoContent(type: SimpleType, params: Set<P>): ContentResult<*> = getSimpleInfoContent(params)
 
     @Suppress("UNCHECKED_CAST")
     final override fun saveInfo(type: SimpleType, info: Any) = saveSimpleInfo(info as T)
@@ -51,7 +51,7 @@ abstract class BaseSimpleContentInfo<T : Any, P : Enum<*>> : BaseContentInfo<Bas
 
     protected abstract fun loadSimpleStoredInfo(): T?
 
-    protected abstract fun getSimpleInfoContent(params: Set<P>): ContentResult<T>
+    protected abstract suspend fun getSimpleInfoContent(params: Set<P>): ContentResult<T>
 
     protected abstract fun saveSimpleInfo(info: T)
 

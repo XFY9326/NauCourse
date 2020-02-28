@@ -22,6 +22,13 @@ android {
                     outputFileName = applicationId + '_' + versionName + '_' + String.valueOf(versionCode) + '.apk'
                 }
         }
+
+        externalNativeBuild {
+            cmake {
+                cppFlags ""
+                arguments "-DANDROID_STL=c++_shared"
+            }
+        }
     }
 
     buildTypes {
@@ -43,6 +50,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     externalNativeBuild {
         cmake {
             path file('src/main/cpp/CMakeLists.txt')
@@ -60,7 +71,7 @@ dependencies {
 
     // Material Design
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.android.material:material:1.2.0-alpha04'
+    implementation 'com.google.android.material:material:1.2.0-alpha05'
 
     // AndroidX Core
     implementation 'androidx.core:core-ktx:1.2.0'
@@ -84,22 +95,16 @@ dependencies {
     // Gson
     implementation 'com.google.code.gson:gson:2.8.6'
 
-    // Lottie
-    implementation 'com.airbnb.android:lottie:3.3.1'
-
     // OkHttp3
-    implementation 'com.squareup.okhttp3:okhttp:4.3.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.4.0'
 
     // Jsoup
-    implementation 'org.jsoup:jsoup:1.12.1'
-
-    // Gson
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'org.jsoup:jsoup:1.12.2'
 
     // Room
-    implementation 'androidx.room:room-runtime:2.2.3'
-    kapt 'androidx.room:room-compiler:2.2.3'
-    implementation 'androidx.room:room-ktx:2.2.3'
+    implementation 'androidx.room:room-runtime:2.2.4'
+    kapt 'androidx.room:room-compiler:2.2.4'
+    implementation 'androidx.room:room-ktx:2.2.4'
 
     // DB Debug
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.0'

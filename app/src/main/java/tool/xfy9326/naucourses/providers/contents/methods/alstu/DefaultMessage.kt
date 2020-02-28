@@ -16,11 +16,14 @@ import tool.xfy9326.naucourses.providers.beans.GeneralNews
 import tool.xfy9326.naucourses.providers.beans.GeneralNewsDetail
 import tool.xfy9326.naucourses.providers.beans.alstu.AlstuMessage
 import tool.xfy9326.naucourses.providers.contents.base.BaseNewsContent
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashSet
 
 object DefaultMessage : BaseNewsContent<AlstuMessage>() {
     private val alstuClient = getSSOClient<AlstuClient>(SSONetworkManager.ClientType.ALSTU)
+
+    private val DATE_FORMAT_YMD = SimpleDateFormat(Constants.Time.FORMAT_YMD, Locale.CHINA)
 
     private const val ALSTU_MESSAGE_PATH = "MESSAGE"
     private const val ALSTU_DEFAULT_ASPX = "DEFAULT.ASPX"
@@ -87,7 +90,7 @@ object DefaultMessage : BaseNewsContent<AlstuMessage>() {
             }
 
             title = tdElements[0].text()
-            date = Constants.Time.DATE_FORMAT_YMD.parse(tdElements[1].text())!!
+            date = readTime(tdElements[1].text())!!
 
             msgSet.add(AlstuMessage(title, url, date))
         }
@@ -117,7 +120,7 @@ object DefaultMessage : BaseNewsContent<AlstuMessage>() {
 
         val title = bodyElement.getElementById(ELEMENT_ID_BT).text().trim()
         val postAdmin = bodyElement.getElementById(ELEMENT_ID_DW).text()
-        val postDate = Constants.Time.DATE_FORMAT_YMD.parse(bodyElement.getElementById(ELEMENT_ID_TJSJ).text())!!
+        val postDate = readTime(bodyElement.getElementById(ELEMENT_ID_TJSJ).text())!!
         val clickAmount = bodyElement.getElementById(ELEMENT_ID_YDCS).text().toInt()
         val html = getAlstuDetailContent(document, isUsingVPN, postDate)
 
@@ -162,4 +165,8 @@ object DefaultMessage : BaseNewsContent<AlstuMessage>() {
     }
 
     private fun buildDownloadHtml(url: HttpUrl, fileName: String) = "<br/><p><a href=\"$url\">$fileName</a></p>"
+
+    // 解决SimpleDateFormat线程不安全问题
+    @Synchronized
+    private fun readTime(text: String) = DATE_FORMAT_YMD.parse(text)
 }

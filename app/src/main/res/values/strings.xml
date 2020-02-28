@@ -45,4 +45,20 @@
     <string name="not_current_week">非本周</string>
     <string name="not_current_week_course">[非本周]</string>
     <string name="in_vacation">放假中</string>
+    <string name="data_empty">当前暂无数据</string>
+    <string name="news_type">类别：%1$s</string>
+    <string name="news_click_amount">点击：%1$d</string>
+    <string name="news_source_alstu">奥兰系统</string>
+    <string name="news_source_jwc">教务系统</string>
+    <string name="news_source_rss_jw">教务委员会</string>
+    <string name="news_source_rss_tw">团务委员会</string>
+    <string name="news_source_rss_xxb">信息化办公室</string>
+    <string name="news_source_rss_xgc">学务委员会</string>
+    <string name="content_error_timeout">请求超时！</string>
+    <string name="content_error_server_error">系统错误！</string>
+    <string name="content_error_operation">数据处理错误！</string>
+    <string name="content_error_parse_failed">数据转换错误！</string>
+    <string name="content_error_empty_data">暂无可用数据</string>
+    <string name="content_error_unknown">未知错误！</string>
+    <string name="news_show_type">显示的通知类别</string>
 </resources>

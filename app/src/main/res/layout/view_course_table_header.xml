@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="1dp"
-        android:textSize="14sp" />
+        android:textSize="13sp" />
 
     <include
         android:id="@+id/layout_cellDateMon"

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import tool.xfy9326.naucourses.App
 import tool.xfy9326.naucourses.io.dbHelpers.NetworkDBHelper
 import tool.xfy9326.naucourses.io.dbHelpers.base.BaseDB
 
@@ -20,15 +21,12 @@ class NetworkDB private constructor(context: Context) : BaseDB() {
         private const val NETWORK_DB_NAME = "Network.db"
         private const val NETWORK_DB_VERSION = 1
 
-        fun initInstance(context: Context) = synchronized(this) {
-            if (!Companion::instance.isInitialized) {
-                instance =
-                    NetworkDB(context)
+        fun getInstance(): NetworkDB = synchronized(this) {
+            if (!::instance.isInitialized) {
+                instance = NetworkDB(App.instance)
             }
-        }
-
-        fun getInstance(): NetworkDB =
             instance
+        }
     }
 
     @Database(entities = [NetworkDBHelper.CookieData::class], version = NETWORK_DB_VERSION, exportSchema = false)

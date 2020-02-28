@@ -6,17 +6,10 @@ import android.os.Bundle
 import tool.xfy9326.naucourses.utils.secure.AccountUtils
 
 class SplashActivity : Activity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (!isTaskRoot) {
-            selectStartActivity()
-        }
-    }
 
-    override fun onEnterAnimationComplete() {
-        if (isTaskRoot) {
-            selectStartActivity()
-        }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        selectStartActivity()
+        super.onCreate(savedInstanceState)
     }
 
     private fun selectStartActivity() {

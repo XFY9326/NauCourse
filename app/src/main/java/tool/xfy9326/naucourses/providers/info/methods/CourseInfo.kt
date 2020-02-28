@@ -37,17 +37,17 @@ object CourseInfo : BaseSimpleContentInfo<CourseSet, CourseInfo.OperationType>()
     }
 
     override fun isSimpleCacheExpired(params: Set<OperationType>, cacheExpire: CacheExpire): Boolean =
-        if (OperationType.ASYNC_COURSE in params || OperationType.INIT_DATA in params) {
-            super.isSimpleCacheExpired(params, cacheExpire)
-        } else {
-            true
+        when {
+            OperationType.ASYNC_COURSE in params -> super.isSimpleCacheExpired(params, cacheExpire)
+            OperationType.INIT_DATA in params -> false
+            else -> true
         }
 
     override fun onGetCacheExpire(): CacheExpire = CacheExpire(CacheExpireRule.PER_TIME, CACHE_EXPIRE_DAY, CacheExpireTimeUnit.DAY)
 
     override fun loadSimpleStoredInfo(): CourseSet? = CoursesDBHelper.readCourseSet()
 
-    override fun getSimpleInfoContent(params: Set<OperationType>): ContentResult<CourseSet> {
+    override suspend fun getSimpleInfoContent(params: Set<OperationType>): ContentResult<CourseSet> {
         if (params.size != 1) {
             throw IllegalArgumentException("Params Amount Error!")
         } else {

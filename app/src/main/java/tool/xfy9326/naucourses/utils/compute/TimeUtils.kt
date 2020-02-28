@@ -95,6 +95,8 @@ object TimeUtils {
         })
     }
 
+    fun getWeekDayNum(date: Date) = getWeekDayNum(getNewCalendar(date))
+
     fun getWeekDayNum(calendar: Calendar): Int {
         calendar.apply {
             val dayOfWeek = get(Calendar.DAY_OF_WEEK)

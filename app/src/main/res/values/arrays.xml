@@ -9,4 +9,9 @@
         <item>@string/saturday</item>
         <item>@string/sunday</item>
     </string-array>
+
+    <integer-array name="refresh_layout_color_scheme">
+        <item>@color/colorPrimary</item>
+        <item>@color/colorPrimaryDark</item>
+    </integer-array>
 </resources>

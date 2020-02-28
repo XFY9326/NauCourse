@@ -20,7 +20,7 @@ object TermDateInfo : BaseSimpleContentInfo<TermDate, Nothing>() {
         CACHE_EXPIRE_DAY, CacheExpireTimeUnit.DAY
     )
 
-    override fun getSimpleInfoContent(params: Set<Nothing>): ContentResult<TermDate> {
+    override suspend fun getSimpleInfoContent(params: Set<Nothing>): ContentResult<TermDate> {
         val result = TermInfo.getContentData()
         return if (result.isSuccess) {
             ContentResult(true, contentData = fixTermDate(result.contentData!!))

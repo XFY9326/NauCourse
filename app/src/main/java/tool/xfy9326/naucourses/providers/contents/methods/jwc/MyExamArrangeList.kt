@@ -9,10 +9,13 @@ import tool.xfy9326.naucourses.network.SSONetworkManager
 import tool.xfy9326.naucourses.network.clients.JwcClient
 import tool.xfy9326.naucourses.providers.beans.jwc.Exam
 import tool.xfy9326.naucourses.providers.contents.base.BaseNoParamContent
+import java.text.SimpleDateFormat
 import java.util.*
 
 object MyExamArrangeList : BaseNoParamContent<Array<Exam>>() {
     private val jwcClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
+
+    private val DATE_FORMAT_YMD_HM_CH = SimpleDateFormat(Constants.Time.FORMAT_YMD_HM_CH, Locale.CHINA)
 
     private const val JWC_MY_EXAM_ARRANGE_LIST_ASPX = "MyExamArrangeList.aspx"
     private const val TIME_SPLIT_SYMBOL = "-"
@@ -54,8 +57,8 @@ object MyExamArrangeList : BaseNoParamContent<Array<Exam>>() {
             val dateStr = tdElements[5].text()
             val daySplit = dateStr.split(Constants.SPACE)
             val timeSplit = daySplit[1].split(TIME_SPLIT_SYMBOL)
-            startDate = Constants.Time.DATE_FORMAT_YMD_HM_CH.parse("${daySplit[0]} ${timeSplit[0]}")!!
-            endDate = Constants.Time.DATE_FORMAT_YMD_HM_CH.parse("${daySplit[0]} ${timeSplit[1]}")!!
+            startDate = readTime("${daySplit[0]} ${timeSplit[0]}")!!
+            endDate = readTime("${daySplit[0]} ${timeSplit[1]}")!!
 
             location = tdElements[6].text()
             property = tdElements[7].text()
@@ -67,4 +70,7 @@ object MyExamArrangeList : BaseNoParamContent<Array<Exam>>() {
         return examArr.requireNoNulls()
     }
 
+    // 解决SimpleDateFormat线程不安全问题
+    @Synchronized
+    private fun readTime(text: String) = DATE_FORMAT_YMD_HM_CH.parse(text)
 }

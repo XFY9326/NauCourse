@@ -32,12 +32,6 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         }
     }
 
-    private val fragmentMap = mapOf<FragmentType, DrawerToolbarFragment<*>>(
-        FragmentType.COURSE_TABLE to CourseTableFragment(),
-        FragmentType.TODAY_COURSE to TodayCourseFragment(),
-        FragmentType.NEWS to NewsFragment()
-    )
-
     override fun onCreateContentView(): Int = R.layout.activity_main
 
     override fun onCreateViewModel(): MainDrawerViewModel = ViewModelProvider(this)[MainDrawerViewModel::class.java]
@@ -56,7 +50,6 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         nav_main.getHeaderView(0).setOnClickListener {
             startActivity(Intent(this, UserInfoActivity::class.java))
         }
-
     }
 
     override fun onResume() {
@@ -66,16 +59,16 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
 
     @Synchronized
     private fun showFragment(type: FragmentType, showAnim: Boolean = true) {
-        val newFragment = supportFragmentManager.findFragmentByTag(type.name) ?: when (type) {
-            FragmentType.COURSE_TABLE -> CourseTableFragment()
-            FragmentType.TODAY_COURSE -> TodayCourseFragment()
-            FragmentType.NEWS -> NewsFragment()
-        }
-        val oldFragment = supportFragmentManager.findFragmentByTag(getViewModel().nowShowFragmentType.name)
-        if (newFragment != oldFragment) {
+        if (type != getViewModel().nowShowFragmentType || supportFragmentManager.fragments.size == 0) {
+            val oldFragment = supportFragmentManager.findFragmentByTag(getViewModel().nowShowFragmentType.name)
             supportFragmentManager.beginTransaction().apply {
                 if (oldFragment != null) hide(oldFragment)
-                if (newFragment.isAdded) {
+                val newFragment = supportFragmentManager.findFragmentByTag(type.name) ?: when (type) {
+                    FragmentType.COURSE_TABLE -> CourseTableFragment()
+                    FragmentType.TODAY_COURSE -> TodayCourseFragment()
+                    FragmentType.NEWS -> NewsFragment()
+                }
+                if (newFragment in supportFragmentManager.fragments) {
                     show(newFragment)
                 } else {
                     add(R.id.fg_mainContent, newFragment.apply {

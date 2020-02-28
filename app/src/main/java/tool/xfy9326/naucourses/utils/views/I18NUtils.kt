@@ -2,6 +2,8 @@ package tool.xfy9326.naucourses.utils.views
 
 import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.network.clients.base.LoginResponse.ErrorReason
+import tool.xfy9326.naucourses.providers.beans.GeneralNews.PostSource
+import tool.xfy9326.naucourses.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourses.ui.models.activity.LoginViewModel.LoadingProcess
 
 object I18NUtils {
@@ -21,5 +23,27 @@ object I18NUtils {
             LoadingProcess.LOGGING_JWC -> R.string.is_logging_jwc
             LoadingProcess.CACHING -> R.string.is_caching
             LoadingProcess.NONE -> null
+        }
+
+    fun getNewsPostSourceResId(postSource: PostSource): Int? =
+        when (postSource) {
+            PostSource.ALSTU -> R.string.news_source_alstu
+            PostSource.JWC -> R.string.news_source_jwc
+            PostSource.RSS_JW -> R.string.news_source_rss_jw
+            PostSource.RSS_TW -> R.string.news_source_rss_tw
+            PostSource.RSS_XGC -> R.string.news_source_rss_xgc
+            PostSource.RSS_XXB -> R.string.news_source_rss_xxb
+            PostSource.UNKNOWN -> null
+        }
+
+    fun getContentErrorResId(contentErrorReason: ContentErrorReason): Int? =
+        when (contentErrorReason) {
+            ContentErrorReason.NONE -> null
+            ContentErrorReason.TIMEOUT -> R.string.content_error_timeout
+            ContentErrorReason.SERVER_ERROR -> R.string.content_error_server_error
+            ContentErrorReason.OPERATION -> R.string.content_error_operation
+            ContentErrorReason.PARSE_FAILED -> R.string.content_error_parse_failed
+            ContentErrorReason.EMPTY_DATA -> R.string.content_error_empty_data
+            ContentErrorReason.UNKNOWN -> R.string.content_error_unknown
         }
 }

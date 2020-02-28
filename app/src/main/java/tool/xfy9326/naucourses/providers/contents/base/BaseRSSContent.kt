@@ -13,6 +13,7 @@ import tool.xfy9326.naucourses.providers.beans.rss.RSSObject
 import tool.xfy9326.naucourses.providers.contents.base.rss.NauRSSTools
 import tool.xfy9326.naucourses.providers.contents.base.rss.RSSReader
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashSet
 
@@ -45,6 +46,8 @@ abstract class BaseRSSContent : BaseNewsContent<RSSObject>() {
         private const val ICON_URL_STR = "/_ueditor/themes/default/images/icon"
 
         private const val EMPTY_HTML_STR = "&nbsp;&nbsp;"
+
+        private val DATE_FORMAT_YMD = SimpleDateFormat(Constants.Time.FORMAT_YMD, Locale.CHINA)
     }
 
     final override fun onRequestData(): Response = vpnClient.newAutoLoginCall(NauRSSTools.buildRSSUrl(siteId, templateId, columnId))
@@ -95,25 +98,25 @@ abstract class BaseRSSContent : BaseNewsContent<RSSObject>() {
             181 -> {
                 title = bodyElement.getElementsByClass(ELEMENT_CLASS_ARTICLE_TITLE).first().text()
                 postAdmin = bodyElement.getElementsByClass(ELEMENT_CLASS_ARTICLE_SOURCE).first().text()
-                postDate = Constants.Time.DATE_FORMAT_YMD.parse(bodyElement.getElementsByClass(ELEMENT_CLASS_ARTICLE_PUBLISH_DATE).first().text())!!
+                postDate = readTime(bodyElement.getElementsByClass(ELEMENT_CLASS_ARTICLE_PUBLISH_DATE).first().text())!!
             }
             221 -> {
                 title = bodyElement.getElementsByClass(ELEMENT_CLASS_ARTICLE_TITLE).first().text()
-                postDate = Constants.Time.DATE_FORMAT_YMD.parse(bodyElement.getElementsByClass(ELEMENT_CLASS_ARTICLE_PUBLISH_DATE).first().text())!!
+                postDate = readTime(bodyElement.getElementsByClass(ELEMENT_CLASS_ARTICLE_PUBLISH_DATE).first().text())!!
             }
             360 -> {
                 title = bodyElement.getElementsByClass(ELEMENT_CLASS_INFO_TITLE).first().text()
                 val tmp = bodyElement.select(SELECT_TABLE_PATH).first().getElementsByTag(Constants.HTML.ELEMENT_TAG_TD).first().text()
                     .split(Constants.SPACE)
                 postAdmin = tmp[0].split(INFO_DIVIDE_SYMBOL)[1]
-                postDate = Constants.Time.DATE_FORMAT_YMD.parse(tmp[1].split(INFO_DIVIDE_SYMBOL)[1])!!
+                postDate = readTime(tmp[1].split(INFO_DIVIDE_SYMBOL)[1])!!
             }
             517 -> {
                 val tmpPostAdmin = bodyElement.getElementsByClass(ELEMENT_CLASS_ARTI_PUBLISHER).first().text().split(INFO_DIVIDE_SYMBOL)
                 val tmpPostDate = bodyElement.getElementsByClass(ELEMENT_CLASS_ARTI_UPDATE).first().text().split(INFO_DIVIDE_SYMBOL)
                 title = bodyElement.getElementsByClass(ELEMENT_CLASS_ARTI_TITLE).first().text()
                 postAdmin = tmpPostAdmin[1]
-                postDate = Constants.Time.DATE_FORMAT_YMD.parse(tmpPostDate[1])!!
+                postDate = readTime(tmpPostDate[1])!!
             }
             else -> throw IllegalArgumentException("Unsupported RSS Template Id! Template Id: $templateId")
         }
@@ -144,4 +147,8 @@ abstract class BaseRSSContent : BaseNewsContent<RSSObject>() {
         }
         return contentElement.html().replace(EMPTY_HTML_STR, Constants.EMPTY)
     }
+
+    // 解决SimpleDateFormat线程不安全问题
+    @Synchronized
+    private fun readTime(text: String) = DATE_FORMAT_YMD.parse(text)
 }

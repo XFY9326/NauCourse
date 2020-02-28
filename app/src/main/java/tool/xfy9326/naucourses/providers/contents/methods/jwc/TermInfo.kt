@@ -7,9 +7,13 @@ import tool.xfy9326.naucourses.network.SSONetworkManager
 import tool.xfy9326.naucourses.network.clients.JwcClient
 import tool.xfy9326.naucourses.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourses.providers.contents.base.BaseNoParamContent
+import java.text.SimpleDateFormat
+import java.util.*
 
 object TermInfo : BaseNoParamContent<TermDate>() {
     private val jwcClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
+
+    private val DATE_FORMAT_YMD = SimpleDateFormat(Constants.Time.FORMAT_YMD, Locale.CHINA)
 
     private const val ELEMENT_ID_TERM_INFO = "TermInfo"
 
@@ -28,9 +32,13 @@ object TermInfo : BaseNoParamContent<TermDate>() {
         } else {
             weekText.substring(1, weekText.length - 1).toInt()
         }
-        val startDate = Constants.Time.DATE_FORMAT_YMD.parse(spanElements[3].text())!!
-        val endDate = Constants.Time.DATE_FORMAT_YMD.parse(spanElements[4].text())!!
+        val startDate = readTime(spanElements[3].text())!!
+        val endDate = readTime(spanElements[4].text())!!
 
         return TermDate(currentWeek, startDate, endDate)
     }
+
+    // 解决SimpleDateFormat线程不安全问题
+    @Synchronized
+    private fun readTime(text: String) = DATE_FORMAT_YMD.parse(text)
 }

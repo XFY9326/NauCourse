@@ -75,7 +75,7 @@ object RSSReader {
                         }
                     }
                     RSS_TAG_DATE -> {
-                        date = DATE_FORMAT.parse(parser.nextText())
+                        date = readTime(parser.nextText())
                     }
                 }
             } else if (eventType == XmlPullParser.END_TAG) {
@@ -119,4 +119,8 @@ object RSSReader {
         }
         return rssObject
     }
+
+    // 解决SimpleDateFormat线程不安全问题
+    @Synchronized
+    private fun readTime(text: String) = DATE_FORMAT.parse(text)
 }

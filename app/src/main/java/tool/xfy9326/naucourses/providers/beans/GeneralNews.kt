@@ -7,6 +7,7 @@ import okhttp3.HttpUrl
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.io.dbHelpers.AppDBHelper
 import java.util.*
+import kotlin.collections.HashSet
 
 @Entity(tableName = AppDBHelper.NEWS_TABLE_NAME)
 data class GeneralNews(
@@ -36,6 +37,30 @@ data class GeneralNews(
 
     enum class PostSource {
         UNKNOWN, JWC, ALSTU, RSS_JW, RSS_TW, RSS_XGC, RSS_XXB
+    }
+
+    companion object {
+        fun convertPostSourceSetToStringSet(set: Set<PostSource>): Set<String> {
+            val result = HashSet<String>(set.size)
+            for (postSource in set) {
+                result.add(postSource.name)
+            }
+            return result
+        }
+
+        fun parseStringSet(set: Set<String>, deleteUnknownSource: Boolean = false): Set<PostSource> {
+            val result = HashSet<PostSource>(set.size)
+            for (s in set) {
+                try {
+                    result.add(PostSource.valueOf(s))
+                } catch (e: IllegalArgumentException) {
+                    if (!deleteUnknownSource) {
+                        result.add(PostSource.UNKNOWN)
+                    }
+                }
+            }
+            return result
+        }
     }
 
     override fun equals(other: Any?): Boolean {

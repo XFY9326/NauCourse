@@ -93,17 +93,14 @@
             android:text="@string/login"
             android:textColor="@android:color/white"
             android:textSize="15sp"
-            app:cornerRadius="56dp" />
+            app:cornerRadius="25dp" />
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/anim_loginLoading"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_loginLoading"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_gravity="center_horizontal"
             android:visibility="gone"
-            app:lottie_autoPlay="true"
-            app:lottie_fileName="lottie/material_wave_loading.json"
-            app:lottie_loop="true" />
+            app:srcCompat="@drawable/avd_anim_loading" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_loadingMsg"

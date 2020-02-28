@@ -11,21 +11,15 @@ import tool.xfy9326.naucourses.ui.activities.MainDrawerActivity
 import tool.xfy9326.naucourses.ui.models.base.BaseViewModel
 
 class MainDrawerViewModel : BaseViewModel() {
+    private val logTag = javaClass.simpleName
 
-    companion object {
-        private val DEFAULT_FRAGMENT = MainDrawerActivity.Companion.FragmentType.COURSE_TABLE
-    }
-
-    var nowShowFragmentType = DEFAULT_FRAGMENT
+    var nowShowFragmentType = MainDrawerActivity.Companion.FragmentType.NEWS
     val studentCardBalance = MutableLiveData<Float>()
     val studentInfo = MutableLiveData<StudentInfo>()
 
-    override fun onActivityCreate() {
+    override fun onInitView(isRestored: Boolean) {
         updatePersonalInfo(true)
         updateBalance(true)
-    }
-
-    override fun onInitView() {
         updatePersonalInfo()
     }
 
@@ -35,7 +29,7 @@ class MainDrawerViewModel : BaseViewModel() {
             if (personalInfo.isSuccess) {
                 studentInfo.postValue(personalInfo.data!!)
             } else {
-                Log.d(this@MainDrawerViewModel.javaClass.simpleName, "PersonalInfo Error: ${personalInfo.errorReason}")
+                Log.d(logTag, "PersonalInfo Error: ${personalInfo.errorReason}")
             }
         }
     }
@@ -46,7 +40,7 @@ class MainDrawerViewModel : BaseViewModel() {
             if (balance.isSuccess) {
                 studentCardBalance.postValue(balance.data!!)
             } else {
-                Log.d(this@MainDrawerViewModel.javaClass.simpleName, "CardBalanceInfo Error: ${balance.errorReason}")
+                Log.d(logTag, "CardBalanceInfo Error: ${balance.errorReason}")
             }
         }
     }

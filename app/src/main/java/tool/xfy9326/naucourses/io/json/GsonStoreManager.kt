@@ -2,8 +2,10 @@ package tool.xfy9326.naucourses.io.json
 
 import android.content.Context
 import com.google.gson.Gson
+import tool.xfy9326.naucourses.App
 import tool.xfy9326.naucourses.beans.CourseCellStyle
 import tool.xfy9326.naucourses.beans.CourseTable
+import tool.xfy9326.naucourses.beans.UUIDContent
 import tool.xfy9326.naucourses.io.prefs.GsonStoreVersionPref
 import tool.xfy9326.naucourses.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourses.utils.IOUtils
@@ -24,6 +26,10 @@ class GsonStoreManager private constructor(context: Context) {
         COURSE_STYLE {
             override val versionCode: Int = 1
             override val storeClass: Class<*> = Array<CourseCellStyle>::class.java
+        },
+        UUID {
+            override val versionCode: Int = 1
+            override val storeClass: Class<*> = UUIDContent::class.java
         };
 
         abstract val storeClass: Class<*>
@@ -36,13 +42,12 @@ class GsonStoreManager private constructor(context: Context) {
         @Volatile
         private lateinit var instance: GsonStoreManager
 
-        fun initInstance(context: Context) = synchronized(this) {
-            if (!Companion::instance.isInitialized) {
-                instance = GsonStoreManager(context)
+        fun getInstance(): GsonStoreManager = synchronized(this) {
+            if (!::instance.isInitialized) {
+                instance = GsonStoreManager(App.instance)
             }
+            instance
         }
-
-        fun getInstance(): GsonStoreManager = instance
     }
 
     private fun getStoredPath(storeType: StoreType) = jsonFilePath + storeType.name

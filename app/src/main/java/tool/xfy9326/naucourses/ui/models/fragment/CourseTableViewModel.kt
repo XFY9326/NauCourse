@@ -14,12 +14,18 @@ import tool.xfy9326.naucourses.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourses.providers.info.methods.CourseInfo
 import tool.xfy9326.naucourses.providers.info.methods.TermDateInfo
 import tool.xfy9326.naucourses.providers.store.CourseCellStyleStore
-import tool.xfy9326.naucourses.providers.store.CourseTableGsonStore
+import tool.xfy9326.naucourses.providers.store.CourseTableStore
 import tool.xfy9326.naucourses.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourses.utils.compute.CourseUtils
 import tool.xfy9326.naucourses.utils.compute.TimeUtils
 
 class CourseTableViewModel : BaseViewModel() {
+    private val logTag = javaClass.simpleName
+
+    companion object {
+        const val DEFAULT_COURSE_PKG_HASH = 0
+    }
+
     @Volatile
     private var hasInit = false
     private var initSuccess = false
@@ -29,7 +35,6 @@ class CourseTableViewModel : BaseViewModel() {
     private lateinit var courseSet: CourseSet
     private lateinit var termDate: TermDate
     private lateinit var courseTableArr: Array<CourseTable>
-    private lateinit var nowUsingStyles: Array<CourseCellStyle>
 
     var hasInitWithNowWeekNum = false
 
@@ -52,24 +57,29 @@ class CourseTableViewModel : BaseViewModel() {
         IN_VACATION
     }
 
-    override fun onActivityCreate() {
-        viewModelScope.launch {
-            val today = TimeUtils.getTodayDate()
-            todayDate.postValue(today)
+    override fun onInitView(isRestored: Boolean) {
+        if (!isRestored) {
+            viewModelScope.launch {
+                val today = TimeUtils.getTodayDate()
+                todayDate.postValue(today)
+            }
         }
+    }
+
+    override fun onInitCache(isRestored: Boolean) {
+        if (!isRestored) initData()
     }
 
     fun initData() {
         if (!hasInit) {
+            initDeferred = viewModelScope.async {
+                CourseCellStyleStore.initStore()
+                initCourseData()
+                hasInit = true
+                true
+            }
             viewModelScope.launch {
-                initDeferred = async {
-                    initCourseData()
-                    hasInit = true
-                    true
-                }
-                launch {
-                    asyncCourseTable()
-                }
+                asyncCourseTable()
             }
         }
     }
@@ -77,8 +87,7 @@ class CourseTableViewModel : BaseViewModel() {
     private suspend fun initCourseData() = withContext(Dispatchers.Default) {
         val courseInfoAsync = async { CourseInfo.getInfo(loadCache = true) }
         val termInfoAsync = async { TermDateInfo.getInfo(loadCache = true) }
-        val cacheCourseTableArrAsync = async { CourseTableGsonStore.loadStore() }
-        val stylesAsync = async { CourseCellStyleStore.loadStore() }
+        val cacheCourseTableArrAsync = async { CourseTableStore.loadStore() }
 
         val termInfo = termInfoAsync.await()
         if (termInfo.isSuccess) {
@@ -94,33 +103,38 @@ class CourseTableViewModel : BaseViewModel() {
                 } else {
                     courseTableArr = cacheCourseTableArr
                 }
-                nowUsingStyles = CourseUtils.asyncCellStyle(courseInfo.data, stylesAsync.await())
                 initSuccess = true
             } else {
-                Log.d(this@CourseTableViewModel.javaClass.simpleName, "CourseInfo Init Error: ${courseInfo.errorReason}")
+                Log.d(logTag, "CourseInfo Init Error: ${courseInfo.errorReason}")
             }
         } else {
-            Log.d(this@CourseTableViewModel.javaClass.simpleName, "TermInfo Init Error: ${termInfo.errorReason}")
+            Log.d(logTag, "TermInfo Init Error: ${termInfo.errorReason}")
         }
     }
 
+    @Synchronized
     fun requestCourseTable(weekNum: Int, coursePkgHash: Int) {
         viewModelScope.launch {
             if (initDeferred.isActive) initDeferred.await()
             if (initSuccess) {
-                if (courseTablePkg[weekNum - 1].hashCode() != coursePkgHash) {
+                if (coursePkgHash == DEFAULT_COURSE_PKG_HASH || coursePkgSavedTemp[weekNum - 1].hashCode() != coursePkgHash) {
                     courseTablePkg[weekNum - 1].postValue(
                         CoursePkg(
                             termDate,
                             courseTableArr[weekNum - 1],
-                            nowUsingStyles
+                            CourseCellStyleStore.loadCellStyles(courseSet)
                         )
                     )
+                } else {
+                    Log.d(logTag, "Course Update Unnecessary For Week: $weekNum!")
                 }
+            } else {
+                Log.d(logTag, "Init Failed While Loading Table WeekNum: $weekNum!")
             }
         }
     }
 
+    @Synchronized
     fun requestCourseDetailInfo(courseId: String) {
         viewModelScope.launch {
             for (course in courseSet.courses) {
@@ -132,6 +146,7 @@ class CourseTableViewModel : BaseViewModel() {
         }
     }
 
+    @Synchronized
     fun updateCourseData(courseSet: CourseSet? = null, termDate: TermDate? = null, styleList: Array<CourseCellStyle>? = null) {
         if (validateUpdateNecessary(courseSet, termDate, styleList)) {
             var hasUpdateInfo = false
@@ -144,7 +159,7 @@ class CourseTableViewModel : BaseViewModel() {
                 hasUpdateInfo = true
             }
             if (styleList != null) {
-                this.nowUsingStyles = styleList
+                CourseCellStyleStore.saveStore(styleList)
                 hasUpdateInfo = true
             }
             if (hasUpdateInfo) {
@@ -172,9 +187,15 @@ class CourseTableViewModel : BaseViewModel() {
         return Pair(maxWeek, currentWeekNum)
     }
 
-    private fun validateUpdateNecessary(courseSet: CourseSet? = null, termDate: TermDate? = null, styleList: Array<CourseCellStyle>? = null) =
-        !this::courseSet.isInitialized || !this::termDate.isInitialized || this.courseSet != courseSet || this.termDate != termDate ||
-                !this::nowUsingStyles.isInitialized || (styleList != null && !this.nowUsingStyles.contentEquals(styleList))
+    private fun validateUpdateNecessary(
+        courseSet: CourseSet? = null,
+        termDate: TermDate? = null,
+        styleList: Array<CourseCellStyle>? = null
+    ): Boolean {
+        val storedStyle = CourseCellStyleStore.loadStore()
+        return !this::courseSet.isInitialized || !this::termDate.isInitialized || this.courseSet != courseSet || this.termDate != termDate ||
+                storedStyle == null || (styleList != null && storedStyle.contentEquals(styleList))
+    }
 
     fun requestShowWeekStatus(nowShowWeekNum: Int) {
         viewModelScope.launch {
@@ -193,45 +214,44 @@ class CourseTableViewModel : BaseViewModel() {
     }
 
     private suspend fun asyncCourseTable() = withContext(Dispatchers.Default) {
-        val courseInfoAsync = async { CourseInfo.getInfo(CourseInfo.OperationType.ASYNC_COURSE) }
-        val termInfoAsync = async { TermDateInfo.getInfo() }
-
-        val termInfo = termInfoAsync.await()
+        val termInfo = TermDateInfo.getInfo()
         if (termInfo.isSuccess) {
             val termNeedUpdate = if (::termDate.isInitialized) {
                 termDate != termInfo.data!!
             } else {
                 true
             }
-            val courseInfo = courseInfoAsync.await()
-            if (courseInfo.isSuccess) {
-                val needUpdate = termNeedUpdate || !::courseSet.isInitialized || courseSet != courseInfo.data!!
-                if (needUpdate) {
-                    val styles = CourseUtils.asyncCellStyle(courseInfo.data!!, if (::nowUsingStyles.isInitialized) nowUsingStyles else null)
+            if (termNeedUpdate) {
+                val courseInfo = CourseInfo.getInfo(CourseInfo.OperationType.ASYNC_COURSE)
+                if (courseInfo.isSuccess) {
+                    val styles = CourseCellStyleStore.loadCellStyles(courseInfo.data!!)
                     updateCourseData(courseInfo.data, termInfo.data!!, styles)
                 } else {
-                    Log.i(this@CourseTableViewModel.javaClass.simpleName, "Course Async Don't Need Update")
+                    Log.d(logTag, "CourseInfo Async Error: ${courseInfo.errorReason}")
                 }
             } else {
-                Log.d(this@CourseTableViewModel.javaClass.simpleName, "CourseInfo Async Error: ${courseInfo.errorReason}")
+                Log.i(logTag, "Course Async Don't Need Update (Same Term Date)")
             }
         } else {
-            Log.d(this@CourseTableViewModel.javaClass.simpleName, "TermInfo Async Error: ${termInfo.errorReason}")
+            Log.d(logTag, "Term Date Async Error: ${termInfo.errorReason}")
         }
     }
 
     private suspend fun generateAllCourseTable(courseSet: CourseSet, termDate: TermDate, maxWeekNum: Int, postValue: Boolean = false) {
-        val result = arrayOfNulls<CourseTable>(maxWeekNum)
-        val waitArr = arrayOfNulls<Deferred<CourseTable>>(maxWeekNum)
-        courseTableArr = withContext(Dispatchers.Default) {
+        withContext(Dispatchers.Default) {
+            val result = arrayOfNulls<CourseTable>(maxWeekNum)
+            val waitArr = arrayOfNulls<Deferred<CourseTable>>(maxWeekNum)
+
+            val startWeekDayNum = TimeUtils.getWeekDayNum(termDate.startDate)
+            val endWeekDayNum = TimeUtils.getWeekDayNum(termDate.endDate)
             for (i in 0 until maxWeekNum) {
                 waitArr[i] = async {
-                    val weekCourseTable = CourseUtils.getCourseTableByWeekNum(courseSet, i + 1)
+                    val weekCourseTable = CourseUtils.getCourseTableByWeekNum(courseSet, i + 1, maxWeekNum, startWeekDayNum, endWeekDayNum)
                     if (postValue && courseTablePkg[i].hasActiveObservers()) courseTablePkg[i].postValue(
                         CoursePkg(
                             termDate,
                             weekCourseTable,
-                            nowUsingStyles
+                            CourseCellStyleStore.loadCellStyles(courseSet)
                         )
                     )
                     weekCourseTable
@@ -240,9 +260,8 @@ class CourseTableViewModel : BaseViewModel() {
             for (i in 0 until maxWeekNum) {
                 result[i] = waitArr[i]?.await()
             }
-            val table = result.requireNoNulls()
-            launch { CourseTableGsonStore.saveStore(table) }
-            table
+            courseTableArr = result.requireNoNulls()
+            launch { CourseTableStore.saveStore(courseTableArr) }
         }
     }
 }

@@ -1,9 +1,9 @@
 package tool.xfy9326.naucourses.ui.activities
 
 import android.content.Intent
+import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.Bundle
 import android.view.View
-import android.view.animation.AnimationUtils
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_login.*
@@ -13,13 +13,13 @@ import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourses.ui.models.activity.LoginViewModel
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.showSnackBar
+import tool.xfy9326.naucourses.utils.views.AnimUtils
 import tool.xfy9326.naucourses.utils.views.DialogUtils
 import tool.xfy9326.naucourses.utils.views.I18NUtils
 import tool.xfy9326.naucourses.utils.views.ViewUtils.clear
 
 
 class LoginActivity : ViewModelActivity<LoginViewModel>() {
-
     override fun onCreateContentView() = R.layout.activity_login
 
     override fun onCreateViewModel() = ViewModelProvider(this)[LoginViewModel::class.java]
@@ -64,17 +64,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
             cb_acceptEULA.isEnabled = !it
             btn_login.isEnabled = !it
 
-            if (it) {
-                btn_login.visibility = View.GONE
-                btn_login.animation = AnimationUtils.loadAnimation(this, android.R.anim.fade_out)
-                anim_loginLoading.visibility = View.VISIBLE
-                anim_loginLoading.animation = AnimationUtils.loadAnimation(this, android.R.anim.fade_in)
-            } else {
-                anim_loginLoading.visibility = View.GONE
-                anim_loginLoading.animation = AnimationUtils.loadAnimation(this, android.R.anim.fade_out)
-                btn_login.visibility = View.VISIBLE
-                btn_login.animation = AnimationUtils.loadAnimation(this, android.R.anim.fade_in)
-            }
+            setLoadingAnimation(it)
         })
         viewModel.errorReasonType.observe(this, Observer {
             showSnackBar(layout_activityLogin, I18NUtils.getErrorMsgResId(it)!!)
@@ -96,7 +86,42 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
         })
     }
 
+    private fun setLoadingAnimation(setShow: Boolean) {
+        (iv_loginLoading.drawable as AnimatedVectorDrawable).apply {
+            if (setShow) {
+                btn_login.apply {
+                    visibility = View.GONE
+                    animation = AnimUtils.getAnimationFadeGone(this@LoginActivity)
+                }
+
+                iv_loginLoading.apply {
+                    visibility = View.VISIBLE
+                    animation = AnimUtils.getAnimationFadeVisible(this@LoginActivity)
+                }
+                registerAnimationCallback(AnimUtils.getAnimationLoopCallback())
+                start()
+            } else {
+                clearAnimationCallbacks()
+                stop()
+                iv_loginLoading.apply {
+                    visibility = View.GONE
+                    animation = AnimUtils.getAnimationFadeGone(this@LoginActivity)
+                }
+
+                btn_login.apply {
+                    visibility = View.VISIBLE
+                    animation = AnimUtils.getAnimationFadeVisible(this@LoginActivity)
+                }
+            }
+        }
+    }
+
     override fun onBackPressed() {
         moveTaskToBack(false)
+    }
+
+    override fun onDestroy() {
+        (iv_loginLoading.drawable as AnimatedVectorDrawable).clearAnimationCallbacks()
+        super.onDestroy()
     }
 }

@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import tool.xfy9326.naucourses.App
 import tool.xfy9326.naucourses.io.dbHelpers.CoursesDBHelper
 import tool.xfy9326.naucourses.io.dbHelpers.base.BaseDB
 import tool.xfy9326.naucourses.io.dbHelpers.base.DBTypeConverter
@@ -23,15 +24,12 @@ class CoursesDB private constructor(context: Context) : BaseDB() {
         private const val COURSES_DB_NAME = "Courses.db"
         private const val COURSES_DB_VERSION = 1
 
-        fun initInstance(context: Context) = synchronized(this) {
-            if (!Companion::instance.isInitialized) {
-                instance =
-                    CoursesDB(context)
+        fun getInstance(): CoursesDB = synchronized(this) {
+            if (!::instance.isInitialized) {
+                instance = CoursesDB(App.instance)
             }
-        }
-
-        fun getInstance(): CoursesDB =
             instance
+        }
     }
 
     @Database(

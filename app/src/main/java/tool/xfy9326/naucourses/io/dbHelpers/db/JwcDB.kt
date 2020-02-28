@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import tool.xfy9326.naucourses.App
 import tool.xfy9326.naucourses.io.dbHelpers.JwcDBHelper
 import tool.xfy9326.naucourses.io.dbHelpers.base.BaseDB
 import tool.xfy9326.naucourses.io.dbHelpers.base.DBTypeConverter
@@ -25,13 +26,12 @@ class JwcDB private constructor(context: Context) : BaseDB() {
         private const val JWC_DB_NAME = "Jwc.db"
         private const val JWC_DB_VERSION = 1
 
-        fun initInstance(context: Context) = synchronized(this) {
-            if (!Companion::instance.isInitialized) {
-                instance = JwcDB(context)
+        fun getInstance(): JwcDB = synchronized(this) {
+            if (!::instance.isInitialized) {
+                instance = JwcDB(App.instance)
             }
+            instance
         }
-
-        fun getInstance(): JwcDB = instance
     }
 
     @Database(
