@@ -3,6 +3,8 @@ package tool.xfy9326.naucourses.utils.views
 import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.network.clients.base.LoginResponse.ErrorReason
 import tool.xfy9326.naucourses.providers.beans.GeneralNews.PostSource
+import tool.xfy9326.naucourses.providers.beans.jwc.StudentLearningProcess.CourseType
+import tool.xfy9326.naucourses.providers.beans.jwc.StudentLearningProcess.SubjectType
 import tool.xfy9326.naucourses.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourses.ui.models.activity.LoginViewModel.LoadingProcess
 
@@ -47,5 +49,21 @@ object I18NUtils {
             ContentErrorReason.EMPTY_DATA -> R.string.content_error_empty_data
             ContentErrorReason.CONNECTION_ERROR -> R.string.connection_error
             ContentErrorReason.UNKNOWN -> R.string.unknown_error
+        }
+
+    fun getCourseType(courseType: CourseType): Int =
+        when (courseType) {
+            CourseType.COMPULSORY -> R.string.course_type_compulsory
+            CourseType.MAJOR_SELECTIVE -> R.string.course_type_major_selective
+            CourseType.OPTIONAL -> R.string.course_type_optional
+            CourseType.PRACTICAL -> R.string.course_type_practical
+        }
+
+    fun getLearningProcessSubjectType(subjectType: SubjectType): Int =
+        when (subjectType) {
+            SubjectType.TARGET -> R.string.learning_process_target_credit
+            SubjectType.REVISED -> R.string.learning_process_revised_credit
+            SubjectType.BALANCE -> R.string.learning_process_balance_credit
+            SubjectType.BONUS -> R.string.learning_process_bonus_credit
         }
 }

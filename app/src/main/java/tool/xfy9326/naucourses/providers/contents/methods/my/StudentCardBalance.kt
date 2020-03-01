@@ -11,7 +11,7 @@ import java.io.IOException
 
 
 object StudentCardBalance : BaseNoParamContent<Float>() {
-    private val myClient = getSSOClient<MyClient>(SSONetworkManager.ClientType.MY)
+    override val networkClient = getSSOClient<MyClient>(SSONetworkManager.ClientType.MY)
 
     private const val MY_WEB_PATH = "_web"
     private const val MY_PLUGS_PATH = "_plugs"
@@ -29,7 +29,7 @@ object StudentCardBalance : BaseNoParamContent<Float>() {
         .addPathSegment(MY_WEB_PATH).addPathSegment(MY_PLUGS_PATH).addPathSegment(MY_NOTES_PATH)
         .addPathSegment(MY_SELECT_NOTES_DEF_BY_ID_RST).addQueryParameter(MY_ID_PARAM, MY_ID_VALUE).build()
 
-    override fun onRequestData(): Response = myClient.newAutoLoginCall(STUDENT_CARD_BALANCE_URL)
+    override fun onRequestData(): Response = networkClient.newAutoLoginCall(STUDENT_CARD_BALANCE_URL)
 
     override fun onParseData(content: String): Float {
         if (STUDENT_CARD_STR in content) {

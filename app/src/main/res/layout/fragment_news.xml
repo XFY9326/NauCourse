@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:color_scheme="@array/refresh_layout_color_scheme"
-            app:trigger_async_distance="@integer/trigger_async_distance">
+            app:trigger_async_distance="@integer/default_refresh_layout_trigger_async_distance">
 
             <RelativeLayout
                 android:layout_width="match_parent"

@@ -4,7 +4,7 @@ import tool.xfy9326.naucourses.providers.beans.GeneralNews
 import tool.xfy9326.naucourses.providers.contents.base.BaseRSSContent
 
 object TwRSS : BaseRSSContent() {
-    private const val TW_HOST = "tw.nau.edu.cn"
+    const val TW_HOST = "tw.nau.edu.cn"
 
     override val siteId: Int = 105
     override val templateId: Int = 517

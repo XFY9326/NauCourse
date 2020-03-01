@@ -1,0 +1,11 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background">
+        <color android:color="@color/colorProcessBarBackground" />
+    </item>
+
+    <item android:id="@android:id/progress">
+        <clip>
+            <color android:color="@color/colorPrimary" />
+        </clip>
+    </item>
+</layer-list>

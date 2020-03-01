@@ -11,6 +11,7 @@ import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.network.SSONetworkManager
 import tool.xfy9326.naucourses.network.clients.AlstuClient
 import tool.xfy9326.naucourses.network.clients.VPNClient
+import tool.xfy9326.naucourses.network.clients.base.BaseLoginClient
 import tool.xfy9326.naucourses.network.clients.tools.VPNTools
 import tool.xfy9326.naucourses.providers.beans.GeneralNews
 import tool.xfy9326.naucourses.providers.beans.GeneralNewsDetail
@@ -21,7 +22,7 @@ import java.util.*
 import kotlin.collections.HashSet
 
 object DefaultMessage : BaseNewsContent<AlstuMessage>() {
-    private val alstuClient = getSSOClient<AlstuClient>(SSONetworkManager.ClientType.ALSTU)
+    override val networkClient = getSSOClient<AlstuClient>(SSONetworkManager.ClientType.ALSTU)
 
     private val DATE_FORMAT_YMD = SimpleDateFormat(Constants.Time.FORMAT_YMD, Locale.CHINA)
 
@@ -54,13 +55,18 @@ object DefaultMessage : BaseNewsContent<AlstuMessage>() {
 
     private const val FILE_DOWNLOAD_TITLE_HTML = "<br/><br/><br/><p>附件：</p>"
 
-    override fun onRequestData(): Response = alstuClient.newAutoLoginCall(
+    override fun onRequestData(): Response = networkClient.newAutoLoginCall(
         Request.Builder().header(Constants.Network.HEADER_REFERER, AlstuClient.ALSTU_INDEX_URL.toString()).url(ALSTU_MESSAGE_URL).build()
     )
 
-    override fun onRequestDetailData(url: HttpUrl): Response = alstuClient.newAutoLoginCall(
+    override fun onRequestDetailData(url: HttpUrl): Response = (getDetailNetworkClient() as BaseLoginClient).newAutoLoginCall(
         Request.Builder().header(Constants.Network.HEADER_REFERER, ALSTU_MESSAGE_URL.toString()).url(url).build()
     )
+
+    override fun onBuildImageUrl(source: String): HttpUrl =
+        HttpUrl.Builder().scheme(Constants.Network.HTTP).host(AlstuClient.ALSTU_HOST).addEncodedPathSegments(
+            if (source.startsWith(Constants.Network.DIR)) source.substring(1) else source
+        ).build()
 
     override fun onParseRawData(content: String): Set<AlstuMessage> {
         val document = Jsoup.parse(content)

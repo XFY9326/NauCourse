@@ -1,14 +1,20 @@
 package tool.xfy9326.naucourses.providers.contents.base
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Response
 import org.jsoup.HttpStatusException
+import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.providers.beans.GeneralNews
 import tool.xfy9326.naucourses.providers.beans.GeneralNewsDetail
 import java.io.IOException
 import java.net.SocketTimeoutException
 
 abstract class BaseNewsContent<T> : BaseNoParamContent<Set<GeneralNews>>() {
+    protected open fun getDetailNetworkClient() = networkClient
+
     protected abstract fun convertToGeneralNews(newsData: Set<T>): Set<GeneralNews>
 
     protected abstract fun onParseRawData(content: String): Set<T>
@@ -32,6 +38,26 @@ abstract class BaseNewsContent<T> : BaseNoParamContent<Set<GeneralNews>>() {
     }
 
     protected abstract fun onRequestDetailData(url: HttpUrl): Response
+
+    protected open fun onBuildImageUrl(source: String): HttpUrl = source.toHttpUrl()
+
+    fun getNewsImage(source: String): Bitmap? {
+        try {
+            val imageUrl = if (source.startsWith(Constants.Network.HTTP)) {
+                source.toHttpUrl()
+            } else {
+                onBuildImageUrl(source)
+            }
+            val response = onRequestDetailData(imageUrl)
+            response.body?.byteStream()?.let {
+                return BitmapFactory.decodeStream(it)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
+        }
+        return null
+    }
 
     protected abstract fun onParseDetailData(content: String): GeneralNewsDetail
 

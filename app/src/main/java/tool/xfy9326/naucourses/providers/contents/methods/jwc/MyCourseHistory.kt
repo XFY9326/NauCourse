@@ -12,7 +12,7 @@ import tool.xfy9326.naucourses.providers.beans.jwc.Term
 import tool.xfy9326.naucourses.providers.contents.base.BaseNoParamContent
 
 object MyCourseHistory : BaseNoParamContent<Array<CourseHistory>>() {
-    private val jwcClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
+    override val networkClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
 
     private const val JWC_MY_COURSE_HISTORY_ASPX = "MyCourseHistory.aspx"
     private const val ELEMENT_ID_MAJOR_APPLY_LIST = "MajorApplyList"
@@ -20,7 +20,7 @@ object MyCourseHistory : BaseNoParamContent<Array<CourseHistory>>() {
     private val JWC_MY_COURSE_HISTORY_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(JwcClient.JWC_HOST)
         .addPathSegment(JwcClient.JWC_STUDENTS_PATH).addPathSegment(JWC_MY_COURSE_HISTORY_ASPX).build()
 
-    override fun onRequestData(): Response = jwcClient.newAutoLoginCall(JWC_MY_COURSE_HISTORY_URL)
+    override fun onRequestData(): Response = networkClient.newAutoLoginCall(JWC_MY_COURSE_HISTORY_URL)
 
     override fun onParseData(content: String): Array<CourseHistory> {
         val document = Jsoup.parse(content)

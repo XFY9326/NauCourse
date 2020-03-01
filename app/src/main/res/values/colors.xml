@@ -13,6 +13,7 @@
     <color name="colorWindowsBackground">@color/design_default_color_background</color>
     <color name="colorDivider">#757575</color>
 
+    <color name="colorProcessBarBackground">#802196F3</color>
     <color name="colorBaseIconWhenDarkBackground">#FFFFFF</color>
     <color name="colorCourseTextLight">#FFFFFF</color>
     <color name="colorCourseTextDark">#2E2E2E</color>

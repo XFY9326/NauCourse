@@ -7,18 +7,22 @@ import org.jsoup.nodes.Element
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.network.SSONetworkManager
 import tool.xfy9326.naucourses.network.clients.VPNClient
+import tool.xfy9326.naucourses.network.clients.base.BaseNetworkClient
 import tool.xfy9326.naucourses.providers.beans.GeneralNews
 import tool.xfy9326.naucourses.providers.beans.GeneralNewsDetail
 import tool.xfy9326.naucourses.providers.beans.rss.RSSObject
 import tool.xfy9326.naucourses.providers.contents.base.rss.NauRSSTools
 import tool.xfy9326.naucourses.providers.contents.base.rss.RSSReader
+import tool.xfy9326.naucourses.providers.contents.methods.rss.TwRSS
+import tool.xfy9326.naucourses.providers.contents.methods.rss.XgcRSS
+import tool.xfy9326.naucourses.providers.contents.methods.rss.XxbRSS
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashSet
 
 abstract class BaseRSSContent : BaseNewsContent<RSSObject>() {
-    protected val vpnClient = getSSOClient<VPNClient>(SSONetworkManager.ClientType.VPN)
+    override val networkClient = getSSOClient<VPNClient>(SSONetworkManager.ClientType.VPN)
 
     abstract val siteId: Int
     abstract val templateId: Int
@@ -50,7 +54,23 @@ abstract class BaseRSSContent : BaseNewsContent<RSSObject>() {
         private val DATE_FORMAT_YMD = SimpleDateFormat(Constants.Time.FORMAT_YMD, Locale.CHINA)
     }
 
-    final override fun onRequestData(): Response = vpnClient.newAutoLoginCall(NauRSSTools.buildRSSUrl(siteId, templateId, columnId))
+    override fun getDetailNetworkClient(): BaseNetworkClient = getSimpleClient()
+
+    final override fun onRequestData(): Response = networkClient.newAutoLoginCall(NauRSSTools.buildRSSUrl(siteId, templateId, columnId))
+
+    override fun onBuildImageUrl(source: String): HttpUrl =
+        HttpUrl.Builder().scheme(Constants.Network.HTTP).host(getHost()).addEncodedPathSegments(
+            if (source.startsWith(Constants.Network.DIR)) source.substring(1) else source
+        ).build()
+
+    private fun getHost(): String =
+        when (postSource) {
+            GeneralNews.PostSource.RSS_JW -> Constants.Network.JW_HOST
+            GeneralNews.PostSource.RSS_TW -> TwRSS.TW_HOST
+            GeneralNews.PostSource.RSS_XGC -> XgcRSS.XGC_HOST
+            GeneralNews.PostSource.RSS_XXB -> XxbRSS.XXB_HOST
+            else -> error("Incorrect RSS Post Source $postSource")
+        }
 
     final override fun convertToGeneralNews(newsData: Set<RSSObject>): Set<GeneralNews> {
         val newsDatum = newsData.first()

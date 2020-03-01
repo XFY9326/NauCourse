@@ -15,7 +15,7 @@ class MainDrawerViewModel : BaseViewModel() {
     private val logTag = javaClass.simpleName
 
     private var hasInitFragmentShow = false
-    var nowShowFragmentType = MainDrawerActivity.Companion.FragmentType.NEWS
+    var nowShowFragmentType = MainDrawerActivity.Companion.FragmentType.TODAY_COURSE
     val studentCardBalance = MutableLiveData<Float>()
     val studentInfo = MutableLiveData<StudentInfo>()
 

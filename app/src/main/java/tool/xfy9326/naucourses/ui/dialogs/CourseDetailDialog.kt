@@ -118,7 +118,7 @@ class CourseDetailDialog : DialogFragment() {
     private fun loadMore(contentView: View, inflater: LayoutInflater) {
         val weekDayNumStrArray = resources.getStringArray(R.array.weekday_num)
         for ((i, courseTime) in courseDetail.course.timeSet.withIndex()) {
-            contentView.layout_moreCourseInfo.addView(
+            contentView.layout_moreCourseInfo.addViewInLayout(
                 inflater.inflate(
                     R.layout.view_course_detail_item,
                     contentView.layout_moreCourseInfo,
@@ -131,7 +131,7 @@ class CourseDetailDialog : DialogFragment() {
                     )
                 })
             if (i != courseDetail.course.timeSet.size - 1) {
-                contentView.layout_moreCourseInfo.addView(
+                contentView.layout_moreCourseInfo.addViewInLayout(
                     inflater.inflate(
                         R.layout.view_divider,
                         contentView.layout_moreCourseInfo,
@@ -140,12 +140,10 @@ class CourseDetailDialog : DialogFragment() {
                 )
             }
         }
+        contentView.layout_moreCourseInfo.refreshLayout()
     }
 
-    private fun loadLess(contentView: View) = contentView.layout_moreCourseInfo.apply {
-        removeAllViewsInLayout()
-        requestLayout()
-    }
+    private fun loadLess(contentView: View) = contentView.layout_moreCourseInfo.removeAllViews()
 
     override fun onStart() {
         super.onStart()

@@ -15,7 +15,7 @@ import java.io.IOException
 import kotlin.math.min
 
 object StudentIndex : BaseNoParamContent<StudentInfo>() {
-    private val jwcClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
+    override val networkClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
 
     private const val JWC_STUDENT_INDEX_ASPX = "StudentIndex.aspx"
     private const val JWC_STU_PHOTO_ASHX = "StuPhotoView.ashx"
@@ -40,7 +40,7 @@ object StudentIndex : BaseNoParamContent<StudentInfo>() {
     val JWC_STU_PHOTO_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(JwcClient.JWC_HOST)
         .addPathSegment(JwcClient.JWC_STUDENTS_PATH).addPathSegment(JWC_STU_PHOTO_ASHX).addQueryParameter(URL_PARAM_T, URL_PARAM_T_VALUE).build()
 
-    override fun onRequestData(): Response = jwcClient.newAutoLoginCall(JWC_STUDENT_INDEX_URL)
+    override fun onRequestData(): Response = networkClient.newAutoLoginCall(JWC_STUDENT_INDEX_URL)
 
     override fun onParseData(content: String): StudentInfo {
         val document = Jsoup.parse(content)

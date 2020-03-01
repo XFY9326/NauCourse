@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object MyExamArrangeList : BaseNoParamContent<Array<Exam>>() {
-    private val jwcClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
+    override val networkClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
 
     private val DATE_FORMAT_YMD_HM_CH = SimpleDateFormat(Constants.Time.FORMAT_YMD_HM_CH, Locale.CHINA)
 
@@ -23,7 +23,7 @@ object MyExamArrangeList : BaseNoParamContent<Array<Exam>>() {
     private val JWC_MY_EXAM_ARRANGE_LIST_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(JwcClient.JWC_HOST)
         .addPathSegment(JwcClient.JWC_STUDENTS_PATH).addPathSegment(JWC_MY_EXAM_ARRANGE_LIST_ASPX).build()
 
-    override fun onRequestData(): Response = jwcClient.newAutoLoginCall(JWC_MY_EXAM_ARRANGE_LIST_URL)
+    override fun onRequestData(): Response = networkClient.newAutoLoginCall(JWC_MY_EXAM_ARRANGE_LIST_URL)
 
     override fun onParseData(content: String): Array<Exam> {
         val document = Jsoup.parse(content)

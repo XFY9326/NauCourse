@@ -15,10 +15,10 @@ import tool.xfy9326.naucourses.io.prefs.CourseTablePref
 import tool.xfy9326.naucourses.ui.dialogs.CourseDetailDialog
 import tool.xfy9326.naucourses.ui.fragments.base.DrawerToolbarFragment
 import tool.xfy9326.naucourses.ui.models.fragment.CourseTableViewModel
-import tool.xfy9326.naucourses.ui.views.table.CourseTableViewBuilder
+import tool.xfy9326.naucourses.ui.views.helpers.CourseTableViewHelper
 import tool.xfy9326.naucourses.ui.views.viewpager.CourseTableViewPagerAdapter
 
-class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), CourseTableViewBuilder.OnCourseCellClickListener {
+class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), CourseTableViewHelper.OnCourseCellClickListener {
     private lateinit var courseTableViewPagerAdapter: CourseTableViewPagerAdapter
     private lateinit var viewPagerCallback: ViewPager2.OnPageChangeCallback
 
@@ -81,7 +81,7 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
     }
 
     override fun initView(viewModel: CourseTableViewModel) {
-        CourseTableViewBuilder.initBuilder(requireActivity(), this)
+        CourseTableViewHelper.initBuilder(requireActivity(), this)
         courseTableViewPagerAdapter = CourseTableViewPagerAdapter(this, viewModel.maxWeekNumTemp ?: Constants.Course.MAX_WEEK_NUM_SIZE)
 
         vp_courseTablePanel.offscreenPageLimit = 2

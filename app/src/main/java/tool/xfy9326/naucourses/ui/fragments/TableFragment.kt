@@ -11,7 +11,7 @@ import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.beans.CoursePkg
 import tool.xfy9326.naucourses.ui.fragments.base.ViewModelFragment
 import tool.xfy9326.naucourses.ui.models.fragment.CourseTableViewModel
-import tool.xfy9326.naucourses.ui.views.table.CourseTableViewBuilder
+import tool.xfy9326.naucourses.ui.views.helpers.CourseTableViewHelper
 import tool.xfy9326.naucourses.ui.views.viewpager.CourseTableViewPagerAdapter
 import tool.xfy9326.naucourses.utils.compute.TimeUtils
 import kotlin.math.floor
@@ -71,12 +71,12 @@ class TableFragment : ViewModelFragment<CourseTableViewModel>() {
                 launch {
                     val dateInfo = async { TimeUtils.getWeekNumDateArray(coursePkg.termDate.startDate, weekNum) }
                     val today = async { TimeUtils.getTodayDate() }
-                    val hasWeekendCourse = CourseTableViewBuilder.hasWeekendCourse(coursePkg.courseTable)
+                    val hasWeekendCourse = CourseTableViewHelper.hasWeekendCourse(coursePkg.courseTable)
                     val weekDayShowSize = getWeekDayShowSize(hasWeekendCourse)
                     buildCourseTableHeader(today.await(), dateInfo.await(), weekDayShowSize, hasWeekendCourse)
 
                     val width = calculateTableHeaderWidth(weekDayShowSize)
-                    CourseTableViewBuilder.createCourseTableView(
+                    CourseTableViewHelper.createCourseTableView(
                         requireContext(),
                         coursePkg.courseTable,
                         hasWeekendCourse,
@@ -91,14 +91,14 @@ class TableFragment : ViewModelFragment<CourseTableViewModel>() {
 
     private fun getWeekDayShowSize(hasWeekendCourse: Boolean) =
         if (hasWeekendCourse) {
-            CourseTableViewBuilder.DEFAULT_TABLE_WIDTH_SIZE - 1
+            CourseTableViewHelper.DEFAULT_TABLE_WIDTH_SIZE - 1
         } else {
-            CourseTableViewBuilder.DEFAULT_TABLE_WIDTH_SIZE - 3
+            CourseTableViewHelper.DEFAULT_TABLE_WIDTH_SIZE - 3
         }
 
     private fun calculateTableHeaderWidth(weekDayShowSize: Int): Pair<Int, Int> {
         val timeRowWidth = resources.getDimensionPixelSize(R.dimen.course_table_course_time_row_size)
-        return Pair(timeRowWidth, floor((CourseTableViewBuilder.getWindowsWidth(requireContext()) - timeRowWidth) * 1f / weekDayShowSize).toInt())
+        return Pair(timeRowWidth, floor((CourseTableViewHelper.getWindowsWidth(requireContext()) - timeRowWidth) * 1f / weekDayShowSize).toInt())
     }
 
     private suspend fun buildCourseTableHeader(
@@ -117,7 +117,7 @@ class TableFragment : ViewModelFragment<CourseTableViewModel>() {
             }
             for (i in 0 until weekDayShowSize) {
                 val isToday = dateInfo.first == today.first && dateInfo.second[i] == today.second
-                CourseTableViewBuilder.setDateCellView(i + 1, dateInfo.second[i], courseTableHeaderDate[i], isToday)
+                CourseTableViewHelper.setDateCellView(i + 1, dateInfo.second[i], courseTableHeaderDate[i], isToday)
             }
         }
 }

@@ -10,13 +10,19 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_news_detail.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.beans.SerializableNews
 import tool.xfy9326.naucourses.providers.beans.GeneralNewsDetail
+import tool.xfy9326.naucourses.tools.HtmlImageGetter
 import tool.xfy9326.naucourses.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourses.ui.models.activity.NewsDetailViewModel
+import tool.xfy9326.naucourses.utils.IntentUtils
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.enableHomeButton
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.showSnackBar
 import tool.xfy9326.naucourses.utils.views.I18NUtils
@@ -25,6 +31,8 @@ import java.util.*
 
 
 class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>() {
+    private val newsDetailScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+    private var imageGetter: HtmlImageGetter? = null
     private lateinit var newsData: SerializableNews
 
     companion object {
@@ -49,6 +57,7 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.menu_newsDetailOpenInBrowser -> IntentUtils.launchUrlInBrowser(this, newsData.detailUrl.toString())
             R.id.menu_newsDetailRefresh -> requestNewsDetail(getViewModel())
         }
         return super.onOptionsItemSelected(item)
@@ -99,7 +108,11 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>() {
 
         tv_newsDetailContent.text = try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Html.fromHtml(detail.htmlContent, Html.FROM_HTML_MODE_LEGACY)
+                imageGetter = HtmlImageGetter(
+                    newsDetailScope, tv_newsDetailContent, this,
+                    newsData.postSource
+                )
+                Html.fromHtml(detail.htmlContent, Html.FROM_HTML_MODE_LEGACY, imageGetter, null)
             } else {
                 @Suppress("DEPRECATION")
                 Html.fromHtml(detail.htmlContent)
@@ -109,5 +122,12 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>() {
         }
 
         tv_newsDetailContent.movementMethod = LinkMovementMethod.getInstance()
+    }
+
+    override fun onDestroy() {
+        newsDetailScope.cancel()
+        imageGetter?.recycleDrawable()
+        System.gc()
+        super.onDestroy()
     }
 }

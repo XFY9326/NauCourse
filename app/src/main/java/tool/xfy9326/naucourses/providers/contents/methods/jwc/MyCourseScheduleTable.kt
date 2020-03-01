@@ -15,7 +15,7 @@ import java.util.*
 import kotlin.collections.HashSet
 
 object MyCourseScheduleTable : BaseNoParamContent<CourseSet>() {
-    private val jwcClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
+    override val networkClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
 
     private const val COURSE_TABLE_ASPX = "MyCourseScheduleTable.aspx"
     private val COURSE_TABLE_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(JwcClient.JWC_HOST)
@@ -37,7 +37,7 @@ object MyCourseScheduleTable : BaseNoParamContent<CourseSet>() {
     private const val MULTI_TIME_JOIN_SYMBOL = ','
     private const val FROM_TO_TIME_JOIN_SYMBOL = '-'
 
-    override fun onRequestData(): Response = jwcClient.newAutoLoginCall(COURSE_TABLE_URL)
+    override fun onRequestData(): Response = networkClient.newAutoLoginCall(COURSE_TABLE_URL)
 
     override fun onParseData(content: String): CourseSet {
         val document = Jsoup.parse(content)

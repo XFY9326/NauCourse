@@ -11,7 +11,7 @@ import tool.xfy9326.naucourses.providers.beans.jwc.CourseScore
 import tool.xfy9326.naucourses.providers.contents.base.BaseNoParamContent
 
 object MyCourse : BaseNoParamContent<Array<CourseScore>>() {
-    private val jwcClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
+    override val networkClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
 
     private const val JWC_MY_COURSE_ASPX = "MyCourse.aspx"
 
@@ -22,7 +22,7 @@ object MyCourse : BaseNoParamContent<Array<CourseScore>>() {
     private const val NOT_MEASURE_STR = "未测评"
     private const val NOT_PUBLISH_STR = "未发布"
 
-    override fun onRequestData(): Response = jwcClient.newAutoLoginCall(JWC_MY_COURSE_URL)
+    override fun onRequestData(): Response = networkClient.newAutoLoginCall(JWC_MY_COURSE_URL)
 
     override fun onParseData(content: String): Array<CourseScore> {
         val document = Jsoup.parse(content)

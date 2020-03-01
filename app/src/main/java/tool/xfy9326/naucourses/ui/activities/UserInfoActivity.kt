@@ -1,14 +1,36 @@
 package tool.xfy9326.naucourses.ui.activities
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_user_info.*
+import kotlinx.android.synthetic.main.view_card_credit_info.*
+import kotlinx.android.synthetic.main.view_card_learning_process.*
+import kotlinx.android.synthetic.main.view_card_rank_info.*
+import kotlinx.android.synthetic.main.view_card_user_info.*
+import kotlinx.android.synthetic.main.view_grid_text_item.view.*
+import kotlinx.android.synthetic.main.view_learning_process_item.view.*
+import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.R
+import tool.xfy9326.naucourses.providers.beans.jwc.StudentInfo
+import tool.xfy9326.naucourses.providers.beans.jwc.StudentLearningProcess
+import tool.xfy9326.naucourses.providers.beans.jwc.StudentPersonalInfo
 import tool.xfy9326.naucourses.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourses.ui.models.activity.UserInfoViewModel
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.enableHomeButton
+import tool.xfy9326.naucourses.utils.views.I18NUtils
 
 class UserInfoActivity : ViewModelActivity<UserInfoViewModel>() {
+    private lateinit var inflater: LayoutInflater
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        inflater = LayoutInflater.from(this)
+    }
+
     override fun onCreateContentView(): Int = R.layout.activity_user_info
 
     override fun onCreateViewModel(): UserInfoViewModel = ViewModelProvider(this)[UserInfoViewModel::class.java]
@@ -16,5 +38,77 @@ class UserInfoActivity : ViewModelActivity<UserInfoViewModel>() {
     override fun initView(savedInstanceState: Bundle?, viewModel: UserInfoViewModel) {
         setSupportActionBar(tb_userInfo)
         enableHomeButton()
+    }
+
+    override fun bindViewModel(viewModel: UserInfoViewModel) {
+        viewModel.studentInfo.observe(this, Observer {
+            updateView(it)
+        })
+    }
+
+    @Synchronized
+    private fun updateView(studentInfo: StudentInfo) {
+        updateBaseInfo(studentInfo.personalInfo)
+        updateLearningProcess(studentInfo.learningProcess)
+        updateCreditInfo(studentInfo.creditInfo)
+        updateRankInfo(studentInfo.rankingInfo)
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun updateBaseInfo(studentPersonalInfo: StudentPersonalInfo) {
+        tv_userInfoId.text = studentPersonalInfo.stuId.first + studentPersonalInfo.stuId.second
+        tv_userInfoName.text = studentPersonalInfo.name.first + studentPersonalInfo.name.second
+        tv_userInfoGrade.text = studentPersonalInfo.grade.first + studentPersonalInfo.grade.second
+        tv_userInfoCollege.text = studentPersonalInfo.college.first + studentPersonalInfo.college.second
+        tv_userInfoMajor.text = studentPersonalInfo.major.first + studentPersonalInfo.major.second
+        tv_userInfoMajorDirection.text = studentPersonalInfo.majorDirection.first + studentPersonalInfo.majorDirection.second
+        tv_userInfoTrainingDirection.text = studentPersonalInfo.trainingDirection.first + studentPersonalInfo.trainingDirection.second
+        tv_userInfoCurrentClass.text = studentPersonalInfo.currentClass.first + studentPersonalInfo.currentClass.second
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun updateLearningProcess(learningProcess: Array<StudentLearningProcess>) {
+        layout_userLearningProcess.removeViewsInLayout(1, layout_userLearningProcess.childCount - 1)
+        for (process in learningProcess) {
+            layout_userLearningProcess.addViewInLayout(
+                inflater.inflate(R.layout.view_learning_process_item, layout_userLearningProcess, false).apply {
+                    tv_processCourseType.setText(I18NUtils.getCourseType(process.courseType))
+                    pb_processBar.progress = process.progress
+                    tv_processPercent.text = process.progress.toString() + Constants.PERCENT
+                    val views = arrayOfNulls<View>(process.subjects.size)
+                    var i = 0
+                    for (entry in process.subjects) {
+                        views[i++] = inflater.inflate(R.layout.view_grid_text_item, gl_processCourseType, false).apply {
+                            tv_gridItemText.text = getString(I18NUtils.getLearningProcessSubjectType(entry.key), entry.value)
+                        }
+                    }
+                    gl_processCourseType.replaceAllViews(views.requireNoNulls(), false)
+                })
+        }
+        layout_userLearningProcess.refreshLayout()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun updateCreditInfo(creditInfo: LinkedHashMap<String, Float>) {
+        val views = arrayOfNulls<View>(creditInfo.size)
+        var i = 0
+        for (entry in creditInfo) {
+            views[i++] = inflater.inflate(R.layout.view_grid_text_item, gl_userCreditInfo, false).apply {
+                tv_gridItemText.text = "${entry.key}：${entry.value}"
+            }
+        }
+        gl_userCreditInfo.replaceAllViews(views.requireNoNulls())
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun updateRankInfo(rankingInfo: LinkedHashMap<String, String>) {
+        val views = arrayOfNulls<View>(rankingInfo.size)
+        var i = 0
+        for (entry in rankingInfo) {
+            views[i++] = inflater.inflate(R.layout.view_grid_text_item, gl_userRankInfo, false).apply {
+                tv_gridItemText.text = entry.key + entry.value
+            }
+        }
+        gl_userRankInfo.replaceAllViews(views.requireNoNulls())
     }
 }

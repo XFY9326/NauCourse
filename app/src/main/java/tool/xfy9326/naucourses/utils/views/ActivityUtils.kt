@@ -40,4 +40,8 @@ object ActivityUtils {
             setDisplayHomeAsUpEnabled(true)
         }
     }
+
+    fun AppCompatActivity.disableActionBarTitle() {
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+    }
 }

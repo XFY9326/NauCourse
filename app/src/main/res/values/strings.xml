@@ -29,7 +29,7 @@
     <string name="night_mode">夜间</string>
     <string name="exit">退出</string>
     <string name="balance">余额：%1$s</string>
-    <string name="user_info">用户信息</string>
+    <string name="user_info">个人信息</string>
     <string name="course_table">课程表</string>
     <string name="today_course">今日课程</string>
     <string name="news">通知</string>
@@ -70,4 +70,17 @@
     <string name="news_detail_info">发布：%1$s</string>
     <string name="news_detail_info_with_click_amount">发布：%1$s 浏览量：%2$d</string>
     <string name="refresh">刷新</string>
+    <string name="open_in_browser">在浏览器中打开</string>
+    <string name="user_info_base">基础信息</string>
+    <string name="user_info_learning_process">修学进度</string>
+    <string name="user_info_credit_info">学分信息</string>
+    <string name="user_info_rank_info">排名信息</string>
+    <string name="learning_process_target_credit">目标学分：%1$.2f</string>
+    <string name="learning_process_revised_credit">已修学分：%1$.2f</string>
+    <string name="learning_process_balance_credit">学分差额：%1$.2f</string>
+    <string name="learning_process_bonus_credit">奖励学分：%1$.2f</string>
+    <string name="course_type_compulsory">必修课</string>
+    <string name="course_type_major_selective">专选课</string>
+    <string name="course_type_optional">任选课</string>
+    <string name="course_type_practical">实践课</string>
 </resources>

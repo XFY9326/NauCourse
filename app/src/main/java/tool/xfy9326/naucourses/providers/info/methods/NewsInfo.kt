@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourses.providers.info.methods
 
+import android.graphics.Bitmap
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -8,6 +9,7 @@ import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.io.dbHelpers.AppDBHelper
 import tool.xfy9326.naucourses.providers.beans.GeneralNews
 import tool.xfy9326.naucourses.providers.beans.GeneralNews.PostSource
+import tool.xfy9326.naucourses.providers.contents.base.BaseNewsContent
 import tool.xfy9326.naucourses.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourses.providers.contents.base.ContentResult
 import tool.xfy9326.naucourses.providers.contents.methods.alstu.DefaultMessage
@@ -20,6 +22,15 @@ import tool.xfy9326.naucourses.providers.info.base.BaseSimpleContentInfo
 
 object NewsInfo : BaseSimpleContentInfo<List<GeneralNews>, PostSource>() {
     private const val INIT_PER_TYPE_NEWS_SIZE = 10
+
+    private val CONTENT_MAP = mapOf<PostSource, BaseNewsContent<*>>(
+        PostSource.JWC to TopicList,
+        PostSource.ALSTU to DefaultMessage,
+        PostSource.RSS_JW to JwRSS,
+        PostSource.RSS_TW to TwRSS,
+        PostSource.RSS_XGC to XgcRSS,
+        PostSource.RSS_XXB to XxbRSS
+    )
 
     override fun loadSimpleStoredInfo(): List<GeneralNews>? =
         sortNewsList(AppDBHelper.getGeneralNewsArray())
@@ -37,14 +48,10 @@ object NewsInfo : BaseSimpleContentInfo<List<GeneralNews>, PostSource>() {
             for ((i, param) in params.withIndex()) {
                 resultDeferred[i] =
                     async {
-                        when (param) {
-                            PostSource.UNKNOWN -> throw IllegalArgumentException("Unknown Post Source")
-                            PostSource.JWC -> TopicList.getContentData()
-                            PostSource.ALSTU -> DefaultMessage.getContentData()
-                            PostSource.RSS_JW -> JwRSS.getContentData()
-                            PostSource.RSS_TW -> TwRSS.getContentData()
-                            PostSource.RSS_XGC -> XgcRSS.getContentData()
-                            PostSource.RSS_XXB -> XxbRSS.getContentData()
+                        if (param == PostSource.UNKNOWN) {
+                            throw IllegalArgumentException("Unknown Post Source")
+                        } else {
+                            CONTENT_MAP[param]?.getContentData()!!
                         }
                     }
             }
@@ -76,15 +83,19 @@ object NewsInfo : BaseSimpleContentInfo<List<GeneralNews>, PostSource>() {
     fun isNewsOutOfDateTimeStamp() = System.currentTimeMillis() - Constants.News.NEWS_STORE_DAY_LENGTH * 24 * 60 * 60 * 1000L
 
     fun getDetailNewsInfo(url: HttpUrl, newsType: PostSource) =
-        when (newsType) {
-            PostSource.UNKNOWN -> throw IllegalArgumentException("Unknown Post Source")
-            PostSource.JWC -> TopicList.getContentDetailData(url)
-            PostSource.ALSTU -> DefaultMessage.getContentDetailData(url)
-            PostSource.RSS_JW -> JwRSS.getContentDetailData(url)
-            PostSource.RSS_TW -> TwRSS.getContentDetailData(url)
-            PostSource.RSS_XGC -> XgcRSS.getContentDetailData(url)
-            PostSource.RSS_XXB -> XxbRSS.getContentDetailData(url)
+        if (newsType == PostSource.UNKNOWN) {
+            throw IllegalArgumentException("Unknown Post Source")
+        } else {
+            CONTENT_MAP[newsType]?.getContentDetailData(url)!!
         }
+
+    fun getImageForNewsInfo(source: String, newsType: PostSource): Bitmap? {
+        if (newsType == PostSource.UNKNOWN) {
+            throw IllegalArgumentException("Unknown Post Source")
+        } else {
+            return CONTENT_MAP[newsType]?.getNewsImage(source)
+        }
+    }
 
     override fun saveSimpleInfo(info: List<GeneralNews>) {
         AppDBHelper.clearGeneralNewsSet()

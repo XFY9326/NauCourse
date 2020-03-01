@@ -9,6 +9,8 @@ import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.providers.contents.base.BaseNoParamContent
 
 object SchoolCalendarList : BaseNoParamContent<LinkedHashMap<String, HttpUrl>>() {
+    override val networkClient = getSimpleClient()
+
     private const val PARAM_PATH = "p141c89"
     private const val LIST_HTM_PATH = "list.htm"
 
@@ -19,7 +21,7 @@ object SchoolCalendarList : BaseNoParamContent<LinkedHashMap<String, HttpUrl>>()
     private val CALENDAR_LIST_PAGE_URL = HttpUrl.Builder().scheme(Constants.Network.HTTPS).host(Constants.Network.NAU_HOST)
         .addPathSegments(PARAM_PATH).addPathSegment(LIST_HTM_PATH).build()
 
-    override fun onRequestData(): Response = getSimpleClient().newClientCall(CALENDAR_LIST_PAGE_URL)
+    override fun onRequestData(): Response = networkClient.newClientCall(CALENDAR_LIST_PAGE_URL)
 
     override fun onParseData(content: String): LinkedHashMap<String, HttpUrl> {
         val document = Jsoup.parse(content)

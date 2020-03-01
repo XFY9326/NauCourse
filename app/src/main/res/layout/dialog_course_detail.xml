@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
+    android:overScrollMode="never"
     android:scrollbars="none">
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -69,7 +70,7 @@
                 android:drawablePadding="12dp"
                 android:gravity="center_vertical"
                 android:textSize="13sp"
-                app:drawableStartCompat="@drawable/ic_course_id" />
+                app:drawableStartCompat="@drawable/ic_id" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_teacher"
@@ -79,7 +80,7 @@
                 android:drawablePadding="12dp"
                 android:gravity="center_vertical"
                 android:textSize="13sp"
-                app:drawableStartCompat="@drawable/ic_teacher" />
+                app:drawableStartCompat="@drawable/ic_person" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_class"
@@ -113,7 +114,7 @@
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <tool.xfy9326.naucourses.ui.views.widgets.AdvancedLinearLayout
             android:id="@+id/layout_moreCourseInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

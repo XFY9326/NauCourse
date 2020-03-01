@@ -76,6 +76,10 @@ class NewsFragment : DrawerToolbarFragment<NewsViewModel>(), NewsAdapter.OnNewsI
     override fun initView(viewModel: NewsViewModel) {
         newsAdapter = NewsAdapter(requireContext(), this)
 
+        tb_general.setOnClickListener {
+            arv_newsList.smoothScrollToPosition(0)
+        }
+
         arv_newsList.adapter = newsAdapter
         asl_newsRefreshLayout.setOnRefreshListener {
             viewModel.refreshNewsList()

@@ -7,6 +7,7 @@ import org.jsoup.nodes.Document
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.network.SSONetworkManager
 import tool.xfy9326.naucourses.network.clients.JwcClient
+import tool.xfy9326.naucourses.network.clients.base.BaseLoginClient
 import tool.xfy9326.naucourses.providers.beans.GeneralNews
 import tool.xfy9326.naucourses.providers.beans.GeneralNewsDetail
 import tool.xfy9326.naucourses.providers.beans.jwc.JwcTopic
@@ -16,7 +17,7 @@ import java.util.*
 import kotlin.collections.HashSet
 
 object TopicList : BaseNewsContent<JwcTopic>() {
-    private val jwcClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
+    override val networkClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
 
     private val DATE_FORMAT_YMD = SimpleDateFormat(Constants.Time.FORMAT_YMD, Locale.CHINA)
 
@@ -28,9 +29,14 @@ object TopicList : BaseNewsContent<JwcTopic>() {
 
     private const val INFO_DIVIDE_SYMBOL = "："
 
-    override fun onRequestData(): Response = jwcClient.newAutoLoginCall(JWC_TOPIC_URL)
+    override fun onRequestData(): Response = networkClient.newAutoLoginCall(JWC_TOPIC_URL)
 
-    override fun onRequestDetailData(url: HttpUrl): Response = jwcClient.newAutoLoginCall(url)
+    override fun onRequestDetailData(url: HttpUrl): Response = (getDetailNetworkClient() as BaseLoginClient).newAutoLoginCall(url)
+
+    override fun onBuildImageUrl(source: String): HttpUrl =
+        HttpUrl.Builder().scheme(Constants.Network.HTTP).host(JwcClient.JWC_HOST).addEncodedPathSegments(
+            source.replace(Constants.Network.PARENT_DIR, Constants.EMPTY)
+        ).build()
 
     override fun onParseRawData(content: String): Set<JwcTopic> {
         val document = Jsoup.parse(content)

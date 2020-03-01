@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object TermInfo : BaseNoParamContent<TermDate>() {
-    private val jwcClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
+    override val networkClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
 
     private val DATE_FORMAT_YMD = SimpleDateFormat(Constants.Time.FORMAT_YMD, Locale.CHINA)
 
@@ -20,7 +20,7 @@ object TermInfo : BaseNoParamContent<TermDate>() {
     private const val IN_VACATION_WEEK_NUM = 0
     private const val IN_VACATION_STR = "放假中"
 
-    override fun onRequestData(): Response = jwcClient.requestJwcMainContent()
+    override fun onRequestData(): Response = networkClient.requestJwcMainContent()
 
     override fun onParseData(content: String): TermDate {
         val document = Jsoup.parse(content)

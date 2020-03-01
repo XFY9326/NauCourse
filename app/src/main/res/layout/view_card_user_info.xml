@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="3dp"
+    android:layout_marginBottom="3dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="2dp"
+    app:cardPreventCornerOverlap="true">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:orientation="vertical">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/user_info_base"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="19sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_userInfoId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:drawablePadding="15dp"
+            android:gravity="center_vertical"
+            android:textSize="14sp"
+            app:drawableStartCompat="@drawable/ic_id" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_userInfoName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:drawablePadding="15dp"
+            android:gravity="center_vertical"
+            android:textSize="14sp"
+            app:drawableStartCompat="@drawable/ic_person" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_userInfoGrade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:drawablePadding="15dp"
+            android:gravity="center_vertical"
+            android:textSize="14sp"
+            app:drawableStartCompat="@drawable/ic_user_grade" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_userInfoCollege"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:drawablePadding="15dp"
+            android:gravity="center_vertical"
+            android:textSize="14sp"
+            app:drawableStartCompat="@drawable/ic_college" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_userInfoMajor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:drawablePadding="15dp"
+            android:gravity="center_vertical"
+            android:textSize="14sp"
+            app:drawableStartCompat="@drawable/ic_major" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_userInfoMajorDirection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:drawablePadding="15dp"
+            android:gravity="center_vertical"
+            android:textSize="14sp"
+            app:drawableStartCompat="@drawable/ic_major_direction" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_userInfoTrainingDirection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:drawablePadding="15dp"
+            android:gravity="center_vertical"
+            android:textSize="14sp"
+            app:drawableStartCompat="@drawable/ic_training_direction" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_userInfoCurrentClass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:drawablePadding="15dp"
+            android:gravity="center_vertical"
+            android:textSize="14sp"
+            app:drawableStartCompat="@drawable/ic_class" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</com.google.android.material.card.MaterialCardView>

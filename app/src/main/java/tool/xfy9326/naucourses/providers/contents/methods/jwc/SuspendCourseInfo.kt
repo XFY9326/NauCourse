@@ -10,12 +10,14 @@ import tool.xfy9326.naucourses.providers.beans.jw.SuspendCourse
 import tool.xfy9326.naucourses.providers.contents.base.BaseNoParamContent
 
 object SuspendCourseInfo : BaseNoParamContent<Array<SuspendCourse>>() {
+    override val networkClient = getSimpleClient()
+
     private const val JWC_SUSPEND_COURSE_ASPX = "SuspendCourseInfo.aspx"
 
     private val JW_SUSPEND_COURSE_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(JwcClient.JWC_HOST)
         .addPathSegment(JWC_SUSPEND_COURSE_ASPX).build()
 
-    override fun onRequestData(): Response = getSimpleClient().newClientCall(JW_SUSPEND_COURSE_URL)
+    override fun onRequestData(): Response = networkClient.newClientCall(JW_SUSPEND_COURSE_URL)
 
     override fun onParseData(content: String): Array<SuspendCourse> {
         val document = Jsoup.parse(content)

@@ -12,7 +12,7 @@ import tool.xfy9326.naucourses.providers.beans.jwc.Term
 import tool.xfy9326.naucourses.providers.contents.base.BaseNoParamContent
 
 object MyLevelExam : BaseNoParamContent<Array<LevelExam>>() {
-    private val jwcClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
+    override val networkClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
 
     private const val JWC_MY_LEVEL_EXAM_ASPX = "MyLevelExam.aspx"
     private const val ELEMENT_ID_TABLE2 = "Table2"
@@ -20,7 +20,7 @@ object MyLevelExam : BaseNoParamContent<Array<LevelExam>>() {
     private val JWC_MY_COURSE_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(JwcClient.JWC_HOST)
         .addPathSegment(JwcClient.JWC_STUDENTS_PATH).addPathSegment(JWC_MY_LEVEL_EXAM_ASPX).build()
 
-    override fun onRequestData(): Response = jwcClient.newAutoLoginCall(JWC_MY_COURSE_URL)
+    override fun onRequestData(): Response = networkClient.newAutoLoginCall(JWC_MY_COURSE_URL)
 
     override fun onParseData(content: String): Array<LevelExam> {
         val document = Jsoup.parse(content)

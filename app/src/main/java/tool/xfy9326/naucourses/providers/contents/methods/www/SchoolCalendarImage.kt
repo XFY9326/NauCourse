@@ -8,6 +8,8 @@ import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.providers.contents.base.BaseParamContent
 
 object SchoolCalendarImage : BaseParamContent<HttpUrl, HttpUrl>() {
+    override val networkClient = getSimpleClient()
+
     private const val PARAM_PATH = "2019/0516/c89a51768"
     private const val PAGE_HTM_PATH = "page.htm"
 
@@ -24,7 +26,7 @@ object SchoolCalendarImage : BaseParamContent<HttpUrl, HttpUrl>() {
         requestUrl = param
     }
 
-    override fun onRequestData(): Response = getSimpleClient().newClientCall(requestUrl)
+    override fun onRequestData(): Response = networkClient.newClientCall(requestUrl)
 
     override fun onParseData(content: String): HttpUrl {
         val document = Jsoup.parse(content)

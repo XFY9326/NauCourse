@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourses.ui.views.table
+package tool.xfy9326.naucourses.ui.views.helpers
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -17,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.setPadding
 import androidx.gridlayout.widget.GridLayout
 import kotlinx.android.synthetic.main.view_table_cell_date.view.*
@@ -29,8 +30,8 @@ import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.beans.CourseCell
 import tool.xfy9326.naucourses.beans.CourseCellStyle
 import tool.xfy9326.naucourses.beans.CourseTable
-import tool.xfy9326.naucourses.ui.views.widgets.CourseTableCellLayout
-import tool.xfy9326.naucourses.ui.views.widgets.CourseTableView
+import tool.xfy9326.naucourses.ui.views.widgets.AdvancedGridLayout
+import tool.xfy9326.naucourses.ui.views.widgets.AdvancedLinearLayout
 import tool.xfy9326.naucourses.utils.BaseUtils.dpToPx
 import tool.xfy9326.naucourses.utils.compute.TimeUtils
 import tool.xfy9326.naucourses.utils.views.ColorUtils
@@ -38,7 +39,7 @@ import kotlin.math.ceil
 import kotlin.math.max
 
 
-object CourseTableViewBuilder {
+object CourseTableViewHelper {
     private const val COURSE_INFO_JOIN_SYMBOL = "\n\n@"
 
     const val DEFAULT_TABLE_WIDTH_SIZE = Constants.Time.MAX_WEEK_DAY + 1
@@ -97,25 +98,19 @@ object CourseTableViewBuilder {
         courseTable: CourseTable,
         showWeekend: Boolean,
         styles: Array<CourseCellStyle>,
-        targetView: CourseTableView,
+        targetView: AdvancedGridLayout,
         headerWidth: Pair<Int, Int>
     ) = withContext(Dispatchers.Default) {
         val colMax = if (showWeekend) DEFAULT_TABLE_WIDTH_SIZE else DEFAULT_TABLE_WIDTH_SIZE - 2
         val rowMax = DEFAULT_TABLE_HEIGHT_SIZE
-        withContext(Dispatchers.Main) {
-            if (targetView.childCount != 0) {
-                targetView.removeAllViewsInLayout()
-            }
-            targetView.columnCount = colMax
-            targetView.rowCount = rowMax
-        }
+
         val resultDeferred = ArrayList<Deferred<View>>(rowMax)
         val lock = Any()
         var maxHeight = 0
 
         //添加课程节数与上下课时间
         for (row in 0 until rowMax) {
-            resultDeferred.add(async {
+            resultDeferred.add(async(Dispatchers.Default) {
                 val view = getTimeCellView(context, headerWidth.first, row, row + 1)
                 val measuredHeight = getHeightByWidth(view, headerWidth.first)
                 synchronized(lock) {
@@ -127,7 +122,7 @@ object CourseTableViewBuilder {
         // 添加课程
         courseTable.table.forEachIndexed { index, cellArr ->
             cellArr.forEach {
-                resultDeferred.add(async {
+                resultDeferred.add(async(Dispatchers.Default) {
                     val view = getCourseCellView(
                         context, it, headerWidth.second, index + 1,
                         CourseCellStyle.getStyleByCourseId(it.courseId, styles, true)!!
@@ -148,7 +143,13 @@ object CourseTableViewBuilder {
             it.layoutParams.height = maxHeight
         }
         withContext(Dispatchers.Main) {
-            targetView.addViews(result)
+            if (targetView.columnCount != colMax) {
+                targetView.columnCount = colMax
+            }
+            if (targetView.rowCount != rowMax) {
+                targetView.rowCount = rowMax
+            }
+            targetView.replaceAllViews(result)
         }
     }
 
@@ -163,7 +164,7 @@ object CourseTableViewBuilder {
 
     @SuppressLint("SetTextI18n")
     private fun getCourseCellView(context: Context, courseInfo: CourseCell, headerWidth: Int, col: Int, cellStyle: CourseCellStyle): View =
-        CourseTableCellLayout(context).apply {
+        AdvancedLinearLayout(context).apply {
             val colMerge = GridLayout.spec(col)
             val rowMerge = GridLayout.spec(courseInfo.timeDuration.startTime - 1, courseInfo.timeDuration.durationLength, 1f)
             layoutParams = GridLayout.LayoutParams().apply {
@@ -178,7 +179,7 @@ object CourseTableViewBuilder {
             alpha = DEFAULT_COURSE_CELL_BACKGROUND_ALPHA
 
             // 课程信息文字
-            addViewWithoutRequestLayout(TextView(context).apply {
+            addViewInLayout(TextView(context).apply {
                 layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
                 textSize = cellStyle.textSize
                 background = buildCourseCellBackground(cellStyle.color, DEFAULT_COURSE_CELL_BACKGROUND_RADIUS)
@@ -212,7 +213,7 @@ object CourseTableViewBuilder {
 
     @SuppressLint("SetTextI18n")
     private fun getTimeCellView(context: Context, headerWidth: Int, row: Int, courseTimeNum: Int): View =
-        CourseTableCellLayout(context).apply {
+        AdvancedLinearLayout(context).apply {
             val colMerge = GridLayout.spec(0)
             val rowMerge = GridLayout.spec(row, 1f)
             layoutParams = GridLayout.LayoutParams().apply {
@@ -222,9 +223,9 @@ object CourseTableViewBuilder {
             }
 
             gravity = Gravity.CENTER
-            orientation = LinearLayout.VERTICAL
+            orientation = LinearLayoutCompat.VERTICAL
 
-            addViewWithoutRequestLayout(TextView(context).apply {
+            addViewInLayout(TextView(context).apply {
                 layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 typeface = Typeface.defaultFromStyle(Typeface.BOLD)
                 gravity = Gravity.CENTER
