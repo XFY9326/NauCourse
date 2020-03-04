@@ -8,16 +8,16 @@ import tool.xfy9326.naucourses.network.SSONetworkManager
 import tool.xfy9326.naucourses.network.clients.base.LoginInfo
 import tool.xfy9326.naucourses.network.clients.base.LoginResponse
 import tool.xfy9326.naucourses.providers.GlobalCacheLoader
-import tool.xfy9326.naucourses.tools.SingleLiveData
+import tool.xfy9326.naucourses.tools.EventLiveData
 import tool.xfy9326.naucourses.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourses.utils.secure.AccountUtils
 
 class LoginViewModel : BaseViewModel() {
-    val isLoginLoading = SingleLiveData(false)
-    val errorReasonType = SingleLiveData<LoginResponse.ErrorReason>()
-    val loginProcess = SingleLiveData<LoadingProcess>()
-    val loginSuccess = SingleLiveData(false)
-    val cachedUserId = SingleLiveData<String>()
+    val isLoginLoading = EventLiveData(false)
+    val errorReasonType = EventLiveData<LoginResponse.ErrorReason>()
+    val loginProcess = EventLiveData<LoadingProcess>()
+    val loginSuccess = EventLiveData(false)
+    val cachedUserId = EventLiveData<String>()
 
     enum class LoadingProcess {
         LOGGING_SSO,
@@ -31,22 +31,23 @@ class LoginViewModel : BaseViewModel() {
             viewModelScope.launch(Dispatchers.Default) {
                 val id = AccountUtils.readSavedCacheUserId()
                 if (id != null) {
-                    cachedUserId.postSingleValue(id)
+                    cachedUserId.postEventValue(id)
                 }
             }
         }
     }
 
     fun doLogin(userId: String, userPw: String) {
-        isLoginLoading.postSingleValue(true)
+        isLoginLoading.postEventValue(true)
         viewModelScope.launch(Dispatchers.Default) {
             val loginResult = withContext(Dispatchers.Default) {
                 SSONetworkManager.clearSSOCacheAndCookies()
+                AccountUtils.saveUserId(userId)
 
-                loginProcess.postSingleValue(LoadingProcess.LOGGING_SSO)
+                loginProcess.postEventValue(LoadingProcess.LOGGING_SSO)
                 val ssoLoginResult = SSONetworkManager.ssoLogin(LoginInfo(userId, userPw))
                 if (ssoLoginResult.isSuccess) {
-                    loginProcess.postSingleValue(LoadingProcess.LOGGING_JWC)
+                    loginProcess.postEventValue(LoadingProcess.LOGGING_JWC)
                     SSONetworkManager.getClient(SSONetworkManager.ClientType.JWC).login()
                 } else {
                     ssoLoginResult
@@ -57,17 +58,17 @@ class LoginViewModel : BaseViewModel() {
                 AccountUtils.setUserLoginStatus(true)
                 AccountUtils.saveUserInfo(AccountUtils.UserInfo(userId, userPw))
 
-                loginProcess.postSingleValue(LoadingProcess.CACHING)
+                loginProcess.postEventValue(LoadingProcess.CACHING)
                 GlobalCacheLoader.loadInitCache()
-                loginSuccess.postSingleValue(true)
+                loginSuccess.postEventValue(true)
             } else {
-                errorReasonType.postSingleValue(loginResult.loginErrorReason)
-                isLoginLoading.postSingleValue(false)
+                errorReasonType.postEventValue(loginResult.loginErrorReason)
+                isLoginLoading.postEventValue(false)
             }
         }
     }
 
     override fun onCleared() {
-        loginProcess.postSingleValue(LoadingProcess.NONE)
+        loginProcess.postEventValue(LoadingProcess.NONE)
     }
 }

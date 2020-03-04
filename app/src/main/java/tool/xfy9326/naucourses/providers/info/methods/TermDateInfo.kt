@@ -1,13 +1,11 @@
 package tool.xfy9326.naucourses.providers.info.methods
 
 import tool.xfy9326.naucourses.io.dbHelpers.JwcDBHelper
+import tool.xfy9326.naucourses.io.prefs.AppPref
 import tool.xfy9326.naucourses.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourses.providers.contents.base.ContentResult
 import tool.xfy9326.naucourses.providers.contents.methods.jwc.TermInfo
-import tool.xfy9326.naucourses.providers.info.base.BaseSimpleContentInfo
-import tool.xfy9326.naucourses.providers.info.base.CacheExpire
-import tool.xfy9326.naucourses.providers.info.base.CacheExpireRule
-import tool.xfy9326.naucourses.providers.info.base.CacheExpireTimeUnit
+import tool.xfy9326.naucourses.providers.info.base.*
 import tool.xfy9326.naucourses.utils.compute.TimeUtils
 
 object TermDateInfo : BaseSimpleContentInfo<TermDate, Nothing>() {
@@ -26,6 +24,31 @@ object TermDateInfo : BaseSimpleContentInfo<TermDate, Nothing>() {
             ContentResult(true, contentData = fixTermDate(result.contentData!!))
         } else {
             result
+        }
+    }
+
+    @Synchronized
+    override suspend fun getInfo(params: Set<Nothing>, loadCache: Boolean, forceRefresh: Boolean): InfoResult<TermDate> {
+        val termDateResult = super.getInfo(params, loadCache, forceRefresh)
+        return if (forceRefresh) {
+            termDateResult
+        } else {
+            val customTermDate = AppPref.readSavedCustomTermDate()
+            if (customTermDate == null) {
+                termDateResult
+            } else {
+                if (termDateResult.isSuccess) {
+                    val termDate = termDateResult.data!!
+                    // 自定义学期不被用于旧学期时间的设定，因此该设定被用于新学期或对当前学期的更正
+                    if (termDate.getTerm() <= customTermDate.getTerm()) {
+                        InfoResult(true, customTermDate)
+                    } else {
+                        termDateResult
+                    }
+                } else {
+                    InfoResult(true, customTermDate)
+                }
+            }
         }
     }
 

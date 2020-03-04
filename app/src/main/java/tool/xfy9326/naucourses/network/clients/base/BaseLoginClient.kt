@@ -19,6 +19,8 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
         this.loginInfo = loginInfo
     }
 
+    fun getLoginInfo() = this.loginInfo
+
     /**
      * 获取登录前对页面的一次请求（获取登录参数）
      * @return 响应

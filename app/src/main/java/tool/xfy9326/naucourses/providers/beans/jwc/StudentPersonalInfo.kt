@@ -9,4 +9,8 @@ data class StudentPersonalInfo(
     val majorDirection: Pair<String, String>,
     val trainingDirection: Pair<String, String>,
     val currentClass: Pair<String, String>
-)
+) {
+    companion object {
+        fun Pair<*, *>.toPlainText() = "${first}${second}"
+    }
+}

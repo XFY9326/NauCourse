@@ -12,7 +12,7 @@ import tool.xfy9326.naucourses.network.clients.tools.SSONetworkTools
 import tool.xfy9326.naucourses.network.clients.tools.SSONetworkTools.Companion.hasSameHost
 import java.io.IOException
 
-open class SSOClient(private val loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = null) :
+open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = null) :
     BaseLoginClient(loginInfo) {
     private val okHttpClient = SSONetworkTools.instance.getClient()
     private val cookieStore = SSONetworkTools.instance.getCookieStore()
@@ -94,7 +94,7 @@ open class SSOClient(private val loginInfo: LoginInfo, private val serviceUrl: H
                 if (!isServiceLogin && getSSOLoginStatus(ssoResponseContent) == LoginResponse.ErrorReason.NONE) {
                     return LoginResponse(true, ssoResponseUrl, ssoResponseContent)
                 }
-                val postForm = getLoginPostForm(loginInfo.userId, loginInfo.userPw, ssoResponseContent)
+                val postForm = getLoginPostForm(getLoginInfo().userId, getLoginInfo().userPw, ssoResponseContent)
                 val request = ssoResponse.request.newBuilder().apply {
                     post(postForm)
                 }.build()

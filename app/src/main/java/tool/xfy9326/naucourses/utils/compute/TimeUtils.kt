@@ -108,9 +108,12 @@ object TimeUtils {
         }
     }
 
-    fun getWeekNum(termDate: TermDate, calculateDate: Date = Date()): Int {
-        val startCalendar = getFixedTermStartDateCalendar(termDate.startDate)
-        val endCalendar = getFixedTermEndDateCalendar(termDate.endDate)
+    fun getWeekNum(termDate: TermDate, calculateDate: Date = Date()): Int =
+        getWeekNum(termDate.startDate, termDate.endDate, calculateDate)
+
+    fun getWeekNum(startDate: Date, endDate: Date, calculateDate: Date = Date()): Int {
+        val startCalendar = getFixedTermStartDateCalendar(startDate)
+        val endCalendar = getFixedTermEndDateCalendar(endDate)
         return if (calculateDate.time >= startCalendar.timeInMillis && calculateDate.time <= endCalendar.timeInMillis) {
             ceil((calculateDate.time - startCalendar.timeInMillis) / (7 * 24 * 60 * 60 * 1000f)).toInt()
         } else {

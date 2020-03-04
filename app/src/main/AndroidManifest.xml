@@ -61,5 +61,13 @@
                 android:value=".ui.activities.MainDrawerActivity" />
         </activity>
 
+        <activity
+            android:name=".ui.activities.AboutActivity"
+            android:label="@string/about">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.MainDrawerActivity" />
+        </activity>
+
     </application>
 </manifest>

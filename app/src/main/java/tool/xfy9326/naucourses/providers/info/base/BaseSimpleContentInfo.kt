@@ -43,7 +43,7 @@ abstract class BaseSimpleContentInfo<T : Any, P : Enum<*>> : BaseContentInfo<Bas
     suspend fun getInfo(params: P, loadCache: Boolean = false, forceRefresh: Boolean = false): InfoResult<T> =
         getInfo(setOf(params), loadCache, forceRefresh)
 
-    suspend fun getInfo(params: Set<P> = emptySet(), loadCache: Boolean = false, forceRefresh: Boolean = false): InfoResult<T> =
+    open suspend fun getInfo(params: Set<P> = emptySet(), loadCache: Boolean = false, forceRefresh: Boolean = false): InfoResult<T> =
         getInfoProcess(SimpleType.DEFAULT, params, loadCache, forceRefresh)
 
 

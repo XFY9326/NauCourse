@@ -1,6 +1,5 @@
 package tool.xfy9326.naucourses.ui.models.activity
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -8,10 +7,9 @@ import kotlinx.coroutines.launch
 import tool.xfy9326.naucourses.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourses.providers.info.methods.PersonalInfo
 import tool.xfy9326.naucourses.ui.models.base.BaseViewModel
+import tool.xfy9326.naucourses.utils.LogUtils
 
 class UserInfoViewModel : BaseViewModel() {
-    private val logTag = javaClass.simpleName
-
     val studentInfo = MutableLiveData<StudentInfo>()
 
     override fun onInitView(isRestored: Boolean) {
@@ -25,7 +23,7 @@ class UserInfoViewModel : BaseViewModel() {
             if (personalInfo.isSuccess) {
                 studentInfo.postValue(personalInfo.data!!)
             } else {
-                Log.d(logTag, "PersonalInfo Error: ${personalInfo.errorReason}")
+                LogUtils.d<UserInfoViewModel>("PersonalInfo Error: ${personalInfo.errorReason}")
             }
         }
     }

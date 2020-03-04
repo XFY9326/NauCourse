@@ -2,8 +2,14 @@ package tool.xfy9326.naucourses.io.prefs
 
 import tool.xfy9326.naucourses.io.prefs.base.BasePref
 import tool.xfy9326.naucourses.providers.beans.GeneralNews
+import tool.xfy9326.naucourses.providers.beans.jwc.TermDate
+import java.util.*
 
 object AppPref : BasePref() {
+    private const val CUSTOM_START_TERM_DATE_MILLS = "CustomStartTermDateMills"
+    private const val CUSTOM_END_TERM_DATE_MILLS = "CustomEndTermDateMills"
+    private const val DEFAULT_TERM_DATE_MILLS = 0L
+
     private var ShowNewsType by pref.stringSet()
 
     fun readShowNewsType(deleteUnknownSource: Boolean = true): Set<GeneralNews.PostSource> {
@@ -22,4 +28,31 @@ object AppPref : BasePref() {
     }
 
     var DefaultShowNewsInBrowser by pref.boolean(defValue = false)
+
+    private var CustomStartTermDateMills by pref.long(CUSTOM_START_TERM_DATE_MILLS, DEFAULT_TERM_DATE_MILLS)
+
+    private var CustomEndTermDateMills by pref.long(CUSTOM_END_TERM_DATE_MILLS, DEFAULT_TERM_DATE_MILLS)
+
+    @Synchronized
+    fun saveCustomTermDate(termDate: TermDate) {
+        CustomStartTermDateMills = termDate.startDate.time
+        CustomEndTermDateMills = termDate.endDate.time
+    }
+
+    @Synchronized
+    fun clearCustomTermDate(termDate: TermDate) {
+        remove(CUSTOM_START_TERM_DATE_MILLS)
+        remove(CUSTOM_END_TERM_DATE_MILLS)
+    }
+
+    @Synchronized
+    fun readSavedCustomTermDate(): TermDate? {
+        val startMills = CustomStartTermDateMills
+        val endMills = CustomEndTermDateMills
+        return if (startMills == DEFAULT_TERM_DATE_MILLS || endMills == DEFAULT_TERM_DATE_MILLS) {
+            null
+        } else {
+            TermDate(Date(startMills), Date(endMills))
+        }
+    }
 }

@@ -92,6 +92,12 @@ object CoursesDBHelper {
         clearIndex()
     }
 
+    fun clearAll() {
+        clearCourseScore()
+        clearAllCourseHistory()
+        clearAllCoursesInfo()
+    }
+
     @Dao
     interface CoursesDataDao {
         @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.io.dbHelpers.JwcDBHelper
+import tool.xfy9326.naucourses.utils.compute.TimeUtils
 import java.io.Serializable
 import java.util.*
 
@@ -14,13 +15,16 @@ data class TermDate(
     @ColumnInfo(name = Constants.DB.COLUMN_ID)
     val id: Int,
     // 周数为 0 表示假期
-    val currentWeekNum: Int,
+    var currentWeekNum: Int,
     val startDate: Date,
     val endDate: Date,
-    val inVacation: Boolean
+    var inVacation: Boolean
 ) : Serializable {
     constructor(currentWeekNum: Int, startDate: Date, endDate: Date, inVacation: Boolean = (currentWeekNum <= 0)) :
             this(Constants.DB.DEFAULT_ID, currentWeekNum, startDate, endDate, inVacation)
+
+    constructor(startDate: Date, endDate: Date) :
+            this(TimeUtils.getWeekNum(startDate, endDate), startDate, endDate)
 
     init {
         if (currentWeekNum < 0 || currentWeekNum > Constants.Course.MAX_WEEK_NUM_SIZE) {
@@ -29,6 +33,11 @@ data class TermDate(
         if (endDate.time <= startDate.time) {
             throw IllegalArgumentException("Term Info Term Start And End Date Error! Start Date: $startDate  End Date: $endDate")
         }
+    }
+
+    fun refreshCurrentWeekNum() {
+        currentWeekNum = TimeUtils.getWeekNum(startDate, endDate)
+        inVacation = currentWeekNum <= 0
     }
 
     fun getTerm(): Term {

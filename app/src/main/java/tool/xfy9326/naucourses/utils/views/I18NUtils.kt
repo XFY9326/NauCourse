@@ -7,6 +7,7 @@ import tool.xfy9326.naucourses.providers.beans.jwc.StudentLearningProcess.Course
 import tool.xfy9326.naucourses.providers.beans.jwc.StudentLearningProcess.SubjectType
 import tool.xfy9326.naucourses.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourses.ui.models.activity.LoginViewModel.LoadingProcess
+import tool.xfy9326.naucourses.ui.models.fragment.CourseArrangeViewModel.CourseArrangeNotifyType
 
 object I18NUtils {
     fun getErrorMsgResId(errorReason: ErrorReason): Int? =
@@ -51,7 +52,7 @@ object I18NUtils {
             ContentErrorReason.UNKNOWN -> R.string.unknown_error
         }
 
-    fun getCourseType(courseType: CourseType): Int =
+    fun getCourseTypeResId(courseType: CourseType): Int =
         when (courseType) {
             CourseType.COMPULSORY -> R.string.course_type_compulsory
             CourseType.MAJOR_SELECTIVE -> R.string.course_type_major_selective
@@ -59,11 +60,18 @@ object I18NUtils {
             CourseType.PRACTICAL -> R.string.course_type_practical
         }
 
-    fun getLearningProcessSubjectType(subjectType: SubjectType): Int =
+    fun getLearningProcessSubjectTypeResId(subjectType: SubjectType): Int =
         when (subjectType) {
             SubjectType.TARGET -> R.string.learning_process_target_credit
             SubjectType.REVISED -> R.string.learning_process_revised_credit
             SubjectType.BALANCE -> R.string.learning_process_balance_credit
             SubjectType.BONUS -> R.string.learning_process_bonus_credit
+        }
+
+    fun getTodayCourseNotifyTypeResId(arrangeNotifyType: CourseArrangeNotifyType): Int =
+        when (arrangeNotifyType) {
+            CourseArrangeNotifyType.COURSE_OR_TERM_DATA_EMPTY -> R.string.today_course_data_empty
+            CourseArrangeNotifyType.LOADING_DATA -> R.string.today_course_loading
+            CourseArrangeNotifyType.NO_TODAY_COURSE -> R.string.today_course_no_course
         }
 }

@@ -51,6 +51,11 @@ object JwcDBHelper {
         clearIndex()
     }
 
+    fun clearAll() {
+        clearExam()
+        clearTermDate()
+    }
+
     @Dao
     interface TermDateDataDao {
         @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -8,18 +8,13 @@ import tool.xfy9326.naucourses.network.clients.base.LoginInfo
 import tool.xfy9326.naucourses.network.clients.base.LoginResponse
 import tool.xfy9326.naucourses.network.clients.tools.SSONetworkTools
 import tool.xfy9326.naucourses.utils.secure.AccountUtils
-import kotlin.properties.Delegates
 
 object SSONetworkManager {
-    private var hasLogin by Delegates.notNull<Boolean>()
     private lateinit var loginInfo: LoginInfo
 
     init {
-        hasLogin = if (UserPref.HasLogin) {
+        if (UserPref.HasLogin) {
             loginInfo = AccountUtils.readUserInfo().toLoginInfo()
-            true
-        } else {
-            false
         }
         SSONetworkTools.initInstance(App.instance.cacheDir.absolutePath)
     }
@@ -41,11 +36,7 @@ object SSONetworkManager {
     }
 
     fun getClient(clientType: ClientType) = synchronized(this) {
-        if (hasLogin) {
-            clientMap[clientType]?.value!!
-        } else {
-            throw IllegalStateException("You Should Login Before Use Client! Client Type: $clientType")
-        }
+        clientMap[clientType]?.value!!
     }
 
     private fun setLoginInfo(loginInfo: LoginInfo) {
@@ -58,28 +49,16 @@ object SSONetworkManager {
     }
 
     fun ssoLogin(loginInfo: LoginInfo): LoginResponse = synchronized(this) {
-        if (!hasLogin) {
-            hasLogin = true
-            setLoginInfo(loginInfo)
-            val result = (getClient(ClientType.SSO)).login()
-            if (!result.isSuccess) {
-                hasLogin = false
-                clearSSOCacheAndCookies()
-            }
-            result
-        } else {
-            throw IllegalStateException("You Should Logout Before Login!")
+        setLoginInfo(loginInfo)
+        val result = (getClient(ClientType.SSO)).login()
+        if (!result.isSuccess) {
+            clearSSOCacheAndCookies()
         }
+        result
     }
 
     fun ssoLogout(): Boolean = synchronized(this) {
-        if (hasLogin) {
-            val result = (getClient(ClientType.SSO)).logout()
-            hasLogin = false
-            return result
-        } else {
-            throw IllegalStateException("You Should Login Before Logout!")
-        }
+        return (getClient(ClientType.SSO)).logout()
     }
 
     fun clearSSOCacheAndCookies() {

@@ -5,11 +5,16 @@ import android.content.Intent
 import android.os.Bundle
 import tool.xfy9326.naucourses.utils.secure.AccountUtils
 
+
 class SplashActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        selectStartActivity()
         super.onCreate(savedInstanceState)
+        if (intent.flags and Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT != 0) {
+            finish()
+        } else {
+            selectStartActivity()
+        }
     }
 
     private fun selectStartActivity() {

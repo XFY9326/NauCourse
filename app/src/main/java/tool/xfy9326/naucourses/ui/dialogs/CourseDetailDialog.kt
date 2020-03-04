@@ -12,7 +12,6 @@ import kotlinx.android.synthetic.main.view_course_detail_item.view.*
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.beans.CourseDetail
-import tool.xfy9326.naucourses.beans.CourseTimeDuration
 import tool.xfy9326.naucourses.utils.compute.TimeUtils
 import tool.xfy9326.naucourses.utils.views.ColorUtils
 import java.text.SimpleDateFormat
@@ -58,11 +57,11 @@ class CourseDetailDialog : DialogFragment() {
             tv_courseName.text = courseDetail.course.name
 
             val timePeriod = TimeUtils.getCourseDateTimePeriod(
-                courseDetail.termDate.startDate, courseDetail.courseCell.weekNum, courseDetail.courseCell.weekDayNum,
-                CourseTimeDuration.convertToTimePeriod(courseDetail.courseCell.timeDuration)
+                courseDetail.termDate.startDate, courseDetail.weekNum, courseDetail.weekDayNum,
+                courseDetail.timePeriod
             )
             tv_courseCellTime.text = DATE_FORMAT_MD_HM_CH.format(timePeriod.startDateTime)
-            tv_courseCellLocation.text = courseDetail.courseCell.courseLocation
+            tv_courseCellLocation.text = courseDetail.courseLocation
 
             val colorDark = resources.getColor(R.color.colorCourseTextDark, null)
             val colorLight = resources.getColor(R.color.colorCourseTextLight, null)

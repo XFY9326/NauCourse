@@ -90,35 +90,33 @@ abstract class BaseContentInfo<T : Enum<*>, P : Enum<*>> {
         params: Set<P> = emptySet(),
         loadCachedData: Boolean = false,
         forceRefresh: Boolean = false
-    ):
-            InfoResult<E> =
-        withContext(Dispatchers.Default) {
-            if (loadCachedData && forceRefresh) {
-                throw IllegalArgumentException("You Can't Do Load Cache And Refresh At The Same Time!")
-            }
-            infoMutex.withLock {
-                val hasCachedData = hasCachedItem(type)
-                val cacheExpire = onGetCacheExpire()
-                if (loadCachedData) {
-                    if (hasCachedData) {
-                        InfoResult(true, onReadCache(getCachedItem(type)!!) as E)
-                    } else {
-                        InfoResult(false, errorReason = ContentErrorReason.EMPTY_DATA)
-                    }
-                } else if (!forceRefresh && hasCachedData && !isCacheExpired(type, params, cacheExpire)) {
+    ): InfoResult<E> = withContext(Dispatchers.Default) {
+        if (loadCachedData && forceRefresh) {
+            throw IllegalArgumentException("You Can't Do Load Cache And Refresh At The Same Time!")
+        }
+        infoMutex.withLock {
+            val hasCachedData = hasCachedItem(type)
+            val cacheExpire = onGetCacheExpire()
+            if (loadCachedData) {
+                if (hasCachedData) {
                     InfoResult(true, onReadCache(getCachedItem(type)!!) as E)
                 } else {
-                    val result = getInfoContent(type, params)
-                    if (result.isSuccess) {
-                        onSaveResult(type, params, result.contentData!! as E)
-                        onSaveCache(type, params, result.contentData as E)
-                        InfoResult(true, result.contentData)
-                    } else {
-                        InfoResult(false, errorReason = result.contentErrorResult)
-                    }
+                    InfoResult(false, errorReason = ContentErrorReason.EMPTY_DATA)
+                }
+            } else if (!forceRefresh && hasCachedData && !isCacheExpired(type, params, cacheExpire)) {
+                InfoResult(true, onReadCache(getCachedItem(type)!!) as E)
+            } else {
+                val result = getInfoContent(type, params)
+                if (result.isSuccess) {
+                    onSaveResult(type, params, result.contentData!! as E)
+                    onSaveCache(type, params, result.contentData as E)
+                    InfoResult(true, result.contentData)
+                } else {
+                    InfoResult(false, errorReason = result.contentErrorResult)
                 }
             }
         }
+    }
 
     @Synchronized
     fun clearCacheInfo() = cacheMap.clear()

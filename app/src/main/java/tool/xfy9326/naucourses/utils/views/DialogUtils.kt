@@ -23,14 +23,36 @@ object DialogUtils {
             background = context.getDrawable(R.drawable.bg_dialog)
         }.create()
 
+    fun createOpenSourceLicenseDialog(context: Context): AlertDialog =
+        MaterialAlertDialogBuilder(context).apply {
+            setTitle(R.string.open_source_license)
+            setMessage(
+                IOUtils.readAssetFileAsText(
+                    context,
+                    IOUtils.ASSETS_PATH_OPEN_SOURCE_LICENSE
+                )
+            )
+            setPositiveButton(android.R.string.yes, null)
+            background = context.getDrawable(R.drawable.bg_dialog)
+        }.create()
+
     fun createForgetPasswordDialog(context: Context): AlertDialog =
         MaterialAlertDialogBuilder(context).apply {
             setTitle(R.string.forget_password)
             setMessage(R.string.forget_password_help)
             setNeutralButton(R.string.find_password) { _: DialogInterface, _: Int ->
-                IntentUtils.launchUrlInBrowser(context, Constants.Url.FORGET_PASSWORD)
+                IntentUtils.launchUrlInBrowser(context, Constants.Others.FORGET_PASSWORD)
             }
             setPositiveButton(android.R.string.yes, null)
+            background = context.getDrawable(R.drawable.bg_dialog)
+        }.create()
+
+    fun createLogoutAttentionDialog(context: Context, logoutListener: DialogInterface.OnClickListener): AlertDialog =
+        MaterialAlertDialogBuilder(context).apply {
+            setTitle(R.string.logout)
+            setMessage(R.string.logout_msg)
+            setNegativeButton(android.R.string.cancel, null)
+            setPositiveButton(android.R.string.yes, logoutListener)
             background = context.getDrawable(R.drawable.bg_dialog)
         }.create()
 }

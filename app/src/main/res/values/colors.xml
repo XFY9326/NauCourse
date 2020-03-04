@@ -5,14 +5,16 @@
     <color name="colorAccent">#536DFE</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
-    <color name="colorPrimaryTextWhenDark">#FFFFFF</color>
-    <color name="colorSecondaryTextWhenDark">#C7C7C7</color>
     <color name="colorCourseTimeDefault">#ACACAC</color>
     <color name="colorCourseTimeHighLight">#000000</color>
     <color name="colorBaseIcon">#858585</color>
     <color name="colorWindowsBackground">@color/design_default_color_background</color>
     <color name="colorDivider">#757575</color>
 
+    <color name="colorPrimaryTextWhenDark">#FFFFFF</color>
+    <color name="colorSecondaryTextWhenDark">#C7C7C7</color>
+    <color name="colorWeekNumBackground">#00897B</color>
+    <color name="colorProcessBarForeground">#2196F3</color>
     <color name="colorProcessBarBackground">#802196F3</color>
     <color name="colorBaseIconWhenDarkBackground">#FFFFFF</color>
     <color name="colorCourseTextLight">#FFFFFF</color>

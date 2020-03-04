@@ -1,19 +1,26 @@
 package tool.xfy9326.naucourses.utils.compute
 
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.beans.CourseCell
+import tool.xfy9326.naucourses.beans.CourseItem
 import tool.xfy9326.naucourses.beans.CourseTable
 import tool.xfy9326.naucourses.beans.CourseTimeDuration
 import tool.xfy9326.naucourses.providers.beans.jwc.Course
 import tool.xfy9326.naucourses.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourses.providers.beans.jwc.CourseTime
+import tool.xfy9326.naucourses.providers.beans.jwc.TermDate
+import tool.xfy9326.naucourses.providers.store.CourseTableStore
 import java.util.*
 import kotlin.collections.ArrayList
 
 object CourseUtils {
     private const val NEXT_COURSE_BEFORE_COURSE_END_BASED_MINUTE = 10
 
-    fun getCourseTableByWeekNum(courseSet: CourseSet, weekNum: Int, maxWeekNum: Int, startWeekDayNum: Int, endWeekDayNum: Int): CourseTable {
+    private fun getCourseTableByWeekNum(courseSet: CourseSet, weekNum: Int, maxWeekNum: Int, startWeekDayNum: Int, endWeekDayNum: Int): CourseTable {
         if (weekNum < Constants.Course.MIN_WEEK_NUM_SIZE || weekNum > maxWeekNum) {
             throw IllegalArgumentException("Week Num Error! Num: $weekNum")
         }
@@ -61,38 +68,76 @@ object CourseUtils {
         return CourseTable(courseTable.toTypedArray())
     }
 
-    fun getTodayCourse(courseSet: CourseSet, weekNum: Int, nowTime: Date = Date()): Array<Triple<Course, CourseTime, CourseTimeDuration>> {
+    fun getTomorrowCourse(courseSet: CourseSet, termDate: TermDate): Array<CourseItem> {
         val calendarNow = Calendar.getInstance(Locale.CHINA).apply {
-            time = nowTime
+            timeInMillis = System.currentTimeMillis()
         }
-        val nowWeekDayNum = TimeUtils.getWeekDayNum(calendarNow)
-        val courses = courseSet.courses
-        val courseTable = ArrayList<Triple<Course, CourseTime, CourseTimeDuration>>()
-        for (course in courses) {
-            for (time in course.timeSet) {
-                if (time.weekDay.toInt() == nowWeekDayNum && time.isWeekNumTrue(weekNum)) {
-                    time.coursesNumArray.timePeriods.forEach {
-                        courseTable.add(Triple(course, time, CourseTimeDuration.parseTimePeriod(it)))
+        calendarNow.add(Calendar.DATE, 1)
+        return getCourseInDay(courseSet, termDate, calendarNow)
+    }
+
+    fun getTodayCourse(courseSet: CourseSet, termDate: TermDate): Array<CourseItem> {
+        val calendarNow = Calendar.getInstance(Locale.CHINA).apply {
+            timeInMillis = System.currentTimeMillis()
+        }
+        return getCourseInDay(courseSet, termDate, calendarNow)
+    }
+
+    private fun getCourseInDay(courseSet: CourseSet, termDate: TermDate, calendarNow: Calendar): Array<CourseItem> {
+        termDate.refreshCurrentWeekNum()
+        return if (termDate.inVacation) {
+            emptyArray()
+        } else {
+            val nowWeekDayNum = TimeUtils.getWeekDayNum(calendarNow)
+            val courses = courseSet.courses
+            val courseTable = ArrayList<CourseItem>()
+            for (course in courses) {
+                for (time in course.timeSet) {
+                    if (time.weekDay.toInt() == nowWeekDayNum && time.isWeekNumTrue(termDate.currentWeekNum)) {
+                        time.coursesNumArray.timePeriods.forEach {
+                            courseTable.add(
+                                CourseItem(
+                                    course, time, it, TimeUtils.getCourseDateTimePeriod(calendarNow.time, it), nowWeekDayNum.toShort()
+                                )
+                            )
+                        }
                     }
                 }
             }
+            courseTable.sortedBy {
+                it.dateTimePeriod.startDateTime
+            }.toTypedArray()
         }
-        return courseTable.toTypedArray()
     }
 
-    fun getTodayNextCourse(
-        todayCourse: Array<Triple<Course, CourseTime, CourseTimeDuration>>,
-        nowTime: Date = Date()
-    ): Int? {
+    fun getNotThisWeekCourse(courseSet: CourseSet, termDate: TermDate): Array<Pair<Course, CourseTime>> {
+        termDate.refreshCurrentWeekNum()
+        return if (termDate.inVacation) {
+            emptyArray()
+        } else {
+            val courses = courseSet.courses
+            val courseTable = ArrayList<Pair<Course, CourseTime>>()
+            for (course in courses) {
+                for (time in course.timeSet) {
+                    if (!time.isWeekNumTrue(termDate.currentWeekNum)) {
+                        time.coursesNumArray.timePeriods.forEach { _ ->
+                            courseTable.add(Pair(course, time))
+                        }
+                    }
+                }
+            }
+            courseTable.toTypedArray()
+        }
+    }
+
+    fun getTodayNextCoursePosition(todayCourse: Array<CourseItem>): Int? {
         val timeOffset = NEXT_COURSE_BEFORE_COURSE_END_BASED_MINUTE * 60 * 1000
         var position = 0
 
-        for (entry in todayCourse) {
-            val dateTimePeriod = TimeUtils.getCourseDateTimePeriod(
-                nowTime,
-                CourseTimeDuration.convertToTimePeriod(entry.third)
-            )
-            if (dateTimePeriod.endDateTime.time - timeOffset >= nowTime.time) {
+        val nowTime = Date()
+
+        for (courseItem in todayCourse) {
+            if (courseItem.dateTimePeriod.endDateTime.time - timeOffset >= nowTime.time) {
                 break
             }
             position++
@@ -103,4 +148,24 @@ object CourseUtils {
             position
         }
     }
+
+    suspend fun generateAllCourseTable(courseSet: CourseSet, termDate: TermDate, maxWeekNum: Int): Array<CourseTable> =
+        coroutineScope {
+            val result = arrayOfNulls<CourseTable>(maxWeekNum)
+            val waitArr = arrayOfNulls<Deferred<CourseTable>>(maxWeekNum)
+
+            val startWeekDayNum = TimeUtils.getWeekDayNum(termDate.startDate)
+            val endWeekDayNum = TimeUtils.getWeekDayNum(termDate.endDate)
+            for (i in 0 until maxWeekNum) {
+                waitArr[i] = async {
+                    getCourseTableByWeekNum(courseSet, i + 1, maxWeekNum, startWeekDayNum, endWeekDayNum)
+                }
+            }
+            for (i in 0 until maxWeekNum) {
+                result[i] = waitArr[i]?.await()
+            }
+            val output = result.requireNoNulls()
+            launch { CourseTableStore.saveStore(output) }
+            output
+        }
 }

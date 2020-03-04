@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_todayCourse"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_general_toolbar" />
+
+    <tool.xfy9326.naucourses.ui.views.widgets.AdvancedSwipeRefreshLayout
+        android:id="@+id/asl_todayCourse"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        app:color_scheme="@array/refresh_layout_color_scheme"
+        app:trigger_async_distance="@integer/default_refresh_layout_trigger_async_distance">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/view_card_next_course" />
+
+                <include layout="@layout/view_card_today_course" />
+
+                <include layout="@layout/view_card_tomorrow_course" />
+
+                <include layout="@layout/view_card_not_this_week_course" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </tool.xfy9326.naucourses.ui.views.widgets.AdvancedSwipeRefreshLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

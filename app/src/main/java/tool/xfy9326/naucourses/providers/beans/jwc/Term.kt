@@ -36,6 +36,15 @@ data class Term(
         }
     }
 
+    operator fun compareTo(term: Term): Int {
+        val startCompare = startYear.compareTo(term.startYear)
+        return if (startCompare == 0) {
+            termNum.compareTo(term.termNum)
+        } else {
+            startCompare
+        }
+    }
+
     override fun hashCode(): Int {
         return toString().hashCode()
     }

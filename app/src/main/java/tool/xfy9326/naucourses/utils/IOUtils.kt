@@ -9,6 +9,7 @@ import java.util.zip.GZIPOutputStream
 
 object IOUtils {
     const val ASSETS_PATH_EULA_LICENSE = "EULA.txt"
+    const val ASSETS_PATH_OPEN_SOURCE_LICENSE = "LICENSE"
 
     fun readAssetFileAsText(context: Context, path: String): String =
         context.assets.open(path).use {
@@ -77,6 +78,18 @@ object IOUtils {
 
     fun deleteFile(path: String): Boolean {
         val file = File(path)
-        return file.exists() && file.delete()
+        return if (file.exists()) {
+            if (file.isDirectory) {
+                var result = true
+                file.listFiles()?.forEach {
+                    if (!deleteFile(it.absolutePath)) result = false
+                }
+                result
+            } else {
+                file.delete()
+            }
+        } else {
+            false
+        }
     }
 }

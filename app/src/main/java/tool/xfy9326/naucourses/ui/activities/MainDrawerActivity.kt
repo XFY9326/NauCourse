@@ -1,11 +1,13 @@
 package tool.xfy9326.naucourses.ui.activities
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.navigation.NavigationView
@@ -15,11 +17,14 @@ import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourses.ui.activities.base.ViewModelActivity
+import tool.xfy9326.naucourses.ui.dialogs.FullScreenLoadingDialog
+import tool.xfy9326.naucourses.ui.fragments.CourseArrangeFragment
 import tool.xfy9326.naucourses.ui.fragments.CourseTableFragment
 import tool.xfy9326.naucourses.ui.fragments.NewsFragment
-import tool.xfy9326.naucourses.ui.fragments.TodayCourseFragment
 import tool.xfy9326.naucourses.ui.fragments.base.DrawerToolbarFragment
 import tool.xfy9326.naucourses.ui.models.activity.MainDrawerViewModel
+import tool.xfy9326.naucourses.utils.BaseUtils
+import tool.xfy9326.naucourses.utils.views.DialogUtils
 
 class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationView.OnNavigationItemSelectedListener {
     companion object {
@@ -27,14 +32,14 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
 
         enum class FragmentType {
             COURSE_TABLE,
-            TODAY_COURSE,
+            COURSE_ARRANGE,
             NEWS,
             NONE
         }
 
         private val FRAGMENTS = mapOf<FragmentType, DrawerToolbarFragment<*>>(
             FragmentType.COURSE_TABLE to CourseTableFragment(),
-            FragmentType.TODAY_COURSE to TodayCourseFragment(),
+            FragmentType.COURSE_ARRANGE to CourseArrangeFragment(),
             FragmentType.NEWS to NewsFragment()
         )
     }
@@ -63,6 +68,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         nav_main.setNavigationItemSelectedListener(this)
         nav_main.getHeaderView(DEFAULT_NAV_HEADER_INDEX).setOnClickListener {
             startActivity(Intent(this, UserInfoActivity::class.java))
+            drawer_main.closeDrawers()
         }
     }
 
@@ -108,13 +114,22 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_navTodayCourse -> showFragment(FragmentType.TODAY_COURSE)
+            R.id.menu_navCourseArrange -> showFragment(FragmentType.COURSE_ARRANGE)
             R.id.menu_navCourseTable -> showFragment(FragmentType.COURSE_TABLE)
             R.id.menu_navNews -> showFragment(FragmentType.NEWS)
+            R.id.menu_navAbout -> startActivity(Intent(this, AboutActivity::class.java))
+            R.id.menu_navLogout -> logout()
             R.id.menu_navExit -> finishAndRemoveTask()
         }
         drawer_main.closeDrawers()
         return true
+    }
+
+    private fun logout() {
+        DialogUtils.createLogoutAttentionDialog(this, DialogInterface.OnClickListener { _, _ ->
+            FullScreenLoadingDialog().show(supportFragmentManager, FullScreenLoadingDialog.LOADING_DIALOG_TAG)
+            getViewModel().requestLogout()
+        }).show()
     }
 
     override fun bindViewModel(viewModel: MainDrawerViewModel) {
@@ -125,6 +140,15 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         viewModel.studentInfo.observe(this, Observer {
             nav_main.getHeaderView(DEFAULT_NAV_HEADER_INDEX).tv_userId.text = it.personalInfo.stuId.second
             nav_main.getHeaderView(DEFAULT_NAV_HEADER_INDEX).tv_userName.text = StudentInfo.trimExtra(it.personalInfo.name.second)
+        })
+        viewModel.logoutSuccess.observeEvent(this, Observer {
+            if (it) {
+                val loadingFragment = supportFragmentManager.findFragmentByTag(FullScreenLoadingDialog.LOADING_DIALOG_TAG)
+                if (loadingFragment != null) {
+                    (loadingFragment as DialogFragment).dismissAllowingStateLoss()
+                }
+                BaseUtils.restartApplication(this)
+            }
         })
     }
 

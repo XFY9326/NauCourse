@@ -40,6 +40,10 @@ object AppDBHelper {
         clearIndex()
     }
 
+    fun clearAll() {
+        clearGeneralNewsSet()
+    }
+
     @Dao
     interface NewsDataDao {
         @Insert(onConflict = OnConflictStrategy.REPLACE)

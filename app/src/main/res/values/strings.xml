@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Nau课程表</string>
+    <string name="app_name">Nau课程表 Test</string>
+    <string name="app_description">南京审计大学非官方开源课程表</string>
     <string name="welcome_app">欢迎使用Nau课程表</string>
     <string name="login_to_continue">登录以继续操作</string>
     <string name="user_id">用户ID：</string>
@@ -83,4 +84,37 @@
     <string name="course_type_major_selective">专选课</string>
     <string name="course_type_optional">任选课</string>
     <string name="course_type_practical">实践课</string>
+    <string name="about">关于</string>
+    <string name="license">协议</string>
+    <string name="open_source_license">开源协议</string>
+    <string name="version">版本</string>
+    <string name="version_detail">v%1$s (%2$d)</string>
+    <string name="open_source_website">开源网站</string>
+    <string name="open_source_website_url" translatable="false">https://xfy9326.github.io/NauCourse/</string>
+    <string name="developer">开发者</string>
+    <string name="author_title">作者</string>
+    <string name="author" translatable="false">逸雪飞扬 (XFY9326)</string>
+    <string name="email_title">邮箱</string>
+    <string name="email" translatable="false">1069665464@qq.com</string>
+    <string name="today_course_data_empty">课程数据为空！</string>
+    <string name="today_course_loading">课程数据正在加载中！</string>
+    <string name="today_course_no_course">今日暂无课程</string>
+    <string name="term">%1$d-%2$d 第%3$d学期</string>
+    <string name="feed_back">反馈</string>
+    <string name="online_feedback_back">问题反馈</string>
+    <string name="online_feedback_back_url" translatable="false">https://support.qq.com/products/114856?</string>
+    <string name="qq_group_title">QQ反馈群</string>
+    <string name="qq_group" translatable="false">704668624</string>
+    <string name="donate">捐赠</string>
+    <string name="donate_summary">开发App不易，可否赞助一杯咖啡钱？</string>
+    <string name="no_next_course">今日已无待上课程</string>
+    <string name="no_today_course">今日无课程</string>
+    <string name="no_tomorrow_course">明日无课程</string>
+    <string name="tomorrow_course">明日课程</string>
+    <string name="course_arrange">课程安排</string>
+    <string name="not_this_week_course">非本周课程</string>
+    <string name="no_not_this_week_course">所有课程本周都有课</string>
+    <string name="course_simple_time">周%1$s %2$s %3$s</string>
+    <string name="logout">注销</string>
+    <string name="logout_msg">您是否确定要继续注销登录并清空所有用户数据？</string>
 </resources>

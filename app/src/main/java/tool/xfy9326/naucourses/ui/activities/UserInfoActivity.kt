@@ -13,11 +13,13 @@ import kotlinx.android.synthetic.main.view_card_rank_info.*
 import kotlinx.android.synthetic.main.view_card_user_info.*
 import kotlinx.android.synthetic.main.view_grid_text_item.view.*
 import kotlinx.android.synthetic.main.view_learning_process_item.view.*
+import kotlinx.coroutines.*
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourses.providers.beans.jwc.StudentLearningProcess
 import tool.xfy9326.naucourses.providers.beans.jwc.StudentPersonalInfo
+import tool.xfy9326.naucourses.providers.beans.jwc.StudentPersonalInfo.Companion.toPlainText
 import tool.xfy9326.naucourses.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourses.ui.models.activity.UserInfoViewModel
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.enableHomeButton
@@ -25,6 +27,7 @@ import tool.xfy9326.naucourses.utils.views.I18NUtils
 
 class UserInfoActivity : ViewModelActivity<UserInfoViewModel>() {
     private lateinit var inflater: LayoutInflater
+    private val userInfoScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,22 +51,24 @@ class UserInfoActivity : ViewModelActivity<UserInfoViewModel>() {
 
     @Synchronized
     private fun updateView(studentInfo: StudentInfo) {
-        updateBaseInfo(studentInfo.personalInfo)
-        updateLearningProcess(studentInfo.learningProcess)
-        updateCreditInfo(studentInfo.creditInfo)
-        updateRankInfo(studentInfo.rankingInfo)
+        userInfoScope.launch {
+            launch { updateBaseInfo(studentInfo.personalInfo) }
+            launch { updateLearningProcess(studentInfo.learningProcess) }
+            launch { updateCreditInfo(studentInfo.creditInfo) }
+            launch { updateRankInfo(studentInfo.rankingInfo) }
+        }
     }
 
     @SuppressLint("SetTextI18n")
     private fun updateBaseInfo(studentPersonalInfo: StudentPersonalInfo) {
-        tv_userInfoId.text = studentPersonalInfo.stuId.first + studentPersonalInfo.stuId.second
-        tv_userInfoName.text = studentPersonalInfo.name.first + studentPersonalInfo.name.second
-        tv_userInfoGrade.text = studentPersonalInfo.grade.first + studentPersonalInfo.grade.second
-        tv_userInfoCollege.text = studentPersonalInfo.college.first + studentPersonalInfo.college.second
-        tv_userInfoMajor.text = studentPersonalInfo.major.first + studentPersonalInfo.major.second
-        tv_userInfoMajorDirection.text = studentPersonalInfo.majorDirection.first + studentPersonalInfo.majorDirection.second
-        tv_userInfoTrainingDirection.text = studentPersonalInfo.trainingDirection.first + studentPersonalInfo.trainingDirection.second
-        tv_userInfoCurrentClass.text = studentPersonalInfo.currentClass.first + studentPersonalInfo.currentClass.second
+        tv_userInfoId.text = studentPersonalInfo.stuId.toPlainText()
+        tv_userInfoName.text = studentPersonalInfo.name.toPlainText()
+        tv_userInfoGrade.text = studentPersonalInfo.grade.toPlainText()
+        tv_userInfoCollege.text = studentPersonalInfo.college.toPlainText()
+        tv_userInfoMajor.text = studentPersonalInfo.major.toPlainText()
+        tv_userInfoMajorDirection.text = studentPersonalInfo.majorDirection.toPlainText()
+        tv_userInfoTrainingDirection.text = studentPersonalInfo.trainingDirection.toPlainText()
+        tv_userInfoCurrentClass.text = studentPersonalInfo.currentClass.toPlainText()
     }
 
     @SuppressLint("SetTextI18n")
@@ -72,14 +77,14 @@ class UserInfoActivity : ViewModelActivity<UserInfoViewModel>() {
         for (process in learningProcess) {
             layout_userLearningProcess.addViewInLayout(
                 inflater.inflate(R.layout.view_learning_process_item, layout_userLearningProcess, false).apply {
-                    tv_processCourseType.setText(I18NUtils.getCourseType(process.courseType))
+                    tv_processCourseType.setText(I18NUtils.getCourseTypeResId(process.courseType))
                     pb_processBar.progress = process.progress
                     tv_processPercent.text = process.progress.toString() + Constants.PERCENT
                     val views = arrayOfNulls<View>(process.subjects.size)
                     var i = 0
                     for (entry in process.subjects) {
                         views[i++] = inflater.inflate(R.layout.view_grid_text_item, gl_processCourseType, false).apply {
-                            tv_gridItemText.text = getString(I18NUtils.getLearningProcessSubjectType(entry.key), entry.value)
+                            tv_gridItemText.text = getString(I18NUtils.getLearningProcessSubjectTypeResId(entry.key), entry.value)
                         }
                     }
                     gl_processCourseType.replaceAllViews(views.requireNoNulls(), false)
@@ -110,5 +115,10 @@ class UserInfoActivity : ViewModelActivity<UserInfoViewModel>() {
             }
         }
         gl_userRankInfo.replaceAllViews(views.requireNoNulls())
+    }
+
+    override fun onDestroy() {
+        userInfoScope.cancel()
+        super.onDestroy()
     }
 }

@@ -1,7 +1,13 @@
 package tool.xfy9326.naucourses.utils.secure
 
-import tool.xfy9326.naucourses.io.prefs.UserPref
+import tool.xfy9326.naucourses.App
+import tool.xfy9326.naucourses.io.dbHelpers.AppDBHelper
+import tool.xfy9326.naucourses.io.dbHelpers.CoursesDBHelper
+import tool.xfy9326.naucourses.io.dbHelpers.JwcDBHelper
+import tool.xfy9326.naucourses.io.dbHelpers.NetworkDBHelper
+import tool.xfy9326.naucourses.io.prefs.*
 import tool.xfy9326.naucourses.network.clients.base.LoginInfo
+import tool.xfy9326.naucourses.utils.IOUtils
 
 object AccountUtils {
     fun validateUserLoginStatus(): Boolean = UserPref.HasLogin
@@ -23,11 +29,31 @@ object AccountUtils {
         }
     }
 
-    fun clearUserPw() = UserPref.remove(UserPref.USER_PASSWORD)
+    fun clearUserCache() {
+        IOUtils.deleteFile(App.instance.cacheDir.absolutePath)
+        IOUtils.deleteFile(App.instance.filesDir.absolutePath)
+        IOUtils.deleteFile(App.instance.codeCacheDir.absolutePath)
+        IOUtils.deleteFile(App.instance.noBackupFilesDir.absolutePath)
+
+        AppDBHelper.clearAll()
+        CoursesDBHelper.clearAll()
+        JwcDBHelper.clearAll()
+        NetworkDBHelper.clearAll()
+
+        GsonStoreVersionPref.clear()
+        InfoStoredTimePref.clear()
+        AppPref.clear()
+        CourseTablePref.clear()
+        UserPref.clear()
+    }
 
     fun saveUserInfo(userInfo: UserInfo) {
         UserPref.UserId = userInfo.userId
         UserPref.UserPassword = userInfo.userPw
+    }
+
+    fun saveUserId(userId: String) {
+        UserPref.UserId = userId
     }
 
     data class UserInfo(

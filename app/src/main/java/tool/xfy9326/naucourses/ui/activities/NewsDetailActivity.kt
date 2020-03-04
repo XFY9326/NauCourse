@@ -96,7 +96,7 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>() {
         viewModel.newsDetail.observe(this, Observer {
             showNewsDetail(it)
         })
-        viewModel.errorNotifyType.observeSingle(this, Observer {
+        viewModel.errorNotifyType.observeEvent(this, Observer {
             showSnackBar(layout_newsDetail, I18NUtils.getContentErrorResId(it)!!)
         })
     }

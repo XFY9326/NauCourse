@@ -12,18 +12,10 @@ class UAInterceptor : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
-//        Log.d("SSONetwork", "UA: $globalUA")
-//        Log.d("SSONetwork", "Method: ${request.method} Url: ${request.url}")
-//        if (request.headers.size > 0) {
-//            Log.d("SSONetwork", "Header: ${request.headers}")
-//        }
         val requestBuilder = request.newBuilder()
         val headerBuilder = request.headers.newBuilder()
         headerBuilder[USER_AGENT] = globalUA
         requestBuilder.headers(headerBuilder.build())
         return chain.proceed(requestBuilder.build())
-//        val response = chain.proceed(requestBuilder.build())
-//        Log.d("SSONetwork", "Turn To: ${response.request.url} Status: ${response.code}")
-//        return response
     }
 }

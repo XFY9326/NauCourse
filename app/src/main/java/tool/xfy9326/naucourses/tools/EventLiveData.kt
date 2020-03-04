@@ -4,18 +4,22 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 
-// 针对只消费一次的事件，防止View重建时二次传递数值
-class SingleLiveData<T> : MutableLiveData<SingleLiveData.Event<T>> {
+// 针对只消费一次的事件，主要用于防止View重建时二次传递脏数据
+class EventLiveData<T> : MutableLiveData<EventLiveData.Event<T>> {
 
     constructor() : super()
 
     constructor(value: T) : super(Event(value))
 
-    fun postSingleValue(value: T) {
-        postValue(Event(value))
+    fun postEventValue(value: T) {
+        super.postValue(Event(value))
     }
 
-    fun observeSingle(owner: LifecycleOwner, observer: Observer<in T>) {
+    fun setEventValue(value: T) {
+        super.setValue(Event(value))
+    }
+
+    fun observeEvent(owner: LifecycleOwner, observer: Observer<in T>) {
         super.observe(owner, Observer {
             it.getContentIfNotHandled()?.let { value ->
                 observer.onChanged(value)
@@ -23,7 +27,7 @@ class SingleLiveData<T> : MutableLiveData<SingleLiveData.Event<T>> {
         })
     }
 
-    fun observeSingleForever(observer: Observer<in T>) {
+    fun observeEventForever(observer: Observer<in T>) {
         super.observeForever {
             it.getContentIfNotHandled()?.let { value ->
                 observer.onChanged(value)
@@ -32,9 +36,7 @@ class SingleLiveData<T> : MutableLiveData<SingleLiveData.Event<T>> {
     }
 
     class Event<out T>(private val content: T) {
-
-        var hasBeenHandled = false
-            private set
+        private var hasBeenHandled = false
 
         fun getContentIfNotHandled(): T? {
             return if (hasBeenHandled) {
@@ -44,7 +46,5 @@ class SingleLiveData<T> : MutableLiveData<SingleLiveData.Event<T>> {
                 content
             }
         }
-
-        fun peekContent(): T = content
     }
 }

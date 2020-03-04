@@ -38,6 +38,10 @@ object NetworkDBHelper {
         clearAllCookieData()
     }
 
+    fun clearAll() {
+        clearAllCookies()
+    }
+
     @Entity(tableName = TABLE_NAME, primaryKeys = [COLUMN_HOST, COLUMN_NAME])
     data class CookieData(
         @ColumnInfo(name = COLUMN_HOST)

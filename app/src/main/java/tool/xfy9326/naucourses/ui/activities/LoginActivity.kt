@@ -12,6 +12,7 @@ import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourses.ui.models.activity.LoginViewModel
+import tool.xfy9326.naucourses.utils.secure.AccountUtils
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.showSnackBar
 import tool.xfy9326.naucourses.utils.views.AnimUtils
 import tool.xfy9326.naucourses.utils.views.DialogUtils
@@ -25,10 +26,9 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
     override fun onCreateViewModel() = ViewModelProvider(this)[LoginViewModel::class.java]
 
     override fun initView(savedInstanceState: Bundle?, viewModel: LoginViewModel) {
-        //TODO
-        et_userId.setText("17013209")
-        et_userPassword.setText("262010")
-
+        AccountUtils.readSavedCacheUserId()?.let {
+            et_userId.setText(it)
+        }
         tv_EULALicense.setOnClickListener {
             DialogUtils.createUsingLicenseDialog(this).show()
         }
@@ -52,10 +52,10 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
     }
 
     override fun bindViewModel(viewModel: LoginViewModel) {
-        viewModel.cachedUserId.observeSingle(this, Observer {
+        viewModel.cachedUserId.observeEvent(this, Observer {
             et_userId.setText(it)
         })
-        viewModel.isLoginLoading.observeSingle(this, Observer {
+        viewModel.isLoginLoading.observeEvent(this, Observer {
             tv_loadingMsg.clear()
             et_userId.isEnabled = !it
             et_userPassword.isEnabled = !it
@@ -66,10 +66,10 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
 
             setLoadingAnimation(it)
         })
-        viewModel.errorReasonType.observeSingle(this, Observer {
+        viewModel.errorReasonType.observeEvent(this, Observer {
             showSnackBar(layout_activityLogin, I18NUtils.getErrorMsgResId(it)!!)
         })
-        viewModel.loginSuccess.observeSingle(this, Observer {
+        viewModel.loginSuccess.observeEvent(this, Observer {
             if (it) {
                 System.gc()
                 startActivity(Intent(this, MainDrawerActivity::class.java))
@@ -77,7 +77,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
                 finishAfterTransition()
             }
         })
-        viewModel.loginProcess.observeSingle(this, Observer {
+        viewModel.loginProcess.observeEvent(this, Observer {
             val resId = I18NUtils.getLoadingProcessResId(it)
             if (resId != null) {
                 tv_loadingMsg.setText(resId)

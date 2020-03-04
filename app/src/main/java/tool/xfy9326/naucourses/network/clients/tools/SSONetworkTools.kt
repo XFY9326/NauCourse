@@ -23,11 +23,11 @@ class SSONetworkTools private constructor() {
         lateinit var cacheDir: File
 
         // TimeUnit.SECONDS
-        private const val CONNECT_TIME_OUT = 20L
+        private const val CONNECT_TIME_OUT = 7L
         // TimeUnit.SECONDS
-        private const val READ_TIME_OUT = 10L
+        private const val READ_TIME_OUT = 8L
         // TimeUnit.SECONDS
-        private const val WRITE_TIME_OUT = 10L
+        private const val WRITE_TIME_OUT = 8L
 
         private const val MAX_CONNECTION_NUM = 15
 
