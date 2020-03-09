@@ -19,7 +19,7 @@
             app:color_scheme="@array/refresh_layout_color_scheme"
             app:trigger_async_distance="@integer/default_refresh_layout_trigger_async_distance">
 
-            <RelativeLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center">
@@ -29,15 +29,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:overScrollMode="never"
-                    app:empty_view="@id/view_list_empty"
+                    app:empty_view="@id/v_listEmpty"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                 <include
-                    android:id="@+id/view_list_empty"
+                    android:id="@+id/v_listEmpty"
                     layout="@layout/view_list_empty"
                     android:visibility="gone" />
 
-            </RelativeLayout>
+            </FrameLayout>
 
         </tool.xfy9326.naucourses.ui.views.widgets.AdvancedSwipeRefreshLayout>
 

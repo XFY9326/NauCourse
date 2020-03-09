@@ -6,8 +6,8 @@ import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.R
-import tool.xfy9326.naucourses.utils.IOUtils
-import tool.xfy9326.naucourses.utils.IntentUtils
+import tool.xfy9326.naucourses.utils.utility.IOUtils
+import tool.xfy9326.naucourses.utils.utility.IntentUtils
 
 object DialogUtils {
     fun createUsingLicenseDialog(context: Context): AlertDialog =

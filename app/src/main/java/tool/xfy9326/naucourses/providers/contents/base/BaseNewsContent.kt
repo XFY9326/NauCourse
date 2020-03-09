@@ -6,6 +6,8 @@ import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Response
 import org.jsoup.HttpStatusException
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.providers.beans.GeneralNews
 import tool.xfy9326.naucourses.providers.beans.GeneralNewsDetail
@@ -59,13 +61,27 @@ abstract class BaseNewsContent<T> : BaseNoParamContent<Set<GeneralNews>>() {
         return null
     }
 
-    protected abstract fun onParseDetailData(content: String): GeneralNewsDetail
+    protected abstract fun onParseDetailData(document: Document): GeneralNewsDetail
 
     private fun parseDetailData(contentData: String): ParseResult<GeneralNewsDetail> = try {
-        ParseResult(true, onParseDetailData(contentData))
+        val document = Jsoup.parse(contentData)
+        imgTagFormat(document)
+        ParseResult(true, onParseDetailData(document))
     } catch (e: Exception) {
         e.printStackTrace()
         ParseResult(false)
+    }
+
+    private fun imgTagFormat(document: Document) {
+        val imgTag = document.body()?.getElementsByTag(Constants.HTML.ELEMENT_TAG_IMG)
+        if (imgTag != null) {
+            for (element in imgTag) {
+                val src = element.attr("src")
+                element.clearAttributes().attr("src", src)
+                element.previousElementSibling()?.appendElement(Constants.HTML.ELEMENT_TAG_BR)
+                element.appendElement(Constants.HTML.ELEMENT_TAG_BR)
+            }
+        }
     }
 
     final override fun onParseData(content: String): Set<GeneralNews> = convertToGeneralNews(onParseRawData(content))

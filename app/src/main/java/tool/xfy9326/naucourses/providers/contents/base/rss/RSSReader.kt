@@ -17,8 +17,10 @@ object RSSReader {
     private const val RSS_TAG_TITLE = "title"
     private const val RSS_TAG_LINK = "link"
     private const val RSS_TAG_ITEM = "item"
+
     // private const val RSS_TAG_DESCRIPTION = "description"
     private const val RSS_TAG_DATE = "date"
+
     // private const val RSS_TAG_TYPE = "type"
     private const val RSS_TAG = "rss"
 

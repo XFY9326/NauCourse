@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_dialogShareImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:drawableStart="@drawable/ic_share"
+        android:drawablePadding="20dp"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:padding="15dp"
+        android:text="@string/share_image" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_dialogSaveImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_save"
+        android:drawablePadding="20dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:padding="15dp"
+        android:text="@string/save_image" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

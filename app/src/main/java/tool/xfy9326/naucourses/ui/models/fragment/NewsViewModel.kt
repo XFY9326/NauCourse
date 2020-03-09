@@ -10,7 +10,7 @@ import tool.xfy9326.naucourses.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourses.providers.info.methods.NewsInfo
 import tool.xfy9326.naucourses.tools.EventLiveData
 import tool.xfy9326.naucourses.ui.models.base.BaseViewModel
-import tool.xfy9326.naucourses.utils.LogUtils
+import tool.xfy9326.naucourses.utils.utility.LogUtils
 
 class NewsViewModel : BaseViewModel() {
     @Volatile
@@ -48,6 +48,9 @@ class NewsViewModel : BaseViewModel() {
                 if (lastNewsHash != newsHashCode) {
                     lastNewsHash = newsHashCode
                     newsList.postValue(newsInfoResult.data)
+                    if (newsInfoResult.data.isEmpty()) {
+                        errorMsg.postEventValue(ContentErrorReason.EMPTY_DATA)
+                    }
                 } else {
                     LogUtils.i<NewsViewModel>("New Info Don't Need Update")
                 }

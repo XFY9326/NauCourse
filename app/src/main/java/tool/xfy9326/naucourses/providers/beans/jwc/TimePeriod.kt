@@ -34,12 +34,16 @@ data class TimePeriod(
             throw IllegalArgumentException("Empty Parse Text to Time Period!")
         }
 
-        private fun initCharArray(size: Int): CharArray = CharArray(size) { False }
+        private fun initCharArray(size: Int, source: CharArray? = null): CharArray =
+            CharArray(size) { if (source != null && it < source.size - 1) source[it] else False }
 
-        fun isStrIndexTrue(str: String, i: Int) = i < str.length && str[i] == True
+        fun isIndexTrue(arr: CharArray, i: Int) = i >= 0 && i < arr.size && arr[i] == True
     }
 
-    fun convertToCharArray(initCharLength: Int, oddMode: Boolean = false, evenMode: Boolean = false, countFromZero: Boolean = false): CharArray {
+    fun convertToCharArray(
+        initCharLength: Int, oddMode: Boolean = false, evenMode: Boolean = false, countFromZero: Boolean = false, source: CharArray? = null
+    ):
+            CharArray {
         val arrLength = max(
             initCharLength, (end ?: start) + if (countFromZero) {
                 1
@@ -52,7 +56,7 @@ data class TimePeriod(
         } else {
             1
         }
-        val array = initCharArray(arrLength)
+        val array = initCharArray(arrLength, source)
         val prefixStart = start - prefix
         val prefixEnd = (end ?: start) - prefix
         if (oddMode && !evenMode) {

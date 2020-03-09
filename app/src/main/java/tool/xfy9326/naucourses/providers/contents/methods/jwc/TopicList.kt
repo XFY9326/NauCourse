@@ -102,8 +102,7 @@ object TopicList : BaseNewsContent<JwcTopic>() {
         return newsSet
     }
 
-    override fun onParseDetailData(content: String): GeneralNewsDetail {
-        val document = Jsoup.parse(content)
+    override fun onParseDetailData(document: Document): GeneralNewsDetail {
         val bodyElement = document.body()
 
         val trElements = bodyElement.getElementsByTag(Constants.HTML.ELEMENT_TAG_TABLE)[1].getElementsByTag(Constants.HTML.ELEMENT_TAG_TR)

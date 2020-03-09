@@ -19,7 +19,7 @@ import tool.xfy9326.naucourses.ui.dialogs.NewsTypeChoiceDialog
 import tool.xfy9326.naucourses.ui.fragments.base.DrawerToolbarFragment
 import tool.xfy9326.naucourses.ui.models.fragment.NewsViewModel
 import tool.xfy9326.naucourses.ui.views.recyclerview.adapters.NewsAdapter
-import tool.xfy9326.naucourses.utils.IntentUtils
+import tool.xfy9326.naucourses.utils.utility.IntentUtils
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.showSnackBar
 import tool.xfy9326.naucourses.utils.views.I18NUtils
 

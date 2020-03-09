@@ -13,6 +13,7 @@
       <w>blocklen</w>
       <w>ciphertext</w>
       <w>cppcoreguidelines</w>
+      <w>dcim</w>
       <w>ecaf</w>
       <w>fdbaaf</w>
       <w>filesize</w>

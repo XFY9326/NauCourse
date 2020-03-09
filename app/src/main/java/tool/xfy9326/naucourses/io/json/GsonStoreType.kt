@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourses.io.json
 
+import tool.xfy9326.naucourses.beans.CourseArrange
 import tool.xfy9326.naucourses.beans.CourseCellStyle
 import tool.xfy9326.naucourses.beans.CourseTable
 import tool.xfy9326.naucourses.beans.UUIDContent
@@ -21,6 +22,10 @@ enum class GsonStoreType {
     UUID {
         override val versionCode: Int = 1
         override val storeClass: Class<*> = UUIDContent::class.java
+    },
+    COURSE_ARRANGE {
+        override val versionCode: Int = 1
+        override val storeClass: Class<*> = CourseArrange::class.java
     };
 
     abstract val storeClass: Class<*>

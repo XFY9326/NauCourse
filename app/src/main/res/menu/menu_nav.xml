@@ -19,10 +19,9 @@
 
     <group android:id="@+id/menu_groupSettings">
         <item
-            android:id="@+id/menu_navNightMode"
-            android:icon="@drawable/ic_night_mode"
-            android:title="@string/night_mode" />
-
+            android:id="@+id/menu_navCourseEdit"
+            android:icon="@drawable/ic_course_edit"
+            android:title="@string/course_manage" />
         <item
             android:id="@+id/menu_navSettings"
             android:icon="@drawable/ic_settings"
@@ -35,6 +34,10 @@
     </group>
 
     <group android:id="@+id/menu_groupOthers">
+        <item
+            android:id="@+id/menu_navNightMode"
+            android:icon="@drawable/ic_night_mode"
+            android:title="@string/night_mode" />
         <item
             android:id="@+id/menu_navLogout"
             android:icon="@drawable/ic_logout"

@@ -7,6 +7,7 @@ import tool.xfy9326.naucourses.providers.beans.jwc.StudentLearningProcess.Course
 import tool.xfy9326.naucourses.providers.beans.jwc.StudentLearningProcess.SubjectType
 import tool.xfy9326.naucourses.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourses.ui.models.activity.LoginViewModel.LoadingProcess
+import tool.xfy9326.naucourses.ui.models.activity.NewsDetailViewModel.ImageOperationType
 import tool.xfy9326.naucourses.ui.models.fragment.CourseArrangeViewModel.CourseArrangeNotifyType
 
 object I18NUtils {
@@ -73,5 +74,12 @@ object I18NUtils {
             CourseArrangeNotifyType.COURSE_OR_TERM_DATA_EMPTY -> R.string.today_course_data_empty
             CourseArrangeNotifyType.LOADING_DATA -> R.string.today_course_loading
             CourseArrangeNotifyType.NO_TODAY_COURSE -> R.string.today_course_no_course
+        }
+
+    fun getImageOperationTypeResId(imageOperationType: ImageOperationType): Int =
+        when (imageOperationType) {
+            ImageOperationType.IMAGE_SAVE_SUCCESS -> R.string.image_save_success
+            ImageOperationType.IMAGE_SAVE_FAILED -> R.string.image_save_failed
+            ImageOperationType.IMAGE_SHARE_FAILED -> R.string.image_share_failed
         }
 }

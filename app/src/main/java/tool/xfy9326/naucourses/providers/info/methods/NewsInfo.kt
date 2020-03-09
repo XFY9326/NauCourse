@@ -75,7 +75,7 @@ object NewsInfo : BaseSimpleContentInfo<List<GeneralNews>, PostSource>() {
                     }
                     ContentResult(true, contentData = sortNewsList(list))
                 }
-                else -> ContentResult(false, contentErrorResult = ContentErrorReason.EMPTY_DATA)
+                else -> ContentResult(true, ContentErrorReason.EMPTY_DATA, emptyList())
             }
         }
     }

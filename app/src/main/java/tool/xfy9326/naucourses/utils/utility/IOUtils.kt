@@ -1,6 +1,9 @@
-package tool.xfy9326.naucourses.utils
+package tool.xfy9326.naucourses.utils.utility
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.net.Uri
+import tool.xfy9326.naucourses.App
 import tool.xfy9326.naucourses.utils.secure.CryptoUtils
 import java.io.*
 import java.util.zip.GZIPInputStream
@@ -48,6 +51,59 @@ object IOUtils {
             e.printStackTrace()
             false
         }
+
+    fun saveBitmap(
+        bitmap: Bitmap, file: File, compressFormat: Bitmap.CompressFormat = Bitmap.CompressFormat.PNG,
+        quality: Int = 100, recycle: Boolean = false, overWrite: Boolean = true
+    ): Boolean {
+        try {
+            if (!bitmap.isRecycled) {
+                if (file.exists() || file.mkdirs()) {
+                    if (file.exists()) {
+                        if (overWrite) {
+                            if (!file.delete()) throw IOException("File Delete Failed!")
+                        } else {
+                            return false
+                        }
+                    }
+                    FileOutputStream(file).use {
+                        bitmap.compress(compressFormat, quality, it)
+                        it.flush()
+
+                        if (recycle) {
+                            bitmap.recycle()
+                        }
+                    }
+                    return true
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return false
+    }
+
+    fun saveBitmap(
+        bitmap: Bitmap, uri: Uri, compressFormat: Bitmap.CompressFormat = Bitmap.CompressFormat.PNG,
+        quality: Int = 100, recycle: Boolean = false
+    ): Boolean {
+        try {
+            if (!bitmap.isRecycled) {
+                App.instance.contentResolver.openOutputStream(uri)?.use {
+                    bitmap.compress(compressFormat, quality, it)
+                    it.flush()
+
+                    if (recycle) {
+                        bitmap.recycle()
+                    }
+                    return true
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return false
+    }
 
     fun readTextFromFile(path: String, encrypt: Boolean = false, zipStore: Boolean = false): String? =
         try {

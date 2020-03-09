@@ -24,8 +24,10 @@ class SSONetworkTools private constructor() {
 
         // TimeUnit.SECONDS
         private const val CONNECT_TIME_OUT = 7L
+
         // TimeUnit.SECONDS
         private const val READ_TIME_OUT = 8L
+
         // TimeUnit.SECONDS
         private const val WRITE_TIME_OUT = 8L
 

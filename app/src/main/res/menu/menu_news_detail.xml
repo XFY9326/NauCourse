@@ -9,9 +9,9 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/menu_newsDetailRefresh"
-        android:icon="@drawable/ic_refresh"
-        android:title="@string/refresh"
+        android:id="@+id/menu_newsDetailShare"
+        android:icon="@drawable/ic_share_black"
+        android:title="@string/share_news"
         app:showAsAction="ifRoom" />
 
 </menu>

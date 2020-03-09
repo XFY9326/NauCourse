@@ -32,10 +32,8 @@ class CourseDetailDialog : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (arguments != null) {
-            arguments?.apply {
-                courseDetail = getSerializable(COURSE_DETAIL_DATA) as CourseDetail
-            }
+        arguments?.apply {
+            courseDetail = getSerializable(COURSE_DETAIL_DATA) as CourseDetail
         }
         if (savedInstanceState != null) {
             isMoreInfoExpanded = savedInstanceState.getBoolean(VIEW_EXPANDED)
@@ -56,15 +54,20 @@ class CourseDetailDialog : DialogFragment() {
             layout_courseTitle.setBackgroundColor(courseDetail.courseCellStyle.color)
             tv_courseName.text = courseDetail.course.name
 
-            val timePeriod = TimeUtils.getCourseDateTimePeriod(
-                courseDetail.termDate.startDate, courseDetail.weekNum, courseDetail.weekDayNum,
-                courseDetail.timePeriod
-            )
-            tv_courseCellTime.text = DATE_FORMAT_MD_HM_CH.format(timePeriod.startDateTime)
-            tv_courseCellLocation.text = courseDetail.courseLocation
+            if (courseDetail.timeDetail != null) {
+                val timePeriod = TimeUtils.getCourseDateTimePeriod(
+                    courseDetail.termDate.startDate, courseDetail.timeDetail!!.weekNum, courseDetail.timeDetail!!.weekDayNum,
+                    courseDetail.timeDetail!!.timePeriod
+                )
+                tv_courseCellTime.text = DATE_FORMAT_MD_HM_CH.format(timePeriod.startDateTime)
+                tv_courseCellLocation.text = courseDetail.timeDetail!!.courseLocation
+            } else {
+                tv_courseCellTime.visibility = View.GONE
+                tv_courseCellLocation.visibility = View.GONE
+            }
 
-            val colorDark = resources.getColor(R.color.colorCourseTextDark, null)
-            val colorLight = resources.getColor(R.color.colorCourseTextLight, null)
+            val colorDark = activity?.getColor(R.color.colorCourseTextDark)!!
+            val colorLight = activity?.getColor(R.color.colorCourseTextLight)!!
             if (ColorUtils.isLightColor(courseDetail.courseCellStyle.color)) {
                 tv_courseName.setTextColor(colorDark)
                 tv_courseCellTime.setTextColor(colorDark)
@@ -125,8 +128,10 @@ class CourseDetailDialog : DialogFragment() {
                 ).apply {
                     tv_courseLocation.text = getString(R.string.course_location, courseTime.location)
                     tv_courseTime.text = getString(
-                        R.string.course_time, courseTime.rawWeeksStr, weekDayNumStrArray[courseTime.weekDay - 1],
-                        courseTime.rawCourseNumStr
+                        R.string.course_time,
+                        courseTime.rawWeeksStr,
+                        weekDayNumStrArray[courseTime.weekDay - 1],
+                        courseTime.rawCoursesNumStr
                     )
                 })
             if (i != courseDetail.course.timeSet.size - 1) {
@@ -150,7 +155,7 @@ class CourseDetailDialog : DialogFragment() {
             val displayMetrics = activity?.resources?.displayMetrics!!
             window?.apply {
                 setLayout((displayMetrics.widthPixels * CONTENT_WIDTH_PERCENT).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT)
-                setBackgroundDrawable(resources.getDrawable(R.drawable.bg_dialog, null))
+                setBackgroundDrawable(activity?.getDrawable(R.drawable.bg_dialog))
             }
         }
     }

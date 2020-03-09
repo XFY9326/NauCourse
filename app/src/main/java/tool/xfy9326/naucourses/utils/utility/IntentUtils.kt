@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourses.utils
+package tool.xfy9326.naucourses.utils.utility
 
 import android.content.ActivityNotFoundException
 import android.content.Context

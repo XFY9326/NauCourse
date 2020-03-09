@@ -3,15 +3,16 @@ package tool.xfy9326.naucourses.io.json
 import com.google.gson.Gson
 import tool.xfy9326.naucourses.App
 import tool.xfy9326.naucourses.io.prefs.GsonStoreVersionPref
-import tool.xfy9326.naucourses.utils.IOUtils
+import tool.xfy9326.naucourses.utils.utility.IOUtils
 import java.io.File
 
 object GsonStoreManager {
     private const val GSON_FILE_DIR_NAME = "GsonStore"
+    private const val GSON_FILE_PREFIX = ".gsf"
 
     private var jsonFilePath: String = App.instance.noBackupFilesDir.absolutePath + File.separator + GSON_FILE_DIR_NAME + File.separator
 
-    private fun getStoredPath(storeType: GsonStoreType) = jsonFilePath + storeType.name
+    private fun getStoredPath(storeType: GsonStoreType) = jsonFilePath + storeType.name + GSON_FILE_PREFIX
 
     fun clearData(storeType: GsonStoreType) = synchronized(storeType) {
         IOUtils.deleteFile(getStoredPath(storeType))

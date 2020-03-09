@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourses.utils
+package tool.xfy9326.naucourses.utils.utility
 
 import android.util.Log
 import tool.xfy9326.naucourses.BuildConfig

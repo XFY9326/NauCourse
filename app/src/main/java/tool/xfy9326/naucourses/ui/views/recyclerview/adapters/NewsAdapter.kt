@@ -38,27 +38,29 @@ class NewsAdapter(context: Context, private var newsList: List<GeneralNews>, pri
         NewsViewHolder(inflater.inflate(R.layout.view_news_item, parent, false))
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-        val news = newsList[position]
-        contextReference.get()?.apply {
-            holder.apply {
-                val newsSource = getString(I18NUtils.getNewsPostSourceResId(news.postSource)!!)
-                if (news.type != null) {
-                    tvNewsType.text = getString(R.string.news_type, news.type)
-                } else {
-                    tvNewsType.text = getString(R.string.news_type, newsSource + getString(R.string.news))
-                }
-                tvNewsTitle.text = news.title
-                tvNewsSource.text = newsSource
-                if (news.clickAmount == null) {
-                    tvNewsClickAmount.visibility = View.GONE
-                } else {
-                    tvNewsClickAmount.text = getString(R.string.news_click_amount, news.clickAmount)
-                    tvNewsClickAmount.visibility = View.VISIBLE
-                }
-                tvNewsPostDate.text = DATE_FORMAT_YMD.format(news.postDate)
-                cvNewsCard.setOnClickListener {
-                    synchronized(isOperationEnabledLock) {
-                        listener.onNewsItemClick(news)
+        if (position < itemCount) {
+            val news = newsList[position]
+            contextReference.get()?.apply {
+                holder.apply {
+                    val newsSource = getString(I18NUtils.getNewsPostSourceResId(news.postSource)!!)
+                    if (news.type != null) {
+                        tvNewsType.text = getString(R.string.news_type, news.type)
+                    } else {
+                        tvNewsType.text = getString(R.string.news_type, newsSource + getString(R.string.news))
+                    }
+                    tvNewsTitle.text = news.title
+                    tvNewsSource.text = newsSource
+                    if (news.clickAmount == null) {
+                        tvNewsClickAmount.visibility = View.GONE
+                    } else {
+                        tvNewsClickAmount.text = getString(R.string.news_click_amount, news.clickAmount)
+                        tvNewsClickAmount.visibility = View.VISIBLE
+                    }
+                    tvNewsPostDate.text = DATE_FORMAT_YMD.format(news.postDate)
+                    cvNewsCard.setOnClickListener {
+                        synchronized(isOperationEnabledLock) {
+                            listener.onNewsItemClick(news)
+                        }
                     }
                 }
             }

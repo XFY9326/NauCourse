@@ -14,6 +14,7 @@ import tool.xfy9326.naucourses.ui.models.fragment.CourseTableViewModel
 import tool.xfy9326.naucourses.ui.views.helpers.CourseTableViewHelper
 import tool.xfy9326.naucourses.ui.views.viewpager.CourseTableViewPagerAdapter
 import tool.xfy9326.naucourses.utils.compute.TimeUtils
+import tool.xfy9326.naucourses.utils.views.ActivityUtils.showToast
 import kotlin.math.floor
 import kotlin.properties.Delegates
 
@@ -48,6 +49,9 @@ class TableFragment : ViewModelFragment<CourseTableViewModel>() {
                 coursePkgHash = it.hashCode()
                 buildCourseTableView(it)
             })
+            courseAndTermEmpty.observeEvent(viewLifecycleOwner, Observer {
+                showToast(requireContext(), R.string.course_and_term_data_empty)
+            })
             if (!isRestored) {
                 val temp = coursePkgSavedTemp[weekNum - 1]
                 if (temp == null) {
@@ -78,9 +82,8 @@ class TableFragment : ViewModelFragment<CourseTableViewModel>() {
                     val width = calculateTableHeaderWidth(weekDayShowSize)
                     CourseTableViewHelper.createCourseTableView(
                         requireContext(),
-                        coursePkg.courseTable,
                         hasWeekendCourse,
-                        coursePkg.styles,
+                        coursePkg,
                         gl_courseTable,
                         width
                     )

@@ -13,6 +13,7 @@ import tool.xfy9326.naucourses.providers.info.base.BaseSimpleContentInfo
 import tool.xfy9326.naucourses.providers.info.base.CacheExpire
 import tool.xfy9326.naucourses.providers.info.base.CacheExpireRule
 import tool.xfy9326.naucourses.providers.info.base.CacheExpireTimeUnit
+import tool.xfy9326.naucourses.utils.utility.LogUtils
 
 object CourseInfo : BaseSimpleContentInfo<CourseSet, CourseInfo.OperationType>() {
     private const val CACHE_EXPIRE_DAY = 1
@@ -55,13 +56,14 @@ object CourseInfo : BaseSimpleContentInfo<CourseSet, CourseInfo.OperationType>()
                 OperationType.ASYNC_COURSE -> {
                     val result = MyCourseScheduleTable.getContentData()
                     if (result.isSuccess) {
-                        val newCourseSet = getSimpleCachedItem()
+                        val cachedCourseSet = getSimpleCachedItem()
                         val contentData = result.contentData!!
-                        if (newCourseSet != null) {
-                            val combineResult = newCourseSet.combine(contentData)
-                            if (combineResult.isSuccess) {
-                                ContentResult(true, contentData = newCourseSet)
+                        if (cachedCourseSet != null) {
+                            val newSet = cachedCourseSet.copy()
+                            if (newSet.update(contentData)) {
+                                ContentResult(true, contentData = newSet)
                             } else {
+                                LogUtils.d<CourseInfo>("Course Update Failed!")
                                 ContentResult(false, ContentErrorReason.OPERATION)
                             }
                         } else {
@@ -69,6 +71,7 @@ object CourseInfo : BaseSimpleContentInfo<CourseSet, CourseInfo.OperationType>()
                             if (conflictCheck.isSuccess) {
                                 ContentResult(true, contentData = contentData)
                             } else {
+                                LogUtils.d<CourseInfo>("Async New Courses Has Conflicts!\n${conflictCheck.printText()}")
                                 ContentResult(false, ContentErrorReason.OPERATION)
                             }
                         }
@@ -76,8 +79,34 @@ object CourseInfo : BaseSimpleContentInfo<CourseSet, CourseInfo.OperationType>()
                         result
                     }
                 }
-                OperationType.INIT_DATA, OperationType.THIS_TERM_COURSE -> MyCourseScheduleTable.getContentData()
-                OperationType.NEXT_TERM_COURSE -> MyCourseScheduleTableNext.getContentData()
+                OperationType.INIT_DATA, OperationType.THIS_TERM_COURSE -> {
+                    val result = MyCourseScheduleTable.getContentData()
+                    if (result.isSuccess) {
+                        val conflictCheck = CourseSet.checkCourseTimeConflict(result.contentData!!.courses)
+                        if (conflictCheck.isSuccess) {
+                            result
+                        } else {
+                            LogUtils.d<CourseInfo>("Init or This Term Courses Has Conflicts!\n${conflictCheck.printText()}")
+                            ContentResult(false, ContentErrorReason.OPERATION)
+                        }
+                    } else {
+                        result
+                    }
+                }
+                OperationType.NEXT_TERM_COURSE -> {
+                    val result = MyCourseScheduleTableNext.getContentData()
+                    if (result.isSuccess) {
+                        val conflictCheck = CourseSet.checkCourseTimeConflict(result.contentData!!.courses)
+                        if (conflictCheck.isSuccess) {
+                            result
+                        } else {
+                            LogUtils.d<CourseInfo>("Next Term Courses Has Conflicts!\n${conflictCheck.printText()}")
+                            ContentResult(false, ContentErrorReason.OPERATION)
+                        }
+                    } else {
+                        result
+                    }
+                }
             }
         }
     }

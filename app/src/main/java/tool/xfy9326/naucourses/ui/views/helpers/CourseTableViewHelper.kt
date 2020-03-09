@@ -29,6 +29,7 @@ import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.beans.CourseCell
 import tool.xfy9326.naucourses.beans.CourseCellStyle
+import tool.xfy9326.naucourses.beans.CoursePkg
 import tool.xfy9326.naucourses.beans.CourseTable
 import tool.xfy9326.naucourses.ui.views.widgets.AdvancedGridLayout
 import tool.xfy9326.naucourses.ui.views.widgets.AdvancedLinearLayout
@@ -95,12 +96,14 @@ object CourseTableViewHelper {
 
     suspend fun createCourseTableView(
         context: Context,
-        courseTable: CourseTable,
         showWeekend: Boolean,
-        styles: Array<CourseCellStyle>,
+        coursePkg: CoursePkg,
         targetView: AdvancedGridLayout,
         headerWidth: Pair<Int, Int>
     ) = withContext(Dispatchers.Default) {
+        val courseTable = coursePkg.courseTable
+        val styles = coursePkg.styles
+
         val colMax = if (showWeekend) DEFAULT_TABLE_WIDTH_SIZE else DEFAULT_TABLE_WIDTH_SIZE - 2
         val rowMax = DEFAULT_TABLE_HEIGHT_SIZE
 
@@ -267,5 +270,6 @@ object CourseTableViewHelper {
     }
 
     fun hasWeekendCourse(courseTable: CourseTable): Boolean =
-        courseTable.table[Constants.Time.MAX_WEEK_DAY - 1].isNotEmpty() || courseTable.table[Constants.Time.MAX_WEEK_DAY - 2].isNotEmpty()
+        courseTable.table.isNotEmpty() &&
+                (courseTable.table[Constants.Time.MAX_WEEK_DAY - 1].isNotEmpty() || courseTable.table[Constants.Time.MAX_WEEK_DAY - 2].isNotEmpty())
 }

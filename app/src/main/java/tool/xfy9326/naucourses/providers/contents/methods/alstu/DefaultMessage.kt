@@ -119,9 +119,8 @@ object DefaultMessage : BaseNewsContent<AlstuMessage>() {
         return newsSet
     }
 
-    override fun onParseDetailData(content: String): GeneralNewsDetail {
-        val isUsingVPN = VPNClient.isPageUsingVPN(content)
-        val document = Jsoup.parse(content)
+    override fun onParseDetailData(document: Document): GeneralNewsDetail {
+        val isUsingVPN = VPNClient.isPageUsingVPN(document.html())
         val bodyElement = document.body()
 
         val title = bodyElement.getElementById(ELEMENT_ID_BT).text().trim()

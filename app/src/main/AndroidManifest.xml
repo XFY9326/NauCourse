@@ -62,12 +62,30 @@
         </activity>
 
         <activity
+            android:name=".ui.activities.CourseManageActivity"
+            android:label="@string/course_manage">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.MainDrawerActivity" />
+        </activity>
+
+        <activity
             android:name=".ui.activities.AboutActivity"
             android:label="@string/about">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activities.MainDrawerActivity" />
         </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="tool.xfy9326.naucourses.file.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_paths" />
+        </provider>
 
     </application>
 </manifest>

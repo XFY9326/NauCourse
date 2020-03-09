@@ -82,7 +82,7 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
         viewModel.notThisWeekCourse.observe(viewLifecycleOwner, Observer {
             buildNotThisWeekCourseList(it)
         })
-        viewModel.nextCourse.observe(viewLifecycleOwner, Observer {
+        viewModel.nextCourseData.observe(viewLifecycleOwner, Observer {
             buildNextCourse(it)
         })
         viewModel.termDateData.observe(viewLifecycleOwner, Observer {
@@ -211,9 +211,12 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
                         this.tv_listCourseName.text = coursePair.first.name
                         this.tv_listCourseTime.text = getString(
                             R.string.course_simple_time, weekDayNumStrArray[coursePair.second.weekDay - 1],
-                            coursePair.second.rawCourseNumStr,
+                            coursePair.second.rawCoursesNumStr,
                             coursePair.second.location
                         )
+                        setOnClickListener {
+                            getViewModel().requestCourseDetail(coursePair.first, coursePair.third)
+                        }
                     })
             }
             layout_notThisWeekCourseContent.refreshLayout()

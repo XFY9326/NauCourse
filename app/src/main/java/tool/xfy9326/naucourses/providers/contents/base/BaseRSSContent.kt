@@ -2,7 +2,7 @@ package tool.xfy9326.naucourses.providers.contents.base
 
 import okhttp3.HttpUrl
 import okhttp3.Response
-import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.network.SSONetworkManager
@@ -106,8 +106,7 @@ abstract class BaseRSSContent : BaseNewsContent<RSSObject>() {
 
     override fun onRequestDetailData(url: HttpUrl): Response = getSimpleClient().newClientCall(url)
 
-    final override fun onParseDetailData(content: String): GeneralNewsDetail {
-        val document = Jsoup.parse(content)
+    final override fun onParseDetailData(document: Document): GeneralNewsDetail {
         val bodyElement = document.body()
 
         val title: String

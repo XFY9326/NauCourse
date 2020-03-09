@@ -1,14 +1,18 @@
 package tool.xfy9326.naucourses.ui.activities
 
+import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
-import android.text.method.LinkMovementMethod
 import android.view.Menu
 import android.view.MenuItem
+import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.activity_news_detail.*
+import kotlinx.android.synthetic.main.dialog_image_operation.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,10 +23,13 @@ import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.beans.SerializableNews
 import tool.xfy9326.naucourses.providers.beans.GeneralNewsDetail
-import tool.xfy9326.naucourses.tools.HtmlImageGetter
 import tool.xfy9326.naucourses.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourses.ui.models.activity.NewsDetailViewModel
-import tool.xfy9326.naucourses.utils.IntentUtils
+import tool.xfy9326.naucourses.ui.views.html.AdvancedLinkMovementMethod
+import tool.xfy9326.naucourses.ui.views.html.AdvancedTagHandler
+import tool.xfy9326.naucourses.ui.views.html.HtmlImageGetter
+import tool.xfy9326.naucourses.utils.utility.IntentUtils
+import tool.xfy9326.naucourses.utils.utility.ShareUtils
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.enableHomeButton
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.showSnackBar
 import tool.xfy9326.naucourses.utils.views.I18NUtils
@@ -58,7 +65,7 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_newsDetailOpenInBrowser -> IntentUtils.launchUrlInBrowser(this, newsData.detailUrl.toString())
-            R.id.menu_newsDetailRefresh -> requestNewsDetail(getViewModel())
+            R.id.menu_newsDetailShare -> startActivity(ShareUtils.getShareNewsIntent(this, newsData))
         }
         return super.onOptionsItemSelected(item)
     }
@@ -78,6 +85,10 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>() {
         }
         tv_newsDetailDate.text = DATE_FORMAT_YMD.format(newsData.postDate)
 
+        asl_newsDetailRefreshLayout.setOnRefreshListener {
+            requestNewsDetail(viewModel)
+        }
+
         requestNewsDetail(viewModel)
     }
 
@@ -86,11 +97,9 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>() {
     )
 
     override fun bindViewModel(viewModel: NewsDetailViewModel) {
-        viewModel.isLoading.observe(this, Observer {
-            if (it) {
-                pb_newsDetailLoading.show()
-            } else {
-                pb_newsDetailLoading.hide()
+        viewModel.isRefreshing.observe(this, Observer {
+            asl_newsDetailRefreshLayout.post {
+                asl_newsDetailRefreshLayout.isRefreshing = it
             }
         })
         viewModel.newsDetail.observe(this, Observer {
@@ -98,6 +107,12 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>() {
         })
         viewModel.errorNotifyType.observeEvent(this, Observer {
             showSnackBar(layout_newsDetail, I18NUtils.getContentErrorResId(it)!!)
+        })
+        viewModel.imageShareUri.observeEvent(this, Observer {
+            startActivity(ShareUtils.getShareImageIntent(this, it))
+        })
+        viewModel.imageOperation.observeEvent(this, Observer {
+            showSnackBar(layout_newsDetail, I18NUtils.getImageOperationTypeResId(it))
         })
     }
 
@@ -112,7 +127,13 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>() {
                     newsDetailScope, tv_newsDetailContent, this,
                     newsData.postSource
                 )
-                Html.fromHtml(detail.htmlContent, Html.FROM_HTML_MODE_LEGACY, imageGetter, null)
+                val tagHandler = AdvancedTagHandler()
+                tagHandler.setOnImageLongPressListener(object : AdvancedTagHandler.OnImageLongPressListener {
+                    override fun onHtmlTextImageLongPress(source: String, bitmap: Bitmap) {
+                        showImageOperationDialog(source, bitmap)
+                    }
+                })
+                Html.fromHtml(detail.htmlContent, Html.FROM_HTML_MODE_LEGACY, imageGetter, tagHandler)
             } else {
                 @Suppress("DEPRECATION")
                 Html.fromHtml(detail.htmlContent)
@@ -121,11 +142,31 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>() {
             detail.htmlContent
         }
 
-        tv_newsDetailContent.movementMethod = LinkMovementMethod.getInstance()
+        tv_newsDetailContent.movementMethod = AdvancedLinkMovementMethod
+    }
+
+    private fun showImageOperationDialog(source: String, bitmap: Bitmap) {
+        BottomSheetDialog(this).apply {
+            setContentView(R.layout.dialog_image_operation)
+            val parentView = findViewById<ViewGroup>(com.google.android.material.R.id.design_bottom_sheet)
+            parentView?.background = getDrawable(R.drawable.bg_dialog)
+
+            tv_dialogShareImage.setOnClickListener {
+                getViewModel().shareImage(source, bitmap)
+                dismiss()
+            }
+            tv_dialogSaveImage.setOnClickListener {
+                getViewModel().saveNewsImage(source, bitmap)
+                dismiss()
+            }
+
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }.show()
     }
 
     override fun onDestroy() {
         newsDetailScope.cancel()
+        AdvancedLinkMovementMethod.clearHandler()
         imageGetter?.recycleDrawable()
         System.gc()
         super.onDestroy()

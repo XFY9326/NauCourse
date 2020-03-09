@@ -13,9 +13,9 @@ import tool.xfy9326.naucourses.providers.store.CourseCellStyleStore
 import tool.xfy9326.naucourses.providers.store.CourseTableStore
 import tool.xfy9326.naucourses.tools.EventLiveData
 import tool.xfy9326.naucourses.ui.models.base.BaseViewModel
-import tool.xfy9326.naucourses.utils.LogUtils
 import tool.xfy9326.naucourses.utils.compute.CourseUtils
 import tool.xfy9326.naucourses.utils.compute.TimeUtils
+import tool.xfy9326.naucourses.utils.utility.LogUtils
 
 class CourseTableViewModel : BaseViewModel() {
     companion object {
@@ -42,6 +42,7 @@ class CourseTableViewModel : BaseViewModel() {
     val todayDate = MutableLiveData<Pair<Int, Int>>()
     val currentWeekStatus = MutableLiveData<CurrentWeekStatus>()
     val courseDetailInfo = EventLiveData<CourseDetail>()
+    val courseAndTermEmpty = EventLiveData<Boolean>()
 
     val coursePkgSavedTemp = arrayOfNulls<CoursePkg>(Constants.Course.MAX_WEEK_NUM_SIZE)
     val courseTablePkg = Array<MutableLiveData<CoursePkg>>(Constants.Course.MAX_WEEK_NUM_SIZE) { MutableLiveData() }
@@ -116,7 +117,19 @@ class CourseTableViewModel : BaseViewModel() {
                     )
                     coursePkgSavedTemp[weekNum - 1] = pkg
                     courseTablePkg[weekNum - 1].postValue(pkg)
+                } else if (::termDate.isInitialized && (!::courseTableArr.isInitialized || !::courseSet.isInitialized)) {
+                    val pkg = CoursePkg(
+                        termDate,
+                        CourseTable(emptyArray()),
+                        emptyArray()
+                    )
+                    coursePkgSavedTemp[weekNum - 1] = pkg
+                    courseTablePkg[weekNum - 1].postValue(pkg)
+
+                    LogUtils.i<CourseTableViewModel>("Init Empty Course Data For Week: $weekNum!")
                 } else {
+                    courseAndTermEmpty.postEventValue(true)
+
                     LogUtils.d<CourseTableViewModel>("Init Request Failed For Week: $weekNum!")
                 }
             } else {
@@ -134,11 +147,13 @@ class CourseTableViewModel : BaseViewModel() {
                         CourseDetail(
                             course,
                             termDate,
-                            courseCell.courseLocation,
-                            courseCell.weekDayNum,
-                            courseCell.weekNum,
-                            CourseTimeDuration.convertToTimePeriod(courseCell.timeDuration),
-                            cellStyle
+                            cellStyle,
+                            CourseDetail.TimeDetail(
+                                courseCell.courseLocation,
+                                courseCell.weekDayNum,
+                                courseCell.weekNum,
+                                CourseTimeDuration.convertToTimePeriod(courseCell.timeDuration)
+                            )
                         )
                     )
                     break

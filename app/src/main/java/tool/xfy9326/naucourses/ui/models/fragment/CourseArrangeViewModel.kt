@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import tool.xfy9326.naucourses.beans.CourseArrange
 import tool.xfy9326.naucourses.beans.CourseCellStyle
 import tool.xfy9326.naucourses.beans.CourseDetail
 import tool.xfy9326.naucourses.beans.CourseItem
@@ -13,24 +14,27 @@ import tool.xfy9326.naucourses.providers.beans.jwc.CourseTime
 import tool.xfy9326.naucourses.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourses.providers.info.methods.CourseInfo
 import tool.xfy9326.naucourses.providers.info.methods.TermDateInfo
+import tool.xfy9326.naucourses.providers.store.CourseArrangeStore
 import tool.xfy9326.naucourses.providers.store.CourseCellStyleStore
 import tool.xfy9326.naucourses.tools.EventLiveData
 import tool.xfy9326.naucourses.ui.models.base.BaseViewModel
-import tool.xfy9326.naucourses.utils.LogUtils
 import tool.xfy9326.naucourses.utils.compute.CourseUtils
+import tool.xfy9326.naucourses.utils.utility.LogUtils
 
 class CourseArrangeViewModel : BaseViewModel() {
     @Volatile
     private lateinit var todayCourseArr: Array<CourseItem>
+
     @Volatile
     private lateinit var tomorrowCourseArr: Array<CourseItem>
+
     @Volatile
     private lateinit var notThisWeekCourseArr: Array<Pair<Course, CourseTime>>
 
     @Volatile
     private lateinit var termDate: TermDate
 
-    val nextCourse = MutableLiveData<CourseItem?>()
+    val nextCourseData = MutableLiveData<CourseItem?>()
     val isRefreshing = MutableLiveData<Boolean>()
     val todayCourses = MutableLiveData<Array<Pair<CourseItem, CourseCellStyle>>>()
     val tomorrowCourses = MutableLiveData<Array<Pair<CourseItem, CourseCellStyle>>>()
@@ -46,8 +50,33 @@ class CourseArrangeViewModel : BaseViewModel() {
     }
 
     override fun onInitView(isRestored: Boolean) {
+        if (!isRestored) loadInitCache()
+
         refreshArrangeCourses()
         refreshNextCoursePosition()
+    }
+
+    private fun loadInitCache() {
+        viewModelScope.launch(Dispatchers.Default) {
+            val arrangeCache = CourseArrangeStore.loadStore()
+            if (arrangeCache != null) {
+                todayCourses.postValue(arrangeCache.todayCourseArr)
+                tomorrowCourses.postValue(arrangeCache.tomorrowCourseArr)
+                notThisWeekCourse.postValue(arrangeCache.notThisWeekCourseArr)
+
+                todayCourseArr = Array(arrangeCache.todayCourseArr.size) {
+                    arrangeCache.todayCourseArr[it].first
+                }
+                refreshNextCoursePosition(false)
+
+                tomorrowCourseArr = Array(arrangeCache.tomorrowCourseArr.size) {
+                    arrangeCache.tomorrowCourseArr[it].first
+                }
+                notThisWeekCourseArr = Array(arrangeCache.notThisWeekCourseArr.size) {
+                    Pair(arrangeCache.notThisWeekCourseArr[it].first, arrangeCache.notThisWeekCourseArr[it].second)
+                }
+            }
+        }
     }
 
     @Synchronized
@@ -77,16 +106,18 @@ class CourseArrangeViewModel : BaseViewModel() {
                     todayCourseArr = CourseUtils.getTodayCourse(courseInfo.data, termInfo.data!!)
                     if (todayCourseArr.isEmpty()) {
                         todayCourses.postValue(emptyArray())
-                        nextCourse.postValue(null)
+                        nextCourseData.postValue(null)
                         if (showAttention) {
                             notifyMsg.postEventValue(CourseArrangeNotifyType.NO_TODAY_COURSE)
                         }
+                        emptyArray()
                     } else {
                         val output = Array(todayCourseArr.size) {
                             Pair(todayCourseArr[it], CourseCellStyle.getStyleByCourseId(todayCourseArr[it].course.id, styleList)!!)
                         }
                         todayCourses.postValue(output)
                         refreshNextCoursePosition(showAttention)
+                        output
                     }
                 }
 
@@ -94,11 +125,13 @@ class CourseArrangeViewModel : BaseViewModel() {
                     tomorrowCourseArr = CourseUtils.getTomorrowCourse(courseInfo.data, termInfo.data!!)
                     if (tomorrowCourseArr.isEmpty()) {
                         tomorrowCourses.postValue(emptyArray())
+                        emptyArray()
                     } else {
                         val output = Array(tomorrowCourseArr.size) {
                             Pair(tomorrowCourseArr[it], CourseCellStyle.getStyleByCourseId(tomorrowCourseArr[it].course.id, styleList)!!)
                         }
                         tomorrowCourses.postValue(output)
+                        output
                     }
                 }
 
@@ -106,6 +139,7 @@ class CourseArrangeViewModel : BaseViewModel() {
                     notThisWeekCourseArr = CourseUtils.getNotThisWeekCourse(courseInfo.data, termInfo.data!!)
                     if (notThisWeekCourseArr.isEmpty()) {
                         notThisWeekCourse.postValue(emptyArray())
+                        emptyArray()
                     } else {
                         val output = Array(notThisWeekCourseArr.size) {
                             Triple(
@@ -114,19 +148,22 @@ class CourseArrangeViewModel : BaseViewModel() {
                             )
                         }
                         notThisWeekCourse.postValue(output)
+                        output
                     }
                 }
 
-                todayAsync.await()
-                tomorrowAsync.await()
-                notThisWeekAsync.await()
+                val todayTemp = todayAsync.await()
+                val tomorrowTemp = tomorrowAsync.await()
+                val notThisWeekTemp = notThisWeekAsync.await()
+
+                CourseArrangeStore.saveStore(CourseArrange(todayTemp, tomorrowTemp, notThisWeekTemp))
             } else {
                 todayCourses.postValue(emptyArray())
-                nextCourse.postValue(null)
+                nextCourseData.postValue(null)
                 if (showAttention) {
                     notifyMsg.postEventValue(CourseArrangeNotifyType.COURSE_OR_TERM_DATA_EMPTY)
                 }
-                LogUtils.d<CourseArrangeViewModel>("Term Or Course Data Empty! Term: ${termInfo.errorReason}  Course: ${courseInfo.errorReason}")
+                LogUtils.d<CourseArrangeViewModel>("Term Or Course Data Error! Term: ${termInfo.errorReason}  Course: ${courseInfo.errorReason}")
             }
 
             if (showAttention) {
@@ -142,10 +179,28 @@ class CourseArrangeViewModel : BaseViewModel() {
                     CourseDetail(
                         courseItem.course,
                         termDate,
-                        courseItem.courseTime.location,
-                        courseItem.weekDayNum,
-                        termDate.currentWeekNum,
-                        courseItem.timePeriod,
+                        cellStyle,
+                        CourseDetail.TimeDetail(
+                            courseItem.courseTime.location,
+                            courseItem.weekDayNum,
+                            termDate.currentWeekNum,
+                            courseItem.timePeriod
+                        )
+                    )
+                )
+            } else {
+                notifyMsg.postEventValue(CourseArrangeNotifyType.LOADING_DATA)
+            }
+        }
+    }
+
+    fun requestCourseDetail(course: Course, cellStyle: CourseCellStyle) {
+        viewModelScope.launch(Dispatchers.Default) {
+            if (::termDate.isInitialized) {
+                courseDetail.postEventValue(
+                    CourseDetail(
+                        course,
+                        termDate,
                         cellStyle
                     )
                 )
@@ -160,9 +215,11 @@ class CourseArrangeViewModel : BaseViewModel() {
             if (::todayCourseArr.isInitialized) {
                 val position = CourseUtils.getTodayNextCoursePosition(todayCourseArr)
                 if (position != null) {
-                    nextCourse.postValue(todayCourseArr[position])
+                    nextCourseData.postValue(todayCourseArr[position])
+                    todayCourseArr[position]
                 } else {
-                    nextCourse.postValue(null)
+                    nextCourseData.postValue(null)
+                    null
                 }
             } else {
                 if (showAttention) {

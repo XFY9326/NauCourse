@@ -1,5 +1,7 @@
 package tool.xfy9326.naucourses.beans
 
+import android.content.Context
+import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.providers.beans.GeneralNews
 import java.io.Serializable
 import java.net.URL
@@ -24,4 +26,11 @@ data class SerializableNews(
                 news.clickAmount
             )
     }
+
+    fun getShareText(context: Context) =
+        if (type == null) {
+            context.getString(R.string.news_share_text, title, detailUrl.toString())
+        } else {
+            context.getString(R.string.news_share_text_with_type, type, title, detailUrl.toString())
+        }
 }

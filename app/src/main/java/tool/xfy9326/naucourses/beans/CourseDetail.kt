@@ -8,9 +8,13 @@ import java.io.Serializable
 data class CourseDetail(
     val course: Course,
     val termDate: TermDate,
-    val courseLocation: String,
-    val weekDayNum: Short,
-    val weekNum: Int,
-    val timePeriod: TimePeriod,
-    val courseCellStyle: CourseCellStyle
-) : Serializable
+    val courseCellStyle: CourseCellStyle,
+    val timeDetail: TimeDetail? = null
+) : Serializable {
+    data class TimeDetail(
+        val courseLocation: String,
+        val weekDayNum: Short,
+        val weekNum: Int,
+        val timePeriod: TimePeriod
+    ) : Serializable
+}
