@@ -1,54 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/layout_courseManageItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground"
-    android:gravity="center_vertical"
-    android:paddingTop="12dp"
-    android:paddingBottom="12dp">
+    android:background="@color/colorPrimary">
 
     <FrameLayout
-        android:id="@+id/layout_courseManageColor"
-        android:layout_width="wrap_content"
+        android:id="@+id/layout_courseManageItemSwipeBackground"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="10dp"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp">
+        android:background="@color/colorAttentionRed"
+        android:visibility="invisible" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/iv_courseManageColor"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/circle_today_course_color" />
-
-    </FrameLayout>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_courseManageItemDeleteIcon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginEnd="25dp"
+        app:srcCompat="@drawable/avd_anim_delete" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/layout_courseManageItemForeground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:orientation="vertical">
+        android:background="@drawable/bg_course_manage_item"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_courseManageName"
+        <FrameLayout
+            android:id="@+id/layout_courseManageColor"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="15sp" />
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_courseManageDetail"
-            android:layout_width="wrap_content"
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_courseManageColor"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/circle_today_course_color" />
+
+        </FrameLayout>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:gravity="center_vertical"
-            android:textSize="13sp" />
+            android:layout_marginStart="10dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_courseManageName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="15sp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_courseManageDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical"
+                android:textSize="13sp" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+</FrameLayout>

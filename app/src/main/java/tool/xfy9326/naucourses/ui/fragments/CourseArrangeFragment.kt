@@ -134,6 +134,7 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun buildTodayCourseList(todayCourses: Array<Pair<CourseItem, CourseCellStyle>>) {
         if (todayCourses.isEmpty()) {
             layout_todayCourseContent.visibility = View.GONE
@@ -146,7 +147,7 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
                 layout_todayCourseContent.addViewInLayout(inflater.inflate(R.layout.view_list_course_item, layout_todayCourseContent, false).apply {
                     ImageViewCompat.setImageTintList(this.iv_listCourseColor, ColorStateList.valueOf(coursePair.second.color))
                     this.tv_listCourseName.text = coursePair.first.course.name
-                    this.tv_listCourseLocation.text = coursePair.first.courseTime.location
+                    this.tv_listCourseDetail.text = "${coursePair.first.course.teacher}·${coursePair.first.courseTime.location}"
                     this.tv_listCourseStartTime.text = DATE_FORMAT_HM.format(coursePair.first.dateTimePeriod.startDateTime)
                     setOnClickListener {
                         getViewModel().requestCourseDetail(coursePair.first, coursePair.second)
@@ -160,6 +161,7 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun buildTomorrowCourseList(tomorrowCourses: Array<Pair<CourseItem, CourseCellStyle>>) {
         if (tomorrowCourses.isEmpty()) {
             layout_tomorrowCourseContent.visibility = View.GONE
@@ -177,7 +179,7 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
                     ).apply {
                         ImageViewCompat.setImageTintList(this.iv_listCourseColor, ColorStateList.valueOf(coursePair.second.color))
                         this.tv_listCourseName.text = coursePair.first.course.name
-                        this.tv_listCourseLocation.text = coursePair.first.courseTime.location
+                        this.tv_listCourseDetail.text = "${coursePair.first.course.teacher}·${coursePair.first.courseTime.location}"
                         this.tv_listCourseStartTime.text = DATE_FORMAT_HM.format(coursePair.first.dateTimePeriod.startDateTime)
                         setOnClickListener {
                             getViewModel().requestCourseDetail(coursePair.first, coursePair.second)

@@ -34,9 +34,10 @@
             android:textSize="15sp" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_listCourseLocation"
+            android:id="@+id/tv_listCourseDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
             android:gravity="center_vertical"
             android:textSize="13sp" />
 

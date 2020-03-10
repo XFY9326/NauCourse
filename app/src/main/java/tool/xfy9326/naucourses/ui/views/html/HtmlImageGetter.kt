@@ -12,6 +12,7 @@ import kotlinx.coroutines.withContext
 import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.providers.beans.GeneralNews
 import tool.xfy9326.naucourses.providers.info.methods.NewsInfo
+import tool.xfy9326.naucourses.ui.views.widgets.MutableDrawable
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -35,11 +36,9 @@ class HtmlImageGetter(
     }
 
     override fun getDrawable(source: String?): Drawable {
-        val drawable = MutableDrawable<ImageStatus>().apply {
-            val defaultIcon = contextReference.get()?.getDrawable(R.drawable.ic_image)!!
-            setDrawable(defaultIcon)
+        val defaultIcon = contextReference.get()?.getDrawable(R.drawable.ic_image)!!
+        val drawable = MutableDrawable(defaultIcon, ImageStatus.LOADING).apply {
             setBounds(0, 0, defaultIcon.intrinsicWidth, defaultIcon.intrinsicHeight)
-            nowStatus = ImageStatus.LOADING
         }
         drawableList.add(drawable)
 
@@ -64,16 +63,14 @@ class HtmlImageGetter(
                             zoom = BITMAP_MAX_ZOOM
                         }
 
-                        setDrawable(bitmapDrawable)
+                        setDrawable(bitmapDrawable, ImageStatus.SHOWING)
                         setBounds(0, 0, (bitmapDrawable.intrinsicWidth * zoom).toInt(), (bitmapDrawable.intrinsicHeight * zoom).toInt())
-                        nowStatus = ImageStatus.SHOWING
                     }
                 } else {
                     drawable.apply {
                         val icon = contextReference.get()?.getDrawable(R.drawable.ic_broken_image)!!
-                        setDrawable(icon)
+                        setDrawable(icon, ImageStatus.BROKEN)
                         setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
-                        nowStatus = ImageStatus.BROKEN
                     }
                 }
                 refreshTextView()

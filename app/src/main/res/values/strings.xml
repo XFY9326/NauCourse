@@ -119,7 +119,6 @@
     <string name="logout_msg">您是否确定要继续注销登录并清空所有用户数据？</string>
     <string name="course_manage">课程管理</string>
     <string name="course_and_term_data_empty">课程与学期数据均为空！</string>
-    <string name="delete">删除</string>
     <string name="share_image">分享图片</string>
     <string name="save_image">保存图片到本地</string>
     <string name="image_save_success">图片保存成功！</string>
@@ -128,4 +127,7 @@
     <string name="share_news">分享通知</string>
     <string name="news_share_text">%1$s\n%2$s</string>
     <string name="news_share_text_with_type">[%1$s] %2$s\n%3$s</string>
+    <string name="delete_course_success">删除课程成功！</string>
+    <string name="revoke">撤销</string>
+    <string name="course_color_edit">课程颜色编辑</string>
 </resources>

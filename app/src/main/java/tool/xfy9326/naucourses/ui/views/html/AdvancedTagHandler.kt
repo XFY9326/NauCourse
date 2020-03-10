@@ -9,6 +9,7 @@ import android.text.style.ImageSpan
 import android.view.View
 import org.xml.sax.XMLReader
 import tool.xfy9326.naucourses.Constants
+import tool.xfy9326.naucourses.ui.views.widgets.MutableDrawable
 import java.util.*
 
 class AdvancedTagHandler : Html.TagHandler {

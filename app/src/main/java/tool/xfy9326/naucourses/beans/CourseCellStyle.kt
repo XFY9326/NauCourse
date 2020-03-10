@@ -7,7 +7,7 @@ import java.io.Serializable
 
 data class CourseCellStyle(
     val courseId: String,
-    val color: Int,
+    var color: Int,
     val textSize: Float
 ) : Serializable {
     companion object {
@@ -23,23 +23,23 @@ data class CourseCellStyle(
 
         fun getStyleByCourseId(
             courseId: String, styles: Array<CourseCellStyle>, createNewWhileNotFound: Boolean = false,
-            saveCreateStyle: Boolean = true
+            saveCreateStyle: Boolean = true, copy: Boolean = false
         ): CourseCellStyle? {
             for (style in styles) {
                 if (style.courseId == courseId) {
-                    return style
+                    return if (copy) style.copy() else style
                 }
             }
             return if (createNewWhileNotFound) {
+                val createStyle = getDefaultCellStyle(courseId)
                 if (saveCreateStyle) {
                     val newStyle = styles.copyOf(styles.size + 1)
-                    newStyle[newStyle.size - 1] = getDefaultCellStyle(courseId)
+                    newStyle[newStyle.size - 1] = createStyle
                     CourseCellStyleStore.saveStore(newStyle.requireNoNulls())
                     newStyle[newStyle.size - 1]
                 } else {
-                    getDefaultCellStyle(courseId)
+                    createStyle
                 }
-
             } else {
                 null
             }

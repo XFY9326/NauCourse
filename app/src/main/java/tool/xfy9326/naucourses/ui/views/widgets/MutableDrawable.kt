@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourses.ui.views.html
+package tool.xfy9326.naucourses.ui.views.widgets
 
 import android.content.res.ColorStateList
 import android.graphics.*
@@ -7,23 +7,32 @@ import android.graphics.drawable.Drawable
 import androidx.core.graphics.drawable.DrawableCompat
 
 // 参考DrawableWrapper实现，用于可替换的Drawable显示
-class MutableDrawable<T : Enum<*>> : Drawable(), Drawable.Callback {
-    var drawable: Drawable? = null
+class MutableDrawable<T : Enum<*>>(drawable: Drawable? = null, nowStatus: T? = null) : Drawable(), Drawable.Callback {
+    @Volatile
+    var drawable: Drawable? = drawable
         private set
-    var nowStatus: T? = null
 
-    fun setDrawable(drawable: Drawable?) {
-        this.drawable?.let {
-            it.callback = null
-            if (it is BitmapDrawable) {
-                try {
-                    if (!it.bitmap.isRecycled) it.bitmap.recycle()
-                } catch (e: Exception) {
+    @Volatile
+    var nowStatus: T? = nowStatus
+        private set
+
+    @Synchronized
+    fun setDrawable(drawable: Drawable?, nowStatus: T?) {
+        if (drawable != this.drawable && nowStatus != this.nowStatus) {
+            this.drawable?.let {
+                it.callback = null
+                if (it is BitmapDrawable) {
+                    try {
+                        if (!it.bitmap.isRecycled) it.bitmap.recycle()
+                    } catch (e: Exception) {
+                    }
                 }
             }
+            this.drawable = drawable
+            this.nowStatus = nowStatus
+            this.drawable?.callback = this
+            invalidateSelf()
         }
-        this.drawable = drawable
-        this.drawable?.callback = this
     }
 
     override fun draw(canvas: Canvas) = drawable!!.draw(canvas)

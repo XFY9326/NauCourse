@@ -12,14 +12,16 @@ import tool.xfy9326.naucourses.beans.CourseCellStyle
 import tool.xfy9326.naucourses.beans.CourseManagePkg
 import tool.xfy9326.naucourses.providers.beans.jwc.Course
 import tool.xfy9326.naucourses.providers.beans.jwc.TermDate
+import tool.xfy9326.naucourses.ui.views.recyclerview.SwipeItemCallback
 import tool.xfy9326.naucourses.ui.views.recyclerview.viewholders.CourseViewHolder
 
-class CourseAdapter(context: Context, @Volatile private var courseManagePkg: CourseManagePkg?) : RecyclerView.Adapter<CourseViewHolder>() {
+class CourseAdapter(context: Context, @Volatile private var courseManagePkg: CourseManagePkg?, private val callback: Callback) :
+    RecyclerView.Adapter<CourseViewHolder>(), SwipeItemCallback.OnItemSwipedListener<CourseViewHolder> {
 
     private val layoutInflater = LayoutInflater.from(context)
     private val isOperationEnabledLock = Any()
 
-    constructor(context: Context) : this(context, null)
+    constructor(context: Context, listener: Callback) : this(context, null, listener)
 
     fun setCourseManagePkg(courseManagePkg: CourseManagePkg) = synchronized(isOperationEnabledLock) {
         this.courseManagePkg = courseManagePkg
@@ -32,8 +34,16 @@ class CourseAdapter(context: Context, @Volatile private var courseManagePkg: Cou
 
     fun removeCourse(position: Int) = synchronized(isOperationEnabledLock) {
         if (courseManagePkg != null) {
-            courseManagePkg!!.courses.removeAt(position)
+            val deleteItem = courseManagePkg!!.courses.removeAt(position)
             notifyItemRemoved(position)
+            callback.onCourseDeleted(this, deleteItem, position)
+        }
+    }
+
+    fun recoverCourse(lastDeleteItem: Pair<Course, CourseCellStyle>, lastDeleteItemPosition: Int) = synchronized(isOperationEnabledLock) {
+        if (courseManagePkg != null) {
+            courseManagePkg!!.courses.add(lastDeleteItemPosition, lastDeleteItem)
+            notifyItemInserted(lastDeleteItemPosition)
         }
     }
 
@@ -70,6 +80,8 @@ class CourseAdapter(context: Context, @Volatile private var courseManagePkg: Cou
         }
     }
 
+    override fun onSwipedItem(viewHolder: CourseViewHolder, position: Int) = removeCourse(position)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder =
         CourseViewHolder(layoutInflater.inflate(R.layout.view_course_manage_item, parent, false))
 
@@ -98,8 +110,33 @@ class CourseAdapter(context: Context, @Volatile private var courseManagePkg: Cou
                     tvCourseManageName.text = coursePair.first.name
                     tvCourseManageDetail.text = "${coursePair.first.type}·${coursePair.first.teacher}"
 
+                    layoutCourseManageColor.setOnClickListener {
+                        synchronized(isOperationEnabledLock) {
+                            if (courseManagePkg != null) {
+                                callback.onEditCourseColor(this@CourseAdapter, position, courseManagePkg!!.courses[position].second)
+                            }
+                        }
+                    }
+
+                    layoutCourseManageItem.setOnClickListener {
+                        synchronized(isOperationEnabledLock) {
+                            if (courseManagePkg != null) {
+                                if (courseManagePkg != null) {
+                                    callback.onEditCourse(this@CourseAdapter, courseManagePkg!!.courses[position])
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
+    }
+
+    interface Callback {
+        fun onCourseDeleted(adapter: CourseAdapter, lastDeleteItem: Pair<Course, CourseCellStyle>, lastDeleteItemPosition: Int)
+
+        fun onEditCourseColor(adapter: CourseAdapter, position: Int, style: CourseCellStyle)
+
+        fun onEditCourse(adapter: CourseAdapter, courseItem: Pair<Course, CourseCellStyle>)
     }
 }

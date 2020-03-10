@@ -81,5 +81,7 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
      */
     abstract fun newAutoLoginCall(request: Request): Response
 
+    protected open fun validateNotInLoginPage(responseContent: String): Boolean = true
+
     fun newAutoLoginCall(url: HttpUrl): Response = newAutoLoginCall(Request.Builder().url(url).build())
 }

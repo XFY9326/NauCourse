@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string-array name="weekday_num">
         <item>@string/monday</item>
         <item>@string/tuesday</item>
@@ -13,5 +13,28 @@
     <integer-array name="refresh_layout_color_scheme">
         <item>@color/colorPrimary</item>
         <item>@color/colorPrimaryDark</item>
+    </integer-array>
+
+    <integer-array name="material_colors_600">
+        <item>@color/material_red_600</item>
+        <item>@color/material_pink_600</item>
+        <item>@color/material_purple_600</item>
+        <item>@color/material_deep_purple_600</item>
+        <item>@color/material_indigo_600</item>
+        <item>@color/material_blue_600</item>
+        <item>@color/material_light_blue_600</item>
+        <item>@color/material_cyan_600</item>
+        <item>@color/material_teal_600</item>
+        <item>@color/material_green_600</item>
+        <item>@color/material_light_green_600</item>
+        <item>@color/material_lime_600</item>
+        <!--  Yellow 颜色过浅  -->
+        <!--  <item>@color/material_yellow_600</item>  -->
+        <item>@color/material_amber_600</item>
+        <item>@color/material_orange_600</item>
+        <item>@color/material_deep_orange_600</item>
+        <item>@color/material_brown_600</item>
+        <item tools:ignore="PrivateResource">@color/material_grey_600</item>
+        <item>@color/material_blue_grey_600</item>
     </integer-array>
 </resources>

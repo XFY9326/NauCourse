@@ -59,7 +59,7 @@ class NewsAdapter(context: Context, private var newsList: List<GeneralNews>, pri
                     tvNewsPostDate.text = DATE_FORMAT_YMD.format(news.postDate)
                     cvNewsCard.setOnClickListener {
                         synchronized(isOperationEnabledLock) {
-                            listener.onNewsItemClick(news)
+                            listener.onNewsItemClick(newsList[position])
                         }
                     }
                 }

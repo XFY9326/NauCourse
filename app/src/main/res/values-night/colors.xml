@@ -10,4 +10,5 @@
     <color name="colorBaseIcon">#DBDBDB</color>
     <color name="colorWindowsBackground">@color/design_dark_default_color_background</color>
     <color name="colorDivider">#C7C7C7</color>
+    <color name="colorDefaultBackground">#303030</color>
 </resources>

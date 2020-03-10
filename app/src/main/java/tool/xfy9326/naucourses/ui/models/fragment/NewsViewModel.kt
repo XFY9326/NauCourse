@@ -32,10 +32,10 @@ class NewsViewModel : BaseViewModel() {
                     LogUtils.d<NewsViewModel>("News Info Init Error: ${newsInfoResult.errorReason}")
                 }
                 isRefreshing.postValue(false)
-
-                refreshNewsList()
             }
         }
+
+        refreshNewsList()
     }
 
     @Synchronized

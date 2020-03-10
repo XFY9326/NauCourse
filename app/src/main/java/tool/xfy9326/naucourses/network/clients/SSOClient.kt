@@ -181,7 +181,11 @@ open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = nu
         val url = response.request.url
         val content = SSONetworkTools.getResponseContent(response)
         return if (validateLoginWithResponse(content, url)) {
-            response
+            if (validateNotInLoginPage(content)) {
+                response
+            } else {
+                newClientCall(request)
+            }
         } else {
             val result = if (url.hasSameHost(SSO_HOST) || SSO_LOGIN_PAGE_STR in content) {
                 login(response)

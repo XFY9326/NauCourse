@@ -35,13 +35,13 @@ class CourseManageViewModel : BaseViewModel() {
                 val styleList = CourseCellStyleStore.loadCellStyles(courseInfo.data!!)
                 val output = ArrayList<Pair<Course, CourseCellStyle>>(courseInfo.data.courses.size).apply {
                     for (course in courseInfo.data.courses) {
-                        add(Pair(course, CourseCellStyle.getStyleByCourseId(course.id, styleList)!!))
+                        add(Pair(course.copy(), CourseCellStyle.getStyleByCourseId(course.id, styleList, copy = true)!!))
                     }
                     sortBy {
                         it.first.id
                     }
                 }
-                courseManagePkg.postValue(CourseManagePkg(termInfo.data!!, courseInfo.data.term, output))
+                courseManagePkg.postValue(CourseManagePkg(termInfo.data!!.copy(), courseInfo.data.term.copy(), output))
             } else {
                 LogUtils.d<CourseManageViewModel>("Term Or Course Data Error! Term: ${termInfo.errorReason}  Course: ${courseInfo.errorReason}")
             }
