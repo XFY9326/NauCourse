@@ -1,13 +1,14 @@
 package tool.xfy9326.naucourses.providers.store.base
 
-import tool.xfy9326.naucourses.io.json.GsonStoreManager
-import tool.xfy9326.naucourses.io.json.GsonStoreType
+import tool.xfy9326.naucourses.io.gson.GsonStoreManager
+import tool.xfy9326.naucourses.io.gson.GsonStoreType
 import java.util.*
 
 abstract class BaseGsonStore<T : Any> {
     protected abstract val storeType: GsonStoreType
     protected abstract val useCache: Boolean
     protected abstract val useEncrypt: Boolean
+
     private var hasInit = false
     private var cache: T? = null
     private var listenerList: Vector<OnStoreChangedListener<T>> = Vector()

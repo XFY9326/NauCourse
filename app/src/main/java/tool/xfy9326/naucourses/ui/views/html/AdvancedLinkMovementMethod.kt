@@ -50,7 +50,5 @@ object AdvancedLinkMovementMethod : LinkMovementMethod() {
         return super.onTouchEvent(widget, buffer, event)
     }
 
-    fun clearHandler() {
-        longClickHandler.removeCallbacksAndMessages(null)
-    }
+    fun clearHandler() = longClickHandler.removeCallbacksAndMessages(null)
 }

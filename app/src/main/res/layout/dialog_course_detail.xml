@@ -125,6 +125,7 @@
             android:id="@+id/btn_loadMoreCourseInfo"
             android:layout_width="match_parent"
             android:layout_height="30dp"
+            android:layout_gravity="bottom"
             android:layout_marginTop="5dp"
             android:background="@android:color/transparent"
             android:foreground="?attr/selectableItemBackgroundBorderless"

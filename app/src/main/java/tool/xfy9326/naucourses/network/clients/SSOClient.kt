@@ -54,8 +54,6 @@ open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = nu
         private const val SSO_LOGIN_INPUT_ERROR_STR = "请勿输入非法字符"
         const val SSO_LOGIN_PAGE_STR = "南京审计大学统一身份认证登录"
 
-        private const val AUTO_TRY_LOGIN_TIME_WHEN_CALL = 2
-
         private val SSO_HEADER = Headers.headersOf(
             "Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
             "Accept-Language", "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7",
@@ -169,12 +167,10 @@ open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = nu
 
     private fun newSSOCall(request: Request): Response = okHttpClient.newCall(request.newBuilder().headers(SSO_HEADER).build()).execute()
 
-    final override fun getBeforeLoginResponse(): Response {
-        val request = Request.Builder().apply {
+    final override fun getBeforeLoginResponse(): Response =
+        newSSOCall(Request.Builder().apply {
             url(loginUrl)
-        }.build()
-        return newSSOCall(request)
-    }
+        }.build())
 
     final override fun newAutoLoginCall(request: Request): Response {
         val response = newClientCall(request)

@@ -50,7 +50,7 @@ object CourseInfo : BaseSimpleContentInfo<CourseSet, CourseInfo.OperationType>()
 
     override suspend fun getSimpleInfoContent(params: Set<OperationType>): ContentResult<CourseSet> {
         if (params.size != 1) {
-            throw IllegalArgumentException("Params Amount Error!")
+            throw IllegalArgumentException("Params Amount Error! Params: $params")
         } else {
             return when (params.first()) {
                 OperationType.ASYNC_COURSE -> {

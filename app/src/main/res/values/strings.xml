@@ -130,4 +130,15 @@
     <string name="delete_course_success">删除课程成功！</string>
     <string name="revoke">撤销</string>
     <string name="course_color_edit">课程颜色编辑</string>
+    <string name="course_edit">课程编辑</string>
+    <string name="course_edit_failed">课程编辑时出现错误！</string>
+    <string name="course_name">课程名称：</string>
+    <string name="teacher_name">教师 (可选)：</string>
+    <string name="teach_class_name">教学班 (可选)：</string>
+    <string name="course_class_name">合班号 (可选)：</string>
+    <string name="course_credit_name">学分 (可选)：</string>
+    <string name="type_name">类型 (可选)：</string>
+    <string name="property_name">性质 (可选)：</string>
+    <string name="course_detail_empty">课程详细信息为空\n请至少添加一条信息</string>
+    <string name="base_course_info">基础课程信息</string>
 </resources>

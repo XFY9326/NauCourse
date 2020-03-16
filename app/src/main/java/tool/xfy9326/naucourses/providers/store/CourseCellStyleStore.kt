@@ -1,7 +1,7 @@
 package tool.xfy9326.naucourses.providers.store
 
 import tool.xfy9326.naucourses.beans.CourseCellStyle
-import tool.xfy9326.naucourses.io.json.GsonStoreType
+import tool.xfy9326.naucourses.io.gson.GsonStoreType
 import tool.xfy9326.naucourses.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourses.providers.store.base.BaseGsonStore
 

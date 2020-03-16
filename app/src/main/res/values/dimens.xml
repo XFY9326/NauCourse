@@ -2,4 +2,10 @@
 <resources>
     <dimen name="login_panel_btn_login_margin_top">15dp</dimen>
     <dimen name="course_table_course_time_row_size">30dp</dimen>
+    <dimen name="course_manage_divider_left_margin">50dp</dimen>
+    <dimen name="course_manage_divider_right_margin">10dp</dimen>
+    <dimen name="course_cell_height_offset">3dp</dimen>
+    <dimen name="course_cell_padding">2dp</dimen>
+    <dimen name="course_cell_text_padding">5dp</dimen>
+    <dimen name="course_cell_background_radius">6dp</dimen>
 </resources>

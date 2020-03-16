@@ -1,5 +1,7 @@
 package tool.xfy9326.naucourses.ui.activities
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
@@ -18,17 +20,16 @@ import tool.xfy9326.naucourses.ui.models.activity.CourseManageViewModel
 import tool.xfy9326.naucourses.ui.views.recyclerview.AdvancedDivider
 import tool.xfy9326.naucourses.ui.views.recyclerview.SwipeItemCallback
 import tool.xfy9326.naucourses.ui.views.recyclerview.adapters.CourseAdapter
-import tool.xfy9326.naucourses.utils.BaseUtils.dpToPx
 import tool.xfy9326.naucourses.utils.views.ActivityUtils
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.enableHomeButton
+import tool.xfy9326.naucourses.utils.views.ActivityUtils.showSnackBar
 
 
 class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseAdapter.Callback {
     companion object {
-        private val dividerLeftMargin = 50.dpToPx()
-        private val dividerRightMargin = 10.dpToPx()
-
         private const val COLOR_PICKER_DIALOG_ID = 1
+
+        private const val COURSE_EDIT_RESULT = 1
     }
 
     private lateinit var courseAdapter: CourseAdapter
@@ -49,7 +50,10 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
                     this@CourseManageActivity,
                     DividerItemDecoration.VERTICAL
                 ).apply {
-                    setMargins(dividerLeftMargin, dividerRightMargin)
+                    setMargins(
+                        resources.getDimensionPixelSize(R.dimen.course_manage_divider_left_margin),
+                        resources.getDimensionPixelSize(R.dimen.course_manage_divider_right_margin)
+                    )
                 })
             ItemTouchHelper(SwipeItemCallback(courseAdapter)).attachToRecyclerView(this)
             adapter = courseAdapter
@@ -66,6 +70,17 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
         ActivityUtils.showSnackBarWithCallback(layout_courseManage, R.string.delete_course_success, R.string.revoke, View.OnClickListener {
             adapter.recoverCourse(lastDeleteItem, lastDeleteItemPosition)
         })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == COURSE_EDIT_RESULT) {
+            if (resultCode == Activity.RESULT_OK && data != null) {
+
+            } else {
+                showSnackBar(layout_courseManage, R.string.course_edit_failed)
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onEditCourseColor(adapter: CourseAdapter, position: Int, style: CourseCellStyle) {
@@ -96,6 +111,11 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
     }
 
     override fun onEditCourse(adapter: CourseAdapter, courseItem: Pair<Course, CourseCellStyle>) {
-
+        startActivityForResult(
+            Intent(this, CourseEditActivity::class.java)
+                .putExtra(CourseEditActivity.COURSE_DATA, courseItem.first)
+                .putExtra(CourseEditActivity.COURSE_CELL_STYLE, courseItem.second),
+            COURSE_EDIT_RESULT
+        )
     }
 }

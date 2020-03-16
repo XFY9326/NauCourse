@@ -46,6 +46,7 @@ object Constants {
     object HTML {
         const val ELEMENT_TAG_IMG = "img"
         const val ELEMENT_TAG_TD = "td"
+        const val ELEMENT_TAG_LI = "li"
         const val ELEMENT_TAG_BR = "br"
         const val ELEMENT_TAG_TR = "tr"
         const val ELEMENT_TAG_TH = "th"

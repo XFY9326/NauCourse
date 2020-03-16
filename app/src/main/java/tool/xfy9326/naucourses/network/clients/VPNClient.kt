@@ -14,8 +14,15 @@ import tool.xfy9326.naucourses.network.clients.tools.VPNTools
 import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 
-open class VPNClient(loginInfo: LoginInfo) : SSOClient(loginInfo, VPN_LOGIN_URL) {
-    var forceUseVPN: Boolean = false
+open class VPNClient(loginInfo: LoginInfo, loginUrl: HttpUrl? = null) :
+    SSOClient(
+        loginInfo, if (loginUrl != null) {
+            getUrlWithVPNClient(loginUrl)
+        } else {
+            VPN_LOGIN_URL
+        }
+    ) {
+    private var forceUseVPN: Boolean = false
 
     companion object {
         const val VPN_HOST = "vpn.nau.edu.cn"
@@ -41,6 +48,32 @@ open class VPNClient(loginInfo: LoginInfo) : SSOClient(loginInfo, VPN_LOGIN_URL)
         private const val TEST_CONNECT_TIME_OUT = 2000L
 
         fun isPageUsingVPN(content: String) = VPN_HOST_DATA_STR in content
+
+        private fun getUrlWithVPNClient(url: HttpUrl): HttpUrl =
+            if (!url.hasSameHost(VPN_HOST)) {
+                VPNTools.buildVPNUrl(url)
+            } else {
+                url
+            }
+
+        fun patchVPNRequest(useVPN: Boolean, request: Request): Request {
+            val vpnUrl = if (useVPN) {
+                getUrlWithVPNClient(request.url)
+            } else {
+                request.url
+            }
+
+            val requestBuilder = request.newBuilder()
+            val refererUrl = request.header(Constants.Network.HEADER_REFERER)
+            if (useVPN && refererUrl != null) {
+                val refererHttpUrl = refererUrl.toHttpUrl()
+                if (!refererHttpUrl.hasSameHost(vpnUrl)) {
+                    requestBuilder.header(Constants.Network.HEADER_REFERER, VPNTools.buildVPNUrl(refererHttpUrl).toString())
+                }
+            }
+            requestBuilder.url(vpnUrl)
+            return requestBuilder.build()
+        }
     }
 
     @CallSuper
@@ -68,9 +101,10 @@ open class VPNClient(loginInfo: LoginInfo) : SSOClient(loginInfo, VPN_LOGIN_URL)
         super.validateLoginWithResponse(responseContent, responseUrl) &&
                 (VPN_LOGIN_PAGE_STR !in responseContent || (SSO_LOGIN_PAGE_STR !in responseContent && VPN_HOST_DATA_STR in responseContent))
 
-    override fun validateNotInLoginPage(responseContent: String): Boolean = VPN_LOGIN_PAGE_STR !in responseContent
+    override fun validateNotInLoginPage(responseContent: String): Boolean =
+        SSO_LOGIN_PAGE_STR !in responseContent && VPN_LOGIN_PAGE_STR !in responseContent
 
-    private fun newVPNCall(request: Request): Response = getNetworkClient().newCall(request).execute()
+    protected fun newVPNCall(request: Request): Response = getNetworkClient().newCall(request).execute()
 
     private fun validateVPNNecessary(url: HttpUrl): Boolean = try {
         getNetworkClient().newBuilder().connectTimeout(TEST_CONNECT_TIME_OUT, TimeUnit.MILLISECONDS).build()
@@ -82,28 +116,16 @@ open class VPNClient(loginInfo: LoginInfo) : SSOClient(loginInfo, VPN_LOGIN_URL)
         true
     }
 
-    @CallSuper
-    override fun newClientCall(request: Request): Response {
-        var vpnUrl = request.url
-        val useVPN = forceUseVPN || validateVPNNecessary(vpnUrl)
-        if (!vpnUrl.hasSameHost(VPN_HOST) && useVPN) {
-            vpnUrl = VPNTools.buildVPNUrl(request.url)
-        }
+    protected fun useVPN(url: HttpUrl) = forceUseVPN || validateVPNNecessary(url)
 
-        val requestBuilder = request.newBuilder()
-        val refererUrl = request.header(Constants.Network.HEADER_REFERER)
-        if (useVPN && refererUrl != null) {
-            val refererHttpUrl = refererUrl.toHttpUrl()
-            if (!refererHttpUrl.hasSameHost(vpnUrl)) {
-                requestBuilder.header(Constants.Network.HEADER_REFERER, VPNTools.buildVPNUrl(refererHttpUrl).toString())
-            }
-        }
-        requestBuilder.url(vpnUrl)
-        val callResult = newVPNCall(requestBuilder.build())
-        return if (VPN_LOGIN_PAGE_STR in SSONetworkTools.getResponseContent(callResult)) {
-            newVPNCall(requestBuilder.build())
-        } else {
+    override fun newClientCall(request: Request): Response {
+        val useVPN = useVPN(request.url)
+        val newRequest = patchVPNRequest(useVPN, request)
+        val callResult = newVPNCall(newRequest)
+        return if (validateNotInLoginPage(SSONetworkTools.getResponseContent(callResult))) {
             callResult
+        } else {
+            newVPNCall(newRequest)
         }
     }
 }

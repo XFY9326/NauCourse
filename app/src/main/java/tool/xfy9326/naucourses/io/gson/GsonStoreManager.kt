@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourses.io.json
+package tool.xfy9326.naucourses.io.gson
 
 import com.google.gson.Gson
 import tool.xfy9326.naucourses.App

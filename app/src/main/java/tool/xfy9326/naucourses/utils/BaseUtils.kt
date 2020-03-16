@@ -4,7 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.os.IBinder
 import android.util.TypedValue
+import android.view.inputmethod.InputMethodManager
 import kotlin.system.exitProcess
 
 
@@ -24,4 +26,9 @@ object BaseUtils {
         context.applicationContext.startActivity(intent)
         exitProcess(0)
     }
+
+    fun hideKeyboard(context: Context, windowToken: IBinder) =
+        (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).apply {
+            if (isActive) hideSoftInputFromWindow(windowToken, 0)
+        }
 }

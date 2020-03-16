@@ -13,6 +13,7 @@ abstract class BaseContentInfo<T : Enum<*>, P : Enum<*>> {
     private val cacheMap = Hashtable<T, Any>(1)
     private var hasInit = false
     private val infoMutex = Mutex()
+    private val cacheMutex = Mutex()
 
     companion object {
         private const val KEY_JOIN_SYMBOL = "_"
@@ -94,30 +95,35 @@ abstract class BaseContentInfo<T : Enum<*>, P : Enum<*>> {
         if (loadCachedData && forceRefresh) {
             throw IllegalArgumentException("You Can't Do Load Cache And Refresh At The Same Time!")
         }
-        infoMutex.withLock {
-            val hasCachedData = hasCachedItem(type)
+
+        if (loadCachedData) {
+            cacheMutex.withLock {
+                if (hasCachedItem(type)) {
+                    return@withContext InfoResult<E>(true, onReadCache(getCachedItem(type)!!) as E)
+                } else {
+                    return@withContext InfoResult<E>(false, errorReason = ContentErrorReason.EMPTY_DATA)
+                }
+            }
+        }
+
+        cacheMutex.withLock {
             val cacheExpire = onGetCacheExpire()
-            if (loadCachedData) {
-                if (hasCachedData) {
-                    InfoResult(true, onReadCache(getCachedItem(type)!!) as E)
-                } else {
-                    InfoResult(false, errorReason = ContentErrorReason.EMPTY_DATA)
-                }
-            } else if (!forceRefresh && hasCachedData && !isCacheExpired(type, params, cacheExpire)) {
-                InfoResult(true, onReadCache(getCachedItem(type)!!) as E)
+            if (!forceRefresh && hasCachedItem(type) && !isCacheExpired(type, params, cacheExpire)) {
+                return@withContext InfoResult<E>(true, onReadCache(getCachedItem(type)!!) as E)
+            }
+        }
+
+        infoMutex.withLock {
+            val result = getInfoContent(type, params)
+            if (result.isSuccess) {
+                onSaveResult(type, params, result.contentData!! as E)
+                onSaveCache(type, params, result.contentData as E)
+                return@withContext InfoResult<E>(true, result.contentData)
             } else {
-                val result = getInfoContent(type, params)
-                if (result.isSuccess) {
-                    onSaveResult(type, params, result.contentData!! as E)
-                    onSaveCache(type, params, result.contentData as E)
-                    InfoResult(true, result.contentData)
-                } else {
-                    InfoResult(false, errorReason = result.contentErrorResult)
-                }
+                return@withContext InfoResult<E>(false, errorReason = result.contentErrorResult)
             }
         }
     }
 
-    @Synchronized
-    fun clearCacheInfo() = cacheMap.clear()
+    fun clearCacheInfo() = synchronized(this) { cacheMap.clear() }
 }

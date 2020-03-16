@@ -33,11 +33,11 @@ import tool.xfy9326.naucourses.beans.CoursePkg
 import tool.xfy9326.naucourses.beans.CourseTable
 import tool.xfy9326.naucourses.ui.views.widgets.AdvancedGridLayout
 import tool.xfy9326.naucourses.ui.views.widgets.AdvancedLinearLayout
-import tool.xfy9326.naucourses.utils.BaseUtils.dpToPx
 import tool.xfy9326.naucourses.utils.compute.TimeUtils
 import tool.xfy9326.naucourses.utils.views.ColorUtils
 import kotlin.math.ceil
 import kotlin.math.max
+import kotlin.properties.Delegates
 
 
 object CourseTableViewHelper {
@@ -50,13 +50,13 @@ object CourseTableViewHelper {
     private lateinit var defaultValues: CourseBuilderDefaultValues
     private lateinit var listener: OnCourseCellClickListener
 
-    private val CELL_HEIGHT_OFFSET = 3.dpToPx()
+    private var CELL_HEIGHT_OFFSET by Delegates.notNull<Int>()
 
-    private val COURSE_CELL_PADDING = 2.dpToPx()
-    private val COURSE_CELL_TEXT_PADDING = 5.dpToPx()
+    private var COURSE_CELL_PADDING by Delegates.notNull<Int>()
+    private var COURSE_CELL_TEXT_PADDING by Delegates.notNull<Int>()
 
     private const val DEFAULT_COURSE_CELL_BACKGROUND_ALPHA = 0.6f
-    private val DEFAULT_COURSE_CELL_BACKGROUND_RADIUS = 6f.dpToPx()
+    private var DEFAULT_COURSE_CELL_BACKGROUND_RADIUS by Delegates.notNull<Float>()
 
     private const val TIME_CELL_TIME_NUM_TEXT_SIZE = 17
     private const val TIME_CELL_TIME_TEXT_SIZE = 10
@@ -69,6 +69,11 @@ object CourseTableViewHelper {
         this.listener = listener
         layoutInflater = LayoutInflater.from(context)
         with(context) {
+            CELL_HEIGHT_OFFSET = resources.getDimensionPixelSize(R.dimen.course_cell_height_offset)
+            COURSE_CELL_PADDING = resources.getDimensionPixelSize(R.dimen.course_cell_padding)
+            COURSE_CELL_TEXT_PADDING = resources.getDimensionPixelSize(R.dimen.course_cell_text_padding)
+            DEFAULT_COURSE_CELL_BACKGROUND_RADIUS = resources.getDimensionPixelSize(R.dimen.course_cell_background_radius).toFloat()
+
             defaultValues = CourseBuilderDefaultValues(
                 getString(R.string.not_current_week_course),
                 resources.getStringArray(R.array.weekday_num),

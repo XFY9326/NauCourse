@@ -35,6 +35,11 @@ class AdvancedRecyclerView : RecyclerView {
         }
     }
 
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        modifyEmptyView()
+    }
+
     private val emptyViewAdapterObserver = object : AdapterDataObserver() {
         override fun onChanged() {
             modifyEmptyView()

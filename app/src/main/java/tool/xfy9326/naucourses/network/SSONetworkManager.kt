@@ -24,7 +24,7 @@ object SSONetworkManager {
         ClientType.VPN to lazy { VPNClient(loginInfo) },
         ClientType.JWC to lazy { JwcClient(loginInfo) },
         ClientType.ALSTU to lazy { AlstuClient(loginInfo) },
-        ClientType.MY to lazy { MyClient(loginInfo) }
+        ClientType.YKT to lazy { YktClient(loginInfo) }
     )
 
     enum class ClientType {
@@ -32,7 +32,7 @@ object SSONetworkManager {
         VPN,
         JWC,
         ALSTU,
-        MY
+        YKT
     }
 
     fun getClient(clientType: ClientType) = synchronized(this) {

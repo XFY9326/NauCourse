@@ -35,8 +35,8 @@ class CourseDetailDialog : DialogFragment() {
         arguments?.apply {
             courseDetail = getSerializable(COURSE_DETAIL_DATA) as CourseDetail
         }
-        if (savedInstanceState != null) {
-            isMoreInfoExpanded = savedInstanceState.getBoolean(VIEW_EXPANDED)
+        savedInstanceState?.let {
+            isMoreInfoExpanded = it.getBoolean(VIEW_EXPANDED)
         }
     }
 

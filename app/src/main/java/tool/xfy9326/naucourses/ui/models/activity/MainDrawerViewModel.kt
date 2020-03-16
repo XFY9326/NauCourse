@@ -51,7 +51,7 @@ class MainDrawerViewModel : BaseViewModel() {
         viewModelScope.launch(Dispatchers.Default) {
             val balance = CardBalanceInfo.getInfo(loadCache = initLoad)
             if (balance.isSuccess) {
-                studentCardBalance.postValue(balance.data!!)
+                studentCardBalance.postValue(balance.data!!.mainBalance)
             } else {
                 LogUtils.d<MainDrawerViewModel>("CardBalanceInfo Error: ${balance.errorReason}")
             }

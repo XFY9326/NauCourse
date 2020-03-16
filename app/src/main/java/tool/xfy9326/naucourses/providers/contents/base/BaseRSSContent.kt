@@ -96,9 +96,15 @@ abstract class BaseRSSContent : BaseNewsContent<RSSObject>() {
     }
 
     final override fun onParseRawData(content: String): Set<RSSObject> {
-        val result = RSSReader.getRSSObject(content)
+        //TODO
+        val result = try {
+            RSSReader.getRSSObject(content)
+        } catch (e: Exception) {
+            println(content)
+            throw e
+        }
         if (result == null) {
-            throw IOException("RSS Parse Result Is Empty!")
+            throw IOException("RSS Parse Result is Empty!")
         } else {
             return setOf(result)
         }

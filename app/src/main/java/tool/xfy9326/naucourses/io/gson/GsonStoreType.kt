@@ -1,9 +1,6 @@
-package tool.xfy9326.naucourses.io.json
+package tool.xfy9326.naucourses.io.gson
 
-import tool.xfy9326.naucourses.beans.CourseArrange
-import tool.xfy9326.naucourses.beans.CourseCellStyle
-import tool.xfy9326.naucourses.beans.CourseTable
-import tool.xfy9326.naucourses.beans.UUIDContent
+import tool.xfy9326.naucourses.beans.*
 import tool.xfy9326.naucourses.providers.beans.jwc.StudentInfo
 
 enum class GsonStoreType {
@@ -26,6 +23,10 @@ enum class GsonStoreType {
     COURSE_ARRANGE {
         override val versionCode: Int = 1
         override val storeClass: Class<*> = CourseArrange::class.java
+    },
+    CARD_BALANCE {
+        override val versionCode: Int = 1
+        override val storeClass: Class<*> = CardBalance::class.java
     };
 
     abstract val storeClass: Class<*>

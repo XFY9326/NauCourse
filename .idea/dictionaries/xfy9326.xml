@@ -10,6 +10,7 @@
       <w>arti</w>
       <w>articlecontent</w>
       <w>ashx</w>
+      <w>auid</w>
       <w>blocklen</w>
       <w>ciphertext</w>
       <w>cppcoreguidelines</w>
@@ -42,6 +43,7 @@
       <w>rssoffer</w>
       <w>sbox</w>
       <w>slcc</w>
+      <w>slogin</w>
       <w>sqlite</w>
       <w>subword</w>
       <w>tablelen</w>

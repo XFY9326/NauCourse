@@ -1,7 +1,7 @@
 package tool.xfy9326.naucourses.providers.info.methods
 
-import tool.xfy9326.naucourses.io.json.GsonStoreManager
-import tool.xfy9326.naucourses.io.json.GsonStoreType
+import tool.xfy9326.naucourses.io.gson.GsonStoreManager
+import tool.xfy9326.naucourses.io.gson.GsonStoreType
 import tool.xfy9326.naucourses.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourses.providers.contents.base.ContentResult
 import tool.xfy9326.naucourses.providers.contents.methods.jwc.StudentIndex
