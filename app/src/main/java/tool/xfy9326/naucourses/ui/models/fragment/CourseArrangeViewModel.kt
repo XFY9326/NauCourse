@@ -2,6 +2,7 @@ package tool.xfy9326.naucourses.ui.models.fragment
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -34,6 +35,8 @@ class CourseArrangeViewModel : BaseViewModel() {
     @Volatile
     private lateinit var termDate: TermDate
 
+    private lateinit var initDeferred: Deferred<*>
+
     val nextCourseData = MutableLiveData<CourseItem?>()
     val isRefreshing = MutableLiveData<Boolean>()
     val todayCourses = MutableLiveData<Array<Pair<CourseItem, CourseCellStyle>>>()
@@ -50,31 +53,39 @@ class CourseArrangeViewModel : BaseViewModel() {
     }
 
     override fun onInitView(isRestored: Boolean) {
-        if (!isRestored) loadInitCache()
+        if (!isRestored) initDeferred = loadInitCache()
 
-        refreshArrangeCourses()
-        refreshNextCoursePosition()
+        viewModelScope.launch {
+            if (this@CourseArrangeViewModel::initDeferred.isInitialized) {
+                if (initDeferred.isActive) initDeferred.await()
+                refreshArrangeCourses()
+                refreshNextCoursePosition()
+            }
+        }
     }
 
-    private fun loadInitCache() {
-        viewModelScope.launch(Dispatchers.Default) {
-            val arrangeCache = CourseArrangeStore.loadStore()
-            if (arrangeCache != null) {
-                todayCourses.postValue(arrangeCache.todayCourseArr)
-                tomorrowCourses.postValue(arrangeCache.tomorrowCourseArr)
-                notThisWeekCourse.postValue(arrangeCache.notThisWeekCourseArr)
+    private fun loadInitCache() = viewModelScope.async(Dispatchers.Default) {
+        val arrangeCache = CourseArrangeStore.loadStore()
+        if (arrangeCache != null) {
+            todayCourses.postValue(arrangeCache.todayCourseArr)
+            tomorrowCourses.postValue(arrangeCache.tomorrowCourseArr)
+            notThisWeekCourse.postValue(arrangeCache.notThisWeekCourseArr)
 
-                todayCourseArr = Array(arrangeCache.todayCourseArr.size) {
-                    arrangeCache.todayCourseArr[it].first
-                }
-                refreshNextCoursePosition(false)
+            if (arrangeCache.termDate != null) {
+                termDateData.postValue(arrangeCache.termDate)
+                termDate = arrangeCache.termDate
+            }
 
-                tomorrowCourseArr = Array(arrangeCache.tomorrowCourseArr.size) {
-                    arrangeCache.tomorrowCourseArr[it].first
-                }
-                notThisWeekCourseArr = Array(arrangeCache.notThisWeekCourseArr.size) {
-                    Pair(arrangeCache.notThisWeekCourseArr[it].first, arrangeCache.notThisWeekCourseArr[it].second)
-                }
+            todayCourseArr = Array(arrangeCache.todayCourseArr.size) {
+                arrangeCache.todayCourseArr[it].first
+            }
+            refreshNextCoursePosition(false)
+
+            tomorrowCourseArr = Array(arrangeCache.tomorrowCourseArr.size) {
+                arrangeCache.tomorrowCourseArr[it].first
+            }
+            notThisWeekCourseArr = Array(arrangeCache.notThisWeekCourseArr.size) {
+                Pair(arrangeCache.notThisWeekCourseArr[it].first, arrangeCache.notThisWeekCourseArr[it].second)
             }
         }
     }
@@ -156,7 +167,7 @@ class CourseArrangeViewModel : BaseViewModel() {
                 val tomorrowTemp = tomorrowAsync.await()
                 val notThisWeekTemp = notThisWeekAsync.await()
 
-                CourseArrangeStore.saveStore(CourseArrange(todayTemp, tomorrowTemp, notThisWeekTemp))
+                CourseArrangeStore.saveStore(CourseArrange(todayTemp, tomorrowTemp, notThisWeekTemp, termInfo.data))
             } else {
                 todayCourses.postValue(emptyArray())
                 nextCourseData.postValue(null)
@@ -219,7 +230,6 @@ class CourseArrangeViewModel : BaseViewModel() {
                     todayCourseArr[position]
                 } else {
                     nextCourseData.postValue(null)
-                    null
                 }
             } else {
                 if (showAttention) {
