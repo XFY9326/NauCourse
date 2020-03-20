@@ -5,13 +5,13 @@ import okhttp3.Response
 import org.jsoup.Jsoup
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.beans.CardBalance
-import tool.xfy9326.naucourses.network.SSONetworkManager
+import tool.xfy9326.naucourses.network.LoginNetworkManager
 import tool.xfy9326.naucourses.network.clients.YktClient
 import tool.xfy9326.naucourses.providers.contents.base.BaseNoParamContent
 
 
 object StudentCardBalance : BaseNoParamContent<CardBalance>() {
-    override val networkClient = getSSOClient<YktClient>(SSONetworkManager.ClientType.YKT)
+    override val networkClient = getLoginClient<YktClient>(LoginNetworkManager.ClientType.YKT)
 
     private const val SELF_SEARCH_PATH = "SelfSearch"
     private const val USER_PATH = "User"

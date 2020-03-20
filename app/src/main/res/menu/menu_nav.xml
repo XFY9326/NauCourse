@@ -20,7 +20,7 @@
     <group android:id="@+id/menu_groupSettings">
         <item
             android:id="@+id/menu_navCourseEdit"
-            android:icon="@drawable/ic_course_edit"
+            android:icon="@drawable/ic_edit"
             android:title="@string/course_manage" />
         <item
             android:id="@+id/menu_navSettings"

@@ -8,8 +8,12 @@ import tool.xfy9326.naucourses.providers.contents.methods.jwc.TermInfo
 import tool.xfy9326.naucourses.providers.info.base.*
 import tool.xfy9326.naucourses.utils.compute.TimeUtils
 
-object TermDateInfo : BaseSimpleContentInfo<TermDate, Nothing>() {
+object TermDateInfo : BaseSimpleContentInfo<TermDate, TermDateInfo.TermType>() {
     private const val CACHE_EXPIRE_DAY = 1
+
+    enum class TermType {
+        RAW_TERM
+    }
 
     override fun loadSimpleStoredInfo(): TermDate? = JwcDBHelper.getTermDate()
 
@@ -18,7 +22,7 @@ object TermDateInfo : BaseSimpleContentInfo<TermDate, Nothing>() {
         CACHE_EXPIRE_DAY, CacheExpireTimeUnit.DAY
     )
 
-    override suspend fun getSimpleInfoContent(params: Set<Nothing>): ContentResult<TermDate> {
+    override suspend fun getSimpleInfoContent(params: Set<TermType>): ContentResult<TermDate> {
         val result = TermInfo.getContentData()
         return if (result.isSuccess) {
             ContentResult(true, contentData = fixTermDate(result.contentData!!))
@@ -28,13 +32,13 @@ object TermDateInfo : BaseSimpleContentInfo<TermDate, Nothing>() {
     }
 
     @Synchronized
-    override suspend fun getInfo(params: Set<Nothing>, loadCache: Boolean, forceRefresh: Boolean): InfoResult<TermDate> {
+    override suspend fun getInfo(params: Set<TermType>, loadCache: Boolean, forceRefresh: Boolean): InfoResult<TermDate> {
         val termDateResult = super.getInfo(params, loadCache, forceRefresh)
         return if (forceRefresh) {
             termDateResult
         } else {
             val customTermDate = AppPref.readSavedCustomTermDate()
-            if (customTermDate == null) {
+            if (customTermDate == null || TermType.RAW_TERM in params) {
                 termDateResult
             } else {
                 if (termDateResult.isSuccess) {
@@ -51,6 +55,10 @@ object TermDateInfo : BaseSimpleContentInfo<TermDate, Nothing>() {
             }
         }
     }
+
+    fun saveCustomTermDate(info: TermDate) = AppPref.saveCustomTermDate(info)
+
+    fun clearCustomTermDate() = AppPref.clearCustomTermDate()
 
     override fun onReadSimpleCache(data: TermDate): TermDate =
         fixTermDate(data)

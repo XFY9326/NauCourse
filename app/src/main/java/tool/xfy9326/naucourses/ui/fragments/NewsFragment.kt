@@ -23,7 +23,7 @@ import tool.xfy9326.naucourses.utils.utility.IntentUtils
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.showSnackBar
 import tool.xfy9326.naucourses.utils.views.I18NUtils
 
-class NewsFragment : DrawerToolbarFragment<NewsViewModel>(), NewsAdapter.OnNewsItemClickListener {
+class NewsFragment : DrawerToolbarFragment<NewsViewModel>(), NewsAdapter.OnNewsItemClickListener, NewsTypeChoiceDialog.OnNewsTypeChangedListener {
     private lateinit var newsAdapter: NewsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,15 +48,13 @@ class NewsFragment : DrawerToolbarFragment<NewsViewModel>(), NewsAdapter.OnNewsI
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_newsShowType -> NewsTypeChoiceDialog().apply {
-                setTypeChangedListener(object : NewsTypeChoiceDialog.OnNewsTypeChangedListener {
-                    override fun onChanged() {
-                        getViewModel().refreshNewsList()
-                    }
-                })
-            }.show(childFragmentManager, null)
+            R.id.menu_newsShowType -> NewsTypeChoiceDialog().show(childFragmentManager, null)
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onNewsTypeChanged() {
+        getViewModel().refreshNewsList()
     }
 
     override fun bindViewModel(viewModel: NewsViewModel) {

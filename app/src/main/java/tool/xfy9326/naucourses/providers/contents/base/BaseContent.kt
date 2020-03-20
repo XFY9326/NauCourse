@@ -2,9 +2,9 @@ package tool.xfy9326.naucourses.providers.contents.base
 
 import okhttp3.Response
 import org.jsoup.HttpStatusException
-import tool.xfy9326.naucourses.network.SSONetworkManager
+import tool.xfy9326.naucourses.network.LoginNetworkManager
 import tool.xfy9326.naucourses.network.SimpleNetworkManager
-import tool.xfy9326.naucourses.network.clients.SSOClient
+import tool.xfy9326.naucourses.network.clients.base.BaseLoginClient
 import tool.xfy9326.naucourses.network.clients.base.BaseNetworkClient
 import java.io.IOException
 import java.net.ConnectException
@@ -14,8 +14,8 @@ abstract class BaseContent<T> {
     protected abstract val networkClient: BaseNetworkClient
 
     @Suppress("UNCHECKED_CAST")
-    protected fun <E : SSOClient> getSSOClient(type: SSONetworkManager.ClientType): E =
-        SSONetworkManager.getClient(type) as E
+    protected fun <E : BaseLoginClient> getLoginClient(type: LoginNetworkManager.ClientType): E =
+        LoginNetworkManager.getClient(type) as E
 
     protected fun getSimpleClient() = SimpleNetworkManager.getClient()
 

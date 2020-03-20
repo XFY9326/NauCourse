@@ -27,6 +27,14 @@ data class TimePeriodList(
         }
     }
 
+    fun convertToCharArray(initCharLength: Int, oddMode: Boolean = false, evenMode: Boolean = false, countFromZero: Boolean = false): CharArray {
+        var result: CharArray? = null
+        for (timePeriod in timePeriods) {
+            result = timePeriod.convertToCharArray(initCharLength, oddMode, evenMode, countFromZero, result)
+        }
+        return result ?: TimePeriod.initCharArray(initCharLength)
+    }
+
     override fun toString(): String {
         val textBuilder = StringBuilder()
         for (timePeriod in timePeriods) {

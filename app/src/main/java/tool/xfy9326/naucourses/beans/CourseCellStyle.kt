@@ -13,7 +13,7 @@ data class CourseCellStyle(
     companion object {
         private const val DEFAULT_COURSE_CELL_TEXT_SIZE = 13f
 
-        private fun getDefaultCellStyle(courseId: String): CourseCellStyle {
+        fun getDefaultCellStyle(courseId: String): CourseCellStyle {
             return CourseCellStyle(
                 courseId,
                 ColorUtils.getRandomMaterialColor(),

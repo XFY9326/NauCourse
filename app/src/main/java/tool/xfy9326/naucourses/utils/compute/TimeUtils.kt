@@ -58,7 +58,7 @@ object TimeUtils {
             startDateTime = time
             if (timePeriod.hasEnd()) {
                 set(Calendar.MINUTE, CLASS_TIME_ARR[timePeriod.end!! - 1].endMinute)
-                set(Calendar.HOUR_OF_DAY, CLASS_TIME_ARR[timePeriod.end - 1].endHour)
+                set(Calendar.HOUR_OF_DAY, CLASS_TIME_ARR[timePeriod.end!! - 1].endHour)
             } else {
                 set(Calendar.MINUTE, CLASS_TIME_ARR[timePeriod.start - 1].endMinute)
                 set(Calendar.HOUR_OF_DAY, CLASS_TIME_ARR[timePeriod.start - 1].endHour)
@@ -121,10 +121,14 @@ object TimeUtils {
         }
     }
 
-    fun getMaxWeekNum(termDate: TermDate): Int {
-        val startCalendar = getFixedTermStartDateCalendar(termDate.startDate)
-        val endCalendar = getFixedTermEndDateCalendar(termDate.endDate)
-        return ceil((endCalendar.timeInMillis - startCalendar.timeInMillis) / (7 * 24 * 60 * 60 * 1000f)).toInt()
+    fun getWeekLength(termDate: TermDate, getRawLength: Boolean = false): Int {
+        val startMills = if (getRawLength) termDate.startDate.time else getFixedTermStartDateCalendar(termDate.startDate).timeInMillis
+        val endMills = if (getRawLength) termDate.endDate.time else getFixedTermEndDateCalendar(termDate.endDate).timeInMillis
+        return if (getRawLength) {
+            ((endMills - startMills + 24 * 60 * 60 * 1000f) / (7 * 24 * 60 * 60 * 1000f)).toInt()
+        } else {
+            ceil((endMills - startMills) / (7 * 24 * 60 * 60 * 1000f)).toInt()
+        }
     }
 
     private fun getFixedTermEndDateCalendar(date: Date) =

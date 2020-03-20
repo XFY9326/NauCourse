@@ -8,7 +8,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import tool.xfy9326.naucourses.Constants
-import tool.xfy9326.naucourses.network.SSONetworkManager
+import tool.xfy9326.naucourses.network.LoginNetworkManager
 import tool.xfy9326.naucourses.network.clients.AlstuClient
 import tool.xfy9326.naucourses.network.clients.VPNClient
 import tool.xfy9326.naucourses.network.clients.base.BaseLoginClient
@@ -22,7 +22,7 @@ import java.util.*
 import kotlin.collections.HashSet
 
 object DefaultMessage : BaseNewsContent<AlstuMessage>() {
-    override val networkClient = getSSOClient<AlstuClient>(SSONetworkManager.ClientType.ALSTU)
+    override val networkClient = getLoginClient<AlstuClient>(LoginNetworkManager.ClientType.ALSTU)
 
     private val DATE_FORMAT_YMD = SimpleDateFormat(Constants.Time.FORMAT_YMD, Locale.CHINA)
 
@@ -75,10 +75,6 @@ object DefaultMessage : BaseNewsContent<AlstuMessage>() {
 
     private fun getAlstuMessageSet(document: Document): Set<AlstuMessage> {
         val dataGridElement = document.getElementById(ELEMENT_ID_MY_DATA_GRID)
-        //TODO
-        if (dataGridElement == null) {
-            println(document.html())
-        }
         val trElements = dataGridElement.getElementsByTag(Constants.HTML.ELEMENT_TAG_TR)
 
         val msgSet = HashSet<AlstuMessage>(trElements.size)

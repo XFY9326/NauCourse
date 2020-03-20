@@ -19,6 +19,7 @@ import kotlin.collections.ArrayList
 
 object CourseUtils {
     private const val NEXT_COURSE_BEFORE_COURSE_END_BASED_MINUTE = 10
+    private const val CUSTOM_COURSE_ID_PREFIX = "NCC-"
 
     private fun getCourseTableByWeekNum(courseSet: CourseSet, weekNum: Int, maxWeekNum: Int, startWeekDayNum: Int, endWeekDayNum: Int): CourseTable {
         if (weekNum < Constants.Course.MIN_WEEK_NUM_SIZE || weekNum > maxWeekNum) {
@@ -168,4 +169,6 @@ object CourseUtils {
             launch { CourseTableStore.saveStore(output) }
             output
         }
+
+    fun getNewCourseId() = CUSTOM_COURSE_ID_PREFIX + (System.currentTimeMillis() / 1000)
 }

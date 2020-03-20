@@ -14,7 +14,7 @@ class AdvancedGridLayout : GridLayout {
 
     constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)
 
-    fun replaceAllViews(views: Array<View>, refreshLayout: Boolean = true) {
+    fun replaceAllViews(views: Array<out View>, refreshLayout: Boolean = true) {
         if (childCount != 0) {
             removeAllViewsInLayout()
         }

@@ -8,12 +8,14 @@ import okhttp3.Response
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.network.clients.base.LoginInfo
 import tool.xfy9326.naucourses.network.clients.base.LoginResponse
-import tool.xfy9326.naucourses.network.clients.tools.SSONetworkTools
-import tool.xfy9326.naucourses.network.clients.tools.SSONetworkTools.Companion.hasSameHost
+import tool.xfy9326.naucourses.network.clients.tools.NetworkTools
+import tool.xfy9326.naucourses.network.clients.tools.NetworkTools.Companion.hasSameHost
 import tool.xfy9326.naucourses.network.clients.tools.VPNTools
+import tool.xfy9326.naucourses.utils.utility.LogUtils
 import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 
+// http://vpn.nau.edu.cn
 open class VPNClient(loginInfo: LoginInfo, loginUrl: HttpUrl? = null) :
     SSOClient(
         loginInfo, if (loginUrl != null) {
@@ -22,7 +24,7 @@ open class VPNClient(loginInfo: LoginInfo, loginUrl: HttpUrl? = null) :
             VPN_LOGIN_URL
         }
     ) {
-    private var forceUseVPN: Boolean = false
+    protected open var forceUseVPN: Boolean = false
 
     companion object {
         const val VPN_HOST = "vpn.nau.edu.cn"
@@ -90,7 +92,7 @@ open class VPNClient(loginInfo: LoginInfo, loginUrl: HttpUrl? = null) :
     }
 
     @CallSuper
-    override fun logout(): Boolean = vpnLogout() && super.logout()
+    override fun logoutInternal(): Boolean = vpnLogout() && super.logoutInternal()
 
     fun vpnLogout(): Boolean = newVPNCall(Request.Builder().url(VPN_LOGOUT_URL).build()).use {
         val content = it.body?.string()!!
@@ -121,8 +123,16 @@ open class VPNClient(loginInfo: LoginInfo, loginUrl: HttpUrl? = null) :
     override fun newClientCall(request: Request): Response {
         val useVPN = useVPN(request.url)
         val newRequest = patchVPNRequest(useVPN, request)
-        val callResult = newVPNCall(newRequest)
-        return if (validateNotInLoginPage(SSONetworkTools.getResponseContent(callResult))) {
+        var callResult = newVPNCall(newRequest)
+        if (!validateLoginWithResponse(NetworkTools.getResponseContent(callResult), callResult.request.url)) {
+            val loginResponse = login(callResult)
+            if (loginResponse.isSuccess) {
+                callResult = newVPNCall(newRequest)
+            } else {
+                LogUtils.d<VPNClient>("VPN Login While Call Failed")
+            }
+        }
+        return if (validateNotInLoginPage(NetworkTools.getResponseContent(callResult))) {
             callResult
         } else {
             newVPNCall(newRequest)

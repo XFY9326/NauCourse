@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import tool.xfy9326.naucourses.network.SSONetworkManager
+import tool.xfy9326.naucourses.network.LoginNetworkManager
 import tool.xfy9326.naucourses.network.clients.base.LoginInfo
 import tool.xfy9326.naucourses.network.clients.base.LoginResponse
 import tool.xfy9326.naucourses.providers.GlobalCacheLoader
@@ -41,14 +41,14 @@ class LoginViewModel : BaseViewModel() {
         isLoginLoading.postEventValue(true)
         viewModelScope.launch(Dispatchers.Default) {
             val loginResult = withContext(Dispatchers.Default) {
-                SSONetworkManager.clearSSOCacheAndCookies()
+                LoginNetworkManager.clearAllCacheAndCookies()
                 AccountUtils.saveUserId(userId)
 
                 loginProcess.postEventValue(LoadingProcess.LOGGING_SSO)
-                val ssoLoginResult = SSONetworkManager.ssoLogin(LoginInfo(userId, userPw))
+                val ssoLoginResult = LoginNetworkManager.login(LoginInfo(userId, userPw))
                 if (ssoLoginResult.isSuccess) {
                     loginProcess.postEventValue(LoadingProcess.LOGGING_JWC)
-                    SSONetworkManager.getClient(SSONetworkManager.ClientType.JWC).login()
+                    LoginNetworkManager.getClient(LoginNetworkManager.ClientType.JWC).login()
                 } else {
                     ssoLoginResult
                 }

@@ -6,10 +6,10 @@ import okhttp3.HttpUrl
 import tool.xfy9326.naucourses.io.dbHelpers.NetworkDBHelper
 
 
-class CookieStore : CookieJar {
-    override fun loadForRequest(url: HttpUrl): List<Cookie> = NetworkDBHelper.loadForRequest(url)
+class CookieStore(private val type: NetworkDBHelper.CookiesType) : CookieJar {
+    override fun loadForRequest(url: HttpUrl): List<Cookie> = NetworkDBHelper.loadForRequest(url, type)
 
-    override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) = NetworkDBHelper.saveFromResponse(url, cookies)
+    override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) = NetworkDBHelper.saveFromResponse(url, cookies, type)
 
-    fun clearCookies() = NetworkDBHelper.clearAllCookies()
+    fun clearCookies() = NetworkDBHelper.clearAllCookies(type)
 }

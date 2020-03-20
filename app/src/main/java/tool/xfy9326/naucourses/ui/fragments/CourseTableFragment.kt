@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import kotlinx.android.synthetic.main.fragment_course_table.*
+import tool.xfy9326.naucourses.App
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.beans.CourseCell
@@ -78,6 +79,11 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
                 }
             }.show(childFragmentManager, null)
         })
+        App.instance.courseTermUpdate.observeEvent(viewLifecycleOwner, Observer {
+            if (it) {
+                viewModel.refreshCourseData()
+            }
+        })
     }
 
     override fun initView(viewModel: CourseTableViewModel) {
@@ -103,7 +109,15 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
         }
 
         layout_dateInfoBar.setOnClickListener {
-            if (viewModel.currentWeekNum != null) {
+            turnToCurrentWeek(viewModel)
+        }
+    }
+
+    private fun turnToCurrentWeek(viewModel: CourseTableViewModel) {
+        if (viewModel.currentWeekNum != null) {
+            if (viewModel.currentWeekNum!! == 0) {
+                vp_courseTablePanel.setCurrentItem(0, true)
+            } else {
                 vp_courseTablePanel.setCurrentItem(viewModel.currentWeekNum!! - 1, true)
             }
         }

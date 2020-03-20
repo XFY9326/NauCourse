@@ -5,7 +5,7 @@ import okhttp3.Response
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import tool.xfy9326.naucourses.Constants
-import tool.xfy9326.naucourses.network.SSONetworkManager
+import tool.xfy9326.naucourses.network.LoginNetworkManager
 import tool.xfy9326.naucourses.network.clients.JwcClient
 import tool.xfy9326.naucourses.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourses.providers.beans.jwc.StudentLearningProcess
@@ -15,7 +15,7 @@ import java.io.IOException
 import kotlin.math.min
 
 object StudentIndex : BaseNoParamContent<StudentInfo>() {
-    override val networkClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
+    override val networkClient = getLoginClient<JwcClient>(LoginNetworkManager.ClientType.JWC)
 
     private const val JWC_STUDENT_INDEX_ASPX = "StudentIndex.aspx"
     private const val JWC_STU_PHOTO_ASHX = "StuPhotoView.ashx"

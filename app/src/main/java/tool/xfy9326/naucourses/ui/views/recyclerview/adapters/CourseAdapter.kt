@@ -30,9 +30,11 @@ class CourseAdapter(context: Context, @Volatile private var courseManagePkg: Cou
 
     fun getCourseSet() = courseManagePkg?.getCourseSet()
 
+    fun getTermDate() = courseManagePkg?.termDate
+
     fun getCourseStyleArray() = courseManagePkg?.getCourseStyleArray()
 
-    fun removeCourse(position: Int) = synchronized(isOperationEnabledLock) {
+    private fun removeCourse(position: Int) = synchronized(isOperationEnabledLock) {
         if (courseManagePkg != null) {
             val deleteItem = courseManagePkg!!.courses.removeAt(position)
             notifyItemRemoved(position)
@@ -54,16 +56,18 @@ class CourseAdapter(context: Context, @Volatile private var courseManagePkg: Cou
         }
     }
 
-    fun updateCourse(course: Course) = synchronized(isOperationEnabledLock) {
+    fun updateCourse(course: Course): Int? = synchronized(isOperationEnabledLock) {
         if (courseManagePkg != null) {
             val position = courseManagePkg!!.courses.indexOfFirst {
                 it.first.id == course.id
             }
-            if (position > 0) {
+            if (position >= 0) {
                 courseManagePkg!!.courses[position] = Pair(course, courseManagePkg!!.courses[position].second)
                 notifyItemChanged(position)
+                return position
             }
         }
+        return null
     }
 
     fun updateCourseStyle(position: Int, style: CourseCellStyle) = synchronized(isOperationEnabledLock) {
@@ -122,7 +126,7 @@ class CourseAdapter(context: Context, @Volatile private var courseManagePkg: Cou
                         synchronized(isOperationEnabledLock) {
                             if (courseManagePkg != null) {
                                 if (courseManagePkg != null) {
-                                    callback.onEditCourse(this@CourseAdapter, courseManagePkg!!.courses[position])
+                                    callback.onEditCourse(this@CourseAdapter, courseManagePkg!!.termDate, courseManagePkg!!.courses[position])
                                 }
                             }
                         }
@@ -137,6 +141,6 @@ class CourseAdapter(context: Context, @Volatile private var courseManagePkg: Cou
 
         fun onEditCourseColor(adapter: CourseAdapter, position: Int, style: CourseCellStyle)
 
-        fun onEditCourse(adapter: CourseAdapter, courseItem: Pair<Course, CourseCellStyle>)
+        fun onEditCourse(adapter: CourseAdapter, termDate: TermDate, courseItem: Pair<Course, CourseCellStyle>)
     }
 }

@@ -127,7 +127,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     }
 
     private fun logout() {
-        DialogUtils.createLogoutAttentionDialog(this, DialogInterface.OnClickListener { _, _ ->
+        DialogUtils.createLogoutAttentionDialog(this, lifecycle, DialogInterface.OnClickListener { _, _ ->
             FullScreenLoadingDialog().show(supportFragmentManager, FullScreenLoadingDialog.LOADING_DIALOG_TAG)
             getViewModel().requestLogout()
         }).show()

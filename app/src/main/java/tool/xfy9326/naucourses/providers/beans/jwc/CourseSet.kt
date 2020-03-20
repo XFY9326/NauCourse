@@ -36,6 +36,15 @@ data class CourseSet(
             }
         }
 
+        fun checkCourseTimeConflict(courseTimes: Set<CourseTime>): Pair<CourseTime, CourseTime>? {
+            val list = courseTimes.toList()
+            val result = checkCourseTimeConflict(list)
+            if (result != null) {
+                return Pair(list[result.first], list[result.second])
+            }
+            return null
+        }
+
         private fun getCourseByCourseTime(courseSet: HashSet<Course>, courseTime: CourseTime): Course? {
             for (course in courseSet) {
                 if (course.timeSet.contains(courseTime)) return course
@@ -68,8 +77,21 @@ data class CourseSet(
                 false
             }
         } else if (term == courseSet.term) {
+            var hasSame: Boolean
             val newCourses = HashSet(courseSet.courses)
-            newCourses.addAll(courses)
+            for (course in courses) {
+                hasSame = false
+                for (newCourse in courseSet.courses) {
+                    if (newCourse.id == course.id) {
+                        hasSame = true
+                        break
+                    }
+                }
+
+                if (!hasSame) {
+                    newCourses.add(course)
+                }
+            }
             val checkResult = checkCourseTimeConflict(newCourses)
             if (checkResult.isSuccess) {
                 courses_ = newCourses

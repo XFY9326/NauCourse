@@ -45,7 +45,7 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/circle_today_course_color" />
+                app:srcCompat="@drawable/shape_today_course_color" />
 
         </FrameLayout>
 

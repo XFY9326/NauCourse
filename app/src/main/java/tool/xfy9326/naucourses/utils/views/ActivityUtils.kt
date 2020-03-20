@@ -22,13 +22,13 @@ object ActivityUtils {
     fun showSnackBarWithCallback(view: CoordinatorLayout, @StringRes strId: Int, @StringRes actionStrId: Int, callback: View.OnClickListener) =
         Snackbar.make(view, strId, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(actionStrId, callback).show()
 
-    fun Activity.showToast(@StringRes resId: Int) =
-        showToast(this, resId)
+    fun Activity.showToast(@StringRes resId: Int, vararg params: Any) =
+        showToast(this, resId, *params)
 
-    fun showToast(context: Context, @StringRes resId: Int) = Toast(context.applicationContext).apply {
+    fun showToast(context: Context, @StringRes resId: Int, vararg params: Any) = Toast(context.applicationContext).apply {
         LayoutInflater.from(context).apply {
             view = inflate(R.layout.view_toast, null).apply {
-                tv_toastText.text = context.getString(resId)
+                tv_toastText.text = context.getString(resId, *params)
             }
         }
         duration = Toast.LENGTH_SHORT

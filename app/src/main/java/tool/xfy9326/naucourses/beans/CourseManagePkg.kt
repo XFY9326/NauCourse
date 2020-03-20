@@ -20,4 +20,26 @@ data class CourseManagePkg(
     fun getCourseStyleArray() = Array(courses.size) {
         courses[it].second
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as CourseManagePkg
+
+        if (termDate != other.termDate) return false
+        if (courseTerm != other.courseTerm) return false
+        if (courses != other.courses) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = termDate.hashCode()
+        result = 31 * result + courseTerm.hashCode()
+        result = 31 * result + courses.hashCode()
+        return result
+    }
+
+
 }

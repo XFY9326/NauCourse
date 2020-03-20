@@ -8,6 +8,7 @@ import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.network.clients.base.LoginInfo
 import tool.xfy9326.naucourses.network.clients.base.LoginResponse
 
+// http://jwc.nau.edu.cn
 class JwcClient(loginInfo: LoginInfo) : SSOClient(loginInfo, JWC_SSO_LOGIN_URL) {
     @Volatile
     private var jwcMainUrl: HttpUrl? = null
@@ -79,7 +80,7 @@ class JwcClient(loginInfo: LoginInfo) : SSOClient(loginInfo, JWC_SSO_LOGIN_URL) 
         return ssoResult
     }
 
-    override fun logout(): Boolean = jwcLogout() && super.logout()
+    override fun logoutInternal(): Boolean = jwcLogout() && super.logoutInternal()
 
     fun jwcLogout(): Boolean = newJwcCall(Request.Builder().url(JWC_LOGOUT_URL).build()).use {
         return it.isSuccessful && it.request.url == JWC_LOGIN_URL

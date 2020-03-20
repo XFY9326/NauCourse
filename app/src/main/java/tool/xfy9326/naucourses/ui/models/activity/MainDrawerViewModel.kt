@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import tool.xfy9326.naucourses.network.SSONetworkManager
+import tool.xfy9326.naucourses.network.LoginNetworkManager
 import tool.xfy9326.naucourses.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourses.providers.info.methods.CardBalanceInfo
 import tool.xfy9326.naucourses.providers.info.methods.PersonalInfo
@@ -60,10 +60,9 @@ class MainDrawerViewModel : BaseViewModel() {
 
     fun requestLogout() {
         viewModelScope.launch(Dispatchers.Default) {
-            (SSONetworkManager.getClient(SSONetworkManager.ClientType.JWC)).logout()
-            SSONetworkManager.ssoLogout()
+            LoginNetworkManager.logout()
 
-            SSONetworkManager.clearSSOCacheAndCookies()
+            LoginNetworkManager.clearAllCacheAndCookies()
             AccountUtils.clearUserCache()
 
             logoutSuccess.postEventValue(true)

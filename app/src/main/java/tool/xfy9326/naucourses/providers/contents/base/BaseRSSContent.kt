@@ -5,8 +5,8 @@ import okhttp3.Response
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import tool.xfy9326.naucourses.Constants
-import tool.xfy9326.naucourses.network.SSONetworkManager
-import tool.xfy9326.naucourses.network.clients.VPNClient
+import tool.xfy9326.naucourses.network.LoginNetworkManager
+import tool.xfy9326.naucourses.network.clients.NgxClient
 import tool.xfy9326.naucourses.network.clients.base.BaseNetworkClient
 import tool.xfy9326.naucourses.providers.beans.GeneralNews
 import tool.xfy9326.naucourses.providers.beans.GeneralNewsDetail
@@ -22,7 +22,7 @@ import java.util.*
 import kotlin.collections.HashSet
 
 abstract class BaseRSSContent : BaseNewsContent<RSSObject>() {
-    override val networkClient = getSSOClient<VPNClient>(SSONetworkManager.ClientType.VPN)
+    override val networkClient = getLoginClient<NgxClient>(LoginNetworkManager.ClientType.NGX)
 
     abstract val siteId: Int
     abstract val templateId: Int
@@ -96,13 +96,7 @@ abstract class BaseRSSContent : BaseNewsContent<RSSObject>() {
     }
 
     final override fun onParseRawData(content: String): Set<RSSObject> {
-        //TODO
-        val result = try {
-            RSSReader.getRSSObject(content)
-        } catch (e: Exception) {
-            println(content)
-            throw e
-        }
+        val result = RSSReader.getRSSObject(content)
         if (result == null) {
             throw IOException("RSS Parse Result is Empty!")
         } else {

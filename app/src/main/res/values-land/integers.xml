@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="user_info_column_size">4</integer>
+    <integer name="user_info_column_count">4</integer>
+    <integer name="course_time_edit_column_count">12</integer>
 </resources>

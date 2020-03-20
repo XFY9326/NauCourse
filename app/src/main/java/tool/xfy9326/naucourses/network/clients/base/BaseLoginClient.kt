@@ -58,13 +58,21 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
      * @param ssoResponse 首次SSO请求返回的Response（用于获取登录参数）
      * @return 登录状态
      */
-    abstract fun login(ssoResponse: Response): LoginResponse
+    protected abstract fun login(ssoResponse: Response): LoginResponse
 
     /**
      * 注销所有该客户端相关登录
      * @return 是否注销成功
      */
-    abstract fun logout(): Boolean
+    protected abstract fun logoutInternal(): Boolean
+
+    fun logout(): Boolean =
+        try {
+            logoutInternal()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
 
     /**
      * 通过返回的数据判断是否登录成功

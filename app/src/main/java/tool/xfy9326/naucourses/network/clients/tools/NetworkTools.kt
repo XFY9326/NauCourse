@@ -1,26 +1,30 @@
 package tool.xfy9326.naucourses.network.clients.tools
 
 import okhttp3.*
+import tool.xfy9326.naucourses.App
+import tool.xfy9326.naucourses.io.dbHelpers.NetworkDBHelper
 import tool.xfy9326.naucourses.network.clients.utils.CookieStore
 import tool.xfy9326.naucourses.network.clients.utils.UAInterceptor
 import java.io.File
 import java.nio.charset.StandardCharsets
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.HashMap
 
-class SSONetworkTools private constructor() {
+class NetworkTools private constructor() {
 
     companion object {
         @Volatile
-        lateinit var instance: SSONetworkTools
+        private lateinit var instance_: NetworkTools
 
-        @Volatile
-        private var cookieStore: CookieStore? = null
+        private val cookieStoreMap = HashMap<NetworkType, CookieStore>()
 
-        @Volatile
-        private lateinit var okhttpClient: OkHttpClient
+        private val okhttpClientMap = HashMap<NetworkType, OkHttpClient>()
 
-        lateinit var cacheDir: File
+        private const val CACHE_DIR = "NetworkCache"
+        private const val CACHE_SIZE = 1024 * 1024 * 10L
+
+        val cacheDir = File(App.instance.cacheDir.absolutePath + File.separator + CACHE_DIR)
 
         // TimeUnit.SECONDS
         private const val CONNECT_TIME_OUT = 7L
@@ -36,17 +40,11 @@ class SSONetworkTools private constructor() {
         // TimeUnit.MINUTES
         private const val ALIVE_CONNECTION_NUM = 5L
 
-        private const val CACHE_DIR = "SSONetworkCache"
-        private const val CACHE_SIZE = 1024 * 1024 * 10L
-
-        fun initInstance(cacheParentDir: String) = synchronized(this) {
-            if (!::instance.isInitialized) {
-                instance = SSONetworkTools()
-                if (!::okhttpClient.isInitialized) {
-                    cacheDir = File(cacheParentDir + File.separator + CACHE_DIR)
-                    createClient(cookieStore ?: createCookieStore()).also { okhttpClient = it }
-                }
+        fun getInstance(): NetworkTools = synchronized(this) {
+            if (!::instance_.isInitialized) {
+                instance_ = NetworkTools()
             }
+            return instance_
         }
 
         private fun createClient(cookieStore: CookieStore): OkHttpClient {
@@ -85,8 +83,11 @@ class SSONetworkTools private constructor() {
             return result
         }
 
-        private fun createCookieStore(): CookieStore =
-            CookieStore()
+        private fun createCookieStore(type: NetworkType): CookieStore =
+            when (type) {
+                NetworkType.SSO -> CookieStore(NetworkDBHelper.CookiesType.SSO)
+                NetworkType.NGX -> CookieStore(NetworkDBHelper.CookiesType.NGX)
+            }
 
         fun HttpUrl.hasSameHost(url: HttpUrl?): Boolean =
             url != null && this.host.toLowerCase(Locale.CHINA) == url.host.toLowerCase(Locale.CHINA)
@@ -95,10 +96,24 @@ class SSONetworkTools private constructor() {
             host != null && this.host.toLowerCase(Locale.CHINA) == host.toLowerCase(Locale.CHINA)
     }
 
-    fun getClient(): OkHttpClient = okhttpClient
+    enum class NetworkType {
+        SSO,
+        NGX
+    }
 
-    fun getCookieStore(): CookieStore = cookieStore ?: synchronized(this) {
-        cookieStore
-            ?: createCookieStore().also { cookieStore = it }
+    @Synchronized
+    fun getClient(type: NetworkType): OkHttpClient {
+        if (!okhttpClientMap.containsKey(type)) {
+            okhttpClientMap[type] = createClient(getCookieStore(type))
+        }
+        return okhttpClientMap[type]!!
+    }
+
+    @Synchronized
+    fun getCookieStore(type: NetworkType): CookieStore {
+        if (!cookieStoreMap.containsKey(type)) {
+            cookieStoreMap[type] = createCookieStore(type)
+        }
+        return cookieStoreMap[type]!!
     }
 }

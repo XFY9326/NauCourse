@@ -40,7 +40,7 @@ object AppPref : BasePref() {
     }
 
     @Synchronized
-    fun clearCustomTermDate(termDate: TermDate) {
+    fun clearCustomTermDate() {
         remove(CUSTOM_START_TERM_DATE_MILLS)
         remove(CUSTOM_END_TERM_DATE_MILLS)
     }

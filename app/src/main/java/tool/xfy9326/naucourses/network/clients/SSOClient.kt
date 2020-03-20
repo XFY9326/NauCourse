@@ -8,14 +8,15 @@ import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.network.clients.base.BaseLoginClient
 import tool.xfy9326.naucourses.network.clients.base.LoginInfo
 import tool.xfy9326.naucourses.network.clients.base.LoginResponse
-import tool.xfy9326.naucourses.network.clients.tools.SSONetworkTools
-import tool.xfy9326.naucourses.network.clients.tools.SSONetworkTools.Companion.hasSameHost
+import tool.xfy9326.naucourses.network.clients.tools.NetworkTools
+import tool.xfy9326.naucourses.network.clients.tools.NetworkTools.Companion.hasSameHost
 import java.io.IOException
 
+// http://sso.nau.edu.cn
 open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = null) :
     BaseLoginClient(loginInfo) {
-    private val okHttpClient = SSONetworkTools.instance.getClient()
-    private val cookieStore = SSONetworkTools.instance.getCookieStore()
+    private val okHttpClient = NetworkTools.getInstance().getClient(NetworkTools.NetworkType.SSO)
+    private val cookieStore = NetworkTools.getInstance().getCookieStore(NetworkTools.NetworkType.SSO)
     private val isServiceLogin = serviceUrl != null
 
     private val loginUrl: HttpUrl
@@ -40,7 +41,12 @@ open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = nu
         private val SSO_LOGOUT_URL =
             HttpUrl.Builder().scheme(Constants.Network.HTTP).host(SSO_HOST).addPathSegment(SSO_PATH).addEncodedPathSegment(SSO_LOGOUT_PATH).build()
 
-        private val SSO_LOGIN_PARAM = arrayOf("lt", "execution", "_eventId", "useVCode", "isUseVCode", "sessionVcode", "errorCount")
+        // 防止错误次数过多
+        // private val SSO_LOGIN_PARAM = arrayOf("lt", "execution", "_eventId", "useVCode", "isUseVCode", "sessionVcode", "errorCount")
+        private val SSO_LOGIN_PARAM = arrayOf("lt", "execution", "_eventId", "useVCode", "isUseVCode", "sessionVcode")
+        private const val SSO_LOGIN_PARAM_ERROR_COUNT = "errorCount"
+        private const val SSO_LOGIN_PARAM_ERROR_COUNT_VALUE = ""
+
         private const val SSO_INPUT_TAG_NAME_ATTR = "name"
         private const val SSO_INPUT_TAG_VALUE_ATTR = "value"
         private const val SSO_INPUT = "input[$SSO_INPUT_TAG_NAME_ATTR][$SSO_INPUT_TAG_VALUE_ATTR]"
@@ -77,6 +83,8 @@ open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = nu
                 val input = htmlContent.select(SSO_POST_FORMAT.format(param)).first()
                 add(param, input.attr(SSO_INPUT_TAG_VALUE_ATTR))
             }
+            // 防止错误次数过多
+            add(SSO_LOGIN_PARAM_ERROR_COUNT, SSO_LOGIN_PARAM_ERROR_COUNT_VALUE)
         }.build()
     }
 
@@ -87,66 +95,59 @@ open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = nu
         val ssoResponseUrl = ssoResponse.request.url
         val ssoResponseContent = ssoResponse.body?.string()!!
         ssoResponse.closeQuietly()
-        when {
-            SSO_LOGIN_PAGE_STR in ssoResponseContent || ssoResponseUrl.hasSameHost(SSO_HOST) -> {
-                if (!isServiceLogin && getSSOLoginStatus(ssoResponseContent) == LoginResponse.ErrorReason.NONE) {
-                    return LoginResponse(true, ssoResponseUrl, ssoResponseContent)
-                }
-                val postForm = getLoginPostForm(getLoginInfo().userId, getLoginInfo().userPw, ssoResponseContent)
-                val request = ssoResponse.request.newBuilder().apply {
-                    post(postForm)
-                }.build()
-                newSSOCall(request).use {
-                    if (it.isSuccessful) {
-                        val url = it.request.url
-                        val content = it.body?.string()!!
-                        return if (isServiceLogin) {
-                            when {
-                                url.hasSameHost(serviceUrl) -> {
-                                    LoginResponse(true, url, content)
-                                }
-                                url.hasSameHost(SSO_HOST) -> {
-                                    LoginResponse(
-                                        false,
-                                        loginErrorReason = getSSOLoginStatus(content)
-                                    )
-                                }
-                                else -> {
-                                    LoginResponse(
-                                        false,
-                                        loginErrorReason = LoginResponse.ErrorReason.SERVER_ERROR
-                                    )
-                                }
-                            }
-                        } else {
-                            val status = getSSOLoginStatus(content)
-                            if (status == LoginResponse.ErrorReason.NONE) {
+        if (SSO_LOGIN_PAGE_STR in ssoResponseContent || ssoResponseUrl.hasSameHost(SSO_HOST)) {
+            if (!isServiceLogin && getSSOLoginStatus(ssoResponseContent) == LoginResponse.ErrorReason.NONE) {
+                return LoginResponse(true, ssoResponseUrl, ssoResponseContent)
+            }
+            val postForm = getLoginPostForm(getLoginInfo().userId, getLoginInfo().userPw, ssoResponseContent)
+            val request = ssoResponse.request.newBuilder().apply {
+                post(postForm)
+            }.build()
+            newSSOCall(request).use {
+                if (it.isSuccessful) {
+                    val url = it.request.url
+                    val content = it.body?.string()!!
+                    return if (isServiceLogin) {
+                        when {
+                            url.hasSameHost(serviceUrl) -> {
                                 LoginResponse(true, url, content)
-                            } else {
+                            }
+                            url.hasSameHost(SSO_HOST) -> {
                                 LoginResponse(
                                     false,
                                     loginErrorReason = getSSOLoginStatus(content)
                                 )
                             }
+                            else -> {
+                                LoginResponse(
+                                    false,
+                                    loginErrorReason = LoginResponse.ErrorReason.SERVER_ERROR
+                                )
+                            }
                         }
                     } else {
-                        throw IOException("SSO Login Failed!")
+                        val status = getSSOLoginStatus(content)
+                        if (status == LoginResponse.ErrorReason.NONE) {
+                            LoginResponse(true, url, content)
+                        } else {
+                            LoginResponse(
+                                false,
+                                loginErrorReason = getSSOLoginStatus(content)
+                            )
+                        }
                     }
+                } else {
+                    throw IOException("SSO Login Failed!")
                 }
             }
-            ssoResponseUrl.hasSameHost(serviceUrl) -> return LoginResponse(
-                true,
-                ssoResponseUrl,
-                ssoResponseContent
-            )
-            else -> throw IOException("SSO Jump Url Error! $ssoResponseUrl")
-        }
+        } else if (ssoResponseUrl.hasSameHost(serviceUrl)) return LoginResponse(true, ssoResponseUrl, ssoResponseContent)
+        else throw IOException("SSO Jump Url Error! $ssoResponseUrl")
     }
 
     @CallSuper
-    override fun logout(): Boolean = ssoLogout()
+    override fun logoutInternal(): Boolean = ssoLogout()
 
-    fun ssoLogout(clearCookies: Boolean = true): Boolean =
+    private fun ssoLogout(clearCookies: Boolean = true): Boolean =
         newSSOCall(Request.Builder().url(SSO_LOGOUT_URL).build()).use {
             val result = it.body?.string()!!.contains(SSO_LOGOUT_SUCCESS_STR)
             if (clearCookies) {
@@ -175,7 +176,7 @@ open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = nu
     final override fun newAutoLoginCall(request: Request): Response {
         val response = newClientCall(request)
         val url = response.request.url
-        val content = SSONetworkTools.getResponseContent(response)
+        val content = NetworkTools.getResponseContent(response)
         return if (validateLoginWithResponse(content, url)) {
             if (validateNotInLoginPage(content)) {
                 response

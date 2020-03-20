@@ -21,10 +21,10 @@ class AboutActivity : AppCompatActivity() {
     private fun setView() {
         tv_aboutVersion.text = getString(R.string.version_detail, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
         layout_aboutEULA.setOnClickListener {
-            DialogUtils.createUsingLicenseDialog(this).show()
+            DialogUtils.createUsingLicenseDialog(this, lifecycle).show()
         }
         layout_aboutOpenSourceLicense.setOnClickListener {
-            DialogUtils.createOpenSourceLicenseDialog(this).show()
+            DialogUtils.createOpenSourceLicenseDialog(this, lifecycle).show()
         }
         layout_aboutDonate.setOnClickListener {
             //TODO

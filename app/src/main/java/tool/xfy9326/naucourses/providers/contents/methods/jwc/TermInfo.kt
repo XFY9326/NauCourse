@@ -3,7 +3,7 @@ package tool.xfy9326.naucourses.providers.contents.methods.jwc
 import okhttp3.Response
 import org.jsoup.Jsoup
 import tool.xfy9326.naucourses.Constants
-import tool.xfy9326.naucourses.network.SSONetworkManager
+import tool.xfy9326.naucourses.network.LoginNetworkManager
 import tool.xfy9326.naucourses.network.clients.JwcClient
 import tool.xfy9326.naucourses.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourses.providers.contents.base.BaseNoParamContent
@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object TermInfo : BaseNoParamContent<TermDate>() {
-    override val networkClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
+    override val networkClient = getLoginClient<JwcClient>(LoginNetworkManager.ClientType.JWC)
 
     private val DATE_FORMAT_YMD = SimpleDateFormat(Constants.Time.FORMAT_YMD, Locale.CHINA)
 

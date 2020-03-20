@@ -17,7 +17,7 @@
         android:id="@+id/iv_listCourseColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/circle_today_course_color" />
+        app:srcCompat="@drawable/shape_today_course_color" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"

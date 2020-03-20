@@ -30,10 +30,10 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
             et_userId.setText(it)
         }
         tv_EULALicense.setOnClickListener {
-            DialogUtils.createUsingLicenseDialog(this).show()
+            DialogUtils.createUsingLicenseDialog(this, lifecycle).show()
         }
         tv_forgetPassword.setOnClickListener {
-            DialogUtils.createForgetPasswordDialog(this).show()
+            DialogUtils.createForgetPasswordDialog(this, lifecycle).show()
         }
         btn_login.setOnClickListener {
             val userId = et_userId.text.toString()

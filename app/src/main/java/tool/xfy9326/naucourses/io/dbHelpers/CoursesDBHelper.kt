@@ -34,11 +34,6 @@ object CoursesDBHelper {
         }
     }
 
-    fun updateCourses(courseSet: Set<Course>): CourseSet? = with(courseDB.getCoursesDataDao()) {
-        putCourses(*courseSet.toTypedArray())
-        readCourseSet()
-    }
-
     @Synchronized
     fun readCourseSet(): CourseSet? = with(courseDB.getCoursesDataDao()) {
         val dbCourseList = getCourses()

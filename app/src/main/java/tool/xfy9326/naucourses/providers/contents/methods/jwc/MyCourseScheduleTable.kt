@@ -6,7 +6,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import tool.xfy9326.naucourses.Constants
-import tool.xfy9326.naucourses.network.SSONetworkManager
+import tool.xfy9326.naucourses.network.LoginNetworkManager
 import tool.xfy9326.naucourses.network.clients.JwcClient
 import tool.xfy9326.naucourses.providers.beans.jwc.*
 import tool.xfy9326.naucourses.providers.contents.base.BaseNoParamContent
@@ -15,7 +15,7 @@ import java.util.*
 import kotlin.collections.HashSet
 
 object MyCourseScheduleTable : BaseNoParamContent<CourseSet>() {
-    override val networkClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
+    override val networkClient = getLoginClient<JwcClient>(LoginNetworkManager.ClientType.JWC)
 
     private const val COURSE_TABLE_ASPX = "MyCourseScheduleTable.aspx"
     private val COURSE_TABLE_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(JwcClient.JWC_HOST)

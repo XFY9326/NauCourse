@@ -60,9 +60,28 @@ data class Course(
         other as Course
 
         if (id != other.id) return false
+        if (name != other.name) return false
+        if (teacher != other.teacher) return false
+        if (courseClass != other.courseClass) return false
+        if (teachClass != other.teachClass) return false
+        if (credit != other.credit) return false
+        if (type != other.type) return false
+        if (property != other.property) return false
+        if (timeSet != other.timeSet) return false
 
         return true
     }
 
-    override fun hashCode(): Int = id.hashCode()
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + name.hashCode()
+        result = 31 * result + teacher.hashCode()
+        result = 31 * result + (courseClass?.hashCode() ?: 0)
+        result = 31 * result + teachClass.hashCode()
+        result = 31 * result + credit.hashCode()
+        result = 31 * result + type.hashCode()
+        result = 31 * result + (property?.hashCode() ?: 0)
+        result = 31 * result + timeSet.hashCode()
+        return result
+    }
 }

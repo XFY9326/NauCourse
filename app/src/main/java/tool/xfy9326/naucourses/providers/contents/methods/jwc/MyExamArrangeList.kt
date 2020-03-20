@@ -5,7 +5,7 @@ import okhttp3.Response
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import tool.xfy9326.naucourses.Constants
-import tool.xfy9326.naucourses.network.SSONetworkManager
+import tool.xfy9326.naucourses.network.LoginNetworkManager
 import tool.xfy9326.naucourses.network.clients.JwcClient
 import tool.xfy9326.naucourses.providers.beans.jwc.Exam
 import tool.xfy9326.naucourses.providers.contents.base.BaseNoParamContent
@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object MyExamArrangeList : BaseNoParamContent<Array<Exam>>() {
-    override val networkClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
+    override val networkClient = getLoginClient<JwcClient>(LoginNetworkManager.ClientType.JWC)
 
     private val DATE_FORMAT_YMD_HM_CH = SimpleDateFormat(Constants.Time.FORMAT_YMD_HM_CH, Locale.CHINA)
 

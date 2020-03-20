@@ -17,7 +17,6 @@ class NewsTypeChoiceDialog : DialogFragment() {
     private lateinit var newsTypeTextArray: Array<String>
     private lateinit var choiceStatus: BooleanArray
     private var statusChanged = false
-    private var typeChangedListener: OnNewsTypeChangedListener? = null
 
     companion object {
         private const val CHOICE_STATUS = "CHOICE_STATUS"
@@ -31,10 +30,6 @@ class NewsTypeChoiceDialog : DialogFragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putBooleanArray(CHOICE_STATUS, choiceStatus)
         super.onSaveInstanceState(outState)
-    }
-
-    fun setTypeChangedListener(typeChangedListener: OnNewsTypeChangedListener?) {
-        this.typeChangedListener = typeChangedListener
     }
 
     private fun initData(savedInstanceState: Bundle?) {
@@ -77,7 +72,7 @@ class NewsTypeChoiceDialog : DialogFragment() {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = AlertDialog.Builder(requireActivity()).apply {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = AlertDialog.Builder(requireContext()).apply {
         setTitle(R.string.news_show_type)
         setMultiChoiceItems(newsTypeTextArray, choiceStatus) { _, which, isChecked ->
             choiceStatus[which] = isChecked
@@ -87,12 +82,15 @@ class NewsTypeChoiceDialog : DialogFragment() {
         setPositiveButton(android.R.string.yes) { _, _ ->
             if (statusChanged) {
                 saveResult()
-                typeChangedListener?.onChanged()
+                val fragment = requireParentFragment()
+                if (fragment is OnNewsTypeChangedListener) {
+                    fragment.onNewsTypeChanged()
+                }
             }
         }
     }.create()
 
     interface OnNewsTypeChangedListener {
-        fun onChanged()
+        fun onNewsTypeChanged()
     }
 }

@@ -18,6 +18,7 @@ object JwcDBHelper {
     private val jwcDB = JwcDB.db
 
     fun putTermDate(termDate: TermDate) = with(jwcDB.getTermDateDataDao()) {
+        clearTermDate()
         putTermDate(termDate)
     }
 

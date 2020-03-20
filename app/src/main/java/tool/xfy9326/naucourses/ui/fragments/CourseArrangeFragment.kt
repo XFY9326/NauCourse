@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.view_list_course_item.view.*
 import kotlinx.android.synthetic.main.view_list_course_item.view.iv_listCourseColor
 import kotlinx.android.synthetic.main.view_list_course_item.view.tv_listCourseName
 import kotlinx.android.synthetic.main.view_list_course_simple_item.view.*
+import tool.xfy9326.naucourses.App
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.beans.CourseCellStyle
@@ -94,6 +95,11 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
                     putSerializable(CourseDetailDialog.COURSE_DETAIL_DATA, it)
                 }
             }.show(childFragmentManager, null)
+        })
+        App.instance.courseTermUpdate.observeEvent(viewLifecycleOwner, Observer {
+            if (it) {
+                getViewModel().refreshArrangeCourses(false)
+            }
         })
     }
 

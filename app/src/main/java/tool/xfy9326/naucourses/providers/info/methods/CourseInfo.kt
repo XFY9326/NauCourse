@@ -3,7 +3,6 @@ package tool.xfy9326.naucourses.providers.info.methods
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import tool.xfy9326.naucourses.io.dbHelpers.CoursesDBHelper
-import tool.xfy9326.naucourses.providers.beans.jwc.Course
 import tool.xfy9326.naucourses.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourses.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourses.providers.contents.base.ContentResult
@@ -114,10 +113,6 @@ object CourseInfo : BaseSimpleContentInfo<CourseSet, CourseInfo.OperationType>()
     suspend fun saveNewCourses(courseSet: CourseSet) = withContext(Dispatchers.Default) {
         saveSimpleInfo(courseSet)
         updateSimpleCache(courseSet)
-    }
-
-    suspend fun updateCourses(courseSet: Set<Course>) = withContext(Dispatchers.Default) {
-        updateSimpleCache(CoursesDBHelper.updateCourses(courseSet)!!)
     }
 
     override fun saveSimpleInfo(info: CourseSet) = CoursesDBHelper.storeNewCourseSet(info)

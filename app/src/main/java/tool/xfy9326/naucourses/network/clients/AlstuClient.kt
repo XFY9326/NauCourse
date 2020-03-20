@@ -4,6 +4,7 @@ import okhttp3.HttpUrl
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.network.clients.base.LoginInfo
 
+// http://alstu.nau.edu.cn
 class AlstuClient(loginInfo: LoginInfo) : VPNClient(loginInfo) {
     companion object {
         const val ALSTU_HOST = "alstu.nau.edu.cn"

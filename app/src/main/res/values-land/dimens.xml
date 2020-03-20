@@ -2,4 +2,5 @@
 <resources>
     <dimen name="login_panel_btn_login_margin_top">30dp</dimen>
     <dimen name="course_table_course_time_row_size">50dp</dimen>
+    <dimen name="dialog_margin_bottom">10dp</dimen>
 </resources>

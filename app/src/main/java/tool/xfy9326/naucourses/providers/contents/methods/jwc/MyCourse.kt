@@ -5,13 +5,13 @@ import okhttp3.Response
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import tool.xfy9326.naucourses.Constants
-import tool.xfy9326.naucourses.network.SSONetworkManager
+import tool.xfy9326.naucourses.network.LoginNetworkManager
 import tool.xfy9326.naucourses.network.clients.JwcClient
 import tool.xfy9326.naucourses.providers.beans.jwc.CourseScore
 import tool.xfy9326.naucourses.providers.contents.base.BaseNoParamContent
 
 object MyCourse : BaseNoParamContent<Array<CourseScore>>() {
-    override val networkClient = getSSOClient<JwcClient>(SSONetworkManager.ClientType.JWC)
+    override val networkClient = getLoginClient<JwcClient>(LoginNetworkManager.ClientType.JWC)
 
     private const val JWC_MY_COURSE_ASPX = "MyCourse.aspx"
 

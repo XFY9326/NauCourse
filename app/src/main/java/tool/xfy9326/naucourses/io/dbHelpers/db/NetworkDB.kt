@@ -16,8 +16,14 @@ object NetworkDB : BaseDB() {
         NETWORK_DB_NAME
     ).build()
 
-    @Database(entities = [NetworkDBHelper.CookieData::class], version = NETWORK_DB_VERSION, exportSchema = false)
+    @Database(
+        entities = [NetworkDBHelper.SSOCookieData::class, NetworkDBHelper.NGXCookieData::class],
+        version = NETWORK_DB_VERSION,
+        exportSchema = false
+    )
     abstract class NetworkDataBase : RoomDatabase() {
-        abstract fun getCookiesDataDao(): NetworkDBHelper.CookieDataDao
+        abstract fun getSSOCookiesDataDao(): NetworkDBHelper.SSOCookieDataDao
+
+        abstract fun getNGXCookiesDataDao(): NetworkDBHelper.NGXCookieDataDao
     }
 }

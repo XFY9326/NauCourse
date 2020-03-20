@@ -2,34 +2,54 @@ package tool.xfy9326.naucourses.ui.activities
 
 import android.animation.Animator
 import android.animation.ValueAnimator
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import kotlinx.android.synthetic.main.activity_course_edit.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
+import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.beans.CourseCellStyle
 import tool.xfy9326.naucourses.providers.beans.jwc.Course
+import tool.xfy9326.naucourses.providers.beans.jwc.CourseSet
+import tool.xfy9326.naucourses.providers.beans.jwc.CourseTime
+import tool.xfy9326.naucourses.providers.beans.jwc.TermDate
+import tool.xfy9326.naucourses.ui.dialogs.CourseTimeEditDialog
+import tool.xfy9326.naucourses.ui.views.recyclerview.adapters.CourseTimeAdapter
 import tool.xfy9326.naucourses.utils.BaseUtils
+import tool.xfy9326.naucourses.utils.compute.CourseUtils
+import tool.xfy9326.naucourses.utils.compute.TimeUtils
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.enableHomeButton
+import tool.xfy9326.naucourses.utils.views.ActivityUtils.showSnackBar
+import tool.xfy9326.naucourses.utils.views.ActivityUtils.showSnackBarWithCallback
 import tool.xfy9326.naucourses.utils.views.AnimUtils
+import tool.xfy9326.naucourses.utils.views.DialogUtils
 
-class CourseEditActivity : AppCompatActivity() {
+class CourseEditActivity : AppCompatActivity(), CourseTimeAdapter.CourseTimeCallback, CourseTimeEditDialog.OnEditCompleteListener {
     companion object {
         const val COURSE_DATA = "COURSE_DATA"
+        const val TERM_DATE = "TERM_DATE"
         const val COURSE_CELL_STYLE = "COURSE_CELL_STYLE"
 
         private const val VIEW_EXPANDED = "VIEW_EXPANDED"
+        private const val TIME_LIST = "TIME_LIST"
 
         private const val EXPAND_ANIMATION_DURATION = 250L
     }
 
-    private lateinit var courseData: Course
+    private lateinit var courseId: String
+    private var courseData: Course? = null
+    private lateinit var termDate: TermDate
     private lateinit var courseStyle: CourseCellStyle
+
+    private lateinit var courseTimeAdapter: CourseTimeAdapter
 
     private var isShowMoreInfoExpanded = false
 
@@ -42,34 +62,58 @@ class CourseEditActivity : AppCompatActivity() {
         setContentView(R.layout.activity_course_edit)
         setSupportActionBar(tb_general)
         enableHomeButton()
-        viewInit()
+        viewInit(savedInstanceState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putBoolean(VIEW_EXPANDED, isShowMoreInfoExpanded)
+        outState.putSerializable(TIME_LIST, courseTimeAdapter.getCourseTimeList())
         super.onSaveInstanceState(outState)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_course_edit, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                prepareBack()
+                checkSaveForExit()
                 return true
+            }
+            R.id.menu_courseEditSave -> {
+                val newCourse = getEditResult(true)
+                if (newCourse != null) {
+                    if (newCourse != courseData) {
+                        setResult(RESULT_OK, Intent().putExtra(COURSE_DATA, newCourse).putExtra(COURSE_CELL_STYLE, courseStyle))
+                    } else {
+                        setResult(RESULT_OK)
+                    }
+                    super.onBackPressed()
+                }
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onBackPressed() {
-        prepareBack()
+    override fun onBackPressed() = checkSaveForExit()
+
+    override fun onDestroy() {
+        System.gc()
+        super.onDestroy()
     }
 
     private fun readIntentData() {
-        courseData = intent?.getSerializableExtra(COURSE_DATA) as Course
-        courseStyle = intent?.getSerializableExtra(COURSE_CELL_STYLE) as CourseCellStyle
+        intent!!.apply {
+            termDate = getSerializableExtra(TERM_DATE) as TermDate
+            courseData = getSerializableExtra(COURSE_DATA) as Course?
+            courseId = courseData?.id ?: CourseUtils.getNewCourseId()
+            courseStyle = (getSerializableExtra(COURSE_CELL_STYLE) ?: CourseCellStyle.getDefaultCellStyle(courseId)) as CourseCellStyle
+        }
     }
 
-    private fun viewInit() {
+    private fun viewInit(savedInstanceState: Bundle?) {
         btn_showMoreCourseEditInfo.setOnClickListener {
             currentFocus?.clearFocus()
             BaseUtils.hideKeyboard(this, layout_courseEdit.windowToken)
@@ -87,13 +131,69 @@ class CourseEditActivity : AppCompatActivity() {
             }
         }
 
+        fab_courseEdit.setOnClickListener {
+            CourseTimeEditDialog().apply {
+                arguments = Bundle().apply {
+                    putString(CourseTimeEditDialog.COURSE_ID, courseId)
+                    putInt(CourseTimeEditDialog.MAX_WEEK_NUM, TimeUtils.getWeekLength(termDate))
+                }
+            }.show(supportFragmentManager, null)
+        }
+
         if (isShowMoreInfoExpanded) {
             btn_showMoreCourseEditInfo.setImageResource(R.drawable.ic_load_less)
             layout_courseEditInfo.visibility = View.VISIBLE
         }
 
         applyCourseInfoData()
+
+        val timeList = if (savedInstanceState != null) {
+            @Suppress("UNCHECKED_CAST")
+            savedInstanceState.getSerializable(TIME_LIST) as ArrayList<CourseTime>
+        } else {
+            getSortedTimeList()
+        }
+
+        courseTimeAdapter = CourseTimeAdapter(this, timeList, this)
+
+        arv_courseDetailList.adapter = courseTimeAdapter
     }
+
+    override fun onDeleteCourseTime(adapter: CourseTimeAdapter, courseTime: CourseTime, position: Int) {
+        showSnackBarWithCallback(layout_courseEdit, R.string.delete_course_time_success, R.string.revoke, View.OnClickListener {
+            adapter.recoverCourseTime(courseTime, position)
+        })
+    }
+
+    override fun onEditCourseTime(adapter: CourseTimeAdapter, courseTime: CourseTime, position: Int) {
+        CourseTimeEditDialog().apply {
+            arguments = Bundle().apply {
+                putSerializable(CourseTimeEditDialog.UPDATE_POSITION, position)
+                putInt(CourseTimeEditDialog.MAX_WEEK_NUM, TimeUtils.getWeekLength(termDate))
+                putString(CourseTimeEditDialog.COURSE_ID, courseId)
+                putSerializable(CourseTimeEditDialog.COURSE_TIME, courseTime)
+            }
+        }.show(supportFragmentManager, null)
+    }
+
+    override fun onCourseTimeUpdated(courseTime: CourseTime, position: Int?) {
+        if (position == null) {
+            courseTimeAdapter.appendCourseTime(courseTime)
+        } else {
+            courseTimeAdapter.editCourseTime(courseTime, position)
+        }
+    }
+
+    private fun getSortedTimeList(): ArrayList<CourseTime> =
+        if (courseData != null) {
+            ArrayList(courseData!!.timeSet).apply {
+                sortWith(Comparator { o1, o2 ->
+                    o1.compareTo(o2)
+                })
+            }
+        } else {
+            ArrayList()
+        }
 
     private fun loadMore() {
         layout_courseEditInfo.measure(
@@ -118,9 +218,7 @@ class CourseEditActivity : AppCompatActivity() {
             addUpdateListener {
                 val value = animatedValue as Int
                 cv_courseBaseInfo.layoutParams.height = value
-                layout_courseDetail.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-                // cv_courseBaseInfo.requestLayout() 计算一个控件布局时，相邻的也会计算
-                layout_courseDetail.requestLayout()
+                cv_courseBaseInfo.requestLayout()
             }
             addListener(object : Animator.AnimatorListener {
                 override fun onAnimationStart(animation: Animator?) {
@@ -144,16 +242,77 @@ class CourseEditActivity : AppCompatActivity() {
     }
 
     private fun applyCourseInfoData() {
-        et_courseName.setText(courseData.name)
-        et_teacherName.setText(courseData.teacher)
-        et_courseCredit.setText(courseData.credit.toString())
-        et_teachClass.setText(courseData.teachClass)
-        et_courseClass.setText(courseData.courseClass)
-        et_courseType.setText(courseData.type)
-        et_courseProperty.setText(courseData.property)
+        et_courseName.setText(courseData?.name)
+        et_teacherName.setText(courseData?.teacher)
+        et_courseCredit.setText(courseData?.credit?.toString())
+        et_teachClass.setText(courseData?.teachClass)
+        et_courseClass.setText(courseData?.courseClass)
+        et_courseType.setText(courseData?.type)
+        et_courseProperty.setText(courseData?.property)
     }
 
-    private fun prepareBack() {
-        super.onBackPressed()
+    private fun showConflictMsg(courseTime1: CourseTime, courseTime2: CourseTime) {
+        val weekDayNumStrArray = resources.getStringArray(R.array.weekday_num)
+        DialogUtils.createBottomMsgDialog(
+            this, lifecycle, getString(R.string.time_conflict_title), getString(
+                R.string.time_conflict_msg,
+                courseTime1.rawWeeksStr, weekDayNumStrArray[courseTime1.weekDay.toInt()], courseTime1.rawCoursesNumStr,
+                courseTime2.rawWeeksStr, weekDayNumStrArray[courseTime2.weekDay.toInt()], courseTime2.rawCoursesNumStr
+            )
+        ).show()
+    }
+
+    private fun getEditResult(showAttention: Boolean): Course? {
+        val timeSet = courseTimeAdapter.getCourseTimeSet()
+        if (timeSet.size == 0) {
+            if (showAttention) showSnackBar(layout_courseEdit, R.string.course_time_empty)
+        } else if (timeSet.size != courseTimeAdapter.getCourseTimeList().size) {
+            if (showAttention) showSnackBar(layout_courseEdit, R.string.same_course_time_exists)
+        } else {
+            val conflictResult = CourseSet.checkCourseTimeConflict(timeSet)
+            if (conflictResult == null) {
+                val courseName = et_courseName.text?.toString()?.trim()
+                if (courseName.isNullOrBlank() || courseName.isNullOrEmpty()) {
+                    if (showAttention) showSnackBar(layout_courseEdit, R.string.course_name_empty)
+                } else {
+                    return Course(
+                        courseId,
+                        courseName,
+                        getEditText(et_teacherName)!!,
+                        getEditText(et_courseClass, true),
+                        getEditText(et_teachClass)!!,
+                        getEditText(et_courseCredit)?.toFloatOrNull() ?: 0f,
+                        getEditText(et_courseType)!!,
+                        getEditText(et_courseProperty, true),
+                        timeSet
+                    )
+                }
+            } else {
+                if (showAttention) showConflictMsg(conflictResult.first, conflictResult.second)
+            }
+        }
+        return null
+    }
+
+    private fun getEditText(editText: AppCompatEditText, nullable: Boolean = false): String? {
+        val result = editText.text?.toString()?.trim()
+        return if (result.isNullOrBlank() || result.isNullOrEmpty()) {
+            if (nullable) null else Constants.EMPTY
+        } else {
+            result
+        }
+    }
+
+    private fun checkSaveForExit() {
+        val newCourse = getEditResult(false)
+        if (newCourse != courseData) {
+            showSnackBarWithCallback(layout_courseEdit, R.string.exit_edit_without_save, android.R.string.yes, View.OnClickListener {
+                setResult(RESULT_OK)
+                super.onBackPressed()
+            })
+        } else {
+            setResult(RESULT_OK)
+            super.onBackPressed()
+        }
     }
 }

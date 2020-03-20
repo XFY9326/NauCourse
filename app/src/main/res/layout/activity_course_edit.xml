@@ -18,7 +18,7 @@
         android:focusable="true"
         app:elevation="4dp"
         app:fabSize="normal"
-        app:layout_anchor="@id/layout_courseDetail"
+        app:layout_anchor="@id/cv_courseBaseInfo"
         app:layout_anchorGravity="bottom|end"
         app:srcCompat="@drawable/ic_plus" />
 
@@ -26,12 +26,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
-        android:fillViewport="true"
-        android:padding="5dp">
+        android:fillViewport="true">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
             android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
@@ -118,7 +120,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/course_credit_name"
-                                android:inputType="text"
+                                android:inputType="numberDecimal"
                                 android:maxLength="20"
                                 android:maxLines="1"
                                 android:textSize="13sp" />
@@ -209,37 +211,53 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <FrameLayout
-                android:id="@+id/layout_courseDetail"
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
-                android:gravity="center">
-
-                <tool.xfy9326.naucourses.ui.views.widgets.AdvancedRecyclerView
-                    android:id="@+id/arv_courseDetailList"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:overScrollMode="never"
-                    app:empty_view="@id/tv_courseDetailEmpty"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_courseDetailEmpty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:drawablePadding="10dp"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="@string/course_detail_empty"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/course_detail_title"
                     android:textColor="@color/colorPrimaryText"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:visibility="gone"
-                    app:drawableTopCompat="@drawable/ic_course_detail" />
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
 
-            </FrameLayout>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp">
+
+                    <tool.xfy9326.naucourses.ui.views.widgets.AdvancedRecyclerView
+                        android:id="@+id/arv_courseDetailList"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:overScrollMode="never"
+                        app:empty_view="@id/tv_courseDetailEmpty"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tv_courseDetailEmpty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:drawablePadding="10dp"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="@string/course_detail_empty"
+                        android:textColor="@color/colorPrimaryText"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        app:drawableTopCompat="@drawable/ic_course_detail" />
+
+                </FrameLayout>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 

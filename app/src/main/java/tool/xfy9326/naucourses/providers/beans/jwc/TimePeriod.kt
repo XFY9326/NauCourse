@@ -6,15 +6,20 @@ import kotlin.math.max
 
 data class TimePeriod(
     val start: Int,
-    val end: Int? = null
+    private var end_: Int? = null
 ) : Serializable {
+    val end: Int? get() = end_
+
     init {
-        if (end != null && start > end) {
-            throw IllegalArgumentException("Time Period Error! Start is Larger than End! Start: $start End: $end")
+        if (start == end_) {
+            end_ = null
+        }
+        if (end_ != null && start > end_!!) {
+            throw IllegalArgumentException("Time Period Error! Start is Larger than End! Start: $start End: $end_")
         }
     }
 
-    fun hasEnd() = end != null
+    fun hasEnd() = end_ != null
 
     companion object {
         private const val TIME_PERIOD_JOIN_SYMBOL = "-"
@@ -34,7 +39,7 @@ data class TimePeriod(
             throw IllegalArgumentException("Empty Parse Text to Time Period!")
         }
 
-        private fun initCharArray(size: Int, source: CharArray? = null): CharArray =
+        fun initCharArray(size: Int, source: CharArray? = null): CharArray =
             CharArray(size) { if (source != null && it < source.size - 1) source[it] else False }
 
         fun isIndexTrue(arr: CharArray, i: Int) = i >= 0 && i < arr.size && arr[i] == True
@@ -42,10 +47,9 @@ data class TimePeriod(
 
     fun convertToCharArray(
         initCharLength: Int, oddMode: Boolean = false, evenMode: Boolean = false, countFromZero: Boolean = false, source: CharArray? = null
-    ):
-            CharArray {
+    ): CharArray {
         val arrLength = max(
-            initCharLength, (end ?: start) + if (countFromZero) {
+            initCharLength, (end_ ?: start) + if (countFromZero) {
                 1
             } else {
                 0
@@ -58,7 +62,7 @@ data class TimePeriod(
         }
         val array = initCharArray(arrLength, source)
         val prefixStart = start - prefix
-        val prefixEnd = (end ?: start) - prefix
+        val prefixEnd = (end_ ?: start) - prefix
         if (oddMode && !evenMode) {
             for (i in prefixStart..prefixEnd) if ((i + 1) % 2 != 0) array[i] = True
         } else if (evenMode && !oddMode) {

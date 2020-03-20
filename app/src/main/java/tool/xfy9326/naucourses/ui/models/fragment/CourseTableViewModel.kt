@@ -162,8 +162,40 @@ class CourseTableViewModel : BaseViewModel() {
         }
     }
 
+    fun refreshCourseData() {
+        viewModelScope.launch(Dispatchers.Default) {
+            val courseInfoAsync = async { CourseInfo.getInfo(loadCache = true) }
+            val termInfoAsync = async { TermDateInfo.getInfo(loadCache = true) }
+
+            val termInfo = termInfoAsync.await()
+            val termDate = if (termInfo.isSuccess) {
+                termInfo.data!!
+            } else {
+                LogUtils.d<CourseTableViewModel>("TermInfo Update Error: ${termInfo.errorReason}")
+                null
+            }
+
+            val courseInfo = courseInfoAsync.await()
+            val courseData = if (courseInfo.isSuccess) {
+                courseInfo.data!!
+            } else {
+                LogUtils.d<CourseTableViewModel>("CourseInfo Update Error: ${courseInfo.errorReason}")
+                null
+            }
+
+            val styles = if (courseData != null) {
+                CourseCellStyleStore.loadCellStyles(courseData)
+            } else {
+                null
+            }
+
+            hasInitWithNowWeekNum = false
+            updateCourseData(courseData, termDate, styles)
+        }
+    }
+
     @Synchronized
-    fun updateCourseData(courseSet: CourseSet? = null, termDate: TermDate? = null, styleList: Array<CourseCellStyle>? = null) {
+    private fun updateCourseData(courseSet: CourseSet? = null, termDate: TermDate? = null, styleList: Array<CourseCellStyle>? = null) {
         if (validateUpdateNecessary(courseSet, termDate, styleList)) {
             var hasUpdateInfo = false
             if (courseSet != null) {
@@ -194,7 +226,7 @@ class CourseTableViewModel : BaseViewModel() {
     }
 
     private fun postWeekInfoByTermDate(termDate: TermDate): Pair<Int, Int> {
-        val maxWeek = TimeUtils.getMaxWeekNum(termDate)
+        val maxWeek = TimeUtils.getWeekLength(termDate)
         val currentWeekNum = TimeUtils.getWeekNum(termDate)
         maxWeekNum.postValue(maxWeek)
         nowWeekNum.postValue(currentWeekNum)
