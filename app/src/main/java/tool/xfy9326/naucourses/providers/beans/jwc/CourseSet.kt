@@ -1,7 +1,7 @@
 package tool.xfy9326.naucourses.providers.beans.jwc
 
 import tool.xfy9326.naucourses.beans.CourseCheckResult
-import tool.xfy9326.naucourses.utils.utility.LogUtils
+import tool.xfy9326.naucourses.utils.debug.LogUtils
 
 data class CourseSet(
     private var courses_: HashSet<Course>,

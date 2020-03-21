@@ -11,6 +11,7 @@ import tool.xfy9326.naucourses.network.clients.base.LoginInfo
 import tool.xfy9326.naucourses.network.clients.base.LoginResponse
 import tool.xfy9326.naucourses.network.clients.tools.NetworkTools
 import tool.xfy9326.naucourses.network.clients.tools.NetworkTools.Companion.hasSameHost
+import tool.xfy9326.naucourses.utils.debug.LogUtils
 
 // http://ngx.nau.edu.cn
 open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null) : BaseLoginClient(loginInfo) {
@@ -174,6 +175,7 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
             if (validateNotInLoginPage(content)) {
                 response
             } else {
+                response.closeQuietly()
                 newClientCall(request)
             }
         } else {
@@ -182,12 +184,11 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
             } else {
                 login()
             }
-            if (result.isSuccess) {
-                response.closeQuietly()
-                newClientCall(request)
-            } else {
-                response
+            response.closeQuietly()
+            if (!result.isSuccess) {
+                LogUtils.d<NgxClient>("NgxClient Auto Login Failed! Reason: ${result.loginErrorReason}")
             }
+            newClientCall(request)
         }
     }
 }

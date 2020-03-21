@@ -99,28 +99,29 @@ abstract class BaseContentInfo<T : Enum<*>, P : Enum<*>> {
         if (loadCachedData) {
             cacheMutex.withLock {
                 if (hasCachedItem(type)) {
-                    return@withContext InfoResult<E>(true, onReadCache(getCachedItem(type)!!) as E)
+                    return@withContext InfoResult(true, onReadCache(getCachedItem(type)!!) as E)
                 } else {
                     return@withContext InfoResult<E>(false, errorReason = ContentErrorReason.EMPTY_DATA)
                 }
             }
         }
 
-        cacheMutex.withLock {
-            val cacheExpire = onGetCacheExpire()
-            if (!forceRefresh && hasCachedItem(type) && !isCacheExpired(type, params, cacheExpire)) {
-                return@withContext InfoResult<E>(true, onReadCache(getCachedItem(type)!!) as E)
+        val cacheExpire = onGetCacheExpire()
+        val useCache = !forceRefresh && hasCachedItem(type) && !isCacheExpired(type, params, cacheExpire)
+        if (useCache) {
+            cacheMutex.withLock {
+                return@withContext InfoResult(true, onReadCache(getCachedItem(type)!!) as E)
             }
-        }
-
-        infoMutex.withLock {
-            val result = getInfoContent(type, params)
-            if (result.isSuccess) {
-                onSaveResult(type, params, result.contentData!! as E)
-                onSaveCache(type, params, result.contentData as E)
-                return@withContext InfoResult<E>(true, result.contentData)
-            } else {
-                return@withContext InfoResult<E>(false, errorReason = result.contentErrorResult)
+        } else {
+            infoMutex.withLock {
+                val result = getInfoContent(type, params)
+                if (result.isSuccess) {
+                    onSaveResult(type, params, result.contentData!! as E)
+                    onSaveCache(type, params, result.contentData as E)
+                    return@withContext InfoResult(true, result.contentData)
+                } else {
+                    return@withContext InfoResult<E>(false, errorReason = result.contentErrorResult)
+                }
             }
         }
     }

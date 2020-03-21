@@ -9,6 +9,7 @@ import tool.xfy9326.naucourses.providers.info.base.BaseSimpleContentInfo
 import tool.xfy9326.naucourses.providers.info.base.CacheExpire
 import tool.xfy9326.naucourses.providers.info.base.CacheExpireRule
 import tool.xfy9326.naucourses.providers.info.base.CacheExpireTimeUnit
+import tool.xfy9326.naucourses.utils.debug.LogUtils
 
 object CardBalanceInfo : BaseSimpleContentInfo<CardBalance, Nothing>() {
     private const val CACHE_EXPIRE_MINUTE = 5
@@ -17,7 +18,10 @@ object CardBalanceInfo : BaseSimpleContentInfo<CardBalance, Nothing>() {
 
     override fun onGetCacheExpire(): CacheExpire = CacheExpire(CacheExpireRule.PER_TIME, CACHE_EXPIRE_MINUTE, CacheExpireTimeUnit.MINUTE)
 
-    override suspend fun getSimpleInfoContent(params: Set<Nothing>): ContentResult<CardBalance> = StudentCardBalance.getContentData()
+    override suspend fun getSimpleInfoContent(params: Set<Nothing>): ContentResult<CardBalance> {
+        LogUtils.d<CardBalanceInfo>("Getting New Card Balance Now")
+        return StudentCardBalance.getContentData()
+    }
 
     override fun saveSimpleInfo(info: CardBalance) {
         GsonStoreManager.writeData(GsonStoreType.CARD_BALANCE, info, true)

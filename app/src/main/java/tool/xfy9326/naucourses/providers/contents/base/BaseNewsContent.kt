@@ -11,6 +11,7 @@ import org.jsoup.nodes.Document
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.providers.beans.GeneralNews
 import tool.xfy9326.naucourses.providers.beans.GeneralNewsDetail
+import tool.xfy9326.naucourses.utils.debug.ExceptionUtils
 import java.io.IOException
 import java.net.SocketTimeoutException
 
@@ -30,7 +31,7 @@ abstract class BaseNewsContent<T> : BaseNoParamContent<Set<GeneralNews>>() {
             }
         }
     } catch (e: Exception) {
-        e.printStackTrace()
+        ExceptionUtils.printStackTrace<BaseNewsContent<T>>(e)
         when (e) {
             is SocketTimeoutException -> RequestResult(false, ContentErrorReason.TIMEOUT)
             is HttpStatusException -> RequestResult(false, ContentErrorReason.SERVER_ERROR)
@@ -55,7 +56,7 @@ abstract class BaseNewsContent<T> : BaseNoParamContent<Set<GeneralNews>>() {
                 return BitmapFactory.decodeStream(it)
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            ExceptionUtils.printStackTrace<BaseNewsContent<T>>(e)
             return null
         }
         return null
@@ -68,7 +69,7 @@ abstract class BaseNewsContent<T> : BaseNoParamContent<Set<GeneralNews>>() {
         imgTagFormat(document)
         ParseResult(true, onParseDetailData(document))
     } catch (e: Exception) {
-        e.printStackTrace()
+        ExceptionUtils.printStackTrace<BaseNewsContent<T>>(e)
         ParseResult(false)
     }
 

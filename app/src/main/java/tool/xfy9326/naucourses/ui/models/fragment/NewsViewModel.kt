@@ -10,7 +10,7 @@ import tool.xfy9326.naucourses.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourses.providers.info.methods.NewsInfo
 import tool.xfy9326.naucourses.tools.EventLiveData
 import tool.xfy9326.naucourses.ui.models.base.BaseViewModel
-import tool.xfy9326.naucourses.utils.utility.LogUtils
+import tool.xfy9326.naucourses.utils.debug.LogUtils
 
 class NewsViewModel : BaseViewModel() {
     @Volatile

@@ -11,7 +11,7 @@ import tool.xfy9326.naucourses.network.clients.base.LoginResponse
 import tool.xfy9326.naucourses.network.clients.tools.NetworkTools
 import tool.xfy9326.naucourses.network.clients.tools.NetworkTools.Companion.hasSameHost
 import tool.xfy9326.naucourses.network.clients.tools.VPNTools
-import tool.xfy9326.naucourses.utils.utility.LogUtils
+import tool.xfy9326.naucourses.utils.debug.LogUtils
 import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 
@@ -130,6 +130,7 @@ open class VPNClient(loginInfo: LoginInfo, loginUrl: HttpUrl? = null) :
                 callResult = newVPNCall(newRequest)
             } else {
                 LogUtils.d<VPNClient>("VPN Login While Call Failed")
+                return newVPNCall(newRequest)
             }
         }
         return if (validateNotInLoginPage(NetworkTools.getResponseContent(callResult))) {

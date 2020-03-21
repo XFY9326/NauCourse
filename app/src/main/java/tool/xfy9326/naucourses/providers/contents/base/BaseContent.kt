@@ -6,6 +6,7 @@ import tool.xfy9326.naucourses.network.LoginNetworkManager
 import tool.xfy9326.naucourses.network.SimpleNetworkManager
 import tool.xfy9326.naucourses.network.clients.base.BaseLoginClient
 import tool.xfy9326.naucourses.network.clients.base.BaseNetworkClient
+import tool.xfy9326.naucourses.utils.debug.ExceptionUtils
 import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
@@ -28,7 +29,7 @@ abstract class BaseContent<T> {
             }
         }
     } catch (e: Exception) {
-        e.printStackTrace()
+        ExceptionUtils.printStackTrace<BaseContent<T>>(e)
         when (e) {
             is SocketTimeoutException -> RequestResult(false, ContentErrorReason.TIMEOUT)
             is HttpStatusException -> RequestResult(false, ContentErrorReason.SERVER_ERROR)
@@ -43,7 +44,7 @@ abstract class BaseContent<T> {
     private fun parseData(contentData: String): ParseResult<T> = try {
         ParseResult(true, onParseData(contentData))
     } catch (e: Exception) {
-        e.printStackTrace()
+        ExceptionUtils.printStackTrace<BaseContent<T>>(e)
         ParseResult(false)
     }
 

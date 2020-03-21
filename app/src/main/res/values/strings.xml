@@ -182,4 +182,5 @@
     <string name="term_date_error_end">学期结束时间必须大于开始时间！</string>
     <string name="clear_term_edit">重置学期</string>
     <string name="term_date_length_error">学期周数长度必须\n为%1$d～%2$d周之间！\n当前长度：%3$d周</string>
+    <string name="crash_msg">程序运行时出现错误！\n错误日志已保存！</string>
 </resources>

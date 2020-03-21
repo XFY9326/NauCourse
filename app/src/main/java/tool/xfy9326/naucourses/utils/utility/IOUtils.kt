@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import tool.xfy9326.naucourses.App
+import tool.xfy9326.naucourses.utils.debug.ExceptionUtils
 import tool.xfy9326.naucourses.utils.secure.CryptoUtils
 import java.io.*
 import java.util.zip.GZIPInputStream
@@ -48,7 +49,7 @@ object IOUtils {
             }
             true
         } catch (e: Exception) {
-            e.printStackTrace()
+            ExceptionUtils.printStackTrace<IOUtils>(e)
             false
         }
 
@@ -78,7 +79,7 @@ object IOUtils {
                 }
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            ExceptionUtils.printStackTrace<IOUtils>(e)
         }
         return false
     }
@@ -100,7 +101,7 @@ object IOUtils {
                 }
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            ExceptionUtils.printStackTrace<IOUtils>(e)
         }
         return false
     }
@@ -128,7 +129,7 @@ object IOUtils {
                 null
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            ExceptionUtils.printStackTrace<IOUtils>(e)
             null
         }
 

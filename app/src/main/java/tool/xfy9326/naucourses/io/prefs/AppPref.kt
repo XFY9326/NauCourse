@@ -9,6 +9,7 @@ object AppPref : BasePref() {
     private const val CUSTOM_START_TERM_DATE_MILLS = "CustomStartTermDateMills"
     private const val CUSTOM_END_TERM_DATE_MILLS = "CustomEndTermDateMills"
     private const val DEFAULT_TERM_DATE_MILLS = 0L
+    private const val DEFAULT_LAST_CRASH_TIME_MILLS = 0L
 
     private var ShowNewsType by pref.stringSet()
 
@@ -55,4 +56,6 @@ object AppPref : BasePref() {
             TermDate(Date(startMills), Date(endMills))
         }
     }
+
+    var LastCrashTimeMills by pref.long(defValue = DEFAULT_LAST_CRASH_TIME_MILLS)
 }

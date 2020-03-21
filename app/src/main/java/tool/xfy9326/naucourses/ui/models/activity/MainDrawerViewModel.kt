@@ -11,8 +11,8 @@ import tool.xfy9326.naucourses.providers.info.methods.PersonalInfo
 import tool.xfy9326.naucourses.tools.EventLiveData
 import tool.xfy9326.naucourses.ui.activities.MainDrawerActivity
 import tool.xfy9326.naucourses.ui.models.base.BaseViewModel
+import tool.xfy9326.naucourses.utils.debug.LogUtils
 import tool.xfy9326.naucourses.utils.secure.AccountUtils
-import tool.xfy9326.naucourses.utils.utility.LogUtils
 
 class MainDrawerViewModel : BaseViewModel() {
     private var hasInitFragmentShow = false

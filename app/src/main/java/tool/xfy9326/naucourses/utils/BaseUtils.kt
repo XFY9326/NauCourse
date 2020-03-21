@@ -11,6 +11,8 @@ import kotlin.system.exitProcess
 
 
 object BaseUtils {
+    const val CRASH_RESTART_FLAG = "CRASH_RESTART"
+
     fun Float.dpToPx() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, Resources.getSystem().displayMetrics)
 
     fun Int.dpToPx() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), Resources.getSystem().displayMetrics).toInt()
@@ -19,10 +21,11 @@ object BaseUtils {
 
     fun Int.spToPx() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this.toFloat(), Resources.getSystem().displayMetrics).toInt()
 
-    fun restartApplication(context: Context) {
+    fun restartApplication(context: Context, crashRestart: Boolean = false) {
         val packageManager: PackageManager = context.applicationContext.packageManager
         val intent = packageManager.getLaunchIntentForPackage(context.packageName)!!
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        if (crashRestart) intent.putExtra(CRASH_RESTART_FLAG, true)
         context.applicationContext.startActivity(intent)
         exitProcess(0)
     }

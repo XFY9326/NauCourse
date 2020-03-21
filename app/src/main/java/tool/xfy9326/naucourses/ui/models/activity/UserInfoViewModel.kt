@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 import tool.xfy9326.naucourses.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourses.providers.info.methods.PersonalInfo
 import tool.xfy9326.naucourses.ui.models.base.BaseViewModel
-import tool.xfy9326.naucourses.utils.utility.LogUtils
+import tool.xfy9326.naucourses.utils.debug.LogUtils
 
 class UserInfoViewModel : BaseViewModel() {
     val studentInfo = MutableLiveData<StudentInfo>()

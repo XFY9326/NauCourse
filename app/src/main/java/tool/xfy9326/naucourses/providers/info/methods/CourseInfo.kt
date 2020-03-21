@@ -12,7 +12,7 @@ import tool.xfy9326.naucourses.providers.info.base.BaseSimpleContentInfo
 import tool.xfy9326.naucourses.providers.info.base.CacheExpire
 import tool.xfy9326.naucourses.providers.info.base.CacheExpireRule
 import tool.xfy9326.naucourses.providers.info.base.CacheExpireTimeUnit
-import tool.xfy9326.naucourses.utils.utility.LogUtils
+import tool.xfy9326.naucourses.utils.debug.LogUtils
 
 object CourseInfo : BaseSimpleContentInfo<CourseSet, CourseInfo.OperationType>() {
     private const val CACHE_EXPIRE_DAY = 1

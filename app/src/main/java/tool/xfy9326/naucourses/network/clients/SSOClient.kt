@@ -10,6 +10,7 @@ import tool.xfy9326.naucourses.network.clients.base.LoginInfo
 import tool.xfy9326.naucourses.network.clients.base.LoginResponse
 import tool.xfy9326.naucourses.network.clients.tools.NetworkTools
 import tool.xfy9326.naucourses.network.clients.tools.NetworkTools.Companion.hasSameHost
+import tool.xfy9326.naucourses.utils.debug.LogUtils
 import java.io.IOException
 
 // http://sso.nau.edu.cn
@@ -181,6 +182,7 @@ open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = nu
             if (validateNotInLoginPage(content)) {
                 response
             } else {
+                response.closeQuietly()
                 newClientCall(request)
             }
         } else {
@@ -189,12 +191,11 @@ open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = nu
             } else {
                 login()
             }
-            if (result.isSuccess) {
-                response.closeQuietly()
-                newClientCall(request)
-            } else {
-                response
+            response.closeQuietly()
+            if (!result.isSuccess) {
+                LogUtils.d<SSOClient>("NgxClient Auto Login Failed! Reason: ${result.loginErrorReason}")
             }
+            newClientCall(request)
         }
     }
 }

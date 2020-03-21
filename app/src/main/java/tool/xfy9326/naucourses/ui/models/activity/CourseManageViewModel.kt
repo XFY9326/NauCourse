@@ -18,7 +18,7 @@ import tool.xfy9326.naucourses.providers.info.methods.TermDateInfo
 import tool.xfy9326.naucourses.providers.store.CourseCellStyleStore
 import tool.xfy9326.naucourses.tools.EventLiveData
 import tool.xfy9326.naucourses.ui.models.base.BaseViewModel
-import tool.xfy9326.naucourses.utils.utility.LogUtils
+import tool.xfy9326.naucourses.utils.debug.LogUtils
 
 class CourseManageViewModel : BaseViewModel() {
     val rawTermDate = EventLiveData<TermDate>()

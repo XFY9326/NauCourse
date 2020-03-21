@@ -4,6 +4,7 @@ import okhttp3.HttpUrl
 import okhttp3.Request
 import okhttp3.Response
 import org.jsoup.HttpStatusException
+import tool.xfy9326.naucourses.utils.debug.ExceptionUtils
 import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
@@ -43,7 +44,7 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
                 }
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            ExceptionUtils.printStackTrace<BaseLoginClient>(e)
             when (e) {
                 is SocketTimeoutException, is IOException, is NullPointerException, is ConnectException ->
                     LoginResponse(false, loginErrorReason = LoginResponse.ErrorReason.CONNECTION_ERROR)
@@ -70,7 +71,7 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
         try {
             logoutInternal()
         } catch (e: Exception) {
-            e.printStackTrace()
+            ExceptionUtils.printStackTrace<BaseLoginClient>(e)
             false
         }
 

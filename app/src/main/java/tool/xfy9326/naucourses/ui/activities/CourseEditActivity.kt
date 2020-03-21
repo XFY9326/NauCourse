@@ -256,8 +256,8 @@ class CourseEditActivity : AppCompatActivity(), CourseTimeAdapter.CourseTimeCall
         DialogUtils.createBottomMsgDialog(
             this, lifecycle, getString(R.string.time_conflict_title), getString(
                 R.string.time_conflict_msg,
-                courseTime1.rawWeeksStr, weekDayNumStrArray[courseTime1.weekDay.toInt()], courseTime1.rawCoursesNumStr,
-                courseTime2.rawWeeksStr, weekDayNumStrArray[courseTime2.weekDay.toInt()], courseTime2.rawCoursesNumStr
+                courseTime1.rawWeeksStr, weekDayNumStrArray[courseTime1.weekDay.toInt() - 1], courseTime1.rawCoursesNumStr,
+                courseTime2.rawWeeksStr, weekDayNumStrArray[courseTime2.weekDay.toInt() - 1], courseTime2.rawCoursesNumStr
             )
         ).show()
     }

@@ -86,6 +86,10 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
             ItemTouchHelper(SwipeItemCallback(courseAdapter)).attachToRecyclerView(this)
             adapter = courseAdapter
         }
+
+        fab_courseManage.setOnClickListener {
+            //TODO
+        }
     }
 
     override fun bindViewModel(viewModel: CourseManageViewModel) {
@@ -276,9 +280,9 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
             this, lifecycle, getString(R.string.time_conflict_title), getString(
                 R.string.course_conflict_msg,
                 course1.name,
-                courseTime1.rawWeeksStr, weekDayNumStrArray[courseTime1.weekDay.toInt()], courseTime1.rawCoursesNumStr,
+                courseTime1.rawWeeksStr, weekDayNumStrArray[courseTime1.weekDay.toInt() - 1], courseTime1.rawCoursesNumStr,
                 course2.name,
-                courseTime2.rawWeeksStr, weekDayNumStrArray[courseTime2.weekDay.toInt()], courseTime2.rawCoursesNumStr
+                courseTime2.rawWeeksStr, weekDayNumStrArray[courseTime2.weekDay.toInt() - 1], courseTime2.rawCoursesNumStr
             )
         ).show()
     }

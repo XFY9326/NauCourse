@@ -15,7 +15,7 @@ import tool.xfy9326.naucourses.tools.EventLiveData
 import tool.xfy9326.naucourses.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourses.utils.compute.CourseUtils
 import tool.xfy9326.naucourses.utils.compute.TimeUtils
-import tool.xfy9326.naucourses.utils.utility.LogUtils
+import tool.xfy9326.naucourses.utils.debug.LogUtils
 
 class CourseTableViewModel : BaseViewModel() {
     companion object {

@@ -9,7 +9,7 @@ import org.jsoup.Jsoup
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.network.clients.base.LoginInfo
 import tool.xfy9326.naucourses.network.clients.tools.NetworkTools
-import tool.xfy9326.naucourses.utils.utility.LogUtils
+import tool.xfy9326.naucourses.utils.debug.LogUtils
 
 // http://ykt.nau.edu.cn
 class YktClient(loginInfo: LoginInfo) : VPNClient(loginInfo) {
@@ -56,10 +56,10 @@ class YktClient(loginInfo: LoginInfo) : VPNClient(loginInfo) {
                 callResult = newVPNCall(newRequest)
             } else {
                 LogUtils.d<VPNClient>("Ykt VPN Login While Call Failed")
+                return newVPNCall(newRequest)
             }
         }
         return if (validateNotInLoginPage(NetworkTools.getResponseContent(callResult))) {
-            println(NetworkTools.getResponseContent(callResult))
             callResult
         } else {
             val loginResponse = newVPNCall(patchVPNRequest(useVPN, Request.Builder().url(YKT_LOGIN_URL).build()))
@@ -68,7 +68,7 @@ class YktClient(loginInfo: LoginInfo) : VPNClient(loginInfo) {
                 if (!validateLoginWithResponse(content, loginResponse.request.url)) {
                     val loginResult = login(loginResponse)
                     if (!loginResult.isSuccess) {
-                        LogUtils.w<YktClient>("YktClient SSO Login Failed! Reason: ${loginResult.loginErrorReason} Url: ${loginResult.url}")
+                        LogUtils.d<YktClient>("YktClient SSO Login Failed! Reason: ${loginResult.loginErrorReason} Url: ${loginResult.url}")
                     }
                 }
 
@@ -86,6 +86,8 @@ class YktClient(loginInfo: LoginInfo) : VPNClient(loginInfo) {
                 }.build()
 
                 newVPNCall(patchVPNRequest(useVPN, loginRequest)).closeQuietly()
+            } else {
+                LogUtils.d<YktClient>("YktClient SSO Login Failed!")
             }
             loginResponse.closeQuietly()
 

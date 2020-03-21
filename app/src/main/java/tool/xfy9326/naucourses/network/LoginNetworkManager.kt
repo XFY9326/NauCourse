@@ -6,8 +6,8 @@ import tool.xfy9326.naucourses.network.clients.*
 import tool.xfy9326.naucourses.network.clients.base.LoginInfo
 import tool.xfy9326.naucourses.network.clients.base.LoginResponse
 import tool.xfy9326.naucourses.network.clients.tools.NetworkTools
+import tool.xfy9326.naucourses.utils.debug.LogUtils
 import tool.xfy9326.naucourses.utils.secure.AccountUtils
-import tool.xfy9326.naucourses.utils.utility.LogUtils
 
 object LoginNetworkManager {
     private lateinit var loginInfo: LoginInfo
