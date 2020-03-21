@@ -4,7 +4,7 @@
         <ripple android:color="@color/colorRipple">
             <item>
                 <shape android:shape="oval">
-                    <solid android:color="@color/colorBaseIcon" />
+                    <solid android:color="@color/colorCourseTimeCell" />
                     <size android:width="26dp" android:height="26dp" />
                 </shape>
             </item>
@@ -21,7 +21,7 @@
         <ripple android:color="@color/colorRipple">
             <item>
                 <shape android:shape="oval">
-                    <solid android:color="@color/colorPrimary" />
+                    <solid android:color="@color/colorCourseTimeCellChecked" />
                     <size android:width="26dp" android:height="26dp" />
                 </shape>
             </item>

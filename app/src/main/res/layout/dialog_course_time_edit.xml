@@ -54,6 +54,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:buttonTint="@color/colorBaseIcon"
                         android:paddingStart="5dp"
                         android:paddingEnd="5dp"
                         android:text="@string/odd_week_mode" />
@@ -63,6 +64,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:buttonTint="@color/colorBaseIcon"
                         android:paddingStart="5dp"
                         android:paddingEnd="5dp"
                         android:text="@string/even_week_mode" />
@@ -72,6 +74,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:buttonTint="@color/colorBaseIcon"
                         android:paddingStart="5dp"
                         android:paddingEnd="5dp"
                         android:text="@string/all_weeks_mode" />
@@ -185,14 +188,16 @@
                 style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@android:string/cancel" />
+                android:text="@android:string/cancel"
+                android:textColor="@color/colorDialogButtonText" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_courseTimeEditConfirm"
                 style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@android:string/yes" />
+                android:text="@android:string/yes"
+                android:textColor="@color/colorDialogButtonText" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 

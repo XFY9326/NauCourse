@@ -158,6 +158,7 @@
                                 android:layout_marginTop="2dp"
                                 android:autoLink="web"
                                 android:text="@string/open_source_website_url"
+                                android:textColorLink="@color/colorUrlLink"
                                 android:textSize="12sp" />
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -321,6 +322,7 @@
                                 android:layout_marginTop="2dp"
                                 android:autoLink="web"
                                 android:text="@string/online_feedback_back_url"
+                                android:textColorLink="@color/colorUrlLink"
                                 android:textSize="12sp" />
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -474,6 +476,7 @@
                                 android:layout_marginTop="2dp"
                                 android:autoLink="email"
                                 android:text="@string/email"
+                                android:textColorLink="@color/colorUrlLink"
                                 android:textSize="12sp" />
 
                         </androidx.appcompat.widget.LinearLayoutCompat>

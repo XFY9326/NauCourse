@@ -40,6 +40,12 @@
         <item name="android:textColorSecondary">@color/colorSecondaryText</item>
         <item name="android:textColorTertiary">@color/colorSecondaryText</item>
         <item name="actionOverflowMenuStyle">@style/OverflowMenuStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/DialogBtnStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/DialogBtnStyle</item>
+    </style>
+
+    <style name="DialogBtnStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/colorDialogButtonText</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />

@@ -192,4 +192,5 @@
     <string name="delete_all_courses">删除全部课程</string>
     <string name="delete_all_courses_msg">是否删除全部课程？</string>
     <string name="next_course_import_attention_msg">\u3000\u3000由于只能同步教务当前学期的开始与结束数据，导入下学期的课程时可能需要您手动更改学期设定！导入的学期为：%1$s\n\u3000\u3000注：点击顶部工具栏的学期设定按钮即可以更改学期。</string>
+    <string name="show_course_table">显示课程表</string>
 </resources>
