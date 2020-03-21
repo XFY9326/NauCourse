@@ -21,9 +21,7 @@ class FullScreenLoadingDialog : DialogFragment() {
         dialog?.apply {
             requestWindowFeature(Window.FEATURE_NO_TITLE)
         }
-        return inflater.inflate(R.layout.dialog_full_screen_loading, container, false).apply {
-
-        }
+        return inflater.inflate(R.layout.dialog_full_screen_loading, container, false)
     }
 
     override fun onStart() {

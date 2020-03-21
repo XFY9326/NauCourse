@@ -5,10 +5,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import tool.xfy9326.naucourses.Constants
-import tool.xfy9326.naucourses.beans.CourseCell
-import tool.xfy9326.naucourses.beans.CourseItem
-import tool.xfy9326.naucourses.beans.CourseTable
-import tool.xfy9326.naucourses.beans.CourseTimeDuration
+import tool.xfy9326.naucourses.beans.*
 import tool.xfy9326.naucourses.providers.beans.jwc.Course
 import tool.xfy9326.naucourses.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourses.providers.beans.jwc.CourseTime
@@ -20,6 +17,30 @@ import kotlin.collections.ArrayList
 object CourseUtils {
     private const val NEXT_COURSE_BEFORE_COURSE_END_BASED_MINUTE = 10
     private const val CUSTOM_COURSE_ID_PREFIX = "NCC-"
+
+    fun importCourseToList(
+        currentList: ArrayList<Pair<Course, CourseCellStyle>>,
+        importedCourses: ArrayList<Course>
+    ): ArrayList<Pair<Course, CourseCellStyle>> {
+        var hasSame: Boolean
+        val newCourses = ArrayList(currentList)
+        for (newCourse in importedCourses) {
+            hasSame = false
+            for (coursePair in currentList) {
+                if (newCourse.id == coursePair.first.id) {
+                    newCourses.remove(coursePair)
+                    newCourses.add(Pair(newCourse, coursePair.second))
+                    hasSame = true
+                    break
+                }
+            }
+
+            if (!hasSame) {
+                newCourses.add(Pair(newCourse, CourseCellStyle.getDefaultCellStyle(newCourse.id)))
+            }
+        }
+        return newCourses
+    }
 
     private fun getCourseTableByWeekNum(courseSet: CourseSet, weekNum: Int, maxWeekNum: Int, startWeekDayNum: Int, endWeekDayNum: Int): CourseTable {
         if (weekNum < Constants.Course.MIN_WEEK_NUM_SIZE || weekNum > maxWeekNum) {

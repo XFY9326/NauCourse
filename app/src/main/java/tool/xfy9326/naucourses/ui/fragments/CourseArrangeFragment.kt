@@ -32,6 +32,7 @@ import tool.xfy9326.naucourses.ui.fragments.base.DrawerToolbarFragment
 import tool.xfy9326.naucourses.ui.models.fragment.CourseArrangeViewModel
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.showSnackBar
 import tool.xfy9326.naucourses.utils.views.I18NUtils
+import tool.xfy9326.naucourses.utils.views.ViewUtils
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -96,7 +97,7 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
                 }
             }.show(childFragmentManager, null)
         })
-        App.instance.courseTermUpdate.observeEvent(viewLifecycleOwner, Observer {
+        App.instance.courseStyleTermUpdate.observeEvent(viewLifecycleOwner, Observer {
             if (it) {
                 getViewModel().refreshArrangeCourses(false)
             }
@@ -133,7 +134,8 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
             tv_nextCourseName.text = courseItem.course.name
             tv_nextCourseTime.text = DATE_FORMAT_HM.format(courseItem.dateTimePeriod.startDateTime) + "~" +
                     DATE_FORMAT_HM.format(courseItem.dateTimePeriod.endDateTime)
-            tv_nextCourseDetail.text = "${courseItem.courseTime.location}·${courseItem.course.teacher}"
+            tv_nextCourseDetail.text =
+                ViewUtils.getCourseDataShowText("${courseItem.courseTime.location}${ViewUtils.COURSE_DATA_JOIN_SYMBOL}${courseItem.course.teacher}")
 
             layout_nextCourse.visibility = View.VISIBLE
             layout_nextCourseBreak.visibility = View.GONE
@@ -153,7 +155,8 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
                 layout_todayCourseContent.addViewInLayout(inflater.inflate(R.layout.view_list_course_item, layout_todayCourseContent, false).apply {
                     ImageViewCompat.setImageTintList(this.iv_listCourseColor, ColorStateList.valueOf(coursePair.second.color))
                     this.tv_listCourseName.text = coursePair.first.course.name
-                    this.tv_listCourseDetail.text = "${coursePair.first.course.teacher}·${coursePair.first.courseTime.location}"
+                    this.tv_listCourseDetail.text =
+                        ViewUtils.getCourseDataShowText("${coursePair.first.course.teacher}${ViewUtils.COURSE_DATA_JOIN_SYMBOL}${coursePair.first.courseTime.location}")
                     this.tv_listCourseStartTime.text = DATE_FORMAT_HM.format(coursePair.first.dateTimePeriod.startDateTime)
                     setOnClickListener {
                         getViewModel().requestCourseDetail(coursePair.first, coursePair.second)
@@ -185,7 +188,8 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
                     ).apply {
                         ImageViewCompat.setImageTintList(this.iv_listCourseColor, ColorStateList.valueOf(coursePair.second.color))
                         this.tv_listCourseName.text = coursePair.first.course.name
-                        this.tv_listCourseDetail.text = "${coursePair.first.course.teacher}·${coursePair.first.courseTime.location}"
+                        this.tv_listCourseDetail.text =
+                            ViewUtils.getCourseDataShowText("${coursePair.first.course.teacher}${ViewUtils.COURSE_DATA_JOIN_SYMBOL}${coursePair.first.courseTime.location}")
                         this.tv_listCourseStartTime.text = DATE_FORMAT_HM.format(coursePair.first.dateTimePeriod.startDateTime)
                         setOnClickListener {
                             getViewModel().requestCourseDetail(coursePair.first, coursePair.second)

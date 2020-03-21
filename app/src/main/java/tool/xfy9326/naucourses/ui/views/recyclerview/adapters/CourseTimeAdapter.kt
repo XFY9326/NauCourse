@@ -34,7 +34,11 @@ class CourseTimeAdapter(context: Context, private val timeList: ArrayList<Course
 
     fun recoverCourseTime(courseTime: CourseTime, position: Int) {
         timeList.add(position, courseTime)
-        notifyItemInserted(position)
+        if (position == 0 && timeList.size == 1) {
+            notifyDataSetChanged()
+        } else {
+            notifyItemInserted(position)
+        }
     }
 
     fun getCourseTimeSet(): HashSet<CourseTime> = timeList.toHashSet()

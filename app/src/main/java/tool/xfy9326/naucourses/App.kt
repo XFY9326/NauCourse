@@ -5,7 +5,7 @@ import tool.xfy9326.naucourses.tools.EventLiveData
 import tool.xfy9326.naucourses.utils.debug.ExceptionUtils
 
 class App : Application() {
-    val courseTermUpdate = EventLiveData(false)
+    val courseStyleTermUpdate = EventLiveData(false)
 
     companion object {
         lateinit var instance: App

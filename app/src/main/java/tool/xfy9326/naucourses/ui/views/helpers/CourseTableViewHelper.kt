@@ -200,16 +200,22 @@ object CourseTableViewHelper {
                 )
                 setPadding(COURSE_CELL_TEXT_PADDING)
 
-                val baseShowText = "${courseInfo.courseName}$COURSE_INFO_JOIN_SYMBOL${courseInfo.courseLocation}"
-
-                text = if (courseInfo.thisWeekCourse) {
-                    baseShowText
-                } else {
-                    val notThisWeekText = "${defaultValues.notThisWeekCourseStr}${Constants.CHANGE_LINE}"
-                    SpannableStringBuilder(notThisWeekText + baseShowText).apply {
-                        setSpan(StyleSpan(Typeface.BOLD), 0, notThisWeekText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                val baseShowText =
+                    if (courseInfo.courseLocation.isEmpty() || courseInfo.courseLocation.isBlank()) {
+                        courseInfo.courseName
+                    } else {
+                        "${courseInfo.courseName}$COURSE_INFO_JOIN_SYMBOL${courseInfo.courseLocation}"
                     }
-                }
+
+                text =
+                    if (courseInfo.thisWeekCourse) {
+                        baseShowText
+                    } else {
+                        val notThisWeekText = "${defaultValues.notThisWeekCourseStr}${Constants.CHANGE_LINE}"
+                        SpannableStringBuilder(notThisWeekText + baseShowText).apply {
+                            setSpan(StyleSpan(Typeface.BOLD), 0, notThisWeekText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                        }
+                    }
 
                 gravity = Gravity.TOP or Gravity.START
                 isClickable = true

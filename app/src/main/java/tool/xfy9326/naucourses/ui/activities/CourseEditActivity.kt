@@ -3,6 +3,7 @@ package tool.xfy9326.naucourses.ui.activities
 import android.animation.Animator
 import android.animation.ValueAnimator
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -11,7 +12,9 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageButton
+import androidx.core.widget.ImageViewCompat
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 import kotlinx.android.synthetic.main.activity_course_edit.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourses.Constants
@@ -32,12 +35,14 @@ import tool.xfy9326.naucourses.utils.views.ActivityUtils.showSnackBarWithCallbac
 import tool.xfy9326.naucourses.utils.views.AnimUtils
 import tool.xfy9326.naucourses.utils.views.DialogUtils
 
-class CourseEditActivity : AppCompatActivity(), CourseTimeAdapter.CourseTimeCallback, CourseTimeEditDialog.OnEditCompleteListener {
+class CourseEditActivity : AppCompatActivity(), CourseTimeAdapter.CourseTimeCallback, CourseTimeEditDialog.OnEditCompleteListener,
+    ColorPickerDialogListener {
     companion object {
         const val COURSE_DATA = "COURSE_DATA"
         const val TERM_DATE = "TERM_DATE"
         const val COURSE_CELL_STYLE = "COURSE_CELL_STYLE"
 
+        private const val COLOR_PICKER_DIALOG_ID = 2
         private const val VIEW_EXPANDED = "VIEW_EXPANDED"
         private const val TIME_LIST = "TIME_LIST"
 
@@ -48,6 +53,7 @@ class CourseEditActivity : AppCompatActivity(), CourseTimeAdapter.CourseTimeCall
     private var courseData: Course? = null
     private lateinit var termDate: TermDate
     private lateinit var courseStyle: CourseCellStyle
+    private var newCourseStyle: CourseCellStyle? = null
 
     private lateinit var courseTimeAdapter: CourseTimeAdapter
 
@@ -57,6 +63,7 @@ class CourseEditActivity : AppCompatActivity(), CourseTimeAdapter.CourseTimeCall
         super.onCreate(savedInstanceState)
         savedInstanceState?.let {
             isShowMoreInfoExpanded = it.getBoolean(VIEW_EXPANDED)
+            newCourseStyle = it.getSerializable(COURSE_CELL_STYLE) as CourseCellStyle?
         }
         readIntentData()
         setContentView(R.layout.activity_course_edit)
@@ -67,6 +74,7 @@ class CourseEditActivity : AppCompatActivity(), CourseTimeAdapter.CourseTimeCall
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putBoolean(VIEW_EXPANDED, isShowMoreInfoExpanded)
+        outState.putSerializable(COURSE_CELL_STYLE, newCourseStyle)
         outState.putSerializable(TIME_LIST, courseTimeAdapter.getCourseTimeList())
         super.onSaveInstanceState(outState)
     }
@@ -83,10 +91,14 @@ class CourseEditActivity : AppCompatActivity(), CourseTimeAdapter.CourseTimeCall
                 return true
             }
             R.id.menu_courseEditSave -> {
+                currentFocus?.clearFocus()
+                BaseUtils.hideKeyboard(this, layout_courseEdit.windowToken)
+
                 val newCourse = getEditResult(true)
                 if (newCourse != null) {
-                    if (newCourse != courseData) {
-                        setResult(RESULT_OK, Intent().putExtra(COURSE_DATA, newCourse).putExtra(COURSE_CELL_STYLE, courseStyle))
+                    val outputStyle = (newCourseStyle ?: courseStyle)
+                    if (newCourse != courseData || outputStyle != courseStyle) {
+                        setResult(RESULT_OK, Intent().putExtra(COURSE_DATA, newCourse).putExtra(COURSE_CELL_STYLE, outputStyle))
                     } else {
                         setResult(RESULT_OK)
                     }
@@ -143,6 +155,12 @@ class CourseEditActivity : AppCompatActivity(), CourseTimeAdapter.CourseTimeCall
         if (isShowMoreInfoExpanded) {
             btn_showMoreCourseEditInfo.setImageResource(R.drawable.ic_load_less)
             layout_courseEditInfo.visibility = View.VISIBLE
+        }
+
+        ImageViewCompat.setImageTintList(iv_courseEditColor, ColorStateList.valueOf((newCourseStyle ?: courseStyle).color))
+        layout_courseEditColor.setOnClickListener {
+            DialogUtils.createCourseColorPickerDialog(this, (newCourseStyle ?: courseStyle).color, COLOR_PICKER_DIALOG_ID)
+                .show(supportFragmentManager, null)
         }
 
         applyCourseInfoData()
@@ -251,6 +269,18 @@ class CourseEditActivity : AppCompatActivity(), CourseTimeAdapter.CourseTimeCall
         et_courseProperty.setText(courseData?.property)
     }
 
+    override fun onColorSelected(dialogId: Int, color: Int) {
+        if (dialogId == COLOR_PICKER_DIALOG_ID) {
+            synchronized(this) {
+                newCourseStyle = (newCourseStyle ?: courseStyle).copy(color = color)
+                ImageViewCompat.setImageTintList(iv_courseEditColor, ColorStateList.valueOf(color))
+            }
+        }
+    }
+
+    // 来自ColorPickerDialog
+    override fun onDialogDismissed(dialogId: Int) {}
+
     private fun showConflictMsg(courseTime1: CourseTime, courseTime2: CourseTime) {
         val weekDayNumStrArray = resources.getStringArray(R.array.weekday_num)
         DialogUtils.createBottomMsgDialog(
@@ -305,7 +335,7 @@ class CourseEditActivity : AppCompatActivity(), CourseTimeAdapter.CourseTimeCall
 
     private fun checkSaveForExit() {
         val newCourse = getEditResult(false)
-        if (newCourse != courseData) {
+        if (newCourse != courseData || (newCourseStyle ?: courseStyle) != courseStyle) {
             showSnackBarWithCallback(layout_courseEdit, R.string.exit_edit_without_save, android.R.string.yes, View.OnClickListener {
                 setResult(RESULT_OK)
                 super.onBackPressed()

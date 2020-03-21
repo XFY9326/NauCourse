@@ -144,10 +144,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         })
         viewModel.logoutSuccess.observeEvent(this, Observer {
             if (it) {
-                val loadingFragment = supportFragmentManager.findFragmentByTag(FullScreenLoadingDialog.LOADING_DIALOG_TAG)
-                if (loadingFragment != null) {
-                    (loadingFragment as DialogFragment).dismissAllowingStateLoss()
-                }
+                (supportFragmentManager.findFragmentByTag(FullScreenLoadingDialog.LOADING_DIALOG_TAG) as DialogFragment?)?.dismissAllowingStateLoss()
                 BaseUtils.restartApplication(this)
             }
         })

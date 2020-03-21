@@ -79,7 +79,7 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
                 }
             }.show(childFragmentManager, null)
         })
-        App.instance.courseTermUpdate.observeEvent(viewLifecycleOwner, Observer {
+        App.instance.courseStyleTermUpdate.observeEvent(viewLifecycleOwner, Observer {
             if (it) {
                 viewModel.refreshCourseData()
             }

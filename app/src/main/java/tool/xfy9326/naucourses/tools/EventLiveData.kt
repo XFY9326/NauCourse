@@ -22,7 +22,7 @@ class EventLiveData<T> : MutableLiveData<EventLiveData.Event<T>> {
     fun observeEvent(owner: LifecycleOwner, observer: Observer<in T>) {
         super.observe(owner, Observer {
             it.getContentIfNotHandled()?.let { value ->
-                observer.onChanged(value)
+                observer.onChanged(value.data)
             }
         })
     }
@@ -30,7 +30,7 @@ class EventLiveData<T> : MutableLiveData<EventLiveData.Event<T>> {
     fun observeEventForever(observer: Observer<in T>) {
         super.observeForever {
             it.getContentIfNotHandled()?.let { value ->
-                observer.onChanged(value)
+                observer.onChanged(value.data)
             }
         }
     }
@@ -38,13 +38,16 @@ class EventLiveData<T> : MutableLiveData<EventLiveData.Event<T>> {
     class Event<out T>(private val content: T) {
         private var hasBeenHandled = false
 
-        fun getContentIfNotHandled(): T? {
+        fun getContentIfNotHandled(): Container<out T>? {
             return if (hasBeenHandled) {
                 null
             } else {
                 hasBeenHandled = true
-                content
+                Container(content)
             }
         }
+
+        // 防止需要返回null时被当作已经处理
+        data class Container<T>(val data: T)
     }
 }

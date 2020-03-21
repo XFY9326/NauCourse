@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.io.dbHelpers.CoursesDBHelper
+import java.io.Serializable
 
 @Entity(tableName = CoursesDBHelper.TERM_TABLE_NAME)
 data class Term(
@@ -14,7 +15,7 @@ data class Term(
     val startYear: Int,
     val endYear: Int,
     val termNum: Short
-) {
+) : Serializable {
     constructor(startYear: Int, endYear: Int, termNum: Short) : this(Constants.DB.DEFAULT_ID, startYear, endYear, termNum)
 
     init {

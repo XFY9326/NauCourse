@@ -33,9 +33,8 @@ class NewsViewModel : BaseViewModel() {
                 }
                 isRefreshing.postValue(false)
             }
+            refreshNewsList()
         }
-
-        refreshNewsList()
     }
 
     @Synchronized

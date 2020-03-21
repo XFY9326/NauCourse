@@ -44,6 +44,14 @@ class AdvancedRecyclerView : RecyclerView {
         override fun onChanged() {
             modifyEmptyView()
         }
+
+        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+            modifyEmptyView()
+        }
+
+        override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
+            modifyEmptyView()
+        }
     }
 
     override fun setAdapter(adapter: Adapter<*>?) {
@@ -60,11 +68,11 @@ class AdvancedRecyclerView : RecyclerView {
             val emptyView = (parent as View).findViewById<View>(emptyViewResId)
             if (emptyView != null) {
                 if (adapter == null || adapter!!.itemCount == 0) {
-                    visibility = View.GONE
-                    emptyView.visibility = View.VISIBLE
+                    if (visibility != View.GONE) visibility = View.GONE
+                    if (emptyView.visibility != View.VISIBLE) emptyView.visibility = View.VISIBLE
                 } else {
-                    visibility = View.VISIBLE
-                    emptyView.visibility = View.GONE
+                    if (visibility != View.VISIBLE) visibility = View.VISIBLE
+                    if (emptyView.visibility != View.GONE) emptyView.visibility = View.GONE
                 }
             }
         }

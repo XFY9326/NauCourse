@@ -2,19 +2,16 @@ package tool.xfy9326.naucourses.providers.beans.jwc
 
 import tool.xfy9326.naucourses.beans.CourseCheckResult
 import tool.xfy9326.naucourses.utils.debug.LogUtils
+import java.io.Serializable
 
 data class CourseSet(
     private var courses_: HashSet<Course>,
     private var term_: Term
-) {
+) : Serializable {
     val courses: HashSet<Course> get() = courses_
-    val term: Term get() = term_
 
-    init {
-        if (courses_.isEmpty()) {
-            throw IllegalArgumentException("Course Set Is Empty!")
-        }
-    }
+    // 该值不建议使用，仅作为管理课程时简单的判断课程所在学期
+    val term: Term get() = term_
 
     companion object {
         fun checkCourseTimeConflict(courseSet: HashSet<Course>): CourseCheckResult {
@@ -64,43 +61,32 @@ data class CourseSet(
         }
     }
 
+    // 将会以传入的CourseSet为准
     @Synchronized
-    fun update(courseSet: CourseSet): Boolean =
-        if (term < courseSet.term) {
-            val checkResult = checkCourseTimeConflict(courseSet.courses)
-            if (checkResult.isSuccess) {
-                term_ = courseSet.term
-                courses_ = courseSet.courses
-                true
-            } else {
-                LogUtils.d<CourseSet>("Course Update Has Conflicts! Replace New Term Courses Error!\n${checkResult.printText()}")
-                false
-            }
-        } else if (term == courseSet.term) {
-            var hasSame: Boolean
-            val newCourses = HashSet(courseSet.courses)
-            for (course in courses) {
-                hasSame = false
-                for (newCourse in courseSet.courses) {
-                    if (newCourse.id == course.id) {
-                        hasSame = true
-                        break
-                    }
+    fun update(courseSet: CourseSet): Boolean {
+        var hasSame: Boolean
+        val newCourses = HashSet(courseSet.courses)
+        for (course in courses) {
+            hasSame = false
+            for (newCourse in courseSet.courses) {
+                if (newCourse.id == course.id) {
+                    hasSame = true
+                    break
                 }
+            }
 
-                if (!hasSame) {
-                    newCourses.add(course)
-                }
+            if (!hasSame) {
+                newCourses.add(course)
             }
-            val checkResult = checkCourseTimeConflict(newCourses)
-            if (checkResult.isSuccess) {
-                courses_ = newCourses
-                true
-            } else {
-                LogUtils.d<CourseSet>("Course Update Has Conflicts! Combine Courses Error!\n${checkResult.printText()}")
-                false
-            }
-        } else {
-            true
         }
+        val checkResult = checkCourseTimeConflict(newCourses)
+        return if (checkResult.isSuccess) {
+            courses_ = newCourses
+            term_ = courseSet.term
+            true
+        } else {
+            LogUtils.d<CourseSet>("Course Update Has Conflicts! Combine Courses Error!\n${checkResult.printText()}")
+            false
+        }
+    }
 }

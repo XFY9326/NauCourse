@@ -14,6 +14,8 @@ import tool.xfy9326.naucourses.providers.beans.jwc.Course
 import tool.xfy9326.naucourses.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourses.ui.views.recyclerview.SwipeItemCallback
 import tool.xfy9326.naucourses.ui.views.recyclerview.viewholders.CourseViewHolder
+import tool.xfy9326.naucourses.utils.compute.CourseUtils
+import tool.xfy9326.naucourses.utils.views.ViewUtils
 
 class CourseAdapter(context: Context, @Volatile private var courseManagePkg: CourseManagePkg?, private val callback: Callback) :
     RecyclerView.Adapter<CourseViewHolder>(), SwipeItemCallback.OnItemSwipedListener<CourseViewHolder> {
@@ -42,10 +44,21 @@ class CourseAdapter(context: Context, @Volatile private var courseManagePkg: Cou
         }
     }
 
+    fun deleteAllCourses() = synchronized(isOperationEnabledLock) {
+        if (courseManagePkg != null) {
+            courseManagePkg!!.courses.clear()
+            notifyDataSetChanged()
+        }
+    }
+
     fun recoverCourse(lastDeleteItem: Pair<Course, CourseCellStyle>, lastDeleteItemPosition: Int) = synchronized(isOperationEnabledLock) {
         if (courseManagePkg != null) {
             courseManagePkg!!.courses.add(lastDeleteItemPosition, lastDeleteItem)
-            notifyItemInserted(lastDeleteItemPosition)
+            if (lastDeleteItemPosition == 0 && courseManagePkg!!.courses.size == 1) {
+                notifyDataSetChanged()
+            } else {
+                notifyItemInserted(lastDeleteItemPosition)
+            }
         }
     }
 
@@ -68,6 +81,17 @@ class CourseAdapter(context: Context, @Volatile private var courseManagePkg: Cou
             }
         }
         return null
+    }
+
+    fun importCourse(courses: ArrayList<Course>) = synchronized(isOperationEnabledLock) {
+        if (courseManagePkg != null) {
+            val result = CourseUtils.importCourseToList(courseManagePkg!!.courses, courses).sortedBy {
+                it.first.id
+            }
+            courseManagePkg!!.courses.clear()
+            courseManagePkg!!.courses.addAll(result)
+            notifyDataSetChanged()
+        }
     }
 
     fun updateCourseStyle(position: Int, style: CourseCellStyle) = synchronized(isOperationEnabledLock) {
@@ -112,7 +136,8 @@ class CourseAdapter(context: Context, @Volatile private var courseManagePkg: Cou
                     ImageViewCompat.setImageTintList(ivCourseManageColor, ColorStateList.valueOf(coursePair.second.color))
 
                     tvCourseManageName.text = coursePair.first.name
-                    tvCourseManageDetail.text = "${coursePair.first.type}·${coursePair.first.teacher}"
+                    tvCourseManageDetail.text =
+                        ViewUtils.getCourseDataShowText("${coursePair.first.type}${ViewUtils.COURSE_DATA_JOIN_SYMBOL}${coursePair.first.teacher}")
 
                     layoutCourseManageColor.setOnClickListener {
                         synchronized(isOperationEnabledLock) {

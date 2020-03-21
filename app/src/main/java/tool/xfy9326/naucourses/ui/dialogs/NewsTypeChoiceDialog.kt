@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.io.prefs.AppPref
 import tool.xfy9326.naucourses.providers.beans.GeneralNews
@@ -72,7 +72,7 @@ class NewsTypeChoiceDialog : DialogFragment() {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = AlertDialog.Builder(requireContext()).apply {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialAlertDialogBuilder(requireContext()).apply {
         setTitle(R.string.news_show_type)
         setMultiChoiceItems(newsTypeTextArray, choiceStatus) { _, which, isChecked ->
             choiceStatus[which] = isChecked

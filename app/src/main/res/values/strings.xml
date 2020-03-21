@@ -160,7 +160,7 @@
     <string name="weeks_odd">第%1$s之单周</string>
     <string name="weeks_even">第%1$s之双周</string>
     <string name="courses">第%1$s节</string>
-    <string name="no_data">暂无</string>
+    <string name="no_data">暂无数据</string>
     <string name="weeks_empty">请设置上课周数！</string>
     <string name="exit_edit_without_save">是否放弃修改并退出编辑？</string>
     <string name="time_conflict_title">课程时间冲突！</string>
@@ -183,4 +183,13 @@
     <string name="clear_term_edit">重置学期</string>
     <string name="term_date_length_error">学期周数长度必须\n为%1$d～%2$d周之间！\n当前长度：%3$d周</string>
     <string name="crash_msg">程序运行时出现错误！\n错误日志已保存！</string>
+    <string name="import_current_term_course">从教务导入本学期的课程</string>
+    <string name="import_next_term_course">从教务导入下学期的课程</string>
+    <string name="add_new_course">添加新的课程</string>
+    <string name="course_import_failed">课程导入失败！</string>
+    <string name="course_import">课程导入</string>
+    <string name="next_course_import_attention">学期更改提示</string>
+    <string name="delete_all_courses">删除全部课程</string>
+    <string name="delete_all_courses_msg">是否删除全部课程？</string>
+    <string name="next_course_import_attention_msg">\u3000\u3000由于只能同步教务当前学期的开始与结束数据，导入下学期的课程时可能需要您手动更改学期设定！导入的学期为：%1$s\n\u3000\u3000注：点击顶部工具栏的学期设定按钮即可以更改学期。</string>
 </resources>

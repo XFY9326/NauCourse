@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.appcompat.widget.AppCompatImageButton
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.DialogFragment
 import kotlinx.android.synthetic.main.dialog_course_detail.view.*
 import kotlinx.android.synthetic.main.view_course_detail_item.view.*
@@ -14,6 +15,7 @@ import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.beans.CourseDetail
 import tool.xfy9326.naucourses.utils.compute.TimeUtils
 import tool.xfy9326.naucourses.utils.views.ColorUtils
+import tool.xfy9326.naucourses.utils.views.ViewUtils
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -64,6 +66,14 @@ class CourseDetailDialog : DialogFragment() {
             } else {
                 tv_courseCellTime.visibility = View.GONE
                 tv_courseCellLocation.visibility = View.GONE
+                layout_courseTitle.apply {
+                    layoutParams = LinearLayoutCompat.LayoutParams(layoutParams).apply {
+                        setPadding(
+                            paddingLeft, paddingTop + resources.getDimensionPixelSize(R.dimen.course_detail_layout_height_make_up),
+                            paddingRight, paddingBottom
+                        )
+                    }
+                }
             }
 
             val colorDark = activity?.getColor(R.color.colorCourseTextDark)!!
@@ -79,21 +89,25 @@ class CourseDetailDialog : DialogFragment() {
             }
 
             tv_courseID.text = getString(R.string.course_id, courseDetail.course.id)
-            tv_teacher.text = getString(R.string.course_teacher, courseDetail.course.teacher)
+            tv_teacher.text = getString(R.string.course_teacher, ViewUtils.getCourseDataShowText(courseDetail.course.teacher))
             tv_class.text = getString(
-                R.string.course_class, if (courseDetail.course.courseClass == null) {
-                    courseDetail.course.teachClass
-                } else {
-                    "${courseDetail.course.teachClass} ${courseDetail.course.courseClass}"
-                }
+                R.string.course_class, ViewUtils.getCourseDataShowText(
+                    if (courseDetail.course.courseClass == null) {
+                        courseDetail.course.teachClass
+                    } else {
+                        "${courseDetail.course.teachClass} ${courseDetail.course.courseClass}"
+                    }
+                )
             )
             tv_credit.text = getString(R.string.course_credit, courseDetail.course.credit)
             tv_courseType.text = getString(
-                R.string.course_type, if (courseDetail.course.property == null) {
-                    courseDetail.course.type
-                } else {
-                    "${courseDetail.course.type} ${courseDetail.course.property}"
-                }
+                R.string.course_type, ViewUtils.getCourseDataShowText(
+                    if (courseDetail.course.property == null) {
+                        courseDetail.course.type
+                    } else {
+                        "${courseDetail.course.type} ${courseDetail.course.property}"
+                    }
+                )
             )
 
             btn_loadMoreCourseInfo.setOnClickListener {
@@ -126,7 +140,7 @@ class CourseDetailDialog : DialogFragment() {
                     contentView.layout_moreCourseInfo,
                     false
                 ).apply {
-                    tv_courseLocation.text = getString(R.string.course_location, courseTime.location)
+                    tv_courseLocation.text = getString(R.string.course_location, ViewUtils.getCourseDataShowText(courseTime.location))
                     tv_courseTime.text = getString(
                         R.string.course_time,
                         courseTime.rawWeeksStr,
@@ -145,9 +159,13 @@ class CourseDetailDialog : DialogFragment() {
             }
         }
         contentView.layout_moreCourseInfo.refreshLayout()
+        contentView.layout_moreCourseInfo.visibility = View.VISIBLE
     }
 
-    private fun loadLess(contentView: View) = contentView.layout_moreCourseInfo.removeAllViews()
+    private fun loadLess(contentView: View) {
+        contentView.layout_moreCourseInfo.visibility = View.GONE
+        contentView.layout_moreCourseInfo.removeAllViews()
+    }
 
     override fun onStart() {
         super.onStart()

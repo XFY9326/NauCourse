@@ -1,27 +1,27 @@
 package tool.xfy9326.naucourses.ui.activities
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
-import com.jaredrummler.android.colorpicker.ColorPickerDialog
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 import kotlinx.android.synthetic.main.activity_course_manage.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.beans.CourseCellStyle
-import tool.xfy9326.naucourses.providers.beans.jwc.Course
-import tool.xfy9326.naucourses.providers.beans.jwc.CourseSet
-import tool.xfy9326.naucourses.providers.beans.jwc.CourseTime
-import tool.xfy9326.naucourses.providers.beans.jwc.TermDate
+import tool.xfy9326.naucourses.providers.beans.jwc.*
 import tool.xfy9326.naucourses.ui.activities.base.ViewModelActivity
+import tool.xfy9326.naucourses.ui.dialogs.CourseImportDialog
+import tool.xfy9326.naucourses.ui.dialogs.FullScreenLoadingDialog
 import tool.xfy9326.naucourses.ui.dialogs.TermDateEditDialog
 import tool.xfy9326.naucourses.ui.dialogs.TermDatePickerDialog
 import tool.xfy9326.naucourses.ui.models.activity.CourseManageViewModel
@@ -32,6 +32,7 @@ import tool.xfy9326.naucourses.utils.compute.TimeUtils
 import tool.xfy9326.naucourses.utils.views.ActivityUtils
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.enableHomeButton
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.showSnackBar
+import tool.xfy9326.naucourses.utils.views.ActivityUtils.showSnackBarWithCallback
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.showToast
 import tool.xfy9326.naucourses.utils.views.DialogUtils
 import java.util.*
@@ -39,7 +40,7 @@ import kotlin.properties.Delegates
 
 
 class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseAdapter.Callback, TermDateEditDialog.OnTermEditListener,
-    ColorPickerDialogListener, TermDatePickerDialog.DatePickDialogCallback {
+    ColorPickerDialogListener, TermDatePickerDialog.DatePickDialogCallback, CourseImportDialog.CourseImportCallback {
     companion object {
         private const val COLOR_PICKER_DIALOG_ID = 1
 
@@ -88,9 +89,28 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
         }
 
         fab_courseManage.setOnClickListener {
-            //TODO
+            DialogUtils.createCourseAddDialog(this, lifecycle,
+                DialogInterface.OnClickListener { _, which ->
+                    when (which) {
+                        0 -> addNewCourse()
+                        1 -> {
+                            FullScreenLoadingDialog().show(supportFragmentManager, FullScreenLoadingDialog.LOADING_DIALOG_TAG)
+                            getViewModel().importCourse(CourseManageViewModel.ImportCourseType.CURRENT_TERM)
+                        }
+                        2 -> {
+                            FullScreenLoadingDialog().show(supportFragmentManager, FullScreenLoadingDialog.LOADING_DIALOG_TAG)
+                            getViewModel().importCourse(CourseManageViewModel.ImportCourseType.NEXT_TERM)
+                        }
+                    }
+                }).show()
         }
     }
+
+    private fun addNewCourse() =
+        startActivityForResult(
+            Intent(this, CourseEditActivity::class.java).putExtra(CourseEditActivity.TERM_DATE, courseAdapter.getTermDate()),
+            COURSE_ADD_RESULT
+        )
 
     override fun bindViewModel(viewModel: CourseManageViewModel) {
         viewModel.courseManagePkg.observe(this, Observer {
@@ -102,9 +122,24 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
         viewModel.rawTermDate.observeEvent(this, Observer {
             courseAdapter.updateTermDate(it)
         })
+        viewModel.importCourseResult.observeEvent(this, Observer {
+            (supportFragmentManager.findFragmentByTag(FullScreenLoadingDialog.LOADING_DIALOG_TAG) as DialogFragment?)?.dismissAllowingStateLoss()
+            if (it == null) {
+                showSnackBar(layout_courseManage, R.string.course_import_failed)
+            } else {
+                CourseImportDialog().apply {
+                    arguments = Bundle().apply {
+                        putSerializable(CourseImportDialog.COURSE_SET, it.first)
+                        putSerializable(CourseImportDialog.COURSE_TYPE, it.second)
+                    }
+                    isCancelable = false
+                }.show(supportFragmentManager, null)
+            }
+        })
     }
 
     override fun onCourseDeleted(adapter: CourseAdapter, lastDeleteItem: Pair<Course, CourseCellStyle>, lastDeleteItemPosition: Int) {
+        dataChanged = true
         ActivityUtils.showSnackBarWithCallback(layout_courseManage, R.string.delete_course_success, R.string.revoke, View.OnClickListener {
             adapter.recoverCourse(lastDeleteItem, lastDeleteItemPosition)
         })
@@ -128,6 +163,13 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
                 } else {
                     showSnackBar(layout_courseManage, R.string.term_date_empty)
                 }
+            }
+            R.id.menu_courseManageDeleteAll -> {
+                showSnackBarWithCallback(layout_courseManage, R.string.delete_all_courses_msg, android.R.string.yes, View.OnClickListener {
+                    dataChanged = true
+                    courseAdapter.deleteAllCourses()
+                    showSnackBar(layout_courseManage, R.string.delete_course_success)
+                })
             }
             R.id.menu_courseManageSave ->
                 if (dataChanged) {
@@ -224,14 +266,19 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
         super.onDestroy()
     }
 
+    override fun onCourseImport(courses: ArrayList<Course>, term: Term, type: CourseManageViewModel.ImportCourseType) {
+        dataChanged = true
+        if (type == CourseManageViewModel.ImportCourseType.NEXT_TERM) {
+            DialogUtils.createBottomMsgDialog(
+                this, lifecycle, getString(R.string.next_course_import_attention),
+                getString(R.string.next_course_import_attention_msg, term.toString())
+            ).show()
+        }
+        courseAdapter.importCourse(courses)
+    }
+
     override fun onEditCourseColor(adapter: CourseAdapter, position: Int, style: CourseCellStyle) {
-        ColorPickerDialog.newBuilder().apply {
-            setColor(style.color)
-            setDialogTitle(R.string.course_color_edit)
-            setDialogId(COLOR_PICKER_DIALOG_ID)
-            setPresets(resources.getIntArray(R.array.material_colors_600))
-            setShowAlphaSlider(false)
-        }.create().show(supportFragmentManager, null).also {
+        DialogUtils.createCourseColorPickerDialog(this, style.color, COLOR_PICKER_DIALOG_ID).show(supportFragmentManager, null).also {
             synchronized(this) {
                 getViewModel().apply {
                     colorEditStyle = style
@@ -295,6 +342,8 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
                 val styles = courseAdapter.getCourseStyleArray()
                 val termDate = courseAdapter.getTermDate()
                 if (styles != null && termDate != null) {
+                    // TermDate更新时会更新CourseSet的学期，导入课程时不会更新CourseSet的学期
+                    // 因此此处只是常规检查，为以后留下可用接口
                     if (courseSet.term == termDate.getTerm()) {
                         return Triple(courseSet, styles, termDate)
                     } else {

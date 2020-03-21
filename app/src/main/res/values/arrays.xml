@@ -15,6 +15,13 @@
         <item>@color/colorPrimaryDark</item>
     </integer-array>
 
+    <string-array name="course_manage_add_list">
+        <item>@string/add_new_course</item>
+        <item>@string/import_current_term_course</item>
+        <item>@string/import_next_term_course</item>
+
+    </string-array>
+
     <integer-array name="material_colors_600">
         <item>@color/material_red_600</item>
         <item>@color/material_pink_600</item>

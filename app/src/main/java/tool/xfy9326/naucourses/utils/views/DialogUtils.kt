@@ -12,6 +12,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.jaredrummler.android.colorpicker.ColorPickerDialog
 import kotlinx.android.synthetic.main.dialog_bottom_msg.*
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.R
@@ -20,6 +21,23 @@ import tool.xfy9326.naucourses.utils.utility.IntentUtils
 import kotlin.math.min
 
 object DialogUtils {
+    fun createCourseColorPickerDialog(context: Context, color: Int, dialogId: Int): ColorPickerDialog =
+        ColorPickerDialog.newBuilder().apply {
+            setColor(color)
+            setDialogTitle(R.string.course_color_edit)
+            setDialogId(dialogId)
+            setPresets(context.resources.getIntArray(R.array.material_colors_600))
+            setShowAlphaSlider(false)
+        }.create()
+
+    fun createCourseAddDialog(context: Context, lifecycle: Lifecycle, listener: DialogInterface.OnClickListener): AlertDialog =
+        MaterialAlertDialogBuilder(context).apply {
+            setItems(context.resources.getStringArray(R.array.course_manage_add_list), listener)
+            background = context.getDrawable(R.drawable.bg_dialog)
+        }.create().apply {
+            addAutoCloseListener(lifecycle, this)
+        }
+
     fun createUsingLicenseDialog(context: Context, lifecycle: Lifecycle): AlertDialog =
         MaterialAlertDialogBuilder(context).apply {
             setTitle(R.string.eula_license)

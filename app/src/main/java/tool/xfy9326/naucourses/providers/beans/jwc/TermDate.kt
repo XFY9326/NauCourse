@@ -35,6 +35,38 @@ data class TermDate(
         }
     }
 
+    companion object {
+        fun generateNewTermDate(): TermDate {
+            Calendar.getInstance(Locale.CHINA).apply {
+                time = Date()
+
+                set(Calendar.MINUTE, 0)
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+
+                return if (get(Calendar.MONTH) + 1 > 6) {
+                    set(Calendar.MONTH, Calendar.SEPTEMBER)
+                    set(Calendar.DATE, 1)
+                    val start = time
+                    add(Calendar.YEAR, 1)
+                    set(Calendar.MONTH, Calendar.JANUARY)
+                    set(Calendar.DATE, 15)
+
+                    TermDate(start, time)
+                } else {
+                    set(Calendar.MONTH, Calendar.MARCH)
+                    set(Calendar.DATE, 1)
+                    val start = time
+                    set(Calendar.MONTH, Calendar.JUNE)
+                    set(Calendar.DATE, 15)
+
+                    TermDate(start, time)
+                }
+            }
+        }
+    }
+
     fun refreshCurrentWeekNum() {
         currentWeekNum = TimeUtils.getWeekNum(startDate, endDate)
         inVacation = currentWeekNum <= 0

@@ -8,6 +8,12 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/menu_courseManageDeleteAll"
+        android:icon="@drawable/ic_delete_all"
+        android:title="@string/delete_all_courses"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/menu_courseManageSave"
         android:icon="@drawable/ic_save"
         android:title="@string/save"
