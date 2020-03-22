@@ -3,6 +3,7 @@ package tool.xfy9326.naucourses.ui.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.setPadding
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
@@ -12,7 +13,7 @@ import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.beans.CourseCell
 import tool.xfy9326.naucourses.beans.CourseCellStyle
-import tool.xfy9326.naucourses.io.prefs.CourseTablePref
+import tool.xfy9326.naucourses.io.prefs.SettingsPref
 import tool.xfy9326.naucourses.ui.dialogs.CourseDetailDialog
 import tool.xfy9326.naucourses.ui.fragments.base.DrawerToolbarFragment
 import tool.xfy9326.naucourses.ui.models.fragment.CourseTableViewModel
@@ -86,6 +87,19 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (SettingsPref.CourseTableRoundCompat) {
+            if (vp_courseTablePanel.paddingBottom == 0) {
+                vp_courseTablePanel.setPadding(0, 0, 0, resources.getDimensionPixelSize(R.dimen.course_table_corner_compat))
+            }
+        } else {
+            if (vp_courseTablePanel.paddingBottom != 0) {
+                vp_courseTablePanel.setPadding(0)
+            }
+        }
+    }
+
     override fun initView(viewModel: CourseTableViewModel) {
         CourseTableViewHelper.initBuilder(requireActivity(), this)
         courseTableViewPagerAdapter = CourseTableViewPagerAdapter(this, viewModel.maxWeekNumTemp ?: Constants.Course.MAX_WEEK_NUM_SIZE)
@@ -101,12 +115,6 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
             }
         }
         vp_courseTablePanel.registerOnPageChangeCallback(viewPagerCallback)
-
-        v_courseTableCornerCompat.visibility = if (CourseTablePref.RoundCornerDeviceCompat) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
 
         layout_dateInfoBar.setOnClickListener {
             turnToCurrentWeek(viewModel)

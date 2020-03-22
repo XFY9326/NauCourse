@@ -56,10 +56,10 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
 
     /**
      * 登录
-     * @param ssoResponse 首次SSO请求返回的Response（用于获取登录参数）
+     * @param beforeLoginResponse 首次SSO请求返回的Response（用于获取登录参数）
      * @return 登录状态
      */
-    protected abstract fun login(ssoResponse: Response): LoginResponse
+    protected abstract fun login(beforeLoginResponse: Response): LoginResponse
 
     /**
      * 注销所有该客户端相关登录

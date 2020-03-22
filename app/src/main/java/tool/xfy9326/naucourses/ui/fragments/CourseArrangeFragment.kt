@@ -27,6 +27,7 @@ import tool.xfy9326.naucourses.beans.CourseItem
 import tool.xfy9326.naucourses.providers.beans.jwc.Course
 import tool.xfy9326.naucourses.providers.beans.jwc.CourseTime
 import tool.xfy9326.naucourses.providers.beans.jwc.TermDate
+import tool.xfy9326.naucourses.ui.activities.MainDrawerActivity
 import tool.xfy9326.naucourses.ui.dialogs.CourseDetailDialog
 import tool.xfy9326.naucourses.ui.fragments.base.DrawerToolbarFragment
 import tool.xfy9326.naucourses.ui.models.fragment.CourseArrangeViewModel
@@ -63,6 +64,9 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
     override fun initView(viewModel: CourseArrangeViewModel) {
         asl_todayCourse.setOnRefreshListener {
             viewModel.refreshArrangeCourses(true)
+        }
+        tv_todayCourseMore.setOnClickListener {
+            (requireActivity() as MainDrawerActivity).showFragment(MainDrawerActivity.Companion.FragmentType.COURSE_TABLE)
         }
     }
 

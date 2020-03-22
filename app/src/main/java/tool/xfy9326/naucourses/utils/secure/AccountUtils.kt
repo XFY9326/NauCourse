@@ -46,8 +46,8 @@ object AccountUtils {
         GsonStoreVersionPref.clear()
         InfoStoredTimePref.clear()
         AppPref.clear()
-        CourseTablePref.clear()
         UserPref.clear()
+        SettingsPref.clear()
     }
 
     fun saveUserInfo(userInfo: UserInfo) {

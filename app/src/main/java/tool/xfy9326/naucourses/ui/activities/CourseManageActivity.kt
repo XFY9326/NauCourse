@@ -140,7 +140,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
 
     override fun onCourseDeleted(adapter: CourseAdapter, lastDeleteItem: Pair<Course, CourseCellStyle>, lastDeleteItemPosition: Int) {
         dataChanged = true
-        ActivityUtils.showSnackBarWithCallback(layout_courseManage, R.string.delete_course_success, R.string.revoke, View.OnClickListener {
+        showSnackBarWithCallback(layout_courseManage, R.string.delete_course_success, R.string.revoke, View.OnClickListener {
             adapter.recoverCourse(lastDeleteItem, lastDeleteItemPosition)
         })
     }

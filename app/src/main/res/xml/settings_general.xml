@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.preference.Preference
+        app:fragment="tool.xfy9326.naucourses.ui.fragments.settings.DisplaySettingsFragment"
+        app:icon="@drawable/ic_display"
+        app:summary="@string/settings_display_sum"
+        app:title="@string/settings_display" />
+
+    <androidx.preference.Preference
+        app:fragment="tool.xfy9326.naucourses.ui.fragments.settings.NetworkSettingsFragment"
+        app:icon="@drawable/ic_network"
+        app:summary="@string/settings_network_sum"
+        app:title="@string/settings_network" />
+
+    <androidx.preference.Preference
+        app:fragment="tool.xfy9326.naucourses.ui.fragments.settings.CourseTableSettingsFragment"
+        app:icon="@drawable/ic_table"
+        app:summary="@string/settings_course_table_sum"
+        app:title="@string/settings_course_table" />
+
+    <androidx.preference.Preference
+        app:fragment="tool.xfy9326.naucourses.ui.fragments.settings.UpdateSettingsFragment"
+        app:icon="@drawable/ic_update"
+        app:summary="@string/settings_update_sum"
+        app:title="@string/settings_update" />
+
+    <androidx.preference.Preference
+        app:fragment="tool.xfy9326.naucourses.ui.fragments.settings.DebugSettingsFragment"
+        app:icon="@drawable/ic_debug"
+        app:summary="@string/settings_debug_sum"
+        app:title="@string/settings_debug" />
+
+    <androidx.preference.Preference
+        app:icon="@drawable/ic_about"
+        app:title="@string/about">
+        <intent
+            android:targetClass="tool.xfy9326.naucourses.ui.activities.AboutActivity"
+            android:targetPackage="tool.xfy9326.naucourses" />
+    </androidx.preference.Preference>
+</androidx.preference.PreferenceScreen>

@@ -7,6 +7,8 @@ import android.content.res.Resources
 import android.os.IBinder
 import android.util.TypedValue
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatDelegate
+import tool.xfy9326.naucourses.io.prefs.SettingsPref
 import kotlin.system.exitProcess
 
 
@@ -20,6 +22,13 @@ object BaseUtils {
     fun Float.spToPx() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this, Resources.getSystem().displayMetrics)
 
     fun Int.spToPx() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this.toFloat(), Resources.getSystem().displayMetrics).toInt()
+
+    fun getNightModeInt(type: SettingsPref.NightModeType) =
+        when (type) {
+            SettingsPref.NightModeType.AUTO -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            SettingsPref.NightModeType.ENABLED -> AppCompatDelegate.MODE_NIGHT_YES
+            SettingsPref.NightModeType.DISABLED -> AppCompatDelegate.MODE_NIGHT_NO
+        }
 
     fun restartApplication(context: Context, crashRestart: Boolean = false) {
         val packageManager: PackageManager = context.applicationContext.packageManager

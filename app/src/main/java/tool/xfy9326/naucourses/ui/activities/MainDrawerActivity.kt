@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_nav_header.view.*
+import tool.xfy9326.naucourses.App
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.providers.beans.jwc.StudentInfo
@@ -94,7 +95,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     }
 
     @Synchronized
-    private fun showFragment(type: FragmentType) {
+    fun showFragment(type: FragmentType) {
         if (type != getViewModel().nowShowFragmentType || !getViewModel().initFragmentShow()) {
             val oldFragment = supportFragmentManager.findFragmentByTag(getViewModel().nowShowFragmentType.name)
             supportFragmentManager.beginTransaction().apply {
@@ -118,7 +119,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
             R.id.menu_navCourseTable -> showFragment(FragmentType.COURSE_TABLE)
             R.id.menu_navNews -> showFragment(FragmentType.NEWS)
             R.id.menu_navCourseEdit -> startActivity(Intent(this, CourseManageActivity::class.java))
-            R.id.menu_navAbout -> startActivity(Intent(this, AboutActivity::class.java))
+            R.id.menu_navSettings -> startActivity(Intent(this, SettingsActivity::class.java))
             R.id.menu_navLogout -> logout()
             R.id.menu_navExit -> finishAndRemoveTask()
         }
@@ -148,6 +149,13 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
                 BaseUtils.restartApplication(this)
             }
         })
+        App.instance.mainNightModeChanged.apply {
+            if (!hasObservers()) {
+                observeEventForever(Observer {
+                    if (it) recreate()
+                })
+            }
+        }
     }
 
     override fun onBackPressed() {

@@ -2,11 +2,12 @@ package tool.xfy9326.naucourses.utils.debug
 
 import android.util.Log
 import tool.xfy9326.naucourses.BuildConfig
+import tool.xfy9326.naucourses.io.prefs.SettingsPref
 import java.util.*
 
 object LogUtils {
     private val LOG_ON = BuildConfig.DEBUG
-    private const val LOG_SAVE_ON = false
+    private val LOG_SAVE_ON get() = SettingsPref.DebugMode && SettingsPref.DebugLogCatch
 
     inline fun <reified T> d(msg: String) {
         print(Log.DEBUG, T::class.java.simpleName, msg)
@@ -42,8 +43,8 @@ object LogUtils {
 
     @Suppress("ConstantConditionIf")
     fun print(type: Int, tag: String, msg: String) {
-        if (LOG_ON) Log.println(type, tag, msg)
-        if (LOG_SAVE_ON) DebugIOUtils.append(DebugIOUtils.DebugSaveType.LOG, getOutputLog(type, tag, msg))
+        if (DebugIOUtils.FORCE_DEBUG_ON || LOG_ON) Log.println(type, tag, msg)
+        if (DebugIOUtils.FORCE_DEBUG_ON || LOG_SAVE_ON) DebugIOUtils.append(DebugIOUtils.DebugSaveType.LOG, getOutputLog(type, tag, msg))
     }
 
     private fun getOutputLog(type: Int, tag: String, msg: String) =

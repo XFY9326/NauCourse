@@ -99,4 +99,8 @@ object Constants {
     object Others {
         const val FORGET_PASSWORD = "http://sso.nau.edu.cn/sso/login"
     }
+
+    object Pref {
+        const val NIGHT_MODE = "NightMode"
+    }
 }

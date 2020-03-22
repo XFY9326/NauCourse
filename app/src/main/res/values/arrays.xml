@@ -19,7 +19,19 @@
         <item>@string/add_new_course</item>
         <item>@string/import_current_term_course</item>
         <item>@string/import_next_term_course</item>
+    </string-array>
 
+    <string-array name="night_mode_text">
+        <item>@string/night_mode_auto</item>
+        <item>@string/night_mode_enabled</item>
+        <item>@string/night_mode_disabled</item>
+    </string-array>
+
+    <!-- SettingsPref.NightModeType -->
+    <string-array name="night_mode_value">
+        <item>AUTO</item>
+        <item>ENABLED</item>
+        <item>DISABLED</item>
     </string-array>
 
     <integer-array name="material_colors_600">

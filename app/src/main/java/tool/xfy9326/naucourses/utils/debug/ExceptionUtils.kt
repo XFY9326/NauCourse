@@ -3,6 +3,7 @@ package tool.xfy9326.naucourses.utils.debug
 import tool.xfy9326.naucourses.App
 import tool.xfy9326.naucourses.BuildConfig
 import tool.xfy9326.naucourses.io.prefs.AppPref
+import tool.xfy9326.naucourses.io.prefs.SettingsPref
 import tool.xfy9326.naucourses.utils.BaseUtils
 import java.io.PrintWriter
 import java.io.StringWriter
@@ -11,8 +12,8 @@ import java.net.UnknownHostException
 object ExceptionUtils : Thread.UncaughtExceptionHandler {
     private const val CRASH_RESTART_PERIOD_MILLS = 3000L
     private val THROWS_ON = BuildConfig.DEBUG
-    private val THROWS_SAVE_ON = BuildConfig.DEBUG
-    private const val GLOBAL_THROWS_SAVE_ON = true
+    private val THROWS_SAVE_ON get() = SettingsPref.DebugMode && SettingsPref.DebugExceptionCatch
+    private val GLOBAL_THROWS_SAVE_ON get() = SettingsPref.CrashCatch
 
     private var exceptionHandler: Thread.UncaughtExceptionHandler? = null
 
@@ -25,8 +26,8 @@ object ExceptionUtils : Thread.UncaughtExceptionHandler {
     }
 
     fun print(tag: String, throwable: Throwable) {
-        if (THROWS_ON) throwable.printStackTrace()
-        if (THROWS_SAVE_ON) saveThrowable(tag, getStackTraceString(throwable))
+        if (DebugIOUtils.FORCE_DEBUG_ON || THROWS_ON) throwable.printStackTrace()
+        if (DebugIOUtils.FORCE_DEBUG_ON || THROWS_SAVE_ON) saveThrowable(tag, getStackTraceString(throwable))
     }
 
     fun initCrashHandler() {
@@ -37,7 +38,7 @@ object ExceptionUtils : Thread.UncaughtExceptionHandler {
     @Suppress("ConstantConditionIf")
     override fun uncaughtException(t: Thread, e: Throwable) {
         try {
-            if (GLOBAL_THROWS_SAVE_ON) {
+            if (DebugIOUtils.FORCE_DEBUG_ON || GLOBAL_THROWS_SAVE_ON) {
                 saveError(getStackTraceString(e))
                 crashRestart(t, e)
             } else {

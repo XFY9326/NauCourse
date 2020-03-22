@@ -11,9 +11,11 @@
     <color name="colorWindowsBackground">@color/design_default_color_background</color>
     <color name="colorDivider">#757575</color>
     <color name="colorDefaultBackground">#FAFAFA</color>
-    <color name="colorDialogButtonText">@color/colorPrimary</color>
+    <color name="colorDialogButtonText">#1976D2</color>
+    <color name="colorPreferenceText">#1976D2</color>
     <color name="colorCourseTimeCell">#858585</color>
     <color name="colorCourseTimeCellChecked">#2196F3</color>
+    <color name="colorControlIcon">#1976D2</color>
 
     <color name="colorPrimaryTextWhenDark">#FFFFFF</color>
     <color name="colorSecondaryTextWhenDark">#C7C7C7</color>

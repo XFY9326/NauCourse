@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/theme">
+
+        <!-- SettingsPref.NightModeType -->
+        <androidx.preference.ListPreference
+            app:defaultValue="AUTO"
+            app:entries="@array/night_mode_text"
+            app:entryValues="@array/night_mode_value"
+            app:icon="@drawable/ic_night_mode"
+            app:key="NightMode"
+            app:summary="@string/night_mode_sum"
+            app:title="@string/night_mode" />
+
+    </tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory>
+</androidx.preference.PreferenceScreen>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/debug">
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="DebugMode"
+            app:summary="@string/debug_mode_sum"
+            app:title="@string/debug_mode" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:dependency="DebugMode"
+            app:iconSpaceReserved="false"
+            app:key="DebugLogCatch"
+            app:summary="@string/debug_log_catch_sum"
+            app:title="@string/debug_log_catch" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:dependency="DebugMode"
+            app:iconSpaceReserved="false"
+            app:key="DebugExceptionCatch"
+            app:summary="@string/debug_exception_catch_sum"
+            app:title="@string/debug_exception_catch" />
+
+    </tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory>
+
+    <tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/crash_record">
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="CrashCatch"
+            app:summary="@string/debug_error_catch_sum"
+            app:title="@string/debug_error_catch" />
+
+    </tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

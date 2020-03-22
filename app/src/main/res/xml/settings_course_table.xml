@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.preference.CheckBoxPreference
+        app:defaultValue="false"
+        app:iconSpaceReserved="false"
+        app:key="CourseTableRoundCompat"
+        app:summary="@string/course_table_round_compat_sum"
+        app:title="@string/course_table_round_compat" />
+
+</androidx.preference.PreferenceScreen>

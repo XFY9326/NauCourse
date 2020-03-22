@@ -92,16 +92,16 @@ open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = nu
     override fun getNetworkClient(): OkHttpClient = okHttpClient
 
     @Synchronized
-    final override fun login(ssoResponse: Response): LoginResponse {
-        val ssoResponseUrl = ssoResponse.request.url
-        val ssoResponseContent = ssoResponse.body?.string()!!
-        ssoResponse.closeQuietly()
+    final override fun login(beforeLoginResponse: Response): LoginResponse {
+        val ssoResponseUrl = beforeLoginResponse.request.url
+        val ssoResponseContent = beforeLoginResponse.body?.string()!!
+        beforeLoginResponse.closeQuietly()
         if (SSO_LOGIN_PAGE_STR in ssoResponseContent || ssoResponseUrl.hasSameHost(SSO_HOST)) {
             if (!isServiceLogin && getSSOLoginStatus(ssoResponseContent) == LoginResponse.ErrorReason.NONE) {
                 return LoginResponse(true, ssoResponseUrl, ssoResponseContent)
             }
             val postForm = getLoginPostForm(getLoginInfo().userId, getLoginInfo().userPw, ssoResponseContent)
-            val request = ssoResponse.request.newBuilder().apply {
+            val request = beforeLoginResponse.request.newBuilder().apply {
                 post(postForm)
             }.build()
             newSSOCall(request).use {

@@ -15,6 +15,7 @@ object DebugIOUtils {
     private val DATE_FORMAT_YMD_HM_CH = SimpleDateFormat(Constants.Time.FORMAT_YMD_HM_CH, Locale.CHINA)
 
     private const val DEBUG_DIR = "Debug_Log"
+    private const val FORCE_LOG_ON_FLAG = "debug_on"
     private const val DEBUG_LOG_FILE_PREFIX = ".log"
 
     private const val DEBUG_EXCEPTION_PREFIX = "Exception_"
@@ -22,6 +23,8 @@ object DebugIOUtils {
     private const val DEBUG_LOG_PREFIX = "Log_"
 
     private val DEBUG_LOG_SAVE_DIR = App.instance.getExternalFilesDir(DEBUG_DIR)
+
+    val FORCE_DEBUG_ON = File(DEBUG_LOG_SAVE_DIR, FORCE_LOG_ON_FLAG).exists()
 
     enum class DebugSaveType {
         EXCEPTION {
@@ -41,8 +44,7 @@ object DebugIOUtils {
 
     private fun getDivider() = "\n\n=================== ${DATE_FORMAT_YMD_HM_CH.format(Date())} ======================\n\n"
 
-    private fun getSaveFile(type: DebugSaveType) =
-        File(App.instance.getExternalFilesDir(DEBUG_DIR), type.frontPrefix + getLogDate() + DEBUG_LOG_FILE_PREFIX)
+    private fun getSaveFile(type: DebugSaveType) = File(DEBUG_LOG_SAVE_DIR, type.frontPrefix + getLogDate() + DEBUG_LOG_FILE_PREFIX)
 
     fun append(type: DebugSaveType, msg: String) =
         GlobalScope.launch(Dispatchers.IO) {

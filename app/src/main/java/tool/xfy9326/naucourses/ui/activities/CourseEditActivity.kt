@@ -1,6 +1,7 @@
 package tool.xfy9326.naucourses.ui.activities
 
 import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -238,13 +239,10 @@ class CourseEditActivity : AppCompatActivity(), CourseTimeAdapter.CourseTimeCall
                 cv_courseBaseInfo.layoutParams.height = value
                 cv_courseBaseInfo.requestLayout()
             }
-            addListener(object : Animator.AnimatorListener {
+            addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationStart(animation: Animator?) {
                     btn_showMoreCourseEditInfo.visibility = View.INVISIBLE
                 }
-
-                override fun onAnimationRepeat(animation: Animator?) {}
-
                 override fun onAnimationEnd(animation: Animator?) = resetAfterExpandLayout()
                 override fun onAnimationCancel(animation: Animator?) = resetAfterExpandLayout()
             })

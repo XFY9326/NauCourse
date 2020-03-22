@@ -36,7 +36,7 @@
                 android:id="@+id/tv_todayCourseWeekNum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_week_num"
+                android:background="@drawable/bg_round_text"
                 android:paddingStart="5dp"
                 android:paddingTop="2dp"
                 android:paddingEnd="5dp"

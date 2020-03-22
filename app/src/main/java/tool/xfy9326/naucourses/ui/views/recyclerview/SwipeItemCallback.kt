@@ -1,6 +1,7 @@
 package tool.xfy9326.naucourses.ui.views.recyclerview
 
 import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.graphics.Canvas
 import android.graphics.drawable.AnimatedVectorDrawable
@@ -180,14 +181,13 @@ class SwipeItemCallback<T : SwipeItemViewHolder>(private val listener: OnItemSwi
             viewHolder.backgroundShowSwipeView, iconX.toInt(), iconY.toInt(), startRadius, finalRadius
         ).apply {
             duration = backgroundCircularRevealDuration
-            addListener(object : Animator.AnimatorListener {
+            addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationStart(animation: Animator?) {
                     if (showSwipeBackground) {
                         viewHolder.backgroundShowSwipeView.visibility = View.VISIBLE
                     }
                 }
 
-                override fun onAnimationRepeat(animation: Animator?) {}
                 override fun onAnimationCancel(animation: Animator?) {
                     if (showSwipeBackground) {
                         viewHolder.backgroundShowSwipeView.visibility = View.VISIBLE

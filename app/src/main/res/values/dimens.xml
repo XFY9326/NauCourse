@@ -14,4 +14,5 @@
     <dimen name="course_time_button_elevation">2dp</dimen>
     <dimen name="bottom_msg_dialog_max_width">400dp</dimen>
     <dimen name="course_detail_layout_height_make_up">20dp</dimen>
+    <dimen name="course_table_corner_compat">20dp</dimen>
 </resources>

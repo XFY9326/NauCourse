@@ -16,19 +16,25 @@ import com.jaredrummler.android.colorpicker.ColorPickerDialog
 import kotlinx.android.synthetic.main.dialog_bottom_msg.*
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.R
+import tool.xfy9326.naucourses.ui.views.widgets.StyledColorPickerDialog
 import tool.xfy9326.naucourses.utils.utility.IOUtils
 import tool.xfy9326.naucourses.utils.utility.IntentUtils
 import kotlin.math.min
 
 object DialogUtils {
-    fun createCourseColorPickerDialog(context: Context, color: Int, dialogId: Int): ColorPickerDialog =
+    fun createCourseColorPickerDialog(context: Context, color: Int, dialogId: Int): StyledColorPickerDialog {
         ColorPickerDialog.newBuilder().apply {
             setColor(color)
             setDialogTitle(R.string.course_color_edit)
             setDialogId(dialogId)
             setPresets(context.resources.getIntArray(R.array.material_colors_600))
             setShowAlphaSlider(false)
-        }.create()
+        }.create().apply {
+            val styledDialog = StyledColorPickerDialog()
+            styledDialog.arguments = arguments
+            return styledDialog
+        }
+    }
 
     fun createCourseAddDialog(context: Context, lifecycle: Lifecycle, listener: DialogInterface.OnClickListener): AlertDialog =
         MaterialAlertDialogBuilder(context).apply {

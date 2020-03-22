@@ -24,7 +24,7 @@ abstract class BasePref {
 
     fun clear() = pref.edit().clear().commit()
 
-    protected open val prefName: String? = null
+    open val prefName: String? = null
 
     private inline fun <T> SharedPreferences.delegate(
         key: String? = null,

@@ -6,7 +6,7 @@
     </style>
 
     <style name="AppTheme.TranslucentStatusBar.DarkActionBar" parent="AppTheme.TranslucentStatusBar.Base">
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
     <style name="AppTheme.LaunchScreen" parent="AppTheme.LaunchScreen.Base">

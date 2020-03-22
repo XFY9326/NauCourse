@@ -63,27 +63,19 @@
 
         <activity
             android:name=".ui.activities.CourseManageActivity"
-            android:label="@string/course_manage">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activities.MainDrawerActivity" />
-        </activity>
+            android:label="@string/course_manage" />
 
         <activity
             android:name=".ui.activities.CourseEditActivity"
-            android:label="@string/course_edit">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activities.CourseManageActivity" />
-        </activity>
+            android:label="@string/course_edit" />
+
+        <activity
+            android:name=".ui.activities.SettingsActivity"
+            android:label="@string/settings" />
 
         <activity
             android:name=".ui.activities.AboutActivity"
-            android:label="@string/about">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activities.MainDrawerActivity" />
-        </activity>
+            android:label="@string/about" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

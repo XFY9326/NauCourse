@@ -83,10 +83,10 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
 
     override fun getNetworkClient(): OkHttpClient = okHttpClient
 
-    override fun login(response: Response): LoginResponse {
-        val responseUrl = response.request.url
-        val responseContent = response.body?.string()!!
-        response.closeQuietly()
+    override fun login(beforeLoginResponse: Response): LoginResponse {
+        val responseUrl = beforeLoginResponse.request.url
+        val responseContent = beforeLoginResponse.body?.string()!!
+        beforeLoginResponse.closeQuietly()
         if (CAPTCHA_HTML_STR in responseContent) {
             cookieStore.clearCookies()
         }
@@ -95,7 +95,7 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
                 return LoginResponse(true, responseUrl, responseContent)
             }
             val postForm = getLoginPostForm(getLoginInfo().userId, getLoginInfo().userPw)
-            val request = response.request.newBuilder().apply {
+            val request = beforeLoginResponse.request.newBuilder().apply {
                 url(getLoginPostUrl(responseContent))
                 post(postForm)
             }.build()

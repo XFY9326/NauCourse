@@ -54,7 +54,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:buttonTint="@color/colorBaseIcon"
                         android:paddingStart="5dp"
                         android:paddingEnd="5dp"
                         android:text="@string/odd_week_mode" />
@@ -64,7 +63,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:buttonTint="@color/colorBaseIcon"
                         android:paddingStart="5dp"
                         android:paddingEnd="5dp"
                         android:text="@string/even_week_mode" />
@@ -74,7 +72,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:buttonTint="@color/colorBaseIcon"
                         android:paddingStart="5dp"
                         android:paddingEnd="5dp"
                         android:text="@string/all_weeks_mode" />
