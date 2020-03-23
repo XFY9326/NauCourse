@@ -34,6 +34,19 @@
         <item>DISABLED</item>
     </string-array>
 
+    <string-array name="default_interface_text">
+        <item>@string/course_arrange</item>
+        <item>@string/course_table</item>
+        <item>@string/news</item>
+    </string-array>
+
+    <!-- SettingsPref.EnterInterfaceType -->
+    <string-array name="default_interface_value">
+        <item>COURSE_ARRANGE</item>
+        <item>COURSE_TABLE</item>
+        <item>NEWS</item>
+    </string-array>
+
     <integer-array name="material_colors_600">
         <item>@color/material_red_600</item>
         <item>@color/material_pink_600</item>

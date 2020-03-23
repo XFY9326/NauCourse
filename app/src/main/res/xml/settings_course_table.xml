@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
-    <androidx.preference.CheckBoxPreference
-        app:defaultValue="false"
+    <tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory
         app:iconSpaceReserved="false"
-        app:key="CourseTableRoundCompat"
-        app:summary="@string/course_table_round_compat_sum"
-        app:title="@string/course_table_round_compat" />
+        app:title="@string/display">
 
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="CourseTableRoundCompat"
+            app:summary="@string/course_table_round_compat_sum"
+            app:title="@string/course_table_round_compat" />
+
+    </tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory>
 </androidx.preference.PreferenceScreen>

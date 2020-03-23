@@ -57,5 +57,5 @@ object AppPref : BasePref() {
         }
     }
 
-    var LastCrashTimeMills by pref.long(defValue = DEFAULT_LAST_CRASH_TIME_MILLS)
+    var LastCrashTimeMills by pref.long(defValue = DEFAULT_LAST_CRASH_TIME_MILLS, commit = true)
 }

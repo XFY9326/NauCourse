@@ -17,14 +17,24 @@ object SettingsPref : BasePref() {
 
     fun getNightMode() = NightModeType.valueOf(NightMode!!)
 
+    enum class EnterInterfaceType {
+        COURSE_ARRANGE,
+        COURSE_TABLE,
+        NEWS
+    }
+
+    private val DefaultEnterInterface by pref.string(defValue = EnterInterfaceType.COURSE_ARRANGE.name)
+
+    fun getDefaultEnterInterface() = EnterInterfaceType.valueOf(DefaultEnterInterface!!)
+
 
     // CourseTableSettingsFragment
-    var CourseTableRoundCompat by pref.boolean(defValue = false)
+    val CourseTableRoundCompat by pref.boolean(defValue = false)
 
 
     // DebugSettingsFragment
-    var DebugMode by pref.boolean(defValue = BuildConfig.DEBUG)
-    var DebugLogCatch by pref.boolean(defValue = false)
-    var DebugExceptionCatch by pref.boolean(defValue = true)
-    var CrashCatch by pref.boolean(defValue = true)
+    val DebugMode by pref.boolean(defValue = BuildConfig.DEBUG)
+    val DebugLogCatch by pref.boolean(defValue = false)
+    val DebugExceptionCatch by pref.boolean(defValue = true)
+    val CrashCatch by pref.boolean(defValue = true)
 }

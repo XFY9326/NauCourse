@@ -9,7 +9,7 @@
         android:id="@+id/tv_processCourseType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="17sp"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -17,8 +17,8 @@
         android:id="@+id/pb_processBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="8dp"
+        android:layout_marginTop="6dp"
         android:max="@integer/learning_process_max"
         android:progressDrawable="@drawable/layer_progress_bar"
         app:layout_constraintStart_toStartOf="parent"

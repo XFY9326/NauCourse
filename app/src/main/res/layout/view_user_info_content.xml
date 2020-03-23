@@ -4,8 +4,8 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingStart="30dp"
-    android:paddingEnd="30dp"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
     android:paddingBottom="10dp">
 
     <include layout="@layout/view_card_user_info" />

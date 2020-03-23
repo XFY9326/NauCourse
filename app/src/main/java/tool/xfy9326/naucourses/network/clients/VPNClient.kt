@@ -104,7 +104,7 @@ open class VPNClient(loginInfo: LoginInfo, loginUrl: HttpUrl? = null) :
                 (VPN_LOGIN_PAGE_STR !in responseContent || (SSO_LOGIN_PAGE_STR !in responseContent && VPN_HOST_DATA_STR in responseContent))
 
     override fun validateNotInLoginPage(responseContent: String): Boolean =
-        SSO_LOGIN_PAGE_STR !in responseContent && VPN_LOGIN_PAGE_STR !in responseContent
+        SSO_LOGIN_PAGE_STR !in responseContent && VPN_LOGIN_PAGE_STR !in responseContent && SSO_SERVER_ERROR !in responseContent
 
     protected fun newVPNCall(request: Request): Response = getNetworkClient().newCall(request).execute()
 

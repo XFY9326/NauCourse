@@ -38,12 +38,17 @@ object ExceptionUtils : Thread.UncaughtExceptionHandler {
     @Suppress("ConstantConditionIf")
     override fun uncaughtException(t: Thread, e: Throwable) {
         try {
-            if (DebugIOUtils.FORCE_DEBUG_ON || GLOBAL_THROWS_SAVE_ON) {
-                saveError(getStackTraceString(e))
-                crashRestart(t, e)
+            if (recordThisCrash()) {
+                if (DebugIOUtils.FORCE_DEBUG_ON || GLOBAL_THROWS_SAVE_ON) {
+                    saveError(getStackTraceString(e))
+                    BaseUtils.restartApplication(App.instance, true)
+                } else {
+                    BaseUtils.restartApplication(App.instance, true)
+                }
             } else {
-                crashRestart(t, e)
+                exceptionHandler?.uncaughtException(t, e)
             }
+
         } catch (e: Exception) {
             exceptionHandler?.uncaughtException(t, e)
         }
@@ -53,14 +58,10 @@ object ExceptionUtils : Thread.UncaughtExceptionHandler {
 
     private fun saveThrowable(tag: String, text: String) = DebugIOUtils.append(DebugIOUtils.DebugSaveType.EXCEPTION, "$tag:\n$text")
 
-    private fun crashRestart(t: Thread, e: Throwable) {
+    private fun recordThisCrash(): Boolean {
         val lastCrashMills = AppPref.LastCrashTimeMills
         AppPref.LastCrashTimeMills = System.currentTimeMillis()
-        if (System.currentTimeMillis() - lastCrashMills > CRASH_RESTART_PERIOD_MILLS) {
-            BaseUtils.restartApplication(App.instance, true)
-        } else {
-            exceptionHandler?.uncaughtException(t, e)
-        }
+        return System.currentTimeMillis() - lastCrashMills > CRASH_RESTART_PERIOD_MILLS
     }
 
     private fun getStackTraceString(throwable: Throwable): String {

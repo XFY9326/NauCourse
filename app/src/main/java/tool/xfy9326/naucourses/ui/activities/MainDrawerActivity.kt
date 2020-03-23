@@ -73,9 +73,9 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        showFragment(getViewModel().nowShowFragmentType)
+    override fun onStart() {
+        super.onStart()
+        showFragment(getViewModel().getNowShowFragment())
     }
 
     private fun preloadFragments() {
@@ -96,9 +96,10 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
 
     @Synchronized
     fun showFragment(type: FragmentType) {
-        if (type != getViewModel().nowShowFragmentType || !getViewModel().initFragmentShow()) {
-            val oldFragment = supportFragmentManager.findFragmentByTag(getViewModel().nowShowFragmentType.name)
+        if (type != getViewModel().getNowShowFragment() || !getViewModel().initFragmentShow()) {
+            val oldFragment = supportFragmentManager.findFragmentByTag(getViewModel().getNowShowFragment().name)
             supportFragmentManager.beginTransaction().apply {
+                setCustomAnimations(R.anim.fragment_fade_enter, R.anim.fragment_fade_exit)
                 if (oldFragment != null) {
                     hide(oldFragment)
                 }
@@ -109,7 +110,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
                     error("Fragment Not Preload Before Show!")
                 }
             }.commit()
-            getViewModel().nowShowFragmentType = type
+            getViewModel().setNowShowFragment(type)
         }
     }
 

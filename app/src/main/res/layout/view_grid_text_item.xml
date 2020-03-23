@@ -4,6 +4,7 @@
     android:id="@+id/tv_gridItemText"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:layout_marginTop="2dp"
+    android:paddingTop="1dp"
+    android:paddingBottom="1dp"
     android:textSize="14sp"
     app:layout_columnWeight="1" />

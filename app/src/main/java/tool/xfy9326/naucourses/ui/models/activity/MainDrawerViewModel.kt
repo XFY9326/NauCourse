@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import tool.xfy9326.naucourses.io.prefs.SettingsPref
 import tool.xfy9326.naucourses.network.LoginNetworkManager
 import tool.xfy9326.naucourses.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourses.providers.info.methods.CardBalanceInfo
@@ -16,7 +17,8 @@ import tool.xfy9326.naucourses.utils.secure.AccountUtils
 
 class MainDrawerViewModel : BaseViewModel() {
     private var hasInitFragmentShow = false
-    var nowShowFragmentType = MainDrawerActivity.Companion.FragmentType.COURSE_ARRANGE
+    private val fragmentTypeLock = Any()
+    private lateinit var nowShowFragmentType: MainDrawerActivity.Companion.FragmentType
     val studentCardBalance = MutableLiveData<Float>()
     val studentInfo = MutableLiveData<StudentInfo>()
     val logoutSuccess = EventLiveData<Boolean>()
@@ -55,6 +57,25 @@ class MainDrawerViewModel : BaseViewModel() {
             } else {
                 LogUtils.d<MainDrawerViewModel>("CardBalanceInfo Error: ${balance.errorReason}")
             }
+        }
+    }
+
+    fun setNowShowFragment(type: MainDrawerActivity.Companion.FragmentType) {
+        synchronized(fragmentTypeLock) {
+            nowShowFragmentType = type
+        }
+    }
+
+    fun getNowShowFragment(): MainDrawerActivity.Companion.FragmentType {
+        synchronized(fragmentTypeLock) {
+            if (!::nowShowFragmentType.isInitialized) {
+                nowShowFragmentType = when (SettingsPref.getDefaultEnterInterface()) {
+                    SettingsPref.EnterInterfaceType.COURSE_ARRANGE -> MainDrawerActivity.Companion.FragmentType.COURSE_ARRANGE
+                    SettingsPref.EnterInterfaceType.COURSE_TABLE -> MainDrawerActivity.Companion.FragmentType.COURSE_TABLE
+                    SettingsPref.EnterInterfaceType.NEWS -> MainDrawerActivity.Companion.FragmentType.NEWS
+                }
+            }
+            return nowShowFragmentType
         }
     }
 

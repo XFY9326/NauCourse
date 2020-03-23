@@ -15,4 +15,20 @@
             app:title="@string/night_mode" />
 
     </tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory>
+
+    <tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/ui">
+
+        <!-- SettingsPref.EnterInterfaceType -->
+        <androidx.preference.ListPreference
+            app:defaultValue="COURSE_ARRANGE"
+            app:entries="@array/default_interface_text"
+            app:entryValues="@array/default_interface_value"
+            app:icon="@drawable/ic_default_interface"
+            app:key="DefaultEnterInterface"
+            app:summary="@string/default_interface_sum"
+            app:title="@string/default_interface" />
+
+    </tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory>
 </androidx.preference.PreferenceScreen>

@@ -192,7 +192,7 @@
     <string name="delete_all_courses_msg">是否删除全部课程？</string>
     <string name="next_course_import_attention_msg">\u3000\u3000由于只能同步教务当前学期的开始与结束数据，导入下学期的课程时可能需要您手动更改学期设定！导入的学期为：%1$s\n\u3000\u3000注：点击顶部工具栏的学期设定按钮即可以更改学期。</string>
     <string name="show_course_table">显示课程表</string>
-    <string name="settings_display">显示</string>
+    <string name="display">显示</string>
     <string name="settings_display_sum">应用界面显示以及主题设置</string>
     <string name="settings_course_table">课程表</string>
     <string name="settings_course_table_sum">课程表样式以及操作方式设置</string>
@@ -220,5 +220,8 @@
     <string name="night_mode_disabled">关闭夜间模式</string>
     <string name="course_table_round_compat">课程表圆角适配</string>
     <string name="course_table_round_compat_sum">防止圆角屏幕设备上部分内容被遮挡</string>
+    <string name="ui">界面</string>
     <string name="more">more</string>
+    <string name="default_interface">默认显示界面</string>
+    <string name="default_interface_sum">设定启动界面时默认显示的界面</string>
 </resources>
