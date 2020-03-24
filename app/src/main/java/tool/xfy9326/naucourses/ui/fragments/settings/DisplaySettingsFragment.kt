@@ -15,7 +15,7 @@ class DisplaySettingsFragment : BaseSettingsPreferenceFragment() {
     override val preferenceResId = R.xml.settings_display
 
     override fun onPrefViewInit(savedInstanceState: Bundle?) {
-        findPreference<ListPreference>(Constants.Pref.NIGHT_MODE)?.setOnPreferenceChangeListener { _, newValue ->
+        findPreference<ListPreference>(Constants.Pref.NightMode)?.setOnPreferenceChangeListener { _, newValue ->
             if (SettingsPref.NightMode != newValue) {
                 changeNightModeTheme(SettingsPref.NightModeType.valueOf(newValue as String))
             }
@@ -25,7 +25,11 @@ class DisplaySettingsFragment : BaseSettingsPreferenceFragment() {
 
     @Synchronized
     private fun changeNightModeTheme(type: SettingsPref.NightModeType) {
-        AppCompatDelegate.setDefaultNightMode(BaseUtils.getNightModeInt(type))
-        App.instance.mainNightModeChanged.postEventValue(true)
+        val newMode = BaseUtils.getNightModeInt(type)
+        if (AppCompatDelegate.getDefaultNightMode() != newMode) {
+            requireActivity().window.setWindowAnimations(R.style.AppTheme_NightModeTransitionAnimation)
+            AppCompatDelegate.setDefaultNightMode(newMode)
+            App.instance.nightModeChanged.notifyEvent()
+        }
     }
 }

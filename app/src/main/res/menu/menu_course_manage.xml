@@ -15,7 +15,7 @@
 
     <item
         android:id="@+id/menu_courseManageSave"
-        android:icon="@drawable/ic_save"
+        android:icon="@drawable/ic_save_dark"
         android:title="@string/save"
         app:showAsAction="always" />
 </menu>

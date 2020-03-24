@@ -30,5 +30,12 @@
             app:summary="@string/default_interface_sum"
             app:title="@string/default_interface" />
 
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:icon="@drawable/ic_open_in_browser"
+            app:key="UseBrowserOpenNewsDetail"
+            app:summary="@string/use_browser_open_news_detail_sum"
+            app:title="@string/use_browser_open_news_detail" />
+
     </tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory>
 </androidx.preference.PreferenceScreen>

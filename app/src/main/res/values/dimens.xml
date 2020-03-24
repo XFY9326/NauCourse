@@ -4,7 +4,6 @@
     <dimen name="course_table_course_time_row_size">30dp</dimen>
     <dimen name="course_manage_divider_left_margin">50dp</dimen>
     <dimen name="course_manage_divider_right_margin">10dp</dimen>
-    <dimen name="course_cell_height_offset">3dp</dimen>
     <dimen name="course_cell_padding">2dp</dimen>
     <dimen name="course_cell_text_padding">5dp</dimen>
     <dimen name="course_cell_background_radius">6dp</dimen>
@@ -14,5 +13,5 @@
     <dimen name="course_time_button_elevation">2dp</dimen>
     <dimen name="bottom_msg_dialog_max_width">400dp</dimen>
     <dimen name="course_detail_layout_height_make_up">20dp</dimen>
-    <dimen name="course_table_corner_compat">20dp</dimen>
+    <dimen name="course_table_bottom_corner_compat">25dp</dimen>
 </resources>

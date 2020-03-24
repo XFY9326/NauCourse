@@ -243,6 +243,7 @@ class CourseEditActivity : AppCompatActivity(), CourseTimeAdapter.CourseTimeCall
                 override fun onAnimationStart(animation: Animator?) {
                     btn_showMoreCourseEditInfo.visibility = View.INVISIBLE
                 }
+
                 override fun onAnimationEnd(animation: Animator?) = resetAfterExpandLayout()
                 override fun onAnimationCancel(animation: Animator?) = resetAfterExpandLayout()
             })

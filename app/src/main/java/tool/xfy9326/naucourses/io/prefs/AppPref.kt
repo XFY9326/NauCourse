@@ -28,8 +28,6 @@ object AppPref : BasePref() {
         ShowNewsType = set
     }
 
-    var DefaultShowNewsInBrowser by pref.boolean(defValue = false)
-
     private var CustomStartTermDateMills by pref.long(CUSTOM_START_TERM_DATE_MILLS, DEFAULT_TERM_DATE_MILLS)
 
     private var CustomEndTermDateMills by pref.long(CUSTOM_END_TERM_DATE_MILLS, DEFAULT_TERM_DATE_MILLS)

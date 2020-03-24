@@ -32,7 +32,7 @@ import tool.xfy9326.naucourses.beans.CourseCellStyle
 import tool.xfy9326.naucourses.beans.CoursePkg
 import tool.xfy9326.naucourses.beans.CourseTable
 import tool.xfy9326.naucourses.ui.views.widgets.AdvancedGridLayout
-import tool.xfy9326.naucourses.ui.views.widgets.AdvancedLinearLayout
+import tool.xfy9326.naucourses.ui.views.widgets.CourseCellLayout
 import tool.xfy9326.naucourses.utils.compute.TimeUtils
 import tool.xfy9326.naucourses.utils.views.ColorUtils
 import kotlin.math.ceil
@@ -50,12 +50,11 @@ object CourseTableViewHelper {
     private lateinit var defaultValues: CourseBuilderDefaultValues
     private lateinit var listener: OnCourseCellClickListener
 
-    private var CELL_HEIGHT_OFFSET by Delegates.notNull<Int>()
-
     private var COURSE_CELL_PADDING by Delegates.notNull<Int>()
+    private var COURSE_CELL_BOTTOM_COMPAT_PADDING by Delegates.notNull<Int>()
     private var COURSE_CELL_TEXT_PADDING by Delegates.notNull<Int>()
 
-    private const val DEFAULT_COURSE_CELL_BACKGROUND_ALPHA = 0.7f
+    private const val DEFAULT_COURSE_CELL_BACKGROUND_ALPHA = 0.6f
     private var DEFAULT_COURSE_CELL_BACKGROUND_RADIUS by Delegates.notNull<Float>()
 
     private const val TIME_CELL_TIME_NUM_TEXT_SIZE = 17
@@ -69,8 +68,8 @@ object CourseTableViewHelper {
         this.listener = listener
         layoutInflater = LayoutInflater.from(context)
         with(context) {
-            CELL_HEIGHT_OFFSET = resources.getDimensionPixelSize(R.dimen.course_cell_height_offset)
             COURSE_CELL_PADDING = resources.getDimensionPixelSize(R.dimen.course_cell_padding)
+            COURSE_CELL_BOTTOM_COMPAT_PADDING = resources.getDimensionPixelSize(R.dimen.course_table_bottom_corner_compat)
             COURSE_CELL_TEXT_PADDING = resources.getDimensionPixelSize(R.dimen.course_cell_text_padding)
             DEFAULT_COURSE_CELL_BACKGROUND_RADIUS = resources.getDimensionPixelSize(R.dimen.course_cell_background_radius).toFloat()
 
@@ -99,12 +98,19 @@ object CourseTableViewHelper {
         val courseTextColorDark: Int
     )
 
+    data class CourseTableStyle(
+        val sameCellHeight: Boolean,
+        val bottomCornerCompat: Boolean,
+        val centerHorizontalShowCourseText: Boolean
+    )
+
     suspend fun createCourseTableView(
         context: Context,
         showWeekend: Boolean,
         coursePkg: CoursePkg,
         targetView: AdvancedGridLayout,
-        headerWidth: Pair<Int, Int>
+        headerWidth: Pair<Int, Int>,
+        courseTableStyle: CourseTableStyle
     ) = withContext(Dispatchers.Default) {
         val courseTable = coursePkg.courseTable
         val styles = coursePkg.styles
@@ -120,9 +126,11 @@ object CourseTableViewHelper {
         for (row in 0 until rowMax) {
             resultDeferred.add(async(Dispatchers.Default) {
                 val view = getTimeCellView(context, headerWidth.first, row, row + 1)
-                val measuredHeight = getHeightByWidth(view, headerWidth.first)
-                synchronized(lock) {
-                    maxHeight = max(maxHeight, measuredHeight)
+                if (courseTableStyle.sameCellHeight) {
+                    val measuredHeight = getHeightByWidth(view, headerWidth.first)
+                    synchronized(lock) {
+                        maxHeight = max(maxHeight, measuredHeight)
+                    }
                 }
                 view
             })
@@ -133,11 +141,14 @@ object CourseTableViewHelper {
                 resultDeferred.add(async(Dispatchers.Default) {
                     val view = getCourseCellView(
                         context, it, headerWidth.second, index + 1,
-                        CourseCellStyle.getStyleByCourseId(it.courseId, styles, true)!!
+                        CourseCellStyle.getStyleByCourseId(it.courseId, styles, true)!!,
+                        courseTableStyle.centerHorizontalShowCourseText
                     )
-                    val measuredHeight = getHeightByWidth(view, headerWidth.second, it.timeDuration.durationLength)
-                    synchronized(lock) {
-                        maxHeight = max(maxHeight, measuredHeight)
+                    if (courseTableStyle.sameCellHeight) {
+                        val measuredHeight = getHeightByWidth(view, headerWidth.second, it.timeDuration.durationLength)
+                        synchronized(lock) {
+                            maxHeight = max(maxHeight, measuredHeight)
+                        }
                     }
                     view
                 })
@@ -146,9 +157,22 @@ object CourseTableViewHelper {
         val result = Array(resultDeferred.size) {
             resultDeferred[it].await()
         }
-        maxHeight += CELL_HEIGHT_OFFSET
         result.forEach {
-            it.layoutParams.height = maxHeight
+            if (courseTableStyle.sameCellHeight) it.layoutParams.height = maxHeight
+
+            if (courseTableStyle.bottomCornerCompat) {
+                val layout = (it as CourseCellLayout)
+                if (layout.rowNum == rowMax - 1) {
+                    layout.setPadding(0, 0, 0, COURSE_CELL_BOTTOM_COMPAT_PADDING)
+                    // sameCellHeight开启时会计算所有课程格高度，此处减少计算量
+                    if (courseTableStyle.sameCellHeight) {
+                        layout.layoutParams.height += COURSE_CELL_BOTTOM_COMPAT_PADDING
+                    } else {
+                        val measuredHeight = getHeightByWidth(layout, headerWidth.first)
+                        layout.layoutParams.height = measuredHeight + COURSE_CELL_BOTTOM_COMPAT_PADDING
+                    }
+                }
+            }
         }
         withContext(Dispatchers.Main) {
             if (targetView.columnCount != colMax) {
@@ -171,8 +195,18 @@ object CourseTableViewHelper {
     fun getWindowsWidth(context: Context) = context.resources.displayMetrics.widthPixels
 
     @SuppressLint("SetTextI18n")
-    private fun getCourseCellView(context: Context, courseInfo: CourseCell, headerWidth: Int, col: Int, cellStyle: CourseCellStyle): View =
-        AdvancedLinearLayout(context).apply {
+    private fun getCourseCellView(
+        context: Context,
+        courseInfo: CourseCell,
+        headerWidth: Int,
+        col: Int,
+        cellStyle: CourseCellStyle,
+        centerShowCourseText: Boolean
+    ): View =
+        CourseCellLayout(context).apply {
+            rowNum = courseInfo.timeDuration.startTime - 1
+            colNum = col
+
             val colMerge = GridLayout.spec(col)
             val rowMerge = GridLayout.spec(courseInfo.timeDuration.startTime - 1, courseInfo.timeDuration.durationLength, 1f)
             layoutParams = GridLayout.LayoutParams().apply {
@@ -217,7 +251,12 @@ object CourseTableViewHelper {
                         }
                     }
 
-                gravity = Gravity.TOP or Gravity.START
+                gravity = if (centerShowCourseText) {
+                    Gravity.CENTER_HORIZONTAL
+                } else {
+                    Gravity.TOP or Gravity.START
+                }
+
                 isClickable = true
                 setOnClickListener {
                     listener.onCourseCellClick(courseInfo, cellStyle)
@@ -227,7 +266,10 @@ object CourseTableViewHelper {
 
     @SuppressLint("SetTextI18n")
     private fun getTimeCellView(context: Context, headerWidth: Int, row: Int, courseTimeNum: Int): View =
-        AdvancedLinearLayout(context).apply {
+        CourseCellLayout(context).apply {
+            rowNum = row
+            colNum = 0
+
             val colMerge = GridLayout.spec(0)
             val rowMerge = GridLayout.spec(row, 1f)
             layoutParams = GridLayout.LayoutParams().apply {

@@ -9,7 +9,7 @@ import tool.xfy9326.naucourses.network.LoginNetworkManager
 import tool.xfy9326.naucourses.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourses.providers.info.methods.CardBalanceInfo
 import tool.xfy9326.naucourses.providers.info.methods.PersonalInfo
-import tool.xfy9326.naucourses.tools.EventLiveData
+import tool.xfy9326.naucourses.tools.NotifyLivaData
 import tool.xfy9326.naucourses.ui.activities.MainDrawerActivity
 import tool.xfy9326.naucourses.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourses.utils.debug.LogUtils
@@ -18,10 +18,10 @@ import tool.xfy9326.naucourses.utils.secure.AccountUtils
 class MainDrawerViewModel : BaseViewModel() {
     private var hasInitFragmentShow = false
     private val fragmentTypeLock = Any()
-    private lateinit var nowShowFragmentType: MainDrawerActivity.Companion.FragmentType
+    private lateinit var nowShowFragmentType: MainDrawerActivity.FragmentType
     val studentCardBalance = MutableLiveData<Float>()
     val studentInfo = MutableLiveData<StudentInfo>()
-    val logoutSuccess = EventLiveData<Boolean>()
+    val logoutSuccess = NotifyLivaData()
 
     override fun onInitView(isRestored: Boolean) {
         updatePersonalInfo(true)
@@ -60,19 +60,19 @@ class MainDrawerViewModel : BaseViewModel() {
         }
     }
 
-    fun setNowShowFragment(type: MainDrawerActivity.Companion.FragmentType) {
+    fun setNowShowFragment(type: MainDrawerActivity.FragmentType) {
         synchronized(fragmentTypeLock) {
             nowShowFragmentType = type
         }
     }
 
-    fun getNowShowFragment(): MainDrawerActivity.Companion.FragmentType {
+    fun getNowShowFragment(): MainDrawerActivity.FragmentType {
         synchronized(fragmentTypeLock) {
             if (!::nowShowFragmentType.isInitialized) {
                 nowShowFragmentType = when (SettingsPref.getDefaultEnterInterface()) {
-                    SettingsPref.EnterInterfaceType.COURSE_ARRANGE -> MainDrawerActivity.Companion.FragmentType.COURSE_ARRANGE
-                    SettingsPref.EnterInterfaceType.COURSE_TABLE -> MainDrawerActivity.Companion.FragmentType.COURSE_TABLE
-                    SettingsPref.EnterInterfaceType.NEWS -> MainDrawerActivity.Companion.FragmentType.NEWS
+                    SettingsPref.EnterInterfaceType.COURSE_ARRANGE -> MainDrawerActivity.FragmentType.COURSE_ARRANGE
+                    SettingsPref.EnterInterfaceType.COURSE_TABLE -> MainDrawerActivity.FragmentType.COURSE_TABLE
+                    SettingsPref.EnterInterfaceType.NEWS -> MainDrawerActivity.FragmentType.NEWS
                 }
             }
             return nowShowFragmentType
@@ -86,7 +86,7 @@ class MainDrawerViewModel : BaseViewModel() {
             LoginNetworkManager.clearAllCacheAndCookies()
             AccountUtils.clearUserCache()
 
-            logoutSuccess.postEventValue(true)
+            logoutSuccess.notifyEvent()
         }
     }
 }

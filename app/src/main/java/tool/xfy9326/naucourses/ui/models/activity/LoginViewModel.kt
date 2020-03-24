@@ -9,6 +9,7 @@ import tool.xfy9326.naucourses.network.clients.base.LoginInfo
 import tool.xfy9326.naucourses.network.clients.base.LoginResponse
 import tool.xfy9326.naucourses.providers.GlobalCacheLoader
 import tool.xfy9326.naucourses.tools.EventLiveData
+import tool.xfy9326.naucourses.tools.NotifyLivaData
 import tool.xfy9326.naucourses.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourses.utils.secure.AccountUtils
 
@@ -16,7 +17,7 @@ class LoginViewModel : BaseViewModel() {
     val isLoginLoading = EventLiveData(false)
     val errorReasonType = EventLiveData<LoginResponse.ErrorReason>()
     val loginProcess = EventLiveData<LoadingProcess>()
-    val loginSuccess = EventLiveData(false)
+    val loginSuccess = NotifyLivaData()
     val cachedUserId = EventLiveData<String>()
 
     enum class LoadingProcess {
@@ -60,7 +61,7 @@ class LoginViewModel : BaseViewModel() {
 
                 loginProcess.postEventValue(LoadingProcess.CACHING)
                 GlobalCacheLoader.loadInitCache()
-                loginSuccess.postEventValue(true)
+                loginSuccess.notifyEvent()
             } else {
                 errorReasonType.postEventValue(loginResult.loginErrorReason)
                 isLoginLoading.postEventValue(false)

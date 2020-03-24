@@ -9,7 +9,7 @@ import androidx.appcompat.widget.AppCompatCheckedTextView
 import tool.xfy9326.naucourses.R
 import kotlin.properties.Delegates
 
-class CourseTimeCell : AppCompatCheckedTextView, View.OnClickListener {
+class CourseTimeEditCell : AppCompatCheckedTextView, View.OnClickListener {
     var showNum by Delegates.notNull<Int>()
         private set
 
@@ -49,6 +49,6 @@ class CourseTimeCell : AppCompatCheckedTextView, View.OnClickListener {
     }
 
     interface OnCheckedChangeListener {
-        fun onCheckedChanged(cellView: CourseTimeCell, isChecked: Boolean)
+        fun onCheckedChanged(cellView: CourseTimeEditCell, isChecked: Boolean)
     }
 }

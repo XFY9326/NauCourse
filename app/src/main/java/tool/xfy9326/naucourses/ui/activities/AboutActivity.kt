@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_about.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourses.BuildConfig
+import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.enableHomeButton
 import tool.xfy9326.naucourses.utils.views.DialogUtils
@@ -28,7 +29,15 @@ class AboutActivity : AppCompatActivity() {
     }
 
     private fun setView() {
-        tv_aboutVersion.text = getString(R.string.version_detail, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
+        tv_aboutVersion.text = if (BuildConfig.DEBUG) {
+            getString(
+                R.string.version_detail,
+                BuildConfig.VERSION_NAME,
+                BuildConfig.VERSION_CODE
+            ) + Constants.SPACE + getString(R.string.debug_version)
+        } else {
+            getString(R.string.version_detail, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
+        }
         layout_aboutEULA.setOnClickListener {
             DialogUtils.createUsingLicenseDialog(this, lifecycle).show()
         }

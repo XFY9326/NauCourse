@@ -16,7 +16,10 @@
     <color name="colorCourseTimeCell">#858585</color>
     <color name="colorCourseTimeCellChecked">#2196F3</color>
     <color name="colorControlIcon">#1976D2</color>
+    <color name="colorFABBackground">#2196F3</color>
 
+    <color name="colorSliderTrackerActive">#2196F3</color>
+    <color name="colorSliderTrackerInActive">#CBE1F3</color>
     <color name="colorPrimaryTextWhenDark">#FFFFFF</color>
     <color name="colorSecondaryTextWhenDark">#C7C7C7</color>
     <color name="colorWeekNumBackground">#00897B</color>
@@ -27,7 +30,7 @@
     <color name="colorCourseTextDark">#2E2E2E</color>
     <color name="colorAttentionRed">#FF4444</color>
     <color name="colorRipple">#65FFFFFF</color>
-    <color name="colorUrlLink">#304FFE</color>
+    <color name="colorUrlLink">#2962FF</color>
 
     <!--  Material 600 Colors  -->
     <color name="material_red_600">#DD191D</color>

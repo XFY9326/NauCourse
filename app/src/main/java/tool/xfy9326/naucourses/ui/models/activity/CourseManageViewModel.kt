@@ -17,6 +17,7 @@ import tool.xfy9326.naucourses.providers.info.methods.CourseInfo
 import tool.xfy9326.naucourses.providers.info.methods.TermDateInfo
 import tool.xfy9326.naucourses.providers.store.CourseCellStyleStore
 import tool.xfy9326.naucourses.tools.EventLiveData
+import tool.xfy9326.naucourses.tools.NotifyLivaData
 import tool.xfy9326.naucourses.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourses.utils.debug.LogUtils
 
@@ -24,7 +25,7 @@ class CourseManageViewModel : BaseViewModel() {
     val rawTermDate = EventLiveData<TermDate>()
     val importCourseResult = EventLiveData<Pair<CourseSet, ImportCourseType>?>()
     val courseManagePkg = MutableLiveData<CourseManagePkg>()
-    val saveSuccess = EventLiveData(false)
+    val saveSuccess = NotifyLivaData()
 
     var colorEditPosition: Int? = null
     var colorEditStyle: CourseCellStyle? = null
@@ -133,8 +134,8 @@ class CourseManageViewModel : BaseViewModel() {
                             TermDateInfo.saveCustomTermDate(termDate)
                         }
                     }
-                    saveSuccess.postEventValue(true)
-                    App.instance.courseStyleTermUpdate.postEventValue(true)
+                    saveSuccess.notifyEvent()
+                    App.instance.courseStyleTermUpdate.notifyEvent()
                 } finally {
                     saveLock.unlock()
                 }

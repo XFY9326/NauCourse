@@ -8,12 +8,6 @@
         app:title="@string/display" />
 
     <androidx.preference.Preference
-        app:fragment="tool.xfy9326.naucourses.ui.fragments.settings.NetworkSettingsFragment"
-        app:icon="@drawable/ic_network"
-        app:summary="@string/settings_network_sum"
-        app:title="@string/settings_network" />
-
-    <androidx.preference.Preference
         app:fragment="tool.xfy9326.naucourses.ui.fragments.settings.CourseTableSettingsFragment"
         app:icon="@drawable/ic_table"
         app:summary="@string/settings_course_table_sum"

@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/menu_newsDetailOpenInBrowser"
-        android:icon="@drawable/ic_open_in_browser"
+        android:icon="@drawable/ic_open_in_browser_dark"
         android:title="@string/open_in_browser"
         app:showAsAction="always" />
 

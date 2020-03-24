@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.fragment_news.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.beans.SerializableNews
-import tool.xfy9326.naucourses.io.prefs.AppPref
+import tool.xfy9326.naucourses.io.prefs.SettingsPref
 import tool.xfy9326.naucourses.providers.beans.GeneralNews
 import tool.xfy9326.naucourses.ui.activities.NewsDetailActivity
 import tool.xfy9326.naucourses.ui.dialogs.NewsTypeChoiceDialog
@@ -85,7 +85,7 @@ class NewsFragment : DrawerToolbarFragment<NewsViewModel>(), NewsAdapter.OnNewsI
     }
 
     override fun onNewsItemClick(news: GeneralNews) {
-        if (AppPref.DefaultShowNewsInBrowser) {
+        if (SettingsPref.UseBrowserOpenNewsDetail) {
             IntentUtils.launchUrlInBrowser(requireContext(), news.detailUrl.toString())
         } else {
             startActivity(

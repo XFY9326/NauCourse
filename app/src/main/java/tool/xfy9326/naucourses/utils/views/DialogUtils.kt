@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
@@ -12,8 +13,11 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.slider.Slider
 import com.jaredrummler.android.colorpicker.ColorPickerDialog
 import kotlinx.android.synthetic.main.dialog_bottom_msg.*
+import kotlinx.android.synthetic.main.dialog_course_control_panel.*
+import kotlinx.android.synthetic.main.dialog_image_operation.*
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.ui.views.widgets.StyledColorPickerDialog
@@ -30,6 +34,7 @@ object DialogUtils {
             setPresets(context.resources.getIntArray(R.array.material_colors_600))
             setShowAlphaSlider(false)
         }.create().apply {
+            // 使用构造器后，将构造的参数传给继承的Dialog
             val styledDialog = StyledColorPickerDialog()
             styledDialog.arguments = arguments
             return styledDialog
@@ -40,8 +45,8 @@ object DialogUtils {
         MaterialAlertDialogBuilder(context).apply {
             setItems(context.resources.getStringArray(R.array.course_manage_add_list), listener)
             background = context.getDrawable(R.drawable.bg_dialog)
-        }.create().apply {
-            addAutoCloseListener(lifecycle, this)
+        }.create().also {
+            addAutoCloseListener(lifecycle, it)
         }
 
     fun createUsingLicenseDialog(context: Context, lifecycle: Lifecycle): AlertDialog =
@@ -55,8 +60,8 @@ object DialogUtils {
             )
             setPositiveButton(android.R.string.yes, null)
             background = context.getDrawable(R.drawable.bg_dialog)
-        }.create().apply {
-            addAutoCloseListener(lifecycle, this)
+        }.create().also {
+            addAutoCloseListener(lifecycle, it)
         }
 
     fun createOpenSourceLicenseDialog(context: Context, lifecycle: Lifecycle): AlertDialog =
@@ -70,8 +75,8 @@ object DialogUtils {
             )
             setPositiveButton(android.R.string.yes, null)
             background = context.getDrawable(R.drawable.bg_dialog)
-        }.create().apply {
-            addAutoCloseListener(lifecycle, this)
+        }.create().also {
+            addAutoCloseListener(lifecycle, it)
         }
 
     fun createForgetPasswordDialog(context: Context, lifecycle: Lifecycle): AlertDialog =
@@ -83,8 +88,8 @@ object DialogUtils {
             }
             setPositiveButton(android.R.string.yes, null)
             background = context.getDrawable(R.drawable.bg_dialog)
-        }.create().apply {
-            addAutoCloseListener(lifecycle, this)
+        }.create().also {
+            addAutoCloseListener(lifecycle, it)
         }
 
     fun createLogoutAttentionDialog(context: Context, lifecycle: Lifecycle, logoutListener: DialogInterface.OnClickListener): AlertDialog =
@@ -94,8 +99,70 @@ object DialogUtils {
             setNegativeButton(android.R.string.cancel, null)
             setPositiveButton(android.R.string.yes, logoutListener)
             background = context.getDrawable(R.drawable.bg_dialog)
-        }.create().apply {
-            addAutoCloseListener(lifecycle, this)
+        }.create().also {
+            addAutoCloseListener(lifecycle, it)
+        }
+
+    fun createImageOperationDialog(context: Context, lifecycle: Lifecycle, shareListener: (() -> Unit), saveListener: (() -> Unit)) =
+        BottomSheetDialog(context).apply {
+            setContentView(R.layout.dialog_image_operation)
+            val parentView = findViewById<ViewGroup>(com.google.android.material.R.id.design_bottom_sheet)
+            parentView?.background = context.getDrawable(R.drawable.bg_dialog)
+
+            tv_dialogShareImage.setOnClickListener {
+                shareListener.invoke()
+                dismiss()
+            }
+            tv_dialogSaveImage.setOnClickListener {
+                saveListener.invoke()
+                dismiss()
+            }
+
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }.also {
+            addAutoCloseListener(lifecycle, it)
+        }
+
+    fun createCourseTableControlDialog(
+        context: Context, lifecycle: Lifecycle, nowWeekNum: Int, nowShowWeekNum: Int,
+        maxWeekNum: Int, weekNumChangeListener: ((Int) -> Unit)
+    ) =
+        BottomSheetDialog(context).apply {
+            setContentView(R.layout.dialog_course_control_panel)
+            val parentView = findViewById<ViewGroup>(com.google.android.material.R.id.design_bottom_sheet)
+            parentView?.background = context.getDrawable(android.R.color.transparent)
+
+            if (nowWeekNum != 0) tv_courseControlCurrentWeekNum.text = context.getString(R.string.current_week_num, nowWeekNum)
+
+            slider_courseControlWeekNum.apply {
+                valueTo = maxWeekNum.toFloat()
+                value = nowShowWeekNum.toFloat()
+                setLabelFormatter {
+                    context.getString(R.string.week_num, it.toInt())
+                }
+                addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+                    private var startValue = -1f
+                    override fun onStartTrackingTouch(slider: Slider) {
+                        startValue = slider.value
+                    }
+
+                    override fun onStopTrackingTouch(slider: Slider) {
+                        if (startValue != slider.value) {
+                            startValue = slider.value
+                            weekNumChangeListener.invoke(slider.value.toInt())
+                        }
+                    }
+                })
+            }
+
+            window?.apply {
+                addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+                attributes.dimAmount = 0.2f
+            }
+
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }.also {
+            addAutoCloseListener(lifecycle, it)
         }
 
     fun createBottomMsgDialog(context: Context, lifecycle: Lifecycle, title: String, msg: String, listener: View.OnClickListener? = null) =
@@ -120,10 +187,11 @@ object DialogUtils {
             }
 
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
-        }.apply {
-            addAutoCloseListener(lifecycle, this)
+        }.also {
+            addAutoCloseListener(lifecycle, it)
         }
 
+    // Activity销毁时自动关闭Dialog，防止窗体泄漏
     private fun addAutoCloseListener(lifecycle: Lifecycle, dialog: Dialog) {
         val observer = object : DefaultLifecycleObserver {
             override fun onDestroy(owner: LifecycleOwner) {

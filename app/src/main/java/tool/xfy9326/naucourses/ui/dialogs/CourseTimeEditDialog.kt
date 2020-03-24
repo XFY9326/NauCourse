@@ -17,7 +17,7 @@ import tool.xfy9326.naucourses.providers.beans.jwc.TimePeriod
 import tool.xfy9326.naucourses.providers.beans.jwc.TimePeriodList
 import tool.xfy9326.naucourses.providers.beans.jwc.WeekMode
 import tool.xfy9326.naucourses.ui.views.widgets.AdvancedFrameLayout
-import tool.xfy9326.naucourses.ui.views.widgets.CourseTimeCell
+import tool.xfy9326.naucourses.ui.views.widgets.CourseTimeEditCell
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.showToast
 import kotlin.properties.Delegates
 
@@ -41,7 +41,7 @@ class CourseTimeEditDialog : DialogFragment() {
     private var courseTime: CourseTime? = null
     private var maxWeekNum by Delegates.notNull<Int>()
     private var position: Int? = null
-    private lateinit var timeViewList: ArrayList<CourseTimeCell>
+    private lateinit var timeViewList: ArrayList<CourseTimeEditCell>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -147,13 +147,13 @@ class CourseTimeEditDialog : DialogFragment() {
                 rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                 columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
             }
-            val cellView = CourseTimeCell(requireContext(), num, checked).apply {
+            val cellView = CourseTimeEditCell(requireContext(), num, checked).apply {
                 layoutParams = FrameLayout.LayoutParams(size, size).apply {
                     this.gravity = Gravity.CENTER
                     setMargins(resources.getDimension(R.dimen.course_time_button_margin).toInt())
                 }
-                setOnCheckedChangeListener(object : CourseTimeCell.OnCheckedChangeListener {
-                    override fun onCheckedChanged(cellView: CourseTimeCell, isChecked: Boolean) {
+                setOnCheckedChangeListener(object : CourseTimeEditCell.OnCheckedChangeListener {
+                    override fun onCheckedChanged(cellView: CourseTimeEditCell, isChecked: Boolean) {
                         if (isChecked) {
                             when (view.radioGroup_weekMode.checkedRadioButtonId) {
                                 R.id.radioBtn_oddWeekMode -> if (cellView.showNum % 2 == 0) view.radioBtn_allWeeksMode.isChecked = true

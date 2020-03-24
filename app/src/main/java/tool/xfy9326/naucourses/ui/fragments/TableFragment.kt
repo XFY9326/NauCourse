@@ -5,10 +5,13 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.fragment_table.*
+import kotlinx.android.synthetic.main.fragment_table.view.*
 import kotlinx.android.synthetic.main.view_course_table_header.*
 import kotlinx.coroutines.*
+import tool.xfy9326.naucourses.App
 import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.beans.CoursePkg
+import tool.xfy9326.naucourses.io.prefs.SettingsPref
 import tool.xfy9326.naucourses.ui.fragments.base.ViewModelFragment
 import tool.xfy9326.naucourses.ui.models.fragment.CourseTableViewModel
 import tool.xfy9326.naucourses.ui.views.helpers.CourseTableViewHelper
@@ -64,6 +67,25 @@ class TableFragment : ViewModelFragment<CourseTableViewModel>() {
         }
     }
 
+    override fun setMenuVisibility(menuVisible: Boolean) {
+        super.setMenuVisibility(menuVisible)
+        // 由于ViewPager预加载，无法判断Fragment是否处于显示状态
+        // 此处借助只有一个Fragment会控制Menu是否可见，来判断Fragment是否处于显示状态
+        if (!menuVisible) {
+            // 若当前课表不可见，则滚动回顶部
+            requireView().layout_courseTable.apply {
+                if (scrollY != 0) scrollTo(0, 0)
+            }
+        }
+    }
+
+    override fun bindViewModel(viewModel: CourseTableViewModel) {
+        App.instance.requestRebuildCourseTable.observeNotification(viewLifecycleOwner, {
+            val temp = viewModel.coursePkgSavedTemp[weekNum - 1]
+            if (temp != null) buildCourseTableView(temp)
+        }, "${TableFragment::class.java.simpleName}-$weekNum")
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         tableScope.cancel()
@@ -75,7 +97,7 @@ class TableFragment : ViewModelFragment<CourseTableViewModel>() {
                 launch {
                     val dateInfo = async { TimeUtils.getWeekNumDateArray(coursePkg.termDate.startDate, weekNum) }
                     val today = async { TimeUtils.getTodayDate() }
-                    val hasWeekendCourse = CourseTableViewHelper.hasWeekendCourse(coursePkg.courseTable)
+                    val hasWeekendCourse = SettingsPref.ForceShowCourseTableWeekends || CourseTableViewHelper.hasWeekendCourse(coursePkg.courseTable)
                     val weekDayShowSize = getWeekDayShowSize(hasWeekendCourse)
                     buildCourseTableHeader(today.await(), dateInfo.await(), weekDayShowSize, hasWeekendCourse)
 
@@ -85,7 +107,12 @@ class TableFragment : ViewModelFragment<CourseTableViewModel>() {
                         hasWeekendCourse,
                         coursePkg,
                         gl_courseTable,
-                        width
+                        width,
+                        CourseTableViewHelper.CourseTableStyle(
+                            SettingsPref.SameCourseCellHeight,
+                            SettingsPref.CourseTableRoundCompat,
+                            SettingsPref.CenterHorizontalShowCourseText
+                        )
                     )
                 }
             }

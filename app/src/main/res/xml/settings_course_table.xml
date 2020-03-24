@@ -2,7 +2,34 @@
 <androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
     <tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory
         app:iconSpaceReserved="false"
-        app:title="@string/display">
+        app:title="@string/course_cell_style">
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="SameCourseCellHeight"
+            app:summary="@string/course_table_cell_same_height_sum"
+            app:title="@string/course_table_cell_same_height" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="CenterHorizontalShowCourseText"
+            app:summary="@string/course_table_cell_center_horizontal_show_sum"
+            app:title="@string/course_table_cell_center_horizontal_show" />
+
+    </tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory>
+
+    <tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/course_table_style">
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="ForceShowCourseTableWeekends"
+            app:summary="@string/force_show_weekend_course_sum"
+            app:title="@string/force_show_weekend_course" />
 
         <androidx.preference.CheckBoxPreference
             app:defaultValue="false"

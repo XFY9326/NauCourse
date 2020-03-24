@@ -27,10 +27,17 @@ object SettingsPref : BasePref() {
 
     fun getDefaultEnterInterface() = EnterInterfaceType.valueOf(DefaultEnterInterface!!)
 
+    val UseBrowserOpenNewsDetail by pref.boolean(defValue = false)
+
 
     // CourseTableSettingsFragment
     val CourseTableRoundCompat by pref.boolean(defValue = false)
+    val ForceShowCourseTableWeekends by pref.boolean(defValue = false)
+    val SameCourseCellHeight by pref.boolean(defValue = true)
+    val CenterHorizontalShowCourseText by pref.boolean(defValue = false)
 
+    // UpdateSettingsFragment
+    val AutoCheckUpdates by pref.boolean(defValue = true)
 
     // DebugSettingsFragment
     val DebugMode by pref.boolean(defValue = BuildConfig.DEBUG)

@@ -17,6 +17,7 @@ import tool.xfy9326.naucourses.App
 import tool.xfy9326.naucourses.Constants
 import tool.xfy9326.naucourses.R
 import tool.xfy9326.naucourses.providers.beans.jwc.StudentInfo
+import tool.xfy9326.naucourses.tools.Event
 import tool.xfy9326.naucourses.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourses.ui.dialogs.FullScreenLoadingDialog
 import tool.xfy9326.naucourses.ui.fragments.CourseArrangeFragment
@@ -31,19 +32,14 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     companion object {
         private const val DEFAULT_NAV_HEADER_INDEX = 0
 
-        enum class FragmentType {
-            COURSE_TABLE,
-            COURSE_ARRANGE,
-            NEWS,
-            NONE
-        }
-
         private val FRAGMENTS = mapOf<FragmentType, DrawerToolbarFragment<*>>(
             FragmentType.COURSE_TABLE to CourseTableFragment(),
             FragmentType.COURSE_ARRANGE to CourseArrangeFragment(),
             FragmentType.NEWS to NewsFragment()
         )
     }
+
+    private var nightModeObserver: Observer<in Event<Unit>>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,6 +111,9 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        drawer_main.post {
+            drawer_main.closeDrawers()
+        }
         when (item.itemId) {
             R.id.menu_navCourseArrange -> showFragment(FragmentType.COURSE_ARRANGE)
             R.id.menu_navCourseTable -> showFragment(FragmentType.COURSE_TABLE)
@@ -124,7 +123,6 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
             R.id.menu_navLogout -> logout()
             R.id.menu_navExit -> finishAndRemoveTask()
         }
-        drawer_main.closeDrawers()
         return true
     }
 
@@ -144,19 +142,15 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
             nav_main.getHeaderView(DEFAULT_NAV_HEADER_INDEX).tv_userId.text = it.personalInfo.stuId.second
             nav_main.getHeaderView(DEFAULT_NAV_HEADER_INDEX).tv_userName.text = StudentInfo.trimExtra(it.personalInfo.name.second)
         })
-        viewModel.logoutSuccess.observeEvent(this, Observer {
-            if (it) {
-                (supportFragmentManager.findFragmentByTag(FullScreenLoadingDialog.LOADING_DIALOG_TAG) as DialogFragment?)?.dismissAllowingStateLoss()
-                BaseUtils.restartApplication(this)
-            }
+        viewModel.logoutSuccess.observeNotification(this, {
+            (supportFragmentManager.findFragmentByTag(FullScreenLoadingDialog.LOADING_DIALOG_TAG) as DialogFragment?)?.dismissAllowingStateLoss()
+            BaseUtils.restartApplication(this)
         })
-        App.instance.mainNightModeChanged.apply {
-            if (!hasObservers()) {
-                observeEventForever(Observer {
-                    if (it) recreate()
-                })
-            }
-        }
+        // 需要Activity在后台时也监听夜间模式设定变化，防止延迟的界面更新
+        tryRemoveNightModeObserver()
+        nightModeObserver = App.instance.nightModeChanged.observeNotificationForever({
+            recreate()
+        }, MainDrawerActivity::class.java.simpleName)
     }
 
     override fun onBackPressed() {
@@ -165,5 +159,25 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         } else {
             moveTaskToBack(false)
         }
+    }
+
+    @Synchronized
+    private fun tryRemoveNightModeObserver() {
+        if (nightModeObserver != null) {
+            App.instance.nightModeChanged.removeObserver(nightModeObserver!!)
+            nightModeObserver = null
+        }
+    }
+
+    override fun onDestroy() {
+        tryRemoveNightModeObserver()
+        super.onDestroy()
+    }
+
+    enum class FragmentType {
+        COURSE_TABLE,
+        COURSE_ARRANGE,
+        NEWS,
+        NONE
     }
 }

@@ -29,7 +29,6 @@ import tool.xfy9326.naucourses.ui.views.recyclerview.AdvancedDivider
 import tool.xfy9326.naucourses.ui.views.recyclerview.SwipeItemCallback
 import tool.xfy9326.naucourses.ui.views.recyclerview.adapters.CourseAdapter
 import tool.xfy9326.naucourses.utils.compute.TimeUtils
-import tool.xfy9326.naucourses.utils.views.ActivityUtils
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.enableHomeButton
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.showSnackBar
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.showSnackBarWithCallback
@@ -116,8 +115,8 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
         viewModel.courseManagePkg.observe(this, Observer {
             courseAdapter.setCourseManagePkg(it)
         })
-        viewModel.saveSuccess.observeEvent(this, Observer {
-            if (it) super.onBackPressed()
+        viewModel.saveSuccess.observeNotification(this, {
+            super.onBackPressed()
         })
         viewModel.rawTermDate.observeEvent(this, Observer {
             courseAdapter.updateTermDate(it)
@@ -366,7 +365,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
 
     private fun checkSaveForExit() {
         if (dataChanged) {
-            ActivityUtils.showSnackBarWithCallback(layout_courseManage, R.string.exit_edit_without_save, android.R.string.yes, View.OnClickListener {
+            showSnackBarWithCallback(layout_courseManage, R.string.exit_edit_without_save, android.R.string.yes, View.OnClickListener {
                 super.onBackPressed()
             })
         } else {

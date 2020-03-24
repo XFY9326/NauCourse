@@ -163,6 +163,7 @@ class CourseDetailDialog : DialogFragment() {
     }
 
     private fun loadLess(contentView: View) {
+        // 提前隐藏，避免重影
         contentView.layout_moreCourseInfo.visibility = View.GONE
         contentView.layout_moreCourseInfo.removeAllViews()
     }

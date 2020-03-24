@@ -101,6 +101,10 @@ object Constants {
     }
 
     object Pref {
-        const val NIGHT_MODE = "NightMode"
+        const val NightMode = "NightMode"
+        const val ForceShowCourseTableWeekends = "ForceShowCourseTableWeekends"
+        const val SameCourseCellHeight = "SameCourseCellHeight"
+        const val CenterHorizontalShowCourseText = "CenterHorizontalShowCourseText"
+        const val CheckUpdatesNow = "CheckUpdatesNow"
     }
 }

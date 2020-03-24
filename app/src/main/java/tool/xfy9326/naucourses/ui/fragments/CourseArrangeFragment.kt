@@ -66,7 +66,7 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
             viewModel.refreshArrangeCourses(true)
         }
         tv_todayCourseMore.setOnClickListener {
-            (requireActivity() as MainDrawerActivity).showFragment(MainDrawerActivity.Companion.FragmentType.COURSE_TABLE)
+            (requireActivity() as MainDrawerActivity).showFragment(MainDrawerActivity.FragmentType.COURSE_TABLE)
         }
     }
 
@@ -101,11 +101,9 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
                 }
             }.show(childFragmentManager, null)
         })
-        App.instance.courseStyleTermUpdate.observeEvent(viewLifecycleOwner, Observer {
-            if (it) {
-                getViewModel().refreshArrangeCourses(false)
-            }
-        })
+        App.instance.courseStyleTermUpdate.observeNotification(viewLifecycleOwner, {
+            getViewModel().refreshArrangeCourses(false)
+        }, CourseArrangeFragment::class.java.simpleName)
     }
 
     private fun buildTermDate(termDate: TermDate?) {

@@ -22,7 +22,7 @@ class NewsDetailViewModel : BaseViewModel() {
     private val loadingLock = ReentrantLock()
 
     val newsDetail = MutableLiveData<GeneralNewsDetail>()
-    val isRefreshing = MutableLiveData(false)
+    val isRefreshing = EventLiveData(false)
     val errorNotifyType = EventLiveData<ContentErrorReason>()
     val imageOperation = EventLiveData<ImageOperationType>()
     val imageShareUri = EventLiveData<Uri>()
@@ -37,7 +37,7 @@ class NewsDetailViewModel : BaseViewModel() {
         if (loadingLock.tryLock()) {
             viewModelScope.launch {
                 try {
-                    isRefreshing.postValue(true)
+                    isRefreshing.postEventValue(true)
                     withContext(Dispatchers.Default) {
 
                         val result = NewsInfo.getDetailNewsInfo(url, postSource)
@@ -48,7 +48,7 @@ class NewsDetailViewModel : BaseViewModel() {
                         }
                     }
                 } finally {
-                    isRefreshing.postValue(false)
+                    isRefreshing.postEventValue(false)
                     loadingLock.unlock()
                 }
             }

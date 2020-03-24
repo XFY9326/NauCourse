@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.preference.Preference
+        app:iconSpaceReserved="false"
+        app:key="CheckUpdatesNow"
+        app:summary="@string/update_check_sum"
+        app:title="@string/update_check" />
 
+    <tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/auto_update_check_settings">
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="AutoCheckUpdates"
+            app:summary="@string/auto_update_check_sum"
+            app:title="@string/auto_update_check" />
+
+    </tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory>
 </androidx.preference.PreferenceScreen>

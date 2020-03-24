@@ -69,13 +69,11 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
         viewModel.errorReasonType.observeEvent(this, Observer {
             showSnackBar(layout_activityLogin, I18NUtils.getErrorMsgResId(it)!!)
         })
-        viewModel.loginSuccess.observeEvent(this, Observer {
-            if (it) {
-                System.gc()
-                startActivity(Intent(this, MainDrawerActivity::class.java))
-                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                finishAfterTransition()
-            }
+        viewModel.loginSuccess.observeNotification(this, {
+            System.gc()
+            startActivity(Intent(this, MainDrawerActivity::class.java))
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+            finishAfterTransition()
         })
         viewModel.loginProcess.observeEvent(this, Observer {
             val resId = I18NUtils.getLoadingProcessResId(it)

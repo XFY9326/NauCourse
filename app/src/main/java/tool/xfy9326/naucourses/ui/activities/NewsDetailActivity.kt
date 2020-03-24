@@ -6,13 +6,9 @@ import android.os.Bundle
 import android.text.Html
 import android.view.Menu
 import android.view.MenuItem
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.activity_news_detail.*
-import kotlinx.android.synthetic.main.dialog_image_operation.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,12 +28,13 @@ import tool.xfy9326.naucourses.utils.utility.IntentUtils
 import tool.xfy9326.naucourses.utils.utility.ShareUtils
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.enableHomeButton
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.showSnackBar
+import tool.xfy9326.naucourses.utils.views.DialogUtils
 import tool.xfy9326.naucourses.utils.views.I18NUtils
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>() {
+class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTagHandler.OnImageLongPressListener {
     private val newsDetailScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     private var imageGetter: HtmlImageGetter? = null
     private lateinit var newsData: SerializableNews
@@ -97,7 +94,7 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>() {
     )
 
     override fun bindViewModel(viewModel: NewsDetailViewModel) {
-        viewModel.isRefreshing.observe(this, Observer {
+        viewModel.isRefreshing.observeEvent(this, Observer {
             asl_newsDetailRefreshLayout.post {
                 asl_newsDetailRefreshLayout.isRefreshing = it
             }
@@ -128,11 +125,7 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>() {
                     newsData.postSource
                 )
                 val tagHandler = AdvancedTagHandler()
-                tagHandler.setOnImageLongPressListener(object : AdvancedTagHandler.OnImageLongPressListener {
-                    override fun onHtmlTextImageLongPress(source: String, bitmap: Bitmap) {
-                        showImageOperationDialog(source, bitmap)
-                    }
-                })
+                tagHandler.setOnImageLongPressListener(this)
                 Html.fromHtml(detail.htmlContent, Html.FROM_HTML_MODE_LEGACY, imageGetter, tagHandler)
             } else {
                 @Suppress("DEPRECATION")
@@ -145,24 +138,10 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>() {
         tv_newsDetailContent.movementMethod = AdvancedLinkMovementMethod
     }
 
-    private fun showImageOperationDialog(source: String, bitmap: Bitmap) {
-        BottomSheetDialog(this).apply {
-            setContentView(R.layout.dialog_image_operation)
-            val parentView = findViewById<ViewGroup>(com.google.android.material.R.id.design_bottom_sheet)
-            parentView?.background = getDrawable(R.drawable.bg_dialog)
-
-            tv_dialogShareImage.setOnClickListener {
-                getViewModel().shareImage(source, bitmap)
-                dismiss()
-            }
-            tv_dialogSaveImage.setOnClickListener {
-                getViewModel().saveNewsImage(source, bitmap)
-                dismiss()
-            }
-
-            behavior.state = BottomSheetBehavior.STATE_EXPANDED
-        }.show()
-    }
+    override fun onHtmlTextImageLongPress(source: String, bitmap: Bitmap) =
+        DialogUtils.createImageOperationDialog(this, lifecycle,
+            { getViewModel().shareImage(source, bitmap) },
+            { getViewModel().saveNewsImage(source, bitmap) }).show()
 
     override fun onDestroy() {
         newsDetailScope.cancel()
