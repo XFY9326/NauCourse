@@ -94,6 +94,7 @@ open class VPNClient(loginInfo: LoginInfo, loginUrl: HttpUrl? = null) :
     @CallSuper
     override fun logoutInternal(): Boolean = vpnLogout() && super.logoutInternal()
 
+    @Suppress("MemberVisibilityCanBePrivate")
     fun vpnLogout(): Boolean = newVPNCall(Request.Builder().url(VPN_LOGOUT_URL).build()).use {
         val content = it.body?.string()!!
         return it.isSuccessful && SSO_LOGIN_PAGE_STR in content

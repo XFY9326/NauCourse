@@ -2,8 +2,8 @@ package tool.xfy9326.naucourses.ui.models.fragment
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import tool.xfy9326.naucourses.beans.CourseArrange
@@ -35,7 +35,7 @@ class CourseArrangeViewModel : BaseViewModel() {
     @Volatile
     private lateinit var termDate: TermDate
 
-    private lateinit var initDeferred: Deferred<*>
+    private lateinit var initJob: Job
 
     val nextCourseData = MutableLiveData<CourseItem?>()
     val isRefreshing = MutableLiveData<Boolean>()
@@ -53,18 +53,18 @@ class CourseArrangeViewModel : BaseViewModel() {
     }
 
     override fun onInitView(isRestored: Boolean) {
-        if (!isRestored) initDeferred = loadInitCache()
+        if (!isRestored) initJob = loadInitCache()
 
         viewModelScope.launch {
-            if (this@CourseArrangeViewModel::initDeferred.isInitialized) {
-                if (initDeferred.isActive) initDeferred.await()
+            if (this@CourseArrangeViewModel::initJob.isInitialized) {
+                if (initJob.isActive) initJob.join()
                 refreshArrangeCourses()
                 refreshNextCoursePosition()
             }
         }
     }
 
-    private fun loadInitCache() = viewModelScope.async(Dispatchers.Default) {
+    private fun loadInitCache() = viewModelScope.launch(Dispatchers.Default) {
         val arrangeCache = CourseArrangeStore.loadStore()
         if (arrangeCache != null) {
             todayCourses.postValue(arrangeCache.todayCourseArr)

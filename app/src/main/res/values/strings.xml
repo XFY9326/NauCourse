@@ -69,7 +69,6 @@
     <string name="course_time">时间：%1$s 周%2$s %3$s</string>
     <string name="news_detail_info">发布：%1$s</string>
     <string name="news_detail_info_with_click_amount">发布：%1$s 浏览量：%2$d</string>
-    <string name="refresh">刷新</string>
     <string name="open_in_browser">在浏览器中打开</string>
     <string name="user_info_base">基础信息</string>
     <string name="user_info_learning_process">修学进度</string>
@@ -153,8 +152,6 @@
     <string name="course_num_join_symbol">~</string>
     <string name="course_num">第%1$d节</string>
     <string name="week_day">周%1$s</string>
-    <string name="course_time_edit_cancel">已取消课程时间编辑！</string>
-    <string name="course_edit_cancel">已取消课程编辑！</string>
     <string name="weeks">第%1$s周</string>
     <string name="weeks_odd">第%1$s之单周</string>
     <string name="weeks_even">第%1$s之双周</string>
@@ -166,7 +163,6 @@
     <string name="time_conflict_msg">时间1：%1$s 周%2$s %3$s\n时间2：%4$s 周%5$s %6$s</string>
     <string name="course_conflict_msg">课程1：%1$s\n时间1：%2$s 周%3$s %4$s\n课程1：%5$s\n时间2：%6$s 周%7$s %8$s</string>
     <string name="save">保存</string>
-    <string name="save_success">保存成功！</string>
     <string name="save_failed">保存失败！</string>
     <string name="same_course_time_exists">存在相同的课程时间！保存失败！</string>
     <string name="course_name_empty">请输入课程名称！</string>
@@ -191,7 +187,6 @@
     <string name="delete_all_courses">删除全部课程</string>
     <string name="delete_all_courses_msg">是否删除全部课程？</string>
     <string name="next_course_import_attention_msg">\u3000\u3000由于只能同步教务当前学期的开始与结束数据，导入下学期的课程时可能需要您手动更改学期设定！导入的学期为：%1$s\n\u3000\u3000注：点击顶部工具栏的学期设定按钮即可以更改学期。</string>
-    <string name="show_course_table">显示课程表</string>
     <string name="display">显示</string>
     <string name="settings_display_sum">应用界面显示以及主题设置</string>
     <string name="settings_course_table">课程表</string>

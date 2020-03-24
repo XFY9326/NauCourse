@@ -116,6 +116,7 @@ data class CourseTime(
 
     fun isWeekNumTrue(weekNum: Int): Boolean = TimePeriod.isIndexTrue(weeksCharArray, weekNum - 1)
 
+    @Suppress("MemberVisibilityCanBePrivate")
     fun isCourseNumTrue(courseNum: Int): Boolean = TimePeriod.isIndexTrue(coursesNumCharArray, courseNum - 1)
 
     fun hasConflict(courseTime: CourseTime): Boolean {

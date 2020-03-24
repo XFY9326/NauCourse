@@ -30,10 +30,6 @@ object AppDBHelper {
         newsArray
     }
 
-    fun clearGeneralNewsByType(type: GeneralNews.PostSource) = with(appDB.getNewsDataDao()) {
-        clearNewsByType(type.name)
-    }
-
     @Synchronized
     fun clearGeneralNewsSet() = with(appDB.getNewsDataDao()) {
         clearAllNews()

@@ -7,6 +7,7 @@ import android.view.animation.AnimationUtils
 import androidx.gridlayout.widget.GridLayout
 
 
+@Suppress("MemberVisibilityCanBePrivate")
 class AdvancedGridLayout : GridLayout {
     constructor(context: Context) : super(context)
 

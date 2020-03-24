@@ -5,6 +5,7 @@ import tool.xfy9326.naucourses.BuildConfig
 import tool.xfy9326.naucourses.io.prefs.SettingsPref
 import java.util.*
 
+@Suppress("unused")
 object LogUtils {
     private val LOG_ON = BuildConfig.DEBUG
     private val LOG_SAVE_ON get() = SettingsPref.DebugMode && SettingsPref.DebugLogCatch

@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import tool.xfy9326.naucourses.io.prefs.SettingsPref
 import kotlin.system.exitProcess
 
-
+@Suppress("unused")
 object BaseUtils {
     const val CRASH_RESTART_FLAG = "CRASH_RESTART"
 

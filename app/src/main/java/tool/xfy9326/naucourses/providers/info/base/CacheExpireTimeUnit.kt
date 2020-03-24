@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourses.providers.info.base
 
+@Suppress("unused")
 enum class CacheExpireTimeUnit {
     MINUTE {
         override val offset: Long = 60 * 1000

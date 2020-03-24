@@ -82,6 +82,7 @@ class JwcClient(loginInfo: LoginInfo) : SSOClient(loginInfo, JWC_SSO_LOGIN_URL) 
 
     override fun logoutInternal(): Boolean = jwcLogout() && super.logoutInternal()
 
+    @Suppress("MemberVisibilityCanBePrivate")
     fun jwcLogout(): Boolean = newJwcCall(Request.Builder().url(JWC_LOGOUT_URL).build()).use {
         return it.isSuccessful && it.request.url == JWC_LOGIN_URL
     }

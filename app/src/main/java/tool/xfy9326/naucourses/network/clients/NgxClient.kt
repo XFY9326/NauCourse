@@ -142,6 +142,7 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
 
     override fun logoutInternal(): Boolean = ngxLogout()
 
+    @Suppress("MemberVisibilityCanBePrivate")
     fun ngxLogout(clearCookies: Boolean = true): Boolean =
         newNGXCall(Request.Builder().url(NGX_LOGOUT_URL).build()).use {
             val result = it.body?.string()!!.contains(LOGIN_PAGE_STR)

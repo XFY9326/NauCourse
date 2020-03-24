@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourses.providers.info.base
 
+@Suppress("unused")
 abstract class BaseMultiContentInfo<T : Enum<*>, P : Enum<*>> : BaseContentInfo<T, P>() {
     suspend fun <E : Any> getInfo(type: T, param: P, loadCache: Boolean = false, forceRefresh: Boolean = false): InfoResult<E> =
         getInfo(type, setOf(param), loadCache, forceRefresh)

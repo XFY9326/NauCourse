@@ -13,5 +13,5 @@ object ColorUtils {
 
     fun isLightColor(color: Int) = ColorUtils.calculateLuminance(color) >= LUMINANCE_IS_LIGHT_COLOR
 
-    fun getRandomMaterialColor() = MATERIAL_COLOR.random().toInt()
+    fun getRandomMaterialColor() = MATERIAL_COLOR.random()
 }

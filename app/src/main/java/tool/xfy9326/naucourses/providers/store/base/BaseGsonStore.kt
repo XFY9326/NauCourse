@@ -4,6 +4,7 @@ import tool.xfy9326.naucourses.io.gson.GsonStoreManager
 import tool.xfy9326.naucourses.io.gson.GsonStoreType
 import java.util.*
 
+@Suppress("unused")
 abstract class BaseGsonStore<T : Any> {
     protected abstract val storeType: GsonStoreType
     protected abstract val useCache: Boolean

@@ -20,7 +20,6 @@ object VPNTools {
     private const val BYTE_SIZE_16 = 16
     private const val BYTE_SIZE_32 = 32
     private const val VPN_URL_SCHEME_JOIN_SYMBOL = "-"
-    private const val URL_QUERY_START_SYMBOL = "?"
 
     private fun encryptHost(host: String): String = encrypt(
         host,

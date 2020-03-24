@@ -26,6 +26,7 @@ object ImageUtils {
 
     fun clearLocalImageBySubDir(dirName: String) = IOUtils.deleteFile(PathUtils.getImageLocalSavePath() + dirName)
 
+    @Suppress("unused")
     fun clearAllLocalImageDir() = IOUtils.deleteFile(PathUtils.getImageLocalSavePath())
 
     // 保存图片到本地（..Android/data/{packageName}/files/Pictures/{dirName}/..）或系统相册（..Pictures/NauCourse/{dirName}/..）

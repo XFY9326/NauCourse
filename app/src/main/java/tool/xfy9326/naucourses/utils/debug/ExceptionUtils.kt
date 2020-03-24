@@ -7,8 +7,10 @@ import tool.xfy9326.naucourses.io.prefs.SettingsPref
 import tool.xfy9326.naucourses.utils.BaseUtils
 import java.io.PrintWriter
 import java.io.StringWriter
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
+@Suppress("unused")
 object ExceptionUtils : Thread.UncaughtExceptionHandler {
     private const val CRASH_RESTART_PERIOD_MILLS = 3000L
     private val THROWS_ON = BuildConfig.DEBUG
@@ -68,6 +70,7 @@ object ExceptionUtils : Thread.UncaughtExceptionHandler {
         var th: Throwable? = throwable
         while (th != null) {
             if (th is UnknownHostException) return "UnknownHostException: Network Unavailable! ${th.message}"
+            if (th is SocketTimeoutException) return "SocketTimeoutException: Network Connection Timeout! ${th.message}"
             th = th.cause
         }
         val writer = StringWriter()

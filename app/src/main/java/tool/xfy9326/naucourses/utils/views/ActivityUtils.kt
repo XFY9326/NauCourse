@@ -13,7 +13,6 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.view_toast.view.*
 import tool.xfy9326.naucourses.R
 
-
 object ActivityUtils {
 
     fun showSnackBar(view: CoordinatorLayout, @StringRes strId: Int) =
@@ -42,6 +41,7 @@ object ActivityUtils {
         }
     }
 
+    @Suppress("unused")
     fun AppCompatActivity.disableActionBarTitle() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
     }

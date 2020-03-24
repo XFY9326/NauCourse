@@ -40,6 +40,7 @@ data class GeneralNews(
     }
 
     companion object {
+        @Suppress("unused")
         fun convertPostSourceSetToStringSet(set: Set<PostSource>): Set<String> {
             val result = HashSet<String>(set.size)
             for (postSource in set) {

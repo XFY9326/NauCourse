@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
 
+@Suppress("unused")
 class AdvancedFrameLayout : FrameLayout {
     constructor(context: Context) : super(context)
 

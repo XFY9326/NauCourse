@@ -75,7 +75,7 @@ u_char *RC4::hexToByte(const char *hexContent) {
     if (!hexContent) {
         return nullptr;
     }
-    int hexLen = strlen(hexContent);
+    int hexLen = static_cast<int>(strlen(hexContent));
     if (hexLen <= 0 || 0 != hexLen % 2) {
         return nullptr;
     }

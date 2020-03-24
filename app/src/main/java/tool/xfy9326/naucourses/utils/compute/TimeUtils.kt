@@ -32,6 +32,7 @@ object TimeUtils {
         return calendar
     }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     fun getCourseDate(termStartDate: Date, weekNum: Int, weekDay: Short): Date = getNewCalendar(
         termStartDate
     ).apply {

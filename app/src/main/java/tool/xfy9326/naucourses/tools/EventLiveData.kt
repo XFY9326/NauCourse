@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 
 // 用于只消费一次的事件，主要用于防止View重建时二次传递脏数据
+@Suppress("unused")
 open class EventLiveData<T> : MutableLiveData<Event<T>> {
     constructor() : super()
 
