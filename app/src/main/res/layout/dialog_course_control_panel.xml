@@ -11,7 +11,7 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        app:cardCornerRadius="4dp"
+        app:cardCornerRadius="8dp"
         app:cardElevation="3dp"
         app:cardPreventCornerOverlap="true">
 
@@ -31,6 +31,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/week_num_title"
+                    android:textColor="@color/colorSecondaryText"
                     android:textSize="13sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -40,6 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/current_in_vacation"
+                    android:textColor="@color/colorSecondaryText"
                     android:textSize="13sp"
                     app:layout_constraintBaseline_toBaselineOf="@id/tv_courseControlWeekNumTitle"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -52,9 +54,11 @@
                     android:stepSize="1"
                     android:valueFrom="1"
                     android:valueTo="24"
+                    app:haloColor="@android:color/transparent"
+                    app:haloRadius="0dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_courseControlWeekNumTitle"
-                    app:thumbRadius="6dp"
+                    app:thumbRadius="@dimen/slider_thumb_radius_not_touched"
                     app:tickColor="@android:color/transparent"
                     app:trackColorActive="@color/colorSliderTrackerActive"
                     app:trackColorInactive="@color/colorSliderTrackerInActive"

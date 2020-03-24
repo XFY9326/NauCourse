@@ -148,7 +148,9 @@ object CourseUtils {
                     }
                 }
             }
-            courseTable.toTypedArray()
+            courseTable.sortedBy {
+                it.first.id
+            }.toTypedArray()
         }
     }
 

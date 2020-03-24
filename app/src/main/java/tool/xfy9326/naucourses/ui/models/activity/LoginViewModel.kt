@@ -18,24 +18,12 @@ class LoginViewModel : BaseViewModel() {
     val errorReasonType = EventLiveData<LoginResponse.ErrorReason>()
     val loginProcess = EventLiveData<LoadingProcess>()
     val loginSuccess = NotifyLivaData()
-    val cachedUserId = EventLiveData<String>()
 
     enum class LoadingProcess {
         LOGGING_SSO,
         LOGGING_JWC,
         CACHING,
         NONE
-    }
-
-    override fun onInitView(isRestored: Boolean) {
-        if (!isRestored) {
-            viewModelScope.launch(Dispatchers.Default) {
-                val id = AccountUtils.readSavedCacheUserId()
-                if (id != null) {
-                    cachedUserId.postEventValue(id)
-                }
-            }
-        }
     }
 
     fun doLogin(userId: String, userPw: String) {

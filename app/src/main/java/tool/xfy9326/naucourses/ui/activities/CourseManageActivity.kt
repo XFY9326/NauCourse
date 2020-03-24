@@ -3,7 +3,6 @@ package tool.xfy9326.naucourses.ui.activities
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -35,7 +34,6 @@ import tool.xfy9326.naucourses.utils.views.ActivityUtils.showSnackBarWithCallbac
 import tool.xfy9326.naucourses.utils.views.ActivityUtils.showToast
 import tool.xfy9326.naucourses.utils.views.DialogUtils
 import java.util.*
-import kotlin.properties.Delegates
 
 
 class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseAdapter.Callback, TermDateEditDialog.OnTermEditListener,
@@ -45,22 +43,9 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
 
         private const val COURSE_EDIT_RESULT = 1
         private const val COURSE_ADD_RESULT = 2
-
-        private const val DATA_CHANGED = "DATA_CHANGED"
     }
 
     private lateinit var courseAdapter: CourseAdapter
-    private var dataChanged by Delegates.notNull<Boolean>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        dataChanged = savedInstanceState?.getBoolean(DATA_CHANGED) ?: false
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-        outState.putBoolean(DATA_CHANGED, dataChanged)
-        super.onSaveInstanceState(outState, outPersistentState)
-    }
 
     override fun onCreateContentView(): Int = R.layout.activity_course_manage
 
@@ -138,7 +123,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
     }
 
     override fun onCourseDeleted(adapter: CourseAdapter, lastDeleteItem: Pair<Course, CourseCellStyle>, lastDeleteItemPosition: Int) {
-        dataChanged = true
+        getViewModel().setDataChanged()
         showSnackBarWithCallback(layout_courseManage, R.string.delete_course_success, R.string.revoke, View.OnClickListener {
             adapter.recoverCourse(lastDeleteItem, lastDeleteItemPosition)
         })
@@ -165,16 +150,16 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
             }
             R.id.menu_courseManageDeleteAll -> {
                 showSnackBarWithCallback(layout_courseManage, R.string.delete_all_courses_msg, android.R.string.yes, View.OnClickListener {
-                    dataChanged = true
+                    getViewModel().setDataChanged()
                     courseAdapter.deleteAllCourses()
                     showSnackBar(layout_courseManage, R.string.delete_course_success)
                 })
             }
             R.id.menu_courseManageSave ->
-                if (dataChanged) {
+                if (getViewModel().dataChanged) {
                     val editResult = getEditResult()
                     if (editResult != null) {
-                        dataChanged = false
+                        getViewModel().setDataChanged()
                         getViewModel().saveAll(editResult.first, editResult.second, editResult.third)
                     }
                 } else {
@@ -196,14 +181,14 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
         if (courseAdapter.getTermDate() != termDate) {
             courseAdapter.updateTermDate(termDate)
             getViewModel().requireCleanTermDate = false
-            dataChanged = true
+            getViewModel().setDataChanged()
         }
     }
 
     override fun onTermCustomClear() {
         getViewModel().requireCleanTermDate = true
         getViewModel().refreshRawTermDate()
-        dataChanged = true
+        getViewModel().setDataChanged()
     }
 
     override fun onTermDatePartSet(date: Date, dateType: TermDatePickerDialog.DateType, termDate: TermDate) {
@@ -243,13 +228,13 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
                     if (requestCode == COURSE_EDIT_RESULT) {
                         val position = courseAdapter.updateCourse(course)
                         if (position != null) {
-                            dataChanged = true
+                            getViewModel().setDataChanged()
                             courseAdapter.updateCourseStyle(position, courseCellStyle)
                         } else {
                             showSnackBar(layout_courseManage, R.string.course_edit_failed)
                         }
                     } else if (requestCode == COURSE_ADD_RESULT) {
-                        dataChanged = true
+                        getViewModel().setDataChanged()
                         courseAdapter.insertCourse(course, courseCellStyle)
                     }
                 }
@@ -266,7 +251,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
     }
 
     override fun onCourseImport(courses: ArrayList<Course>, term: Term, type: CourseManageViewModel.ImportCourseType) {
-        dataChanged = true
+        getViewModel().setDataChanged()
         if (type == CourseManageViewModel.ImportCourseType.NEXT_TERM) {
             DialogUtils.createBottomMsgDialog(
                 this, lifecycle, getString(R.string.next_course_import_attention),
@@ -297,7 +282,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
                         if (colorEditStyle!!.color != color) {
                             colorEditStyle!!.color = color
                             courseAdapter.updateCourseStyle(colorEditPosition!!, colorEditStyle!!)
-                            dataChanged = true
+                            getViewModel().setDataChanged()
                         }
                     }
                     colorEditStyle = null
@@ -364,7 +349,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
     }
 
     private fun checkSaveForExit() {
-        if (dataChanged) {
+        if (getViewModel().dataChanged) {
             showSnackBarWithCallback(layout_courseManage, R.string.exit_edit_without_save, android.R.string.yes, View.OnClickListener {
                 super.onBackPressed()
             })

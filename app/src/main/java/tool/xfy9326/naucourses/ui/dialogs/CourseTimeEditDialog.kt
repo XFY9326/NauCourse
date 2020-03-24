@@ -129,7 +129,7 @@ class CourseTimeEditDialog : DialogFragment() {
         val views = Array(maxWeekNum) {
             createCourseTimeButton(view, it + 1, size, courseTime?.isWeekNumTrue(it + 1) ?: DEFAULT_WEEK_NUM_CHECK)
         }
-        layout_courseWeeks.replaceAllViews(views, true)
+        layout_courseWeeks.replaceAllViews(views)
     }
 
     private fun setupRadioGroup(view: View) = view.apply {

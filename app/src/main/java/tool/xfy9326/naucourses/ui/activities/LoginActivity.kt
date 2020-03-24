@@ -52,9 +52,6 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
     }
 
     override fun bindViewModel(viewModel: LoginViewModel) {
-        viewModel.cachedUserId.observeEvent(this, Observer {
-            et_userId.setText(it)
-        })
         viewModel.isLoginLoading.observeEvent(this, Observer {
             tv_loadingMsg.clear()
             et_userId.isEnabled = !it

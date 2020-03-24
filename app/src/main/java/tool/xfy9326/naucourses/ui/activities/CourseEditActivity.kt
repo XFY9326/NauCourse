@@ -122,7 +122,16 @@ class CourseEditActivity : AppCompatActivity(), CourseTimeAdapter.CourseTimeCall
             termDate = getSerializableExtra(TERM_DATE) as TermDate
             courseData = getSerializableExtra(COURSE_DATA) as Course?
             courseId = courseData?.id ?: CourseUtils.getNewCourseId()
-            courseStyle = (getSerializableExtra(COURSE_CELL_STYLE) ?: CourseCellStyle.getDefaultCellStyle(courseId)) as CourseCellStyle
+
+            val tempCourseStyle = getSerializableExtra(COURSE_CELL_STYLE) as CourseCellStyle?
+            if (tempCourseStyle == null) {
+                if (newCourseStyle == null) {
+                    newCourseStyle = CourseCellStyle.getDefaultCellStyle(courseId)
+                }
+                courseStyle = newCourseStyle!!
+            } else {
+                courseStyle = tempCourseStyle
+            }
         }
     }
 

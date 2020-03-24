@@ -2,6 +2,7 @@ package tool.xfy9326.naucourses.beans
 
 import tool.xfy9326.naucourses.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourses.providers.store.CourseCellStyleStore
+import tool.xfy9326.naucourses.utils.debug.LogUtils
 import tool.xfy9326.naucourses.utils.views.ColorUtils
 import java.io.Serializable
 
@@ -14,6 +15,7 @@ data class CourseCellStyle(
         private const val DEFAULT_COURSE_CELL_TEXT_SIZE = 13f
 
         fun getDefaultCellStyle(courseId: String): CourseCellStyle {
+            LogUtils.d<CourseCellStyle>("Creating New Course Style For ID: $courseId")
             return CourseCellStyle(
                 courseId,
                 ColorUtils.getRandomMaterialColor(),

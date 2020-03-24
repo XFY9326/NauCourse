@@ -54,7 +54,7 @@ object CourseTableViewHelper {
     private var COURSE_CELL_BOTTOM_COMPAT_PADDING by Delegates.notNull<Int>()
     private var COURSE_CELL_TEXT_PADDING by Delegates.notNull<Int>()
 
-    private const val DEFAULT_COURSE_CELL_BACKGROUND_ALPHA = 0.6f
+    private const val DEFAULT_COURSE_CELL_BACKGROUND_ALPHA = 0.65f
     private var DEFAULT_COURSE_CELL_BACKGROUND_RADIUS by Delegates.notNull<Float>()
 
     private const val TIME_CELL_TIME_NUM_TEXT_SIZE = 17

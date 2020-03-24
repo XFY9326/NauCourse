@@ -24,8 +24,10 @@ class MainDrawerViewModel : BaseViewModel() {
     val logoutSuccess = NotifyLivaData()
 
     override fun onInitView(isRestored: Boolean) {
-        updatePersonalInfo(true)
-        updateBalance(true)
+        if (!isRestored) {
+            updatePersonalInfo(true)
+            updateBalance(true)
+        }
         updatePersonalInfo()
     }
 

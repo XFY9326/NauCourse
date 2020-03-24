@@ -17,6 +17,7 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment(), Preference
         findPreference<CheckBoxPreference>(Constants.Pref.ForceShowCourseTableWeekends)?.onPreferenceChangeListener = this
         findPreference<CheckBoxPreference>(Constants.Pref.SameCourseCellHeight)?.onPreferenceChangeListener = this
         findPreference<CheckBoxPreference>(Constants.Pref.CenterHorizontalShowCourseText)?.onPreferenceChangeListener = this
+        findPreference<CheckBoxPreference>(Constants.Pref.CourseTableRoundCompat)?.onPreferenceChangeListener = this
     }
 
     // 刷新课表视图

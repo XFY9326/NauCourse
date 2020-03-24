@@ -5,7 +5,6 @@
         app:title="@string/debug">
 
         <androidx.preference.CheckBoxPreference
-            app:defaultValue="false"
             app:iconSpaceReserved="false"
             app:key="DebugMode"
             app:summary="@string/debug_mode_sum"

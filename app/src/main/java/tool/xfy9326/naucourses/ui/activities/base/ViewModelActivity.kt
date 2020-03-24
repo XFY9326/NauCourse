@@ -16,10 +16,10 @@ abstract class ViewModelActivity<T : BaseViewModel> : AppCompatActivity() {
 
     private fun initActivity(savedInstanceState: Bundle?) {
         contentViewModel = onCreateViewModel()
-        contentViewModel.onInitCache(savedInstanceState == null)
+        contentViewModel.onInitCache(savedInstanceState != null)
         bindViewModel(contentViewModel)
         initView(savedInstanceState, contentViewModel)
-        contentViewModel.onInitView(savedInstanceState == null)
+        contentViewModel.onInitView(savedInstanceState != null)
     }
 
     protected fun getViewModel(): T = contentViewModel

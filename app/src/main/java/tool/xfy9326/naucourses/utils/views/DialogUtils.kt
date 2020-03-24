@@ -3,6 +3,7 @@ package tool.xfy9326.naucourses.utils.views
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -34,7 +35,7 @@ object DialogUtils {
             setPresets(context.resources.getIntArray(R.array.material_colors_600))
             setShowAlphaSlider(false)
         }.create().apply {
-            // 使用构造器后，将构造的参数传给继承的Dialog
+            // 使用Builder后，将Builder的参数传给继承的Dialog
             val styledDialog = StyledColorPickerDialog()
             styledDialog.arguments = arguments
             return styledDialog
@@ -139,6 +140,13 @@ object DialogUtils {
                 value = nowShowWeekNum.toFloat()
                 setLabelFormatter {
                     context.getString(R.string.week_num, it.toInt())
+                }
+                setOnTouchListener { v, event ->
+                    when (event.action) {
+                        MotionEvent.ACTION_DOWN -> AnimUtils.animateSlideThumb(context, v as Slider, true)
+                        MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> AnimUtils.animateSlideThumb(context, v as Slider, false)
+                    }
+                    false
                 }
                 addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
                     private var startValue = -1f

@@ -6,4 +6,5 @@
     <integer name="learning_process_max">100</integer>
     <integer name="user_info_column_count">2</integer>
     <integer name="course_time_edit_column_count">6</integer>
+    <integer name="very_short_anim_time">100</integer>
 </resources>

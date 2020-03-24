@@ -13,7 +13,9 @@ class UserInfoViewModel : BaseViewModel() {
     val studentInfo = MutableLiveData<StudentInfo>()
 
     override fun onInitView(isRestored: Boolean) {
-        updatePersonalInfo(true)
+        if (!isRestored) {
+            updatePersonalInfo(true)
+        }
         updatePersonalInfo()
     }
 

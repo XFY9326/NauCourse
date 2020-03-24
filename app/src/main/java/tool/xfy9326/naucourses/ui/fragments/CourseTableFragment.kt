@@ -125,7 +125,7 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
 
     private fun showCourseTableControlPanel() {
         DialogUtils.createCourseTableControlDialog(
-            requireContext(), lifecycle, getViewModel().currentWeekNum ?: 0, vp_courseTablePanel.currentItem + 1,
+            requireContext(), viewLifecycleOwner.lifecycle, getViewModel().currentWeekNum ?: 0, vp_courseTablePanel.currentItem + 1,
             getViewModel().maxWeekNumTemp ?: Constants.Course.MAX_WEEK_NUM_SIZE
         ) {
             vp_courseTablePanel.setCurrentItem(it - 1, true)

@@ -27,6 +27,13 @@ class CourseManageViewModel : BaseViewModel() {
     val courseManagePkg = MutableLiveData<CourseManagePkg>()
     val saveSuccess = NotifyLivaData()
 
+    var dataChanged = false
+        private set
+
+    fun setDataChanged() {
+        dataChanged = true
+    }
+
     var colorEditPosition: Int? = null
     var colorEditStyle: CourseCellStyle? = null
 
@@ -36,7 +43,7 @@ class CourseManageViewModel : BaseViewModel() {
     private val importLock = Mutex()
 
     override fun onInitView(isRestored: Boolean) {
-        requestCourseManagePkg()
+        if (!isRestored) requestCourseManagePkg()
     }
 
     enum class ImportCourseType {

@@ -53,6 +53,7 @@ object CourseInfo : BaseSimpleContentInfo<CourseSet, CourseInfo.OperationType>()
         } else {
             return when (params.first()) {
                 OperationType.ASYNC_COURSE -> {
+                    LogUtils.d<CourseInfo>("Starting Async Courses")
                     val result = MyCourseScheduleTable.getContentData()
                     if (result.isSuccess) {
                         val cachedCourseSet = getSimpleCachedItem()
