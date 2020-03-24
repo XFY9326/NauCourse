@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="IconDuplicates">
+        <ignore path="src/main/res/drawable/launch_screen_logo.png" />
+        <ignore path="src/main/res/mipmap-xxhdpi/ic_launcher.png" />
+    </issue>
+    <issue id="IconLocation">
+        <ignore path="src/main/res/drawable/launch_screen_logo.png" />
+        <ignore path="src/main/res/drawable/launch_screen_text.png" />
+        <ignore path="src/main/res/drawable/user_info_header.png" />
+    </issue>
+</lint>

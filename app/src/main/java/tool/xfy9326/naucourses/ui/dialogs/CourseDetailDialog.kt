@@ -92,7 +92,7 @@ class CourseDetailDialog : DialogFragment() {
             tv_teacher.text = getString(R.string.course_teacher, ViewUtils.getCourseDataShowText(courseDetail.course.teacher))
             tv_class.text = getString(
                 R.string.course_class, ViewUtils.getCourseDataShowText(
-                    if (courseDetail.course.courseClass == null) {
+                    if (courseDetail.course.courseClass == null || courseDetail.course.courseClass == courseDetail.course.teachClass) {
                         courseDetail.course.teachClass
                     } else {
                         "${courseDetail.course.teachClass} ${courseDetail.course.courseClass}"
