@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
-    <tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory
+    <tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/theme">
 
@@ -14,9 +14,9 @@
             app:summary="@string/night_mode_sum"
             app:title="@string/night_mode" />
 
-    </tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory>
+    </tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory>
 
-    <tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory
+    <tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/ui">
 
@@ -37,5 +37,5 @@
             app:summary="@string/use_browser_open_news_detail_sum"
             app:title="@string/use_browser_open_news_detail" />
 
-    </tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory>
+    </tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory>
 </androidx.preference.PreferenceScreen>

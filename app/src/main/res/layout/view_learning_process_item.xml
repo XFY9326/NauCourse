@@ -34,7 +34,7 @@
         app:layout_constraintBottom_toTopOf="@id/pb_processBar"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <tool.xfy9326.naucourses.ui.views.widgets.AdvancedGridLayout
+    <tool.xfy9326.naucourse.ui.views.widgets.AdvancedGridLayout
         android:id="@+id/gl_processCourseType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

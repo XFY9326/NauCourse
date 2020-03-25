@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
-    <tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory
+    <tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/course_cell_style">
 
@@ -18,9 +18,9 @@
             app:summary="@string/course_table_cell_center_horizontal_show_sum"
             app:title="@string/course_table_cell_center_horizontal_show" />
 
-    </tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory>
+    </tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory>
 
-    <tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory
+    <tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/course_table_style">
 
@@ -38,5 +38,5 @@
             app:summary="@string/course_table_round_compat_sum"
             app:title="@string/course_table_round_compat" />
 
-    </tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory>
+    </tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory>
 </androidx.preference.PreferenceScreen>

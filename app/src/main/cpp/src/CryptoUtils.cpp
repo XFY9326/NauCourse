@@ -35,7 +35,7 @@ char *decryptContent(const char *content, const char *param, int contentLen, int
 }
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_tool_xfy9326_naucourses_utils_secure_CryptoUtils_encryptText(JNIEnv *env, jobject, jstring content, jstring key) {
+Java_tool_xfy9326_naucourse_utils_secure_CryptoUtils_encryptText(JNIEnv *env, jobject, jstring content, jstring key) {
     const char *contentBuf = env->GetStringUTFChars(content, nullptr);
     const char *keyBuf = env->GetStringUTFChars(key, nullptr);
     int contentLen = env->GetStringUTFLength(content);
@@ -53,7 +53,7 @@ Java_tool_xfy9326_naucourses_utils_secure_CryptoUtils_encryptText(JNIEnv *env, j
 }
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_tool_xfy9326_naucourses_utils_secure_CryptoUtils_decryptText(JNIEnv *env, jobject, jstring content, jstring key) {
+Java_tool_xfy9326_naucourse_utils_secure_CryptoUtils_decryptText(JNIEnv *env, jobject, jstring content, jstring key) {
     const char *contentBuf = env->GetStringUTFChars(content, nullptr);
     const char *keyBuf = env->GetStringUTFChars(key, nullptr);
     int contentLen = env->GetStringUTFLength(content);

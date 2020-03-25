@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme.TranslucentStatusBar" parent="AppTheme.TranslucentStatusBar.Base">
-        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">false</item>
     </style>
 
     <style name="AppTheme.TranslucentStatusBar.DarkActionBar" parent="AppTheme.TranslucentStatusBar.Base">
-        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">false</item>
     </style>
 
     <style name="AppTheme.LaunchScreen" parent="AppTheme.LaunchScreen.Base">
-        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">false</item>
     </style>
 
 </resources>

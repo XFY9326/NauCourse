@@ -235,7 +235,7 @@
                         android:background="@android:color/transparent"
                         android:foreground="?attr/selectableItemBackgroundBorderless"
                         android:src="@drawable/ic_load_more"
-                        tools:ignore="ContentDescription" />
+                        tools:ignore="ContentDescription,UnusedAttribute" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -262,7 +262,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp">
 
-                    <tool.xfy9326.naucourses.ui.views.widgets.AdvancedRecyclerView
+                    <tool.xfy9326.naucourse.ui.views.widgets.AdvancedRecyclerView
                         android:id="@+id/arv_courseDetailList"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

@@ -14,7 +14,7 @@
     app:cardElevation="2dp"
     app:cardPreventCornerOverlap="true">
 
-    <tool.xfy9326.naucourses.ui.views.widgets.AdvancedLinearLayout
+    <tool.xfy9326.naucourse.ui.views.widgets.AdvancedLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -32,13 +32,13 @@
             android:textSize="19sp"
             android:textStyle="bold" />
 
-        <tool.xfy9326.naucourses.ui.views.widgets.AdvancedGridLayout
+        <tool.xfy9326.naucourse.ui.views.widgets.AdvancedGridLayout
             android:id="@+id/gl_userRankInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             app:columnCount="@integer/user_info_column_count" />
 
-    </tool.xfy9326.naucourses.ui.views.widgets.AdvancedLinearLayout>
+    </tool.xfy9326.naucourse.ui.views.widgets.AdvancedLinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

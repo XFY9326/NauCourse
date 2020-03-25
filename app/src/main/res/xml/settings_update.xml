@@ -6,7 +6,7 @@
         app:summary="@string/update_check_sum"
         app:title="@string/update_check" />
 
-    <tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory
+    <tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/auto_update_check_settings">
 
@@ -17,5 +17,5 @@
             app:summary="@string/auto_update_check_sum"
             app:title="@string/auto_update_check" />
 
-    </tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory>
+    </tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory>
 </androidx.preference.PreferenceScreen>

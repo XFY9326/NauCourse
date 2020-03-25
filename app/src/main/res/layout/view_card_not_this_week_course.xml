@@ -30,7 +30,7 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <tool.xfy9326.naucourses.ui.views.widgets.AdvancedLinearLayout
+        <tool.xfy9326.naucourse.ui.views.widgets.AdvancedLinearLayout
             android:id="@+id/layout_notThisWeekCourseContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

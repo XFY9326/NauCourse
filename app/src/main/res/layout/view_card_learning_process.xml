@@ -14,7 +14,7 @@
     app:cardElevation="2dp"
     app:cardPreventCornerOverlap="true">
 
-    <tool.xfy9326.naucourses.ui.views.widgets.AdvancedLinearLayout
+    <tool.xfy9326.naucourse.ui.views.widgets.AdvancedLinearLayout
         android:id="@+id/layout_userLearningProcess"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,6 +33,6 @@
             android:textSize="19sp"
             android:textStyle="bold" />
 
-    </tool.xfy9326.naucourses.ui.views.widgets.AdvancedLinearLayout>
+    </tool.xfy9326.naucourse.ui.views.widgets.AdvancedLinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

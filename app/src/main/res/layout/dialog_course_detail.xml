@@ -23,7 +23,8 @@
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
-            android:paddingBottom="8dp">
+            android:paddingBottom="8dp"
+            tools:ignore="UnusedAttribute">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_courseName"
@@ -114,7 +115,7 @@
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <tool.xfy9326.naucourses.ui.views.widgets.AdvancedLinearLayout
+        <tool.xfy9326.naucourse.ui.views.widgets.AdvancedLinearLayout
             android:id="@+id/layout_moreCourseInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

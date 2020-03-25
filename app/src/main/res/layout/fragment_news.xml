@@ -12,7 +12,7 @@
 
         <include layout="@layout/view_general_toolbar" />
 
-        <tool.xfy9326.naucourses.ui.views.widgets.AdvancedSwipeRefreshLayout
+        <tool.xfy9326.naucourse.ui.views.widgets.AdvancedSwipeRefreshLayout
             android:id="@+id/asl_newsRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -24,7 +24,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center">
 
-                <tool.xfy9326.naucourses.ui.views.widgets.AdvancedRecyclerView
+                <tool.xfy9326.naucourse.ui.views.widgets.AdvancedRecyclerView
                     android:id="@+id/arv_newsList"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -39,7 +39,7 @@
 
             </FrameLayout>
 
-        </tool.xfy9326.naucourses.ui.views.widgets.AdvancedSwipeRefreshLayout>
+        </tool.xfy9326.naucourse.ui.views.widgets.AdvancedSwipeRefreshLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

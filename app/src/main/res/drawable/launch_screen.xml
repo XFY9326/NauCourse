@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:opacity="opaque">
     <item android:drawable="@color/colorWindowsBackground" />
 
@@ -15,5 +16,6 @@
         android:height="60dp"
         android:bottom="50dp"
         android:drawable="@drawable/launch_screen_text"
-        android:gravity="center_horizontal|bottom" />
+        android:gravity="center_horizontal|bottom"
+        tools:ignore="UnusedAttribute" />
 </layer-list>

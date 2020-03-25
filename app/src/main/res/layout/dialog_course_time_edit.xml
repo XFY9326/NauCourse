@@ -78,7 +78,7 @@
 
                 </RadioGroup>
 
-                <tool.xfy9326.naucourses.ui.views.widgets.AdvancedGridLayout
+                <tool.xfy9326.naucourse.ui.views.widgets.AdvancedGridLayout
                     android:id="@+id/layout_courseWeeks"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

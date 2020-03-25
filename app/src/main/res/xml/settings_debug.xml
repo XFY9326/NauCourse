@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
-    <tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory
+    <tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/debug">
 
@@ -26,9 +26,9 @@
             app:summary="@string/debug_exception_catch_sum"
             app:title="@string/debug_exception_catch" />
 
-    </tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory>
+    </tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory>
 
-    <tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory
+    <tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/crash_record">
 
@@ -39,6 +39,6 @@
             app:summary="@string/debug_error_catch_sum"
             app:title="@string/debug_error_catch" />
 
-    </tool.xfy9326.naucourses.ui.views.preference.StyledPreferenceCategory>
+    </tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

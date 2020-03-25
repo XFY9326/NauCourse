@@ -9,7 +9,7 @@
     android:foreground="?android:attr/selectableItemBackgroundBorderless"
     android:gravity="bottom"
     android:orientation="vertical"
-    tools:ignore="Overdraw">
+    tools:ignore="Overdraw,UnusedAttribute">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_userName"

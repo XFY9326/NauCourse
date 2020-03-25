@@ -9,7 +9,7 @@
 
     <include layout="@layout/view_general_toolbar" />
 
-    <tool.xfy9326.naucourses.ui.views.widgets.AdvancedSwipeRefreshLayout
+    <tool.xfy9326.naucourse.ui.views.widgets.AdvancedSwipeRefreshLayout
         android:id="@+id/asl_newsDetailRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -78,6 +78,6 @@
 
         </androidx.core.widget.NestedScrollView>
 
-    </tool.xfy9326.naucourses.ui.views.widgets.AdvancedSwipeRefreshLayout>
+    </tool.xfy9326.naucourse.ui.views.widgets.AdvancedSwipeRefreshLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
