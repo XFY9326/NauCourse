@@ -6,6 +6,8 @@ import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import java.util.*
 
 object AppPref : BasePref() {
+    override val prefName: String = "App"
+
     private const val CUSTOM_START_TERM_DATE_MILLS = "CustomStartTermDateMills"
     private const val CUSTOM_END_TERM_DATE_MILLS = "CustomEndTermDateMills"
     private const val DEFAULT_TERM_DATE_MILLS = 0L

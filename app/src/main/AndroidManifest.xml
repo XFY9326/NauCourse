@@ -21,7 +21,7 @@
         tools:targetApi="n">
 
         <activity
-            android:name="tool.xfy9326.naucourse.ui.activities.SplashActivity"
+            android:name="tool.xfy9326.naucourse.ui.activities.MainIndexActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.LaunchScreen">

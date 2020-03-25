@@ -14,7 +14,7 @@ import tool.xfy9326.naucourse.utils.secure.AccountUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 
 
-class SplashActivity : Activity() {
+class MainIndexActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (intent?.getBooleanExtra(BaseUtils.CRASH_RESTART_FLAG, false) == true) {

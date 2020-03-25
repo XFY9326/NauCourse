@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourse.compat
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.preference.PreferenceManager
 import com.google.gson.Gson
@@ -170,13 +171,16 @@ object OldDataCompat {
 
     fun hasOldData() = PreferenceManager.getDefaultSharedPreferences(App.instance).contains("HAS_LOGIN") && File(CourseDataPath).exists()
 
+    @SuppressLint("ApplySharedPref")
     private fun clearOldData() {
         IOUtils.deleteFile(App.instance.filesDir.absolutePath)
         IOUtils.deleteFile(App.instance.cacheDir.absolutePath)
         IOUtils.deleteFile(App.instance.codeCacheDir.absolutePath)
 
         App.instance.filesDir?.parentFile?.absolutePath?.let {
-            IOUtils.deleteFile(it + File.separator + "shared_prefs")
+            IOUtils.deleteFile(it + File.separator + "shared_prefs" + File.separator + "CookiesPrefs.xml")
+            IOUtils.deleteFile(it + File.separator + "shared_prefs" + File.separator + "Cookies_Prefs.xml")
+            IOUtils.deleteFile(it + File.separator + "shared_prefs" + File.separator + "tool.xfy9326.naucourse_preferences.xml")
         }
     }
 }
