@@ -101,6 +101,7 @@ object Constants {
     }
 
     object Pref {
+        const val AboutIntent = "AboutIntent"
         const val NightMode = "NightMode"
         const val DebugMode = "DebugMode"
         const val ForceShowCourseTableWeekends = "ForceShowCourseTableWeekends"

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.preference.Preference
         app:fragment="tool.xfy9326.naucourse.ui.fragments.settings.DisplaySettingsFragment"
         app:icon="@drawable/ic_display"
@@ -27,9 +26,6 @@
 
     <androidx.preference.Preference
         app:icon="@drawable/ic_about"
-        app:title="@string/about">
-        <intent
-            android:targetClass="tool.xfy9326.naucourse.ui.activities.AboutActivity"
-            android:targetPackage="tool.xfy9326.naucourse" />
-    </androidx.preference.Preference>
+        app:key="AboutIntent"
+        app:title="@string/about" />
 </androidx.preference.PreferenceScreen>

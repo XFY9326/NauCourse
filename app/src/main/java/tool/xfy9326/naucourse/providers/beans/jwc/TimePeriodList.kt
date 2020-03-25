@@ -7,6 +7,8 @@ data class TimePeriodList(
     val size: Int = timePeriods.size
 ) : Serializable {
 
+    constructor(timePeriods: TimePeriod) : this(arrayOf(timePeriods), 1)
+
     companion object {
         private const val TIME_PERIOD_ARRAY_JOIN_SYMBOL = ","
 

@@ -120,30 +120,32 @@ object OldDataCompat {
                     val weeks = TimePeriodList(Array(it.weeks?.size ?: 0) { i ->
                         TimePeriod.parse(it.weeks!![i])
                     })
-                    val courses = TimePeriodList(Array(it.courseTime?.size ?: 0) { i ->
+                    val courses = Array(it.courseTime?.size ?: 0) { i ->
                         TimePeriod.parse(it.courseTime!![i])
-                    })
-                    add(
-                        CourseTime(
-                            context,
-                            id,
-                            it.location ?: Constants.EMPTY,
-                            /*
-                                单周 COURSE_DETAIL_WEEKMODE_SINGLE = 1
-                                双周 COURSE_DETAIL_WEEKMODE_DOUBLE = 2
-                                仅一周 COURSE_DETAIL_WEEKMODE_ONCE = 3
-                                多个连续的间断周或多个间断周 COURSE_DETAIL_WEEKMODE_ONCE_MORE = 4
-                             */
-                            when (it.weekMode) {
-                                1 -> WeekMode.ODD_WEEK_ONLY
-                                2 -> WeekMode.EVEN_WEEK_ONLY
-                                else -> WeekMode.ALL_WEEKS
-                            },
-                            weeks,
-                            it.weekDay.toShort(),
-                            courses
+                    }
+                    for (period in courses) {
+                        add(
+                            CourseTime(
+                                context,
+                                id,
+                                it.location ?: Constants.EMPTY,
+                                /*
+                                    单周 COURSE_DETAIL_WEEKMODE_SINGLE = 1
+                                    双周 COURSE_DETAIL_WEEKMODE_DOUBLE = 2
+                                    仅一周 COURSE_DETAIL_WEEKMODE_ONCE = 3
+                                    多个连续的间断周或多个间断周 COURSE_DETAIL_WEEKMODE_ONCE_MORE = 4
+                                 */
+                                when (it.weekMode) {
+                                    1 -> WeekMode.ODD_WEEK_ONLY
+                                    2 -> WeekMode.EVEN_WEEK_ONLY
+                                    else -> WeekMode.ALL_WEEKS
+                                },
+                                weeks,
+                                it.weekDay.toShort(),
+                                TimePeriodList(period)
+                            )
                         )
-                    )
+                    }
                 }
             }
         } else {

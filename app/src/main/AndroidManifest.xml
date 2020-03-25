@@ -77,7 +77,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="tool.xfy9326.naucourse.file.provider"
+            android:authorities="${FileProviderName}"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

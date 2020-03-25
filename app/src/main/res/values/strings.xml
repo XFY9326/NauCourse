@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">NAU课程表</string>
     <string name="app_description">南京审计大学非官方开源课程表</string>
     <string name="welcome_app">欢迎使用NAU课程表</string>
     <string name="login_to_continue">登录以继续操作</string>
@@ -236,6 +235,5 @@
     <string name="auto_update_check_settings">自动更新设置</string>
     <string name="auto_update_check">自动检查更新</string>
     <string name="auto_update_check_sum">应用每次启动时自动检查更新</string>
-    <string name="debug_version">测试版</string>
     <string name="data_compat">正在适配旧版数据</string>
 </resources>
