@@ -89,6 +89,7 @@
         <!-- ImageView.ScaleType -->
         <androidx.preference.ListPreference
             app:defaultValue="CENTER_CROP"
+            app:dependency="CustomCourseTableBackground"
             app:entries="@array/scare_type_text"
             app:entryValues="@array/scare_type_value"
             app:iconSpaceReserved="false"
@@ -99,6 +100,7 @@
         <androidx.preference.SeekBarPreference
             android:max="100"
             app:defaultValue="100"
+            app:dependency="CustomCourseTableBackground"
             app:iconSpaceReserved="false"
             app:key="CourseTableBackgroundAlpha"
             app:min="0"
