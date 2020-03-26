@@ -3,7 +3,8 @@ package tool.xfy9326.naucourse.io.gson
 import com.google.gson.Gson
 import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.io.prefs.GsonStoreVersionPref
-import tool.xfy9326.naucourse.utils.utility.IOUtils
+import tool.xfy9326.naucourse.utils.io.BaseIOUtils
+import tool.xfy9326.naucourse.utils.io.TextIOUtils
 import java.io.File
 
 object GsonStoreManager {
@@ -15,12 +16,12 @@ object GsonStoreManager {
     private fun getStoredPath(storeType: GsonStoreType) = jsonFilePath + storeType.name + GSON_FILE_PREFIX
 
     fun clearData(storeType: GsonStoreType) = synchronized(storeType) {
-        IOUtils.deleteFile(getStoredPath(storeType))
+        BaseIOUtils.deleteFile(getStoredPath(storeType))
     }
 
     fun writeData(storeType: GsonStoreType, data: Any, encrypt: Boolean = false): Boolean = synchronized(storeType) {
         GsonStoreVersionPref.saveStoredVersion(storeType.name, storeType.versionCode)
-        IOUtils.saveTextToFile(Gson().toJson(data), getStoredPath(storeType), encrypt, true)
+        TextIOUtils.saveTextToFile(Gson().toJson(data), getStoredPath(storeType), encrypt, true)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -29,7 +30,7 @@ object GsonStoreManager {
             clearData(storeType)
             null
         } else {
-            val text = IOUtils.readTextFromFile(getStoredPath(storeType), encrypt, true)
+            val text = TextIOUtils.readTextFromFile(getStoredPath(storeType), encrypt, true)
             return if (text == null || text.isEmpty()) {
                 null
             } else {

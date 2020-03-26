@@ -49,22 +49,15 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.slider.Slider
+                <tool.xfy9326.naucourse.ui.views.widgets.AnimateSlider
                     android:id="@+id/slider_courseControlWeekNum"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:stepSize="1"
                     android:valueFrom="1"
                     android:valueTo="24"
-                    app:haloColor="@android:color/transparent"
-                    app:haloRadius="0dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_courseControlWeekNumTitle"
-                    app:thumbRadius="@dimen/slider_thumb_radius_not_touched"
-                    app:tickColor="@android:color/transparent"
-                    app:trackColorActive="@color/colorSliderTrackerActive"
-                    app:trackColorInactive="@color/colorSliderTrackerInActive"
-                    app:trackHeight="18dp" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_courseControlWeekNumTitle" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

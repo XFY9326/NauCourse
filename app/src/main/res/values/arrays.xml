@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string-array name="weekday_num">
         <item>@string/monday</item>
         <item>@string/tuesday</item>
@@ -47,26 +47,42 @@
         <item>NEWS</item>
     </string-array>
 
-    <integer-array name="material_colors_600">
-        <item>@color/material_red_600</item>
-        <item>@color/material_pink_600</item>
-        <item>@color/material_purple_600</item>
-        <item>@color/material_deep_purple_600</item>
-        <item>@color/material_indigo_600</item>
-        <item>@color/material_blue_600</item>
-        <item>@color/material_light_blue_600</item>
-        <item>@color/material_cyan_600</item>
-        <item>@color/material_teal_600</item>
-        <item>@color/material_green_600</item>
-        <item>@color/material_light_green_600</item>
-        <item>@color/material_lime_600</item>
-        <!--  Yellow 颜色过浅  -->
-        <!--  <item>@color/material_yellow_600</item>  -->
-        <item>@color/material_amber_600</item>
-        <item>@color/material_orange_600</item>
-        <item>@color/material_deep_orange_600</item>
-        <item>@color/material_brown_600</item>
-        <item tools:ignore="PrivateResource">@color/material_grey_600</item>
-        <item>@color/material_blue_grey_600</item>
+    <string-array name="scare_type_text">
+        <item>@string/scare_type_fit_xy</item>
+        <item>@string/scare_type_fit_start</item>
+        <item>@string/scare_type_fit_center</item>
+        <item>@string/scare_type_fit_end</item>
+        <item>@string/scare_type_center</item>
+        <item>@string/scare_type_center_crop</item>
+        <item>@string/scare_type_center_inside</item>
+    </string-array>
+
+    <!-- ImageView.ScaleType -->
+    <string-array name="scare_type_value">
+        <item>FIT_XY</item>
+        <item>FIT_START</item>
+        <item>FIT_CENTER</item>
+        <item>FIT_END</item>
+        <item>CENTER</item>
+        <item>CENTER_CROP</item>
+        <item>CENTER_INSIDE</item>
+    </string-array>
+
+    <integer-array name="material_colors_300">
+        <item>@color/material_red_300</item>
+        <item>@color/material_pink_300</item>
+        <item>@color/material_purple_300</item>
+        <item>@color/material_deep_purple_300</item>
+        <item>@color/material_indigo_300</item>
+        <item>@color/material_blue_300</item>
+        <item>@color/material_light_blue_300</item>
+        <item>@color/material_cyan_300</item>
+        <item>@color/material_teal_300</item>
+        <item>@color/material_green_300</item>
+        <item>@color/material_light_green_300</item>
+        <item>@color/material_lime_300</item>
+        <item>@color/material_amber_300</item>
+        <item>@color/material_orange_300</item>
+        <item>@color/material_deep_orange_300</item>
     </integer-array>
 </resources>

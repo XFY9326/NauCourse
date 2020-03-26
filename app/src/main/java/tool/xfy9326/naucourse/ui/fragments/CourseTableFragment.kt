@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
@@ -13,11 +15,13 @@ import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseCell
 import tool.xfy9326.naucourse.beans.CourseCellStyle
+import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.ui.dialogs.CourseDetailDialog
 import tool.xfy9326.naucourse.ui.fragments.base.DrawerToolbarFragment
 import tool.xfy9326.naucourse.ui.models.fragment.CourseTableViewModel
 import tool.xfy9326.naucourse.ui.views.helpers.CourseTableViewHelper
 import tool.xfy9326.naucourse.ui.views.viewpager.CourseTableViewPagerAdapter
+import tool.xfy9326.naucourse.utils.utility.ImageUtils
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 
 class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), CourseTableViewHelper.OnCourseCellClickListener {
@@ -88,13 +92,20 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
                 }
             }.show(childFragmentManager, null)
         })
+
         App.instance.courseStyleTermUpdate.observeNotification(viewLifecycleOwner, {
             viewModel.refreshCourseData()
+        }, CourseTableFragment::class.java.simpleName)
+        App.instance.requestRebuildCourseTable.observeNotification(viewLifecycleOwner, {
+            viewModel.refreshCourseTableStyle()
+            setCourseTableBackground()
+            viewModel.courseTableRebuild.notifyEvent()
         }, CourseTableFragment::class.java.simpleName)
     }
 
     override fun initView(viewModel: CourseTableViewModel) {
-        CourseTableViewHelper.initBuilder(requireActivity(), this)
+        CourseTableViewHelper.initBuilder(requireContext())
+        CourseTableViewHelper.setOnCourseCellClickListener(this)
         courseTableViewPagerAdapter = CourseTableViewPagerAdapter(this, viewModel.maxWeekNumTemp ?: Constants.Course.MAX_WEEK_NUM_SIZE)
 
         vp_courseTablePanel.adapter = courseTableViewPagerAdapter
@@ -110,6 +121,27 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
 
         layout_dateInfoBar.setOnClickListener {
             turnToCurrentWeek(viewModel)
+        }
+
+        setCourseTableBackground()
+    }
+
+    private fun setCourseTableBackground() {
+        if (SettingsPref.CustomCourseTableBackground) {
+            val backgroundBitmap = ImageUtils.readLocalImage(Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE)
+            if (backgroundBitmap != null) {
+                iv_courseTableBackground.setImageBitmap(backgroundBitmap)
+                iv_courseTableBackground.alpha = SettingsPref.CourseTableBackgroundAlpha / 100f
+                iv_courseTableBackground.scaleType = SettingsPref.getCourseTableBackgroundScareType()
+                iv_courseTableBackground.visibility = View.VISIBLE
+                viewLifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
+                    override fun onDestroy(owner: LifecycleOwner) {
+                        if (!backgroundBitmap.isRecycled) backgroundBitmap.recycle()
+                    }
+                })
+            }
+        } else {
+            iv_courseTableBackground.visibility = View.GONE
         }
     }
 

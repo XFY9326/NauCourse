@@ -5,14 +5,17 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.beans.*
+import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.providers.info.methods.CourseInfo
 import tool.xfy9326.naucourse.providers.info.methods.TermDateInfo
 import tool.xfy9326.naucourse.providers.store.CourseCellStyleStore
 import tool.xfy9326.naucourse.providers.store.CourseTableStore
-import tool.xfy9326.naucourse.tools.livedata.EventLiveData
+import tool.xfy9326.naucourse.tools.EventLiveData
+import tool.xfy9326.naucourse.tools.NotifyLivaData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
+import tool.xfy9326.naucourse.ui.views.helpers.CourseTableViewHelper
 import tool.xfy9326.naucourse.utils.compute.CourseUtils
 import tool.xfy9326.naucourse.utils.compute.TimeUtils
 import tool.xfy9326.naucourse.utils.debug.LogUtils
@@ -31,6 +34,10 @@ class CourseTableViewModel : BaseViewModel() {
     private lateinit var termDate: TermDate
     private lateinit var courseTableArr: Array<CourseTable>
 
+    @Volatile
+    private var courseTableStyle: CourseTableViewHelper.CourseTableStyle? = null
+    private val courseTableStyleLock = Any()
+
     var hasInitWithNowWeekNum = false
 
     var currentWeekNum: Int? = null
@@ -43,6 +50,8 @@ class CourseTableViewModel : BaseViewModel() {
     val currentWeekStatus = MutableLiveData<CurrentWeekStatus>()
     val courseDetailInfo = EventLiveData<CourseDetail>()
     val courseAndTermEmpty = EventLiveData<Boolean>()
+
+    val courseTableRebuild = NotifyLivaData()
 
     val coursePkgSavedTemp = arrayOfNulls<CoursePkg>(Constants.Course.MAX_WEEK_NUM_SIZE)
     val courseTablePkg = Array<MutableLiveData<CoursePkg>>(Constants.Course.MAX_WEEK_NUM_SIZE) { MutableLiveData() }
@@ -294,11 +303,35 @@ class CourseTableViewModel : BaseViewModel() {
                                 termDate,
                                 courseTableArr[i],
                                 CourseCellStyleStore.loadCellStyles(courseSet)
-                            )
+                            ).also {
+                                coursePkgSavedTemp[i] = it
+                            }
                         )
                     }
                 }
             }
         }
     }
+
+    fun getCourseTableStyle() = synchronized(courseTableStyleLock) {
+        if (courseTableStyle == null) {
+            courseTableStyle = CourseTableViewHelper.CourseTableStyle(
+                SettingsPref.SameCourseCellHeight,
+                SettingsPref.CourseTableRoundCompat,
+                SettingsPref.CenterHorizontalShowCourseText,
+                SettingsPref.CenterVerticalShowCourseText,
+                SettingsPref.UseRoundCornerCourseCell,
+                SettingsPref.DrawAllCellBackground,
+                SettingsPref.ForceShowCourseTableWeekends,
+                SettingsPref.CustomCourseTableBackground,
+                SettingsPref.CustomCourseTableAlpha / 100f
+            )
+        }
+        return@synchronized courseTableStyle!!
+    }
+
+    fun refreshCourseTableStyle() = synchronized(courseTableStyleLock) {
+        courseTableStyle = null
+    }
+
 }

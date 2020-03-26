@@ -3,7 +3,7 @@ package tool.xfy9326.naucourse
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
-import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
+import tool.xfy9326.naucourse.tools.NotifyLivaData
 import tool.xfy9326.naucourse.utils.BaseUtils
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 

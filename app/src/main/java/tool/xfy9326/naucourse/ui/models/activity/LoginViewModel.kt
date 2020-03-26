@@ -10,8 +10,8 @@ import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.network.clients.base.LoginInfo
 import tool.xfy9326.naucourse.network.clients.base.LoginResponse
 import tool.xfy9326.naucourse.providers.GlobalCacheLoader
-import tool.xfy9326.naucourse.tools.livedata.EventLiveData
-import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
+import tool.xfy9326.naucourse.tools.EventLiveData
+import tool.xfy9326.naucourse.tools.NotifyLivaData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourse.utils.secure.AccountUtils
 

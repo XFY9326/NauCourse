@@ -10,6 +10,8 @@ import android.provider.MediaStore
 import androidx.core.content.FileProvider
 import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.utils.io.BaseIOUtils
+import tool.xfy9326.naucourse.utils.io.ImageIOUtils
 import java.io.File
 import java.util.*
 
@@ -21,13 +23,37 @@ object ImageUtils {
     private const val IMAGE_JPEG = ".jpeg"
     private const val IMAGE_WEBP = ".webp"
 
-    const val DIR_NEWS_DETAIL_IMAGE = "NewsDetailImage"
+    private const val IMAGE_TEMP = ".tmp"
+
     private const val DIR_PICTURE_MAIN_DIR = "NauCourse"
 
-    fun clearLocalImageBySubDir(dirName: String) = IOUtils.deleteFile(PathUtils.getImageLocalSavePath() + dirName)
+    fun clearLocalImageBySubDir(dirName: String) = BaseIOUtils.deleteFile(PathUtils.getImageLocalSavePath() + dirName)
 
     @Suppress("unused")
-    fun clearAllLocalImageDir() = IOUtils.deleteFile(PathUtils.getImageLocalSavePath())
+    fun clearAllLocalImageDir() = BaseIOUtils.deleteFile(PathUtils.getImageLocalSavePath())
+
+    fun localImageExists(fileName: String, dirName: String? = null) = File(PathUtils.getImageLocalSavePath(dirName), fileName).exists()
+
+    fun readLocalImage(fileName: String, dirName: String? = null): Bitmap? {
+        val localStorageFile = File(PathUtils.getImageLocalSavePath(dirName), fileName)
+        return ImageIOUtils.readBitmap(localStorageFile)
+    }
+
+    fun deleteLocalImage(fileName: String, dirName: String? = null) = File(PathUtils.getImageLocalSavePath(dirName), fileName).delete()
+
+    fun modifyLocalImage(
+        fileName: String, dirName: String? = null,
+        compressFormat: Bitmap.CompressFormat = Bitmap.CompressFormat.WEBP, quality: Int = 100
+    ): Boolean {
+        val localStorageFile = File(PathUtils.getImageLocalSavePath(dirName), fileName)
+        return ImageIOUtils.modifyLocalImage(localStorageFile, compressFormat, quality)
+    }
+
+    fun saveImageToLocalFromUri(fileName: String?, uri: Uri, dirName: String? = null, overWrite: Boolean = true): String? {
+        val newFileName = fileName ?: UUID.randomUUID().toString()
+        val localStorageFile = File(PathUtils.getImageLocalSavePath(dirName), newFileName)
+        return if (ImageIOUtils.saveImageFromUri(uri, localStorageFile, overWrite)) newFileName else null
+    }
 
     // 保存图片到本地（..Android/data/{packageName}/files/Pictures/{dirName}/..）或系统相册（..Pictures/NauCourse/{dirName}/..）
     // 保存的本地的图片如果要对外分享，请使用fileProviderUri = true，并在xml里面注册路径
@@ -47,7 +73,7 @@ object ImageUtils {
 
         if (saveToLocal) {
             val localStorageFile = File(PathUtils.getImageLocalSavePath(dirName), newFileName)
-            return if (IOUtils.saveBitmap(
+            return if (ImageIOUtils.saveBitmap(
                     bitmap,
                     localStorageFile,
                     compressFormat = format,
@@ -67,7 +93,7 @@ object ImageUtils {
         } else {
             val contentValues = getImageContentValues(newFileName, dirName, format, bitmap)
             val uri = App.instance.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-            return if (uri != null && IOUtils.saveBitmap(bitmap, uri, compressFormat = format, recycle = recycle, quality = quality)) {
+            return if (uri != null && ImageIOUtils.saveBitmap(bitmap, uri, compressFormat = format, recycle = recycle, quality = quality)) {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                     @Suppress("DEPRECATION")
                     App.instance.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri))

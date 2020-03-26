@@ -100,6 +100,13 @@ object Constants {
         const val FORGET_PASSWORD = "http://sso.nau.edu.cn/sso/login"
     }
 
+    object Image {
+        const val DIR_NEWS_DETAIL_IMAGE = "NewsDetailImage"
+        const val DIR_APP_IMAGE = "Application"
+
+        const val COURSE_TABLE_BACKGROUND_IMAGE_NAME = "CourseTableBackgroundImage"
+    }
+
     object Pref {
         const val AboutIntent = "AboutIntent"
         const val NightMode = "NightMode"
@@ -107,7 +114,16 @@ object Constants {
         const val ForceShowCourseTableWeekends = "ForceShowCourseTableWeekends"
         const val SameCourseCellHeight = "SameCourseCellHeight"
         const val CenterHorizontalShowCourseText = "CenterHorizontalShowCourseText"
+        const val CenterVerticalShowCourseText = "CenterVerticalShowCourseText"
+        const val DrawAllCellBackground = "DrawAllCellBackground"
+        const val UseRoundCornerCourseCell = "UseRoundCornerCourseCell"
         const val CourseTableRoundCompat = "CourseTableRoundCompat"
         const val CheckUpdatesNow = "CheckUpdatesNow"
+        const val CustomCourseTableBackground = "CustomCourseTableBackground"
+        const val ChooseCourseTableBackgroundPicture = "ChooseCourseTableBackgroundPicture"
+        const val CustomCourseTableAlpha = "CustomCourseTableAlpha"
+        const val CourseTableImageQuality = "CourseTableImageQuality"
+        const val CourseTableBackgroundScareType = "CourseTableBackgroundScareType"
+        const val CourseTableBackgroundAlpha = "CourseTableBackgroundAlpha"
     }
 }

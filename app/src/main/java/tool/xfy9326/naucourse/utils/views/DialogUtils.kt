@@ -3,7 +3,6 @@ package tool.xfy9326.naucourse.utils.views
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -21,8 +20,9 @@ import kotlinx.android.synthetic.main.dialog_course_control_panel.*
 import kotlinx.android.synthetic.main.dialog_image_operation.*
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.ui.views.widgets.AnimateSlider
 import tool.xfy9326.naucourse.ui.views.widgets.StyledColorPickerDialog
-import tool.xfy9326.naucourse.utils.utility.IOUtils
+import tool.xfy9326.naucourse.utils.io.TextIOUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import kotlin.math.min
 
@@ -32,8 +32,8 @@ object DialogUtils {
             setColor(color)
             setDialogTitle(R.string.course_color_edit)
             setDialogId(dialogId)
-            setPresets(context.resources.getIntArray(R.array.material_colors_600))
             setShowAlphaSlider(false)
+            setPresets(context.resources.getIntArray(R.array.material_colors_300))
         }.create().apply {
             // 使用Builder后，将Builder的参数传给继承的Dialog
             val styledDialog = StyledColorPickerDialog()
@@ -54,9 +54,9 @@ object DialogUtils {
         MaterialAlertDialogBuilder(context).apply {
             setTitle(R.string.eula_license)
             setMessage(
-                IOUtils.readAssetFileAsText(
+                TextIOUtils.readAssetFileAsText(
                     context,
-                    IOUtils.ASSETS_PATH_EULA_LICENSE
+                    TextIOUtils.ASSETS_PATH_EULA_LICENSE
                 )
             )
             setPositiveButton(android.R.string.yes, null)
@@ -69,9 +69,9 @@ object DialogUtils {
         MaterialAlertDialogBuilder(context).apply {
             setTitle(R.string.open_source_license)
             setMessage(
-                IOUtils.readAssetFileAsText(
+                TextIOUtils.readAssetFileAsText(
                     context,
-                    IOUtils.ASSETS_PATH_OPEN_SOURCE_LICENSE
+                    TextIOUtils.ASSETS_PATH_OPEN_SOURCE_LICENSE
                 )
             )
             setPositiveButton(android.R.string.yes, null)
@@ -141,24 +141,9 @@ object DialogUtils {
                 setLabelFormatter {
                     context.getString(R.string.week_num, it.toInt())
                 }
-                setOnTouchListener { v, event ->
-                    when (event.action) {
-                        MotionEvent.ACTION_DOWN -> AnimUtils.animateSlideThumb(context, v as Slider, true)
-                        MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> AnimUtils.animateSlideThumb(context, v as Slider, false)
-                    }
-                    false
-                }
-                addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
-                    private var startValue = -1f
-                    override fun onStartTrackingTouch(slider: Slider) {
-                        startValue = slider.value
-                    }
-
-                    override fun onStopTrackingTouch(slider: Slider) {
-                        if (startValue != slider.value) {
-                            startValue = slider.value
-                            weekNumChangeListener.invoke(slider.value.toInt())
-                        }
+                setOnSlideFinishListener(object : AnimateSlider.OnSlideFinishListener {
+                    override fun onValueChanged(slider: Slider, value: Float) {
+                        weekNumChangeListener.invoke(slider.value.toInt())
                     }
                 })
             }

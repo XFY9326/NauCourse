@@ -1,8 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/course_cell_style">
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="UseRoundCornerCourseCell"
+            app:summary="@string/use_round_corner_course_cell_sum"
+            app:title="@string/use_round_corner_course_cell" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="CenterHorizontalShowCourseText"
+            app:summary="@string/course_table_cell_center_horizontal_show_sum"
+            app:title="@string/course_table_cell_center_horizontal_show" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="CenterVerticalShowCourseText"
+            app:summary="@string/course_table_cell_center_vertical_show_sum"
+            app:title="@string/course_table_cell_center_vertical_show" />
 
         <androidx.preference.CheckBoxPreference
             app:defaultValue="true"
@@ -14,9 +36,9 @@
         <androidx.preference.CheckBoxPreference
             app:defaultValue="false"
             app:iconSpaceReserved="false"
-            app:key="CenterHorizontalShowCourseText"
-            app:summary="@string/course_table_cell_center_horizontal_show_sum"
-            app:title="@string/course_table_cell_center_horizontal_show" />
+            app:key="DrawAllCellBackground"
+            app:summary="@string/draw_course_cell_background_sum"
+            app:title="@string/draw_course_cell_background" />
 
     </tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory>
 
@@ -37,6 +59,65 @@
             app:key="CourseTableRoundCompat"
             app:summary="@string/course_table_round_compat_sum"
             app:title="@string/course_table_round_compat" />
+
+        <androidx.preference.SeekBarPreference
+            android:max="100"
+            app:defaultValue="100"
+            app:iconSpaceReserved="false"
+            app:key="CustomCourseTableAlpha"
+            app:min="0"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true"
+            app:summary="@string/custom_course_table_alpha_sum"
+            app:title="@string/custom_course_table_alpha" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="CustomCourseTableBackground"
+            app:summary="@string/custom_course_table_background_sum"
+            app:title="@string/custom_course_table_background" />
+
+        <androidx.preference.Preference
+            app:dependency="CustomCourseTableBackground"
+            app:iconSpaceReserved="false"
+            app:key="ChooseCourseTableBackgroundPicture"
+            app:persistent="false"
+            app:summary="@string/choose_picture_as_course_table_background_sum"
+            app:title="@string/choose_picture_as_course_table_background" />
+
+        <!-- ImageView.ScaleType -->
+        <androidx.preference.ListPreference
+            app:defaultValue="CENTER_CROP"
+            app:entries="@array/scare_type_text"
+            app:entryValues="@array/scare_type_value"
+            app:iconSpaceReserved="false"
+            app:key="CourseTableBackgroundScareType"
+            app:summary="@string/course_table_background_scare_type_sum"
+            app:title="@string/course_table_background_scare_type" />
+
+        <androidx.preference.SeekBarPreference
+            android:max="100"
+            app:defaultValue="100"
+            app:iconSpaceReserved="false"
+            app:key="CourseTableBackgroundAlpha"
+            app:min="0"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true"
+            app:summary="@string/course_table_background_alpha_sum"
+            app:title="@string/course_table_background_alpha" />
+
+        <androidx.preference.SeekBarPreference
+            android:max="100"
+            app:defaultValue="60"
+            app:dependency="CustomCourseTableBackground"
+            app:iconSpaceReserved="false"
+            app:key="CourseTableImageQuality"
+            app:min="0"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true"
+            app:summary="@string/custom_course_table_quality_sum"
+            app:title="@string/custom_course_table_quality" />
 
     </tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory>
 </androidx.preference.PreferenceScreen>

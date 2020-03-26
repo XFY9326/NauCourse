@@ -8,11 +8,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.HttpUrl
+import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.providers.beans.GeneralNews
 import tool.xfy9326.naucourse.providers.beans.GeneralNewsDetail
 import tool.xfy9326.naucourse.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourse.providers.info.methods.NewsInfo
-import tool.xfy9326.naucourse.tools.livedata.EventLiveData
+import tool.xfy9326.naucourse.tools.EventLiveData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourse.utils.utility.ImageUtils
 import tool.xfy9326.naucourse.utils.utility.PathUtils
@@ -62,7 +63,7 @@ class NewsDetailViewModel : BaseViewModel() {
                 bitmap,
                 recycle = false,
                 saveToLocal = false,
-                dirName = ImageUtils.DIR_NEWS_DETAIL_IMAGE
+                dirName = Constants.Image.DIR_NEWS_DETAIL_IMAGE
             )
             if (uri == null) {
                 imageOperation.postEventValue(ImageOperationType.IMAGE_SAVE_FAILED)
@@ -78,7 +79,7 @@ class NewsDetailViewModel : BaseViewModel() {
                 PathUtils.getUrlFileName(source),
                 bitmap,
                 recycle = false,
-                dirName = ImageUtils.DIR_NEWS_DETAIL_IMAGE,
+                dirName = Constants.Image.DIR_NEWS_DETAIL_IMAGE,
                 fileProviderUri = true
             )
             if (uri == null) {

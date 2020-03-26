@@ -17,7 +17,7 @@ import tool.xfy9326.naucourse.providers.info.methods.CourseInfo
 import tool.xfy9326.naucourse.providers.info.methods.TermDateInfo
 import tool.xfy9326.naucourse.providers.store.CourseArrangeStore
 import tool.xfy9326.naucourse.providers.store.CourseCellStyleStore
-import tool.xfy9326.naucourse.tools.livedata.EventLiveData
+import tool.xfy9326.naucourse.tools.EventLiveData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourse.utils.compute.CourseUtils
 import tool.xfy9326.naucourse.utils.debug.LogUtils

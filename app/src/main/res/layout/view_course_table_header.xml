@@ -3,12 +3,15 @@
     android:id="@+id/layout_courseTableHeader"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/course_cell_padding"
+    android:baselineAligned="false"
     android:gravity="center">
 
     <TextView
         android:id="@+id/tv_cellMonth"
         android:layout_width="@dimen/course_table_course_time_row_size"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:baselineAligned="false"
         android:gravity="center"
         android:padding="1dp"
         android:textSize="13sp" />

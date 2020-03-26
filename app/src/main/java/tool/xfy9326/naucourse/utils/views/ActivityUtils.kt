@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.view_toast.view.*
 import tool.xfy9326.naucourse.R
@@ -23,6 +24,9 @@ object ActivityUtils {
 
     fun Activity.showToast(@StringRes resId: Int, vararg params: Any) =
         showToast(this, resId, *params)
+
+    fun Fragment.showToast(@StringRes resId: Int, vararg params: Any) =
+        showToast(requireContext(), resId, *params)
 
     fun showToast(context: Context, @StringRes resId: Int, vararg params: Any) = Toast(context.applicationContext).apply {
         LayoutInflater.from(context).apply {

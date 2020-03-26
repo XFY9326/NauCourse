@@ -20,8 +20,9 @@ import tool.xfy9326.naucourse.providers.store.CourseCellStyleStore
 import tool.xfy9326.naucourse.utils.compute.CourseUtils
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 import tool.xfy9326.naucourse.utils.debug.LogUtils
+import tool.xfy9326.naucourse.utils.io.BaseIOUtils
+import tool.xfy9326.naucourse.utils.io.TextIOUtils
 import tool.xfy9326.naucourse.utils.secure.AccountUtils
-import tool.xfy9326.naucourse.utils.utility.IOUtils
 import java.io.File
 
 
@@ -53,7 +54,7 @@ object OldDataCompat {
 
     private fun readCourseDataFromOld(userId: String): Pair<CourseSet, Array<CourseCellStyle>>? {
         try {
-            val text = IOUtils.readTextFromFile(CourseDataPath)
+            val text = TextIOUtils.readTextFromFile(CourseDataPath)
             if (!text.isNullOrEmpty()) {
                 val decryptText = AESCompat.decrypt(text, userId)
                 if (decryptText != null) {
@@ -175,14 +176,14 @@ object OldDataCompat {
 
     @SuppressLint("ApplySharedPref")
     private fun clearOldData() {
-        IOUtils.deleteFile(App.instance.filesDir.absolutePath)
-        IOUtils.deleteFile(App.instance.cacheDir.absolutePath)
-        IOUtils.deleteFile(App.instance.codeCacheDir.absolutePath)
+        BaseIOUtils.deleteFile(App.instance.filesDir.absolutePath)
+        BaseIOUtils.deleteFile(App.instance.cacheDir.absolutePath)
+        BaseIOUtils.deleteFile(App.instance.codeCacheDir.absolutePath)
 
         App.instance.filesDir?.parentFile?.absolutePath?.let {
-            IOUtils.deleteFile(it + File.separator + "shared_prefs" + File.separator + "CookiesPrefs.xml")
-            IOUtils.deleteFile(it + File.separator + "shared_prefs" + File.separator + "Cookies_Prefs.xml")
-            IOUtils.deleteFile(it + File.separator + "shared_prefs" + File.separator + "tool.xfy9326.naucourse_preferences.xml")
+            BaseIOUtils.deleteFile(it + File.separator + "shared_prefs" + File.separator + "CookiesPrefs.xml")
+            BaseIOUtils.deleteFile(it + File.separator + "shared_prefs" + File.separator + "Cookies_Prefs.xml")
+            BaseIOUtils.deleteFile(it + File.separator + "shared_prefs" + File.separator + "tool.xfy9326.naucourse_preferences.xml")
         }
     }
 }

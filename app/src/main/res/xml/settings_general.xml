@@ -27,5 +27,6 @@
     <androidx.preference.Preference
         app:icon="@drawable/ic_about"
         app:key="AboutIntent"
+        app:persistent="false"
         app:title="@string/about" />
 </androidx.preference.PreferenceScreen>

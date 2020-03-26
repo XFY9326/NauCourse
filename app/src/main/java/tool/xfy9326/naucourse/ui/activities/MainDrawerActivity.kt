@@ -17,7 +17,7 @@ import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentInfo
-import tool.xfy9326.naucourse.tools.livedata.Event
+import tool.xfy9326.naucourse.tools.Event
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourse.ui.dialogs.FullScreenLoadingDialog
 import tool.xfy9326.naucourse.ui.fragments.CourseArrangeFragment
