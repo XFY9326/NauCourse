@@ -5,7 +5,7 @@
     <color name="colorAccent">#536DFE</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
-    <color name="colorCourseTimeDefault">#1A237E</color>
+    <color name="colorCourseTimeDefault">#004080</color>
     <color name="colorBaseIcon">#858585</color>
     <color name="colorWindowsBackground">@color/design_default_color_background</color>
     <color name="colorDivider">#757575</color>
@@ -16,9 +16,9 @@
     <color name="colorCourseTimeCellChecked">#2196F3</color>
     <color name="colorControlIcon">#1976D2</color>
     <color name="colorFABBackground">#2196F3</color>
+    <color name="colorCourseTimeHighLightBackground">#64B5F6</color>
 
     <color name="colorCourseTimeHighLight">#FFFFFF</color>
-    <color name="colorCourseTimeHighLightBackground">#00E5FF</color>
     <color name="colorSliderTrackerActive">#2196F3</color>
     <color name="colorSliderTrackerInActive">#CBE1F3</color>
     <color name="colorPrimaryTextWhenDark">#FFFFFF</color>
@@ -33,7 +33,7 @@
     <color name="colorUrlLink">#2962FF</color>
     <color name="colorOtherCourseCellBackground">#99FFFFFF</color>
 
-    <!--  Material 300 Colors -->
+    <!--  Material Colors -->
     <color name="material_red_300">#E57373</color>
     <color name="material_pink_300">#F06292</color>
     <color name="material_purple_300">#BA68C8</color>
@@ -46,10 +46,10 @@
 
     <color name="material_teal_300">#4DB6AC</color>
     <color name="material_green_300">#81C784</color>
-    <color name="material_light_green_300">#AED581</color>
-    <color name="material_lime_300">#DCE775</color>
+    <color name="material_light_green_400">#66BB6A</color>
+    <color name="material_lime_400">#D4E157</color>
 
-    <color name="material_amber_300">#FFD54F</color>
+    <color name="material_amber_400">#FFCA28</color>
     <color name="material_orange_300">#FFB74D</color>
     <color name="material_deep_orange_300">#FF8A65</color>
 </resources>

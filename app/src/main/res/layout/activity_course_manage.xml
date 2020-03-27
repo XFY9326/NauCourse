@@ -16,7 +16,6 @@
         android:layout_margin="25dp"
         android:clickable="true"
         android:focusable="true"
-        app:backgroundTint="@color/colorFABBackground"
         app:elevation="4dp"
         app:fabSize="normal"
         app:layout_anchor="@id/layout_courseManageList"

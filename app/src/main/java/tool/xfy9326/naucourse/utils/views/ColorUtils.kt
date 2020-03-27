@@ -9,7 +9,7 @@ object ColorUtils {
     @FloatRange(from = 0.0, to = 1.0)
     private const val LUMINANCE_IS_LIGHT_COLOR = 0.7f
 
-    private val MATERIAL_COLOR = App.instance.resources.getIntArray(R.array.material_colors_300)
+    private val MATERIAL_COLOR = App.instance.resources.getIntArray(R.array.material_colors)
 
     fun isLightColor(color: Int) = ColorUtils.calculateLuminance(color) >= LUMINANCE_IS_LIGHT_COLOR
 

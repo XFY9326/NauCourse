@@ -268,6 +268,8 @@
     <string name="scare_type_center_inside">等比缩放到能够完整展示</string>
     <string name="show_next_week_course_ahead">提前显示下周课表</string>
     <string name="show_next_week_course_ahead_sum">周末没有课程时提前显示下周课表</string>
+    <string name="course_table_background_fullscreen">沉浸显示课程表背景</string>
+    <string name="course_table_background_fullscreen_sum">使用透明的工具栏以及全屏的背景</string>
     <string name="clear_logs">清空日志</string>
     <string name="course_settings">课程设置</string>
     <string name="others">其它</string>

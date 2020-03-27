@@ -12,6 +12,7 @@
     <style name="AppTheme.TranslucentStatusBar.Base" parent="AppTheme">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
     <style name="AppTheme.TranslucentStatusBar" parent="AppTheme.TranslucentStatusBar.Base">
@@ -36,6 +37,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.DayNight</item>
+        <item name="floatingActionButtonStyle">@style/AppTheme.FloatingActionButton</item>
         <item name="colorControlActivated">@color/colorControlIcon</item>
         <item name="android:textColorPrimary">@color/colorPrimaryText</item>
         <item name="android:textColorSecondary">@color/colorSecondaryText</item>
@@ -45,13 +48,23 @@
         <item name="buttonBarNegativeButtonStyle">@style/AppTheme.DialogBtnStyle</item>
     </style>
 
+    <style name="AppTheme.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">@color/colorFABBackground</item>
+        <item name="tint">@android:color/white</item>
+    </style>
+
     <style name="AppTheme.DialogBtnStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <item name="android:textColor">@color/colorDialogButtonText</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+    <!-- 设置ActionBar背景色，使得在暗色模式下使用相同背景并保持文字按钮颜色为白色 -->
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="elevation">0dp</item>
+    </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.DayNight" />
+    <!-- 在代码中动态设置背景色 -->
+    <style name="AppTheme.AppBarOverlay.CourseTable" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 
     <style name="AppTheme.OverflowMenuStyle" parent="@style/Widget.MaterialComponents.PopupMenu.Overflow">
         <item name="overlapAnchor">false</item>

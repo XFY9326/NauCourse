@@ -1,10 +1,13 @@
 package tool.xfy9326.naucourse.utils.views
 
+import android.content.Context
+import android.content.res.TypedArray
 import android.widget.EditText
 import android.widget.TextView
 import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+
 
 object ViewUtils {
     const val COURSE_DATA_JOIN_SYMBOL = "·"
@@ -13,6 +16,13 @@ object ViewUtils {
 
     fun TextView.clear() {
         this.text = Constants.EMPTY
+    }
+
+    fun getActionBarSize(context: Context): Int {
+        val styledAttributes: TypedArray = context.theme.obtainStyledAttributes(intArrayOf(android.R.attr.actionBarSize))
+        val mActionBarSize = styledAttributes.getDimension(0, 0f).toInt()
+        styledAttributes.recycle()
+        return mActionBarSize
     }
 
     fun getCourseDataShowText(text: String) =

@@ -42,8 +42,9 @@ android {
 
         release {
             zipAlignEnabled true
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+//            minifyEnabled true
+//            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             manifestPlaceholders = ['ExtractNativeLibs': 'false']
         }

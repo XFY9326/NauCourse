@@ -110,6 +110,14 @@
             app:summary="@string/course_table_background_scare_type_sum"
             app:title="@string/course_table_background_scare_type" />
 
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:dependency="CustomCourseTableBackground"
+            app:iconSpaceReserved="false"
+            app:key="CourseTableBackgroundFullScreen"
+            app:summary="@string/course_table_background_fullscreen_sum"
+            app:title="@string/course_table_background_fullscreen" />
+
         <androidx.preference.SeekBarPreference
             android:max="100"
             app:defaultValue="100"

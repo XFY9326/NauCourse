@@ -33,7 +33,7 @@ object DialogUtils {
             setDialogTitle(R.string.course_color_edit)
             setDialogId(dialogId)
             setShowAlphaSlider(false)
-            setPresets(context.resources.getIntArray(R.array.material_colors_300))
+            setPresets(context.resources.getIntArray(R.array.material_colors))
         }.create().apply {
             // 使用Builder后，将Builder的参数传给继承的Dialog
             val styledDialog = StyledColorPickerDialog()

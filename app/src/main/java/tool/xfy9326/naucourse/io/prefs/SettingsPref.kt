@@ -44,6 +44,7 @@ object SettingsPref : BasePref() {
     val CustomCourseTableAlpha by pref.int(defValue = 100)
     val CourseTableImageQuality by pref.int(defValue = 60)
     val CourseTableBackgroundAlpha by pref.int(defValue = 100)
+    val CourseTableBackgroundFullScreen by pref.boolean(defValue = true)
     private val CourseTableBackgroundScareType by pref.string(defValue = ImageView.ScaleType.CENTER_CROP.name)
 
     fun getCourseTableBackgroundScareType() = ImageView.ScaleType.valueOf(CourseTableBackgroundScareType!!)

@@ -37,7 +37,7 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment(), Preference
             NotifyBus[NotifyBus.Type.COURSE_TERM_UPDATE].notifyEvent()
             true
         }
-        
+
         addRefreshCourseTableListener(Constants.Pref.ForceShowCourseTableWeekends)
         addRefreshCourseTableListener(Constants.Pref.SameCourseCellHeight)
         addRefreshCourseTableListener(Constants.Pref.CenterHorizontalShowCourseText)
@@ -50,6 +50,7 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment(), Preference
         addRefreshCourseTableBackgroundListener(Constants.Pref.CustomCourseTableAlpha)
         addRefreshCourseTableBackgroundListener(Constants.Pref.CourseTableBackgroundScareType)
         addRefreshCourseTableBackgroundListener(Constants.Pref.CourseTableBackgroundAlpha)
+        addRefreshCourseTableBackgroundListener(Constants.Pref.CourseTableBackgroundFullScreen)
 
         findPreference<Preference>(Constants.Pref.ChooseCourseTableBackgroundPicture)?.setOnPreferenceClickListener {
             IntentUtils.selectPicture(this, SELECT_COURSE_TABLE_PICTURE_REQUEST_CODE)

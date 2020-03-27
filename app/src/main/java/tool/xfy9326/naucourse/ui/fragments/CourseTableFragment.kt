@@ -1,11 +1,20 @@
 package tool.xfy9326.naucourse.ui.fragments
 
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewOutlineProvider
+import android.widget.FrameLayout
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.isVisible
+import androidx.core.view.iterator
+import androidx.core.view.setPadding
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
@@ -21,8 +30,8 @@ import tool.xfy9326.naucourse.ui.fragments.base.DrawerToolbarFragment
 import tool.xfy9326.naucourse.ui.models.fragment.CourseTableViewModel
 import tool.xfy9326.naucourse.ui.views.helpers.CourseTableViewHelper
 import tool.xfy9326.naucourse.ui.views.viewpager.CourseTableViewPagerAdapter
-import tool.xfy9326.naucourse.utils.utility.ImageUtils
 import tool.xfy9326.naucourse.utils.views.DialogUtils
+import tool.xfy9326.naucourse.utils.views.ViewUtils
 
 class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), CourseTableViewHelper.OnCourseCellClickListener {
     private lateinit var courseTableViewPagerAdapter: CourseTableViewPagerAdapter
@@ -96,6 +105,16 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
                 }
             }.show(childFragmentManager, null)
         })
+        viewModel.courseTableBackground.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                iv_courseTableBackground.setImageBitmap(it)
+                iv_courseTableBackground.alpha = SettingsPref.CourseTableBackgroundAlpha / 100f
+                iv_courseTableBackground.scaleType = SettingsPref.getCourseTableBackgroundScareType()
+                iv_courseTableBackground.visibility = View.VISIBLE
+            } else {
+                iv_courseTableBackground.visibility = View.GONE
+            }
+        })
 
         NotifyBus[NotifyBus.Type.COURSE_STYLE_TERM_UPDATE].observeNotification(viewLifecycleOwner, {
             viewModel.refreshCourseData()
@@ -108,7 +127,8 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
             viewModel.courseTableRebuild.notifyEvent()
         }, CourseTableFragment::class.java.simpleName)
         NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE_BACKGROUND].observeNotification(viewLifecycleOwner, {
-            setCourseTableBackground()
+            viewModel.requestCourseTableBackground()
+            setFullScreenBackground(false)
         }, CourseTableFragment::class.java.simpleName)
     }
 
@@ -132,25 +152,57 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
             turnToDefaultWeek(viewModel)
         }
 
-        setCourseTableBackground()
+        viewModel.requestCourseTableBackground()
+        setFullScreenBackground(true)
     }
 
-    private fun setCourseTableBackground() {
-        if (SettingsPref.CustomCourseTableBackground) {
-            val backgroundBitmap = ImageUtils.readLocalImage(Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE)
-            if (backgroundBitmap != null) {
-                iv_courseTableBackground.setImageBitmap(backgroundBitmap)
-                iv_courseTableBackground.alpha = SettingsPref.CourseTableBackgroundAlpha / 100f
-                iv_courseTableBackground.scaleType = SettingsPref.getCourseTableBackgroundScareType()
-                iv_courseTableBackground.visibility = View.VISIBLE
-                viewLifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
-                    override fun onDestroy(owner: LifecycleOwner) {
-                        if (!backgroundBitmap.isRecycled) backgroundBitmap.recycle()
-                    }
-                })
+    private fun setFullScreenBackground(isInit: Boolean) {
+        if (SettingsPref.CustomCourseTableBackground && SettingsPref.CourseTableBackgroundFullScreen) {
+            layout_courseTableWindow.fitsSystemWindows = false
+            ViewCompat.requestApplyInsets(layout_courseTableWindow)
+            layout_courseTableWindow.setPadding(0)
+
+            layout_courseTableAppBar.fitsSystemWindows = true
+            ViewCompat.requestApplyInsets(layout_courseTableAppBar)
+
+            iv_courseTableBackground.layoutParams = FrameLayout.LayoutParams(iv_courseTableBackground.layoutParams).apply {
+                setMargins(0, 0, 0, 0)
+            }
+            layout_courseTableAppBar.apply {
+                outlineProvider = null
+                background = null
+            }
+            val colorTimeText = ContextCompat.getColor(requireContext(), R.color.colorCourseTimeDefault)
+            tv_nowShowWeekNum.setTextColor(colorTimeText)
+            tv_todayDate.setTextColor(colorTimeText)
+            tv_notCurrentWeek.setTextColor(colorTimeText)
+            tb_courseTable.navigationIcon?.colorFilter = PorterDuffColorFilter(colorTimeText, PorterDuff.Mode.SRC)
+            tb_courseTable.menu.iterator().forEach {
+                it.icon?.colorFilter = PorterDuffColorFilter(colorTimeText, PorterDuff.Mode.SRC_ATOP)
             }
         } else {
-            iv_courseTableBackground.visibility = View.GONE
+            layout_courseTableWindow.fitsSystemWindows = true
+            ViewCompat.requestApplyInsets(layout_courseTableWindow)
+
+            layout_courseTableAppBar.fitsSystemWindows = false
+            ViewCompat.requestApplyInsets(layout_courseTableAppBar)
+
+            if (!isInit) {
+                iv_courseTableBackground.layoutParams = FrameLayout.LayoutParams(iv_courseTableBackground.layoutParams).apply {
+                    setMargins(0, ViewUtils.getActionBarSize(requireContext()), 0, 0)
+                }
+                layout_courseTableAppBar.apply {
+                    outlineProvider = ViewOutlineProvider.BOUNDS
+                    setBackgroundResource(R.color.colorPrimary)
+                }
+                tv_nowShowWeekNum.setTextColor(Color.WHITE)
+                tv_todayDate.setTextColor(Color.WHITE)
+                tv_notCurrentWeek.setTextColor(Color.WHITE)
+                tb_courseTable.navigationIcon?.clearColorFilter()
+                tb_courseTable.menu.iterator().forEach {
+                    it.icon?.clearColorFilter()
+                }
+            }
         }
     }
 
@@ -186,5 +238,14 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
     override fun onDestroyView() {
         vp_courseTablePanel.unregisterOnPageChangeCallback(viewPagerCallback)
         super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        if (iv_courseTableBackground.isVisible) {
+            (iv_courseTableBackground.drawable as BitmapDrawable?)?.bitmap?.let {
+                if (!it.isRecycled) it.recycle()
+            }
+        }
+        super.onDestroy()
     }
 }

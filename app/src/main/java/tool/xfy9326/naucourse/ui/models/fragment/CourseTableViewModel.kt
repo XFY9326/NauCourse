@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourse.ui.models.fragment
 
+import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
@@ -19,6 +20,7 @@ import tool.xfy9326.naucourse.ui.views.helpers.CourseTableViewHelper
 import tool.xfy9326.naucourse.utils.compute.CourseUtils
 import tool.xfy9326.naucourse.utils.compute.TimeUtils
 import tool.xfy9326.naucourse.utils.debug.LogUtils
+import tool.xfy9326.naucourse.utils.utility.ImageUtils
 
 class CourseTableViewModel : BaseViewModel() {
     companion object {
@@ -54,6 +56,7 @@ class CourseTableViewModel : BaseViewModel() {
     val currentWeekStatus = MutableLiveData<CurrentWeekStatus>()
     val courseDetailInfo = EventLiveData<CourseDetail>()
     val courseAndTermEmpty = EventLiveData<Boolean>()
+    val courseTableBackground = MutableLiveData<Bitmap?>()
 
     val courseTableRebuild = NotifyLivaData()
 
@@ -379,4 +382,14 @@ class CourseTableViewModel : BaseViewModel() {
         courseTableStyle = null
     }
 
+    fun requestCourseTableBackground() {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (SettingsPref.CustomCourseTableBackground) {
+                val backgroundBitmap = ImageUtils.readLocalImage(Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE)
+                courseTableBackground.postValue(backgroundBitmap)
+            } else {
+                courseTableBackground.postValue(null)
+            }
+        }
+    }
 }

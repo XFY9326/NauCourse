@@ -68,7 +68,7 @@
         <item>CENTER_INSIDE</item>
     </string-array>
 
-    <integer-array name="material_colors_300">
+    <integer-array name="material_colors">
         <item>@color/material_red_300</item>
         <item>@color/material_pink_300</item>
         <item>@color/material_purple_300</item>
@@ -79,9 +79,9 @@
         <item>@color/material_cyan_300</item>
         <item>@color/material_teal_300</item>
         <item>@color/material_green_300</item>
-        <item>@color/material_light_green_300</item>
-        <item>@color/material_lime_300</item>
-        <item>@color/material_amber_300</item>
+        <item>@color/material_light_green_400</item>
+        <item>@color/material_lime_400</item>
+        <item>@color/material_amber_400</item>
         <item>@color/material_orange_300</item>
         <item>@color/material_deep_orange_300</item>
     </integer-array>
