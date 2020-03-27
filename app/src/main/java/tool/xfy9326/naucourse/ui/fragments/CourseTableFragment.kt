@@ -10,12 +10,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import kotlinx.android.synthetic.main.fragment_course_table.*
-import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseCell
 import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
+import tool.xfy9326.naucourse.tools.NotifyBus
 import tool.xfy9326.naucourse.ui.dialogs.CourseDetailDialog
 import tool.xfy9326.naucourse.ui.fragments.base.DrawerToolbarFragment
 import tool.xfy9326.naucourse.ui.models.fragment.CourseTableViewModel
@@ -62,6 +62,10 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
                     tv_notCurrentWeek.visibility = View.GONE
                     tv_notCurrentWeek.text = Constants.EMPTY
                 }
+                CourseTableViewModel.CurrentWeekStatus.IS_NEXT_WEEK -> {
+                    tv_notCurrentWeek.visibility = View.VISIBLE
+                    tv_notCurrentWeek.setText(R.string.next_week)
+                }
                 CourseTableViewModel.CurrentWeekStatus.NOT_CURRENT_WEEK -> {
                     tv_notCurrentWeek.visibility = View.VISIBLE
                     tv_notCurrentWeek.setText(R.string.not_current_week)
@@ -79,9 +83,9 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
             synchronized(this) {
                 if (!viewModel.hasInitWithNowWeekNum) {
                     viewModel.hasInitWithNowWeekNum = true
-                    val weekNum = if (it == 0) 1 else it
-                    viewModel.nowShowWeekNum.postValue(weekNum - 1)
-                    vp_courseTablePanel.setCurrentItem(weekNum - 1, false)
+                    val showWeekNum = if (it.first == 0) 1 else if (it.second) it.first + 1 else it.first
+                    viewModel.nowShowWeekNum.postValue(showWeekNum - 1)
+                    vp_courseTablePanel.setCurrentItem(showWeekNum - 1, false)
                 }
             }
         })
@@ -93,13 +97,18 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
             }.show(childFragmentManager, null)
         })
 
-        App.instance.courseStyleTermUpdate.observeNotification(viewLifecycleOwner, {
+        NotifyBus[NotifyBus.Type.COURSE_STYLE_TERM_UPDATE].observeNotification(viewLifecycleOwner, {
             viewModel.refreshCourseData()
         }, CourseTableFragment::class.java.simpleName)
-        App.instance.requestRebuildCourseTable.observeNotification(viewLifecycleOwner, {
+        NotifyBus[NotifyBus.Type.COURSE_TERM_UPDATE].observeNotification(viewLifecycleOwner, {
+            viewModel.refreshTimeInfo()
+        }, CourseTableFragment::class.java.simpleName)
+        NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE].observeNotification(viewLifecycleOwner, {
             viewModel.refreshCourseTableStyle()
-            setCourseTableBackground()
             viewModel.courseTableRebuild.notifyEvent()
+        }, CourseTableFragment::class.java.simpleName)
+        NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE_BACKGROUND].observeNotification(viewLifecycleOwner, {
+            setCourseTableBackground()
         }, CourseTableFragment::class.java.simpleName)
     }
 
@@ -120,7 +129,7 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
         vp_courseTablePanel.registerOnPageChangeCallback(viewPagerCallback)
 
         layout_dateInfoBar.setOnClickListener {
-            turnToCurrentWeek(viewModel)
+            turnToDefaultWeek(viewModel)
         }
 
         setCourseTableBackground()
@@ -145,12 +154,18 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
         }
     }
 
-    private fun turnToCurrentWeek(viewModel: CourseTableViewModel) {
-        if (viewModel.currentWeekNum != null) {
-            if (viewModel.currentWeekNum!! == 0) {
+    private fun turnToDefaultWeek(viewModel: CourseTableViewModel) {
+        val defaultWeek = viewModel.currentWeekNum
+        val showAhead = viewModel.showNextWeekAhead
+        if (defaultWeek != null) {
+            if (defaultWeek == 0) {
                 vp_courseTablePanel.setCurrentItem(0, true)
             } else {
-                vp_courseTablePanel.setCurrentItem(viewModel.currentWeekNum!! - 1, true)
+                if (showAhead == true) {
+                    vp_courseTablePanel.setCurrentItem(defaultWeek, true)
+                } else {
+                    vp_courseTablePanel.setCurrentItem(defaultWeek - 1, true)
+                }
             }
         }
     }

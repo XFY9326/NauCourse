@@ -32,6 +32,7 @@ object SettingsPref : BasePref() {
 
 
     // CourseTableSettingsFragment
+    val ShowNextWeekCourseTableAhead by pref.boolean(defValue = true)
     val CourseTableRoundCompat by pref.boolean(defValue = false)
     val ForceShowCourseTableWeekends by pref.boolean(defValue = false)
     val SameCourseCellHeight by pref.boolean(defValue = true)

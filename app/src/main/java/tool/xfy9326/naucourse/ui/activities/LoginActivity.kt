@@ -128,6 +128,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
 
     override fun onDestroy() {
         AnimatedVectorDrawableCompat.clearAnimationCallbacks(iv_loginLoading.drawable)
+        System.gc()
         super.onDestroy()
     }
 }

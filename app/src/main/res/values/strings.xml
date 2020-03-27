@@ -266,4 +266,12 @@
     <string name="scare_type_center">居中显示</string>
     <string name="scare_type_center_crop">等比缩放直到完全填充</string>
     <string name="scare_type_center_inside">等比缩放到能够完整展示</string>
+    <string name="show_next_week_course_ahead">提前显示下周课表</string>
+    <string name="show_next_week_course_ahead_sum">周末没有课程时提前显示下周课表</string>
+    <string name="clear_logs">清空日志</string>
+    <string name="course_settings">课程设置</string>
+    <string name="others">其它</string>
+    <string name="operation_success">操作成功！</string>
+    <string name="operation_failed">操作失败！</string>
+    <string name="next_week">下一周</string>
 </resources>

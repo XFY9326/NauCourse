@@ -96,6 +96,10 @@ object TimeUtils {
         })
     }
 
+    fun inWeekend() = Calendar.getInstance(Locale.CHINA).get(Calendar.DAY_OF_WEEK).let {
+        return@let it == Calendar.SATURDAY || it == Calendar.SUNDAY
+    }
+
     fun getWeekDayNum(date: Date) = getWeekDayNum(getNewCalendar(date))
 
     fun getWeekDayNum(calendar: Calendar): Int {

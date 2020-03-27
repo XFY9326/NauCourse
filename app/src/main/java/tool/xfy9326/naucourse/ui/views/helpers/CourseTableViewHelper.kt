@@ -25,7 +25,6 @@ import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseCell
 import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.beans.CoursePkg
-import tool.xfy9326.naucourse.beans.CourseTable
 import tool.xfy9326.naucourse.ui.views.widgets.AdvancedGridLayout
 import tool.xfy9326.naucourse.ui.views.widgets.CourseCellLayout
 import tool.xfy9326.naucourse.utils.compute.TimeUtils
@@ -460,8 +459,4 @@ object CourseTableViewHelper {
             targetView.background = null
         }
     }
-
-    fun hasWeekendCourse(courseTable: CourseTable): Boolean =
-        courseTable.table.isNotEmpty() &&
-                (courseTable.table[Constants.Time.MAX_WEEK_DAY - 1].isNotEmpty() || courseTable.table[Constants.Time.MAX_WEEK_DAY - 2].isNotEmpty())
 }

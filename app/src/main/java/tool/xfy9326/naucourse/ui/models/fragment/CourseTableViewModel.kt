@@ -12,8 +12,8 @@ import tool.xfy9326.naucourse.providers.info.methods.CourseInfo
 import tool.xfy9326.naucourse.providers.info.methods.TermDateInfo
 import tool.xfy9326.naucourse.providers.store.CourseCellStyleStore
 import tool.xfy9326.naucourse.providers.store.CourseTableStore
-import tool.xfy9326.naucourse.tools.EventLiveData
-import tool.xfy9326.naucourse.tools.NotifyLivaData
+import tool.xfy9326.naucourse.tools.livedata.EventLiveData
+import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourse.ui.views.helpers.CourseTableViewHelper
 import tool.xfy9326.naucourse.utils.compute.CourseUtils
@@ -40,11 +40,15 @@ class CourseTableViewModel : BaseViewModel() {
 
     var hasInitWithNowWeekNum = false
 
+    var showNextWeekAhead: Boolean? = null
     var currentWeekNum: Int? = null
     var maxWeekNumTemp: Int? = null
 
     val maxWeekNum = MutableLiveData<Int>()
-    val nowWeekNum = MutableLiveData<Int>()
+
+    // 当前周数，是否要提前显示下一周课表
+    val nowWeekNum = MutableLiveData<Pair<Int, Boolean>>()
+
     val nowShowWeekNum = MutableLiveData<Int>()
     val todayDate = MutableLiveData<Pair<Int, Int>>()
     val currentWeekStatus = MutableLiveData<CurrentWeekStatus>()
@@ -58,6 +62,7 @@ class CourseTableViewModel : BaseViewModel() {
 
     enum class CurrentWeekStatus {
         IS_CURRENT_WEEK,
+        IS_NEXT_WEEK,
         NOT_CURRENT_WEEK,
         IN_VACATION
     }
@@ -94,20 +99,19 @@ class CourseTableViewModel : BaseViewModel() {
         val termInfo = termInfoAsync.await()
         if (termInfo.isSuccess) {
             termDate = termInfo.data!!
-            val termDatePostResult = postWeekInfoByTermDate(termInfo.data)
-            currentWeekNum = termDatePostResult.second
             val courseInfo = courseInfoAsync.await()
             if (courseInfo.isSuccess) {
                 courseSet = courseInfo.data!!
                 val cacheCourseTableArr = cacheCourseTableArrAsync.await()
                 if (cacheCourseTableArr == null) {
-                    makeCourseTable(courseSet, termDate, termDatePostResult.first)
+                    makeCourseTable(courseSet, termDate)
                 } else {
                     courseTableArr = cacheCourseTableArr
                 }
             } else {
                 LogUtils.d<CourseTableViewModel>("CourseInfo Init Error: ${courseInfo.errorReason}")
             }
+            setWeekInfoByTermDate(termInfo.data, courseInfo.data)
         } else {
             LogUtils.d<CourseTableViewModel>("TermInfo Init Error: ${termInfo.errorReason}")
         }
@@ -171,6 +175,22 @@ class CourseTableViewModel : BaseViewModel() {
         }
     }
 
+    fun refreshTimeInfo() {
+        viewModelScope.launch(Dispatchers.Default) {
+            val termInfoAsync = async { TermDateInfo.getInfo(loadCache = true) }
+            val termInfo = termInfoAsync.await()
+            if (termInfo.isSuccess) {
+                hasInitWithNowWeekNum = false
+                setWeekInfoByTermDate(
+                    termInfo.data!!,
+                    if (this@CourseTableViewModel::courseSet.isInitialized) this@CourseTableViewModel.courseSet else null
+                )
+            } else {
+                LogUtils.d<CourseTableViewModel>("TermInfo Refresh Error: ${termInfo.errorReason}")
+            }
+        }
+    }
+
     fun refreshCourseData() {
         viewModelScope.launch(Dispatchers.Default) {
             val courseInfoAsync = async { CourseInfo.getInfo(loadCache = true) }
@@ -207,9 +227,11 @@ class CourseTableViewModel : BaseViewModel() {
     private fun updateCourseData(courseSet: CourseSet? = null, termDate: TermDate? = null, styleList: Array<CourseCellStyle>? = null) {
         if (validateUpdateNecessary(courseSet, termDate, styleList)) {
             var hasUpdateInfo = false
+            var hasCourseUpdateInfo = false
             if (courseSet != null) {
                 this.courseSet = courseSet
                 hasUpdateInfo = true
+                hasCourseUpdateInfo = true
             }
             if (termDate != null) {
                 this.termDate = termDate
@@ -218,28 +240,54 @@ class CourseTableViewModel : BaseViewModel() {
             if (styleList != null) {
                 CourseCellStyleStore.saveStore(styleList)
                 hasUpdateInfo = true
+                hasCourseUpdateInfo = true
             }
             if (hasUpdateInfo) {
                 viewModelScope.launch(Dispatchers.Default) {
-                    val termDatePostResult = postWeekInfoByTermDate(this@CourseTableViewModel.termDate)
-                    currentWeekNum = termDatePostResult.second
-                    makeCourseTable(
-                        this@CourseTableViewModel.courseSet,
+                    if (hasCourseUpdateInfo) {
+                        makeCourseTable(
+                            this@CourseTableViewModel.courseSet,
+                            this@CourseTableViewModel.termDate,
+                            true
+                        )
+                    }
+                    setWeekInfoByTermDate(
                         this@CourseTableViewModel.termDate,
-                        termDatePostResult.first,
-                        true
+                        if (this@CourseTableViewModel::courseSet.isInitialized) this@CourseTableViewModel.courseSet else null
                     )
                 }
             }
+        } else {
+            LogUtils.i<CourseTableViewModel>("Course Update Unnecessary!")
         }
     }
 
-    private fun postWeekInfoByTermDate(termDate: TermDate): Pair<Int, Int> {
+    // 应当在生成课表后调用以提高加载速度
+    @Synchronized
+    private suspend fun setWeekInfoByTermDate(termDate: TermDate, courseSet: CourseSet?) {
         val maxWeek = TimeUtils.getWeekLength(termDate)
         val currentWeekNum = TimeUtils.getWeekNum(termDate)
+        val showAhead =
+            if (courseSet != null && courseSet.hasCourse &&
+                SettingsPref.ShowNextWeekCourseTableAhead && TimeUtils.inWeekend() && currentWeekNum < maxWeek
+            ) {
+                val currentWeekTable =
+                    if (::courseTableArr.isInitialized) {
+                        courseTableArr[currentWeekNum - 1]
+                    } else {
+                        makeCourseTable(courseSet, termDate)
+                        courseTableArr[currentWeekNum - 1]
+                    }
+                !CourseUtils.hasWeekendCourse(currentWeekTable)
+            } else {
+                false
+            }
         maxWeekNum.postValue(maxWeek)
-        nowWeekNum.postValue(currentWeekNum)
-        return Pair(maxWeek, currentWeekNum)
+        if (currentWeekNum != this.currentWeekNum || showNextWeekAhead != showAhead) {
+            this.currentWeekNum = currentWeekNum
+            this.showNextWeekAhead = showAhead
+            nowWeekNum.postValue(Pair(currentWeekNum, showAhead))
+        }
     }
 
     private fun validateUpdateNecessary(
@@ -255,14 +303,11 @@ class CourseTableViewModel : BaseViewModel() {
     fun requestShowWeekStatus(nowShowWeekNum: Int) {
         viewModelScope.launch(Dispatchers.Default) {
             currentWeekStatus.postValue(
-                if (currentWeekNum == 0) {
-                    CurrentWeekStatus.IN_VACATION
-                } else {
-                    if (currentWeekNum == nowShowWeekNum) {
-                        CurrentWeekStatus.IS_CURRENT_WEEK
-                    } else {
-                        CurrentWeekStatus.NOT_CURRENT_WEEK
-                    }
+                when (currentWeekNum) {
+                    0 -> CurrentWeekStatus.IN_VACATION
+                    nowShowWeekNum -> CurrentWeekStatus.IS_CURRENT_WEEK
+                    nowShowWeekNum - 1 -> CurrentWeekStatus.IS_NEXT_WEEK
+                    else -> CurrentWeekStatus.NOT_CURRENT_WEEK
                 }
             )
         }
@@ -292,9 +337,9 @@ class CourseTableViewModel : BaseViewModel() {
         }
     }
 
-    private suspend fun makeCourseTable(courseSet: CourseSet, termDate: TermDate, maxWeekNum: Int, postValue: Boolean = false) {
+    private suspend fun makeCourseTable(courseSet: CourseSet, termDate: TermDate, postValue: Boolean = false) {
         withContext(Dispatchers.Default) {
-            courseTableArr = CourseUtils.generateAllCourseTable(courseSet, termDate, maxWeekNum)
+            courseTableArr = CourseUtils.generateAllCourseTable(courseSet, termDate, TimeUtils.getWeekLength(termDate))
             if (postValue) {
                 for (i in courseTablePkg.indices) {
                     if (courseTablePkg[i].hasActiveObservers()) {

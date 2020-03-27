@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.tools
+package tool.xfy9326.naucourse.tools.livedata
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData

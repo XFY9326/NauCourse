@@ -108,6 +108,7 @@ object Constants {
     }
 
     object Pref {
+        const val ClearDebugLogs = "ClearDebugLogs"
         const val AboutIntent = "AboutIntent"
         const val NightMode = "NightMode"
         const val DebugMode = "DebugMode"
@@ -125,5 +126,6 @@ object Constants {
         const val CourseTableImageQuality = "CourseTableImageQuality"
         const val CourseTableBackgroundScareType = "CourseTableBackgroundScareType"
         const val CourseTableBackgroundAlpha = "CourseTableBackgroundAlpha"
+        const val ShowNextWeekCourseTableAhead = "ShowNextWeekCourseTableAhead"
     }
 }

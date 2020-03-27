@@ -119,6 +119,7 @@ class UserInfoActivity : ViewModelActivity<UserInfoViewModel>() {
 
     override fun onDestroy() {
         userInfoScope.cancel()
+        System.gc()
         super.onDestroy()
     }
 }

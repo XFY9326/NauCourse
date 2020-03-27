@@ -13,6 +13,7 @@ import tool.xfy9326.naucourse.ui.fragments.base.ViewModelFragment
 import tool.xfy9326.naucourse.ui.models.fragment.CourseTableViewModel
 import tool.xfy9326.naucourse.ui.views.helpers.CourseTableViewHelper
 import tool.xfy9326.naucourse.ui.views.viewpager.CourseTableViewPagerAdapter
+import tool.xfy9326.naucourse.utils.compute.CourseUtils
 import tool.xfy9326.naucourse.utils.compute.TimeUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 import kotlin.math.floor
@@ -95,7 +96,7 @@ class TableFragment : ViewModelFragment<CourseTableViewModel>() {
                     val dateInfo = async { TimeUtils.getWeekNumDateArray(coursePkg.termDate.startDate, weekNum) }
                     val today = async { TimeUtils.getTodayDate() }
                     val hasWeekendCourse = courseTableStyle.forceShowCourseTableWeekends
-                            || CourseTableViewHelper.hasWeekendCourse(coursePkg.courseTable)
+                            || CourseUtils.hasWeekendCourse(coursePkg.courseTable)
                     val weekDayShowSize = getWeekDayShowSize(hasWeekendCourse)
                     CourseTableViewHelper.drawHeaderBackground(requireContext(), layout_courseTableHeader, courseTableStyle)
                     CourseTableViewHelper.buildCourseTableHeader(

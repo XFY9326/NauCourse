@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -78,11 +77,11 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
                     when (which) {
                         0 -> addNewCourse()
                         1 -> {
-                            FullScreenLoadingDialog().show(supportFragmentManager, FullScreenLoadingDialog.LOADING_DIALOG_TAG)
+                            FullScreenLoadingDialog().show(supportFragmentManager)
                             getViewModel().importCourse(CourseManageViewModel.ImportCourseType.CURRENT_TERM)
                         }
                         2 -> {
-                            FullScreenLoadingDialog().show(supportFragmentManager, FullScreenLoadingDialog.LOADING_DIALOG_TAG)
+                            FullScreenLoadingDialog().show(supportFragmentManager)
                             getViewModel().importCourse(CourseManageViewModel.ImportCourseType.NEXT_TERM)
                         }
                     }
@@ -107,7 +106,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
             courseAdapter.updateTermDate(it)
         })
         viewModel.importCourseResult.observeEvent(this, Observer {
-            (supportFragmentManager.findFragmentByTag(FullScreenLoadingDialog.LOADING_DIALOG_TAG) as DialogFragment?)?.dismissAllowingStateLoss()
+            FullScreenLoadingDialog.close(supportFragmentManager)
             if (it == null) {
                 showSnackBar(layout_courseManage, R.string.course_import_failed)
             } else {

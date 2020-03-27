@@ -8,7 +8,7 @@ import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.providers.beans.GeneralNews
 import tool.xfy9326.naucourse.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourse.providers.info.methods.NewsInfo
-import tool.xfy9326.naucourse.tools.EventLiveData
+import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourse.utils.debug.LogUtils
 

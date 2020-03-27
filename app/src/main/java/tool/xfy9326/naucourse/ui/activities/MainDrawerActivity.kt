@@ -7,17 +7,16 @@ import android.view.MenuItem
 import android.view.View
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_nav_header.view.*
-import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentInfo
-import tool.xfy9326.naucourse.tools.Event
+import tool.xfy9326.naucourse.tools.NotifyBus
+import tool.xfy9326.naucourse.tools.livedata.Event
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourse.ui.dialogs.FullScreenLoadingDialog
 import tool.xfy9326.naucourse.ui.fragments.CourseArrangeFragment
@@ -128,7 +127,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
 
     private fun logout() {
         DialogUtils.createLogoutAttentionDialog(this, lifecycle, DialogInterface.OnClickListener { _, _ ->
-            FullScreenLoadingDialog().show(supportFragmentManager, FullScreenLoadingDialog.LOADING_DIALOG_TAG)
+            FullScreenLoadingDialog().show(supportFragmentManager)
             getViewModel().requestLogout()
         }).show()
     }
@@ -143,12 +142,12 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
             nav_main.getHeaderView(DEFAULT_NAV_HEADER_INDEX).tv_userName.text = StudentInfo.trimExtra(it.personalInfo.name.second)
         })
         viewModel.logoutSuccess.observeNotification(this, {
-            (supportFragmentManager.findFragmentByTag(FullScreenLoadingDialog.LOADING_DIALOG_TAG) as DialogFragment?)?.dismissAllowingStateLoss()
+            FullScreenLoadingDialog.close(supportFragmentManager)
             BaseUtils.restartApplication(this)
         })
         // 需要Activity在后台时也监听夜间模式设定变化，防止延迟的界面更新
         tryRemoveNightModeObserver()
-        nightModeObserver = App.instance.nightModeChanged.observeNotificationForever({
+        nightModeObserver = NotifyBus[NotifyBus.Type.NIGHT_MODE_CHANGED].observeNotificationForever({
             recreate()
         }, MainDrawerActivity::class.java.simpleName)
     }
@@ -164,7 +163,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     @Synchronized
     private fun tryRemoveNightModeObserver() {
         if (nightModeObserver != null) {
-            App.instance.nightModeChanged.removeObserver(nightModeObserver!!)
+            NotifyBus[NotifyBus.Type.NIGHT_MODE_CHANGED].removeObserver(nightModeObserver!!)
             nightModeObserver = null
         }
     }

@@ -3,6 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory
         app:iconSpaceReserved="false"
+        app:title="@string/course_settings">
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="ShowNextWeekCourseTableAhead"
+            app:summary="@string/show_next_week_course_ahead_sum"
+            app:title="@string/show_next_week_course_ahead" />
+
+    </tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory>
+
+    <tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory
+        app:iconSpaceReserved="false"
         app:title="@string/course_cell_style">
 
         <androidx.preference.CheckBoxPreference

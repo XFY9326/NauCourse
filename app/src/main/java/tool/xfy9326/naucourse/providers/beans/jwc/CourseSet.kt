@@ -13,6 +13,8 @@ data class CourseSet(
     // 该值不建议使用，仅作为管理课程时简单的判断课程所在学期
     val term: Term get() = term_
 
+    val hasCourse: Boolean get() = courses_.isNotEmpty()
+
     companion object {
         fun checkCourseTimeConflict(courseSet: HashSet<Course>): CourseCheckResult {
             val timeList = ArrayList<CourseTime>(courseSet.size)

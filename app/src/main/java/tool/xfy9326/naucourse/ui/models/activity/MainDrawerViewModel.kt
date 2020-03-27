@@ -9,7 +9,7 @@ import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourse.providers.info.methods.CardBalanceInfo
 import tool.xfy9326.naucourse.providers.info.methods.PersonalInfo
-import tool.xfy9326.naucourse.tools.NotifyLivaData
+import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
 import tool.xfy9326.naucourse.ui.activities.MainDrawerActivity
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourse.utils.debug.LogUtils

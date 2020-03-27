@@ -46,6 +46,9 @@ object DebugIOUtils {
 
     private fun getSaveFile(type: DebugSaveType) = File(DEBUG_LOG_SAVE_DIR, type.frontPrefix + getLogDate() + DEBUG_LOG_FILE_PREFIX)
 
+    @Synchronized
+    fun clearLogs() = if (DEBUG_LOG_SAVE_DIR?.exists() == true) DEBUG_LOG_SAVE_DIR.deleteRecursively() else true
+
     fun append(type: DebugSaveType, msg: String) =
         GlobalScope.launch(Dispatchers.IO) {
             writeFile(type, msg)

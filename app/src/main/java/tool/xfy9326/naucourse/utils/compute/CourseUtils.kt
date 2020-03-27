@@ -194,4 +194,8 @@ object CourseUtils {
         }
 
     fun getNewCourseId() = CUSTOM_COURSE_ID_PREFIX + (System.currentTimeMillis() / 1000)
+
+    fun hasWeekendCourse(courseTable: CourseTable): Boolean =
+        courseTable.table.isNotEmpty() &&
+                (courseTable.table[Constants.Time.MAX_WEEK_DAY - 1].isNotEmpty() || courseTable.table[Constants.Time.MAX_WEEK_DAY - 2].isNotEmpty())
 }

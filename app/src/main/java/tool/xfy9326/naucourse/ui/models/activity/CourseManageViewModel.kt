@@ -6,7 +6,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
-import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.beans.CourseManagePkg
 import tool.xfy9326.naucourse.providers.beans.jwc.Course
@@ -16,8 +15,9 @@ import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.providers.info.methods.CourseInfo
 import tool.xfy9326.naucourse.providers.info.methods.TermDateInfo
 import tool.xfy9326.naucourse.providers.store.CourseCellStyleStore
-import tool.xfy9326.naucourse.tools.EventLiveData
-import tool.xfy9326.naucourse.tools.NotifyLivaData
+import tool.xfy9326.naucourse.tools.NotifyBus
+import tool.xfy9326.naucourse.tools.livedata.EventLiveData
+import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourse.utils.debug.LogUtils
 
@@ -142,7 +142,7 @@ class CourseManageViewModel : BaseViewModel() {
                         }
                     }
                     saveSuccess.notifyEvent()
-                    App.instance.courseStyleTermUpdate.notifyEvent()
+                    NotifyBus[NotifyBus.Type.COURSE_STYLE_TERM_UPDATE].notifyEvent()
                 } finally {
                     saveLock.unlock()
                 }

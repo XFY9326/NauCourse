@@ -3,10 +3,10 @@ package tool.xfy9326.naucourse.ui.fragments.settings
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.ListPreference
-import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
+import tool.xfy9326.naucourse.tools.NotifyBus
 import tool.xfy9326.naucourse.ui.fragments.base.BaseSettingsPreferenceFragment
 import tool.xfy9326.naucourse.utils.BaseUtils
 
@@ -29,7 +29,7 @@ class DisplaySettingsFragment : BaseSettingsPreferenceFragment() {
         if (AppCompatDelegate.getDefaultNightMode() != newMode) {
             requireActivity().window.setWindowAnimations(R.style.AppTheme_NightModeTransitionAnimation)
             AppCompatDelegate.setDefaultNightMode(newMode)
-            App.instance.nightModeChanged.notifyEvent()
+            NotifyBus[NotifyBus.Type.NIGHT_MODE_CHANGED].notifyEvent()
         }
     }
 }

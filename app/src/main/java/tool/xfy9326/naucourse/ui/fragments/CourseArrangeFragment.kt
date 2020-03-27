@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.view_list_course_item.view.*
 import kotlinx.android.synthetic.main.view_list_course_item.view.iv_listCourseColor
 import kotlinx.android.synthetic.main.view_list_course_item.view.tv_listCourseName
 import kotlinx.android.synthetic.main.view_list_course_simple_item.view.*
-import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseCellStyle
@@ -27,6 +26,7 @@ import tool.xfy9326.naucourse.beans.CourseItem
 import tool.xfy9326.naucourse.providers.beans.jwc.Course
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseTime
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
+import tool.xfy9326.naucourse.tools.NotifyBus
 import tool.xfy9326.naucourse.ui.activities.MainDrawerActivity
 import tool.xfy9326.naucourse.ui.dialogs.CourseDetailDialog
 import tool.xfy9326.naucourse.ui.fragments.base.DrawerToolbarFragment
@@ -101,7 +101,7 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
                 }
             }.show(childFragmentManager, null)
         })
-        App.instance.courseStyleTermUpdate.observeNotification(viewLifecycleOwner, {
+        NotifyBus[NotifyBus.Type.COURSE_STYLE_TERM_UPDATE].observeNotification(viewLifecycleOwner, {
             getViewModel().refreshArrangeCourses(false)
         }, CourseArrangeFragment::class.java.simpleName)
     }

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import androidx.transition.Fade
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import kotlinx.android.synthetic.main.dialog_full_screen_loading.view.*
@@ -16,7 +17,10 @@ import tool.xfy9326.naucourse.utils.views.AnimUtils
 class FullScreenLoadingDialog : DialogFragment() {
 
     companion object {
-        const val LOADING_DIALOG_TAG = "LOADING_DIALOG"
+        private const val LOADING_DIALOG_TAG = "LOADING_DIALOG"
+
+        fun close(fragmentManager: FragmentManager) =
+            (fragmentManager.findFragmentByTag(LOADING_DIALOG_TAG) as DialogFragment?)?.dismissAllowingStateLoss()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,4 +56,5 @@ class FullScreenLoadingDialog : DialogFragment() {
         super.onStop()
     }
 
+    fun show(fragmentManager: FragmentManager) = show(fragmentManager, LOADING_DIALOG_TAG)
 }

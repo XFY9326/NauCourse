@@ -41,4 +41,16 @@
 
     </tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory>
 
+    <tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/others">
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="ClearDebugLogs"
+            app:persistent="false"
+            app:title="@string/clear_logs" />
+
+    </tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory>
+
 </androidx.preference.PreferenceScreen>
