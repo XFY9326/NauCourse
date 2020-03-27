@@ -10,7 +10,7 @@ object Constants {
 
     const val PERCENT = "%"
 
-    const val FILE_PROVIDER_AUTH = "tool.xfy9326.naucourse.file.provider"
+    const val FILE_PROVIDER_AUTH = BuildConfig.APPLICATION_ID + ".file.provider"
 
     object News {
         const val NEWS_STORE_DAY_LENGTH = 90

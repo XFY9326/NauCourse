@@ -67,7 +67,7 @@ android {
             versionNameSuffix '-beta'
 
             resValue('string', 'app_name', "${rootProject.ext.applicationName} Beta")
-            manifestPlaceholders = ['FileProviderName': "${applicationId}.file.provider${applicationIdSuffix}"]
+            manifestPlaceholders = ['FileProviderName': "${applicationId}${applicationIdSuffix}.file.provider"]
         }
     }
 
