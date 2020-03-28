@@ -6,42 +6,36 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <include layout="@layout/view_general_toolbar" />
+
+    <tool.xfy9326.naucourse.ui.views.widgets.AdvancedSwipeRefreshLayout
+        android:id="@+id/asl_newsRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_marginTop="?attr/actionBarSize"
+        app:color_scheme="@array/refresh_layout_color_scheme"
+        app:trigger_async_distance="@integer/default_refresh_layout_trigger_async_distance">
 
-        <include layout="@layout/view_general_toolbar" />
-
-        <tool.xfy9326.naucourse.ui.views.widgets.AdvancedSwipeRefreshLayout
-            android:id="@+id/asl_newsRefreshLayout"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:color_scheme="@array/refresh_layout_color_scheme"
-            app:trigger_async_distance="@integer/default_refresh_layout_trigger_async_distance">
+            android:gravity="center">
 
-            <FrameLayout
+            <tool.xfy9326.naucourse.ui.views.widgets.AdvancedRecyclerView
+                android:id="@+id/arv_newsList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center">
+                android:overScrollMode="never"
+                app:empty_view="@id/v_listEmpty"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-                <tool.xfy9326.naucourse.ui.views.widgets.AdvancedRecyclerView
-                    android:id="@+id/arv_newsList"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:overScrollMode="never"
-                    app:empty_view="@id/v_listEmpty"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            <include
+                android:id="@+id/v_listEmpty"
+                layout="@layout/view_list_empty"
+                android:visibility="gone" />
 
-                <include
-                    android:id="@+id/v_listEmpty"
-                    layout="@layout/view_list_empty"
-                    android:visibility="gone" />
+        </FrameLayout>
 
-            </FrameLayout>
-
-        </tool.xfy9326.naucourse.ui.views.widgets.AdvancedSwipeRefreshLayout>
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </tool.xfy9326.naucourse.ui.views.widgets.AdvancedSwipeRefreshLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

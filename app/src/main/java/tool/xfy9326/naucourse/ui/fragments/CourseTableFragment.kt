@@ -8,8 +8,8 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewOutlineProvider
-import android.widget.FrameLayout
 import androidx.appcompat.widget.Toolbar
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
@@ -165,7 +165,7 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
             layout_courseTableAppBar.fitsSystemWindows = true
             ViewCompat.requestApplyInsets(layout_courseTableAppBar)
 
-            iv_courseTableBackground.layoutParams = FrameLayout.LayoutParams(iv_courseTableBackground.layoutParams).apply {
+            iv_courseTableBackground.layoutParams = CoordinatorLayout.LayoutParams(iv_courseTableBackground.layoutParams).apply {
                 setMargins(0, 0, 0, 0)
             }
             layout_courseTableAppBar.apply {
@@ -190,7 +190,7 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
             ViewCompat.requestApplyInsets(layout_courseTableAppBar)
 
             if (!isInit) {
-                iv_courseTableBackground.layoutParams = FrameLayout.LayoutParams(iv_courseTableBackground.layoutParams).apply {
+                iv_courseTableBackground.layoutParams = CoordinatorLayout.LayoutParams(iv_courseTableBackground.layoutParams).apply {
                     setMargins(0, ViewUtils.getActionBarSize(requireContext()), 0, 0)
                 }
                 layout_courseTableAppBar.apply {
@@ -240,16 +240,12 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
     }
 
     override fun onDestroyView() {
-        vp_courseTablePanel.unregisterOnPageChangeCallback(viewPagerCallback)
-        super.onDestroyView()
-    }
-
-    override fun onDestroy() {
         if (iv_courseTableBackground.isVisible) {
             (iv_courseTableBackground.drawable as BitmapDrawable?)?.bitmap?.let {
                 if (!it.isRecycled) it.recycle()
             }
         }
-        super.onDestroy()
+        vp_courseTablePanel.unregisterOnPageChangeCallback(viewPagerCallback)
+        super.onDestroyView()
     }
 }

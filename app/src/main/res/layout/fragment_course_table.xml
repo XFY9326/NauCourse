@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_courseTableWindow"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_courseTableBackground"
@@ -12,71 +13,66 @@
         android:layout_marginTop="?attr/actionBarSize"
         android:visibility="gone" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/layout_courseTableAppBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/layout_courseTableAppBar"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_courseTable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true">
+            android:theme="@style/AppTheme.ActionBar"
+            app:menu="@menu/menu_course_table">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/tb_courseTable"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_dateInfoBar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/AppTheme.ActionBar"
-                app:menu="@menu/menu_course_table">
+                android:layout_height="wrap_content">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/layout_dateInfoBar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_todayDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimaryTextWhenDark"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_todayDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimaryTextWhenDark"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_nowShowWeekNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimaryTextWhenDark"
+                    android:textSize="13sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_todayDate" />
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_nowShowWeekNum"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimaryTextWhenDark"
-                        android:textSize="13sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_todayDate" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_notCurrentWeek"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textColor="@color/colorPrimaryTextWhenDark"
+                    android:textSize="13sp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@id/tv_nowShowWeekNum"
+                    app:layout_constraintTop_toBottomOf="@id/tv_todayDate" />
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_notCurrentWeek"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:textColor="@color/colorPrimaryTextWhenDark"
-                        android:textSize="13sp"
-                        android:visibility="gone"
-                        app:layout_constraintStart_toEndOf="@id/tv_nowShowWeekNum"
-                        app:layout_constraintTop_toBottomOf="@id/tv_todayDate" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.appbar.MaterialToolbar>
 
-            </com.google.android.material.appbar.MaterialToolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
-        </com.google.android.material.appbar.AppBarLayout>
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_courseTablePanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:fitsSystemWindows="true"
+        android:orientation="horizontal" />
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/vp_courseTablePanel"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal" />
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
-</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
