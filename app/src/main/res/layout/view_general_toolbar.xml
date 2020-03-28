@@ -2,11 +2,12 @@
 <com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:theme="@style/AppTheme.AppBarOverlay">
+    android:stateListAnimator="@null">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/tb_general"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.ActionBar" />
 
 </com.google.android.material.appbar.AppBarLayout>

@@ -58,7 +58,7 @@ android {
             applicationId rootProject.ext.applicationId
 
             resValue('string', 'app_name', rootProject.ext.applicationName)
-            manifestPlaceholders = ['FileProviderName': "${applicationId}.file.provider"]
+            manifestPlaceholders = ['ApplicationId': "${applicationId}"]
         }
         beta {
             dimension 'version'
@@ -68,7 +68,7 @@ android {
             versionNameSuffix '-beta'
 
             resValue('string', 'app_name', "${rootProject.ext.applicationName} Beta")
-            manifestPlaceholders = ['FileProviderName': "${applicationId}${applicationIdSuffix}.file.provider"]
+            manifestPlaceholders = ['ApplicationId': "${applicationId}${applicationIdSuffix}"]
         }
     }
 

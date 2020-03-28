@@ -58,13 +58,7 @@
     </style>
 
     <!-- 设置ActionBar背景色，使得在暗色模式下使用相同背景并保持文字按钮颜色为白色 -->
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
-        <item name="android:background">@color/colorPrimary</item>
-        <item name="elevation">0dp</item>
-    </style>
-
-    <!-- 在代码中动态设置背景色 -->
-    <style name="AppTheme.AppBarOverlay.CourseTable" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+    <style name="AppTheme.ActionBar" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 
     <style name="AppTheme.OverflowMenuStyle" parent="@style/Widget.MaterialComponents.PopupMenu.Overflow">
         <item name="overlapAnchor">false</item>

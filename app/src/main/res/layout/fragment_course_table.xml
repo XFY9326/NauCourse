@@ -21,13 +21,13 @@
             android:id="@+id/layout_courseTableAppBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            android:theme="@style/AppTheme.AppBarOverlay.CourseTable">
+            android:fitsSystemWindows="true">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/tb_courseTable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:theme="@style/AppTheme.ActionBar"
                 app:menu="@menu/menu_course_table">
 
                 <androidx.constraintlayout.widget.ConstraintLayout

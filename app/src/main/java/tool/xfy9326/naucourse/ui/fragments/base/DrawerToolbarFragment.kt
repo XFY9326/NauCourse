@@ -32,12 +32,15 @@ abstract class DrawerToolbarFragment<T : BaseViewModel> : ViewModelFragment<T>()
     }
 
     private fun bindToolbarWithDrawer(toolbar: Toolbar) {
-        val drawer = requireActivity().findViewById<DrawerLayout>(drawerIdRes)
-        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
-        ActionBarDrawerToggle(requireActivity(), drawer, toolbar, R.string.drawer_layout_open, R.string.drawer_layout_close).apply {
-            isDrawerIndicatorEnabled = true
-            syncState()
-            drawer.addDrawerListener(this)
+        (requireActivity() as AppCompatActivity).apply {
+            val drawer = findViewById<DrawerLayout>(drawerIdRes)
+            setSupportActionBar(toolbar)
+
+            ActionBarDrawerToggle(requireActivity(), drawer, toolbar, R.string.drawer_layout_open, R.string.drawer_layout_close).apply {
+                isDrawerIndicatorEnabled = true
+                syncState()
+                drawer.addDrawerListener(this)
+            }
         }
     }
 

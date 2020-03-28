@@ -172,6 +172,8 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
                 outlineProvider = null
                 background = null
             }
+            tb_courseTable.background = null
+
             val colorTimeText = ContextCompat.getColor(requireContext(), R.color.colorCourseTimeDefault)
             tv_nowShowWeekNum.setTextColor(colorTimeText)
             tv_todayDate.setTextColor(colorTimeText)
@@ -195,6 +197,8 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
                     outlineProvider = ViewOutlineProvider.BOUNDS
                     setBackgroundResource(R.color.colorPrimary)
                 }
+                tb_courseTable.setBackgroundResource(R.color.colorPrimary)
+
                 tv_nowShowWeekNum.setTextColor(Color.WHITE)
                 tv_todayDate.setTextColor(Color.WHITE)
                 tv_notCurrentWeek.setTextColor(Color.WHITE)
