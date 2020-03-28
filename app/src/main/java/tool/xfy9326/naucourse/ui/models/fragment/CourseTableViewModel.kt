@@ -16,7 +16,7 @@ import tool.xfy9326.naucourse.providers.store.CourseTableStore
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
-import tool.xfy9326.naucourse.ui.views.helpers.CourseTableViewHelper
+import tool.xfy9326.naucourse.ui.views.table.CourseTableStyle
 import tool.xfy9326.naucourse.utils.compute.CourseUtils
 import tool.xfy9326.naucourse.utils.compute.TimeUtils
 import tool.xfy9326.naucourse.utils.debug.LogUtils
@@ -37,7 +37,7 @@ class CourseTableViewModel : BaseViewModel() {
     private lateinit var courseTableArr: Array<CourseTable>
 
     @Volatile
-    private var courseTableStyle: CourseTableViewHelper.CourseTableStyle? = null
+    private var courseTableStyle: CourseTableStyle? = null
     private val courseTableStyleLock = Any()
 
     var hasInitWithNowWeekNum = false
@@ -363,7 +363,7 @@ class CourseTableViewModel : BaseViewModel() {
 
     fun getCourseTableStyle() = synchronized(courseTableStyleLock) {
         if (courseTableStyle == null) {
-            courseTableStyle = CourseTableViewHelper.CourseTableStyle(
+            courseTableStyle = CourseTableStyle(
                 SettingsPref.SameCourseCellHeight,
                 SettingsPref.CourseTableRoundCompat,
                 SettingsPref.CenterHorizontalShowCourseText,

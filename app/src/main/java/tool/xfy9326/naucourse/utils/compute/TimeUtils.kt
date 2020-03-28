@@ -84,8 +84,8 @@ object TimeUtils {
             ), timePeriod
         )
 
-    fun getWeekNumDateArray(termStartDate: Date, weekNum: Int): Pair<Int, Array<Int>> {
-        val calendar = getNewCalendar(termStartDate).apply {
+    fun getWeekNumDateArray(termDate: TermDate, weekNum: Int): Pair<Int, Array<Int>> {
+        val calendar = getNewCalendar(termDate.startDate).apply {
             // 最后 -1 是为了生成日期时方便
             val dayOffset = 1 - getWeekDayNum(this) + (weekNum - 1) * 7 - 1
             if (dayOffset != 0) add(Calendar.DATE, dayOffset)

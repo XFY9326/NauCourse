@@ -3,7 +3,6 @@ package tool.xfy9326.naucourse.ui.fragments
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -12,7 +11,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
-import androidx.core.view.isVisible
 import androidx.core.view.iterator
 import androidx.core.view.setPadding
 import androidx.lifecycle.Observer
@@ -28,12 +26,14 @@ import tool.xfy9326.naucourse.tools.NotifyBus
 import tool.xfy9326.naucourse.ui.dialogs.CourseDetailDialog
 import tool.xfy9326.naucourse.ui.fragments.base.DrawerToolbarFragment
 import tool.xfy9326.naucourse.ui.models.fragment.CourseTableViewModel
-import tool.xfy9326.naucourse.ui.views.helpers.CourseTableViewHelper
+import tool.xfy9326.naucourse.ui.views.table.CourseTableViewHelper
+import tool.xfy9326.naucourse.ui.views.table.OnCourseCellClickListener
 import tool.xfy9326.naucourse.ui.views.viewpager.CourseTableViewPagerAdapter
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 import tool.xfy9326.naucourse.utils.views.ViewUtils
 
-class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), CourseTableViewHelper.OnCourseCellClickListener {
+class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
+    OnCourseCellClickListener {
     private lateinit var courseTableViewPagerAdapter: CourseTableViewPagerAdapter
     private lateinit var viewPagerCallback: ViewPager2.OnPageChangeCallback
 
@@ -133,8 +133,8 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
     }
 
     override fun initView(viewModel: CourseTableViewModel) {
-        CourseTableViewHelper.initBuilder(requireContext())
         CourseTableViewHelper.setOnCourseCellClickListener(this)
+
         courseTableViewPagerAdapter = CourseTableViewPagerAdapter(this, viewModel.maxWeekNumTemp ?: Constants.Course.MAX_WEEK_NUM_SIZE)
 
         vp_courseTablePanel.adapter = courseTableViewPagerAdapter
@@ -240,11 +240,6 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(), Cours
     }
 
     override fun onDestroyView() {
-        if (iv_courseTableBackground.isVisible) {
-            (iv_courseTableBackground.drawable as BitmapDrawable?)?.bitmap?.let {
-                if (!it.isRecycled) it.recycle()
-            }
-        }
         vp_courseTablePanel.unregisterOnPageChangeCallback(viewPagerCallback)
         super.onDestroyView()
     }

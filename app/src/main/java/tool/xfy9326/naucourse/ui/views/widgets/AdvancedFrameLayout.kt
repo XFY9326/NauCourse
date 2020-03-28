@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.FrameLayout
 
 @Suppress("unused")
-class AdvancedFrameLayout : FrameLayout {
+open class AdvancedFrameLayout : FrameLayout {
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <dimen name="login_panel_btn_login_margin_top">15dp</dimen>
-    <dimen name="course_table_course_time_row_size">30dp</dimen>
+    <dimen name="course_table_course_time_row_size">32dp</dimen>
     <dimen name="course_manage_divider_left_margin">50dp</dimen>
     <dimen name="course_manage_divider_right_margin">10dp</dimen>
     <dimen name="course_cell_padding" tools:ignore="PxUsage">4px</dimen>
+    <dimen name="course_cell_padding_half" tools:ignore="PxUsage">2px</dimen>
     <dimen name="course_cell_text_padding">4dp</dimen>
     <dimen name="course_cell_background_radius">6dp</dimen>
     <dimen name="dialog_margin_bottom">5dp</dimen>
@@ -17,9 +18,11 @@
     <dimen name="slider_thumb_radius_not_touched">4dp</dimen>
     <dimen name="slider_thumb_radius_touched">12dp</dimen>
     <dimen name="slider_tracker_height">18dp</dimen>
-    <dimen name="course_time_cell_text_size">3.2sp</dimen>
-    <dimen name="course_time_cell_num_text_size">5.9sp</dimen>
+    <dimen name="course_time_cell_text_size">3.35sp</dimen>
+    <dimen name="course_time_text_padding">2dp</dimen>
+    <dimen name="course_time_cell_num_text_size">6sp</dimen>
     <dimen name="course_date_highlight_background_radius">8dp</dimen>
+    <dimen name="course_time_cell_vertical_padding">4dp</dimen>
 
     <dimen name="preference_seekbar_padding_horizontal" tools:ignore="PrivateResource">10dp</dimen>
 </resources>

@@ -5,7 +5,29 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/view_course_table_header" />
+    <tool.xfy9326.naucourse.ui.views.widgets.AdvancedLinearLayout
+        android:id="@+id/layout_courseTableHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/course_cell_padding_half"
+        android:gravity="center">
+
+        <FrameLayout
+            android:layout_width="@dimen/course_table_course_time_row_size"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_cellMonth"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/course_cell_padding"
+                android:gravity="center"
+                android:textColor="@color/colorCourseTimeDefault"
+                android:textSize="12sp" />
+
+        </FrameLayout>
+
+    </tool.xfy9326.naucourse.ui.views.widgets.AdvancedLinearLayout>
 
     <ScrollView
         android:id="@+id/layout_courseTable"
@@ -19,6 +41,7 @@
             android:id="@+id/gl_courseTable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
             android:clipChildren="true"
             app:columnCount="@integer/default_course_table_column_count"
             app:orientation="vertical"
@@ -27,6 +50,3 @@
     </ScrollView>
 
 </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-
