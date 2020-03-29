@@ -276,4 +276,6 @@
     <string name="operation_success">操作成功！</string>
     <string name="operation_failed">操作失败！</string>
     <string name="next_week">下一周</string>
+    <string name="show_not_this_week_course">显示非本周课程</string>
+    <string name="show_not_this_week_course_sum">在课表上显示非本周的课程</string>
 </resources>

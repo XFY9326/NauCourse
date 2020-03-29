@@ -8,18 +8,14 @@ import java.io.Serializable
 
 data class CourseCellStyle(
     val courseId: String,
-    var color: Int,
-    val textSize: Float
+    var color: Int
 ) : Serializable {
     companion object {
-        private const val DEFAULT_COURSE_CELL_TEXT_SIZE = 13f
-
         fun getDefaultCellStyle(courseId: String, color: Int? = null): CourseCellStyle {
             LogUtils.d<CourseCellStyle>("Creating New Course Style For ID: $courseId")
             return CourseCellStyle(
                 courseId,
-                color ?: ColorUtils.getRandomMaterialColor(),
-                DEFAULT_COURSE_CELL_TEXT_SIZE
+                color ?: ColorUtils.getRandomMaterialColor()
             )
         }
 

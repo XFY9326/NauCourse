@@ -42,7 +42,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
-            android:clipChildren="true"
             app:columnCount="@integer/default_course_table_column_count"
             app:orientation="vertical"
             app:rowCount="@integer/default_course_table_row_count" />

@@ -8,6 +8,13 @@
         <androidx.preference.CheckBoxPreference
             app:defaultValue="true"
             app:iconSpaceReserved="false"
+            app:key="ShowNotThisWeekCourseInTable"
+            app:summary="@string/show_not_this_week_course_sum"
+            app:title="@string/show_not_this_week_course" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
             app:key="ShowNextWeekCourseTableAhead"
             app:summary="@string/show_next_week_course_ahead_sum"
             app:title="@string/show_next_week_course_ahead" />

@@ -165,8 +165,8 @@ class CourseTableViewModel : BaseViewModel() {
                             termDate,
                             cellStyle,
                             CourseDetail.TimeDetail(
-                                courseCell.courseLocation,
-                                courseCell.weekDayNum,
+                                courseCell.courseTime.location,
+                                courseCell.courseTime.weekDay,
                                 courseCell.weekNum,
                                 CourseTimeDuration.convertToTimePeriod(courseCell.timeDuration)
                             )
@@ -194,7 +194,7 @@ class CourseTableViewModel : BaseViewModel() {
         }
     }
 
-    fun refreshCourseData() {
+    fun refreshCourseData(forceUpdate: Boolean = false) {
         viewModelScope.launch(Dispatchers.Default) {
             val courseInfoAsync = async { CourseInfo.getInfo(loadCache = true) }
             val termInfoAsync = async { TermDateInfo.getInfo(loadCache = true) }
@@ -222,42 +222,45 @@ class CourseTableViewModel : BaseViewModel() {
             }
 
             hasInitWithNowWeekNum = false
-            updateCourseData(courseData, termDate, styles)
+            updateCourseData(courseData, termDate, styles, forceUpdate)
         }
     }
 
     @Synchronized
-    private fun updateCourseData(courseSet: CourseSet? = null, termDate: TermDate? = null, styleList: Array<CourseCellStyle>? = null) {
+    private fun updateCourseData(
+        courseSet: CourseSet? = null, termDate: TermDate? = null, styleList: Array<CourseCellStyle>? = null,
+        forceUpdate: Boolean = false
+    ) {
         if (validateUpdateNecessary(courseSet, termDate, styleList)) {
-            var hasUpdateInfo = false
+            var hasTermUpdateInfo = false
             var hasCourseUpdateInfo = false
             if (courseSet != null) {
                 this.courseSet = courseSet
-                hasUpdateInfo = true
                 hasCourseUpdateInfo = true
             }
             if (termDate != null) {
                 this.termDate = termDate
-                hasUpdateInfo = true
+                hasTermUpdateInfo = true
             }
             if (styleList != null) {
                 CourseCellStyleStore.saveStore(styleList)
-                hasUpdateInfo = true
                 hasCourseUpdateInfo = true
             }
-            if (hasUpdateInfo) {
+            if (hasCourseUpdateInfo || hasTermUpdateInfo || forceUpdate) {
                 viewModelScope.launch(Dispatchers.Default) {
-                    if (hasCourseUpdateInfo) {
+                    if (hasCourseUpdateInfo || forceUpdate) {
                         makeCourseTable(
                             this@CourseTableViewModel.courseSet,
                             this@CourseTableViewModel.termDate,
                             true
                         )
                     }
-                    setWeekInfoByTermDate(
-                        this@CourseTableViewModel.termDate,
-                        if (this@CourseTableViewModel::courseSet.isInitialized) this@CourseTableViewModel.courseSet else null
-                    )
+                    if (hasTermUpdateInfo || forceUpdate) {
+                        setWeekInfoByTermDate(
+                            this@CourseTableViewModel.termDate,
+                            if (this@CourseTableViewModel::courseSet.isInitialized) this@CourseTableViewModel.courseSet else null
+                        )
+                    }
                 }
             }
         } else {
@@ -342,7 +345,8 @@ class CourseTableViewModel : BaseViewModel() {
 
     private suspend fun makeCourseTable(courseSet: CourseSet, termDate: TermDate, postValue: Boolean = false) {
         withContext(Dispatchers.Default) {
-            courseTableArr = CourseUtils.generateAllCourseTable(courseSet, termDate, TimeUtils.getWeekLength(termDate))
+            courseTableArr =
+                CourseUtils.generateAllCourseTable(courseSet, termDate, TimeUtils.getWeekLength(termDate))
             if (postValue) {
                 for (i in courseTablePkg.indices) {
                     if (courseTablePkg[i].hasActiveObservers()) {
@@ -372,7 +376,8 @@ class CourseTableViewModel : BaseViewModel() {
                 SettingsPref.DrawAllCellBackground,
                 SettingsPref.ForceShowCourseTableWeekends,
                 SettingsPref.CustomCourseTableBackground,
-                SettingsPref.CustomCourseTableAlpha / 100f
+                SettingsPref.CustomCourseTableAlpha / 100f,
+                SettingsPref.ShowNotThisWeekCourseInTable
             )
         }
         return@synchronized courseTableStyle!!

@@ -68,9 +68,10 @@ object CourseTableViewHelper {
         val timeColWidth = context.resources.getDimensionPixelSize(R.dimen.course_table_course_time_row_size)
         val courseColWidth = floor((targetWidth - timeColWidth) * 1f / (columnSize - 1)).toInt()
 
-        var rowMax = DEFAULT_TABLE_HEIGHT_SIZE
+        // 增加最后一行用于填充用的Cell
+        val rowMax = DEFAULT_TABLE_HEIGHT_SIZE + 1
 
-        val resultDeferred = ArrayList<Deferred<CourseCellLayout>>((columnSize * rowMax * 0.75).toInt())
+        val resultDeferred = ArrayList<Deferred<View>>((columnSize * rowMax * 0.75).toInt())
 
         val courseCellPadding = context.resources.getDimensionPixelSize(R.dimen.course_cell_padding)
         val timeCellVerticalPadding = context.resources.getDimensionPixelSize(R.dimen.course_time_cell_vertical_padding)
@@ -84,6 +85,12 @@ object CourseTableViewHelper {
         val timeCellTimeNumSize = context.resources.getDimensionPixelSize(R.dimen.course_time_cell_num_text_size).toFloat()
         val timeCellTimeSize = context.resources.getDimensionPixelSize(R.dimen.course_time_cell_text_size).toFloat()
         val timeTextPaddingTop = context.resources.getDimensionPixelSize(R.dimen.course_time_text_padding)
+        val bottomFillCellHeight =
+            if (courseTableStyle.bottomCornerCompat) {
+                context.resources.getDimensionPixelSize(R.dimen.course_table_bottom_corner_compat)
+            } else {
+                0
+            }
 
         val defaultTextColor = ContextCompat.getColor(context, R.color.colorCourseTimeDefault)
         val courseTextColorLight = ContextCompat.getColor(context, R.color.colorCourseTextLight)
@@ -93,8 +100,34 @@ object CourseTableViewHelper {
         val lock = Any()
         var maxHeight = 0
 
+        val fillCellSize =
+            if (courseTableStyle.drawAllCellBackground) {
+                1
+            } else {
+                columnSize
+            }
+        // 底部填充用Cell，防止课程格自动在存在多个空列时左对齐
+        // 若绘制全部Cell，则可以省略本行填充，留一个作为圆角适配使用
+        for (col in 0 until fillCellSize) {
+            resultDeferred.add(async(Dispatchers.Default) {
+                View(context).apply {
+                    layoutParams = GridLayout.LayoutParams().apply {
+                        columnSpec = GridLayout.spec(col)
+                        rowSpec = GridLayout.spec(rowMax - 1)
+                        width =
+                            if (col == 0) {
+                                timeColWidth
+                            } else {
+                                courseColWidth
+                            }
+                        height = bottomFillCellHeight
+                    }
+                }
+            })
+        }
+
         //添加课程节数与上下课时间
-        for (row in 0 until rowMax) {
+        for (row in 0 until rowMax - 1) {
             resultDeferred.add(async(Dispatchers.Default) {
                 val view = buildTimeCellView(
                     context, row, CourseTableInternalStyle.TimeCellView(
@@ -117,30 +150,32 @@ object CourseTableViewHelper {
             val col = index + 1
             if (col < columnSize) {
                 val emptyCell = if (courseTableStyle.drawAllCellBackground) {
-                    IntArray(rowMax) { it }
+                    IntArray(rowMax - 1) { it }
                 } else {
                     IntArray(0)
                 }
                 cellArr.forEach {
-                    if (courseTableStyle.drawAllCellBackground) {
-                        emptyCell.fill(-1, it.timeDuration.startTime - 1, it.timeDuration.startTime + it.timeDuration.durationLength - 1)
-                    }
-                    resultDeferred.add(async(Dispatchers.Default) {
-                        val view = buildCourseCellView(
-                            context, col, it, CourseCellStyle.getStyleByCourseId(it.courseId, styles, true)!!,
-                            CourseTableInternalStyle.CourseCellView(
-                                courseColWidth, backgroundRadius, courseCellPadding,
-                                courseCellTextPadding, courseTextColorDark, courseTextColorLight
-                            ), courseTableStyle
-                        )
-                        if (courseTableStyle.sameCellHeight) {
-                            val viewHeight = getCellHeightByWidth(view, courseColWidth, it.timeDuration.durationLength)
-                            synchronized(lock) {
-                                maxHeight = max(maxHeight, viewHeight)
-                            }
+                    if (it.thisWeekCourse || courseTableStyle.showNotThisWeekCourseInTable) {
+                        if (courseTableStyle.drawAllCellBackground) {
+                            emptyCell.fill(-1, it.timeDuration.startTime - 1, it.timeDuration.startTime + it.timeDuration.durationLength - 1)
                         }
-                        view
-                    })
+                        resultDeferred.add(async(Dispatchers.Default) {
+                            val view = buildCourseCellView(
+                                context, col, it, CourseCellStyle.getStyleByCourseId(it.courseId, styles, true)!!,
+                                CourseTableInternalStyle.CourseCellView(
+                                    courseColWidth, backgroundRadius, courseCellPadding,
+                                    courseCellTextPadding, courseTextColorDark, courseTextColorLight
+                                ), courseTableStyle
+                            )
+                            if (courseTableStyle.sameCellHeight) {
+                                val viewHeight = getCellHeightByWidth(view, courseColWidth, it.timeDuration.durationLength)
+                                synchronized(lock) {
+                                    maxHeight = max(maxHeight, viewHeight)
+                                }
+                            }
+                            view
+                        })
+                    }
                 }
                 if (courseTableStyle.drawAllCellBackground) {
                     emptyCell.forEach {
@@ -169,21 +204,8 @@ object CourseTableViewHelper {
 
         if (courseTableStyle.sameCellHeight) {
             result.forEach {
-                it.layoutParams.height = maxHeight
+                if (it is CourseCellLayout) it.layoutParams.height = maxHeight
             }
-        }
-
-        if (courseTableStyle.bottomCornerCompat) {
-            val bottomCompat = context.resources.getDimensionPixelSize(R.dimen.course_table_bottom_corner_compat)
-            result.add(View(context).apply {
-                layoutParams = GridLayout.LayoutParams().apply {
-                    columnSpec = GridLayout.spec(0)
-                    rowSpec = GridLayout.spec(rowMax)
-                    width = timeColWidth
-                    height = bottomCompat
-                }
-            })
-            rowMax++
         }
 
         launch(Dispatchers.Main) {
@@ -212,7 +234,7 @@ object CourseTableViewHelper {
         internalStyle: CourseTableInternalStyle.CourseCellView, courseTableStyle: CourseTableStyle
     ) =
         CourseCellLayout(context, courseInfo.timeDuration.startTime - 1, col).apply {
-            val colMerge = GridLayout.spec(colNum)
+            val colMerge = GridLayout.spec(colNum, 1)
             val rowMerge = GridLayout.spec(rowNum, courseInfo.timeDuration.durationLength, 1f)
             layoutParams = GridLayout.LayoutParams().apply {
                 columnSpec = colMerge
@@ -228,7 +250,8 @@ object CourseTableViewHelper {
             addViewInLayout(TextView(context).apply {
                 layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 
-                textSize = cellStyle.textSize
+                textSize = 13f
+
                 background = buildRadiusDrawable(cellStyle.color, internalStyle.radius)
                 setTextColor(
                     if (ColorUtils.isLightColor(cellStyle.color)) {
@@ -240,10 +263,10 @@ object CourseTableViewHelper {
                 setPadding(internalStyle.textPadding)
 
                 val baseShowText =
-                    if (courseInfo.courseLocation.isEmpty() || courseInfo.courseLocation.isBlank()) {
+                    if (courseInfo.courseTime.location.isEmpty() || courseInfo.courseTime.location.isBlank()) {
                         courseInfo.courseName
                     } else {
-                        "${courseInfo.courseName}${COURSE_INFO_JOIN_SYMBOL}${courseInfo.courseLocation}"
+                        "${courseInfo.courseName}${COURSE_INFO_JOIN_SYMBOL}${courseInfo.courseTime.location}"
                     }
 
                 text =
@@ -278,7 +301,7 @@ object CourseTableViewHelper {
         internalStyle: CourseTableInternalStyle.TimeCellView, courseTableStyle: CourseTableStyle
     ) =
         CourseCellLayout(context, row, 0).apply {
-            val colMerge = GridLayout.spec(colNum)
+            val colMerge = GridLayout.spec(colNum, 1)
             val rowMerge = GridLayout.spec(rowNum, 1f)
             layoutParams = GridLayout.LayoutParams().apply {
                 columnSpec = colMerge
@@ -337,7 +360,7 @@ object CourseTableViewHelper {
     ) =
         CourseCellLayout(context, row, col).apply {
             layoutParams = GridLayout.LayoutParams().apply {
-                columnSpec = GridLayout.spec(col)
+                columnSpec = GridLayout.spec(col, 1)
                 rowSpec = GridLayout.spec(row, 1f)
                 width = internalStyle.width
             }

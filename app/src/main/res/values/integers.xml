@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="default_refresh_layout_trigger_async_distance">200</integer>
-    <integer name="default_course_table_column_count">5</integer>
+    <integer name="default_course_table_column_count">6</integer>
     <integer name="default_course_table_row_count">13</integer>
     <integer name="learning_process_max">100</integer>
     <integer name="user_info_column_count">2</integer>

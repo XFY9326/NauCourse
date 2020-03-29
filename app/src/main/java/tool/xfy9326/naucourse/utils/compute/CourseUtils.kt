@@ -42,7 +42,14 @@ object CourseUtils {
         return newCourses
     }
 
-    private fun getCourseTableByWeekNum(courseSet: CourseSet, weekNum: Int, maxWeekNum: Int, startWeekDayNum: Int, endWeekDayNum: Int): CourseTable {
+    private fun getCourseTableByWeekNum(
+        courseSet: CourseSet,
+        weekNum: Int,
+        maxWeekNum: Int,
+        startWeekDayNum: Int,
+        endWeekDayNum: Int
+    ):
+            CourseTable {
         if (weekNum < Constants.Course.MIN_WEEK_NUM_SIZE || weekNum > maxWeekNum) {
             throw IllegalArgumentException("Week Num Error! Num: $weekNum")
         }
@@ -54,12 +61,11 @@ object CourseUtils {
             for (time in course.timeSet) {
                 val thisWeekCourse = time.isWeekNumTrue(weekNum)
                 time.coursesNumArray.timePeriods.forEach {
-                    if (thisWeekCourse || temp[time.weekDay - 1][it.start - 1] == null) {
+                    if (thisWeekCourse || temp[time.weekDay - 1][it.start - 1] == null || temp[time.weekDay - 1][it.start - 1]!!.courseTime < time) {
                         temp[time.weekDay - 1][it.start - 1] = CourseCell(
                             course.id,
                             course.name,
-                            time.location,
-                            time.weekDay,
+                            time,
                             weekNum,
                             CourseTimeDuration.parseTimePeriod(it),
                             thisWeekCourse
@@ -173,7 +179,11 @@ object CourseUtils {
         }
     }
 
-    suspend fun generateAllCourseTable(courseSet: CourseSet, termDate: TermDate, maxWeekNum: Int): Array<CourseTable> =
+    suspend fun generateAllCourseTable(
+        courseSet: CourseSet,
+        termDate: TermDate,
+        maxWeekNum: Int
+    ): Array<CourseTable> =
         coroutineScope {
             val result = arrayOfNulls<CourseTable>(maxWeekNum)
             val waitArr = arrayOfNulls<Deferred<CourseTable>>(maxWeekNum)

@@ -38,6 +38,8 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment(), Preference
             true
         }
 
+        addRefreshCourseTableListener(Constants.Pref.ShowNotThisWeekCourseInTable)
+
         addRefreshCourseTableListener(Constants.Pref.ForceShowCourseTableWeekends)
         addRefreshCourseTableListener(Constants.Pref.SameCourseCellHeight)
         addRefreshCourseTableListener(Constants.Pref.CenterHorizontalShowCourseText)

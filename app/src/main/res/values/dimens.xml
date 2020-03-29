@@ -18,9 +18,9 @@
     <dimen name="slider_thumb_radius_not_touched">4dp</dimen>
     <dimen name="slider_thumb_radius_touched">12dp</dimen>
     <dimen name="slider_tracker_height">18dp</dimen>
-    <dimen name="course_time_cell_text_size">3.35sp</dimen>
-    <dimen name="course_time_text_padding">2dp</dimen>
-    <dimen name="course_time_cell_num_text_size">6sp</dimen>
+    <dimen name="course_time_cell_text_size">3.3dp</dimen>
+    <dimen name="course_time_text_padding">4dp</dimen>
+    <dimen name="course_time_cell_num_text_size">6dp</dimen>
     <dimen name="course_date_highlight_background_radius">8dp</dimen>
     <dimen name="course_time_cell_vertical_padding">4dp</dimen>
 

@@ -128,5 +128,6 @@ object Constants {
         const val CourseTableBackgroundAlpha = "CourseTableBackgroundAlpha"
         const val ShowNextWeekCourseTableAhead = "ShowNextWeekCourseTableAhead"
         const val CourseTableBackgroundFullScreen = "CourseTableBackgroundFullScreen"
+        const val ShowNotThisWeekCourseInTable = "ShowNotThisWeekCourseInTable"
     }
 }

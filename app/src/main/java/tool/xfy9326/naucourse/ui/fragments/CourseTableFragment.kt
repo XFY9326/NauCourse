@@ -138,6 +138,7 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
         courseTableViewPagerAdapter = CourseTableViewPagerAdapter(this, viewModel.maxWeekNumTemp ?: Constants.Course.MAX_WEEK_NUM_SIZE)
 
         vp_courseTablePanel.adapter = courseTableViewPagerAdapter
+        vp_courseTablePanel.offscreenPageLimit = 2
 
         setToolbarTitleEnabled(false)
 
