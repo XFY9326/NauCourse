@@ -87,8 +87,10 @@ class CourseTableViewModel : BaseViewModel() {
                     hasInit = true
                     true
                 }
-                viewModelScope.launch(Dispatchers.Default) {
-                    asyncCourseTable()
+                if (SettingsPref.AutoAsyncCourseData) {
+                    viewModelScope.launch(Dispatchers.Default) {
+                        asyncCourseTable()
+                    }
                 }
             }
         }

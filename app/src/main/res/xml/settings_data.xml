@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/async_settings">
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="AutoAsyncCourseData"
+            app:summary="@string/auto_async_course_sum"
+            app:title="@string/auto_async_course" />
+
+    </tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory>
+</androidx.preference.PreferenceScreen>

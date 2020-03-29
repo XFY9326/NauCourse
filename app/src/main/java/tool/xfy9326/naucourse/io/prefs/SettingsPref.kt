@@ -31,6 +31,9 @@ object SettingsPref : BasePref() {
     val UseBrowserOpenNewsDetail by pref.boolean(defValue = false)
 
 
+    // DataSettingsFragment
+    val AutoAsyncCourseData by pref.boolean(defValue = true)
+
     // CourseTableSettingsFragment
     val ShowNextWeekCourseTableAhead by pref.boolean(defValue = true)
     val CourseTableRoundCompat by pref.boolean(defValue = false)

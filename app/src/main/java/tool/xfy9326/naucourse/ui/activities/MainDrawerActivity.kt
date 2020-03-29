@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_nav_header.view.*
+import kotlinx.coroutines.*
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentInfo
@@ -37,6 +38,8 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
             FragmentType.NEWS to NewsFragment()
         )
     }
+
+    private val drawerScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     private var nightModeObserver: Observer<in Event<Unit>>? = null
 
@@ -110,17 +113,19 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        drawer_main.post {
+        drawerScope.launch(Dispatchers.Main) {
             drawer_main.closeDrawers()
         }
-        when (item.itemId) {
-            R.id.menu_navCourseArrange -> showFragment(FragmentType.COURSE_ARRANGE)
-            R.id.menu_navCourseTable -> showFragment(FragmentType.COURSE_TABLE)
-            R.id.menu_navNews -> showFragment(FragmentType.NEWS)
-            R.id.menu_navCourseEdit -> startActivity(Intent(this, CourseManageActivity::class.java))
-            R.id.menu_navSettings -> startActivity(Intent(this, SettingsActivity::class.java))
-            R.id.menu_navLogout -> logout()
-            R.id.menu_navExit -> finishAndRemoveTask()
+        drawerScope.launch(Dispatchers.Main) {
+            when (item.itemId) {
+                R.id.menu_navCourseArrange -> showFragment(FragmentType.COURSE_ARRANGE)
+                R.id.menu_navCourseTable -> showFragment(FragmentType.COURSE_TABLE)
+                R.id.menu_navNews -> showFragment(FragmentType.NEWS)
+                R.id.menu_navCourseEdit -> startActivity(Intent(this@MainDrawerActivity, CourseManageActivity::class.java))
+                R.id.menu_navSettings -> startActivity(Intent(this@MainDrawerActivity, SettingsActivity::class.java))
+                R.id.menu_navLogout -> logout()
+                R.id.menu_navExit -> finishAndRemoveTask()
+            }
         }
         return true
     }
@@ -170,6 +175,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
 
     override fun onDestroy() {
         tryRemoveNightModeObserver()
+        drawerScope.cancel()
         super.onDestroy()
     }
 

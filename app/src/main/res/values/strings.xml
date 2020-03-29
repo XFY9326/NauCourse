@@ -278,4 +278,9 @@
     <string name="next_week">下一周</string>
     <string name="show_not_this_week_course">显示非本周课程</string>
     <string name="show_not_this_week_course_sum">在课表上显示非本周的课程</string>
+    <string name="data_settings">数据</string>
+    <string name="data_settings_sum">课程以及个人信息数据同步与更新设置</string>
+    <string name="async_settings">同步设置</string>
+    <string name="auto_async_course">自动同步课程数据</string>
+    <string name="auto_async_course_sum">每天自动从教务同步课程数据</string>
 </resources>
