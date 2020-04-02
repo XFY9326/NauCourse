@@ -403,11 +403,12 @@ object CourseTableViewHelper {
                 }
 
             val views = Array(columnSize) {
-                val isToday = dateInfo.first == today.first && dateInfo.second[it] == today.second
+                val isToday = dateInfo[it].first == today.first && dateInfo[it].second == today.second
 
                 layoutInflater.inflate(R.layout.view_course_table_date, headerLayout, false).apply {
                     tv_cellWeekdayNum.text = weekDayNumStrArr[it]
-                    tv_cellDateNum.text = dateInfo.second[it].toString()
+                    tv_cellDateNum.text = dateInfo[it].second.toString()
+                    println(isToday)
                     if (isToday) {
                         tv_cellWeekdayNum.setTextColor(highLightTextColor)
                         tv_cellDateNum.setTextColor(highLightTextColor)
@@ -440,7 +441,7 @@ object CourseTableViewHelper {
                 }
 
                 headerLayout.tv_cellMonth.apply {
-                    text = getString(R.string.month, today.first)
+                    text = getString(R.string.month, dateInfo.first().first)
                     background =
                         if (courseTableStyle.drawAllCellBackground) {
                             buildRadiusDrawable(otherCourseCellBackground, backgroundRadius)

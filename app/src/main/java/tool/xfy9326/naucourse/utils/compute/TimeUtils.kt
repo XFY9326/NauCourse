@@ -84,16 +84,16 @@ object TimeUtils {
             ), timePeriod
         )
 
-    fun getWeekNumDateArray(termDate: TermDate, weekNum: Int): Pair<Int, Array<Int>> {
+    fun getWeekNumDateArray(termDate: TermDate, weekNum: Int): Array<Pair<Int, Int>> {
         val calendar = getNewCalendar(termDate.startDate).apply {
             // 最后 -1 是为了生成日期时方便
             val dayOffset = 1 - getWeekDayNum(this) + (weekNum - 1) * 7 - 1
             if (dayOffset != 0) add(Calendar.DATE, dayOffset)
         }
-        return Pair(calendar.get(Calendar.MONTH) + 1, Array(Constants.Time.MAX_WEEK_DAY) {
+        return Array(Constants.Time.MAX_WEEK_DAY) {
             calendar.add(Calendar.DATE, 1)
-            calendar.get(Calendar.DATE)
-        })
+            Pair(calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DATE))
+        }
     }
 
     fun inWeekend() = Calendar.getInstance(Locale.CHINA).get(Calendar.DAY_OF_WEEK).let {
