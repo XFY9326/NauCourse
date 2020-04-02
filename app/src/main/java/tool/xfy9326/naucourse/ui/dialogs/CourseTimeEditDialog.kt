@@ -8,8 +8,10 @@ import androidx.annotation.IdRes
 import androidx.core.view.setMargins
 import androidx.fragment.app.DialogFragment
 import androidx.gridlayout.widget.GridLayout
+import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.dialog_course_time_edit.view.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseTime
@@ -33,8 +35,6 @@ class CourseTimeEditDialog : DialogFragment() {
         private const val CONTENT_WIDTH_PERCENT = 0.85
         private const val DEFAULT_WEEK_NUM_CHECK = true
     }
-
-    private val editScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     private lateinit var courseId: String
     private var oldCourseTime: CourseTime? = null
@@ -72,19 +72,19 @@ class CourseTimeEditDialog : DialogFragment() {
         return inflater.inflate(R.layout.dialog_course_time_edit, container, false).apply {
             radioGroup_weekMode.check(getWeekModeId())
 
-            editScope.launch {
+            lifecycleScope.launch(Dispatchers.Main) {
                 buildWeekNumGrid(this@apply)
                 setupRadioGroup(this@apply)
             }
 
-            editScope.launch {
+            lifecycleScope.launch(Dispatchers.Main) {
                 buildTimeWheel(this@apply)
             }
 
             et_courseLocation.setText(courseTime?.location)
 
             btn_courseTimeEditConfirm.setOnClickListener {
-                editScope.launch {
+                lifecycleScope.launch(Dispatchers.Main) {
                     val newCourseTime = generateCourseTime()
                     if (newCourseTime.weeksArray.size > 0) {
                         if (newCourseTime != oldCourseTime) {
@@ -225,11 +225,6 @@ class CourseTimeEditDialog : DialogFragment() {
                 setBackgroundDrawable(activity?.getDrawable(R.drawable.bg_dialog))
             }
         }
-    }
-
-    override fun onDestroy() {
-        editScope.cancel()
-        super.onDestroy()
     }
 
     private fun generateCourseTime(): CourseTime {

@@ -8,12 +8,9 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.activity_news_detail.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
@@ -35,7 +32,6 @@ import java.util.*
 
 
 class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTagHandler.OnImageLongPressListener {
-    private val newsDetailScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     private var imageGetter: HtmlImageGetter? = null
     private lateinit var newsData: SerializableNews
 
@@ -121,7 +117,7 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
         tv_newsDetailContent.text = try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 imageGetter = HtmlImageGetter(
-                    newsDetailScope, tv_newsDetailContent, this,
+                    lifecycleScope, tv_newsDetailContent, this,
                     newsData.postSource
                 )
                 val tagHandler = AdvancedTagHandler()
@@ -144,7 +140,6 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
             { getViewModel().saveNewsImage(source, bitmap) }).show()
 
     override fun onDestroy() {
-        newsDetailScope.cancel()
         AdvancedLinkMovementMethod.clearHandler()
         imageGetter?.recycleDrawable()
         System.gc()

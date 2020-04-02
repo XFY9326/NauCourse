@@ -2,13 +2,16 @@ package tool.xfy9326.naucourse.utils.debug
 
 import android.util.Log
 import tool.xfy9326.naucourse.BuildConfig
+import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
+import java.text.SimpleDateFormat
 import java.util.*
 
 @Suppress("unused")
 object LogUtils {
     private val LOG_ON = BuildConfig.DEBUG
     private val LOG_SAVE_ON get() = SettingsPref.DebugMode && SettingsPref.DebugLogCatch
+    private val DATE_FORMAT_YMD_HM_S = SimpleDateFormat(Constants.Time.FORMAT_YMD_HM_S, Locale.CHINA)
 
     inline fun <reified T> d(msg: String) {
         print(Log.DEBUG, T::class.java.simpleName, msg)
@@ -44,12 +47,12 @@ object LogUtils {
 
     @Suppress("ConstantConditionIf")
     fun print(type: Int, tag: String, msg: String) {
-        if (DebugIOUtils.FORCE_DEBUG_ON || LOG_ON) Log.println(type, tag, msg)
+        if (DebugIOUtils.FORCE_DEBUG_ON || LOG_ON) Log.println(type, "LogUtils-$tag", msg)
         if (DebugIOUtils.FORCE_DEBUG_ON || LOG_SAVE_ON) DebugIOUtils.append(DebugIOUtils.DebugSaveType.LOG, getOutputLog(type, tag, msg))
     }
 
     private fun getOutputLog(type: Int, tag: String, msg: String) =
-        "${Date()} ${
+        "${DATE_FORMAT_YMD_HM_S.format(Date())} ${
         when (type) {
             Log.DEBUG -> "D"
             Log.ERROR -> "E"

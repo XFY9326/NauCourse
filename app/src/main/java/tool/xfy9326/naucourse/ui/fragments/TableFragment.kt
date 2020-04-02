@@ -3,9 +3,11 @@ package tool.xfy9326.naucourse.ui.fragments
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.fragment_table.*
 import kotlinx.android.synthetic.main.fragment_table.view.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CoursePkg
 import tool.xfy9326.naucourse.ui.fragments.base.ViewModelFragment
@@ -18,7 +20,6 @@ import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 import kotlin.properties.Delegates
 
 class TableFragment : ViewModelFragment<CourseTableViewModel>() {
-    private val tableScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     private val courseUpdateLock = Any()
     private var weekNum by Delegates.notNull<Int>()
     private var coursePkgHash = CourseTableViewModel.DEFAULT_COURSE_PKG_HASH
@@ -39,9 +40,9 @@ class TableFragment : ViewModelFragment<CourseTableViewModel>() {
                 coursePkgHash = it.hashCode()
                 buildCourseTableView(it, viewModel.getCourseTableStyle())
             })
-            courseAndTermEmpty.observeEvent(viewLifecycleOwner, Observer {
+            courseAndTermEmpty.observeNotification(viewLifecycleOwner, {
                 showToast(requireContext(), R.string.course_and_term_data_empty)
-            })
+            }, "${TableFragment::class.java.simpleName}-$weekNum")
             if (!isRestored) {
                 val temp = coursePkgSavedTemp[weekNum - 1]
                 if (temp == null) {
@@ -73,31 +74,33 @@ class TableFragment : ViewModelFragment<CourseTableViewModel>() {
         }, "${TableFragment::class.java.simpleName}-$weekNum")
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        tableScope.cancel()
-    }
-
     private fun buildCourseTableView(coursePkg: CoursePkg, courseTableStyle: CourseTableStyle) {
-        tableScope.launch {
+        lifecycleScope.launch(Dispatchers.Default) {
             synchronized(courseUpdateLock) {
                 launch {
                     val showWeekend = courseTableStyle.forceShowCourseTableWeekends || CourseUtils.hasWeekendCourse(coursePkg.courseTable)
                     val showWeekDaySize = CourseTableViewHelper.getShowWeekDaySize(showWeekend)
+                    if (layout_courseTableHeader != null) {
+                        launch {
+                            CourseTableViewHelper.buildCourseTableHeader(
+                                requireContext(),
+                                coursePkg.termDate,
+                                weekNum,
+                                showWeekDaySize,
+                                layout_courseTableHeader,
+                                courseTableStyle
+                            )
+                        }
+                    }
 
-                    CourseTableViewHelper.buildCourseTableHeader(
-                        requireContext(),
-                        coursePkg.termDate,
-                        weekNum,
-                        showWeekDaySize,
-                        layout_courseTableHeader,
-                        courseTableStyle
-                    )
-
-                    CourseTableViewHelper.buildCourseTable(
-                        requireContext(), coursePkg, gl_courseTable,
-                        requireContext().resources.displayMetrics.widthPixels, showWeekDaySize + 1, courseTableStyle
-                    )
+                    if (gl_courseTable != null) {
+                        launch {
+                            CourseTableViewHelper.buildCourseTable(
+                                requireContext(), coursePkg, gl_courseTable,
+                                requireContext().resources.displayMetrics.widthPixels, showWeekDaySize + 1, courseTableStyle
+                            )
+                        }
+                    }
                 }
             }
         }

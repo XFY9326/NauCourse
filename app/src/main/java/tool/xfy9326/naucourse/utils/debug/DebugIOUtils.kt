@@ -1,9 +1,11 @@
 package tool.xfy9326.naucourse.utils.debug
 
+import android.os.Build
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import tool.xfy9326.naucourse.App
+import tool.xfy9326.naucourse.BuildConfig
 import tool.xfy9326.naucourse.Constants
 import java.io.File
 import java.io.FileWriter
@@ -12,7 +14,7 @@ import java.util.*
 
 object DebugIOUtils {
     private val DATE_FORMAT_YMD = SimpleDateFormat(Constants.Time.FORMAT_YMD, Locale.CHINA)
-    private val DATE_FORMAT_YMD_HM_CH = SimpleDateFormat(Constants.Time.FORMAT_YMD_HM_CH, Locale.CHINA)
+    private val DATE_FORMAT_YMD_HM_S = SimpleDateFormat(Constants.Time.FORMAT_YMD_HM_S, Locale.CHINA)
 
     private const val DEBUG_DIR = "Debug_Log"
     private const val FORCE_LOG_ON_FLAG = "debug_on"
@@ -42,7 +44,8 @@ object DebugIOUtils {
 
     private fun getLogDate() = DATE_FORMAT_YMD.format(Date())
 
-    private fun getDivider() = "\n\n=================== ${DATE_FORMAT_YMD_HM_CH.format(Date())} ======================\n\n"
+    private fun getDivider() =
+        "\n\n========== ${BuildConfig.VERSION_NAME}(${BuildConfig.VERSION_CODE}) ${DATE_FORMAT_YMD_HM_S.format(Date())} ==========\n\n"
 
     private fun getSaveFile(type: DebugSaveType) = File(DEBUG_LOG_SAVE_DIR, type.frontPrefix + getLogDate() + DEBUG_LOG_FILE_PREFIX)
 
@@ -59,7 +62,15 @@ object DebugIOUtils {
     private fun writeFile(type: DebugSaveType, msg: String) =
         synchronized(this) {
             try {
-                FileWriter(getSaveFile(type), true).use {
+                var needGenerateDeviceInfo = false
+                val saveFile = getSaveFile(type)
+                if (!saveFile.exists()) {
+                    needGenerateDeviceInfo = true
+                }
+                FileWriter(saveFile, true).use {
+                    if (needGenerateDeviceInfo) {
+                        it.write(generateDeviceInfo())
+                    }
                     if (type != DebugSaveType.LOG) {
                         it.write(getDivider())
                     }
@@ -73,4 +84,13 @@ object DebugIOUtils {
                 e.printStackTrace()
             }
         }
+
+    private fun generateDeviceInfo() =
+        ">>>>> Device Info <<<<<\n" +
+                "Device Brand: ${Build.BRAND}\n" +
+                "Device Model: ${Build.MODEL}\n" +
+                "Device ABI: ${Build.SUPPORTED_ABIS?.contentToString()}\n" +
+                "System SDK: ${Build.VERSION.SDK_INT}\n" +
+                "System Version: ${Build.VERSION.RELEASE}\n" +
+                "-------------------------\n\n"
 }

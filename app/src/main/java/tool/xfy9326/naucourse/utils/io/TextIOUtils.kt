@@ -25,10 +25,7 @@ object TextIOUtils {
                 text
             }
             val file = File(path)
-            if (file.exists() || file.mkdirs()) {
-                if (file.exists() && !file.delete()) {
-                    throw IOException("File Delete Failed!")
-                }
+            if (BaseIOUtils.prepareFile(file)) {
                 FileOutputStream(file).use {
                     val bytes = storeText.toByteArray()
                     if (zipStore) {
@@ -42,7 +39,7 @@ object TextIOUtils {
                     }
                 }
             } else {
-                throw IOException("File Dirs Create Failed!")
+                throw IOException("File Prepare Failed!")
             }
             true
         } catch (e: Exception) {

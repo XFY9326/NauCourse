@@ -4,11 +4,13 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.SeekBarPreference
 import kotlinx.android.synthetic.main.activity_settings.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import tool.xfy9326.naucourse.Constants
@@ -23,7 +25,6 @@ import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBar
 
 @Suppress("unused")
 class CourseTableSettingsFragment : BaseSettingsPreferenceFragment(), Preference.OnPreferenceChangeListener {
-    private val ioScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private val imageMutex = Mutex()
 
     companion object {
@@ -79,7 +80,7 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment(), Preference
 
     private fun modifyCourseTableBackgroundQuality(quality: Int) {
         if (ImageUtils.localImageExists(Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE)) {
-            ioScope.launch {
+            lifecycleScope.launch(Dispatchers.IO) {
                 imageMutex.withLock {
                     launch(Dispatchers.Main) {
                         FullScreenLoadingDialog().show(childFragmentManager)
@@ -108,7 +109,7 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment(), Preference
     }
 
     private fun saveCourseTableBackground(uri: Uri) {
-        ioScope.launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             imageMutex.withLock {
                 launch(Dispatchers.Main) {
                     FullScreenLoadingDialog().show(childFragmentManager)
@@ -163,10 +164,5 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment(), Preference
     override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
         NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE].notifyEvent()
         return true
-    }
-
-    override fun onDestroy() {
-        ioScope.cancel()
-        super.onDestroy()
     }
 }

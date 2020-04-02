@@ -9,10 +9,12 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_nav_header.view.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentInfo
@@ -38,8 +40,6 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
             FragmentType.NEWS to NewsFragment()
         )
     }
-
-    private val drawerScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     private var nightModeObserver: Observer<in Event<Unit>>? = null
 
@@ -113,10 +113,10 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        drawerScope.launch(Dispatchers.Main) {
+        lifecycleScope.launch(Dispatchers.Main) {
             drawer_main.closeDrawers()
         }
-        drawerScope.launch(Dispatchers.Main) {
+        lifecycleScope.launch(Dispatchers.Main) {
             when (item.itemId) {
                 R.id.menu_navCourseArrange -> showFragment(FragmentType.COURSE_ARRANGE)
                 R.id.menu_navCourseTable -> showFragment(FragmentType.COURSE_TABLE)
@@ -175,7 +175,6 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
 
     override fun onDestroy() {
         tryRemoveNightModeObserver()
-        drawerScope.cancel()
         super.onDestroy()
     }
 

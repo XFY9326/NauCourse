@@ -73,6 +73,7 @@ object Constants {
     object Time {
         const val FORMAT_YMD = "yyyy-MM-dd"
         const val FORMAT_YMD_HM_CH = "yyyy年MM月dd日 HH:mm"
+        const val FORMAT_YMD_HM_S = "yyyy-MM-dd HH:mm:ss"
         const val FORMAT_MD_HM_CH = "MM月dd日 HH:mm"
         const val FORMAT_MD_HM = "HH:mm"
 
