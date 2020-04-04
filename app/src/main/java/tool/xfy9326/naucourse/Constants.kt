@@ -130,5 +130,7 @@ object Constants {
         const val ShowNextWeekCourseTableAhead = "ShowNextWeekCourseTableAhead"
         const val CourseTableBackgroundFullScreen = "CourseTableBackgroundFullScreen"
         const val ShowNotThisWeekCourseInTable = "ShowNotThisWeekCourseInTable"
+        const val CourseTableTimeTextColor = "CourseTableTimeTextColor"
+        const val EnableCourseTableTimeTextColor = "EnableCourseTableTimeTextColor"
     }
 }

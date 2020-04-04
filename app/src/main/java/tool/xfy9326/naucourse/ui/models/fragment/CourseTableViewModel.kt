@@ -399,7 +399,9 @@ class CourseTableViewModel : BaseViewModel() {
                 SettingsPref.ForceShowCourseTableWeekends,
                 SettingsPref.CustomCourseTableBackground,
                 SettingsPref.CustomCourseTableAlpha / 100f,
-                SettingsPref.ShowNotThisWeekCourseInTable
+                SettingsPref.ShowNotThisWeekCourseInTable,
+                SettingsPref.EnableCourseTableTimeTextColor,
+                SettingsPref.CourseTableTimeTextColor
             )
         }
         return@synchronized courseTableStyle!!

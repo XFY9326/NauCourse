@@ -10,5 +10,7 @@ data class CourseTableStyle(
     val forceShowCourseTableWeekends: Boolean,
     val customCourseTableBackground: Boolean,
     val customCourseTableAlpha: Float,
-    val showNotThisWeekCourseInTable: Boolean
+    val showNotThisWeekCourseInTable: Boolean,
+    val enableCourseTableTimeTextColor: Boolean,
+    val courseTableTimeTextColor: Int
 )

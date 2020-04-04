@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourse.io.prefs
 
+import android.graphics.Color
 import android.widget.ImageView
 import tool.xfy9326.naucourse.BuildConfig
 import tool.xfy9326.naucourse.io.prefs.base.BasePref
@@ -49,6 +50,8 @@ object SettingsPref : BasePref() {
     val CourseTableBackgroundAlpha by pref.int(defValue = 100)
     val CourseTableBackgroundFullScreen by pref.boolean(defValue = true)
     val ShowNotThisWeekCourseInTable by pref.boolean(defValue = true)
+    val EnableCourseTableTimeTextColor by pref.boolean(defValue = false)
+    val CourseTableTimeTextColor by pref.int(defValue = Color.BLACK)
     private val CourseTableBackgroundScareType by pref.string(defValue = ImageView.ScaleType.CENTER_CROP.name)
 
     fun getCourseTableBackgroundScareType() = ImageView.ScaleType.valueOf(CourseTableBackgroundScareType!!)

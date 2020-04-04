@@ -22,7 +22,6 @@
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/course_cell_padding"
                 android:gravity="center"
-                android:textColor="@color/colorCourseTimeDefault"
                 android:textSize="12sp" />
 
         </FrameLayout>

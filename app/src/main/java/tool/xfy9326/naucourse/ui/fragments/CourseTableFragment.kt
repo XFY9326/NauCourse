@@ -175,7 +175,12 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
             }
             tb_courseTable.background = null
 
-            val colorTimeText = ContextCompat.getColor(requireContext(), R.color.colorCourseTimeDefault)
+            val colorTimeText =
+                if (SettingsPref.EnableCourseTableTimeTextColor) {
+                    SettingsPref.CourseTableTimeTextColor
+                } else {
+                    ContextCompat.getColor(requireContext(), R.color.colorCourseTimeDefault)
+                }
             tv_nowShowWeekNum.setTextColor(colorTimeText)
             tv_todayDate.setTextColor(colorTimeText)
             tv_notCurrentWeek.setTextColor(colorTimeText)

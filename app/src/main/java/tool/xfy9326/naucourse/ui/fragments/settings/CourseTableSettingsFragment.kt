@@ -55,6 +55,9 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment(), Preference
         addRefreshCourseTableBackgroundListener(Constants.Pref.CourseTableBackgroundAlpha)
         addRefreshCourseTableBackgroundListener(Constants.Pref.CourseTableBackgroundFullScreen)
 
+        addRefreshAllTableListener(Constants.Pref.EnableCourseTableTimeTextColor)
+        addRefreshAllTableListener(Constants.Pref.CourseTableTimeTextColor)
+
         findPreference<Preference>(Constants.Pref.ChooseCourseTableBackgroundPicture)?.setOnPreferenceClickListener {
             IntentUtils.selectPicture(this, SELECT_COURSE_TABLE_PICTURE_REQUEST_CODE)
             NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE_BACKGROUND].notifyEvent()
@@ -151,6 +154,11 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment(), Preference
 
     private fun addRefreshCourseTableListener(key: String) {
         findPreference<Preference>(key)?.onPreferenceChangeListener = this
+    }
+
+    private fun addRefreshAllTableListener(key: String) {
+        NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE].notifyEvent()
+        NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE_BACKGROUND].notifyEvent()
     }
 
     private fun addRefreshCourseTableBackgroundListener(key: String) {

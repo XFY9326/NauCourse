@@ -92,7 +92,12 @@ object CourseTableViewHelper {
                 0
             }
 
-        val defaultTextColor = ContextCompat.getColor(context, R.color.colorCourseTimeDefault)
+        val defaultTextColor =
+            if (courseTableStyle.enableCourseTableTimeTextColor) {
+                courseTableStyle.courseTableTimeTextColor
+            } else {
+                ContextCompat.getColor(context, R.color.colorCourseTimeDefault)
+            }
         val courseTextColorLight = ContextCompat.getColor(context, R.color.colorCourseTextLight)
         val courseTextColorDark = ContextCompat.getColor(context, R.color.colorCourseTextDark)
         val otherCourseCellBackground = ContextCompat.getColor(context, R.color.colorOtherCourseCellBackground)
@@ -390,7 +395,12 @@ object CourseTableViewHelper {
             val dateInfo = TimeUtils.getWeekNumDateArray(termDate, weekNum)
             val today = TimeUtils.getTodayDate()
 
-            val defaultTextColor = ContextCompat.getColor(this, R.color.colorCourseTimeDefault)
+            val defaultTextColor =
+                if (courseTableStyle.enableCourseTableTimeTextColor) {
+                    courseTableStyle.courseTableTimeTextColor
+                } else {
+                    ContextCompat.getColor(context, R.color.colorCourseTimeDefault)
+                }
             val highLightTextColor = ContextCompat.getColor(this, R.color.colorCourseTimeHighLight)
             val highLightTextColorBackground = ContextCompat.getColor(this, R.color.colorCourseTimeHighLightBackground)
             val otherCourseCellBackground = ContextCompat.getColor(context, R.color.colorOtherCourseCellBackground)
@@ -441,6 +451,7 @@ object CourseTableViewHelper {
 
                 headerLayout.tv_cellMonth.apply {
                     text = getString(R.string.month, dateInfo.first().first)
+                    setTextColor(defaultTextColor)
                     background =
                         if (courseTableStyle.drawAllCellBackground) {
                             buildRadiusDrawable(otherCourseCellBackground, backgroundRadius)

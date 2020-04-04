@@ -80,7 +80,15 @@
             app:summary="@string/course_table_round_compat_sum"
             app:title="@string/course_table_round_compat" />
 
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="EnableCourseTableTimeTextColor"
+            app:summary="@string/enable_course_table_time_text_color_sum"
+            app:title="@string/enable_course_table_time_text_color" />
+
         <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            app:dependency="EnableCourseTableTimeTextColor"
             app:iconSpaceReserved="false"
             app:key="CourseTableTimeTextColor"
             app:summary="@string/course_table_time_text_color_sum"
@@ -96,6 +104,12 @@
             app:showSeekBarValue="true"
             app:summary="@string/custom_course_table_alpha_sum"
             app:title="@string/custom_course_table_alpha" />
+
+    </tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory>
+
+    <tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/course_table_background">
 
         <androidx.preference.CheckBoxPreference
             app:defaultValue="false"
