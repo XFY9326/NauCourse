@@ -7,7 +7,9 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.fragment_table.*
 import kotlinx.android.synthetic.main.fragment_table.view.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CoursePkg
 import tool.xfy9326.naucourse.ui.fragments.base.ViewModelFragment
@@ -20,7 +22,7 @@ import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 import kotlin.properties.Delegates
 
 class TableFragment : ViewModelFragment<CourseTableViewModel>() {
-    private val courseUpdateLock = Any()
+    private val courseUpdateLock = Mutex()
     private var weekNum by Delegates.notNull<Int>()
     private var coursePkgHash = CourseTableViewModel.DEFAULT_COURSE_PKG_HASH
 
@@ -76,12 +78,12 @@ class TableFragment : ViewModelFragment<CourseTableViewModel>() {
 
     private fun buildCourseTableView(coursePkg: CoursePkg, courseTableStyle: CourseTableStyle) {
         lifecycleScope.launch(Dispatchers.Default) {
-            synchronized(courseUpdateLock) {
-                launch {
+            if (courseUpdateLock.tryLock()) {
+                try {
                     val showWeekend = courseTableStyle.forceShowCourseTableWeekends || CourseUtils.hasWeekendCourse(coursePkg.courseTable)
                     val showWeekDaySize = CourseTableViewHelper.getShowWeekDaySize(showWeekend)
-                    if (layout_courseTableHeader != null) {
-                        launch {
+                    if (layout_courseTableHeader != null && gl_courseTable != null) {
+                        val header = async {
                             CourseTableViewHelper.buildCourseTableHeader(
                                 requireContext(),
                                 coursePkg.termDate,
@@ -91,16 +93,17 @@ class TableFragment : ViewModelFragment<CourseTableViewModel>() {
                                 courseTableStyle
                             )
                         }
-                    }
-
-                    if (gl_courseTable != null) {
-                        launch {
+                        val table = async {
                             CourseTableViewHelper.buildCourseTable(
                                 requireContext(), coursePkg, gl_courseTable,
                                 requireContext().resources.displayMetrics.widthPixels, showWeekDaySize + 1, courseTableStyle
                             )
                         }
+                        header.await()
+                        table.await()
                     }
+                } finally {
+                    courseUpdateLock.unlock()
                 }
             }
         }

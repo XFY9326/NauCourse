@@ -283,4 +283,6 @@
     <string name="async_settings">同步设置</string>
     <string name="auto_async_course">自动同步课程数据</string>
     <string name="auto_async_course_sum">每天自动从教务同步课程数据</string>
+    <string name="course_table_time_text_color">课程表时间文字颜色</string>
+    <string name="course_table_time_text_color_sum">修改课程表其他非课程文字的颜色</string>
 </resources>

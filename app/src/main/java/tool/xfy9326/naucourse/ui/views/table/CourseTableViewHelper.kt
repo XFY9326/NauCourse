@@ -403,12 +403,11 @@ object CourseTableViewHelper {
                 }
 
             val views = Array(columnSize) {
-                val isToday = dateInfo[it].first == today.first && dateInfo[it].second == today.second
+                val isToday = dateInfo[it] == today
 
                 layoutInflater.inflate(R.layout.view_course_table_date, headerLayout, false).apply {
                     tv_cellWeekdayNum.text = weekDayNumStrArr[it]
                     tv_cellDateNum.text = dateInfo[it].second.toString()
-                    println(isToday)
                     if (isToday) {
                         tv_cellWeekdayNum.setTextColor(highLightTextColor)
                         tv_cellDateNum.setTextColor(highLightTextColor)

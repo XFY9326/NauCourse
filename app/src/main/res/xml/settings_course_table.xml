@@ -80,6 +80,12 @@
             app:summary="@string/course_table_round_compat_sum"
             app:title="@string/course_table_round_compat" />
 
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            app:iconSpaceReserved="false"
+            app:key="CourseTableTimeTextColor"
+            app:summary="@string/course_table_time_text_color_sum"
+            app:title="@string/course_table_time_text_color" />
+
         <androidx.preference.SeekBarPreference
             android:max="100"
             app:defaultValue="100"

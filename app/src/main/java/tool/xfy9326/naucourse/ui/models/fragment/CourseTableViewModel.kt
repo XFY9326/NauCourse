@@ -86,13 +86,14 @@ class CourseTableViewModel : BaseViewModel() {
         if (!isRestored) {
             synchronized(hasInit) {
                 if (!hasInit) {
-                    initDeferred = viewModelScope.async(Dispatchers.Default) {
-                        initCourseData()
-                        if (SettingsPref.AutoAsyncCourseData) {
-                            asyncCourseTable()
+                    viewModelScope.launch(Dispatchers.Default) {
+                        initDeferred = viewModelScope.async(Dispatchers.Default) {
+                            initCourseData()
+                            hasInit = true
+                            true
                         }
-                        hasInit = true
-                        true
+                        initDeferred.await()
+                        startOnlineDataAsync()
                     }
                 }
             }
@@ -125,7 +126,12 @@ class CourseTableViewModel : BaseViewModel() {
         }
     }
 
-    @Synchronized
+    private suspend fun startOnlineDataAsync() {
+        if (SettingsPref.AutoAsyncCourseData) {
+            asyncCourseTable()
+        }
+    }
+
     fun requestCourseTable(weekNum: Int, coursePkgHash: Int) {
         viewModelScope.launch(Dispatchers.Default) {
             if (initDeferred.isActive) initDeferred.await()

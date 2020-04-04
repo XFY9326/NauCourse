@@ -64,8 +64,13 @@ class TermDatePickerDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
 
     override fun onStart() {
         super.onStart()
-        dialog?.findViewById<Button>(android.R.id.button1)?.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorDialogButtonText))
-        dialog?.findViewById<Button>(android.R.id.button2)?.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorDialogButtonText))
+        dialog?.apply {
+            findViewById<Button>(android.R.id.button1)?.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorDialogButtonText))
+            findViewById<Button>(android.R.id.button2)?.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorDialogButtonText))
+            window?.apply {
+                setBackgroundDrawable(activity?.getDrawable(R.drawable.bg_dialog))
+            }
+        }
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {

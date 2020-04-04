@@ -44,6 +44,12 @@
         <item name="android:textColorSecondary">@color/colorSecondaryText</item>
         <item name="android:textColorTertiary">@color/colorSecondaryText</item>
         <item name="actionOverflowMenuStyle">@style/AppTheme.OverflowMenuStyle</item>
+        <item name="alertDialogTheme">@style/AppTheme.AlertDialog</item>
+    </style>
+
+    <style name="AppTheme.AlertDialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/bg_dialog</item>
+        <item name="colorControlActivated">@color/colorControlIcon</item>
         <item name="buttonBarPositiveButtonStyle">@style/AppTheme.DialogBtnStyle</item>
         <item name="buttonBarNegativeButtonStyle">@style/AppTheme.DialogBtnStyle</item>
     </style>
