@@ -20,6 +20,8 @@ import androidx.gridlayout.widget.GridLayout
 import kotlinx.android.synthetic.main.fragment_table.view.*
 import kotlinx.android.synthetic.main.view_course_table_date.view.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseCell
@@ -54,10 +56,27 @@ object CourseTableViewHelper {
             DEFAULT_TABLE_WIDTH_SIZE - 3
         }
 
+    suspend fun applyViewToCourseTable(targetView: AdvancedGridLayout, views: Array<View>, columnSize: Int) =
+        withContext(Dispatchers.Main) {
+            if (targetView.childCount != 0) {
+                targetView.removeAllViews()
+            }
+            if (targetView.columnCount != columnSize) {
+                targetView.columnCount = columnSize
+            }
+
+            // 增加最后一行用于填充用的Cell
+            val rowMax = DEFAULT_TABLE_HEIGHT_SIZE + 1
+
+            if (targetView.rowCount != rowMax) {
+                targetView.rowCount = rowMax
+            }
+            targetView.replaceAllViews(views)
+        }
+
     suspend fun buildCourseTable(
         context: Context,
         coursePkg: CoursePkg,
-        targetView: AdvancedGridLayout,
         targetWidth: Int,
         columnSize: Int,
         courseTableStyle: CourseTableStyle
@@ -102,7 +121,7 @@ object CourseTableViewHelper {
         val courseTextColorDark = ContextCompat.getColor(context, R.color.colorCourseTextDark)
         val otherCourseCellBackground = ContextCompat.getColor(context, R.color.colorOtherCourseCellBackground)
 
-        val lock = Any()
+        val lock = Mutex()
         var maxHeight = 0
 
         val fillCellSize =
@@ -114,7 +133,7 @@ object CourseTableViewHelper {
         // 底部填充用Cell，防止课程格自动在存在多个空列时左对齐
         // 若绘制全部Cell，则可以省略本行填充，留一个作为圆角适配使用
         for (col in 0 until fillCellSize) {
-            resultDeferred.add(async(Dispatchers.Default) {
+            resultDeferred.add(async {
                 View(context).apply {
                     layoutParams = GridLayout.LayoutParams().apply {
                         columnSpec = GridLayout.spec(col)
@@ -133,7 +152,7 @@ object CourseTableViewHelper {
 
         //添加课程节数与上下课时间
         for (row in 0 until rowMax - 1) {
-            resultDeferred.add(async(Dispatchers.Default) {
+            resultDeferred.add(async {
                 val view = buildTimeCellView(
                     context, row, CourseTableInternalStyle.TimeCellView(
                         timeColWidth, otherCourseCellBackground, backgroundRadius, timeCellVerticalPadding,
@@ -142,7 +161,7 @@ object CourseTableViewHelper {
                 )
                 if (courseTableStyle.sameCellHeight) {
                     val viewHeight = getCellHeightByWidth(view, timeColWidth)
-                    synchronized(lock) {
+                    lock.withLock {
                         maxHeight = max(maxHeight, viewHeight)
                     }
                 }
@@ -150,21 +169,22 @@ object CourseTableViewHelper {
             })
         }
 
+        val defaultCell = if (courseTableStyle.drawAllCellBackground) {
+            IntArray(rowMax - 1) { it }
+        } else {
+            IntArray(0)
+        }
         // 添加课程
         courseTable.table.forEachIndexed { index, cellArr ->
             val col = index + 1
             if (col < columnSize) {
-                val emptyCell = if (courseTableStyle.drawAllCellBackground) {
-                    IntArray(rowMax - 1) { it }
-                } else {
-                    IntArray(0)
-                }
+                val emptyCell = defaultCell.copyOf()
                 cellArr.forEach {
                     if (it.thisWeekCourse || courseTableStyle.showNotThisWeekCourseInTable) {
                         if (courseTableStyle.drawAllCellBackground) {
                             emptyCell.fill(-1, it.timeDuration.startTime - 1, it.timeDuration.startTime + it.timeDuration.durationLength - 1)
                         }
-                        resultDeferred.add(async(Dispatchers.Default) {
+                        resultDeferred.add(async {
                             val view = buildCourseCellView(
                                 context, col, it, CourseCellStyle.getStyleByCourseId(it.courseId, styles, true)!!,
                                 CourseTableInternalStyle.CourseCellView(
@@ -174,7 +194,7 @@ object CourseTableViewHelper {
                             )
                             if (courseTableStyle.sameCellHeight) {
                                 val viewHeight = getCellHeightByWidth(view, courseColWidth, it.timeDuration.durationLength)
-                                synchronized(lock) {
+                                lock.withLock {
                                     maxHeight = max(maxHeight, viewHeight)
                                 }
                             }
@@ -185,7 +205,7 @@ object CourseTableViewHelper {
                 if (courseTableStyle.drawAllCellBackground) {
                     emptyCell.forEach {
                         if (it >= 0) {
-                            resultDeferred.add(async(Dispatchers.Default) {
+                            resultDeferred.add(async {
                                 buildEmptyCellView(
                                     context, col, it,
                                     CourseTableInternalStyle.EmptyView(
@@ -213,18 +233,7 @@ object CourseTableViewHelper {
             }
         }
 
-        launch(Dispatchers.Main) {
-            if (targetView.childCount != 0) {
-                targetView.removeAllViews()
-            }
-            if (targetView.columnCount != columnSize) {
-                targetView.columnCount = columnSize
-            }
-            if (targetView.rowCount != rowMax) {
-                targetView.rowCount = rowMax
-            }
-            targetView.replaceAllViews(result.toTypedArray())
-        }
+        result.toTypedArray()
     }
 
     private fun getCellHeightByWidth(view: View, width: Int, divideNum: Int = 1): Int {
@@ -443,7 +452,9 @@ object CourseTableViewHelper {
             }
 
             launch(Dispatchers.Main) {
-                headerLayout.alpha = courseTableStyle.customCourseTableAlpha
+                if (headerLayout.alpha != courseTableStyle.customCourseTableAlpha) {
+                    headerLayout.alpha = courseTableStyle.customCourseTableAlpha
+                }
 
                 if (headerLayout.childCount > 1) {
                     headerLayout.removeViewsInLayout(1, headerLayout.childCount - 1)
@@ -459,11 +470,7 @@ object CourseTableViewHelper {
                             null
                         }
                 }
-
-                for (view in views) {
-                    headerLayout.addViewInLayout(view)
-                }
-                headerLayout.refreshLayout()
+                headerLayout.addViewsInLayout(views, true)
             }
         }
     }

@@ -27,9 +27,10 @@ class DisplaySettingsFragment : BaseSettingsPreferenceFragment() {
     private fun changeNightModeTheme(type: SettingsPref.NightModeType) {
         val newMode = BaseUtils.getNightModeInt(type)
         if (AppCompatDelegate.getDefaultNightMode() != newMode) {
+            NotifyBus[NotifyBus.Type.NIGHT_MODE_CHANGED].notifyEvent()
+
             requireActivity().window.setWindowAnimations(R.style.AppTheme_NightModeTransitionAnimation)
             AppCompatDelegate.setDefaultNightMode(newMode)
-            NotifyBus[NotifyBus.Type.NIGHT_MODE_CHANGED].notifyEvent()
         }
     }
 }

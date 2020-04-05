@@ -10,8 +10,19 @@ object CourseCellStyleStore : BaseGsonStore<Array<CourseCellStyle>>() {
     override val useEncrypt: Boolean = false
     override val storeType: GsonStoreType = GsonStoreType.COURSE_STYLE
 
+    @Volatile
+    private var styleTemp: Pair<CourseSet, Array<CourseCellStyle>>? = null
+
+    @Synchronized
     fun loadCellStyles(courseSet: CourseSet): Array<CourseCellStyle> {
+        if (styleTemp != null) {
+            if (styleTemp?.first == courseSet) {
+                return styleTemp?.second!!
+            }
+        }
         val storedStyles = loadStore()
-        return CourseCellStyle.asyncCellStyle(courseSet, storedStyles)
+        val styles = CourseCellStyle.asyncCellStyle(courseSet, storedStyles)
+        styleTemp = Pair(courseSet, styles)
+        return styles
     }
 }

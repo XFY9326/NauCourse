@@ -133,6 +133,8 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
     }
 
     override fun initView(viewModel: CourseTableViewModel) {
+        viewModel.refreshCourseTableStyle()
+
         CourseTableViewHelper.setOnCourseCellClickListener(this)
 
         courseTableViewPagerAdapter = CourseTableViewPagerAdapter(this, viewModel.maxWeekNumTemp ?: Constants.Course.MAX_WEEK_NUM_SIZE)

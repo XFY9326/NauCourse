@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activities.AboutActivity">
+    tools:context=".ui.activities.AboutActivity"
+    tools:ignore="UnusedAttribute">
 
     <include layout="@layout/view_general_toolbar" />
 
@@ -160,7 +161,6 @@
                                 android:layout_marginTop="2dp"
                                 android:autoLink="web"
                                 android:text="@string/open_source_website_url"
-                                android:textColorLink="@color/colorUrlLink"
                                 android:textSize="12sp" />
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -324,7 +324,6 @@
                                 android:layout_marginTop="2dp"
                                 android:autoLink="web"
                                 android:text="@string/online_feedback_back_url"
-                                android:textColorLink="@color/colorUrlLink"
                                 android:textSize="12sp" />
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -478,7 +477,6 @@
                                 android:layout_marginTop="2dp"
                                 android:autoLink="email"
                                 android:text="@string/email"
-                                android:textColorLink="@color/colorUrlLink"
                                 android:textSize="12sp" />
 
                         </androidx.appcompat.widget.LinearLayoutCompat>

@@ -11,5 +11,12 @@
             app:summary="@string/auto_async_course_sum"
             app:title="@string/auto_async_course" />
 
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="AutoAsyncNewsInfo"
+            app:summary="@string/auto_async_news_info_sum"
+            app:title="@string/auto_async_news_info" />
+
     </tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory>
 </androidx.preference.PreferenceScreen>

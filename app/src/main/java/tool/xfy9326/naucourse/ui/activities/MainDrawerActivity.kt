@@ -9,12 +9,9 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_nav_header.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentInfo
@@ -47,6 +44,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
             preloadFragments()
+            showFragment(getViewModel().getNowShowFragment())
         }
     }
 
@@ -71,15 +69,10 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        showFragment(getViewModel().getNowShowFragment())
-    }
-
     private fun preloadFragments() {
-        supportFragmentManager.beginTransaction().apply {
-            for ((type, fragment) in FRAGMENTS) {
-                if (fragment !in supportFragmentManager.fragments) {
+        if (supportFragmentManager.fragments.isEmpty()) {
+            supportFragmentManager.beginTransaction().apply {
+                for ((type, fragment) in FRAGMENTS) {
                     add(R.id.fg_mainContent, fragment.apply {
                         arguments = Bundle().apply {
                             putInt(DrawerToolbarFragment.DRAWER_ID, R.id.drawer_main)
@@ -88,35 +81,32 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
                     attach(fragment)
                     hide(fragment)
                 }
-            }
-        }.commitNow()
+            }.commitNow()
+        }
     }
 
     @Synchronized
-    fun showFragment(type: FragmentType) {
+    fun showFragment(type: FragmentType, withAnimation: Boolean = true) {
         if (type != getViewModel().getNowShowFragment() || !getViewModel().initFragmentShow()) {
             val oldFragment = supportFragmentManager.findFragmentByTag(getViewModel().getNowShowFragment().name)
             supportFragmentManager.beginTransaction().apply {
-                setCustomAnimations(R.anim.fragment_fade_enter, R.anim.fragment_fade_exit)
+                if (withAnimation) setCustomAnimations(0, R.anim.fragment_fade_exit)
                 if (oldFragment != null) {
                     hide(oldFragment)
                 }
                 val newFragment = supportFragmentManager.findFragmentByTag(type.name)
-                if (newFragment != null && newFragment in supportFragmentManager.fragments) {
+                if (newFragment != null) {
                     show(newFragment)
+                    getViewModel().setNowShowFragment(type)
                 } else {
                     error("Fragment Not Preload Before Show!")
                 }
             }.commit()
-            getViewModel().setNowShowFragment(type)
         }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        lifecycleScope.launch(Dispatchers.Main) {
-            drawer_main.closeDrawers()
-        }
-        lifecycleScope.launch(Dispatchers.Main) {
+        drawer_main.postDelayed({
             when (item.itemId) {
                 R.id.menu_navCourseArrange -> showFragment(FragmentType.COURSE_ARRANGE)
                 R.id.menu_navCourseTable -> showFragment(FragmentType.COURSE_TABLE)
@@ -126,7 +116,8 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
                 R.id.menu_navLogout -> logout()
                 R.id.menu_navExit -> finishAndRemoveTask()
             }
-        }
+        }, 250)
+        drawer_main.closeDrawers()
         return true
     }
 

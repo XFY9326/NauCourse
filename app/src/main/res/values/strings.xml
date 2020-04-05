@@ -288,4 +288,6 @@
     <string name="course_table_time_text_color">课程表时间文字颜色</string>
     <string name="course_table_time_text_color_sum">修改课程表其他非课程文字的颜色</string>
     <string name="course_table_background">课程表背景</string>
+    <string name="auto_async_news_info">自动同步通知数据</string>
+    <string name="auto_async_news_info_sum">每次启动时自动同步通知数据</string>
 </resources>

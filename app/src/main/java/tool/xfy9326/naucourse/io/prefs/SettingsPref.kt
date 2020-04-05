@@ -59,6 +59,7 @@ object SettingsPref : BasePref() {
 
     // UpdateSettingsFragment
     val AutoCheckUpdates by pref.boolean(defValue = true)
+    val AutoAsyncNewsInfo by pref.boolean(defValue = true)
 
     // DebugSettingsFragment
     val DebugMode by pref.boolean(defValue = BuildConfig.DEBUG)

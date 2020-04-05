@@ -83,7 +83,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:animateLayoutChanges="true"
                     app:columnCount="@integer/course_time_edit_column_count" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>

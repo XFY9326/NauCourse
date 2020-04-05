@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:opacity="opaque">
+    android:opacity="opaque"
+    tools:ignore="UnusedAttribute">
     <item android:drawable="@color/colorWindowsBackground" />
 
     <item
         android:width="110dp"
         android:height="110dp"
-        android:drawable="@drawable/launch_screen_logo"
         android:gravity="center_horizontal|top"
-        android:top="100dp" />
+        android:left="100dp"
+        android:right="100dp"
+        android:top="100dp">
+        <bitmap android:src="@drawable/launch_screen_logo" />
+    </item>
 
     <item
         android:width="180dp"
         android:height="60dp"
         android:bottom="50dp"
-        android:drawable="@drawable/launch_screen_text"
         android:gravity="center_horizontal|bottom"
-        tools:ignore="UnusedAttribute" />
+        android:left="100dp"
+        android:right="100dp">
+        <bitmap android:src="@drawable/launch_screen_text" />
+    </item>
 </layer-list>

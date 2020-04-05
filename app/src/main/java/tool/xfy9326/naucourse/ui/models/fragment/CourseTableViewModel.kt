@@ -143,7 +143,7 @@ class CourseTableViewModel : BaseViewModel() {
                         CourseCellStyleStore.loadCellStyles(courseSet)
                     )
                     coursePkgSavedTemp[weekNum - 1] = pkg
-                    viewModelScope.launch(Dispatchers.Main) { courseTablePkg[weekNum - 1].value = pkg }
+                    courseTablePkg[weekNum - 1].postValue(pkg)
                 } else if (::termDate.isInitialized && (!::courseTableArr.isInitialized || !::courseSet.isInitialized)) {
                     val pkg = CoursePkg(
                         termDate,
@@ -151,7 +151,7 @@ class CourseTableViewModel : BaseViewModel() {
                         emptyArray()
                     )
                     coursePkgSavedTemp[weekNum - 1] = pkg
-                    viewModelScope.launch(Dispatchers.Main) { courseTablePkg[weekNum - 1].value = pkg }
+                    courseTablePkg[weekNum - 1].postValue(pkg)
 
                     LogUtils.i<CourseTableViewModel>("Init Empty Course Data For Week: $weekNum!")
                 } else {
@@ -409,6 +409,7 @@ class CourseTableViewModel : BaseViewModel() {
 
     fun refreshCourseTableStyle() = synchronized(courseTableStyleLock) {
         courseTableStyle = null
+        getCourseTableStyle()
     }
 
     fun requestCourseTableBackground() {

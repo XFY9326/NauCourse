@@ -18,7 +18,9 @@
         android:foreground="?android:attr/selectableItemBackground"
         android:gravity="center_vertical"
         android:padding="15dp"
-        android:text="@string/share_image" />
+        android:text="@string/share_image"
+        android:textColor="@color/colorSecondaryText"
+        tools:ignore="UnusedAttribute" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_dialogSaveImage"
@@ -30,6 +32,7 @@
         android:gravity="center_vertical"
         android:padding="15dp"
         android:text="@string/save_image"
+        android:textColor="@color/colorSecondaryText"
         tools:ignore="UnusedAttribute" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

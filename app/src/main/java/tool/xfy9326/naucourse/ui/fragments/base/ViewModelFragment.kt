@@ -31,8 +31,8 @@ abstract class ViewModelFragment<T : BaseViewModel> : Fragment() {
     }
 
     @CallSuper
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         contentViewModel = onCreateViewModel()
         prepareCacheInit(contentViewModel, savedInstanceState != null)
         contentViewModel.onInitCache(savedInstanceState != null)

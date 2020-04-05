@@ -71,15 +71,18 @@ class MainDrawerViewModel : BaseViewModel() {
     fun getNowShowFragment(): MainDrawerActivity.FragmentType {
         synchronized(fragmentTypeLock) {
             if (!::nowShowFragmentType.isInitialized) {
-                nowShowFragmentType = when (SettingsPref.getDefaultEnterInterface()) {
-                    SettingsPref.EnterInterfaceType.COURSE_ARRANGE -> MainDrawerActivity.FragmentType.COURSE_ARRANGE
-                    SettingsPref.EnterInterfaceType.COURSE_TABLE -> MainDrawerActivity.FragmentType.COURSE_TABLE
-                    SettingsPref.EnterInterfaceType.NEWS -> MainDrawerActivity.FragmentType.NEWS
-                }
+                nowShowFragmentType = getDefaultFragmentType()
             }
             return nowShowFragmentType
         }
     }
+
+    fun getDefaultFragmentType() =
+        when (SettingsPref.getDefaultEnterInterface()) {
+            SettingsPref.EnterInterfaceType.COURSE_ARRANGE -> MainDrawerActivity.FragmentType.COURSE_ARRANGE
+            SettingsPref.EnterInterfaceType.COURSE_TABLE -> MainDrawerActivity.FragmentType.COURSE_TABLE
+            SettingsPref.EnterInterfaceType.NEWS -> MainDrawerActivity.FragmentType.NEWS
+        }
 
     fun requestLogout() {
         viewModelScope.launch(Dispatchers.Default) {

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import tool.xfy9326.naucourse.io.prefs.AppPref
+import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.providers.beans.GeneralNews
 import tool.xfy9326.naucourse.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourse.providers.info.methods.NewsInfo
@@ -33,7 +34,9 @@ class NewsViewModel : BaseViewModel() {
                 }
                 isRefreshing.postValue(false)
             }
-            refreshNewsList()
+            if (SettingsPref.AutoAsyncNewsInfo) {
+                refreshNewsList()
+            }
         }
     }
 

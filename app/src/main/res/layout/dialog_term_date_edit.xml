@@ -79,7 +79,8 @@
             android:layout_marginStart="20dp"
             android:background="@android:color/transparent"
             android:foreground="?attr/selectableItemBackground"
-            android:src="@drawable/ic_edit" />
+            android:src="@drawable/ic_edit"
+            tools:ignore="UnusedAttribute" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

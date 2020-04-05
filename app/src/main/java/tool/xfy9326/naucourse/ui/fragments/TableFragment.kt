@@ -1,6 +1,10 @@
 package tool.xfy9326.naucourse.ui.fragments
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -10,9 +14,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.withContext
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CoursePkg
-import tool.xfy9326.naucourse.ui.fragments.base.ViewModelFragment
 import tool.xfy9326.naucourse.ui.models.fragment.CourseTableViewModel
 import tool.xfy9326.naucourse.ui.views.table.CourseTableStyle
 import tool.xfy9326.naucourse.ui.views.table.CourseTableViewHelper
@@ -21,39 +25,75 @@ import tool.xfy9326.naucourse.utils.compute.CourseUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 import kotlin.properties.Delegates
 
-class TableFragment : ViewModelFragment<CourseTableViewModel>() {
+class TableFragment : Fragment() {
+    private lateinit var contentViewModel: CourseTableViewModel
+
     private val courseUpdateLock = Mutex()
     private var weekNum by Delegates.notNull<Int>()
     private var coursePkgHash = CourseTableViewModel.DEFAULT_COURSE_PKG_HASH
 
-    override fun onCreateContentView(): Int = R.layout.fragment_table
-
-    override fun onSetInstance(args: Bundle?) {
-        weekNum = args?.getInt(CourseTableViewPagerAdapter.COURSE_TABLE_WEEK_NUM)!!
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        weekNum = arguments?.getInt(CourseTableViewPagerAdapter.COURSE_TABLE_WEEK_NUM)!!
+        contentViewModel = ViewModelProvider(requireParentFragment())[CourseTableViewModel::class.java]
     }
 
-    override fun onCreateViewModel(): CourseTableViewModel = ViewModelProvider(requireParentFragment())[CourseTableViewModel::class.java]
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return if (view == null) {
+            inflater.inflate(R.layout.fragment_table, container, false)
+        } else {
+            val parent = requireView().parent as ViewGroup?
+            parent?.removeView(view)
+            view
+        }
+    }
 
-    override fun prepareCacheInit(viewModel: CourseTableViewModel, isRestored: Boolean) {
-        gl_courseTable.layoutTransition?.setAnimateParentHierarchy(false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        gl_courseTable?.layoutTransition?.setAnimateParentHierarchy(false)
 
-        viewModel.apply {
+        bindObserver()
+        if (savedInstanceState == null) {
+            prepareCourseTable()
+        }
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun bindObserver() {
+        contentViewModel.apply {
             courseTablePkg[weekNum - 1].observe(viewLifecycleOwner, Observer {
-                coursePkgHash = it.hashCode()
-                buildCourseTableView(it, viewModel.getCourseTableStyle())
+                startBuildTable(it)
             })
+
             courseAndTermEmpty.observeNotification(viewLifecycleOwner, {
                 showToast(requireContext(), R.string.course_and_term_data_empty)
             }, "${TableFragment::class.java.simpleName}-$weekNum")
-            if (!isRestored) {
+
+            courseTableRebuild.observeNotification(viewLifecycleOwner, {
                 val temp = coursePkgSavedTemp[weekNum - 1]
-                if (temp == null) {
-                    requestCourseTable(weekNum, coursePkgHash)
-                } else {
-                    coursePkgHash = temp.hashCode()
-                    buildCourseTableView(temp, viewModel.getCourseTableStyle())
+                if (temp != null) {
+                    lifecycleScope.launch(Dispatchers.Default) {
+                        buildCourseTableView(temp, getCourseTableStyle())
+                    }
                 }
+            }, "${TableFragment::class.java.simpleName}-$weekNum")
+        }
+    }
+
+    private fun prepareCourseTable() {
+        contentViewModel.apply {
+            val temp = coursePkgSavedTemp[weekNum - 1]
+            if (temp == null) {
+                requestCourseTable(weekNum, coursePkgHash)
+            } else {
+                startBuildTable(temp)
             }
+        }
+    }
+
+    private fun startBuildTable(coursePkg: CoursePkg) {
+        lifecycleScope.launch(Dispatchers.Default) {
+            buildCourseTableView(coursePkg, contentViewModel.getCourseTableStyle())
+            coursePkgHash = coursePkg.hashCode()
         }
     }
 
@@ -69,21 +109,22 @@ class TableFragment : ViewModelFragment<CourseTableViewModel>() {
         }
     }
 
-    override fun bindViewModel(viewModel: CourseTableViewModel) {
-        viewModel.courseTableRebuild.observeNotification(viewLifecycleOwner, {
-            val temp = viewModel.coursePkgSavedTemp[weekNum - 1]
-            if (temp != null) buildCourseTableView(temp, viewModel.getCourseTableStyle())
-        }, "${TableFragment::class.java.simpleName}-$weekNum")
-    }
-
-    private fun buildCourseTableView(coursePkg: CoursePkg, courseTableStyle: CourseTableStyle) {
-        lifecycleScope.launch(Dispatchers.Default) {
+    private suspend fun buildCourseTableView(coursePkg: CoursePkg, courseTableStyle: CourseTableStyle) =
+        withContext(Dispatchers.Default) {
             if (courseUpdateLock.tryLock()) {
                 try {
                     val showWeekend = courseTableStyle.forceShowCourseTableWeekends || CourseUtils.hasWeekendCourse(coursePkg.courseTable)
                     val showWeekDaySize = CourseTableViewHelper.getShowWeekDaySize(showWeekend)
-                    if (layout_courseTableHeader != null && gl_courseTable != null) {
-                        val header = async {
+                    val columnSize = showWeekDaySize + 1
+
+                    val table = async {
+                        CourseTableViewHelper.buildCourseTable(
+                            requireContext(), coursePkg,
+                            requireContext().resources.displayMetrics.widthPixels, columnSize, courseTableStyle
+                        )
+                    }
+                    val header = if (layout_courseTableHeader != null) {
+                        async {
                             CourseTableViewHelper.buildCourseTableHeader(
                                 requireContext(),
                                 coursePkg.termDate,
@@ -93,19 +134,18 @@ class TableFragment : ViewModelFragment<CourseTableViewModel>() {
                                 courseTableStyle
                             )
                         }
-                        val table = async {
-                            CourseTableViewHelper.buildCourseTable(
-                                requireContext(), coursePkg, gl_courseTable,
-                                requireContext().resources.displayMetrics.widthPixels, showWeekDaySize + 1, courseTableStyle
-                            )
-                        }
-                        header.await()
-                        table.await()
+                    } else {
+                        null
                     }
+
+                    if (gl_courseTable != null) {
+                        CourseTableViewHelper.applyViewToCourseTable(gl_courseTable, table.await(), columnSize)
+                    }
+
+                    header?.await()
                 } finally {
                     courseUpdateLock.unlock()
                 }
             }
         }
-    }
 }

@@ -1,6 +1,7 @@
 package tool.xfy9326.naucourse.ui.fragments.base
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -20,10 +21,10 @@ abstract class DrawerToolbarFragment<T : BaseViewModel> : ViewModelFragment<T>()
         drawerIdRes = args?.getInt(DRAWER_ID)!!
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val toolbar = onBindToolbar()
         bindToolbarWithDrawer(toolbar)
-        super.onActivityCreated(savedInstanceState)
+        super.onViewCreated(view, savedInstanceState)
     }
 
     @Suppress("SameParameterValue")
