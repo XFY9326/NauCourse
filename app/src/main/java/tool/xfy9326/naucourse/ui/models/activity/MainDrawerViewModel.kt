@@ -77,7 +77,7 @@ class MainDrawerViewModel : BaseViewModel() {
         }
     }
 
-    fun getDefaultFragmentType() =
+    private fun getDefaultFragmentType() =
         when (SettingsPref.getDefaultEnterInterface()) {
             SettingsPref.EnterInterfaceType.COURSE_ARRANGE -> MainDrawerActivity.FragmentType.COURSE_ARRANGE
             SettingsPref.EnterInterfaceType.COURSE_TABLE -> MainDrawerActivity.FragmentType.COURSE_TABLE

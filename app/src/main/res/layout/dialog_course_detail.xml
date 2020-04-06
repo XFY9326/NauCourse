@@ -131,7 +131,7 @@
             android:background="@android:color/transparent"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_load_more"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription,UnusedAttribute" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

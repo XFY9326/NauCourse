@@ -4,10 +4,12 @@ import java.io.Serializable
 
 data class TimePeriodList(
     val timePeriods: Array<TimePeriod>,
-    val size: Int = timePeriods.size
+    val size: Int
 ) : Serializable {
 
-    constructor(timePeriods: TimePeriod) : this(arrayOf(timePeriods), 1)
+    constructor(timePeriods: Array<TimePeriod>) : this(timePeriods, timePeriods.size)
+
+    constructor(timePeriod: TimePeriod) : this(arrayOf(timePeriod), 1)
 
     companion object {
         private const val TIME_PERIOD_ARRAY_JOIN_SYMBOL = ","
