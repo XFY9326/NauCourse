@@ -1,14 +1,17 @@
 package tool.xfy9326.naucourse.providers.store
 
 import tool.xfy9326.naucourse.beans.CourseCellStyle
-import tool.xfy9326.naucourse.io.gson.GsonStoreType
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
-import tool.xfy9326.naucourse.providers.store.base.BaseGsonStore
+import tool.xfy9326.naucourse.providers.store.base.BaseJsonStore
+import tool.xfy9326.naucourse.utils.courses.CourseStyleUtils
 
-object CourseCellStyleStore : BaseGsonStore<Array<CourseCellStyle>>() {
+object CourseCellStyleStore : BaseJsonStore<Array<CourseCellStyle>>() {
+    override val fileName: String = "CourseCellStyle"
+    override val versionCode: Int = 1
+    override val storeClass: Class<Array<CourseCellStyle>> = Array<CourseCellStyle>::class.java
+
     override val useCache: Boolean = true
     override val useEncrypt: Boolean = false
-    override val storeType: GsonStoreType = GsonStoreType.COURSE_STYLE
 
     @Volatile
     private var styleTemp: Pair<CourseSet, Array<CourseCellStyle>>? = null
@@ -21,7 +24,7 @@ object CourseCellStyleStore : BaseGsonStore<Array<CourseCellStyle>>() {
             }
         }
         val storedStyles = loadStore()
-        val styles = CourseCellStyle.asyncCellStyle(courseSet, storedStyles)
+        val styles = CourseStyleUtils.asyncCellStyle(courseSet, storedStyles)
         styleTemp = Pair(courseSet, styles)
         return styles
     }

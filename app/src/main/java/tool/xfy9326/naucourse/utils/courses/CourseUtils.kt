@@ -1,11 +1,14 @@
-package tool.xfy9326.naucourse.utils.compute
+package tool.xfy9326.naucourse.utils.courses
 
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import tool.xfy9326.naucourse.Constants
-import tool.xfy9326.naucourse.beans.*
+import tool.xfy9326.naucourse.beans.CourseCell
+import tool.xfy9326.naucourse.beans.CourseCellStyle
+import tool.xfy9326.naucourse.beans.CourseItem
+import tool.xfy9326.naucourse.beans.CourseTable
 import tool.xfy9326.naucourse.providers.beans.jwc.Course
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseTime
@@ -36,7 +39,7 @@ object CourseUtils {
             }
 
             if (!hasSame) {
-                newCourses.add(Pair(newCourse, CourseCellStyle.getDefaultCellStyle(newCourse.id)))
+                newCourses.add(Pair(newCourse, CourseStyleUtils.getDefaultCellStyle(newCourse.id)))
             }
         }
         return newCourses
@@ -67,7 +70,7 @@ object CourseUtils {
                             course.name,
                             time,
                             weekNum,
-                            CourseTimeDuration.parseTimePeriod(it),
+                            TimeUtils.parseTimePeriod(it),
                             thisWeekCourse
                         )
                     }

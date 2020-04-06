@@ -31,7 +31,8 @@ import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.ui.views.widgets.AdvancedGridLayout
 import tool.xfy9326.naucourse.ui.views.widgets.AdvancedLinearLayout
 import tool.xfy9326.naucourse.ui.views.widgets.CourseCellLayout
-import tool.xfy9326.naucourse.utils.compute.TimeUtils
+import tool.xfy9326.naucourse.utils.courses.CourseStyleUtils
+import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import tool.xfy9326.naucourse.utils.views.ColorUtils
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -186,7 +187,7 @@ object CourseTableViewHelper {
                         }
                         resultDeferred.add(async {
                             val view = buildCourseCellView(
-                                context, col, it, CourseCellStyle.getStyleByCourseId(it.courseId, styles, true)!!,
+                                context, col, it, CourseStyleUtils.getStyleByCourseId(it.courseId, styles, true)!!,
                                 CourseTableInternalStyle.CourseCellView(
                                     courseColWidth, backgroundRadius, courseCellPadding,
                                     courseCellTextPadding, courseTextColorDark, courseTextColorLight

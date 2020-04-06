@@ -28,8 +28,9 @@ import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.ui.dialogs.CourseTimeEditDialog
 import tool.xfy9326.naucourse.ui.views.recyclerview.adapters.CourseTimeAdapter
 import tool.xfy9326.naucourse.utils.BaseUtils
-import tool.xfy9326.naucourse.utils.compute.CourseUtils
-import tool.xfy9326.naucourse.utils.compute.TimeUtils
+import tool.xfy9326.naucourse.utils.courses.CourseStyleUtils
+import tool.xfy9326.naucourse.utils.courses.CourseUtils
+import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBar
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBarWithCallback
@@ -126,7 +127,7 @@ class CourseEditActivity : AppCompatActivity(), CourseTimeAdapter.CourseTimeCall
             val tempCourseStyle = getSerializableExtra(COURSE_CELL_STYLE) as CourseCellStyle?
             if (tempCourseStyle == null) {
                 if (newCourseStyle == null) {
-                    newCourseStyle = CourseCellStyle.getDefaultCellStyle(courseId)
+                    newCourseStyle = CourseStyleUtils.getDefaultCellStyle(courseId)
                 }
                 courseStyle = newCourseStyle!!
             } else {

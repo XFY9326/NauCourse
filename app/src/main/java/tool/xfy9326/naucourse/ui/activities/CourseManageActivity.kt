@@ -26,7 +26,7 @@ import tool.xfy9326.naucourse.ui.models.activity.CourseManageViewModel
 import tool.xfy9326.naucourse.ui.views.recyclerview.AdvancedDivider
 import tool.xfy9326.naucourse.ui.views.recyclerview.SwipeItemCallback
 import tool.xfy9326.naucourse.ui.views.recyclerview.adapters.CourseAdapter
-import tool.xfy9326.naucourse.utils.compute.TimeUtils
+import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBar
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBarWithCallback

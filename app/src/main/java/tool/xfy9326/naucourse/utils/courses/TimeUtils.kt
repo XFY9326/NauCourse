@@ -1,7 +1,8 @@
-package tool.xfy9326.naucourse.utils.compute
+package tool.xfy9326.naucourse.utils.courses
 
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.beans.ClassTime
+import tool.xfy9326.naucourse.beans.CourseTimeDuration
 import tool.xfy9326.naucourse.beans.DateTimePeriod
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.providers.beans.jwc.TimePeriod
@@ -155,4 +156,22 @@ object TimeUtils {
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
         }
+
+    fun convertToTimePeriod(duration: CourseTimeDuration): TimePeriod =
+        TimePeriod(
+            duration.startTime, if (duration.durationLength == 1) {
+                null
+            } else {
+                duration.startTime + duration.durationLength - 1
+            }
+        )
+
+    fun parseTimePeriod(period: TimePeriod): CourseTimeDuration =
+        CourseTimeDuration(
+            period.start, if (period.hasEnd()) {
+                period.end!! - period.start + 1
+            } else {
+                1
+            }
+        )
 }

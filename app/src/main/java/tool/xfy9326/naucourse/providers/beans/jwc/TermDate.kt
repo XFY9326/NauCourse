@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.io.dbHelpers.JwcDBHelper
-import tool.xfy9326.naucourse.utils.compute.TimeUtils
+import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import java.io.Serializable
 import java.util.*
 

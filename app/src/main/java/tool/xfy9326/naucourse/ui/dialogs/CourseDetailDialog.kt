@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.view_course_detail_item.view.*
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseDetail
-import tool.xfy9326.naucourse.utils.compute.TimeUtils
+import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import tool.xfy9326.naucourse.utils.views.ColorUtils
 import tool.xfy9326.naucourse.utils.views.ViewUtils
 import java.text.SimpleDateFormat

@@ -18,8 +18,8 @@ import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourse.ui.views.table.CourseTableStyle
-import tool.xfy9326.naucourse.utils.compute.CourseUtils
-import tool.xfy9326.naucourse.utils.compute.TimeUtils
+import tool.xfy9326.naucourse.utils.courses.CourseUtils
+import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import tool.xfy9326.naucourse.utils.debug.LogUtils
 import tool.xfy9326.naucourse.utils.utility.ImageUtils
 
@@ -179,7 +179,7 @@ class CourseTableViewModel : BaseViewModel() {
                                 courseCell.courseTime.location,
                                 courseCell.courseTime.weekDay,
                                 courseCell.weekNum,
-                                CourseTimeDuration.convertToTimePeriod(courseCell.timeDuration)
+                                TimeUtils.convertToTimePeriod(courseCell.timeDuration)
                             )
                         )
                     )

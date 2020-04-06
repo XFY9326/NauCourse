@@ -17,7 +17,8 @@ import tool.xfy9326.naucourse.network.clients.base.LoginInfo
 import tool.xfy9326.naucourse.providers.beans.jwc.*
 import tool.xfy9326.naucourse.providers.info.methods.CourseInfo
 import tool.xfy9326.naucourse.providers.store.CourseCellStyleStore
-import tool.xfy9326.naucourse.utils.compute.CourseUtils
+import tool.xfy9326.naucourse.utils.courses.CourseStyleUtils
+import tool.xfy9326.naucourse.utils.courses.CourseUtils
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 import tool.xfy9326.naucourse.utils.debug.LogUtils
 import tool.xfy9326.naucourse.utils.io.BaseIOUtils
@@ -99,7 +100,7 @@ object OldDataCompat {
                             timeSet
                         )
                     )
-                    styles.add(CourseCellStyle.getDefaultCellStyle(courseId, oldDatum.courseColor))
+                    styles.add(CourseStyleUtils.getDefaultCellStyle(courseId, oldDatum.courseColor))
                     if (oldDatum.courseTerm != null) term = oldDatum.courseTerm.trim()
                 }
             }

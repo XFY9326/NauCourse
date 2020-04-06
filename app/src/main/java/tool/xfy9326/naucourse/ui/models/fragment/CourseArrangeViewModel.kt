@@ -19,7 +19,8 @@ import tool.xfy9326.naucourse.providers.store.CourseArrangeStore
 import tool.xfy9326.naucourse.providers.store.CourseCellStyleStore
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
-import tool.xfy9326.naucourse.utils.compute.CourseUtils
+import tool.xfy9326.naucourse.utils.courses.CourseStyleUtils
+import tool.xfy9326.naucourse.utils.courses.CourseUtils
 import tool.xfy9326.naucourse.utils.debug.LogUtils
 
 class CourseArrangeViewModel : BaseViewModel() {
@@ -124,7 +125,7 @@ class CourseArrangeViewModel : BaseViewModel() {
                         emptyArray()
                     } else {
                         val output = Array(todayCourseArr.size) {
-                            Pair(todayCourseArr[it], CourseCellStyle.getStyleByCourseId(todayCourseArr[it].course.id, styleList)!!)
+                            Pair(todayCourseArr[it], CourseStyleUtils.getStyleByCourseId(todayCourseArr[it].course.id, styleList)!!)
                         }
                         todayCourses.postValue(output)
                         refreshNextCoursePosition(showAttention)
@@ -139,7 +140,7 @@ class CourseArrangeViewModel : BaseViewModel() {
                         emptyArray()
                     } else {
                         val output = Array(tomorrowCourseArr.size) {
-                            Pair(tomorrowCourseArr[it], CourseCellStyle.getStyleByCourseId(tomorrowCourseArr[it].course.id, styleList)!!)
+                            Pair(tomorrowCourseArr[it], CourseStyleUtils.getStyleByCourseId(tomorrowCourseArr[it].course.id, styleList)!!)
                         }
                         tomorrowCourses.postValue(output)
                         output
@@ -155,7 +156,7 @@ class CourseArrangeViewModel : BaseViewModel() {
                         val output = Array(notThisWeekCourseArr.size) {
                             Triple(
                                 notThisWeekCourseArr[it].first, notThisWeekCourseArr[it].second,
-                                CourseCellStyle.getStyleByCourseId(notThisWeekCourseArr[it].first.id, styleList)!!
+                                CourseStyleUtils.getStyleByCourseId(notThisWeekCourseArr[it].first.id, styleList)!!
                             )
                         }
                         notThisWeekCourse.postValue(output)

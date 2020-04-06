@@ -14,7 +14,7 @@ import tool.xfy9326.naucourse.providers.beans.jwc.Course
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.ui.views.recyclerview.SwipeItemCallback
 import tool.xfy9326.naucourse.ui.views.recyclerview.viewholders.CourseViewHolder
-import tool.xfy9326.naucourse.utils.compute.CourseUtils
+import tool.xfy9326.naucourse.utils.courses.CourseUtils
 import tool.xfy9326.naucourse.utils.views.ViewUtils
 
 class CourseAdapter(context: Context, @Volatile private var courseManagePkg: CourseManagePkg?, private val callback: Callback) :

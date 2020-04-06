@@ -19,6 +19,7 @@ import tool.xfy9326.naucourse.tools.NotifyBus
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
+import tool.xfy9326.naucourse.utils.courses.CourseStyleUtils
 import tool.xfy9326.naucourse.utils.debug.LogUtils
 
 class CourseManageViewModel : BaseViewModel() {
@@ -72,7 +73,7 @@ class CourseManageViewModel : BaseViewModel() {
                 term = courseInfo.data.term.copy()
                 ArrayList<Pair<Course, CourseCellStyle>>(courseInfo.data.courses.size).apply {
                     for (course in courseInfo.data.courses) {
-                        add(Pair(course.copy(), CourseCellStyle.getStyleByCourseId(course.id, styleList, copy = true)!!))
+                        add(Pair(course.copy(), CourseStyleUtils.getStyleByCourseId(course.id, styleList, copy = true)!!))
                     }
                     sortBy {
                         it.first.id

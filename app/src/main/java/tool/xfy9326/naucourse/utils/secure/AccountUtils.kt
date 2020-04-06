@@ -45,7 +45,7 @@ object AccountUtils {
         JwcDBHelper.clearAll()
         NetworkDBHelper.clearAll()
 
-        GsonStoreVersionPref.clear()
+        JsonStoreVersionPref.clear()
         InfoStoredTimePref.clear()
         AppPref.clear()
         UserPref.clear()

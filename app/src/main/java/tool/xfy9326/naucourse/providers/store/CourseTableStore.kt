@@ -1,11 +1,13 @@
 package tool.xfy9326.naucourse.providers.store
 
 import tool.xfy9326.naucourse.beans.CourseTable
-import tool.xfy9326.naucourse.io.gson.GsonStoreType
-import tool.xfy9326.naucourse.providers.store.base.BaseGsonStore
+import tool.xfy9326.naucourse.providers.store.base.BaseJsonStore
 
-object CourseTableStore : BaseGsonStore<Array<CourseTable>>() {
+object CourseTableStore : BaseJsonStore<Array<CourseTable>>() {
+    override val fileName: String = "CourseTable"
+    override val versionCode: Int = 1
+    override val storeClass: Class<Array<CourseTable>> = Array<CourseTable>::class.java
+
     override val useCache: Boolean = true
     override val useEncrypt: Boolean = false
-    override val storeType: GsonStoreType = GsonStoreType.COURSE_TABLE
 }

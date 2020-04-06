@@ -1,12 +1,11 @@
 package tool.xfy9326.naucourse.providers.store.base
 
-import tool.xfy9326.naucourse.io.gson.GsonStoreManager
-import tool.xfy9326.naucourse.io.gson.GsonStoreType
+import tool.xfy9326.naucourse.io.json.JsonStoreConfig
+import tool.xfy9326.naucourse.io.json.JsonStoreManager
 import java.util.*
 
 @Suppress("unused")
-abstract class BaseGsonStore<T : Any> {
-    protected abstract val storeType: GsonStoreType
+abstract class BaseJsonStore<T : Any> : JsonStoreConfig<T> {
     protected abstract val useCache: Boolean
     protected abstract val useEncrypt: Boolean
 
@@ -20,7 +19,7 @@ abstract class BaseGsonStore<T : Any> {
 
     private fun initStore() {
         if (useCache) {
-            cache = GsonStoreManager.readData(storeType, useEncrypt)
+            cache = JsonStoreManager.readData(this, useEncrypt)
             listenerList.forEach {
                 it.onInitLoad()
             }
@@ -37,7 +36,7 @@ abstract class BaseGsonStore<T : Any> {
             }
             cache
         } else {
-            GsonStoreManager.readData(storeType, useEncrypt)
+            JsonStoreManager.readData(this, useEncrypt)
         }
 
     fun saveStore(data: T): Boolean {
@@ -45,7 +44,7 @@ abstract class BaseGsonStore<T : Any> {
             this.cache = data
             hasInit = true
         }
-        return GsonStoreManager.writeData(storeType, data, useEncrypt).also {
+        return JsonStoreManager.writeData(this, data, useEncrypt).also {
             listenerList.forEach {
                 it.onDataChanged(data)
             }
@@ -56,7 +55,7 @@ abstract class BaseGsonStore<T : Any> {
         if (useCache) {
             this.cache = null
         }
-        GsonStoreManager.clearData(storeType)
+        JsonStoreManager.clearData(this)
         listenerList.forEach {
             it.onClear()
         }

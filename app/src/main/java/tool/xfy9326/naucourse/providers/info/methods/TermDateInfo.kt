@@ -6,7 +6,7 @@ import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.providers.contents.base.ContentResult
 import tool.xfy9326.naucourse.providers.contents.methods.jwc.TermInfo
 import tool.xfy9326.naucourse.providers.info.base.*
-import tool.xfy9326.naucourse.utils.compute.TimeUtils
+import tool.xfy9326.naucourse.utils.courses.TimeUtils
 
 object TermDateInfo : BaseSimpleContentInfo<TermDate, TermDateInfo.TermType>() {
     private const val CACHE_EXPIRE_DAY = 1
