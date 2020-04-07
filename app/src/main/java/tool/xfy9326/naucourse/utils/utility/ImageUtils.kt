@@ -23,8 +23,6 @@ object ImageUtils {
     private const val IMAGE_JPEG = ".jpeg"
     private const val IMAGE_WEBP = ".webp"
 
-    private const val IMAGE_TEMP = ".tmp"
-
     private const val DIR_PICTURE_MAIN_DIR = "NauCourse"
 
     fun clearLocalImageBySubDir(dirName: String) = BaseIOUtils.deleteFile(PathUtils.getImageLocalSavePath() + dirName)

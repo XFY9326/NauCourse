@@ -1,7 +1,7 @@
-package tool.xfy9326.naucourse.network.clients.utils
+package tool.xfy9326.naucourse.network.utils
 
 /**
- * User Agent池
+ * User Agent Pool
  * @author XFY9326
  */
 object UAPool {

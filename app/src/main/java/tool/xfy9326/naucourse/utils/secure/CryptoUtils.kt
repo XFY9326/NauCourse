@@ -1,6 +1,6 @@
 package tool.xfy9326.naucourse.utils.secure
 
-import tool.xfy9326.naucourse.providers.store.UUIDStore
+import tool.xfy9326.naucourse.io.db.UUIDDBHelper
 import java.util.*
 
 object CryptoUtils {
@@ -10,10 +10,10 @@ object CryptoUtils {
 
     @Synchronized
     private fun readUUID(): String = synchronized(this) {
-        val uuid = UUIDStore.readUUID()
+        val uuid = UUIDDBHelper.readUUID()
         if (uuid == null) {
             val newUUID = UUID.randomUUID().toString()
-            UUIDStore.saveUUID(newUUID)
+            UUIDDBHelper.saveUUID(newUUID)
             return newUUID
         } else {
             uuid

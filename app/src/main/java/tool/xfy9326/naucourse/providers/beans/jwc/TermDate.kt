@@ -4,12 +4,12 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import tool.xfy9326.naucourse.Constants
-import tool.xfy9326.naucourse.io.dbHelpers.JwcDBHelper
+import tool.xfy9326.naucourse.io.db.TermDateDBHelper
 import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import java.io.Serializable
 import java.util.*
 
-@Entity(tableName = JwcDBHelper.TERM_DATE_TABLE_NAME)
+@Entity(tableName = TermDateDBHelper.TERM_DATE_TABLE_NAME)
 data class TermDate(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = Constants.DB.COLUMN_ID)

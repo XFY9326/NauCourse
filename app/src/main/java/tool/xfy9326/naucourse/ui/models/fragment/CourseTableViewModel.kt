@@ -7,12 +7,12 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.beans.*
+import tool.xfy9326.naucourse.io.db.CourseCellStyleDBHelper
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.providers.info.methods.CourseInfo
 import tool.xfy9326.naucourse.providers.info.methods.TermDateInfo
-import tool.xfy9326.naucourse.providers.store.CourseCellStyleStore
 import tool.xfy9326.naucourse.providers.store.CourseTableStore
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
@@ -140,7 +140,7 @@ class CourseTableViewModel : BaseViewModel() {
                     val pkg = CoursePkg(
                         termDate,
                         courseTableArr[weekNum - 1],
-                        CourseCellStyleStore.loadCellStyles(courseSet)
+                        CourseCellStyleDBHelper.loadCourseCellStyle(courseSet)
                     )
                     coursePkgSavedTemp[weekNum - 1] = pkg
                     courseTablePkg[weekNum - 1].postValue(pkg)
@@ -227,7 +227,7 @@ class CourseTableViewModel : BaseViewModel() {
             }
 
             val styles = if (courseData != null) {
-                CourseCellStyleStore.loadCellStyles(courseData)
+                CourseCellStyleDBHelper.loadCourseCellStyle(courseData)
             } else {
                 null
             }
@@ -255,7 +255,7 @@ class CourseTableViewModel : BaseViewModel() {
                 hasTermUpdateInfo = true
             }
             if (styleList != null) {
-                CourseCellStyleStore.saveStore(styleList)
+                CourseCellStyleDBHelper.saveCourseCellStyle(styleList)
                 hasCourseUpdateInfo = true
             }
             if (hasCourseUpdateInfo || hasTermUpdateInfo || forceUpdate) {
@@ -316,9 +316,9 @@ class CourseTableViewModel : BaseViewModel() {
         termDate: TermDate? = null,
         styleList: Array<CourseCellStyle>? = null
     ): Boolean {
-        val storedStyle = CourseCellStyleStore.loadStore()
+        val storedStyle = CourseCellStyleDBHelper.loadCourseCellStyle()
         return !this::courseSet.isInitialized || !this::termDate.isInitialized || this.courseSet != courseSet || this.termDate != termDate ||
-                storedStyle == null || (styleList != null && storedStyle.contentEquals(styleList))
+                storedStyle.isEmpty() || (styleList != null && storedStyle.contentEquals(styleList))
     }
 
     fun requestShowWeekStatus(nowShowWeekNum: Int) {
@@ -348,7 +348,7 @@ class CourseTableViewModel : BaseViewModel() {
                     if (termNeedUpdate) {
                         val courseInfo = CourseInfo.getInfo(CourseInfo.OperationType.ASYNC_COURSE)
                         if (courseInfo.isSuccess) {
-                            val styles = CourseCellStyleStore.loadCellStyles(courseInfo.data!!)
+                            val styles = CourseCellStyleDBHelper.loadCourseCellStyle(courseInfo.data!!)
                             updateCourseData(courseInfo.data, termInfo.data!!, styles)
                         } else {
                             LogUtils.d<CourseTableViewModel>("CourseInfo Async Error: ${courseInfo.errorReason}")
@@ -376,7 +376,7 @@ class CourseTableViewModel : BaseViewModel() {
                             CoursePkg(
                                 termDate,
                                 courseTableArr[i],
-                                CourseCellStyleStore.loadCellStyles(courseSet)
+                                CourseCellStyleDBHelper.loadCourseCellStyle(courseSet)
                             ).also {
                                 coursePkgSavedTemp[i] = it
                             }

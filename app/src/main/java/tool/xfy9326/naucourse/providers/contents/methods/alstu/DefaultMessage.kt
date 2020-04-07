@@ -12,7 +12,7 @@ import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.network.clients.AlstuClient
 import tool.xfy9326.naucourse.network.clients.VPNClient
 import tool.xfy9326.naucourse.network.clients.base.BaseLoginClient
-import tool.xfy9326.naucourse.network.clients.tools.VPNTools
+import tool.xfy9326.naucourse.network.tools.VPNTools
 import tool.xfy9326.naucourse.providers.beans.GeneralNews
 import tool.xfy9326.naucourse.providers.beans.GeneralNewsDetail
 import tool.xfy9326.naucourse.providers.beans.alstu.AlstuMessage

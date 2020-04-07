@@ -13,10 +13,10 @@ import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.beans.UserInfo
 import tool.xfy9326.naucourse.compat.beans.CourseCompat
 import tool.xfy9326.naucourse.compat.beans.CourseDetailCompat
+import tool.xfy9326.naucourse.io.db.CourseCellStyleDBHelper
 import tool.xfy9326.naucourse.network.clients.base.LoginInfo
 import tool.xfy9326.naucourse.providers.beans.jwc.*
 import tool.xfy9326.naucourse.providers.info.methods.CourseInfo
-import tool.xfy9326.naucourse.providers.store.CourseCellStyleStore
 import tool.xfy9326.naucourse.utils.courses.CourseStyleUtils
 import tool.xfy9326.naucourse.utils.courses.CourseUtils
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
@@ -47,7 +47,7 @@ object OldDataCompat {
 
         if (courseData != null) {
             CourseInfo.saveNewCourses(courseData.first)
-            CourseCellStyleStore.saveStore(courseData.second)
+            CourseCellStyleDBHelper.saveCourseCellStyle(courseData.second)
         }
 
         return@withContext loginInfo

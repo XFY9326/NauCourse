@@ -3,10 +3,10 @@ package tool.xfy9326.naucourse.utils.secure
 import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.beans.UserInfo
-import tool.xfy9326.naucourse.io.dbHelpers.AppDBHelper
-import tool.xfy9326.naucourse.io.dbHelpers.CoursesDBHelper
-import tool.xfy9326.naucourse.io.dbHelpers.JwcDBHelper
-import tool.xfy9326.naucourse.io.dbHelpers.NetworkDBHelper
+import tool.xfy9326.naucourse.io.db.room.AppDB
+import tool.xfy9326.naucourse.io.db.room.CoursesDB
+import tool.xfy9326.naucourse.io.db.room.JwcDB
+import tool.xfy9326.naucourse.io.db.room.NetworkDB
 import tool.xfy9326.naucourse.io.prefs.*
 import tool.xfy9326.naucourse.utils.io.BaseIOUtils
 import tool.xfy9326.naucourse.utils.utility.ImageUtils
@@ -35,15 +35,14 @@ object AccountUtils {
         BaseIOUtils.deleteFile(App.instance.cacheDir.absolutePath)
         BaseIOUtils.deleteFile(App.instance.filesDir.absolutePath)
         BaseIOUtils.deleteFile(App.instance.codeCacheDir.absolutePath)
-        BaseIOUtils.deleteFile(App.instance.noBackupFilesDir.absolutePath)
 
         ImageUtils.clearLocalImageBySubDir(Constants.Image.DIR_NEWS_DETAIL_IMAGE)
         ImageUtils.clearLocalImageBySubDir(Constants.Image.DIR_APP_IMAGE)
 
-        AppDBHelper.clearAll()
-        CoursesDBHelper.clearAll()
-        JwcDBHelper.clearAll()
-        NetworkDBHelper.clearAll()
+        AppDB.getDB().clearAll()
+        CoursesDB.getDB().clearAll()
+        JwcDB.getDB().clearAll()
+        NetworkDB.getDB().clearAll()
 
         JsonStoreVersionPref.clear()
         InfoStoredTimePref.clear()

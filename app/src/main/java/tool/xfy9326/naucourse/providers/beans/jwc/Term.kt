@@ -4,10 +4,10 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import tool.xfy9326.naucourse.Constants
-import tool.xfy9326.naucourse.io.dbHelpers.CoursesDBHelper
+import tool.xfy9326.naucourse.io.db.CourseSetDBHelper
 import java.io.Serializable
 
-@Entity(tableName = CoursesDBHelper.TERM_TABLE_NAME)
+@Entity(tableName = CourseSetDBHelper.TERM_TABLE_NAME)
 data class Term(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = Constants.DB.COLUMN_ID)

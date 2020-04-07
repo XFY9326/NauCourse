@@ -9,8 +9,8 @@ import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.network.clients.base.BaseLoginClient
 import tool.xfy9326.naucourse.network.clients.base.LoginInfo
 import tool.xfy9326.naucourse.network.clients.base.LoginResponse
-import tool.xfy9326.naucourse.network.clients.tools.NetworkTools
-import tool.xfy9326.naucourse.network.clients.tools.NetworkTools.Companion.hasSameHost
+import tool.xfy9326.naucourse.network.tools.NetworkTools
+import tool.xfy9326.naucourse.network.tools.NetworkTools.Companion.hasSameHost
 import tool.xfy9326.naucourse.utils.debug.LogUtils
 
 // http://ngx.nau.edu.cn

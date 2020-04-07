@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.network.clients.tools
+package tool.xfy9326.naucourse.network.tools
 
 import okhttp3.HttpUrl
 import tool.xfy9326.naucourse.Constants

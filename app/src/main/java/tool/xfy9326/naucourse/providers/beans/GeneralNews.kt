@@ -5,17 +5,17 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import okhttp3.HttpUrl
 import tool.xfy9326.naucourse.Constants
-import tool.xfy9326.naucourse.io.dbHelpers.AppDBHelper
+import tool.xfy9326.naucourse.io.db.NewsDBHelper
 import java.util.*
 import kotlin.collections.HashSet
 
-@Entity(tableName = AppDBHelper.NEWS_TABLE_NAME)
+@Entity(tableName = NewsDBHelper.NEWS_TABLE_NAME)
 data class GeneralNews(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = AppDBHelper.COLUMN_ID)
+    @ColumnInfo(name = NewsDBHelper.COLUMN_ID)
     var id: Int,
     val title: String,
-    @ColumnInfo(name = AppDBHelper.COLUMN_POST_DATE)
+    @ColumnInfo(name = NewsDBHelper.COLUMN_POST_DATE)
     val postDate: Date,
     val detailUrl: HttpUrl,
     val type: String?,

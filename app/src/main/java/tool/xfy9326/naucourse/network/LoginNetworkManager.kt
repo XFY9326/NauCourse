@@ -1,11 +1,11 @@
 package tool.xfy9326.naucourse.network
 
-import tool.xfy9326.naucourse.io.dbHelpers.NetworkDBHelper
+import tool.xfy9326.naucourse.io.db.NetworkDBHelper
 import tool.xfy9326.naucourse.io.prefs.UserPref
 import tool.xfy9326.naucourse.network.clients.*
 import tool.xfy9326.naucourse.network.clients.base.LoginInfo
 import tool.xfy9326.naucourse.network.clients.base.LoginResponse
-import tool.xfy9326.naucourse.network.clients.tools.NetworkTools
+import tool.xfy9326.naucourse.network.tools.NetworkTools
 import tool.xfy9326.naucourse.utils.debug.LogUtils
 import tool.xfy9326.naucourse.utils.secure.AccountUtils
 

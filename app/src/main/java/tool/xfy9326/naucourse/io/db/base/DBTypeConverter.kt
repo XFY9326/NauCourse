@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.io.dbHelpers.base
+package tool.xfy9326.naucourse.io.db.base
 
 import androidx.room.TypeConverter
 import okhttp3.HttpUrl

@@ -8,9 +8,9 @@ import okhttp3.Response
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.network.clients.base.LoginInfo
 import tool.xfy9326.naucourse.network.clients.base.LoginResponse
-import tool.xfy9326.naucourse.network.clients.tools.NetworkTools
-import tool.xfy9326.naucourse.network.clients.tools.NetworkTools.Companion.hasSameHost
-import tool.xfy9326.naucourse.network.clients.tools.VPNTools
+import tool.xfy9326.naucourse.network.tools.NetworkTools
+import tool.xfy9326.naucourse.network.tools.NetworkTools.Companion.hasSameHost
+import tool.xfy9326.naucourse.network.tools.VPNTools
 import tool.xfy9326.naucourse.utils.debug.LogUtils
 import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit

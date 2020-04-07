@@ -8,7 +8,7 @@ import okhttp3.internal.closeQuietly
 import org.jsoup.Jsoup
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.network.clients.base.LoginInfo
-import tool.xfy9326.naucourse.network.clients.tools.NetworkTools
+import tool.xfy9326.naucourse.network.tools.NetworkTools
 import tool.xfy9326.naucourse.utils.debug.LogUtils
 
 // http://ykt.nau.edu.cn

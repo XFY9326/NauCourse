@@ -10,13 +10,13 @@ import tool.xfy9326.naucourse.beans.CourseArrange
 import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.beans.CourseDetail
 import tool.xfy9326.naucourse.beans.CourseItem
+import tool.xfy9326.naucourse.io.db.CourseCellStyleDBHelper
 import tool.xfy9326.naucourse.providers.beans.jwc.Course
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseTime
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.providers.info.methods.CourseInfo
 import tool.xfy9326.naucourse.providers.info.methods.TermDateInfo
 import tool.xfy9326.naucourse.providers.store.CourseArrangeStore
-import tool.xfy9326.naucourse.providers.store.CourseCellStyleStore
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourse.utils.courses.CourseStyleUtils
@@ -112,7 +112,7 @@ class CourseArrangeViewModel : BaseViewModel() {
             val courseInfo = courseInfoAsync.await()
 
             if (termInfo.isSuccess && courseInfo.isSuccess) {
-                val styleList = CourseCellStyleStore.loadCellStyles(courseInfo.data!!)
+                val styleList = CourseCellStyleDBHelper.loadCourseCellStyle(courseInfo.data!!)
 
                 val todayAsync = async {
                     todayCourseArr = CourseUtils.getTodayCourse(courseInfo.data, termInfo.data!!)

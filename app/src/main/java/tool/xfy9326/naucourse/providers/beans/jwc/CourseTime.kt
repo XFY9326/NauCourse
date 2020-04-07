@@ -4,14 +4,14 @@ import android.content.Context
 import androidx.room.*
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
-import tool.xfy9326.naucourse.io.dbHelpers.CoursesDBHelper
+import tool.xfy9326.naucourse.io.db.CourseSetDBHelper
 import java.io.Serializable
 import kotlin.math.min
 
 @Entity(
-    tableName = CoursesDBHelper.COURSES_TIME_TABLE_NAME,
-    indices = [Index(value = [CoursesDBHelper.COLUMN_COURSE_ID]), Index(value = [CoursesDBHelper.COLUMN_WEEK_DAY])],
-    foreignKeys = [ForeignKey(entity = Course::class, parentColumns = [Constants.DB.COLUMN_ID], childColumns = [CoursesDBHelper.COLUMN_COURSE_ID])]
+    tableName = CourseSetDBHelper.COURSES_TIME_TABLE_NAME,
+    indices = [Index(value = [CourseSetDBHelper.COLUMN_COURSE_ID]), Index(value = [CourseSetDBHelper.COLUMN_WEEK_DAY])],
+    foreignKeys = [ForeignKey(entity = Course::class, parentColumns = [Constants.DB.COLUMN_ID], childColumns = [CourseSetDBHelper.COLUMN_COURSE_ID])]
 )
 data class CourseTime(
     @PrimaryKey(autoGenerate = true)
@@ -23,7 +23,7 @@ data class CourseTime(
     val weekMode: WeekMode,
     val weeksArray: TimePeriodList,
     val rawWeeksStr: String,
-    @ColumnInfo(name = CoursesDBHelper.COLUMN_WEEK_DAY)
+    @ColumnInfo(name = CourseSetDBHelper.COLUMN_WEEK_DAY)
     val weekDay: Short,
     val coursesNumStr: String,
     // 课程时间在单个时间项只被允许设定一段，此处为冗余设计，防止解析教务的时间段出现多段

@@ -6,7 +6,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import okhttp3.HttpUrl
 import tool.xfy9326.naucourse.Constants
-import tool.xfy9326.naucourse.io.dbHelpers.AppDBHelper
+import tool.xfy9326.naucourse.io.db.NewsDBHelper
 import tool.xfy9326.naucourse.providers.beans.GeneralNews
 import tool.xfy9326.naucourse.providers.beans.GeneralNews.PostSource
 import tool.xfy9326.naucourse.providers.contents.base.BaseNewsContent
@@ -33,7 +33,7 @@ object NewsInfo : BaseSimpleContentInfo<List<GeneralNews>, PostSource>() {
     )
 
     override fun loadSimpleStoredInfo(): List<GeneralNews>? =
-        sortNewsList(AppDBHelper.getGeneralNewsArray())
+        sortNewsList(NewsDBHelper.getGeneralNewsArray())
 
     override fun onReadSimpleCache(data: List<GeneralNews>): List<GeneralNews> {
         return data.filterNot {
@@ -98,11 +98,11 @@ object NewsInfo : BaseSimpleContentInfo<List<GeneralNews>, PostSource>() {
     }
 
     override fun saveSimpleInfo(info: List<GeneralNews>) {
-        AppDBHelper.clearGeneralNewsSet()
-        AppDBHelper.putGeneralNewsSet(info)
+        NewsDBHelper.clearAll()
+        NewsDBHelper.putGeneralNewsSet(info)
     }
 
-    override fun clearSimpleStoredInfo() = AppDBHelper.clearGeneralNewsSet()
+    override fun clearSimpleStoredInfo() = NewsDBHelper.clearAll()
 
     private fun sortNewsList(list: List<GeneralNews>): List<GeneralNews> =
         list.sortedWith(Comparator { o1, o2 ->

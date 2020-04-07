@@ -1,9 +1,9 @@
-package tool.xfy9326.naucourse.network.clients.utils
+package tool.xfy9326.naucourse.network.utils
 
 import okhttp3.Cookie
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
-import tool.xfy9326.naucourse.io.dbHelpers.NetworkDBHelper
+import tool.xfy9326.naucourse.io.db.NetworkDBHelper
 
 
 class CookieStore(private val type: NetworkDBHelper.CookiesType) : CookieJar {

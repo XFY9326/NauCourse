@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.network.clients.utils
+package tool.xfy9326.naucourse.network.utils
 
 import okhttp3.Interceptor
 import okhttp3.Response

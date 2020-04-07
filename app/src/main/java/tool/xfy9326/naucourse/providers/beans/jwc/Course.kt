@@ -1,15 +1,17 @@
 package tool.xfy9326.naucourse.providers.beans.jwc
 
-import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
-import tool.xfy9326.naucourse.io.dbHelpers.CoursesDBHelper
+import androidx.room.*
+import tool.xfy9326.naucourse.io.db.CourseSetDBHelper
 import java.io.Serializable
 
-@Entity(tableName = CoursesDBHelper.COURSES_TABLE_NAME)
+@Entity(
+    tableName = CourseSetDBHelper.COURSES_TABLE_NAME,
+    indices = [Index(value = [CourseSetDBHelper.COLUMN_NAME])]
+)
 data class Course(
     @PrimaryKey
     val id: String,
+    @ColumnInfo(name = CourseSetDBHelper.COLUMN_NAME)
     val name: String,
     val teacher: String,
     val courseClass: String?,

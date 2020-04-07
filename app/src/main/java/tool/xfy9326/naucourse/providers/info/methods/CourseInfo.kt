@@ -2,7 +2,7 @@ package tool.xfy9326.naucourse.providers.info.methods
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import tool.xfy9326.naucourse.io.dbHelpers.CoursesDBHelper
+import tool.xfy9326.naucourse.io.db.CourseSetDBHelper
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourse.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourse.providers.contents.base.ContentResult
@@ -45,7 +45,7 @@ object CourseInfo : BaseSimpleContentInfo<CourseSet, CourseInfo.OperationType>()
 
     override fun onGetCacheExpire(): CacheExpire = CacheExpire(CacheExpireRule.PER_TIME, CACHE_EXPIRE_DAY, CacheExpireTimeUnit.DAY)
 
-    override fun loadSimpleStoredInfo(): CourseSet? = CoursesDBHelper.readCourseSet()
+    override fun loadSimpleStoredInfo(): CourseSet? = CourseSetDBHelper.readCourseSet()
 
     override suspend fun getSimpleInfoContent(params: Set<OperationType>): ContentResult<CourseSet> {
         if (params.size != 1) {
@@ -118,7 +118,7 @@ object CourseInfo : BaseSimpleContentInfo<CourseSet, CourseInfo.OperationType>()
         updateSimpleCache(courseSet)
     }
 
-    override fun saveSimpleInfo(info: CourseSet) = CoursesDBHelper.storeNewCourseSet(info)
+    override fun saveSimpleInfo(info: CourseSet) = CourseSetDBHelper.storeNewCourseSet(info)
 
-    override fun clearSimpleStoredInfo() = CoursesDBHelper.clearAllCoursesInfo()
+    override fun clearSimpleStoredInfo() = CourseSetDBHelper.clearAll()
 }

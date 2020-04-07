@@ -1,10 +1,10 @@
-package tool.xfy9326.naucourse.network.clients.tools
+package tool.xfy9326.naucourse.network.tools
 
 import okhttp3.*
 import tool.xfy9326.naucourse.App
-import tool.xfy9326.naucourse.io.dbHelpers.NetworkDBHelper
-import tool.xfy9326.naucourse.network.clients.utils.CookieStore
-import tool.xfy9326.naucourse.network.clients.utils.UAInterceptor
+import tool.xfy9326.naucourse.io.db.NetworkDBHelper
+import tool.xfy9326.naucourse.network.utils.CookieStore
+import tool.xfy9326.naucourse.network.utils.UAInterceptor
 import java.io.File
 import java.nio.charset.StandardCharsets
 import java.util.*

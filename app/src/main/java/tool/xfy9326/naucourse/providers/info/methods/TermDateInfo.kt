@@ -1,6 +1,6 @@
 package tool.xfy9326.naucourse.providers.info.methods
 
-import tool.xfy9326.naucourse.io.dbHelpers.JwcDBHelper
+import tool.xfy9326.naucourse.io.db.TermDateDBHelper
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.providers.contents.base.ContentResult
@@ -15,7 +15,7 @@ object TermDateInfo : BaseSimpleContentInfo<TermDate, TermDateInfo.TermType>() {
         RAW_TERM
     }
 
-    override fun loadSimpleStoredInfo(): TermDate? = JwcDBHelper.getTermDate()
+    override fun loadSimpleStoredInfo(): TermDate? = TermDateDBHelper.getTermDate()
 
     override fun onGetCacheExpire(): CacheExpire = CacheExpire(
         CacheExpireRule.PER_TIME,
@@ -63,9 +63,9 @@ object TermDateInfo : BaseSimpleContentInfo<TermDate, TermDateInfo.TermType>() {
     override fun onReadSimpleCache(data: TermDate): TermDate =
         fixTermDate(data)
 
-    override fun saveSimpleInfo(info: TermDate) = JwcDBHelper.putTermDate(info)
+    override fun saveSimpleInfo(info: TermDate) = TermDateDBHelper.putTermDate(info)
 
-    override fun clearSimpleStoredInfo() = JwcDBHelper.clearTermDate()
+    override fun clearSimpleStoredInfo() = TermDateDBHelper.clearAll()
 
     private fun fixTermDate(termDate: TermDate): TermDate = TermDate(TimeUtils.getWeekNum(termDate), termDate.startDate, termDate.endDate)
 }

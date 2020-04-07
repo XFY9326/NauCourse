@@ -4,10 +4,10 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import tool.xfy9326.naucourse.Constants
-import tool.xfy9326.naucourse.io.dbHelpers.JwcDBHelper
+import tool.xfy9326.naucourse.io.db.ExamDBHelper
 import java.util.*
 
-@Entity(tableName = JwcDBHelper.EXAM_TABLE_NAME)
+@Entity(tableName = ExamDBHelper.EXAM_TABLE_NAME)
 data class Exam(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = Constants.DB.COLUMN_ID)
@@ -16,7 +16,7 @@ data class Exam(
     val name: String,
     val credit: Float,
     val teachClass: String,
-    @ColumnInfo(name = JwcDBHelper.COLUMN_START_DATE)
+    @ColumnInfo(name = ExamDBHelper.COLUMN_START_DATE)
     val startDate: Date,
     val endDate: Date,
     val location: String,

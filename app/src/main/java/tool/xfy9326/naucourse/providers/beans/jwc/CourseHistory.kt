@@ -4,9 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import tool.xfy9326.naucourse.Constants
-import tool.xfy9326.naucourse.io.dbHelpers.CoursesDBHelper
+import tool.xfy9326.naucourse.io.db.CourseHistoryDBHelper
 
-@Entity(tableName = CoursesDBHelper.COURSES_HISTORY_TABLE_NAME)
+@Entity(tableName = CourseHistoryDBHelper.COURSES_HISTORY_TABLE_NAME)
 data class CourseHistory(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = Constants.DB.COLUMN_ID)

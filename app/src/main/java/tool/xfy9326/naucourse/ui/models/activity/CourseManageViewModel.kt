@@ -8,13 +8,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.beans.CourseManagePkg
+import tool.xfy9326.naucourse.io.db.CourseCellStyleDBHelper
 import tool.xfy9326.naucourse.providers.beans.jwc.Course
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourse.providers.beans.jwc.Term
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.providers.info.methods.CourseInfo
 import tool.xfy9326.naucourse.providers.info.methods.TermDateInfo
-import tool.xfy9326.naucourse.providers.store.CourseCellStyleStore
 import tool.xfy9326.naucourse.tools.NotifyBus
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
@@ -69,7 +69,7 @@ class CourseManageViewModel : BaseViewModel() {
 
             val term: Term
             val courseData = if (courseInfo.isSuccess) {
-                val styleList = CourseCellStyleStore.loadCellStyles(courseInfo.data!!)
+                val styleList = CourseCellStyleDBHelper.loadCourseCellStyle(courseInfo.data!!)
                 term = courseInfo.data.term.copy()
                 ArrayList<Pair<Course, CourseCellStyle>>(courseInfo.data.courses.size).apply {
                     for (course in courseInfo.data.courses) {
@@ -127,7 +127,7 @@ class CourseManageViewModel : BaseViewModel() {
             if (saveLock.tryLock()) {
                 try {
                     CourseInfo.saveNewCourses(courseSet)
-                    CourseCellStyleStore.saveStore(styles)
+                    CourseCellStyleDBHelper.saveCourseCellStyle(styles)
                     if (requireCleanTermDate) {
                         TermDateInfo.clearCustomTermDate()
                     } else {

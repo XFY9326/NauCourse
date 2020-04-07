@@ -1,8 +1,8 @@
 package tool.xfy9326.naucourse.utils.courses
 
 import tool.xfy9326.naucourse.beans.CourseCellStyle
+import tool.xfy9326.naucourse.io.db.CourseCellStyleDBHelper
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
-import tool.xfy9326.naucourse.providers.store.CourseCellStyleStore
 import tool.xfy9326.naucourse.utils.debug.LogUtils
 import tool.xfy9326.naucourse.utils.views.ColorUtils
 
@@ -29,7 +29,7 @@ object CourseStyleUtils {
             if (saveCreateStyle) {
                 val newStyle = styles.copyOf(styles.size + 1)
                 newStyle[newStyle.size - 1] = createStyle
-                CourseCellStyleStore.saveStore(newStyle.requireNoNulls())
+                CourseCellStyleDBHelper.saveCourseCellStyle(newStyle.requireNoNulls())
                 newStyle[newStyle.size - 1]
             } else {
                 createStyle
@@ -48,7 +48,7 @@ object CourseStyleUtils {
         }
         val result = newStyles.toTypedArray()
         if (saveStyle) {
-            CourseCellStyleStore.saveStore(result)
+            CourseCellStyleDBHelper.saveCourseCellStyle(result)
         }
         return result
     }

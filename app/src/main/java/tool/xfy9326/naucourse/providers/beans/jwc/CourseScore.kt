@@ -3,12 +3,12 @@ package tool.xfy9326.naucourse.providers.beans.jwc
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import tool.xfy9326.naucourse.io.dbHelpers.CoursesDBHelper
+import tool.xfy9326.naucourse.io.db.CourseScoreDBHelper
 
-@Entity(tableName = CoursesDBHelper.COURSES_SCORE_TABLE_NAME)
+@Entity(tableName = CourseScoreDBHelper.COURSES_SCORE_TABLE_NAME)
 data class CourseScore(
     @PrimaryKey
-    @ColumnInfo(name = CoursesDBHelper.COLUMN_COURSE_ID)
+    @ColumnInfo(name = CourseScoreDBHelper.COLUMN_COURSE_ID)
     val courseId: String,
     val name: String,
     val credit: Float,
