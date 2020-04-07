@@ -21,26 +21,19 @@ import kotlinx.android.synthetic.main.dialog_image_operation.*
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.ui.views.widgets.AnimateSlider
-import tool.xfy9326.naucourse.ui.views.widgets.StyledColorPickerDialog
 import tool.xfy9326.naucourse.utils.io.TextIOUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import kotlin.math.min
 
 object DialogUtils {
-    fun createCourseColorPickerDialog(context: Context, color: Int, dialogId: Int): StyledColorPickerDialog {
+    fun createCourseColorPickerDialog(context: Context, color: Int, dialogId: Int): ColorPickerDialog =
         ColorPickerDialog.newBuilder().apply {
             setColor(color)
             setDialogTitle(R.string.course_color_edit)
             setDialogId(dialogId)
             setShowAlphaSlider(false)
             setPresets(context.resources.getIntArray(R.array.material_colors))
-        }.create().apply {
-            // 使用Builder后，将Builder的参数传给继承的Dialog
-            val styledDialog = StyledColorPickerDialog()
-            styledDialog.arguments = arguments
-            return styledDialog
-        }
-    }
+        }.create()
 
     fun createCourseAddDialog(context: Context, lifecycle: Lifecycle, listener: DialogInterface.OnClickListener): AlertDialog =
         MaterialAlertDialogBuilder(context).apply {

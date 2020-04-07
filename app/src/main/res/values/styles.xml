@@ -53,6 +53,7 @@
         <item name="colorControlActivated">@color/colorControlIcon</item>
         <item name="buttonBarPositiveButtonStyle">@style/AppTheme.DialogBtnStyle</item>
         <item name="buttonBarNegativeButtonStyle">@style/AppTheme.DialogBtnStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/AppTheme.DialogBtnStyle</item>
     </style>
 
     <style name="AppTheme.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
