@@ -12,7 +12,7 @@ interface UUIDDataDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun putUUID(vararg uuidContent: UUIDContent)
 
-    @Query("select * from ${UUIDDBHelper.UUID_TABLE_NAME}")
+    @Query("select * from ${UUIDDBHelper.UUID_TABLE_NAME} limit 1")
     fun getUUID(): Array<UUIDContent>
 
     @Query("delete from ${UUIDDBHelper.UUID_TABLE_NAME}")

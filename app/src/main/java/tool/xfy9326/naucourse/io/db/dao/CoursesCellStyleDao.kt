@@ -12,9 +12,6 @@ interface CoursesCellStyleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun putCourseCellStyle(vararg courseCellStyle: CourseCellStyle)
 
-    @Insert
-    fun addCourseCellStyle(vararg courseCellStyle: CourseCellStyle)
-
     @Query("select * from ${CourseCellStyleDBHelper.COURSES_CELL_STYLE_TABLE_NAME}")
     fun getCourseCellStyle(): Array<CourseCellStyle>
 

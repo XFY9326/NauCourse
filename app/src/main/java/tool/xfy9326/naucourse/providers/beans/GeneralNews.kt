@@ -12,7 +12,7 @@ import kotlin.collections.HashSet
 @Entity(tableName = NewsDBHelper.NEWS_TABLE_NAME)
 data class GeneralNews(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = NewsDBHelper.COLUMN_ID)
+    @ColumnInfo(name = Constants.DB.COLUMN_ID)
     var id: Int,
     val title: String,
     @ColumnInfo(name = NewsDBHelper.COLUMN_POST_DATE)

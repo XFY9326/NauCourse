@@ -20,6 +20,7 @@ import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourse.utils.courses.CourseStyleUtils
+import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import tool.xfy9326.naucourse.utils.debug.LogUtils
 
 class CourseManageViewModel : BaseViewModel() {
@@ -64,7 +65,7 @@ class CourseManageViewModel : BaseViewModel() {
                 termInfo.data!!.copy()
             } else {
                 LogUtils.d<CourseManageViewModel>("Term Error! Term: ${termInfo.errorReason}")
-                TermDate.generateNewTermDate()
+                TimeUtils.generateNewTermDate()
             }
 
             val term: Term

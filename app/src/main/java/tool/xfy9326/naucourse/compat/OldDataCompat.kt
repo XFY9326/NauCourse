@@ -19,6 +19,7 @@ import tool.xfy9326.naucourse.providers.beans.jwc.*
 import tool.xfy9326.naucourse.providers.info.methods.CourseInfo
 import tool.xfy9326.naucourse.utils.courses.CourseStyleUtils
 import tool.xfy9326.naucourse.utils.courses.CourseUtils
+import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 import tool.xfy9326.naucourse.utils.debug.LogUtils
 import tool.xfy9326.naucourse.utils.io.BaseIOUtils
@@ -106,7 +107,7 @@ object OldDataCompat {
             }
             val newTerm =
                 if (term == null) {
-                    TermDate.generateNewTermDate().getTerm()
+                    TimeUtils.generateNewTermDate().getTerm()
                 } else {
                     Term.parse(term)
                 }

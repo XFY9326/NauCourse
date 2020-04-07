@@ -8,7 +8,6 @@ import tool.xfy9326.naucourse.providers.info.methods.NewsInfo
 object NewsDBHelper : BaseDBHelper<AppDB.AppDataBase>() {
     const val NEWS_TABLE_NAME = "News"
     const val COLUMN_POST_DATE = "postDate"
-    const val COLUMN_ID = "id"
 
     override val db: AppDB.AppDataBase = AppDB.getDB()
 
