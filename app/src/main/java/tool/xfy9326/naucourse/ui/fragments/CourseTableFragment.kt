@@ -30,6 +30,7 @@ import tool.xfy9326.naucourse.ui.views.table.CourseTableViewHelper
 import tool.xfy9326.naucourse.ui.views.table.OnCourseCellClickListener
 import tool.xfy9326.naucourse.ui.views.viewpager.CourseTableViewPagerAdapter
 import tool.xfy9326.naucourse.utils.views.DialogUtils
+import tool.xfy9326.naucourse.utils.views.I18NUtils
 import tool.xfy9326.naucourse.utils.views.ViewUtils
 
 class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
@@ -62,24 +63,7 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
             viewModel.requestShowWeekStatus(it)
         })
         viewModel.currentWeekStatus.observe(viewLifecycleOwner, Observer {
-            when (it!!) {
-                CourseTableViewModel.CurrentWeekStatus.IN_VACATION -> {
-                    tv_notCurrentWeek.visibility = View.VISIBLE
-                    tv_notCurrentWeek.setText(R.string.in_vacation)
-                }
-                CourseTableViewModel.CurrentWeekStatus.IS_CURRENT_WEEK -> {
-                    tv_notCurrentWeek.visibility = View.GONE
-                    tv_notCurrentWeek.text = Constants.EMPTY
-                }
-                CourseTableViewModel.CurrentWeekStatus.IS_NEXT_WEEK -> {
-                    tv_notCurrentWeek.visibility = View.VISIBLE
-                    tv_notCurrentWeek.setText(R.string.next_week)
-                }
-                CourseTableViewModel.CurrentWeekStatus.NOT_CURRENT_WEEK -> {
-                    tv_notCurrentWeek.visibility = View.VISIBLE
-                    tv_notCurrentWeek.setText(R.string.not_current_week)
-                }
-            }
+            tv_notCurrentWeek.setText(I18NUtils.getCurrentWeekStatusResId(it!!))
         })
         viewModel.todayDate.observe(viewLifecycleOwner, Observer {
             tv_todayDate.text = getString(R.string.today_date, it.first, it.second)

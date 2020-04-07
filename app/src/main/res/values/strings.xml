@@ -292,4 +292,5 @@
     <string name="auto_async_news_info_sum">每次启动时自动同步通知数据</string>
     <string name="expand_course_detail_in_default">默认展开课程详情</string>
     <string name="expand_course_detail_in_default_sum">显示课程详情时默认展开时间列表</string>
+    <string name="current_week">当前周</string>
 </resources>

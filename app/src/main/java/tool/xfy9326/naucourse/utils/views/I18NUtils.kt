@@ -9,8 +9,17 @@ import tool.xfy9326.naucourse.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourse.ui.models.activity.LoginViewModel.LoadingProcess
 import tool.xfy9326.naucourse.ui.models.activity.NewsDetailViewModel.ImageOperationType
 import tool.xfy9326.naucourse.ui.models.fragment.CourseArrangeViewModel.CourseArrangeNotifyType
+import tool.xfy9326.naucourse.ui.models.fragment.CourseTableViewModel
 
 object I18NUtils {
+    fun getCurrentWeekStatusResId(currentWeekStatus: CourseTableViewModel.CurrentWeekStatus): Int =
+        when (currentWeekStatus) {
+            CourseTableViewModel.CurrentWeekStatus.IN_VACATION -> R.string.in_vacation
+            CourseTableViewModel.CurrentWeekStatus.IS_CURRENT_WEEK -> R.string.current_week
+            CourseTableViewModel.CurrentWeekStatus.IS_NEXT_WEEK -> R.string.next_week
+            CourseTableViewModel.CurrentWeekStatus.NOT_CURRENT_WEEK -> R.string.not_current_week
+        }
+
     fun getErrorMsgResId(errorReason: ErrorReason): Int? =
         when (errorReason) {
             ErrorReason.ALREADY_LOGIN -> R.string.already_login
