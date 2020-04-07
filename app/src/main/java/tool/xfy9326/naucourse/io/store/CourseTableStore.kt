@@ -1,7 +1,7 @@
-package tool.xfy9326.naucourse.providers.store
+package tool.xfy9326.naucourse.io.store
 
 import tool.xfy9326.naucourse.beans.CourseTable
-import tool.xfy9326.naucourse.providers.store.base.BaseJsonStore
+import tool.xfy9326.naucourse.io.store.base.BaseJsonStore
 
 object CourseTableStore : BaseJsonStore<Array<CourseTable>>() {
     override val fileName: String = "CourseTable"
@@ -9,5 +9,5 @@ object CourseTableStore : BaseJsonStore<Array<CourseTable>>() {
     override val storeClass: Class<Array<CourseTable>> = Array<CourseTable>::class.java
 
     override val useCache: Boolean = true
-    override val useEncrypt: Boolean = false
+    override val useEncrypt: Boolean = true
 }

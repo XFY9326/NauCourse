@@ -1,6 +1,6 @@
 package tool.xfy9326.naucourse.providers.info.base
 
-import tool.xfy9326.naucourse.providers.store.base.BaseJsonStore
+import tool.xfy9326.naucourse.io.store.base.BaseJsonStore
 
 abstract class BaseJsonStoreInfo<T : Any, P : Enum<*>> : BaseSimpleContentInfo<T, P>() {
     protected abstract val jsonStore: BaseJsonStore<T>

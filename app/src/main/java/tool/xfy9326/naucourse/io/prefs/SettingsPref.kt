@@ -30,6 +30,7 @@ object SettingsPref : BasePref() {
     fun getDefaultEnterInterface() = EnterInterfaceType.valueOf(DefaultEnterInterface!!)
 
     val UseBrowserOpenNewsDetail by pref.boolean(defValue = false)
+    val ExpandCourseDetailInDefault by pref.boolean(defValue = false)
 
 
     // DataSettingsFragment

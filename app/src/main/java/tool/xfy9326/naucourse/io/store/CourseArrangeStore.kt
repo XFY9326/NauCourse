@@ -1,7 +1,7 @@
-package tool.xfy9326.naucourse.providers.store
+package tool.xfy9326.naucourse.io.store
 
 import tool.xfy9326.naucourse.beans.CourseArrange
-import tool.xfy9326.naucourse.providers.store.base.BaseJsonStore
+import tool.xfy9326.naucourse.io.store.base.BaseJsonStore
 
 object CourseArrangeStore : BaseJsonStore<CourseArrange>() {
     override val fileName: String = "CourseArrange"

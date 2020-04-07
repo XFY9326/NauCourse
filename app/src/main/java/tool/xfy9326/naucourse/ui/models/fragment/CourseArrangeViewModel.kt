@@ -11,12 +11,12 @@ import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.beans.CourseDetail
 import tool.xfy9326.naucourse.beans.CourseItem
 import tool.xfy9326.naucourse.io.db.CourseCellStyleDBHelper
+import tool.xfy9326.naucourse.io.store.CourseArrangeStore
 import tool.xfy9326.naucourse.providers.beans.jwc.Course
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseTime
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.providers.info.methods.CourseInfo
 import tool.xfy9326.naucourse.providers.info.methods.TermDateInfo
-import tool.xfy9326.naucourse.providers.store.CourseArrangeStore
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourse.utils.courses.CourseStyleUtils

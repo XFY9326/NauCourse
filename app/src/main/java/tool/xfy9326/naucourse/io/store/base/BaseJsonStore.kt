@@ -1,7 +1,5 @@
-package tool.xfy9326.naucourse.providers.store.base
+package tool.xfy9326.naucourse.io.store.base
 
-import tool.xfy9326.naucourse.io.json.JsonStoreConfig
-import tool.xfy9326.naucourse.io.json.JsonStoreManager
 import java.util.*
 
 @Suppress("unused")

@@ -9,11 +9,11 @@ import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.beans.*
 import tool.xfy9326.naucourse.io.db.CourseCellStyleDBHelper
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
+import tool.xfy9326.naucourse.io.store.CourseTableStore
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.providers.info.methods.CourseInfo
 import tool.xfy9326.naucourse.providers.info.methods.TermDateInfo
-import tool.xfy9326.naucourse.providers.store.CourseTableStore
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel

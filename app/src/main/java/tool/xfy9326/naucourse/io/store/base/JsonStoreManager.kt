@@ -1,4 +1,4 @@
-package tool.xfy9326.naucourse.io.json
+package tool.xfy9326.naucourse.io.store.base
 
 import com.google.gson.Gson
 import tool.xfy9326.naucourse.App
@@ -21,7 +21,10 @@ object JsonStoreManager {
 
     fun <T : Any> writeData(config: JsonStoreConfig<T>, data: T, encrypt: Boolean = false): Boolean = synchronized(config) {
         JsonStoreVersionPref.saveStoredVersion(config.fileName, config.versionCode)
-        TextIOUtils.saveTextToFile(convertToJson(data), getStoredPath(config.fileName), encrypt, true)
+        TextIOUtils.saveTextToFile(
+            convertToJson(data),
+            getStoredPath(config.fileName), encrypt, true
+        )
     }
 
     fun <T : Any> readData(config: JsonStoreConfig<T>, encrypt: Boolean = false): T? = synchronized(config) {

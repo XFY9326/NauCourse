@@ -37,5 +37,12 @@
             app:summary="@string/use_browser_open_news_detail_sum"
             app:title="@string/use_browser_open_news_detail" />
 
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:icon="@drawable/ic_course_detail_small"
+            app:key="ExpandCourseDetailInDefault"
+            app:summary="@string/expand_course_detail_in_default_sum"
+            app:title="@string/expand_course_detail_in_default" />
+
     </tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory>
 </androidx.preference.PreferenceScreen>

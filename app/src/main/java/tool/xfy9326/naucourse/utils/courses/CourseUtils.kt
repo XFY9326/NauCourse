@@ -9,11 +9,11 @@ import tool.xfy9326.naucourse.beans.CourseCell
 import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.beans.CourseItem
 import tool.xfy9326.naucourse.beans.CourseTable
+import tool.xfy9326.naucourse.io.store.CourseTableStore
 import tool.xfy9326.naucourse.providers.beans.jwc.Course
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseTime
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
-import tool.xfy9326.naucourse.providers.store.CourseTableStore
 import java.util.*
 import kotlin.collections.ArrayList
 
