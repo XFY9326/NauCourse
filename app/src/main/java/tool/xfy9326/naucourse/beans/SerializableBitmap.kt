@@ -4,18 +4,18 @@ import android.graphics.Bitmap
 import java.io.Serializable
 import java.nio.ByteBuffer
 
-data class BitmapSerializable internal constructor(
+data class SerializableBitmap internal constructor(
     private val bitmapByteArray: ByteArray,
     private val bitmapWidth: Int,
     private val bitmapHeight: Int,
     private val bitmapConfig: Bitmap.Config
 ) : Serializable {
     companion object {
-        fun create(bitmap: Bitmap): BitmapSerializable {
+        fun create(bitmap: Bitmap): SerializableBitmap {
             val buffer = ByteBuffer.allocate(bitmap.byteCount)
             bitmap.copyPixelsToBuffer(buffer)
             val byteArray = buffer.array()
-            return BitmapSerializable(byteArray, bitmap.width, bitmap.height, bitmap.config)
+            return SerializableBitmap(byteArray, bitmap.width, bitmap.height, bitmap.config)
         }
     }
 
@@ -29,7 +29,7 @@ data class BitmapSerializable internal constructor(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as BitmapSerializable
+        other as SerializableBitmap
 
         if (!bitmapByteArray.contentEquals(other.bitmapByteArray)) return false
         if (bitmapWidth != other.bitmapWidth) return false

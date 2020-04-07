@@ -1,6 +1,6 @@
 package tool.xfy9326.naucourse.providers.store
 
-import tool.xfy9326.naucourse.beans.CardBalance
+import tool.xfy9326.naucourse.providers.beans.ykt.CardBalance
 import tool.xfy9326.naucourse.providers.store.base.BaseJsonStore
 
 object CardBalanceStore : BaseJsonStore<CardBalance>() {

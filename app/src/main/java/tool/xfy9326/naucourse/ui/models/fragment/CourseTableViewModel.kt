@@ -171,17 +171,25 @@ class CourseTableViewModel : BaseViewModel() {
             for (course in courseSet.courses) {
                 if (course.id == courseCell.courseId) {
                     courseDetailInfo.postEventValue(
-                        CourseDetail(
-                            course,
-                            termDate,
-                            cellStyle,
-                            CourseDetail.TimeDetail(
-                                courseCell.courseTime.location,
-                                courseCell.courseTime.weekDay,
-                                courseCell.weekNum,
-                                TimeUtils.convertToTimePeriod(courseCell.timeDuration)
+                        if (courseCell.thisWeekCourse) {
+                            CourseDetail(
+                                course,
+                                termDate,
+                                cellStyle,
+                                CourseDetail.TimeDetail(
+                                    courseCell.courseTime.location,
+                                    courseCell.courseTime.weekDay,
+                                    courseCell.weekNum,
+                                    TimeUtils.convertToTimePeriod(courseCell.timeDuration)
+                                )
                             )
-                        )
+                        } else {
+                            CourseDetail(
+                                course,
+                                termDate,
+                                cellStyle
+                            )
+                        }
                     )
                     break
                 }

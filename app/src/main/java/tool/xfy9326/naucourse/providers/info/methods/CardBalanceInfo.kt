@@ -1,6 +1,6 @@
 package tool.xfy9326.naucourse.providers.info.methods
 
-import tool.xfy9326.naucourse.beans.CardBalance
+import tool.xfy9326.naucourse.providers.beans.ykt.CardBalance
 import tool.xfy9326.naucourse.providers.contents.base.ContentResult
 import tool.xfy9326.naucourse.providers.contents.methods.ykt.StudentCardBalance
 import tool.xfy9326.naucourse.providers.info.base.BaseJsonStoreInfo
