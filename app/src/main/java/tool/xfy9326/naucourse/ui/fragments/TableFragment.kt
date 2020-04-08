@@ -9,7 +9,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.fragment_table.*
-import kotlinx.android.synthetic.main.fragment_table.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -94,18 +93,6 @@ class TableFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.Default) {
             buildCourseTableView(coursePkg, contentViewModel.getCourseTableStyle())
             coursePkgHash = coursePkg.hashCode()
-        }
-    }
-
-    override fun setMenuVisibility(menuVisible: Boolean) {
-        super.setMenuVisibility(menuVisible)
-        // 由于ViewPager预加载，无法判断Fragment是否处于显示状态
-        // 此处借助只有一个Fragment会控制Menu是否可见，来判断Fragment是否处于显示状态
-        if (!menuVisible) {
-            // 若当前课表不可见，则滚动回顶部
-            requireView().layout_courseTable.apply {
-                if (scrollY != 0) scrollTo(0, 0)
-            }
         }
     }
 

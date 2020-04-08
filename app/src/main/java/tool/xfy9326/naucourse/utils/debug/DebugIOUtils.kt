@@ -26,7 +26,9 @@ object DebugIOUtils {
 
     private val DEBUG_LOG_SAVE_DIR = App.instance.getExternalFilesDir(DEBUG_DIR)
 
-    val FORCE_DEBUG_ON = File(DEBUG_LOG_SAVE_DIR, FORCE_LOG_ON_FLAG).exists()
+    val FORCE_DEBUG_ON = DEBUG_LOG_SAVE_DIR?.listFiles { _, name ->
+        name.trim().equals(FORCE_LOG_ON_FLAG, true)
+    }?.isNotEmpty() ?: false
 
     enum class DebugSaveType {
         EXCEPTION {
@@ -44,10 +46,10 @@ object DebugIOUtils {
 
     private fun getLogDate() = DATE_FORMAT_YMD.format(Date())
 
-    private fun getDivider() =
-        "\n\n========== ${BuildConfig.VERSION_NAME}(${BuildConfig.VERSION_CODE}) ${DATE_FORMAT_YMD_HM_S.format(Date())} ==========\n\n"
+    private fun getDivider() = "\n\n========== ${DATE_FORMAT_YMD_HM_S.format(Date())} ==========\n\n"
 
-    private fun getSaveFile(type: DebugSaveType) = File(DEBUG_LOG_SAVE_DIR, type.frontPrefix + getLogDate() + DEBUG_LOG_FILE_PREFIX)
+    private fun getSaveFile(type: DebugSaveType) =
+        File(DEBUG_LOG_SAVE_DIR, type.frontPrefix + getLogDate() + "_" + getVersionStr() + DEBUG_LOG_FILE_PREFIX)
 
     @Synchronized
     fun clearLogs() = if (DEBUG_LOG_SAVE_DIR?.exists() == true) DEBUG_LOG_SAVE_DIR.deleteRecursively() else true
@@ -85,6 +87,8 @@ object DebugIOUtils {
             }
         }
 
+    private fun getVersionStr() = "${BuildConfig.VERSION_NAME}(${BuildConfig.VERSION_CODE})"
+
     private fun generateDeviceInfo() =
         ">>>>> Device Info <<<<<\n" +
                 "Device Brand: ${Build.BRAND}\n" +
@@ -92,5 +96,6 @@ object DebugIOUtils {
                 "Device ABI: ${Build.SUPPORTED_ABIS?.contentToString()}\n" +
                 "System SDK: ${Build.VERSION.SDK_INT}\n" +
                 "System Version: ${Build.VERSION.RELEASE}\n" +
-                "-------------------------\n\n"
+                "App Version: ${getVersionStr()}\n" +
+                "--------------------------------\n\n"
 }

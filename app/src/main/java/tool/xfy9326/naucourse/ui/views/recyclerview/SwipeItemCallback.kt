@@ -27,8 +27,8 @@ class SwipeItemCallback<T : SwipeItemViewHolder>(private val listener: OnItemSwi
         private const val foregroundNotSwipeCorner = 0f
         private const val foregroundCornerDuration = 150L
         private const val backgroundCircularRevealDuration = 380L
-        private const val swipeIconDuration = 150L
-        private const val swipeIconScaleTo = 1.25f
+        private const val swipeIconDuration = 100L
+        private const val swipeIconScaleTo = 1.2f
     }
 
     @Volatile
