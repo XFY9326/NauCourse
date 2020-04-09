@@ -14,6 +14,13 @@
         <androidx.preference.CheckBoxPreference
             app:defaultValue="true"
             app:iconSpaceReserved="false"
+            app:key="AutoUpdateCourseArrange"
+            app:summary="@string/auto_update_course_arrange_sum"
+            app:title="@string/auto_update_course_arrange" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
             app:key="AutoAsyncNewsInfo"
             app:summary="@string/auto_async_news_info_sum"
             app:title="@string/auto_async_news_info" />

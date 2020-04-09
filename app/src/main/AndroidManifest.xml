@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="tool.xfy9326.naucourse">
@@ -7,8 +8,12 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <permission
+        android:name="${ApplicationId}.permission.NextCourseWidget"
+        android:protectionLevel="signature" />
+
     <application
-        android:name="tool.xfy9326.naucourse.App"
+        android:name=".App"
         android:allowBackup="true"
         android:extractNativeLibs="${ExtractNativeLibs}"
         android:icon="@mipmap/ic_launcher"
@@ -21,59 +26,81 @@
         tools:targetApi="n">
 
         <activity
-            android:name="tool.xfy9326.naucourse.ui.activities.MainIndexActivity"
+            android:name=".ui.activities.MainIndexActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.LaunchScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="tool.xfy9326.naucourse.ui.activities.MainDrawerActivity"
+            android:name=".ui.activities.MainDrawerActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:theme="@style/AppTheme.TranslucentStatusBar.DarkActionBar" />
-
         <activity
-            android:name="tool.xfy9326.naucourse.ui.activities.LoginActivity"
+            android:name=".ui.activities.LoginActivity"
             android:launchMode="singleTask"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:theme="@style/AppTheme.TranslucentStatusBar" />
-
         <activity
-            android:name="tool.xfy9326.naucourse.ui.activities.UserInfoActivity"
+            android:name=".ui.activities.UserInfoActivity"
             android:label="@string/user_info"
             android:theme="@style/AppTheme.TranslucentStatusBar.DarkActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="tool.xfy9326.naucourse.ui.activities.MainDrawerActivity" />
         </activity>
-
-        <activity android:name="tool.xfy9326.naucourse.ui.activities.NewsDetailActivity">
+        <activity android:name=".ui.activities.NewsDetailActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="tool.xfy9326.naucourse.ui.activities.MainDrawerActivity" />
         </activity>
-
         <activity
-            android:name="tool.xfy9326.naucourse.ui.activities.CourseManageActivity"
+            android:name=".ui.activities.CourseManageActivity"
             android:label="@string/course_manage" />
-
         <activity
-            android:name="tool.xfy9326.naucourse.ui.activities.CourseEditActivity"
+            android:name=".ui.activities.CourseEditActivity"
             android:label="@string/course_edit" />
-
         <activity
-            android:name="tool.xfy9326.naucourse.ui.activities.SettingsActivity"
+            android:name=".ui.activities.SettingsActivity"
             android:label="@string/settings" />
-
         <activity
-            android:name="tool.xfy9326.naucourse.ui.activities.AboutActivity"
+            android:name=".ui.activities.AboutActivity"
             android:label="@string/about" />
+
+        <service
+            android:name=".services.NextCourseNotifyService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="${ApplicationId}.action.NOTIFY_NEXT_COURSE" />
+            </intent-filter>
+        </service>
+
+        <receiver android:name=".receivers.NextCourseAlarmReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="${ApplicationId}.action.NEXT_COURSE_ALARM" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".widget.NextCourseWidget"
+            android:permission="${ApplicationId}.permission.NextCourseWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="${ApplicationId}.action.NEXT_COURSE_WIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/next_course_appwidget_info" />
+        </receiver>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -84,6 +111,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_provider_paths" />
         </provider>
-
     </application>
+
 </manifest>

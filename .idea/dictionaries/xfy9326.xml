@@ -13,6 +13,7 @@
       <w>auid</w>
       <w>blocklen</w>
       <w>ciphertext</w>
+      <w>coroutine</w>
       <w>cppcoreguidelines</w>
       <w>dcim</w>
       <w>ecaf</w>
@@ -36,6 +37,7 @@
       <w>pkcs</w>
       <w>rcon</w>
       <w>recyclerview</w>
+      <w>remoteviews</w>
       <w>rijndael</w>
       <w>rotl</w>
       <w>rotr</w>

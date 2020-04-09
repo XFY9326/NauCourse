@@ -5,12 +5,13 @@ import java.io.File
 object BaseIOUtils {
     fun deleteFile(path: String) = File(path).deleteRecursively()
 
-    fun prepareFile(file: File): Boolean {
+    fun prepareFile(file: File, replaceFile: Boolean = true): Boolean {
         if (file.exists() || file.mkdirs()) {
-            if (file.exists() && !file.delete()) {
-                return false
+            return if (replaceFile) {
+                !file.exists() || file.delete()
+            } else {
+                true
             }
-            return true
         }
         return false
     }

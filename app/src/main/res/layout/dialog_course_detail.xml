@@ -16,15 +16,12 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_courseTitle"
+            style="@style/AppTheme.SelectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
-            android:paddingBottom="8dp"
-            tools:ignore="UnusedAttribute">
+            android:paddingBottom="8dp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_courseName"
@@ -124,14 +121,14 @@
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/btn_loadMoreCourseInfo"
+            style="@style/AppTheme.SelectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_gravity="bottom"
             android:layout_marginTop="5dp"
             android:background="@android:color/transparent"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_load_more"
-            tools:ignore="ContentDescription,UnusedAttribute" />
+            tools:ignore="ContentDescription" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

@@ -14,6 +14,7 @@ import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.providers.info.methods.CourseInfo
 import tool.xfy9326.naucourse.providers.info.methods.TermDateInfo
+import tool.xfy9326.naucourse.tools.NotifyBus
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
@@ -92,8 +93,9 @@ class CourseTableViewModel : BaseViewModel() {
                             hasInit = true
                             true
                         }
-                        initDeferred.await()
-                        startOnlineDataAsync()
+                        if (SettingsPref.AutoAsyncCourseData) {
+                            startOnlineDataAsync()
+                        }
                     }
                 }
             }
@@ -126,8 +128,9 @@ class CourseTableViewModel : BaseViewModel() {
         }
     }
 
-    private suspend fun startOnlineDataAsync() {
-        if (SettingsPref.AutoAsyncCourseData) {
+    fun startOnlineDataAsync() = viewModelScope.launch(Dispatchers.Default) {
+        if (::initDeferred.isInitialized) {
+            if (initDeferred.isActive) initDeferred.await()
             asyncCourseTable()
         }
     }
@@ -250,7 +253,6 @@ class CourseTableViewModel : BaseViewModel() {
         courseSet: CourseSet? = null, termDate: TermDate? = null, styleList: Array<CourseCellStyle>? = null,
         forceUpdate: Boolean = false
     ) {
-        LogUtils.i<CourseTableViewModel>("Receive Update Course Table Request")
         if (validateUpdateNecessary(courseSet, termDate, styleList)) {
             var hasTermUpdateInfo = false
             var hasCourseUpdateInfo = false
@@ -267,7 +269,6 @@ class CourseTableViewModel : BaseViewModel() {
                 hasCourseUpdateInfo = true
             }
             if (hasCourseUpdateInfo || hasTermUpdateInfo || forceUpdate) {
-                LogUtils.i<CourseTableViewModel>("Start Update Course Table")
                 viewModelScope.launch(Dispatchers.Default) {
                     if (hasCourseUpdateInfo || forceUpdate) {
                         makeCourseTable(
@@ -275,14 +276,12 @@ class CourseTableViewModel : BaseViewModel() {
                             this@CourseTableViewModel.termDate,
                             true
                         )
-                        LogUtils.i<CourseTableViewModel>("Start Table Data")
                     }
                     if (hasTermUpdateInfo || forceUpdate) {
                         setWeekInfoByTermDate(
                             this@CourseTableViewModel.termDate,
                             if (this@CourseTableViewModel::courseSet.isInitialized) this@CourseTableViewModel.courseSet else null
                         )
-                        LogUtils.i<CourseTableViewModel>("Start Term Data")
                     }
                 }
             }
@@ -345,7 +344,6 @@ class CourseTableViewModel : BaseViewModel() {
     private suspend fun asyncCourseTable() = withContext(Dispatchers.Default) {
         if (courseTableAsyncLock.tryLock()) {
             try {
-                LogUtils.i<CourseTableViewModel>("Start Async CourseTable")
                 val termInfo = TermDateInfo.getInfo()
                 if (termInfo.isSuccess) {
                     val termNeedUpdate = if (::termDate.isInitialized) {
@@ -356,8 +354,18 @@ class CourseTableViewModel : BaseViewModel() {
                     if (termNeedUpdate) {
                         val courseInfo = CourseInfo.getInfo(CourseInfo.OperationType.ASYNC_COURSE)
                         if (courseInfo.isSuccess) {
-                            val styles = CourseCellStyleDBHelper.loadCourseCellStyle(courseInfo.data!!)
-                            updateCourseData(courseInfo.data, termInfo.data!!, styles)
+                            val courseDataNeedUpdate = if (::courseSet.isInitialized) {
+                                courseSet != courseInfo.data!!
+                            } else {
+                                true
+                            }
+                            if (courseDataNeedUpdate) {
+                                val styles = CourseCellStyleDBHelper.loadCourseCellStyle(courseInfo.data!!)
+                                updateCourseData(courseInfo.data, termInfo.data!!, styles)
+                                NotifyBus[NotifyBus.Type.COURSE_ASYNC_UPDATE].notifyEvent()
+                            } else {
+                                LogUtils.d<CourseTableViewModel>("Course Data Don't Need Update (Same Course Data)")
+                            }
                         } else {
                             LogUtils.d<CourseTableViewModel>("CourseInfo Async Error: ${courseInfo.errorReason}")
                         }

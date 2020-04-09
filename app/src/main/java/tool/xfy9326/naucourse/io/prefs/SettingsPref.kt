@@ -31,10 +31,13 @@ object SettingsPref : BasePref() {
 
     val UseBrowserOpenNewsDetail by pref.boolean(defValue = false)
     val ExpandCourseDetailInDefault by pref.boolean(defValue = false)
+    val NotifyNextCourse by pref.boolean(defValue = true)
 
 
     // DataSettingsFragment
     val AutoAsyncCourseData by pref.boolean(defValue = true)
+    val AutoAsyncNewsInfo by pref.boolean(defValue = false)
+    val AutoUpdateCourseArrange by pref.boolean(defValue = true)
 
     // CourseTableSettingsFragment
     val ShowNextWeekCourseTableAhead by pref.boolean(defValue = true)
@@ -60,7 +63,6 @@ object SettingsPref : BasePref() {
 
     // UpdateSettingsFragment
     val AutoCheckUpdates by pref.boolean(defValue = true)
-    val AutoAsyncNewsInfo by pref.boolean(defValue = true)
 
     // DebugSettingsFragment
     val DebugMode by pref.boolean(defValue = BuildConfig.DEBUG)

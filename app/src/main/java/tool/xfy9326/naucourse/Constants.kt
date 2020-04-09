@@ -113,6 +113,7 @@ object Constants {
         const val AboutIntent = "AboutIntent"
         const val NightMode = "NightMode"
         const val DebugMode = "DebugMode"
+        const val NotifyNextCourse = "NotifyNextCourse"
         const val ForceShowCourseTableWeekends = "ForceShowCourseTableWeekends"
         const val SameCourseCellHeight = "SameCourseCellHeight"
         const val CenterHorizontalShowCourseText = "CenterHorizontalShowCourseText"

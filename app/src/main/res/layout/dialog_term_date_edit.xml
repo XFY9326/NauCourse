@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -45,14 +44,13 @@
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/btn_courseTermEditStart"
+            style="@style/AppTheme.SelectableItemBackground"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="end"
             android:layout_marginStart="20dp"
             android:background="@android:color/transparent"
-            android:foreground="?attr/selectableItemBackground"
-            android:src="@drawable/ic_edit"
-            tools:ignore="UnusedAttribute" />
+            android:src="@drawable/ic_edit" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -73,14 +71,13 @@
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/btn_courseTermEditEnd"
+            style="@style/AppTheme.SelectableItemBackground"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="end"
             android:layout_marginStart="20dp"
             android:background="@android:color/transparent"
-            android:foreground="?attr/selectableItemBackground"
-            android:src="@drawable/ic_edit"
-            tools:ignore="UnusedAttribute" />
+            android:src="@drawable/ic_edit" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

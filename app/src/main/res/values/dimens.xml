@@ -25,4 +25,10 @@
     <dimen name="course_time_cell_vertical_padding">4dp</dimen>
 
     <dimen name="preference_seekbar_padding_horizontal" tools:ignore="PrivateResource">10dp</dimen>
+
+    <!--
+Refer to App Widget Documentation for margin information
+http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
+    -->
+    <dimen name="widget_margin">8dp</dimen>
 </resources>

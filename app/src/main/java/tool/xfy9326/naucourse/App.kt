@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.utils.BaseUtils
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
+import tool.xfy9326.naucourse.utils.utility.IntentUtils
 
 class App : Application() {
     companion object {
@@ -17,6 +18,7 @@ class App : Application() {
         instance = this
         ExceptionUtils.initCrashHandler()
         setupNightMode()
+        IntentUtils.startNextCourseAlarm(this)
     }
 
     private fun setupNightMode() = AppCompatDelegate.setDefaultNightMode(BaseUtils.getNightModeInt(SettingsPref.getNightMode()))

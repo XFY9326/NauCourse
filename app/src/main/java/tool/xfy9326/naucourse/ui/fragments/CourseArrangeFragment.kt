@@ -21,16 +21,17 @@ import kotlinx.android.synthetic.main.view_list_course_item.view.tv_listCourseNa
 import kotlinx.android.synthetic.main.view_list_course_simple_item.view.*
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
-import tool.xfy9326.naucourse.beans.CourseCellStyle
+import tool.xfy9326.naucourse.beans.CourseBundle
 import tool.xfy9326.naucourse.beans.CourseItem
-import tool.xfy9326.naucourse.providers.beans.jwc.Course
-import tool.xfy9326.naucourse.providers.beans.jwc.CourseTime
+import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.tools.NotifyBus
 import tool.xfy9326.naucourse.ui.activities.MainDrawerActivity
 import tool.xfy9326.naucourse.ui.dialogs.CourseDetailDialog
 import tool.xfy9326.naucourse.ui.fragments.base.DrawerToolbarFragment
 import tool.xfy9326.naucourse.ui.models.fragment.CourseArrangeViewModel
+import tool.xfy9326.naucourse.utils.utility.AppWidgetUtils
+import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBar
 import tool.xfy9326.naucourse.utils.views.I18NUtils
 import tool.xfy9326.naucourse.utils.views.ViewUtils
@@ -57,8 +58,10 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
     }
 
     override fun onStart() {
+        if (SettingsPref.AutoUpdateCourseArrange) {
+            getViewModel().refreshArrangeCourses(false)
+        }
         super.onStart()
-        getViewModel().refreshArrangeCourses(false)
     }
 
     override fun initView(viewModel: CourseArrangeViewModel) {
@@ -67,6 +70,9 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
         }
         tv_todayCourseMore.setOnClickListener {
             (requireActivity() as MainDrawerActivity).showFragment(MainDrawerActivity.FragmentType.COURSE_TABLE)
+        }
+        if (!SettingsPref.AutoUpdateCourseArrange) {
+            getViewModel().refreshArrangeCourses(false)
         }
     }
 
@@ -91,6 +97,13 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
         viewModel.nextCourseData.observe(viewLifecycleOwner, Observer {
             buildNextCourse(it)
         })
+        viewModel.nextCourseBundle.observeEvent(viewLifecycleOwner, Observer {
+            if (it == null) {
+                AppWidgetUtils.refreshNextCourseWidget(requireContext())
+            } else {
+                AppWidgetUtils.updateNextCourseWidget(requireContext(), it)
+            }
+        })
         viewModel.termDateData.observe(viewLifecycleOwner, Observer {
             buildTermDate(it)
         })
@@ -101,9 +114,21 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
                 }
             }.show(childFragmentManager, null)
         })
-        NotifyBus[NotifyBus.Type.COURSE_STYLE_TERM_UPDATE].observeNotification(viewLifecycleOwner, {
-            getViewModel().refreshArrangeCourses(false)
-        }, CourseArrangeFragment::class.java.simpleName)
+        val notifyObserver = {
+            getViewModel().refreshArrangeCourses(showAttention = false, updateNextCourseWidget = false)
+            viewModel.nextCourseBundle.postEventValue(null)
+            IntentUtils.refreshNextCourseAlarmData(requireContext())
+        }
+        NotifyBus[NotifyBus.Type.COURSE_ASYNC_UPDATE].observeNotification(
+            viewLifecycleOwner,
+            notifyObserver,
+            CourseArrangeFragment::class.java.simpleName
+        )
+        NotifyBus[NotifyBus.Type.COURSE_STYLE_TERM_UPDATE].observeNotification(
+            viewLifecycleOwner,
+            notifyObserver,
+            CourseArrangeFragment::class.java.simpleName
+        )
     }
 
     private fun buildTermDate(termDate: TermDate?) {
@@ -132,10 +157,10 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
         if (courseItem == null) {
             layout_nextCourse.visibility = View.GONE
             layout_nextCourseBreak.visibility = View.VISIBLE
-        } else {
+        } else if (courseItem.detail != null) {
             tv_nextCourseName.text = courseItem.course.name
-            tv_nextCourseTime.text = DATE_FORMAT_HM.format(courseItem.dateTimePeriod.startDateTime) + "~" +
-                    DATE_FORMAT_HM.format(courseItem.dateTimePeriod.endDateTime)
+            tv_nextCourseTime.text = DATE_FORMAT_HM.format(courseItem.detail.dateTimePeriod.startDateTime) + "~" +
+                    DATE_FORMAT_HM.format(courseItem.detail.dateTimePeriod.endDateTime)
             tv_nextCourseDetail.text =
                 ViewUtils.getCourseDataShowText("${courseItem.courseTime.location}${ViewUtils.COURSE_DATA_JOIN_SYMBOL}${courseItem.course.teacher}")
 
@@ -145,7 +170,7 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun buildTodayCourseList(todayCourses: Array<Pair<CourseItem, CourseCellStyle>>) {
+    private fun buildTodayCourseList(todayCourses: Array<CourseBundle>) {
         if (todayCourses.isEmpty()) {
             layout_todayCourseContent.visibility = View.GONE
             tv_todayCourseEmpty.visibility = View.VISIBLE
@@ -153,17 +178,20 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
             val inflater = LayoutInflater.from(requireContext())
 
             layout_todayCourseContent.removeAllViewsInLayout()
-            for (coursePair in todayCourses) {
-                layout_todayCourseContent.addViewInLayout(inflater.inflate(R.layout.view_list_course_item, layout_todayCourseContent, false).apply {
-                    ImageViewCompat.setImageTintList(this.iv_listCourseColor, ColorStateList.valueOf(coursePair.second.color))
-                    this.tv_listCourseName.text = coursePair.first.course.name
-                    this.tv_listCourseDetail.text =
-                        ViewUtils.getCourseDataShowText("${coursePair.first.course.teacher}${ViewUtils.COURSE_DATA_JOIN_SYMBOL}${coursePair.first.courseTime.location}")
-                    this.tv_listCourseStartTime.text = DATE_FORMAT_HM.format(coursePair.first.dateTimePeriod.startDateTime)
-                    setOnClickListener {
-                        getViewModel().requestCourseDetail(coursePair.first, coursePair.second)
-                    }
-                })
+            for (courseBundle in todayCourses) {
+                if (courseBundle.courseItem.detail != null) {
+                    layout_todayCourseContent.addViewInLayout(
+                        inflater.inflate(R.layout.view_list_course_item, layout_todayCourseContent, false).apply {
+                            ImageViewCompat.setImageTintList(this.iv_listCourseColor, ColorStateList.valueOf(courseBundle.courseCellStyle.color))
+                            this.tv_listCourseName.text = courseBundle.courseItem.course.name
+                            this.tv_listCourseDetail.text =
+                                ViewUtils.getCourseDataShowText("${courseBundle.courseItem.course.teacher}${ViewUtils.COURSE_DATA_JOIN_SYMBOL}${courseBundle.courseItem.courseTime.location}")
+                            this.tv_listCourseStartTime.text = DATE_FORMAT_HM.format(courseBundle.courseItem.detail.dateTimePeriod.startDateTime)
+                            setOnClickListener {
+                                getViewModel().requestCourseDetail(courseBundle.courseItem, courseBundle.courseCellStyle)
+                            }
+                        })
+                }
             }
             layout_todayCourseContent.refreshLayout()
 
@@ -173,7 +201,7 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun buildTomorrowCourseList(tomorrowCourses: Array<Pair<CourseItem, CourseCellStyle>>) {
+    private fun buildTomorrowCourseList(tomorrowCourses: Array<CourseBundle>) {
         if (tomorrowCourses.isEmpty()) {
             layout_tomorrowCourseContent.visibility = View.GONE
             tv_tomorrowCourseEmpty.visibility = View.VISIBLE
@@ -181,22 +209,24 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
             val inflater = LayoutInflater.from(requireContext())
 
             layout_tomorrowCourseContent.removeAllViewsInLayout()
-            for (coursePair in tomorrowCourses) {
-                layout_tomorrowCourseContent.addViewInLayout(
-                    inflater.inflate(
-                        R.layout.view_list_course_item,
-                        layout_todayCourseContent,
-                        false
-                    ).apply {
-                        ImageViewCompat.setImageTintList(this.iv_listCourseColor, ColorStateList.valueOf(coursePair.second.color))
-                        this.tv_listCourseName.text = coursePair.first.course.name
-                        this.tv_listCourseDetail.text =
-                            ViewUtils.getCourseDataShowText("${coursePair.first.course.teacher}${ViewUtils.COURSE_DATA_JOIN_SYMBOL}${coursePair.first.courseTime.location}")
-                        this.tv_listCourseStartTime.text = DATE_FORMAT_HM.format(coursePair.first.dateTimePeriod.startDateTime)
-                        setOnClickListener {
-                            getViewModel().requestCourseDetail(coursePair.first, coursePair.second)
-                        }
-                    })
+            for (courseBundle in tomorrowCourses) {
+                if (courseBundle.courseItem.detail != null) {
+                    layout_tomorrowCourseContent.addViewInLayout(
+                        inflater.inflate(
+                            R.layout.view_list_course_item,
+                            layout_todayCourseContent,
+                            false
+                        ).apply {
+                            ImageViewCompat.setImageTintList(this.iv_listCourseColor, ColorStateList.valueOf(courseBundle.courseCellStyle.color))
+                            this.tv_listCourseName.text = courseBundle.courseItem.course.name
+                            this.tv_listCourseDetail.text =
+                                ViewUtils.getCourseDataShowText("${courseBundle.courseItem.course.teacher}${ViewUtils.COURSE_DATA_JOIN_SYMBOL}${courseBundle.courseItem.courseTime.location}")
+                            this.tv_listCourseStartTime.text = DATE_FORMAT_HM.format(courseBundle.courseItem.detail.dateTimePeriod.startDateTime)
+                            setOnClickListener {
+                                getViewModel().requestCourseDetail(courseBundle.courseItem, courseBundle.courseCellStyle)
+                            }
+                        })
+                }
             }
             layout_tomorrowCourseContent.refreshLayout()
 
@@ -205,7 +235,7 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
         }
     }
 
-    private fun buildNotThisWeekCourseList(notThisWeekCourses: Array<Triple<Course, CourseTime, CourseCellStyle>>) {
+    private fun buildNotThisWeekCourseList(notThisWeekCourses: Array<CourseBundle>) {
         if (notThisWeekCourses.isEmpty()) {
             layout_notThisWeekCourseContent.visibility = View.GONE
             tv_notThisWeekCourseEmpty.visibility = View.VISIBLE
@@ -214,22 +244,22 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
             val weekDayNumStrArray = resources.getStringArray(R.array.weekday_num)
 
             layout_notThisWeekCourseContent.removeAllViewsInLayout()
-            for (coursePair in notThisWeekCourses) {
+            for (courseBundle in notThisWeekCourses) {
                 layout_notThisWeekCourseContent.addViewInLayout(
                     inflater.inflate(
                         R.layout.view_list_course_simple_item,
                         layout_todayCourseContent,
                         false
                     ).apply {
-                        ImageViewCompat.setImageTintList(this.iv_listCourseColor, ColorStateList.valueOf(coursePair.third.color))
-                        this.tv_listCourseName.text = coursePair.first.name
+                        ImageViewCompat.setImageTintList(this.iv_listCourseColor, ColorStateList.valueOf(courseBundle.courseCellStyle.color))
+                        this.tv_listCourseName.text = courseBundle.courseItem.course.name
                         this.tv_listCourseTime.text = getString(
-                            R.string.course_simple_time, weekDayNumStrArray[coursePair.second.weekDay - 1],
-                            coursePair.second.rawCoursesNumStr,
-                            coursePair.second.location
+                            R.string.course_simple_time, weekDayNumStrArray[courseBundle.courseItem.courseTime.weekDay - 1],
+                            courseBundle.courseItem.courseTime.rawCoursesNumStr,
+                            courseBundle.courseItem.courseTime.location
                         )
                         setOnClickListener {
-                            getViewModel().requestCourseDetail(coursePair.first, coursePair.third)
+                            getViewModel().requestCourseDetail(courseBundle.courseItem, courseBundle.courseCellStyle)
                         }
                     })
             }

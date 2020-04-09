@@ -1,0 +1,135 @@
+package tool.xfy9326.naucourse.widget
+
+import android.app.PendingIntent
+import android.appwidget.AppWidgetManager
+import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
+import android.widget.RemoteViews
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.core.graphics.drawable.toBitmap
+import tool.xfy9326.naucourse.BuildConfig
+import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.beans.NextCourseBundle
+import tool.xfy9326.naucourse.io.store.NextCourseBundleStore
+import tool.xfy9326.naucourse.ui.activities.MainIndexActivity
+import tool.xfy9326.naucourse.utils.courses.ExtraCourseUtils
+import tool.xfy9326.naucourse.utils.debug.LogUtils
+import tool.xfy9326.naucourse.utils.utility.AppWidgetUtils
+import tool.xfy9326.naucourse.utils.utility.AppWidgetUtils.goAsync
+import tool.xfy9326.naucourse.utils.utility.IntentUtils
+import tool.xfy9326.naucourse.utils.views.ViewUtils
+import java.text.SimpleDateFormat
+import java.util.*
+
+
+class NextCourseWidget : AppWidgetProvider() {
+    companion object {
+        const val ACTION_NEXT_COURSE_WIDGET_UPDATE = "${BuildConfig.APPLICATION_ID}.action.NEXT_COURSE_WIDGET_UPDATE"
+        const val EXTRA_NEXT_COURSE_WIDGET_DATA = "EXTRA_NEXT_COURSE_WIDGET_DATA"
+        private const val REQUEST_ON_CLICK_WIDGET_CONTENT = 1
+
+        private val DATE_FORMAT_HM = SimpleDateFormat(Constants.Time.FORMAT_MD_HM, Locale.CHINA)
+
+        private fun generateView(context: Context, nextCourseBundle: NextCourseBundle): RemoteViews = when {
+            nextCourseBundle.courseDataEmpty -> RemoteViews(context.packageName, R.layout.widget_next_course_msg).apply {
+                setWidgetMsg(context, this, R.string.widget_empty_course_or_term_data, R.drawable.ic_data)
+                setContentClickIntent(context, this)
+            }
+            nextCourseBundle.inVacation -> RemoteViews(context.packageName, R.layout.widget_next_course_msg).apply {
+                setWidgetMsg(context, this, R.string.widget_in_vacation, R.drawable.ic_break)
+                setContentClickIntent(context, this)
+            }
+            nextCourseBundle.hasNextCourse -> {
+                val courseBundle = nextCourseBundle.courseBundle!!
+                RemoteViews(context.packageName, R.layout.widget_next_course).apply {
+                    val colorDrawable = context.getDrawable(R.drawable.shape_today_course_color)!!
+                    colorDrawable.colorFilter = PorterDuffColorFilter(courseBundle.courseCellStyle.color, PorterDuff.Mode.SRC_ATOP)
+                    setImageViewBitmap(R.id.iv_widgetCourseColor, colorDrawable.toBitmap())
+
+                    setTextViewText(R.id.tv_widgetCourseName, courseBundle.courseItem.course.name)
+                    setTextViewText(
+                        R.id.tv_widgetCourseDetail,
+                        ViewUtils.getCourseDataShowText("${courseBundle.courseItem.course.teacher}${ViewUtils.COURSE_DATA_JOIN_SYMBOL}${courseBundle.courseItem.courseTime.location}")
+                    )
+                    if (courseBundle.courseItem.detail != null) {
+                        setTextViewText(
+                            R.id.tv_widgetCourseStartTime,
+                            DATE_FORMAT_HM.format(courseBundle.courseItem.detail.dateTimePeriod.startDateTime)
+                        )
+                    }
+                    setContentClickIntent(context, this)
+                }
+            }
+            else -> RemoteViews(context.packageName, R.layout.widget_next_course_msg).apply {
+                setWidgetMsg(context, this, R.string.no_next_course, R.drawable.ic_break)
+                setContentClickIntent(context, this)
+            }
+        }
+
+        private fun setContentClickIntent(context: Context, remoteViews: RemoteViews) =
+            remoteViews.setOnClickPendingIntent(
+                R.id.layout_widgetNextCourse, PendingIntent.getActivity(
+                    context,
+                    REQUEST_ON_CLICK_WIDGET_CONTENT,
+                    Intent(context, MainIndexActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
+            )
+
+        private fun setWidgetMsg(context: Context, remoteViews: RemoteViews, @StringRes strResId: Int, @DrawableRes iconResId: Int) {
+            remoteViews.apply {
+                setImageViewResource(R.id.iv_widgetIcon, iconResId)
+                setTextViewText(R.id.tv_widgetMsg, context.getString(strResId))
+            }
+        }
+
+        fun hasWidget(context: Context): Boolean {
+            val componentName = ComponentName(context, NextCourseWidget::class.java)
+            return AppWidgetManager.getInstance(context).getAppWidgetIds(componentName).isNotEmpty()
+        }
+    }
+
+    override fun onEnabled(context: Context?) {
+        context?.let {
+            IntentUtils.startNextCourseAlarm(context)
+            goAsync {
+                LogUtils.d<NextCourseWidget>("Next Course Widget Update (Load Cache)")
+                NextCourseBundleStore.loadStore()?.let { bundle ->
+                    AppWidgetUtils.updateNextCourseWidget(it, bundle)
+                }
+            }
+        }
+    }
+
+    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+        goAsync {
+            LogUtils.d<NextCourseWidget>("Next Course Widget Update (Without Data)")
+            ExtraCourseUtils.getLocalCourseData()?.let {
+                val nextCourseBundle = ExtraCourseUtils.getNextCourseInfo(it.first, it.second, it.third)
+                appWidgetManager.updateAppWidget(appWidgetIds, generateView(context, nextCourseBundle))
+                NextCourseBundleStore.saveStore(nextCourseBundle)
+            }
+        }
+    }
+
+    override fun onReceive(context: Context?, intent: Intent?) {
+        context?.let {
+            if (intent?.action == ACTION_NEXT_COURSE_WIDGET_UPDATE) {
+                goAsync {
+                    LogUtils.d<NextCourseWidget>("Next Course Widget Update (With Data)")
+                    val nextCourseBundle = intent.getSerializableExtra(EXTRA_NEXT_COURSE_WIDGET_DATA) as NextCourseBundle
+                    val componentName = ComponentName(it, NextCourseWidget::class.java)
+                    AppWidgetManager.getInstance(it).updateAppWidget(componentName, generateView(it, nextCourseBundle))
+                    NextCourseBundleStore.saveStore(nextCourseBundle)
+                }
+            }
+        }
+        super.onReceive(context, intent)
+    }
+}

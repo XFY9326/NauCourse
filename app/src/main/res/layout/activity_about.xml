@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activities.AboutActivity"
-    tools:ignore="UnusedAttribute">
+    tools:context=".ui.activities.AboutActivity">
 
     <include layout="@layout/view_general_toolbar" />
 
@@ -23,17 +22,12 @@
             android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
+                style="@style/AppTheme.ContentCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="2dp"
-                app:cardPreventCornerOverlap="true">
+                android:layout_marginEnd="10dp">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
@@ -43,17 +37,14 @@
                     android:orientation="vertical">
 
                     <androidx.appcompat.widget.LinearLayoutCompat
+                        style="@style/AppTheme.SelectableItemBackground"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
                         android:gravity="center_vertical"
                         android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        tools:ignore="UnusedAttribute">
+                        android:paddingEnd="10dp">
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="55dp"
@@ -86,15 +77,12 @@
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
                     <androidx.appcompat.widget.LinearLayoutCompat
+                        style="@style/AppTheme.SelectableItemBackground"
                         android:layout_width="match_parent"
                         android:layout_height="55dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
                         android:gravity="center_vertical"
                         android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        tools:ignore="UnusedAttribute">
+                        android:paddingEnd="10dp">
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="60dp"
@@ -127,11 +115,9 @@
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
                     <androidx.appcompat.widget.LinearLayoutCompat
+                        style="@style/AppTheme.SelectableItemBackground"
                         android:layout_width="match_parent"
                         android:layout_height="55dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
                         android:gravity="center_vertical"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp">
@@ -172,17 +158,12 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
+                style="@style/AppTheme.ContentCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="2dp"
-                app:cardPreventCornerOverlap="true">
+                android:layout_marginEnd="10dp">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
@@ -202,12 +183,10 @@
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/layout_aboutEULA"
+                        style="@style/AppTheme.SelectableItemBackground"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginTop="8dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
                         android:gravity="center_vertical"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp">
@@ -230,11 +209,9 @@
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/layout_aboutOpenSourceLicense"
+                        style="@style/AppTheme.SelectableItemBackground"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
                         android:gravity="center_vertical"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp">
@@ -260,17 +237,12 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
+                style="@style/AppTheme.ContentCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="2dp"
-                app:cardPreventCornerOverlap="true">
+                android:layout_marginEnd="10dp">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
@@ -289,12 +261,10 @@
                         android:textStyle="bold" />
 
                     <androidx.appcompat.widget.LinearLayoutCompat
+                        style="@style/AppTheme.SelectableItemBackground"
                         android:layout_width="match_parent"
                         android:layout_height="55dp"
                         android:layout_marginTop="8dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
                         android:gravity="center_vertical"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp">
@@ -331,11 +301,9 @@
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
                     <androidx.appcompat.widget.LinearLayoutCompat
+                        style="@style/AppTheme.SelectableItemBackground"
                         android:layout_width="match_parent"
                         android:layout_height="55dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
                         android:gravity="center_vertical"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp">
@@ -375,15 +343,10 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
+                style="@style/AppTheme.ContentCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="2dp"
-                app:cardPreventCornerOverlap="true">
+                android:layout_margin="10dp">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
@@ -402,12 +365,10 @@
                         android:textStyle="bold" />
 
                     <androidx.appcompat.widget.LinearLayoutCompat
+                        style="@style/AppTheme.SelectableItemBackground"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginTop="8dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
                         android:gravity="center_vertical"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp">
@@ -443,11 +404,9 @@
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
                     <androidx.appcompat.widget.LinearLayoutCompat
+                        style="@style/AppTheme.SelectableItemBackground"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
                         android:gravity="center_vertical"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp">
@@ -485,11 +444,9 @@
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/layout_aboutDonate"
+                        style="@style/AppTheme.SelectableItemBackground"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
                         android:gravity="center_vertical"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp">

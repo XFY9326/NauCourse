@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="0dp"
     android:layout_height="match_parent"
+    android:layout_margin="@dimen/course_cell_padding"
     android:layout_weight="1"
     android:gravity="center"
-    android:orientation="vertical"
-    android:layout_margin="@dimen/course_cell_padding">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tv_cellDateNum"

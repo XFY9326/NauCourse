@@ -1,13 +1,11 @@
 package tool.xfy9326.naucourse.beans
 
-import tool.xfy9326.naucourse.providers.beans.jwc.Course
-import tool.xfy9326.naucourse.providers.beans.jwc.CourseTime
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 
 data class CourseArrange(
-    val todayCourseArr: Array<Pair<CourseItem, CourseCellStyle>>,
-    val tomorrowCourseArr: Array<Pair<CourseItem, CourseCellStyle>>,
-    val notThisWeekCourseArr: Array<Triple<Course, CourseTime, CourseCellStyle>>,
+    val todayCourseArr: Array<CourseBundle>,
+    val tomorrowCourseArr: Array<CourseBundle>,
+    val notThisWeekCourseArr: Array<CourseBundle>,
     val termDate: TermDate?
 ) {
     override fun equals(other: Any?): Boolean {

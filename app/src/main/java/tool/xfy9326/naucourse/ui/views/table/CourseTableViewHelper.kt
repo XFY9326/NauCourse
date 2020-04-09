@@ -223,11 +223,7 @@ object CourseTableViewHelper {
                 }
             }
         }
-        val result = ArrayList<View>(resultDeferred.size)
-        resultDeferred.forEach {
-            result.add(it.await())
-        }
-
+        val result = resultDeferred.awaitAll()
         if (courseTableStyle.sameCellHeight) {
             result.forEach {
                 if (it is CourseCellLayout) it.layoutParams.height = maxHeight

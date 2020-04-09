@@ -7,6 +7,7 @@ import android.net.Uri
 import androidx.fragment.app.Fragment
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.receivers.NextCourseAlarmReceiver
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 
 
@@ -38,4 +39,17 @@ object IntentUtils {
             fragment.showToast(R.string.application_launch_failed)
         }
     }
+
+    fun startNextCourseAlarm(context: Context) =
+        context.sendBroadcast(Intent(context, NextCourseAlarmReceiver::class.java).apply {
+            action = NextCourseAlarmReceiver.ACTION_NEXT_COURSE_ALARM
+            putExtra(NextCourseAlarmReceiver.EXTRA_JUST_INIT, true)
+        })
+
+    fun refreshNextCourseAlarmData(context: Context) =
+        context.sendBroadcast(Intent(context, NextCourseAlarmReceiver::class.java).apply {
+            action = NextCourseAlarmReceiver.ACTION_NEXT_COURSE_ALARM
+            putExtra(NextCourseAlarmReceiver.EXTRA_JUST_INIT, true)
+            putExtra(NextCourseAlarmReceiver.EXTRA_DATA_UPDATE, true)
+        })
 }

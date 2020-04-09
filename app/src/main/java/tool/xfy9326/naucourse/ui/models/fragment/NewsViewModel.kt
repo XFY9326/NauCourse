@@ -32,10 +32,10 @@ class NewsViewModel : BaseViewModel() {
                 } else {
                     LogUtils.d<NewsViewModel>("News Info Init Error: ${newsInfoResult.errorReason}")
                 }
+                if (!SettingsPref.AutoAsyncNewsInfo) {
+                    refreshNewsList()
+                }
                 isRefreshing.postValue(false)
-            }
-            if (SettingsPref.AutoAsyncNewsInfo) {
-                refreshNewsList()
             }
         }
     }

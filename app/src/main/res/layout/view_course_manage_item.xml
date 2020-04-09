@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/colorPrimary">
@@ -23,16 +22,13 @@
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/layout_courseManageItemForeground"
+        style="@style/AppTheme.SelectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_course_manage_item"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
         android:gravity="center_vertical"
         android:paddingTop="12dp"
-        android:paddingBottom="12dp"
-        tools:ignore="UnusedAttribute">
+        android:paddingBottom="12dp">
 
         <FrameLayout
             android:id="@+id/layout_courseManageColor"

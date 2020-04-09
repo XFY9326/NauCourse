@@ -15,6 +15,7 @@ object NotifyBus {
     enum class Type {
         NIGHT_MODE_CHANGED,
         COURSE_TERM_UPDATE,
+        COURSE_ASYNC_UPDATE,
         COURSE_STYLE_TERM_UPDATE,
         REBUILD_COURSE_TABLE,
         REBUILD_COURSE_TABLE_BACKGROUND

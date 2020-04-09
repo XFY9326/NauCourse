@@ -7,12 +7,10 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv_dialogBottomMsg"
+        style="@style/AppTheme.SelectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
         app:cardCornerRadius="16dp"
         app:cardElevation="3dp"
         app:cardPreventCornerOverlap="true">

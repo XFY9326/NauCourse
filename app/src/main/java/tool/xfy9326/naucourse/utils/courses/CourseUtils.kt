@@ -12,13 +12,13 @@ import tool.xfy9326.naucourse.beans.CourseTable
 import tool.xfy9326.naucourse.io.store.CourseTableStore
 import tool.xfy9326.naucourse.providers.beans.jwc.Course
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
-import tool.xfy9326.naucourse.providers.beans.jwc.CourseTime
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import java.util.*
 import kotlin.collections.ArrayList
 
 object CourseUtils {
-    private const val NEXT_COURSE_BEFORE_COURSE_END_BASED_MINUTE = 10
+    const val NEXT_COURSE_BEFORE_COURSE_START_BASED_MINUTE = 10
+    const val NEXT_COURSE_BEFORE_COURSE_END_BASED_MINUTE = 10
     private const val CUSTOM_COURSE_ID_PREFIX = "NCC-"
 
     fun importCourseToList(
@@ -136,30 +136,40 @@ object CourseUtils {
                 }
             }
             courseTable.sortedBy {
-                it.dateTimePeriod.startDateTime
+                it.detail!!.dateTimePeriod.startDateTime
             }.toTypedArray()
         }
     }
 
-    fun getNotThisWeekCourse(courseSet: CourseSet, termDate: TermDate): Array<Pair<Course, CourseTime>> {
+    fun getNotThisWeekCourse(courseSet: CourseSet, termDate: TermDate): Array<CourseItem> {
         termDate.refreshCurrentWeekNum()
         return if (termDate.inVacation) {
             emptyArray()
         } else {
             val courses = courseSet.courses
-            val courseTable = ArrayList<Pair<Course, CourseTime>>()
+            val courseTable = ArrayList<CourseItem>()
             for (course in courses) {
                 for (time in course.timeSet) {
                     if (!time.isWeekNumTrue(termDate.currentWeekNum)) {
                         time.coursesNumArray.timePeriods.forEach { _ ->
-                            courseTable.add(Pair(course, time))
+                            courseTable.add(CourseItem(course, time))
                         }
                     }
                 }
             }
             courseTable.sortedBy {
-                it.first.id
+                it.course.id
             }.toTypedArray()
+        }
+    }
+
+    fun getTodayNextCourse(courseSet: CourseSet, termDate: TermDate): CourseItem? {
+        val todayCourse = getTodayCourse(courseSet, termDate)
+        val position = getTodayNextCoursePosition(todayCourse)
+        return if (position == null) {
+            null
+        } else {
+            todayCourse[position]
         }
     }
 
@@ -170,10 +180,14 @@ object CourseUtils {
         val nowTime = Date()
 
         for (courseItem in todayCourse) {
-            if (courseItem.dateTimePeriod.endDateTime.time - timeOffset >= nowTime.time) {
-                break
+            if (courseItem.detail == null) {
+                return null
+            } else {
+                if (courseItem.detail.dateTimePeriod.endDateTime.time - timeOffset >= nowTime.time) {
+                    break
+                }
+                position++
             }
-            position++
         }
         return if (position == todayCourse.size) {
             null

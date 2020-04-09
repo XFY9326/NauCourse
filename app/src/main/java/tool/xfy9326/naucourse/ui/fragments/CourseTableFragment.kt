@@ -116,6 +116,15 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
         }, CourseTableFragment::class.java.simpleName)
     }
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        if (!hidden) {
+            if (SettingsPref.AutoAsyncCourseData) {
+                getViewModel().startOnlineDataAsync()
+            }
+        }
+        super.onHiddenChanged(hidden)
+    }
+
     override fun initView(viewModel: CourseTableViewModel) {
         viewModel.refreshCourseTableStyle()
 

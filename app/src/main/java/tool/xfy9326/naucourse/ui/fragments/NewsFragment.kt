@@ -71,6 +71,13 @@ class NewsFragment : DrawerToolbarFragment<NewsViewModel>(), NewsAdapter.OnNewsI
         })
     }
 
+    override fun onStart() {
+        if (SettingsPref.AutoAsyncNewsInfo) {
+            getViewModel().refreshNewsList()
+        }
+        super.onStart()
+    }
+
     override fun initView(viewModel: NewsViewModel) {
         newsAdapter = NewsAdapter(requireContext(), this)
 

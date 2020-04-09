@@ -7,12 +7,10 @@
     tools:ignore="MergeRootFrame">
 
     <com.google.android.material.card.MaterialCardView
+        style="@style/AppTheme.SelectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
         app:cardCornerRadius="8dp"
         app:cardElevation="3dp"
         app:cardPreventCornerOverlap="true">

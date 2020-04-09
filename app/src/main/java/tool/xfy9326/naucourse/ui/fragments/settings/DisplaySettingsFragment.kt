@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.ui.fragments.settings
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.preference.CheckBoxPreference
 import androidx.preference.ListPreference
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
@@ -9,6 +10,7 @@ import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.tools.NotifyBus
 import tool.xfy9326.naucourse.ui.fragments.base.BaseSettingsPreferenceFragment
 import tool.xfy9326.naucourse.utils.BaseUtils
+import tool.xfy9326.naucourse.utils.utility.IntentUtils
 
 @Suppress("unused")
 class DisplaySettingsFragment : BaseSettingsPreferenceFragment() {
@@ -19,6 +21,10 @@ class DisplaySettingsFragment : BaseSettingsPreferenceFragment() {
             if (SettingsPref.NightMode != newValue) {
                 changeNightModeTheme(SettingsPref.NightModeType.valueOf(newValue as String))
             }
+            true
+        }
+        findPreference<CheckBoxPreference>(Constants.Pref.NotifyNextCourse)?.setOnPreferenceChangeListener { _, _ ->
+            IntentUtils.startNextCourseAlarm(requireContext())
             true
         }
     }
