@@ -8,7 +8,12 @@ import tool.xfy9326.naucourse.io.prefs.base.BasePref
 object SettingsPref : BasePref() {
     override val prefName: String = "Settings"
 
-    // DisplaySettingsFragment
+    // GeneralSettings
+    val ExitApplicationDirectly by pref.boolean(defValue = false)
+    val NotifyNextCourse by pref.boolean(defValue = true)
+
+
+    // DisplaySettings
     enum class NightModeType {
         AUTO,
         ENABLED,
@@ -31,15 +36,15 @@ object SettingsPref : BasePref() {
 
     val UseBrowserOpenNewsDetail by pref.boolean(defValue = false)
     val ExpandCourseDetailInDefault by pref.boolean(defValue = false)
-    val NotifyNextCourse by pref.boolean(defValue = true)
 
 
-    // DataSettingsFragment
+    // DataSettings
     val AutoAsyncCourseData by pref.boolean(defValue = true)
     val AutoAsyncNewsInfo by pref.boolean(defValue = false)
     val AutoUpdateCourseArrange by pref.boolean(defValue = true)
 
-    // CourseTableSettingsFragment
+
+    // CourseTableSettings
     val ShowNextWeekCourseTableAhead by pref.boolean(defValue = true)
     val CourseTableRoundCompat by pref.boolean(defValue = false)
     val ForceShowCourseTableWeekends by pref.boolean(defValue = false)
@@ -61,10 +66,11 @@ object SettingsPref : BasePref() {
     fun getCourseTableBackgroundScareType() = ImageView.ScaleType.valueOf(CourseTableBackgroundScareType!!)
 
 
-    // UpdateSettingsFragment
+    // UpdateSettings
     val AutoCheckUpdates by pref.boolean(defValue = true)
 
-    // DebugSettingsFragment
+
+    // DebugSettings
     val DebugMode by pref.boolean(defValue = BuildConfig.DEBUG)
     val DebugLogCatch by pref.boolean(defValue = false)
     val DebugExceptionCatch by pref.boolean(defValue = true)

@@ -46,16 +46,4 @@
 
     </tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory>
 
-    <tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory
-        app:iconSpaceReserved="false"
-        app:title="@string/notification">
-
-        <androidx.preference.CheckBoxPreference
-            app:defaultValue="true"
-            app:icon="@drawable/ic_notification"
-            app:key="NotifyNextCourse"
-            app:summary="@string/notify_before_next_course_sum"
-            app:title="@string/notify_before_next_course" />
-
-    </tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory>
 </androidx.preference.PreferenceScreen>

@@ -1,38 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
-    <androidx.preference.Preference
-        app:fragment="tool.xfy9326.naucourse.ui.fragments.settings.DisplaySettingsFragment"
-        app:icon="@drawable/ic_display"
-        app:summary="@string/settings_display_sum"
-        app:title="@string/display" />
+    <tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/notification">
 
-    <androidx.preference.Preference
-        app:fragment="tool.xfy9326.naucourse.ui.fragments.settings.DataSettingsFragment"
-        app:icon="@drawable/ic_data"
-        app:summary="@string/data_settings_sum"
-        app:title="@string/settings_data" />
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:icon="@drawable/ic_notification"
+            app:key="NotifyNextCourse"
+            app:summary="@string/notify_before_next_course_sum"
+            app:title="@string/notify_before_next_course" />
 
-    <androidx.preference.Preference
-        app:fragment="tool.xfy9326.naucourse.ui.fragments.settings.CourseTableSettingsFragment"
-        app:icon="@drawable/ic_table"
-        app:summary="@string/settings_course_table_sum"
-        app:title="@string/settings_course_table" />
+    </tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory>
 
-    <androidx.preference.Preference
-        app:fragment="tool.xfy9326.naucourse.ui.fragments.settings.UpdateSettingsFragment"
-        app:icon="@drawable/ic_update"
-        app:summary="@string/settings_update_sum"
-        app:title="@string/settings_update" />
+    <tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/other_settings">
 
-    <androidx.preference.Preference
-        app:fragment="tool.xfy9326.naucourse.ui.fragments.settings.DebugSettingsFragment"
-        app:icon="@drawable/ic_debug"
-        app:summary="@string/settings_debug_sum"
-        app:title="@string/settings_debug" />
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:icon="@drawable/ic_exit"
+            app:key="ExitApplicationDirectly"
+            app:summary="@string/exit_application_directly_sum"
+            app:title="@string/exit_application_directly" />
 
-    <androidx.preference.Preference
-        app:icon="@drawable/ic_about"
-        app:key="AboutIntent"
-        app:persistent="false"
-        app:title="@string/about" />
+    </tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory>
+
 </androidx.preference.PreferenceScreen>

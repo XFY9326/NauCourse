@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_nav_header.view.*
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourse.tools.NotifyBus
 import tool.xfy9326.naucourse.tools.livedata.Event
@@ -152,7 +153,11 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         if (drawer_main.isDrawerOpen(GravityCompat.START)) {
             drawer_main.closeDrawer(GravityCompat.START)
         } else {
-            moveTaskToBack(false)
+            if (SettingsPref.ExitApplicationDirectly) {
+                finishAndRemoveTask()
+            } else {
+                moveTaskToBack(false)
+            }
         }
     }
 

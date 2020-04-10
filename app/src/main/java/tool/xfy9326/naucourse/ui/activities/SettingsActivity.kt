@@ -5,7 +5,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourse.R
-import tool.xfy9326.naucourse.ui.fragments.settings.GeneralSettingsFragment
+import tool.xfy9326.naucourse.ui.fragments.settings.MainSettingsScreenFragment
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
 
 class SettingsActivity : AppCompatActivity() {
@@ -19,7 +19,7 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun setupBaseSettingsFragment(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction().replace(R.id.fg_settingsContent, GeneralSettingsFragment()).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.fg_settingsContent, MainSettingsScreenFragment()).commit()
         }
     }
 

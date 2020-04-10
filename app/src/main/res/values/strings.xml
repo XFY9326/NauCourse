@@ -309,4 +309,9 @@
     <string name="share_news_by_image">通过图片分享</string>
     <string name="generating_image">正在生成图片… …</string>
     <string name="share_when_news_loading">通知正在加载中，请稍后再试！</string>
+    <string name="general">通用</string>
+    <string name="settings_general_sum">应用的通用操作设置</string>
+    <string name="other_settings">其它</string>
+    <string name="exit_application_directly">返回主界面时直接退出应用</string>
+    <string name="exit_application_directly_sum">返回主界面时不隐藏界面而直接退出</string>
 </resources>
