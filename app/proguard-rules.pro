@@ -22,6 +22,12 @@
 
 # -----------------------------
 
+-keep class tool.xfy9326.naucourse.beans.** { *; }
+-keep class tool.xfy9326.naucourse.compat.beans.** { *; }
+-keep class tool.xfy9326.naucourse.providers.beans.** { *; }
+
+# -----------------------------
+
 # 默认设置
 # 指定压缩级别
 -optimizationpasses 5
@@ -30,7 +36,7 @@
 -dontskipnonpubliclibraryclassmembers
 
 # 混淆时采用的算法
--optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
+-optimizations !code/simplification/cast,!field/*,!class/merging/*
 
 # 优化时允许访问并修改有修饰符的类和类的成员
 -allowaccessmodification
@@ -40,6 +46,10 @@
 
 # 保留行号
 -keepattributes SourceFile,LineNumberTable
+
+-keepattributes *Annotation*,InnerClasses
+-keepattributes Signature
+-printmapping proguardMapping.txt
 
 # 保持所有实现 Serializable 接口的类成员
 -keepclassmembers class * implements java.io.Serializable {
@@ -56,39 +66,26 @@
 -keep public class * extends android.app.Fragment
 -keep public class * extends androidx.fragment.app.Fragment
 
-# 保持测试相关的代码
--dontnote junit.framework.**
--dontnote junit.runner.**
--dontwarn android.test.**
--dontwarn android.support.test.**
--dontwarn org.junit.**
+# -----------------------------
 
-# 保留所有的本地native方法不被混淆
--keepclasseswithmembernames class * {
-    native <methods>;
-}
-
-# 枚举类不能被混淆
--keepclassmembers enum * {
-    public static **[] values();
-    public static ** valueOf(java.lang.String);
-}
-
-# 保留Parcelable序列化的类不能被混淆
--keep class * implements android.os.Parcelable{
-    public static final android.os.Parcelable$Creator *;
-}
+# Debug
+-keep class com.amitshekhar.android.** { *; }
 
 # -----------------------------
 
-# AndroidX
--keep class com.google.android.material.** {*;}
--keep class androidx.** {*;}
--keep public class * extends androidx.**
--keep interface androidx.** {*;}
--dontwarn com.google.android.material.**
--dontnote com.google.android.material.**
--dontwarn androidx.**
+# Kotlin
+-keep class kotlin.** { *; }
+-keep class kotlin.Metadata { *; }
+-dontwarn kotlin.**
+-keepclassmembers class **$WhenMappings {
+    <fields>;
+}
+-keepclassmembers class kotlin.Metadata {
+    public <methods>;
+}
+-assumenosideeffects class kotlin.jvm.internal.Intrinsics {
+    static void checkParameterIsNotNull(java.lang.Object, java.lang.String);
+}
 
 # -----------------------------
 

@@ -5,6 +5,7 @@
     android:minHeight="60dp"
     android:minResizeWidth="250dp"
     android:minResizeHeight="60dp"
+    android:previewImage="@drawable/preview_next_course_widget"
     android:resizeMode="horizontal"
     android:updatePeriodMillis="0"
     android:widgetCategory="home_screen" />
