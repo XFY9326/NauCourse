@@ -35,8 +35,11 @@
 # 不跳过非公共的库的类成员
 -dontskipnonpubliclibraryclassmembers
 
+-dontpreverify
+-verbose
+
 # 混淆时采用的算法
--optimizations !code/simplification/cast,!field/*,!class/merging/*
+-optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*
 
 # 优化时允许访问并修改有修饰符的类和类的成员
 -allowaccessmodification

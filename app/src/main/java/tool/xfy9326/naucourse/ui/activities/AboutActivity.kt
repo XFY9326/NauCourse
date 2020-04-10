@@ -28,7 +28,13 @@ class AboutActivity : AppCompatActivity() {
     }
 
     private fun setView() {
-        tv_aboutVersion.text = getString(R.string.version_detail, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
+        @Suppress("ConstantConditionIf")
+        tv_aboutVersion.text =
+            if (BuildConfig.DEBUG) {
+                getString(R.string.version_detail_debug, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
+            } else {
+                getString(R.string.version_detail, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
+            }
         layout_aboutEULA.setOnClickListener {
             DialogUtils.createUsingLicenseDialog(this, lifecycle).show()
         }
