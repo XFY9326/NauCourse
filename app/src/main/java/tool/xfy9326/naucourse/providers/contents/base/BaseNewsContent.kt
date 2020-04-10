@@ -44,7 +44,7 @@ abstract class BaseNewsContent<T> : BaseNoParamContent<Set<GeneralNews>>() {
 
     protected open fun onBuildImageUrl(source: String): HttpUrl = source.toHttpUrl()
 
-    fun getNewsImage(source: String): Bitmap? {
+    fun getNewsImage(source: String): Pair<String, Bitmap>? {
         try {
             val imageUrl = if (source.startsWith(Constants.Network.HTTP)) {
                 source.toHttpUrl()
@@ -53,7 +53,7 @@ abstract class BaseNewsContent<T> : BaseNoParamContent<Set<GeneralNews>>() {
             }
             val response = onRequestDetailData(imageUrl)
             response.body?.byteStream()?.let {
-                return BitmapFactory.decodeStream(it)
+                return Pair(imageUrl.toString(), BitmapFactory.decodeStream(it))
             }
         } catch (e: Exception) {
             ExceptionUtils.printStackTrace<BaseNewsContent<T>>(e)

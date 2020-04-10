@@ -28,22 +28,17 @@ object AdvancedLinkMovementMethod : LinkMovementMethod() {
                 val link = buffer?.getSpans<AdvancedClickableSpan>(off, off)?.firstOrNull()
                 val image = buffer?.getSpans<ImageSpan>(off, off)?.firstOrNull()
                 if (link != null && image != null) {
-                    // 修复ImageSpan点击判断以一整行来计算的问题（由于使用左对齐因此可以这样计算）
-                    return if (image.drawable.bounds.right >= x && image.drawable.bounds.left <= x) {
-                        if (event.action == MotionEvent.ACTION_UP) {
-                            clearHandler()
-                            if (!isLongPress) link.onClick(widget, x, y)
-                            isLongPress = false
-                        } else {
-                            longClickHandler.postDelayed({
-                                link.onLongPress(widget, x, y)
-                                isLongPress = true
-                            }, ViewConfiguration.getLongPressTimeout().toLong())
-                        }
-                        true
+                    if (event.action == MotionEvent.ACTION_UP) {
+                        clearHandler()
+                        if (!isLongPress) link.onClick(widget, x, y)
+                        isLongPress = false
                     } else {
-                        false
+                        longClickHandler.postDelayed({
+                            link.onLongPress(widget, x, y)
+                            isLongPress = true
+                        }, ViewConfiguration.getLongPressTimeout().toLong())
                     }
+                    return true
                 }
             }
         }

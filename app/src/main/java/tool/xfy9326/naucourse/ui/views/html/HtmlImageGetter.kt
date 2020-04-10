@@ -29,15 +29,9 @@ class HtmlImageGetter(
         private const val BITMAP_MAX_ZOOM = 3f
     }
 
-    enum class ImageStatus {
-        LOADING,
-        SHOWING,
-        BROKEN
-    }
-
     override fun getDrawable(source: String?): Drawable {
         val defaultIcon = contextReference.get()?.getDrawable(R.drawable.ic_image)!!
-        val drawable = MutableDrawable(defaultIcon, ImageStatus.LOADING).apply {
+        val drawable = HtmlDrawable(defaultIcon, ImageStatus.LOADING).apply {
             setBounds(0, 0, defaultIcon.intrinsicWidth, defaultIcon.intrinsicHeight)
         }
         drawableList.add(drawable)
@@ -45,10 +39,11 @@ class HtmlImageGetter(
         if (source != null) {
             scope.launch(Dispatchers.Default) {
                 refreshTextView()
-                val bitmap = NewsInfo.getImageForNewsInfo(source, newsType)
-                if (bitmap != null) {
+                val pair = NewsInfo.getImageForNewsInfo(source, newsType)
+                if (pair != null) {
                     drawable.apply {
-                        val bitmapDrawable = BitmapDrawable(contextReference.get()?.resources, bitmap)
+                        downloadUrl = pair.first
+                        val bitmapDrawable = BitmapDrawable(contextReference.get()?.resources, pair.second)
 
                         val screenWidth = contextReference.get()!!.resources.displayMetrics.widthPixels
                         val screenHeight = contextReference.get()!!.resources.displayMetrics.heightPixels

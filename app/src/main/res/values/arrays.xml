@@ -68,6 +68,11 @@
         <item>CENTER_INSIDE</item>
     </string-array>
 
+    <string-array name="news_share_type">
+        <item>@string/share_news_by_url</item>
+        <item>@string/share_news_by_image</item>
+    </string-array>
+
     <integer-array name="material_colors">
         <item>@color/material_red_300</item>
         <item>@color/material_pink_300</item>

@@ -10,6 +10,7 @@ import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 abstract class BaseContent<T> {
     protected abstract val networkClient: BaseNetworkClient
@@ -32,7 +33,7 @@ abstract class BaseContent<T> {
         ExceptionUtils.printStackTrace<BaseContent<T>>(e)
         when (e) {
             is SocketTimeoutException -> RequestResult(false, ContentErrorReason.TIMEOUT)
-            is HttpStatusException -> RequestResult(false, ContentErrorReason.SERVER_ERROR)
+            is UnknownHostException, is HttpStatusException -> RequestResult(false, ContentErrorReason.SERVER_ERROR)
             is IOException, is NullPointerException -> RequestResult(false, ContentErrorReason.OPERATION)
             is ConnectException -> RequestResult(false, ContentErrorReason.CONNECTION_ERROR)
             else -> RequestResult(false, ContentErrorReason.UNKNOWN)

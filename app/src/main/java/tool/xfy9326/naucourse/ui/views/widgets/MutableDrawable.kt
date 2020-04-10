@@ -7,7 +7,7 @@ import android.graphics.drawable.Drawable
 import androidx.core.graphics.drawable.DrawableCompat
 
 // 参考DrawableWrapper实现，用于可替换的Drawable显示
-class MutableDrawable<T : Enum<*>>(drawable: Drawable? = null, nowStatus: T? = null) : Drawable(), Drawable.Callback {
+open class MutableDrawable<T : Enum<*>>(drawable: Drawable? = null, nowStatus: T? = null) : Drawable(), Drawable.Callback {
     @Volatile
     var drawable: Drawable? = drawable
         private set

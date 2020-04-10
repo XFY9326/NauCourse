@@ -1,14 +1,17 @@
 package tool.xfy9326.naucourse.ui.activities
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.view.drawToBitmap
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.activity_news_detail.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
@@ -31,8 +34,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTagHandler.OnImageLongPressListener {
+class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTagHandler.OnImageLongPressListener,
+    AdvancedTagHandler.OnImageClickListener {
     private var imageGetter: HtmlImageGetter? = null
+    private var isNewsDetailSet = false
     private lateinit var newsData: SerializableNews
 
     companion object {
@@ -58,9 +63,29 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_newsDetailOpenInBrowser -> IntentUtils.launchUrlInBrowser(this, newsData.detailUrl.toString())
-            R.id.menu_newsDetailShare -> startActivity(ShareUtils.getShareNewsIntent(this, newsData))
+            R.id.menu_newsDetailShare -> showNewsShareDialog()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showNewsShareDialog() {
+        MaterialAlertDialogBuilder(this).apply {
+            setItems(R.array.news_share_type) { _, which ->
+                if (which == 0) {
+                    startActivity(ShareUtils.getShareNewsIntent(this@NewsDetailActivity, newsData))
+                } else if (which == 1) {
+                    if (isNewsDetailSet) {
+                        showSnackBar(layout_newsDetail, R.string.generating_image)
+                        getViewModel().shareNewsImage(layout_newsContent.drawToBitmap())
+                    } else {
+                        showSnackBar(layout_newsDetail, R.string.share_when_news_loading)
+                    }
+                }
+            }
+        }.create().apply {
+            DialogUtils.addAutoCloseListener(lifecycle, this)
+            show()
+        }
     }
 
     override fun initView(savedInstanceState: Bundle?, viewModel: NewsDetailViewModel) {
@@ -97,6 +122,7 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
         })
         viewModel.newsDetail.observe(this, Observer {
             showNewsDetail(it)
+            isNewsDetailSet = true
         })
         viewModel.errorNotifyType.observeEvent(this, Observer {
             showSnackBar(layout_newsDetail, I18NUtils.getContentErrorResId(it)!!)
@@ -120,8 +146,10 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
                     lifecycleScope, tv_newsDetailContent, this,
                     newsData.postSource
                 )
-                val tagHandler = AdvancedTagHandler()
-                tagHandler.setOnImageLongPressListener(this)
+                val tagHandler = AdvancedTagHandler().apply {
+                    setOnImageClickListener(this@NewsDetailActivity)
+                    setOnImageLongPressListener(this@NewsDetailActivity)
+                }
                 Html.fromHtml(detail.htmlContent, Html.FROM_HTML_MODE_LEGACY, imageGetter, tagHandler)
             } else {
                 @Suppress("DEPRECATION")
@@ -132,6 +160,13 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
         }
 
         tv_newsDetailContent.movementMethod = AdvancedLinkMovementMethod
+    }
+
+    override fun onHtmlTextImageClick(source: String, bitmap: Bitmap) {
+        startActivity(Intent(this, ImageShowActivity::class.java).apply {
+            putExtra(ImageShowActivity.EXTRA_IMAGE_URL, source)
+        })
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 
     override fun onHtmlTextImageLongPress(source: String, bitmap: Bitmap) =

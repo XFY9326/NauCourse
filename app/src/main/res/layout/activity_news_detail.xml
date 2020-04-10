@@ -24,8 +24,10 @@
             android:scrollbars="none">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_newsContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="?android:colorBackground"
                 android:padding="15dp">
 
                 <com.google.android.material.textview.MaterialTextView

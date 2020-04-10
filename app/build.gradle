@@ -37,7 +37,7 @@ android {
         release {
             storeFile KEY_STORE_FILE
             storePassword KEY_STORE_PASSWORD
-            keyAlias = KEY_STORE_ALIAS
+            keyAlias KEY_STORE_ALIAS
             keyPassword KEY_STORE_KEY_PASSWORD
         }
     }
@@ -127,6 +127,9 @@ dependencies {
 
     // Color Picker
     implementation 'com.jaredrummler:colorpicker:1.1.0'
+
+    // Photo View
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
     // Gson
     implementation 'com.google.code.gson:gson:2.8.6'

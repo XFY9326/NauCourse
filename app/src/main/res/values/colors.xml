@@ -32,6 +32,7 @@
     <color name="colorUrlLink">#2962FF</color>
     <color name="colorOtherCourseCellBackground">#99FFFFFF</color>
     <color name="colorNavHeader">#2196F3</color>
+    <color name="colorImageViewActivityBackground">#B2000000</color>
 
     <color name="colorLaunchScreenWindowsBackground">#FFFFFF</color>
 

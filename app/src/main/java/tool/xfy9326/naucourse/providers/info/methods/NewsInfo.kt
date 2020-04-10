@@ -89,7 +89,7 @@ object NewsInfo : BaseSimpleContentInfo<List<GeneralNews>, PostSource>() {
             CONTENT_MAP[newsType]?.getContentDetailData(url)!!
         }
 
-    fun getImageForNewsInfo(source: String, newsType: PostSource): Bitmap? {
+    fun getImageForNewsInfo(source: String, newsType: PostSource): Pair<String, Bitmap>? {
         if (newsType == PostSource.UNKNOWN) {
             throw IllegalArgumentException("Unknown Post Source")
         } else {

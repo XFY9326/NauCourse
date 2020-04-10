@@ -178,7 +178,7 @@ object DialogUtils {
         }
 
     // Activity销毁时自动关闭Dialog，防止窗体泄漏
-    private fun addAutoCloseListener(lifecycle: Lifecycle, dialog: Dialog) {
+    fun addAutoCloseListener(lifecycle: Lifecycle, dialog: Dialog) {
         val observer = object : DefaultLifecycleObserver {
             override fun onDestroy(owner: LifecycleOwner) {
                 if (dialog.isShowing) dialog.dismiss()

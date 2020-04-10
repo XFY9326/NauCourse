@@ -7,6 +7,7 @@
     <issue id="IconLocation">
         <ignore path="src/main/res/drawable/launch_screen_logo.png" />
         <ignore path="src/main/res/drawable/launch_screen_text.png" />
+        <ignore path="src/main/res/drawable/preview_next_course_widget.jpeg" />
         <ignore path="src/main/res/drawable/user_info_header.png" />
     </issue>
 </lint>

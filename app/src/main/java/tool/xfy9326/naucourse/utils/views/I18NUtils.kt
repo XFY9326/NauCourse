@@ -1,13 +1,13 @@
 package tool.xfy9326.naucourse.utils.views
 
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.beans.ImageOperationType
 import tool.xfy9326.naucourse.network.clients.base.LoginResponse.ErrorReason
 import tool.xfy9326.naucourse.providers.beans.GeneralNews.PostSource
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentLearningProcess.CourseType
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentLearningProcess.SubjectType
 import tool.xfy9326.naucourse.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourse.ui.models.activity.LoginViewModel.LoadingProcess
-import tool.xfy9326.naucourse.ui.models.activity.NewsDetailViewModel.ImageOperationType
 import tool.xfy9326.naucourse.ui.models.fragment.CourseArrangeViewModel.CourseArrangeNotifyType
 import tool.xfy9326.naucourse.ui.models.fragment.CourseTableViewModel
 

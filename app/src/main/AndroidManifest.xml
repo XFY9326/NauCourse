@@ -79,6 +79,10 @@
             android:name=".ui.activities.AboutActivity"
             android:label="@string/about" />
 
+        <activity
+            android:name=".ui.activities.ImageShowActivity"
+            android:theme="@style/AppTheme.ImageShowActivity" />
+
         <service
             android:name=".services.NextCourseNotifyService"
             android:exported="false">
