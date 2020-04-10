@@ -3,7 +3,6 @@ package tool.xfy9326.naucourse.services
 import android.app.IntentService
 import android.content.Intent
 import tool.xfy9326.naucourse.BuildConfig
-import tool.xfy9326.naucourse.beans.NextCourseNotification
 import tool.xfy9326.naucourse.utils.debug.LogUtils
 import tool.xfy9326.naucourse.utils.utility.NotificationUtils
 
@@ -26,7 +25,7 @@ class NextCourseNotifyService : IntentService(NextCourseNotifyService::class.jav
             ) {
                 NotificationUtils.publishNextCourseNotification(
                     this,
-                    NextCourseNotification(
+                    NotificationUtils.NextCourseNotification(
                         intent.getStringExtra(EXTRA_NEXT_COURSE_NAME)!!,
                         intent.getStringExtra(EXTRA_NEXT_COURSE_TEACHER)!!,
                         intent.getStringExtra(EXTRA_NEXT_COURSE_LOCATION)!!,

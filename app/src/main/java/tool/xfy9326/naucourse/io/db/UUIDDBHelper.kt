@@ -11,6 +11,7 @@ object UUIDDBHelper : BaseDBHelper<AppDB.AppDataBase>() {
 
     @Synchronized
     fun saveUUID(newUUID: String) = with(db.getUUIDDataDao()) {
+        clearAll()
         putUUID(UUIDContent(newUUID))
     }
 

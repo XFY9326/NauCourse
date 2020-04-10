@@ -1,9 +1,9 @@
 package tool.xfy9326.naucourse.ui.activities
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.BuildConfig
 import tool.xfy9326.naucourse.R
@@ -14,7 +14,7 @@ import tool.xfy9326.naucourse.utils.secure.AccountUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 
 
-class MainIndexActivity : Activity() {
+class MainIndexActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (intent?.getBooleanExtra(BaseUtils.CRASH_RESTART_FLAG, false) == true) {

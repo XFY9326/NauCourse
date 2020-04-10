@@ -15,6 +15,7 @@ import tool.xfy9326.naucourse.utils.utility.IntentUtils
 @Suppress("unused")
 class DisplaySettingsFragment : BaseSettingsPreferenceFragment() {
     override val preferenceResId = R.xml.settings_display
+    override val titleName: Int = R.string.display
 
     override fun onPrefViewInit(savedInstanceState: Bundle?) {
         findPreference<ListPreference>(Constants.Pref.NightMode)?.setOnPreferenceChangeListener { _, newValue ->

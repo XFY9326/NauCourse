@@ -11,6 +11,7 @@ object CardBalanceDBHelper : BaseDBHelper<AppDB.AppDataBase>() {
 
     @Synchronized
     fun saveCardBalance(cardBalance: CardBalance) = with(db.getCardBalanceDao()) {
+        clearAll()
         putCardBalance(cardBalance)
     }
 

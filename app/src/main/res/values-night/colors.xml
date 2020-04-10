@@ -7,7 +7,6 @@
     <color name="colorSecondaryText">#C7C7C7</color>
     <color name="colorCourseTimeDefault">#FFFFFF</color>
     <color name="colorBaseIcon">#DBDBDB</color>
-    <color name="colorWindowsBackground">@color/design_dark_default_color_background</color>
     <color name="colorDivider">#C7C7C7</color>
     <color name="colorDefaultBackground">#303030</color>
     <color name="colorDialogButtonText">#DBDBDB</color>
@@ -15,4 +14,7 @@
     <color name="colorControlIcon">#DBDBDB</color>
     <color name="colorFABBackground">#1976D2</color>
     <color name="colorCourseTimeHighLightBackground">#01579B</color>
+    <color name="colorNavHeader">#212121</color>
+
+    <color name="colorLaunchScreenWindowsBackground">#121212</color>
 </resources>

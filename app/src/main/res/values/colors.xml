@@ -7,7 +7,6 @@
     <color name="colorSecondaryText">#757575</color>
     <color name="colorCourseTimeDefault">#0050A0</color>
     <color name="colorBaseIcon">#858585</color>
-    <color name="colorWindowsBackground">@color/design_default_color_background</color>
     <color name="colorDivider">#757575</color>
     <color name="colorDefaultBackground">#FAFAFA</color>
     <color name="colorDialogButtonText">#1976D2</color>
@@ -32,6 +31,9 @@
     <color name="colorRipple">#65FFFFFF</color>
     <color name="colorUrlLink">#2962FF</color>
     <color name="colorOtherCourseCellBackground">#99FFFFFF</color>
+    <color name="colorNavHeader">#2196F3</color>
+
+    <color name="colorLaunchScreenWindowsBackground">#FFFFFF</color>
 
     <!--  Material Colors -->
     <color name="material_red_300">#E57373</color>

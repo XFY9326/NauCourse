@@ -11,7 +11,7 @@ object TermDateDBHelper : BaseDBHelper<JwcDB.JwcDataBase>() {
 
     @Synchronized
     fun putTermDate(termDate: TermDate) = with(db.getTermDateDataDao()) {
-        clearTermDate()
+        clearAll()
         putTermDate(termDate)
     }
 

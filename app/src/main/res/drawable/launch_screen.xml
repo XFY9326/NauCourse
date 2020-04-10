@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:opacity="opaque"
     tools:ignore="UnusedAttribute">
-    <item android:drawable="@color/colorWindowsBackground" />
+    <item android:drawable="@color/colorLaunchScreenWindowsBackground" />
 
     <item
         android:width="110dp"

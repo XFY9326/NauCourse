@@ -32,6 +32,7 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment(), Preference
     }
 
     override val preferenceResId = R.xml.settings_course_table
+    override val titleName: Int = R.string.settings_course_table
 
     override fun onPrefViewInit(savedInstanceState: Bundle?) {
         findPreference<CheckBoxPreference>(Constants.Pref.ShowNextWeekCourseTableAhead)?.setOnPreferenceChangeListener { _, _ ->
@@ -157,8 +158,11 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment(), Preference
     }
 
     private fun addRefreshAllTableListener(key: String) {
-        NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE].notifyEvent()
-        NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE_BACKGROUND].notifyEvent()
+        findPreference<Preference>(key)?.setOnPreferenceChangeListener { _, _ ->
+            NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE].notifyEvent()
+            NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE_BACKGROUND].notifyEvent()
+            true
+        }
     }
 
     private fun addRefreshCourseTableBackgroundListener(key: String) {

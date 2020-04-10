@@ -1,7 +1,9 @@
 package tool.xfy9326.naucourse
 
 import android.app.Application
+import android.app.UiModeManager
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.getSystemService
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.utils.BaseUtils
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
@@ -16,10 +18,16 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        ExceptionUtils.initCrashHandler()
+
         setupNightMode()
+        ExceptionUtils.initCrashHandler()
         IntentUtils.startNextCourseAlarm(this)
     }
 
-    private fun setupNightMode() = AppCompatDelegate.setDefaultNightMode(BaseUtils.getNightModeInt(SettingsPref.getNightMode()))
+    private fun setupNightMode() {
+        BaseUtils.getNightModeInt(SettingsPref.getNightMode()).let {
+            getSystemService<UiModeManager>()?.nightMode = it
+            AppCompatDelegate.setDefaultNightMode(it)
+        }
+    }
 }

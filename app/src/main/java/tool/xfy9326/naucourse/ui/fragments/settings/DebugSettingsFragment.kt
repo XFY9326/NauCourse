@@ -14,6 +14,7 @@ import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBar
 @Suppress("unused")
 class DebugSettingsFragment : BaseSettingsPreferenceFragment() {
     override val preferenceResId = R.xml.settings_debug
+    override val titleName: Int = R.string.settings_debug
 
     override fun onPrefViewInit(savedInstanceState: Bundle?) {
         findPreference<CheckBoxPreference>(Constants.Pref.DebugMode)?.isChecked = SettingsPref.DebugMode

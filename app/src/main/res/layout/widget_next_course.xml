@@ -34,6 +34,7 @@
             android:layout_marginTop="6dp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:textColor="@color/colorSecondaryText"
             android:textSize="12sp" />
 
     </LinearLayout>
@@ -43,7 +44,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        android:paddingStart="8dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:textColor="@color/colorSecondaryText"
         android:textSize="14sp" />
 
 </LinearLayout>

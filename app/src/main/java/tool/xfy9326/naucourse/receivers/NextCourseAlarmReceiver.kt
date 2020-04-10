@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.AlarmManagerCompat
+import androidx.core.content.getSystemService
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import tool.xfy9326.naucourse.BuildConfig
@@ -34,17 +35,13 @@ class NextCourseAlarmReceiver : BroadcastReceiver() {
         private fun needAlarm(context: Context) = NextCourseWidget.hasWidget(context) || SettingsPref.NotifyNextCourse
 
         private fun cancelAlarm(context: Context, intent: PendingIntent) =
-            (context.getSystemService(Context.ALARM_SERVICE) as AlarmManager).cancel(intent)
+            context.getSystemService<AlarmManager>()?.cancel(intent)
 
         private suspend fun setNextUpdateAlarm(context: Context, nextCourseBundle: NextCourseBundle? = null) {
-            (context.getSystemService(Context.ALARM_SERVICE) as AlarmManager).let {
+            context.getSystemService<AlarmManager>()?.let {
                 val updateTime = getNextUpdateTime(nextCourseBundle)
                 if (updateTime != null) {
                     val intent = getAlarmPendingIntent(context)
-                    if (it.nextAlarmClock?.showIntent == intent && it.nextAlarmClock?.triggerTime != updateTime) {
-                        cancelAlarm(context, intent)
-                        LogUtils.d<NextCourseAlarmReceiver>("Cancel Old Next Course Alarm")
-                    }
                     AlarmManagerCompat.setExactAndAllowWhileIdle(it, AlarmManager.RTC_WAKEUP, updateTime, intent)
                     LogUtils.d<NextCourseAlarmReceiver>("Set Next Course Alarm. Time: $updateTime")
                 } else {
@@ -54,7 +51,7 @@ class NextCourseAlarmReceiver : BroadcastReceiver() {
         }
 
         private fun setNextUpdateNotifyAlarm(context: Context, courseItem: CourseItem) {
-            (context.getSystemService(Context.ALARM_SERVICE) as AlarmManager).let {
+            context.getSystemService<AlarmManager>()?.let {
                 val updateTime = getNextCourseNotifyTime(courseItem)
                 if (updateTime != null) {
                     if (updateTime == 0L) {
@@ -62,10 +59,6 @@ class NextCourseAlarmReceiver : BroadcastReceiver() {
                         LogUtils.d<NextCourseAlarmReceiver>("Notify Next Course Now!")
                     } else {
                         val intent = getNotifyPendingIntent(context, courseItem)
-                        if (it.nextAlarmClock?.showIntent == intent && it.nextAlarmClock?.triggerTime != updateTime) {
-                            cancelAlarm(context, intent)
-                            LogUtils.d<NextCourseAlarmReceiver>("Cancel Old Next Course Notify Alarm")
-                        }
                         AlarmManagerCompat.setExactAndAllowWhileIdle(it, AlarmManager.RTC_WAKEUP, updateTime, intent)
                         LogUtils.d<NextCourseAlarmReceiver>("Set Next Course Notify Alarm. Time: $updateTime")
                     }
@@ -104,8 +97,11 @@ class NextCourseAlarmReceiver : BroadcastReceiver() {
 
                 add(Calendar.MINUTE, -CourseUtils.NEXT_COURSE_BEFORE_COURSE_START_BASED_MINUTE)
                 return when {
+                    // 得出上课通知时间
                     timeInMillis > currentTime -> timeInMillis
+                    // 已经上课
                     passStartTime -> null
+                    // 立即通知（未上课但是已经过了通知时间）
                     else -> 0L
                 }
             }
@@ -121,12 +117,14 @@ class NextCourseAlarmReceiver : BroadcastReceiver() {
                 set(Calendar.MILLISECOND, 0)
             }
             if (nextCourseBundle == null) {
+                // 直接通过课程时间算出下次通知的时间
                 val courseBundle = ExtraCourseUtils.getLocalSimpleCourseData()
                 if (courseBundle != null) {
                     if (courseBundle.first.hasCourse) {
                         if (courseBundle.second.inVacation) {
                             calendar.add(Calendar.DATE, 1)
                         } else {
+                            // 第一节课上课
                             calendar.apply {
                                 set(Calendar.HOUR_OF_DAY, TimeUtils.CLASS_TIME_ARR[0].startHour)
                                 set(Calendar.MINUTE, TimeUtils.CLASS_TIME_ARR[0].startMinute)
@@ -136,6 +134,7 @@ class NextCourseAlarmReceiver : BroadcastReceiver() {
                                 return calendar.timeInMillis
                             }
 
+                            // 所有课下课
                             var found = false
                             for (classTime in TimeUtils.CLASS_TIME_ARR) {
                                 calendar.apply {
@@ -160,18 +159,14 @@ class NextCourseAlarmReceiver : BroadcastReceiver() {
                     }
                 }
             } else if (!nextCourseBundle.courseDataEmpty) {
-                if (!nextCourseBundle.inVacation) {
-                    if (nextCourseBundle.hasNextCourse) {
-                        nextCourseBundle.courseBundle?.courseItem?.detail?.dateTimePeriod?.endDateTime?.let {
-                            calendar.apply {
-                                calendar.time = it
-                                calendar.add(Calendar.MINUTE, -CourseUtils.NEXT_COURSE_BEFORE_COURSE_END_BASED_MINUTE)
-                                return calendar.timeInMillis
-                            }
+                // 通过下一节课的数据算出下次通知的时间
+                if (nextCourseBundle.hasNextCourse) {
+                    nextCourseBundle.courseBundle?.courseItem?.detail?.dateTimePeriod?.endDateTime?.let {
+                        calendar.apply {
+                            calendar.time = it
+                            calendar.add(Calendar.MINUTE, -CourseUtils.NEXT_COURSE_BEFORE_COURSE_END_BASED_MINUTE)
+                            return calendar.timeInMillis
                         }
-                    } else {
-                        calendar.add(Calendar.DATE, 1)
-                        return calendar.timeInMillis
                     }
                 } else {
                     calendar.add(Calendar.DATE, 1)
@@ -191,20 +186,24 @@ class NextCourseAlarmReceiver : BroadcastReceiver() {
                             val nextCourseBundle = ExtraCourseUtils.getNextCourseInfo(it.first, it.second, it.third)
                             if (intent.getBooleanExtra(EXTRA_JUST_INIT, false)) {
                                 if (intent.getBooleanExtra(EXTRA_DATA_UPDATE, false)) {
+                                    // 数据刷新
                                     LogUtils.d<NextCourseAlarmReceiver>("Next Course Alarm Data Update")
                                     onAlarm(context, nextCourseBundle)
                                     setNextUpdateAlarm(context, nextCourseBundle)
                                 } else {
+                                    // 定时器初始化
                                     LogUtils.d<NextCourseAlarmReceiver>("Init Next Course Alarm")
                                     setNextUpdateAlarm(context)
                                 }
                             } else {
+                                // 定时器通知
                                 onAlarm(context, nextCourseBundle)
                                 setNextUpdateAlarm(context, nextCourseBundle)
                             }
                         }
                     }
                 } else {
+                    // 不再需要定时器
                     cancelAlarm(context, getAlarmPendingIntent(context))
                     LogUtils.d<NextCourseAlarmReceiver>("Not Necessary For Next Course Alarm!")
                 }
@@ -220,11 +219,9 @@ class NextCourseAlarmReceiver : BroadcastReceiver() {
         }
 
         launch {
-            if (SettingsPref.NotifyNextCourse) {
-                if (nextCourseBundle.hasNextCourse) {
-                    nextCourseBundle.courseBundle?.courseItem?.let {
-                        if (it.detail != null) setNextUpdateNotifyAlarm(context, it)
-                    }
+            if (SettingsPref.NotifyNextCourse && nextCourseBundle.hasNextCourse) {
+                nextCourseBundle.courseBundle?.courseItem?.let {
+                    if (it.detail != null) setNextUpdateNotifyAlarm(context, it)
                 }
             }
         }

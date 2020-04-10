@@ -8,6 +8,6 @@ object NextCourseBundleStore : BaseJsonStore<NextCourseBundle>() {
     override val versionCode: Int = 1
     override val storeClass: Class<NextCourseBundle> = NextCourseBundle::class.java
 
-    override val useCache: Boolean = true
+    override val useCache: Boolean = false
     override val useEncrypt: Boolean = true
 }

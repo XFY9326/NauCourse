@@ -97,9 +97,11 @@ class NextCourseWidget : AppWidgetProvider() {
 
     override fun onEnabled(context: Context?) {
         context?.let {
+            // 初始化定时器
             IntentUtils.startNextCourseAlarm(context)
             goAsync {
                 LogUtils.d<NextCourseWidget>("Next Course Widget Update (Load Cache)")
+                // 载入缓存
                 NextCourseBundleStore.loadStore()?.let { bundle ->
                     AppWidgetUtils.updateNextCourseWidget(it, bundle)
                 }
@@ -110,6 +112,7 @@ class NextCourseWidget : AppWidgetProvider() {
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         goAsync {
             LogUtils.d<NextCourseWidget>("Next Course Widget Update (Without Data)")
+            // 数据刷新（无传入数据）
             ExtraCourseUtils.getLocalCourseData()?.let {
                 val nextCourseBundle = ExtraCourseUtils.getNextCourseInfo(it.first, it.second, it.third)
                 appWidgetManager.updateAppWidget(appWidgetIds, generateView(context, nextCourseBundle))
@@ -123,6 +126,7 @@ class NextCourseWidget : AppWidgetProvider() {
             if (intent?.action == ACTION_NEXT_COURSE_WIDGET_UPDATE) {
                 goAsync {
                     LogUtils.d<NextCourseWidget>("Next Course Widget Update (With Data)")
+                    // 数据刷新（有传入数据）
                     val nextCourseBundle = intent.getSerializableExtra(EXTRA_NEXT_COURSE_WIDGET_DATA) as NextCourseBundle
                     val componentName = ComponentName(it, NextCourseWidget::class.java)
                     AppWidgetManager.getInstance(it).updateAppWidget(componentName, generateView(it, nextCourseBundle))
