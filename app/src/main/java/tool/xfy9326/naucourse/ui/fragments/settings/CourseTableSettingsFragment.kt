@@ -49,9 +49,9 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment(), Preference
         addRefreshCourseTableListener(Constants.Pref.CenterVerticalShowCourseText)
         addRefreshCourseTableListener(Constants.Pref.UseRoundCornerCourseCell)
         addRefreshCourseTableListener(Constants.Pref.DrawAllCellBackground)
+        addRefreshCourseTableListener(Constants.Pref.CustomCourseTableAlpha)
 
         addRefreshCourseTableBackgroundListener(Constants.Pref.CustomCourseTableBackground)
-        addRefreshCourseTableBackgroundListener(Constants.Pref.CustomCourseTableAlpha)
         addRefreshCourseTableBackgroundListener(Constants.Pref.CourseTableBackgroundScareType)
         addRefreshCourseTableBackgroundListener(Constants.Pref.CourseTableBackgroundAlpha)
         addRefreshCourseTableBackgroundListener(Constants.Pref.CourseTableBackgroundFullScreen)

@@ -126,7 +126,7 @@ class TableFragment : Fragment() {
                     }
 
                     if (gl_courseTable != null) {
-                        CourseTableViewHelper.applyViewToCourseTable(gl_courseTable, table.await(), columnSize)
+                        CourseTableViewHelper.applyViewToCourseTable(gl_courseTable, table.await(), columnSize, courseTableStyle)
                     }
 
                     header?.await()

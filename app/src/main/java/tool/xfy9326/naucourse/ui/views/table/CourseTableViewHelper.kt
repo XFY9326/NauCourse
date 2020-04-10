@@ -57,13 +57,17 @@ object CourseTableViewHelper {
             DEFAULT_TABLE_WIDTH_SIZE - 3
         }
 
-    suspend fun applyViewToCourseTable(targetView: AdvancedGridLayout, views: Array<View>, columnSize: Int) =
+    suspend fun applyViewToCourseTable(targetView: AdvancedGridLayout, views: Array<View>, columnSize: Int, courseTableStyle: CourseTableStyle) =
         withContext(Dispatchers.Main) {
             if (targetView.childCount != 0) {
                 targetView.removeAllViews()
             }
             if (targetView.columnCount != columnSize) {
                 targetView.columnCount = columnSize
+            }
+
+            if (targetView.alpha != courseTableStyle.customCourseTableAlpha) {
+                targetView.alpha = courseTableStyle.customCourseTableAlpha
             }
 
             // 增加最后一行用于填充用的Cell
@@ -255,8 +259,6 @@ object CourseTableViewHelper {
 
             setPadding(internalStyle.padding)
 
-            alpha = courseTableStyle.customCourseTableAlpha
-
             // 课程信息文字
             addViewInLayout(TextView(context).apply {
                 layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
@@ -320,8 +322,6 @@ object CourseTableViewHelper {
                 width = internalStyle.width
             }
 
-            alpha = courseTableStyle.customCourseTableAlpha
-
             setPadding(internalStyle.padding)
 
             val courseTimeNumText = (rowNum + 1).toString()
@@ -375,8 +375,6 @@ object CourseTableViewHelper {
                 rowSpec = GridLayout.spec(row, 1f)
                 width = internalStyle.width
             }
-
-            alpha = courseTableStyle.customCourseTableAlpha
 
             setPadding(internalStyle.padding)
 
