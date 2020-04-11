@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourse.ui.activities
 
+import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.Menu
@@ -22,6 +23,8 @@ import tool.xfy9326.naucourse.utils.views.DialogUtils
 import tool.xfy9326.naucourse.utils.views.I18NUtils
 
 class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
+    private var isCalendarSet = false
+
     override fun onCreateContentView(): Int = R.layout.activity_school_calendar
 
     override fun onCreateViewModel(): SchoolCalendarViewModel = ViewModelProvider(this)[SchoolCalendarViewModel::class.java]
@@ -34,13 +37,7 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
             ActivityUtils.showSnackBar(layout_schoolCalendar, I18NUtils.getImageOperationTypeResId(it))
         })
         viewModel.calendarImage.observeEvent(this, Observer {
-            if (it != null) {
-                pv_calendarImage.setImageBitmap(it)
-                viewModel.calendarHasSet = true
-
-                pb_calendarLoading.hide()
-                pv_calendarImage.visibility = View.VISIBLE
-            }
+            if (it != null) setImageView(it)
         })
         viewModel.calendarList.observeEvent(this, Observer {
             showCalendarList(it)
@@ -70,21 +67,11 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
                 onBackPressed()
                 return true
             }
-            R.id.menu_calendarSave -> {
-                if (getViewModel().calendarHasSet) {
-                    val bitmap = (pv_calendarImage.drawable.current as BitmapDrawable).bitmap
-                    getViewModel().saveImage(bitmap)
-                } else {
-                    ActivityUtils.showSnackBar(layout_schoolCalendar, R.string.image_operation_when_calendar_loading)
-                }
+            R.id.menu_calendarSave -> getBitmapFromImageView()?.let {
+                getViewModel().saveImage(it)
             }
-            R.id.menu_calendarShare -> {
-                if (getViewModel().calendarHasSet) {
-                    val bitmap = (pv_calendarImage.drawable.current as BitmapDrawable).bitmap
-                    getViewModel().shareImage(bitmap)
-                } else {
-                    ActivityUtils.showSnackBar(layout_schoolCalendar, R.string.image_operation_when_calendar_loading)
-                }
+            R.id.menu_calendarShare -> getBitmapFromImageView()?.let {
+                getViewModel().shareImage(it)
             }
             R.id.menu_calendarList -> getViewModel().getCalendarList()
         }
@@ -99,19 +86,11 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
             setTitle(R.string.calendar_list)
 
             setItems(itemList) { _, which ->
-                getViewModel().calendarHasSet = false
-
-                pv_calendarImage.visibility = View.GONE
-                pb_calendarLoading.show()
-
+                resetImageView()
                 getViewModel().loadCalendarImage(list[which].url)
             }
             setNeutralButton(R.string.restore_to_default_calendar) { _, _ ->
-                getViewModel().calendarHasSet = false
-
-                pv_calendarImage.visibility = View.GONE
-                pb_calendarLoading.show()
-
+                resetImageView()
                 getViewModel().restoreToDefaultImage()
             }
             setNegativeButton(android.R.string.cancel, null)
@@ -119,6 +98,33 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
             DialogUtils.addAutoCloseListener(lifecycle, this)
             show()
         }
+    }
+
+    @Synchronized
+    private fun setImageView(bitmap: Bitmap) {
+        pv_calendarImage.setImageBitmap(bitmap)
+        isCalendarSet = true
+
+        pb_calendarLoading.hide()
+        pv_calendarImage.visibility = View.VISIBLE
+    }
+
+    @Synchronized
+    private fun getBitmapFromImageView(): Bitmap? {
+        return if (isCalendarSet) {
+            (pv_calendarImage.drawable.current as BitmapDrawable?)?.bitmap
+        } else {
+            ActivityUtils.showSnackBar(layout_schoolCalendar, R.string.image_operation_when_calendar_loading)
+            null
+        }
+    }
+
+    @Synchronized
+    private fun resetImageView() {
+        isCalendarSet = false
+
+        pv_calendarImage.visibility = View.GONE
+        pb_calendarLoading.show()
     }
 
     override fun onDestroy() {

@@ -39,18 +39,10 @@ class ImageShowViewModel : BaseViewModel() {
     fun saveImage(source: String, bitmap: Bitmap) {
         viewModelScope.launch(Dispatchers.Default) {
             imageOperationMutex.withLock {
-                val uri = ImageUtils.saveImage(
-                    PathUtils.getUrlFileName(source),
-                    bitmap,
-                    recycle = false,
-                    saveToLocal = false,
-                    dirName = Constants.Image.DIR_NEWS_DETAIL_IMAGE,
-                    addFileNameTypePrefix = true
-                )
-                if (uri == null) {
-                    imageOperation.postEventValue(ImageOperationType.IMAGE_SAVE_FAILED)
-                } else {
+                if (ImageUtils.saveImageToAlbum(PathUtils.getUrlFileName(source), Constants.Image.DIR_NEWS_DETAIL_IMAGE, bitmap, false)) {
                     imageOperation.postEventValue(ImageOperationType.IMAGE_SAVE_SUCCESS)
+                } else {
+                    imageOperation.postEventValue(ImageOperationType.IMAGE_SAVE_FAILED)
                 }
             }
         }
@@ -59,14 +51,7 @@ class ImageShowViewModel : BaseViewModel() {
     fun shareImage(source: String, bitmap: Bitmap) {
         viewModelScope.launch(Dispatchers.Default) {
             imageOperationMutex.withLock {
-                val uri = ImageUtils.saveImage(
-                    PathUtils.getUrlFileName(source),
-                    bitmap,
-                    recycle = false,
-                    dirName = Constants.Image.DIR_SHARE_TEMP_IMAGE,
-                    fileProviderUri = true,
-                    addFileNameTypePrefix = true
-                )
+                val uri = ImageUtils.createImageShareTemp(PathUtils.getUrlFileName(source), bitmap, false)
                 if (uri == null) {
                     imageOperation.postEventValue(ImageOperationType.IMAGE_SHARE_FAILED)
                 } else {

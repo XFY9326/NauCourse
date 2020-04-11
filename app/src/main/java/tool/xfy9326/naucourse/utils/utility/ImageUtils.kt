@@ -57,6 +57,19 @@ object ImageUtils {
         return if (ImageIOUtils.saveImageFromUri(uri, localStorageFile, overWrite)) newFileName else null
     }
 
+    fun saveImageToAlbum(fileName: String?, dirName: String? = null, bitmap: Bitmap, recycle: Boolean) =
+        saveImage(fileName, bitmap, recycle = recycle, saveToLocal = false, dirName = dirName, addFileNameTypePrefix = true) != null
+
+    fun createImageShareTemp(fileName: String?, bitmap: Bitmap, recycle: Boolean) =
+        saveImage(
+            fileName,
+            bitmap,
+            recycle = recycle,
+            dirName = Constants.Image.DIR_SHARE_TEMP_IMAGE,
+            fileProviderUri = true,
+            addFileNameTypePrefix = true
+        )
+
     // 保存图片到本地（..Android/data/{packageName}/files/Pictures/{dirName}/..）或系统相册（..Pictures/NauCourse/{dirName}/..）
     // 保存的本地的图片如果要对外分享，请使用fileProviderUri = true，并在xml里面注册路径
     fun saveImage(
@@ -64,12 +77,12 @@ object ImageUtils {
         bitmap: Bitmap,
         recycle: Boolean = true,
         overWrite: Boolean = true,  // 仅本地存储时有效
-        saveToLocal: Boolean = true,
-        fileProviderUri: Boolean = false,
+        saveToLocal: Boolean = true, // 保存到私有目录
+        fileProviderUri: Boolean = false, // 对外分享时才会用到
         dirName: String? = null,
-        compressFormat: Bitmap.CompressFormat? = null, //不添加文件名后缀时必须指定图片类型
+        compressFormat: Bitmap.CompressFormat? = null, // 不添加文件名后缀时必须指定图片类型
         quality: Int = 100,
-        addFileNameTypePrefix: Boolean = false
+        addFileNameTypePrefix: Boolean = false // 对外分享图片时建议添加文件后缀名
     ): Uri? {
         if (!addFileNameTypePrefix && compressFormat == null) {
             error("You Must Set Compress Format If File Name Type Prefix Is Not Added!")
