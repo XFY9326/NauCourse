@@ -112,6 +112,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
                 R.id.menu_navCourseArrange -> showFragment(FragmentType.COURSE_ARRANGE)
                 R.id.menu_navCourseTable -> showFragment(FragmentType.COURSE_TABLE)
                 R.id.menu_navNews -> showFragment(FragmentType.NEWS)
+                R.id.menu_navSchoolCalendar -> startActivity(Intent(this@MainDrawerActivity, SchoolCalendarActivity::class.java))
                 R.id.menu_navCourseEdit -> startActivity(Intent(this@MainDrawerActivity, CourseManageActivity::class.java))
                 R.id.menu_navSettings -> startActivity(Intent(this@MainDrawerActivity, SettingsActivity::class.java))
                 R.id.menu_navLogout -> logout()

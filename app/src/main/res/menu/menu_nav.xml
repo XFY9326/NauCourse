@@ -17,6 +17,13 @@
             android:title="@string/news" />
     </group>
 
+    <group android:id="@+id/menu_groupFunction">
+        <item
+            android:id="@+id/menu_navSchoolCalendar"
+            android:icon="@drawable/ic_school_calendar"
+            android:title="@string/school_calendar" />
+    </group>
+
     <group android:id="@+id/menu_groupSettings">
         <item
             android:id="@+id/menu_navCourseEdit"

@@ -61,8 +61,9 @@ class NewsDetailViewModel : BaseViewModel() {
                     null,
                     bitmap,
                     recycle = true,
-                    dirName = Constants.Image.DIR_NEWS_DETAIL_IMAGE,
-                    fileProviderUri = true
+                    dirName = Constants.Image.DIR_SHARE_TEMP_IMAGE,
+                    fileProviderUri = true,
+                    addFileNameTypePrefix = true
                 )
                 if (uri == null) {
                     imageOperation.postEventValue(ImageOperationType.IMAGE_SHARE_FAILED)
@@ -81,7 +82,8 @@ class NewsDetailViewModel : BaseViewModel() {
                     bitmap,
                     recycle = false,
                     saveToLocal = false,
-                    dirName = Constants.Image.DIR_NEWS_DETAIL_IMAGE
+                    dirName = Constants.Image.DIR_NEWS_DETAIL_IMAGE,
+                    addFileNameTypePrefix = true
                 )
                 if (uri == null) {
                     imageOperation.postEventValue(ImageOperationType.IMAGE_SAVE_FAILED)
@@ -99,8 +101,9 @@ class NewsDetailViewModel : BaseViewModel() {
                     PathUtils.getUrlFileName(source),
                     bitmap,
                     recycle = false,
-                    dirName = Constants.Image.DIR_NEWS_DETAIL_IMAGE,
-                    fileProviderUri = true
+                    dirName = Constants.Image.DIR_SHARE_TEMP_IMAGE,
+                    fileProviderUri = true,
+                    addFileNameTypePrefix = true
                 )
                 if (uri == null) {
                     imageOperation.postEventValue(ImageOperationType.IMAGE_SHARE_FAILED)

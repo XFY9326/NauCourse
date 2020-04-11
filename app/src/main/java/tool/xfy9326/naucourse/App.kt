@@ -2,9 +2,13 @@ package tool.xfy9326.naucourse
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.utils.BaseUtils
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
+import tool.xfy9326.naucourse.utils.utility.ImageUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 
 class App : Application() {
@@ -20,8 +24,15 @@ class App : Application() {
         ExceptionUtils.initCrashHandler()
 
         setupNightMode()
+        clearOldCache()
         IntentUtils.startNextCourseAlarm(this)
     }
 
     private fun setupNightMode() = AppCompatDelegate.setDefaultNightMode(BaseUtils.getNightModeInt(SettingsPref.getNightMode()))
+
+    private fun clearOldCache() {
+        GlobalScope.launch(Dispatchers.IO) {
+            ImageUtils.clearLocalImageBySubDir(Constants.Image.DIR_SHARE_TEMP_IMAGE)
+        }
+    }
 }

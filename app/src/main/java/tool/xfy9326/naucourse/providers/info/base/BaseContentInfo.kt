@@ -9,8 +9,8 @@ import tool.xfy9326.naucourse.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourse.providers.contents.base.ContentResult
 import java.util.*
 
-abstract class BaseContentInfo<T : Enum<*>, P : Enum<*>> {
-    private val cacheMap = Hashtable<T, Any>(1)
+abstract class BaseContentInfo<Type : Enum<*>, Param> {
+    private val cacheMap = Hashtable<Type, Any>(1)
 
     @Volatile
     private var hasInit = false
@@ -29,7 +29,7 @@ abstract class BaseContentInfo<T : Enum<*>, P : Enum<*>> {
         hasInit = true
     }
 
-    protected open fun <E : Any> updateCache(type: T, data: E) {
+    protected open fun <Element : Any> updateCache(type: Type, data: Element) {
         cacheMap[type] = data
         hasInit = true
     }
@@ -37,27 +37,27 @@ abstract class BaseContentInfo<T : Enum<*>, P : Enum<*>> {
     protected open fun onGetCacheExpire(): CacheExpire = CacheExpire()
 
     @Suppress("UNCHECKED_CAST")
-    protected open fun <E : Any> onSaveResult(type: T, params: Set<P>, data: E) {
+    protected open fun <E : Any> onSaveResult(type: Type, params: Set<Param>, data: E) {
         saveInfo(type, data)
         InfoStoredTimePref.saveStoredTime(getKeyName(type), System.currentTimeMillis())
     }
 
     @Suppress("UNCHECKED_CAST")
-    protected open fun <E : Any> onSaveCache(type: T, params: Set<P>, data: E) {
+    protected open fun <E : Any> onSaveCache(type: Type, params: Set<Param>, data: E) {
         cacheMap[type] = data
     }
 
     protected open fun onReadCache(data: Any): Any = data
 
-    protected abstract fun loadStoredInfo(): Map<T, Any>
+    protected abstract fun loadStoredInfo(): Map<Type, Any>
 
-    protected abstract suspend fun getInfoContent(type: T, params: Set<P>): ContentResult<*>
+    protected abstract suspend fun getInfoContent(type: Type, params: Set<Param>): ContentResult<*>
 
-    protected abstract fun saveInfo(type: T, info: Any)
+    protected abstract fun saveInfo(type: Type, info: Any)
 
-    abstract fun clearStoredInfo(type: T)
+    abstract fun clearStoredInfo(type: Type)
 
-    protected open fun hasCachedItem(type: T): Boolean {
+    protected open fun hasCachedItem(type: Type): Boolean {
         synchronized(this) {
             if (!hasInit) {
                 initCache()
@@ -66,7 +66,7 @@ abstract class BaseContentInfo<T : Enum<*>, P : Enum<*>> {
         return cacheMap.containsKey(type) && cacheMap[type] != null
     }
 
-    protected open fun getCachedItem(type: T): Any? {
+    protected open fun getCachedItem(type: Type): Any? {
         synchronized(this) {
             if (!hasInit) {
                 initCache()
@@ -76,7 +76,7 @@ abstract class BaseContentInfo<T : Enum<*>, P : Enum<*>> {
     }
 
     @Synchronized
-    protected open fun isCacheExpired(type: T, params: Set<P>, cacheExpire: CacheExpire): Boolean {
+    protected open fun isCacheExpired(type: Type, params: Set<Param>, cacheExpire: CacheExpire): Boolean {
         return when (cacheExpire.expireRule) {
             CacheExpireRule.INSTANTLY -> true
             CacheExpireRule.PER_TIME ->
@@ -87,12 +87,12 @@ abstract class BaseContentInfo<T : Enum<*>, P : Enum<*>> {
         }
     }
 
-    private fun getKeyName(type: T) = "${this.javaClass.simpleName}$KEY_JOIN_SYMBOL${type.name}"
+    private fun getKeyName(type: Type) = "${this.javaClass.simpleName}$KEY_JOIN_SYMBOL${type.name}"
 
     @Suppress("UNCHECKED_CAST")
     protected suspend fun <E : Any> getInfoProcess(
-        type: T,
-        params: Set<P> = emptySet(),
+        type: Type,
+        params: Set<Param> = emptySet(),
         loadCachedData: Boolean = false,
         forceRefresh: Boolean = false
     ): InfoResult<E> = withContext(Dispatchers.Default) {

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_calendarSave"
+        android:icon="@drawable/ic_save_dark"
+        android:title="@string/save_image"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_calendarShare"
+        android:icon="@drawable/ic_share_black"
+        android:title="@string/share_image"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_calendarList"
+        android:icon="@drawable/ic_school_calendar_dark"
+        android:title="@string/calendar_list"
+        app:showAsAction="ifRoom" />
+
+</menu>

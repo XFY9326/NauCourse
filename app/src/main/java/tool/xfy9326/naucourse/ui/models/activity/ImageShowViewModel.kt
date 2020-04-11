@@ -1,7 +1,6 @@
 package tool.xfy9326.naucourse.ui.models.activity
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +14,6 @@ import tool.xfy9326.naucourse.network.SimpleNetworkManager
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
-import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 import tool.xfy9326.naucourse.utils.utility.ImageUtils
 import tool.xfy9326.naucourse.utils.utility.PathUtils
 
@@ -29,28 +27,16 @@ class ImageShowViewModel : BaseViewModel() {
 
     fun loadBitmap(url: String) {
         viewModelScope.launch(Dispatchers.Default) {
-            try {
-                SimpleNetworkManager.getClient().newClientCall(url.toHttpUrl()).use {
-                    if (it.isSuccessful) {
-                        if (it.body?.byteStream() != null) {
-                            it.body?.byteStream()?.let { input ->
-                                image.postEventValue(BitmapFactory.decodeStream(input))
-                            }
-                        } else {
-                            imageDownloadFailed.notifyEvent()
-                        }
-                    } else {
-                        imageDownloadFailed.notifyEvent()
-                    }
-                }
-            } catch (e: Exception) {
-                ExceptionUtils.printStackTrace<ImageShowViewModel>(e)
+            val bitmap = SimpleNetworkManager.getClient().getBitmapFromUrl(url.toHttpUrl())
+            if (bitmap != null) {
+                image.postEventValue(bitmap)
+            } else {
                 imageDownloadFailed.notifyEvent()
             }
         }
     }
 
-    fun saveNewsImage(source: String, bitmap: Bitmap) {
+    fun saveImage(source: String, bitmap: Bitmap) {
         viewModelScope.launch(Dispatchers.Default) {
             imageOperationMutex.withLock {
                 val uri = ImageUtils.saveImage(
@@ -58,7 +44,8 @@ class ImageShowViewModel : BaseViewModel() {
                     bitmap,
                     recycle = false,
                     saveToLocal = false,
-                    dirName = Constants.Image.DIR_NEWS_DETAIL_IMAGE
+                    dirName = Constants.Image.DIR_NEWS_DETAIL_IMAGE,
+                    addFileNameTypePrefix = true
                 )
                 if (uri == null) {
                     imageOperation.postEventValue(ImageOperationType.IMAGE_SAVE_FAILED)
@@ -76,8 +63,9 @@ class ImageShowViewModel : BaseViewModel() {
                     PathUtils.getUrlFileName(source),
                     bitmap,
                     recycle = false,
-                    dirName = Constants.Image.DIR_NEWS_DETAIL_IMAGE,
-                    fileProviderUri = true
+                    dirName = Constants.Image.DIR_SHARE_TEMP_IMAGE,
+                    fileProviderUri = true,
+                    addFileNameTypePrefix = true
                 )
                 if (uri == null) {
                     imageOperation.postEventValue(ImageOperationType.IMAGE_SHARE_FAILED)

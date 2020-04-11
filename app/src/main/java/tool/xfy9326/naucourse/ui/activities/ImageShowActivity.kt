@@ -40,7 +40,7 @@ class ImageShowActivity : ViewModelActivity<ImageShowViewModel>(), View.OnLongCl
         viewModel.image.observeEvent(this, Observer {
             if (it != null) {
                 pv_imageView.setImageBitmap(it)
-                pb_imageLoading.visibility = View.GONE
+                pb_imageLoading.hide()
                 pv_imageView.visibility = View.VISIBLE
             }
         })
@@ -64,7 +64,7 @@ class ImageShowActivity : ViewModelActivity<ImageShowViewModel>(), View.OnLongCl
         val bitmap = ((v as PhotoView).drawable.current as BitmapDrawable).bitmap
         DialogUtils.createImageOperationDialog(this, lifecycle,
             { getViewModel().shareImage(imageUrl, bitmap) },
-            { getViewModel().saveNewsImage(imageUrl, bitmap) }).show()
+            { getViewModel().saveImage(imageUrl, bitmap) }).show()
         v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
         return true
     }

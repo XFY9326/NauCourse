@@ -72,6 +72,10 @@
             android:label="@string/course_edit" />
 
         <activity
+            android:name=".ui.activities.SchoolCalendarActivity"
+            android:label="@string/school_calendar" />
+
+        <activity
             android:name=".ui.activities.SettingsActivity"
             android:label="@string/settings" />
 

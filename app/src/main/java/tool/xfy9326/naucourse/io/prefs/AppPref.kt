@@ -10,6 +10,10 @@ object AppPref : BasePref() {
 
     private const val CUSTOM_START_TERM_DATE_MILLS = "CustomStartTermDateMills"
     private const val CUSTOM_END_TERM_DATE_MILLS = "CustomEndTermDateMills"
+
+    const val CURRENT_SCHOOL_CALENDAR_URL = "CurrentSchoolCalendarUrl"
+    const val CURRENT_SCHOOL_CALENDAR_IMAGE_URL = "CurrentSchoolCalendarImageUrl"
+
     private const val DEFAULT_TERM_DATE_MILLS = 0L
     private const val DEFAULT_LAST_CRASH_TIME_MILLS = 0L
 
@@ -60,4 +64,7 @@ object AppPref : BasePref() {
     var LastCrashTimeMills by pref.long(defValue = DEFAULT_LAST_CRASH_TIME_MILLS, commit = true)
 
     var LastInstalledVersionCode by pref.int(defValue = 0)
+
+    var CurrentSchoolCalendarUrl by pref.string(key = CURRENT_SCHOOL_CALENDAR_URL)
+    var CurrentSchoolCalendarImageUrl by pref.string(key = CURRENT_SCHOOL_CALENDAR_IMAGE_URL)
 }

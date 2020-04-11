@@ -25,7 +25,7 @@ object ImageUtils {
 
     private const val DIR_PICTURE_MAIN_DIR = "NauCourse"
 
-    fun clearLocalImageBySubDir(dirName: String) = BaseIOUtils.deleteFile(PathUtils.getImageLocalSavePath() + dirName)
+    fun clearLocalImageBySubDir(dirName: String) = BaseIOUtils.deleteFile(PathUtils.getImageLocalSavePath(dirName))
 
     @Suppress("unused")
     fun clearAllLocalImageDir() = BaseIOUtils.deleteFile(PathUtils.getImageLocalSavePath())
@@ -34,7 +34,11 @@ object ImageUtils {
 
     fun readLocalImage(fileName: String, dirName: String? = null): Bitmap? {
         val localStorageFile = File(PathUtils.getImageLocalSavePath(dirName), fileName)
-        return ImageIOUtils.readBitmap(localStorageFile)
+        return if (localStorageFile.exists()) {
+            ImageIOUtils.readBitmap(localStorageFile)
+        } else {
+            null
+        }
     }
 
     fun deleteLocalImage(fileName: String, dirName: String? = null) = File(PathUtils.getImageLocalSavePath(dirName), fileName).delete()
@@ -63,10 +67,14 @@ object ImageUtils {
         saveToLocal: Boolean = true,
         fileProviderUri: Boolean = false,
         dirName: String? = null,
-        compressFormat: Bitmap.CompressFormat? = null,
-        quality: Int = 100
+        compressFormat: Bitmap.CompressFormat? = null, //不添加文件名后缀时必须指定图片类型
+        quality: Int = 100,
+        addFileNameTypePrefix: Boolean = false
     ): Uri? {
-        val newFileName = imageFileNameFix(fileName, compressFormat)
+        if (!addFileNameTypePrefix && compressFormat == null) {
+            error("You Must Set Compress Format If File Name Type Prefix Is Not Added!")
+        }
+        val newFileName = imageFileNameFix(fileName, compressFormat, addFileNameTypePrefix)
         val format = getSaveImageFormatFromFileName(newFileName, compressFormat)!!
 
         if (saveToLocal) {
@@ -140,19 +148,24 @@ object ImageUtils {
             }
         }
 
-    private fun imageFileNameFix(source: String?, compressFormat: Bitmap.CompressFormat?): String =
+    private fun imageFileNameFix(source: String?, compressFormat: Bitmap.CompressFormat?, addFileNameTypePrefix: Boolean): String =
         if (source == null || source.isEmpty() || source.isBlank()) {
-            UUID.randomUUID().toString() + getFileTypePrefixByCompressType(compressFormat)
+            UUID.randomUUID().toString() + if (addFileNameTypePrefix) getFileTypePrefixByCompressType(compressFormat) else Constants.EMPTY
         } else {
             val lower = source.toLowerCase(Locale.CHINA)
             if (lower.endsWith(IMAGE_PNG) || lower.endsWith(IMAGE_JPEG) || lower.endsWith(IMAGE_JPG) || lower.endsWith(IMAGE_WEBP)) {
                 if (compressFormat != null) {
-                    source.substring(0, source.lastIndexOf(TYPE_DIVIDER)) + getFileTypePrefixByCompressType(compressFormat)
+                    source.substring(0, source.lastIndexOf(TYPE_DIVIDER)) +
+                            if (addFileNameTypePrefix) getFileTypePrefixByCompressType(compressFormat) else Constants.EMPTY
                 } else {
-                    source
+                    if (addFileNameTypePrefix) {
+                        source
+                    } else {
+                        source.substring(0, source.lastIndexOf(TYPE_DIVIDER))
+                    }
                 }
             } else {
-                source + getFileTypePrefixByCompressType(compressFormat)
+                source + if (addFileNameTypePrefix) getFileTypePrefixByCompressType(compressFormat) else Constants.EMPTY
             }
         }
 

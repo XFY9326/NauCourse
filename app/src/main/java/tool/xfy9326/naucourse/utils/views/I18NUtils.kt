@@ -8,16 +8,25 @@ import tool.xfy9326.naucourse.providers.beans.jwc.StudentLearningProcess.CourseT
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentLearningProcess.SubjectType
 import tool.xfy9326.naucourse.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourse.ui.models.activity.LoginViewModel.LoadingProcess
+import tool.xfy9326.naucourse.ui.models.activity.SchoolCalendarViewModel.CalendarLoadStatus
 import tool.xfy9326.naucourse.ui.models.fragment.CourseArrangeViewModel.CourseArrangeNotifyType
-import tool.xfy9326.naucourse.ui.models.fragment.CourseTableViewModel
+import tool.xfy9326.naucourse.ui.models.fragment.CourseTableViewModel.CurrentWeekStatus
 
 object I18NUtils {
-    fun getCurrentWeekStatusResId(currentWeekStatus: CourseTableViewModel.CurrentWeekStatus): Int =
+
+    fun getCalendarLoadStatusResId(calendarLoadStatus: CalendarLoadStatus): Int =
+        when (calendarLoadStatus) {
+            CalendarLoadStatus.LOADING_IMAGE_LIST -> R.string.loading_calendar_list
+            CalendarLoadStatus.IMAGE_LIST_LOAD_FAILED -> R.string.loading_calendar_list_failed
+            CalendarLoadStatus.IMAGE_LOAD_FAILED -> R.string.loading_calendar_failed
+        }
+
+    fun getCurrentWeekStatusResId(currentWeekStatus: CurrentWeekStatus): Int =
         when (currentWeekStatus) {
-            CourseTableViewModel.CurrentWeekStatus.IN_VACATION -> R.string.in_vacation
-            CourseTableViewModel.CurrentWeekStatus.IS_CURRENT_WEEK -> R.string.current_week
-            CourseTableViewModel.CurrentWeekStatus.IS_NEXT_WEEK -> R.string.next_week
-            CourseTableViewModel.CurrentWeekStatus.NOT_CURRENT_WEEK -> R.string.not_current_week
+            CurrentWeekStatus.IN_VACATION -> R.string.in_vacation
+            CurrentWeekStatus.IS_CURRENT_WEEK -> R.string.current_week
+            CurrentWeekStatus.IS_NEXT_WEEK -> R.string.next_week
+            CurrentWeekStatus.NOT_CURRENT_WEEK -> R.string.not_current_week
         }
 
     fun getErrorMsgResId(errorReason: ErrorReason): Int? =

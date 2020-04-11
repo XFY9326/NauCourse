@@ -2,7 +2,7 @@ package tool.xfy9326.naucourse.providers.info.base
 
 import tool.xfy9326.naucourse.providers.contents.base.ContentResult
 
-abstract class BaseSimpleContentInfo<T : Any, P : Enum<*>> : BaseContentInfo<BaseSimpleContentInfo.SimpleType, P>() {
+abstract class BaseSimpleContentInfo<Element : Any, Param> : BaseContentInfo<BaseSimpleContentInfo.SimpleType, Param>() {
     enum class SimpleType {
         DEFAULT
     }
@@ -16,12 +16,12 @@ abstract class BaseSimpleContentInfo<T : Any, P : Enum<*>> : BaseContentInfo<Bas
     }
 
     @Suppress("UNCHECKED_CAST")
-    final override fun onReadCache(data: Any): Any = onReadSimpleCache(data as T)
+    final override fun onReadCache(data: Any): Any = onReadSimpleCache(data as Element)
 
-    final override suspend fun getInfoContent(type: SimpleType, params: Set<P>): ContentResult<*> = getSimpleInfoContent(params)
+    final override suspend fun getInfoContent(type: SimpleType, params: Set<Param>): ContentResult<*> = getSimpleInfoContent(params)
 
     @Suppress("UNCHECKED_CAST")
-    final override fun saveInfo(type: SimpleType, info: Any) = saveSimpleInfo(info as T)
+    final override fun saveInfo(type: SimpleType, info: Any) = saveSimpleInfo(info as Element)
 
     final override fun clearStoredInfo(type: SimpleType) = clearSimpleStoredInfo()
 
@@ -30,44 +30,45 @@ abstract class BaseSimpleContentInfo<T : Any, P : Enum<*>> : BaseContentInfo<Bas
     final override fun hasCachedItem(type: SimpleType): Boolean = super.hasCachedItem(type)
 
     @Suppress("UNCHECKED_CAST")
-    final override fun <E : Any> onSaveResult(type: SimpleType, params: Set<P>, data: E) = onSaveSimpleResult(params, data as T)
+    final override fun <E : Any> onSaveResult(type: SimpleType, params: Set<Param>, data: E) = onSaveSimpleResult(params, data as Element)
 
     @Suppress("UNCHECKED_CAST")
-    final override fun <E : Any> onSaveCache(type: SimpleType, params: Set<P>, data: E) = onSaveSimpleCache(params, data as T)
+    final override fun <E : Any> onSaveCache(type: SimpleType, params: Set<Param>, data: E) = onSaveSimpleCache(params, data as Element)
 
     final override fun <E : Any> updateCache(type: SimpleType, data: E) = super.updateCache(type, data)
 
-    final override fun isCacheExpired(type: SimpleType, params: Set<P>, cacheExpire: CacheExpire): Boolean = isSimpleCacheExpired(params, cacheExpire)
+    final override fun isCacheExpired(type: SimpleType, params: Set<Param>, cacheExpire: CacheExpire): Boolean =
+        isSimpleCacheExpired(params, cacheExpire)
 
 
-    suspend fun getInfo(params: P, loadCache: Boolean = false, forceRefresh: Boolean = false): InfoResult<T> =
+    suspend fun getInfo(params: Param, loadCache: Boolean = false, forceRefresh: Boolean = false): InfoResult<Element> =
         getInfo(setOf(params), loadCache, forceRefresh)
 
-    open suspend fun getInfo(params: Set<P> = emptySet(), loadCache: Boolean = false, forceRefresh: Boolean = false): InfoResult<T> =
+    open suspend fun getInfo(params: Set<Param> = emptySet(), loadCache: Boolean = false, forceRefresh: Boolean = false): InfoResult<Element> =
         getInfoProcess(SimpleType.DEFAULT, params, loadCache, forceRefresh)
 
 
-    protected open fun onReadSimpleCache(data: T): T = data
+    protected open fun onReadSimpleCache(data: Element): Element = data
 
-    protected abstract fun loadSimpleStoredInfo(): T?
+    protected abstract fun loadSimpleStoredInfo(): Element?
 
-    protected abstract suspend fun getSimpleInfoContent(params: Set<P>): ContentResult<T>
+    protected abstract suspend fun getSimpleInfoContent(params: Set<Param>): ContentResult<Element>
 
-    protected abstract fun saveSimpleInfo(info: T)
+    protected abstract fun saveSimpleInfo(info: Element)
 
     protected abstract fun clearSimpleStoredInfo()
 
     @Suppress("UNCHECKED_CAST")
-    protected fun getSimpleCachedItem(): T? = super.getCachedItem(SimpleType.DEFAULT) as T?
+    protected fun getSimpleCachedItem(): Element? = super.getCachedItem(SimpleType.DEFAULT) as Element?
 
     protected fun hasSimpleCachedItem(): Boolean = super.hasCachedItem(SimpleType.DEFAULT)
 
-    protected open fun onSaveSimpleResult(params: Set<P>, data: T) = super.onSaveResult(SimpleType.DEFAULT, params, data)
+    protected open fun onSaveSimpleResult(params: Set<Param>, data: Element) = super.onSaveResult(SimpleType.DEFAULT, params, data)
 
-    protected open fun onSaveSimpleCache(params: Set<P>, data: T) = super.onSaveCache(SimpleType.DEFAULT, params, data)
+    protected open fun onSaveSimpleCache(params: Set<Param>, data: Element) = super.onSaveCache(SimpleType.DEFAULT, params, data)
 
-    protected fun updateSimpleCache(data: T) = super.updateCache(SimpleType.DEFAULT, data)
+    protected fun updateSimpleCache(data: Element) = super.updateCache(SimpleType.DEFAULT, data)
 
-    protected open fun isSimpleCacheExpired(params: Set<P>, cacheExpire: CacheExpire): Boolean =
+    protected open fun isSimpleCacheExpired(params: Set<Param>, cacheExpire: CacheExpire): Boolean =
         super.isCacheExpired(SimpleType.DEFAULT, params, cacheExpire)
 }

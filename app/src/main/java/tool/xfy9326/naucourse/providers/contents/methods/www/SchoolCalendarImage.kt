@@ -10,8 +10,8 @@ import tool.xfy9326.naucourse.providers.contents.base.BaseParamContent
 object SchoolCalendarImage : BaseParamContent<HttpUrl, HttpUrl>() {
     override val networkClient = getSimpleClient()
 
-    private const val PARAM_PATH = "2019/0516/c89a51768"
-    private const val PAGE_HTM_PATH = "page.htm"
+    private const val PARAM_PATH = "5825"
+    private const val PAGE_HTM_PATH = "list.htm"
 
     private const val ELEMENT_CLASS_WP_ARTICLE_CONTENT = "wp_articlecontent"
     private const val SELECT_WP_ARTICLE_PATH =
