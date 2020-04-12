@@ -4,9 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import tool.xfy9326.naucourse.Constants
-import tool.xfy9326.naucourse.io.db.ExamDBHelper
+import tool.xfy9326.naucourse.io.db.LevelExamDBHelper
 
-@Entity(tableName = ExamDBHelper.LEVEL_EXAM_TABLE_NAME)
+@Entity(tableName = LevelExamDBHelper.LEVEL_EXAM_TABLE_NAME)
 data class LevelExam(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = Constants.DB.COLUMN_ID)

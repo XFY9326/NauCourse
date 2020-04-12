@@ -12,6 +12,7 @@ object CourseScoreDBHelper : BaseDBHelper<CoursesDB.CoursesDataBase>() {
 
     @Synchronized
     fun putCourseScores(courseScoreSet: Array<CourseScore>) = with(db.getCourseScoreDao()) {
+        clearAll()
         putCourseScore(*courseScoreSet)
     }
 

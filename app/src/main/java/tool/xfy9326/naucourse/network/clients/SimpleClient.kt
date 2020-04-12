@@ -21,10 +21,8 @@ class SimpleClient : BaseNetworkClient() {
         try {
             newClientCall(url).use {
                 if (it.isSuccessful) {
-                    if (it.body?.byteStream() != null) {
-                        it.body?.byteStream()?.let { input ->
-                            return BitmapFactory.decodeStream(input)
-                        }
+                    it.body?.byteStream()?.let { input ->
+                        return BitmapFactory.decodeStream(input)
                     }
                 }
             }

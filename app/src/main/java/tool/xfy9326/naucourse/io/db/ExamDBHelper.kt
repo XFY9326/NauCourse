@@ -5,7 +5,6 @@ import tool.xfy9326.naucourse.io.db.room.JwcDB
 import tool.xfy9326.naucourse.providers.beans.jwc.Exam
 
 object ExamDBHelper : BaseDBHelper<JwcDB.JwcDataBase>() {
-    const val LEVEL_EXAM_TABLE_NAME = "LevelExam"
     const val EXAM_TABLE_NAME = "Exam"
     const val COLUMN_START_DATE = "startDate"
 
@@ -13,6 +12,7 @@ object ExamDBHelper : BaseDBHelper<JwcDB.JwcDataBase>() {
 
     @Synchronized
     fun putExam(examArr: Array<Exam>) = with(db.getExamDataDao()) {
+        clearAll()
         putExam(*examArr)
     }
 

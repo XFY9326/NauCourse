@@ -41,15 +41,14 @@ class SchoolCalendarViewModel : BaseViewModel() {
 
     override fun onInitView(isRestored: Boolean) {
         viewModelScope.launch(Dispatchers.Default) {
-            val bitmap = tryLoadCalendarFromLocal()
+            val bitmap = tryLoadCalendarTemp()
             if (bitmap != null) {
                 calendarImage.postEventValue(bitmap)
             } else {
                 LogUtils.d<SchoolCalendarViewModel>("School Calendar Image Temp Load Failed!")
             }
             // 默认先从指定位置读取校历，如果有其他设置就从其他地方读取
-            // 可能以后地址会改变或者有其他动态获取地址的情况，另外考虑，目前不做修改
-            val currentUseUrl = AppPref.CurrentSchoolCalendarUrl?.toHttpUrlOrNull() ?: SchoolCalendarImage.CURRENT_TERM_CALENDAR_PAGE_URL
+            val currentUseUrl = AppPref.CurrentSchoolCalendarUrl?.toHttpUrlOrNull() ?: getDefaultCalendarUrl()
             loadCalendarImage(currentUseUrl, bitmap != null)
         }
     }
@@ -59,9 +58,14 @@ class SchoolCalendarViewModel : BaseViewModel() {
             imageLoadMutex.withLock {
                 AppPref.remove(AppPref.CURRENT_SCHOOL_CALENDAR_URL)
                 AppPref.remove(AppPref.CURRENT_SCHOOL_CALENDAR_IMAGE_URL)
-                loadCalendarImage(SchoolCalendarImage.CURRENT_TERM_CALENDAR_PAGE_URL, false)
+                loadCalendarImage(getDefaultCalendarUrl(), false)
             }
         }
+    }
+
+    private fun getDefaultCalendarUrl(): HttpUrl {
+        // 可能以后地址会改变或者有其他动态获取地址的情况，另外考虑，目前不做修改
+        return SchoolCalendarImage.CURRENT_TERM_CALENDAR_PAGE_URL
     }
 
     fun loadCalendarImage(url: HttpUrl, tempLoadSuccess: Boolean = true) {
@@ -107,7 +111,7 @@ class SchoolCalendarViewModel : BaseViewModel() {
         }
     }
 
-    private suspend fun tryLoadCalendarFromLocal(): Bitmap? = withContext(Dispatchers.IO) {
+    private suspend fun tryLoadCalendarTemp(): Bitmap? = withContext(Dispatchers.IO) {
         imageLoadMutex.withLock {
             return@withContext if (AppPref.contains(AppPref.CURRENT_SCHOOL_CALENDAR_IMAGE_URL)) {
                 val bitmap = if (ImageUtils.localImageExists(Constants.Image.SCHOOL_CALENDAR_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE)) {

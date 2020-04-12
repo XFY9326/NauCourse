@@ -40,6 +40,4 @@ data class CourseManagePkg(
         result = 31 * result + courses.hashCode()
         return result
     }
-
-
 }

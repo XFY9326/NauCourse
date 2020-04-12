@@ -24,15 +24,15 @@ class App : Application() {
         ExceptionUtils.initCrashHandler()
 
         setupNightMode()
-        clearOldCache()
-        IntentUtils.startNextCourseAlarm(this)
+        GlobalScope.launch(Dispatchers.Default) {
+            clearOldCache()
+            IntentUtils.startNextCourseAlarm(this@App)
+        }
     }
 
     private fun setupNightMode() = AppCompatDelegate.setDefaultNightMode(BaseUtils.getNightModeInt(SettingsPref.getNightMode()))
 
     private fun clearOldCache() {
-        GlobalScope.launch(Dispatchers.IO) {
-            ImageUtils.clearLocalImageBySubDir(Constants.Image.DIR_SHARE_TEMP_IMAGE)
-        }
+        ImageUtils.clearLocalImageBySubDir(Constants.Image.DIR_SHARE_TEMP_IMAGE)
     }
 }

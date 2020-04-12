@@ -321,4 +321,10 @@
     <string name="loading_calendar_failed">校历加载失败</string>
     <string name="calendar_list">校历列表</string>
     <string name="restore_to_default_calendar">重置为默认校历</string>
+    <string name="exam_query">考试查询</string>
+    <string name="score_query">成绩查询</string>
+    <string name="exam_arrange">考试安排</string>
+    <string name="level_exam_record">等级考试成绩</string>
+    <string name="current_term_score">本学期成绩</string>
+    <string name="history_course_score">历史课程成绩</string>
 </resources>

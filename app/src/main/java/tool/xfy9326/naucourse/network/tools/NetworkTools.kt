@@ -71,16 +71,14 @@ class NetworkTools private constructor() {
         fun getResponseContent(response: Response): String {
             val body = response.body
             val contentType = body?.contentType()
-            val source = body?.source()
-            source!!.request(Long.MAX_VALUE)
-            val buffer = source.buffer
-
-            val bufferClone = buffer.clone()
-            val result = bufferClone.readString(
-                (if (contentType != null) contentType.charset(StandardCharsets.UTF_8) else StandardCharsets.UTF_8) ?: StandardCharsets.UTF_8
-            )
-            bufferClone.close()
-            return result
+            body?.source().let {
+                it!!.request(Long.MAX_VALUE)
+                it.buffer.clone().use { buffer ->
+                    return buffer.readString(
+                        (if (contentType != null) contentType.charset(StandardCharsets.UTF_8) else StandardCharsets.UTF_8) ?: StandardCharsets.UTF_8
+                    )
+                }
+            }
         }
 
         private fun createCookieStore(type: NetworkType): CookieStore =

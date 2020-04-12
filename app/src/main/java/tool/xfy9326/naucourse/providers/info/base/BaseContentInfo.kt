@@ -121,8 +121,10 @@ abstract class BaseContentInfo<Type : Enum<*>, Param> {
                 val result = getInfoContent(type, params)
                 if (result.isSuccess) {
                     onSaveResult(type, params, result.contentData!! as E)
-                    onSaveCache(type, params, result.contentData as E)
-                    return@withContext InfoResult(true, result.contentData)
+                    if (cacheExpire.expireRule != CacheExpireRule.INSTANTLY) {
+                        onSaveCache(type, params, result.contentData as E)
+                    }
+                    return@withContext InfoResult(true, result.contentData as E)
                 } else {
                     return@withContext InfoResult<E>(false, errorReason = result.contentErrorResult)
                 }

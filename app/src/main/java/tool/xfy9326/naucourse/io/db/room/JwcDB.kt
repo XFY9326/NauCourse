@@ -5,6 +5,7 @@ import androidx.room.TypeConverters
 import tool.xfy9326.naucourse.io.db.base.BaseDB
 import tool.xfy9326.naucourse.io.db.base.DBTypeConverter
 import tool.xfy9326.naucourse.io.db.dao.ExamDataDao
+import tool.xfy9326.naucourse.io.db.dao.LevelExamDataDao
 import tool.xfy9326.naucourse.io.db.dao.TermDateDataDao
 import tool.xfy9326.naucourse.providers.beans.jwc.Exam
 import tool.xfy9326.naucourse.providers.beans.jwc.LevelExam
@@ -27,8 +28,11 @@ object JwcDB : BaseDB<JwcDB.JwcDataBase>() {
 
         abstract fun getExamDataDao(): ExamDataDao
 
+        abstract fun getLevelExamDataDao(): LevelExamDataDao
+
         override fun clearAll() {
             getTermDateDataDao().clearIndex()
+            getLevelExamDataDao().clearIndex()
             getExamDataDao().clearIndex()
             super.clearAll()
         }

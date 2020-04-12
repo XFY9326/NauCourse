@@ -22,6 +22,14 @@
             android:id="@+id/menu_navSchoolCalendar"
             android:icon="@drawable/ic_school_calendar"
             android:title="@string/school_calendar" />
+        <item
+            android:id="@+id/menu_navExamQuery"
+            android:icon="@drawable/ic_exam"
+            android:title="@string/exam_query" />
+        <item
+            android:id="@+id/menu_navScoreQuery"
+            android:icon="@drawable/ic_score"
+            android:title="@string/score_query" />
     </group>
 
     <group android:id="@+id/menu_groupSettings">

@@ -79,7 +79,6 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
                             putInt(DrawerToolbarFragment.DRAWER_ID, R.id.drawer_main)
                         }
                     }, type.name)
-                    attach(fragment)
                     hide(fragment)
                 }
             }.commitNow()
