@@ -132,5 +132,8 @@ abstract class BaseContentInfo<Type : Enum<*>, Param> {
         }
     }
 
-    fun clearCacheInfo() = synchronized(this) { cacheMap.clear() }
+    fun clearCacheInfo() = synchronized(this) {
+        hasInit = false
+        cacheMap.clear()
+    }
 }

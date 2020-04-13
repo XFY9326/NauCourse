@@ -9,7 +9,7 @@ import tool.xfy9326.naucourse.compat.OldDataCompat
 import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.network.clients.base.LoginInfo
 import tool.xfy9326.naucourse.network.clients.base.LoginResponse
-import tool.xfy9326.naucourse.providers.GlobalCacheLoader
+import tool.xfy9326.naucourse.providers.GlobalCacheManager
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
@@ -63,7 +63,7 @@ class LoginViewModel : BaseViewModel() {
 
             if (loginResult.isSuccess) {
                 loginProcess.postEventValue(LoadingProcess.CACHING)
-                GlobalCacheLoader.loadInitCache()
+                GlobalCacheManager.loadInitCache()
 
                 AccountUtils.setUserLoginStatus(true)
                 AccountUtils.saveUserInfo(UserInfo(userId, userPw))
