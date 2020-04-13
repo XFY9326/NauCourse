@@ -50,11 +50,20 @@ class AdvancedRecyclerView : RecyclerView {
     }
 
     override fun setAdapter(adapter: Adapter<*>?) {
+        val firstAdapter = this.adapter == null
         if (this.adapter?.hasObservers() == true) {
             this.adapter?.unregisterAdapterDataObserver(emptyViewAdapterObserver)
         }
         super.setAdapter(adapter)
         adapter?.registerAdapterDataObserver(emptyViewAdapterObserver)
+
+        if (firstAdapter) {
+            postDelayed({
+                modifyEmptyView()
+            }, 200)
+        } else {
+            modifyEmptyView()
+        }
     }
 
     @Synchronized
