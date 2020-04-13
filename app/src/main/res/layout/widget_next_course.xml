@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:ellipsize="end"
-            android:maxLines="1"
+            android:singleLine="true"
             android:textColor="@color/colorSecondaryText"
             android:textSize="12sp" />
 
@@ -43,9 +43,9 @@
         android:id="@+id/tv_widgetCourseStartTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxLines="1"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
+        android:singleLine="true"
         android:textColor="@color/colorSecondaryText"
         android:textSize="14sp" />
 

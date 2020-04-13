@@ -22,10 +22,10 @@ abstract class ListViewModelActivity<E, T : BaseListViewModel<E>, VH : RecyclerV
     @CallSuper
     override fun bindViewModel(viewModel: T) {
         viewModel.errorMsg.observeEvent(this, Observer {
-            ActivityUtils.showSnackBar(layout_list, I18NUtils.getContentErrorResId(it)!!)
+            ActivityUtils.showSnackBar(layout_refresh_list, I18NUtils.getContentErrorResId(it)!!)
         })
         viewModel.listData.observe(this, Observer {
-            adapter.updateData(it)
+            adapter.submitList(it)
         })
         viewModel.isRefreshing.observe(this, Observer {
             asl_refreshLayout.post {

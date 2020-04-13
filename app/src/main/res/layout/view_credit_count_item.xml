@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/AppTheme.SelectableItemBackground"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:gravity="center_vertical"
+    android:paddingStart="15dp"
+    android:paddingTop="5dp"
+    android:paddingEnd="15dp"
+    android:paddingBottom="5dp">
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/cb_creditCountCourseName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:checked="true"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:textSize="15sp" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/et_creditCountCreditWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="3"
+        android:gravity="center"
+        android:hint="@string/credit_weight_name"
+        android:inputType="numberDecimal"
+        android:singleLine="true"
+        android:textSize="13sp" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

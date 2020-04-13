@@ -1,25 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:id="@+id/menu_groupBase">
+    <group android:id="@+id/menu_groupBase1">
         <item
             android:id="@+id/menu_navCourseArrange"
             android:icon="@drawable/ic_course_list"
             android:title="@string/course_arrange" />
 
         <item
+            android:id="@+id/menu_navNews"
+            android:icon="@drawable/ic_news"
+            android:title="@string/news" />
+    </group>
+
+    <group android:id="@+id/menu_groupBase2">
+        <item
             android:id="@+id/menu_navCourseTable"
             android:icon="@drawable/ic_table"
             android:title="@string/course_table" />
+        <item
+            android:id="@+id/menu_navCourseManage"
+            android:icon="@drawable/ic_edit"
+            android:title="@string/course_manage" />
     </group>
 
     <group android:id="@+id/menu_groupFunction">
         <item
-            android:id="@+id/menu_navNews"
-            android:icon="@drawable/ic_news"
-            android:title="@string/news" />
-        <item
             android:id="@+id/menu_navSchoolCalendar"
-            android:icon="@drawable/ic_school_calendar"
+            android:icon="@drawable/ic_calendar"
             android:title="@string/school_calendar" />
         <item
             android:id="@+id/menu_navLevelExam"
@@ -38,18 +45,11 @@
             android:title="@string/score_query" />
     </group>
 
-    <group android:id="@+id/menu_groupSettings">
-        <item
-            android:id="@+id/menu_navCourseManage"
-            android:icon="@drawable/ic_edit"
-            android:title="@string/course_manage" />
+    <group android:id="@+id/menu_groupOthers">
         <item
             android:id="@+id/menu_navSettings"
             android:icon="@drawable/ic_settings"
             android:title="@string/settings" />
-    </group>
-
-    <group android:id="@+id/menu_groupOthers">
         <item
             android:id="@+id/menu_navLogout"
             android:icon="@drawable/ic_logout"

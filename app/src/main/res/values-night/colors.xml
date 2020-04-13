@@ -15,6 +15,7 @@
     <color name="colorFABBackground">#1976D2</color>
     <color name="colorCourseTimeHighLightBackground">#01579B</color>
     <color name="colorNavHeader">#212121</color>
+    <color name="colorTabIndicator">#FFFFFF</color>
 
     <color name="colorLaunchScreenWindowsBackground">#121212</color>
 </resources>

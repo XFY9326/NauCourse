@@ -17,6 +17,7 @@
     <color name="colorFABBackground">#2196F3</color>
     <color name="colorCourseTimeHighLightBackground">#64B5F6</color>
 
+    <color name="colorTabIndicator">#2196F3</color>
     <color name="colorCourseTimeHighLight">#FFFFFF</color>
     <color name="colorSliderTrackerActive">#2196F3</color>
     <color name="colorSliderTrackerInActive">#CBE1F3</color>

@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.layout_list.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.ui.fragments.base.ViewModelFragment
-import tool.xfy9326.naucourse.ui.models.fragment.ScoreQueryViewModel
+import tool.xfy9326.naucourse.ui.models.activity.ScoreQueryViewModel
 import tool.xfy9326.naucourse.ui.views.recyclerview.adapters.CourseScoreAdapter
 
 class CourseScoreFragment : ViewModelFragment<ScoreQueryViewModel>() {
@@ -21,7 +21,7 @@ class CourseScoreFragment : ViewModelFragment<ScoreQueryViewModel>() {
 
     override fun bindViewModel(viewModel: ScoreQueryViewModel) {
         viewModel.courseScore.observe(viewLifecycleOwner, Observer {
-            adapter.updateData(it)
+            adapter.submitList(it)
         })
         viewModel.scrollToTop.observeNotification(viewLifecycleOwner, {
             arv_dataList.smoothScrollToPosition(0)

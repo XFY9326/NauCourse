@@ -9,11 +9,18 @@ import tool.xfy9326.naucourse.providers.beans.jwc.StudentLearningProcess.Subject
 import tool.xfy9326.naucourse.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourse.ui.models.activity.LoginViewModel.LoadingProcess
 import tool.xfy9326.naucourse.ui.models.activity.SchoolCalendarViewModel.CalendarLoadStatus
+import tool.xfy9326.naucourse.ui.models.activity.ScoreQueryViewModel.CreditCountStatus
 import tool.xfy9326.naucourse.ui.models.fragment.CourseArrangeViewModel.CourseArrangeNotifyType
 import tool.xfy9326.naucourse.ui.models.fragment.CourseTableViewModel.CurrentWeekStatus
 import java.util.concurrent.TimeUnit
 
 object I18NUtils {
+
+    fun getCreditCountStatusResId(status: CreditCountStatus): Int =
+        when (status) {
+            CreditCountStatus.DATA_LOADING -> R.string.operation_when_data_loading
+            CreditCountStatus.EMPTY_DATA -> R.string.empty_credit_count_data
+        }
 
     fun getTimeUnitResId(timeUnit: TimeUnit): Int =
         when (timeUnit) {

@@ -1,38 +1,25 @@
 package tool.xfy9326.naucourse.ui.views.recyclerview.adapters.base
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class ListRecyclerAdapter<VH : RecyclerView.ViewHolder, E>(context: Context) : RecyclerView.Adapter<VH>() {
+abstract class ListRecyclerAdapter<VH : RecyclerView.ViewHolder, E>(context: Context, callBack: DiffUtil.ItemCallback<E>? = null) :
+    ListAdapter<E, VH>(callBack ?: SimpleDifferItemCallBack<E>()) {
     private val layoutInflater = LayoutInflater.from(context)
-    private val dataLock = Any()
-
-    @Volatile
-    private var dataContainer = emptyList<E>()
-
-    @CallSuper
-    open fun updateData(data: List<E>) {
-        synchronized(dataLock) {
-            dataContainer = data
-            notifyDataSetChanged()
-        }
-    }
-
-    final override fun getItemCount(): Int = synchronized(dataLock) { dataContainer.size }
 
     final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH =
         onCreateViewHolder(layoutInflater.inflate(onBindLayout(), parent, false))
 
     @Synchronized
     final override fun onBindViewHolder(holder: VH, position: Int) {
-        synchronized(dataLock) {
-            onBindViewHolder(holder, position, dataContainer[holder.adapterPosition])
-        }
+        onBindViewHolder(holder, position, getItem(holder.adapterPosition))
     }
 
     @LayoutRes
@@ -41,4 +28,15 @@ abstract class ListRecyclerAdapter<VH : RecyclerView.ViewHolder, E>(context: Con
     protected abstract fun onCreateViewHolder(view: View): VH
 
     protected abstract fun onBindViewHolder(holder: VH, position: Int, element: E)
+
+    @SuppressLint("DiffUtilEquals")
+    private class SimpleDifferItemCallBack<E> : DiffUtil.ItemCallback<E>() {
+        override fun areContentsTheSame(oldItem: E, newItem: E): Boolean {
+            return oldItem == newItem
+        }
+
+        override fun areItemsTheSame(oldItem: E, newItem: E): Boolean {
+            return oldItem == newItem
+        }
+    }
 }

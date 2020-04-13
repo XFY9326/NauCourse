@@ -94,7 +94,9 @@
                     android:id="@+id/tv_examCountDown"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="40sp" />
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="40sp"
+                    android:textStyle="bold" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_examCountDownTimeUnit"

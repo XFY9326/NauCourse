@@ -31,7 +31,7 @@
     <string name="user_info">个人信息</string>
     <string name="course_table">课程表</string>
     <string name="today_course">今日课程</string>
-    <string name="news">通知</string>
+    <string name="news">校内通知</string>
     <string name="monday">一</string>
     <string name="tuesday">二</string>
     <string name="wednesday">三</string>
@@ -338,6 +338,7 @@
     <string name="time_unit_minute">分钟</string>
     <string name="time_unit_hour">小时</string>
     <string name="credit_weight">绩点权值：%1$.2f</string>
+    <string name="credit_weight_name">权值：</string>
     <string name="score">成绩：%1$s</string>
     <string name="type">类型：%1$s</string>
     <string name="notes">备注：%1$s</string>
@@ -348,4 +349,10 @@
     <string name="score_not_entry">未录入</string>
     <string name="score_not_measure">未测评</string>
     <string name="score_not_publish">未发布</string>
+    <string name="credit_count">绩点计算</string>
+    <string name="count">计算</string>
+    <string name="operation_when_data_loading">数据正在加载中，请稍后再试！</string>
+    <string name="empty_credit_count_data">暂无可以计算绩点的课程！</string>
+    <string name="select_credit_count_course">选择参与绩点计算的课程</string>
+    <string name="credit_count_result">计算结果：%1$.6f\n\n注：该计算结果仅供参考</string>
 </resources>

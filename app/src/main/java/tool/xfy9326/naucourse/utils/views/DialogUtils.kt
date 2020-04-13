@@ -6,7 +6,6 @@ import android.content.DialogInterface
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -26,7 +25,17 @@ import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import kotlin.math.min
 
 object DialogUtils {
-    fun createCourseColorPickerDialog(context: Context, color: Int, dialogId: Int): ColorPickerDialog =
+    fun createCreditShowDialog(context: Context, lifecycle: Lifecycle, credit: Float) =
+        MaterialAlertDialogBuilder(context).apply {
+            setTitle(R.string.credit_count)
+            setMessage(context.getString(R.string.credit_count_result, credit))
+            setPositiveButton(android.R.string.yes, null)
+            background = context.getDrawable(R.drawable.bg_dialog)
+        }.create().also {
+            addAutoCloseListener(lifecycle, it)
+        }
+
+    fun createCourseColorPickerDialog(context: Context, color: Int, dialogId: Int) =
         ColorPickerDialog.newBuilder().apply {
             setColor(color)
             setDialogTitle(R.string.course_color_edit)
@@ -35,7 +44,7 @@ object DialogUtils {
             setPresets(context.resources.getIntArray(R.array.material_colors))
         }.create()
 
-    fun createCourseAddDialog(context: Context, lifecycle: Lifecycle, listener: DialogInterface.OnClickListener): AlertDialog =
+    fun createCourseAddDialog(context: Context, lifecycle: Lifecycle, listener: DialogInterface.OnClickListener) =
         MaterialAlertDialogBuilder(context).apply {
             setItems(context.resources.getStringArray(R.array.course_manage_add_list), listener)
             background = context.getDrawable(R.drawable.bg_dialog)
@@ -43,7 +52,7 @@ object DialogUtils {
             addAutoCloseListener(lifecycle, it)
         }
 
-    fun createUsingLicenseDialog(context: Context, lifecycle: Lifecycle): AlertDialog =
+    fun createUsingLicenseDialog(context: Context, lifecycle: Lifecycle) =
         MaterialAlertDialogBuilder(context).apply {
             setTitle(R.string.eula_license)
             setMessage(
@@ -58,7 +67,7 @@ object DialogUtils {
             addAutoCloseListener(lifecycle, it)
         }
 
-    fun createOpenSourceLicenseDialog(context: Context, lifecycle: Lifecycle): AlertDialog =
+    fun createOpenSourceLicenseDialog(context: Context, lifecycle: Lifecycle) =
         MaterialAlertDialogBuilder(context).apply {
             setTitle(R.string.open_source_license)
             setMessage(
@@ -73,7 +82,7 @@ object DialogUtils {
             addAutoCloseListener(lifecycle, it)
         }
 
-    fun createForgetPasswordDialog(context: Context, lifecycle: Lifecycle): AlertDialog =
+    fun createForgetPasswordDialog(context: Context, lifecycle: Lifecycle) =
         MaterialAlertDialogBuilder(context).apply {
             setTitle(R.string.forget_password)
             setMessage(R.string.forget_password_help)
@@ -86,7 +95,7 @@ object DialogUtils {
             addAutoCloseListener(lifecycle, it)
         }
 
-    fun createLogoutAttentionDialog(context: Context, lifecycle: Lifecycle, logoutListener: DialogInterface.OnClickListener): AlertDialog =
+    fun createLogoutAttentionDialog(context: Context, lifecycle: Lifecycle, logoutListener: DialogInterface.OnClickListener) =
         MaterialAlertDialogBuilder(context).apply {
             setTitle(R.string.logout)
             setMessage(R.string.logout_msg)

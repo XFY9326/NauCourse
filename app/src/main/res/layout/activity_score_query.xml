@@ -31,9 +31,12 @@
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tabLayout_scoreQuery"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:fillViewport="true"
-                    app:tabMode="fixed" />
+                    android:layout_height="wrap_content"
+                    app:tabGravity="fill"
+                    app:tabIndicatorColor="@color/colorTabIndicator"
+                    app:tabMaxWidth="0dp"
+                    app:tabMode="fixed"
+                    app:tabSelectedTextColor="@color/colorPrimaryText" />
 
             </com.google.android.material.card.MaterialCardView>
 
