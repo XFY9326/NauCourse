@@ -9,7 +9,7 @@ import tool.xfy9326.naucourse.ui.views.recyclerview.adapters.base.ListRecyclerAd
 import tool.xfy9326.naucourse.ui.views.recyclerview.viewholders.CourseScoreViewHolder
 import java.lang.ref.WeakReference
 
-class CourseScoreAdapter(context: Context) : ListRecyclerAdapter<CourseScoreViewHolder, CourseScore>(context) {
+class CourseScoreAdapter(context: Context) : ListRecyclerAdapter<CourseScoreViewHolder, CourseScore>(context, DifferItemCallback()) {
     private val weakContext = WeakReference(context)
 
     override fun onBindLayout(): Int = R.layout.view_course_score_item
@@ -35,5 +35,11 @@ class CourseScoreAdapter(context: Context) : ListRecyclerAdapter<CourseScoreView
         if (element.notMeasure) return weakContext.get()?.getString(R.string.score_not_measure)!!
         if (element.notPublish) return weakContext.get()?.getString(R.string.score_not_publish)!!
         return String.format(Constants.KEEP_TWO_DECIMAL_PLACES, score)
+    }
+
+    private class DifferItemCallback : SimpleDifferItemCallBack<CourseScore>() {
+        override fun areContentsTheSame(oldItem: CourseScore, newItem: CourseScore): Boolean {
+            return oldItem.courseId == newItem.courseId
+        }
     }
 }

@@ -28,4 +28,38 @@ data class Exam(
         startDate: Date, endDate: Date, location: String, property: String, type: String
     ) :
             this(Constants.DB.DEFAULT_ID, courseId, name, credit, teachClass, startDate, endDate, location, property, type)
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Exam
+
+        if (courseId != other.courseId) return false
+        if (name != other.name) return false
+        if (credit != other.credit) return false
+        if (teachClass != other.teachClass) return false
+        if (startDate != other.startDate) return false
+        if (endDate != other.endDate) return false
+        if (location != other.location) return false
+        if (property != other.property) return false
+        if (type != other.type) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = courseId.hashCode()
+        result = 31 * result + name.hashCode()
+        result = 31 * result + credit.hashCode()
+        result = 31 * result + teachClass.hashCode()
+        result = 31 * result + startDate.hashCode()
+        result = 31 * result + endDate.hashCode()
+        result = 31 * result + location.hashCode()
+        result = 31 * result + property.hashCode()
+        result = 31 * result + type.hashCode()
+        return result
+    }
+
+
 }

@@ -17,7 +17,6 @@ abstract class ListRecyclerAdapter<VH : RecyclerView.ViewHolder, E>(context: Con
     final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH =
         onCreateViewHolder(layoutInflater.inflate(onBindLayout(), parent, false))
 
-    @Synchronized
     final override fun onBindViewHolder(holder: VH, position: Int) {
         onBindViewHolder(holder, position, getItem(holder.adapterPosition))
     }
@@ -30,7 +29,7 @@ abstract class ListRecyclerAdapter<VH : RecyclerView.ViewHolder, E>(context: Con
     protected abstract fun onBindViewHolder(holder: VH, position: Int, element: E)
 
     @SuppressLint("DiffUtilEquals")
-    private class SimpleDifferItemCallBack<E> : DiffUtil.ItemCallback<E>() {
+    open class SimpleDifferItemCallBack<E> : DiffUtil.ItemCallback<E>() {
         override fun areContentsTheSame(oldItem: E, newItem: E): Boolean {
             return oldItem == newItem
         }

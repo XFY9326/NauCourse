@@ -9,7 +9,7 @@ import tool.xfy9326.naucourse.ui.views.recyclerview.adapters.base.ListRecyclerAd
 import tool.xfy9326.naucourse.ui.views.recyclerview.viewholders.LevelExamViewHolder
 import java.lang.ref.WeakReference
 
-class LevelExamAdapter(context: Context) : ListRecyclerAdapter<LevelExamViewHolder, LevelExam>(context) {
+class LevelExamAdapter(context: Context) : ListRecyclerAdapter<LevelExamViewHolder, LevelExam>(context, DifferItemCallback()) {
     private val weakContext = WeakReference(context)
 
     override fun onBindLayout(): Int = R.layout.view_level_exam_item
@@ -44,6 +44,12 @@ class LevelExamAdapter(context: Context) : ListRecyclerAdapter<LevelExamViewHold
                 tvLevelExamNote.text = weakContext.get()?.getString(R.string.notes, element.notes)
                 tvLevelExamNote.visibility = View.VISIBLE
             }
+        }
+    }
+
+    private class DifferItemCallback : SimpleDifferItemCallBack<LevelExam>() {
+        override fun areContentsTheSame(oldItem: LevelExam, newItem: LevelExam): Boolean {
+            return oldItem.name == newItem.name
         }
     }
 }

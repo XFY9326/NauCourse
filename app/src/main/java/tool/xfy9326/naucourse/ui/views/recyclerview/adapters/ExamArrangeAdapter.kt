@@ -13,7 +13,7 @@ import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ExamArrangeAdapter(context: Context) : ListRecyclerAdapter<ExamArrangeViewHolder, Exam>(context) {
+class ExamArrangeAdapter(context: Context) : ListRecyclerAdapter<ExamArrangeViewHolder, Exam>(context, DifferItemCallback()) {
     companion object {
         private val DATE_FORMAT_YMD_HM_CH = SimpleDateFormat(Constants.Time.FORMAT_YMD_HM_CH, Locale.CHINA)
     }
@@ -44,6 +44,12 @@ class ExamArrangeAdapter(context: Context) : ListRecyclerAdapter<ExamArrangeView
                 layoutExamCountDown.visibility = View.VISIBLE
             }
 
+        }
+    }
+
+    private class DifferItemCallback : SimpleDifferItemCallBack<Exam>() {
+        override fun areContentsTheSame(oldItem: Exam, newItem: Exam): Boolean {
+            return oldItem.courseId == newItem.courseId
         }
     }
 }

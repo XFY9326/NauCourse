@@ -12,7 +12,8 @@ import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
 
-class NewsAdapter(context: Context, private val listener: OnNewsItemClickListener) : ListRecyclerAdapter<NewsViewHolder, GeneralNews>(context) {
+class NewsAdapter(context: Context, private val listener: OnNewsItemClickListener) :
+    ListRecyclerAdapter<NewsViewHolder, GeneralNews>(context, DifferItemCallback()) {
     private val contextReference = WeakReference(context)
 
     companion object {
@@ -50,5 +51,11 @@ class NewsAdapter(context: Context, private val listener: OnNewsItemClickListene
 
     interface OnNewsItemClickListener {
         fun onNewsItemClick(news: GeneralNews)
+    }
+
+    private class DifferItemCallback : SimpleDifferItemCallBack<GeneralNews>() {
+        override fun areContentsTheSame(oldItem: GeneralNews, newItem: GeneralNews): Boolean {
+            return oldItem.title == newItem.title
+        }
     }
 }

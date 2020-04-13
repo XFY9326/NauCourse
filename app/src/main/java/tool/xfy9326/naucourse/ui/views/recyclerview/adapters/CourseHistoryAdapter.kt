@@ -9,7 +9,7 @@ import tool.xfy9326.naucourse.ui.views.recyclerview.adapters.base.ListRecyclerAd
 import tool.xfy9326.naucourse.ui.views.recyclerview.viewholders.CourseHistoryViewHolder
 import java.lang.ref.WeakReference
 
-class CourseHistoryAdapter(context: Context) : ListRecyclerAdapter<CourseHistoryViewHolder, CourseHistory>(context) {
+class CourseHistoryAdapter(context: Context) : ListRecyclerAdapter<CourseHistoryViewHolder, CourseHistory>(context, DifferItemCallback()) {
     private val weakContext = WeakReference(context)
 
     override fun onBindLayout(): Int = R.layout.view_course_history_item
@@ -39,6 +39,12 @@ class CourseHistoryAdapter(context: Context) : ListRecyclerAdapter<CourseHistory
                 tvCourseHistoryNote.text = weakContext.get()?.getString(R.string.notes, element.notes)
                 tvCourseHistoryNote.visibility = View.VISIBLE
             }
+        }
+    }
+
+    private class DifferItemCallback : SimpleDifferItemCallBack<CourseHistory>() {
+        override fun areContentsTheSame(oldItem: CourseHistory, newItem: CourseHistory): Boolean {
+            return oldItem.courseId == newItem.courseId
         }
     }
 }

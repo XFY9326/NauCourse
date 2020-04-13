@@ -22,4 +22,34 @@ data class LevelExam(
 ) {
     constructor(type: String, name: String, grade1: Float?, grade2: String, term: Term, ticketNum: String, certificateNum: String, notes: String) :
             this(Constants.DB.DEFAULT_ID, type, name, grade1, grade2, term, ticketNum, certificateNum, notes)
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as LevelExam
+
+        if (type != other.type) return false
+        if (name != other.name) return false
+        if (grade1 != other.grade1) return false
+        if (grade2 != other.grade2) return false
+        if (term != other.term) return false
+        if (ticketNum != other.ticketNum) return false
+        if (certificateNum != other.certificateNum) return false
+        if (notes != other.notes) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = type.hashCode()
+        result = 31 * result + name.hashCode()
+        result = 31 * result + (grade1?.hashCode() ?: 0)
+        result = 31 * result + grade2.hashCode()
+        result = 31 * result + term.hashCode()
+        result = 31 * result + ticketNum.hashCode()
+        result = 31 * result + certificateNum.hashCode()
+        result = 31 * result + notes.hashCode()
+        return result
+    }
 }

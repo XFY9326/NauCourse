@@ -88,6 +88,10 @@ android {
         jvmTarget = "1.8"
     }
 
+    lintOptions {
+        checkReleaseBuilds false
+    }
+
     externalNativeBuild {
         cmake {
             path file('src/main/cpp/CMakeLists.txt')
