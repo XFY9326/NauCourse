@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <tool.xfy9326.naucourse.ui.views.widgets.AdvancedRecyclerView
+        android:id="@+id/arv_dataList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:nestedScrollingEnabled="true"
+        android:overScrollMode="never"
+        app:empty_view="@id/v_listEmpty"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    <include
+        android:id="@+id/v_listEmpty"
+        layout="@layout/view_list_empty"
+        android:visibility="gone" />
+
+</FrameLayout>

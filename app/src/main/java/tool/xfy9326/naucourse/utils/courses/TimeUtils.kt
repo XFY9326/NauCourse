@@ -7,7 +7,9 @@ import tool.xfy9326.naucourse.beans.DateTimePeriod
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.providers.beans.jwc.TimePeriod
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.math.ceil
+
 
 object TimeUtils {
     val CLASS_TIME_ARR = arrayOf(
@@ -202,4 +204,32 @@ object TimeUtils {
             }
         }
     }
+
+    fun getCountDownTime(countDownDate: Date): Pair<Int, TimeUnit>? {
+        val currentMills = System.currentTimeMillis()
+        val countDownMills = countDownDate.time
+
+        val temp = (countDownMills - currentMills) / 1000f
+        if (temp > 0) {
+            val day = getShowTime(temp / (3600f * 24))
+            return if (day > 0) {
+                Pair(day, TimeUnit.DAYS)
+            } else {
+                val hour = getShowTime(temp / 3600f)
+                if (hour > 0) {
+                    Pair(hour, TimeUnit.HOURS)
+                } else {
+                    val minute = getShowTime(temp / 60f)
+                    if (minute > 0) {
+                        Pair(minute, TimeUnit.MINUTES)
+                    } else {
+                        Pair(0, TimeUnit.MINUTES)
+                    }
+                }
+            }
+        }
+        return null
+    }
+
+    private fun getShowTime(time: Float) = if (time > 1) ceil(time).toInt() else 0
 }

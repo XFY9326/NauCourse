@@ -31,6 +31,7 @@ class CourseTableViewModel : BaseViewModel() {
 
     @Volatile
     private var hasInit = false
+    private val initLock = Any()
 
     private lateinit var initDeferred: Deferred<Boolean>
 
@@ -85,9 +86,9 @@ class CourseTableViewModel : BaseViewModel() {
 
     override fun onInitCache(isRestored: Boolean) {
         if (!isRestored) {
-            synchronized(hasInit) {
-                if (!hasInit) {
-                    viewModelScope.launch(Dispatchers.Default) {
+            viewModelScope.launch(Dispatchers.Default) {
+                synchronized(initLock) {
+                    if (!hasInit) {
                         initDeferred = viewModelScope.async(Dispatchers.Default) {
                             initCourseData()
                             hasInit = true

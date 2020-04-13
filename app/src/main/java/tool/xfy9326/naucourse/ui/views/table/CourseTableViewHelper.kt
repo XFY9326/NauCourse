@@ -218,8 +218,7 @@ object CourseTableViewHelper {
                                         otherCourseCellBackground,
                                         backgroundRadius,
                                         courseCellPadding
-                                    ),
-                                    courseTableStyle
+                                    )
                                 )
                             })
                         }
@@ -367,7 +366,7 @@ object CourseTableViewHelper {
 
     private fun buildEmptyCellView(
         context: Context, col: Int, row: Int,
-        internalStyle: CourseTableInternalStyle.EmptyView, courseTableStyle: CourseTableStyle
+        internalStyle: CourseTableInternalStyle.EmptyView
     ) =
         CourseCellLayout(context, row, col).apply {
             layoutParams = GridLayout.LayoutParams().apply {

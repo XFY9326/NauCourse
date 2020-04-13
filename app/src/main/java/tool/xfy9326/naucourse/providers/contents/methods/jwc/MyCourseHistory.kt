@@ -31,7 +31,7 @@ object MyCourseHistory : BaseNoParamContent<Array<CourseHistory>>() {
     private fun getCourseHistoryArr(bodyElement: Element): Array<CourseHistory> {
         val trElements = bodyElement.getElementById(ELEMENT_ID_MAJOR_APPLY_LIST).getElementsByTag(Constants.HTML.ELEMENT_TAG_TR)
 
-        val courseHistoryArr = arrayOfNulls<CourseHistory>(trElements.size - 2)
+        val courseHistoryArr = arrayOfNulls<CourseHistory>(trElements.size - 3)
 
         var courseId: String
         var name: String

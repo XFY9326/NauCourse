@@ -72,6 +72,6 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
         android:fitsSystemWindows="true"
-        android:orientation="horizontal" />
+        android:overScrollMode="never" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

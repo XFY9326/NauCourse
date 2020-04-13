@@ -29,7 +29,7 @@ abstract class ViewModelActivity<T : BaseViewModel> : AppCompatActivity() {
 
     protected abstract fun onCreateViewModel(): T
 
-    protected abstract fun initView(savedInstanceState: Bundle?, viewModel: T)
+    protected open fun initView(savedInstanceState: Bundle?, viewModel: T) {}
 
     protected open fun bindViewModel(viewModel: T) {}
 }

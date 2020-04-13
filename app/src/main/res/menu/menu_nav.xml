@@ -10,22 +10,28 @@
             android:id="@+id/menu_navCourseTable"
             android:icon="@drawable/ic_table"
             android:title="@string/course_table" />
+    </group>
 
+    <group android:id="@+id/menu_groupFunction">
         <item
             android:id="@+id/menu_navNews"
             android:icon="@drawable/ic_news"
             android:title="@string/news" />
-    </group>
-
-    <group android:id="@+id/menu_groupFunction">
         <item
             android:id="@+id/menu_navSchoolCalendar"
             android:icon="@drawable/ic_school_calendar"
             android:title="@string/school_calendar" />
         <item
-            android:id="@+id/menu_navExamQuery"
+            android:id="@+id/menu_navLevelExam"
+            android:icon="@drawable/ic_level_exam"
+            android:title="@string/level_exam" />
+    </group>
+
+    <group android:id="@+id/menu_groupAdvancedFunction">
+        <item
+            android:id="@+id/menu_navExamArrange"
             android:icon="@drawable/ic_exam"
-            android:title="@string/exam_query" />
+            android:title="@string/exam_arrange" />
         <item
             android:id="@+id/menu_navScoreQuery"
             android:icon="@drawable/ic_score"
@@ -34,7 +40,7 @@
 
     <group android:id="@+id/menu_groupSettings">
         <item
-            android:id="@+id/menu_navCourseEdit"
+            android:id="@+id/menu_navCourseManage"
             android:icon="@drawable/ic_edit"
             android:title="@string/course_manage" />
         <item

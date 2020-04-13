@@ -103,7 +103,7 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
         }
         tv_newsDetailDate.text = DATE_FORMAT_YMD.format(newsData.postDate)
 
-        asl_newsDetailRefreshLayout.setOnRefreshListener {
+        asl_newsDetail.setOnRefreshListener {
             requestNewsDetail(viewModel)
         }
 
@@ -116,8 +116,8 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
 
     override fun bindViewModel(viewModel: NewsDetailViewModel) {
         viewModel.isRefreshing.observeEvent(this, Observer {
-            asl_newsDetailRefreshLayout.post {
-                asl_newsDetailRefreshLayout.isRefreshing = it
+            asl_newsDetail.post {
+                asl_newsDetail.isRefreshing = it
             }
         })
         viewModel.newsDetail.observe(this, Observer {

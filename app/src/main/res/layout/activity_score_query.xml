@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_scoreQuery"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/view_general_toolbar" />
+
+    <tool.xfy9326.naucourse.ui.views.widgets.AdvancedSwipeRefreshLayout
+        android:id="@+id/asl_scoreQuery"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        app:color_scheme="@array/refresh_layout_color_scheme"
+        app:trigger_async_distance="@integer/default_refresh_layout_trigger_async_distance">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/AppTheme.ContentCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="6dp">
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout_scoreQuery"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:fillViewport="true"
+                    app:tabMode="fixed" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp_scoreQuery"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </tool.xfy9326.naucourse.ui.views.widgets.AdvancedSwipeRefreshLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

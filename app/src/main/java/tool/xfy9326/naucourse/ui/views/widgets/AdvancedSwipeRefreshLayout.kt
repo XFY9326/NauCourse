@@ -2,10 +2,19 @@ package tool.xfy9326.naucourse.ui.views.widgets
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.MotionEvent
+import android.view.ViewConfiguration
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import tool.xfy9326.naucourse.R
+import kotlin.math.abs
+
 
 class AdvancedSwipeRefreshLayout : SwipeRefreshLayout {
+    private var mTouchSlop = 0
+    private var startY = 0f
+    private var startX = 0f
+    private var mIsVpDrag = false
+
     companion object {
         private const val ATTR_DEFAULT_RES_ID = 0
     }
@@ -14,6 +23,32 @@ class AdvancedSwipeRefreshLayout : SwipeRefreshLayout {
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         setAttrs(context, attrs)
+        mTouchSlop = ViewConfiguration.get(context).scaledTouchSlop
+    }
+
+    override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
+        when (ev.action) {
+            MotionEvent.ACTION_DOWN -> {
+                startY = ev.y
+                startX = ev.x
+                mIsVpDrag = false
+            }
+            MotionEvent.ACTION_MOVE -> {
+                if (mIsVpDrag) {
+                    return false
+                }
+                val endY = ev.y
+                val endX = ev.x
+                val distanceX = abs(endX - startX)
+                val distanceY = abs(endY - startY)
+                if (distanceX > mTouchSlop && distanceX > distanceY) {
+                    mIsVpDrag = true
+                    return false
+                }
+            }
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> mIsVpDrag = false
+        }
+        return super.onInterceptTouchEvent(ev)
     }
 
     private fun setAttrs(context: Context, attrs: AttributeSet?) {

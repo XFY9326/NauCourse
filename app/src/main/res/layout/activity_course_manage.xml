@@ -26,7 +26,8 @@
         android:id="@+id/layout_courseManageList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize">
+        android:layout_marginTop="?attr/actionBarSize"
+        android:gravity="center">
 
         <tool.xfy9326.naucourse.ui.views.widgets.AdvancedRecyclerView
             android:id="@+id/arv_courseManageList"

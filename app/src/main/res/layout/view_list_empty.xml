@@ -13,5 +13,6 @@
     android:textColor="@color/colorPrimaryText"
     android:textSize="17sp"
     android:textStyle="bold"
-    app:drawableTopCompat="@drawable/ic_data"
+    app:drawableTopCompat="@drawable/ic_data_large"
+    app:layout_gravity="center"
     tools:ignore="ObsoleteLayoutParam" />

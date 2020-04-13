@@ -11,8 +11,17 @@ import tool.xfy9326.naucourse.ui.models.activity.LoginViewModel.LoadingProcess
 import tool.xfy9326.naucourse.ui.models.activity.SchoolCalendarViewModel.CalendarLoadStatus
 import tool.xfy9326.naucourse.ui.models.fragment.CourseArrangeViewModel.CourseArrangeNotifyType
 import tool.xfy9326.naucourse.ui.models.fragment.CourseTableViewModel.CurrentWeekStatus
+import java.util.concurrent.TimeUnit
 
 object I18NUtils {
+
+    fun getTimeUnitResId(timeUnit: TimeUnit): Int =
+        when (timeUnit) {
+            TimeUnit.DAYS -> R.string.time_unit_day
+            TimeUnit.HOURS -> R.string.time_unit_hour
+            TimeUnit.MINUTES -> R.string.time_unit_minute
+            else -> error("Unsupported I18N Time Unit")
+        }
 
     fun getCalendarLoadStatusResId(calendarLoadStatus: CalendarLoadStatus): Int =
         when (calendarLoadStatus) {

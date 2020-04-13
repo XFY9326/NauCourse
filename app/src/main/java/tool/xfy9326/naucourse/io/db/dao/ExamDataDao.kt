@@ -13,7 +13,7 @@ interface ExamDataDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun putExam(vararg exam: Exam)
 
-    @Query("select * from ${ExamDBHelper.EXAM_TABLE_NAME} order by ${ExamDBHelper.COLUMN_START_DATE} desc")
+    @Query("select * from ${ExamDBHelper.EXAM_TABLE_NAME}")
     fun getExam(): Array<Exam>
 
     @Query("delete from ${ExamDBHelper.EXAM_TABLE_NAME}")

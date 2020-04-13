@@ -63,10 +63,6 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> {
-                onBackPressed()
-                return true
-            }
             R.id.menu_calendarSave -> getBitmapFromImageView()?.let {
                 getViewModel().saveImage(it)
             }
