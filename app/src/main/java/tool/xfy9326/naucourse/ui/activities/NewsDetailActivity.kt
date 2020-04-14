@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.activity_news_detail.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
+import kotlinx.coroutines.launch
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
@@ -24,6 +25,7 @@ import tool.xfy9326.naucourse.ui.models.activity.NewsDetailViewModel
 import tool.xfy9326.naucourse.ui.views.html.AdvancedLinkMovementMethod
 import tool.xfy9326.naucourse.ui.views.html.AdvancedTagHandler
 import tool.xfy9326.naucourse.ui.views.html.HtmlImageGetter
+import tool.xfy9326.naucourse.utils.utility.ImageUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import tool.xfy9326.naucourse.utils.utility.ShareUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
@@ -76,7 +78,16 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
                 } else if (which == 1) {
                     if (isNewsDetailSet) {
                         showSnackBar(layout_newsDetail, R.string.generating_image)
-                        getViewModel().shareNewsImage(layout_newsContent.drawToBitmap())
+                        lifecycleScope.launch {
+                            try {
+                                layout_newsContent.drawToBitmap().let {
+                                    ImageUtils.drawDefaultWaterPrint(this@NewsDetailActivity, it)
+                                    getViewModel().shareNewsImage(it)
+                                }
+                            } catch (e: Exception) {
+                                showSnackBar(layout_newsDetail, R.string.share_when_news_loading)
+                            }
+                        }
                     } else {
                         showSnackBar(layout_newsDetail, R.string.share_when_news_loading)
                     }

@@ -1,32 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <tool.xfy9326.naucourse.ui.views.widgets.AdvancedLinearLayout
-        android:id="@+id/layout_courseTableHeader"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/course_cell_padding_half"
-        android:gravity="center_vertical">
-
-        <FrameLayout
-            android:layout_width="@dimen/course_table_course_time_row_size"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/tv_cellMonth"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/course_cell_padding"
-                android:gravity="center"
-                android:textSize="12sp" />
-
-        </FrameLayout>
-
-    </tool.xfy9326.naucourse.ui.views.widgets.AdvancedLinearLayout>
+    <include layout="@layout/view_course_table_header" />
 
     <ScrollView
         android:id="@+id/layout_courseTable"
@@ -36,14 +14,7 @@
         android:overScrollMode="never"
         android:scrollbars="none">
 
-        <tool.xfy9326.naucourse.ui.views.widgets.AdvancedGridLayout
-            android:id="@+id/gl_courseTable"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
-            app:columnCount="@integer/default_course_table_column_count"
-            app:orientation="vertical"
-            app:rowCount="@integer/default_course_table_row_count" />
+        <include layout="@layout/view_course_table" />
 
     </ScrollView>
 

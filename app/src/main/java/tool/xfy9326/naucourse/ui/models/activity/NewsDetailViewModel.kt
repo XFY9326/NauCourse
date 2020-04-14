@@ -18,7 +18,7 @@ import tool.xfy9326.naucourse.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourse.providers.info.methods.NewsInfo
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
-import tool.xfy9326.naucourse.utils.utility.ImageUtils
+import tool.xfy9326.naucourse.utils.utility.ImageUriUtils
 import tool.xfy9326.naucourse.utils.utility.PathUtils
 import java.util.concurrent.locks.ReentrantLock
 
@@ -55,9 +55,9 @@ class NewsDetailViewModel : BaseViewModel() {
     }
 
     fun shareNewsImage(bitmap: Bitmap) {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(Dispatchers.IO) {
             imageOperationMutex.withLock {
-                val uri = ImageUtils.createImageShareTemp(null, bitmap, true)
+                val uri = ImageUriUtils.createImageShareTemp(null, bitmap, true)
                 if (uri == null) {
                     imageOperation.postEventValue(ImageOperationType.IMAGE_SHARE_FAILED)
                 } else {
@@ -68,9 +68,9 @@ class NewsDetailViewModel : BaseViewModel() {
     }
 
     fun saveNewsImage(source: String, bitmap: Bitmap) {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(Dispatchers.IO) {
             imageOperationMutex.withLock {
-                if (ImageUtils.saveImageToAlbum(PathUtils.getUrlFileName(source), Constants.Image.DIR_NEWS_DETAIL_IMAGE, bitmap, false)) {
+                if (ImageUriUtils.saveImageToAlbum(PathUtils.getUrlFileName(source), Constants.Image.DIR_NEWS_DETAIL_IMAGE, bitmap, false)) {
                     imageOperation.postEventValue(ImageOperationType.IMAGE_SAVE_SUCCESS)
                 } else {
                     imageOperation.postEventValue(ImageOperationType.IMAGE_SAVE_FAILED)
@@ -80,9 +80,9 @@ class NewsDetailViewModel : BaseViewModel() {
     }
 
     fun shareImage(source: String, bitmap: Bitmap) {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(Dispatchers.IO) {
             imageOperationMutex.withLock {
-                val uri = ImageUtils.createImageShareTemp(PathUtils.getUrlFileName(source), bitmap, false)
+                val uri = ImageUriUtils.createImageShareTemp(PathUtils.getUrlFileName(source), bitmap, false)
                 if (uri == null) {
                     imageOperation.postEventValue(ImageOperationType.IMAGE_SHARE_FAILED)
                 } else {

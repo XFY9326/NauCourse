@@ -13,7 +13,7 @@ import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.providers.GlobalCacheManager
 import tool.xfy9326.naucourse.utils.BaseUtils
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
-import tool.xfy9326.naucourse.utils.utility.ImageUtils
+import tool.xfy9326.naucourse.utils.utility.ImageUriUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 
 class App : Application(), LifecycleObserver {
@@ -39,7 +39,7 @@ class App : Application(), LifecycleObserver {
 
     private fun setupNightMode() = AppCompatDelegate.setDefaultNightMode(BaseUtils.getNightModeInt(SettingsPref.getNightMode()))
 
-    private fun clearOldCache() = ImageUtils.clearLocalImageBySubDir(Constants.Image.DIR_SHARE_TEMP_IMAGE)
+    private fun clearOldCache() = ImageUriUtils.clearLocalImageBySubDir(Constants.Image.DIR_SHARE_TEMP_IMAGE)
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     private fun onAppForeground() {

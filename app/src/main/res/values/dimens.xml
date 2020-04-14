@@ -24,6 +24,8 @@
     <dimen name="course_date_highlight_background_radius">8dp</dimen>
     <dimen name="course_time_cell_vertical_padding">4dp</dimen>
     <dimen name="credit_count_course_select_dialog_padding">10dp</dimen>
+    <dimen name="water_print_text_size">14dp</dimen>
+    <dimen name="water_print_text_padding">10dp</dimen>
 
     <dimen name="preference_seekbar_padding_horizontal" tools:ignore="PrivateResource">10dp</dimen>
 </resources>

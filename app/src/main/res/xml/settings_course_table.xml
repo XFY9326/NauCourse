@@ -54,6 +54,13 @@
             app:title="@string/course_table_cell_same_height" />
 
         <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="HighLightCourseTableTodayDate"
+            app:summary="@string/highlight_course_table_today_date_sum"
+            app:title="@string/highlight_course_table_today_date" />
+
+        <androidx.preference.CheckBoxPreference
             app:defaultValue="false"
             app:iconSpaceReserved="false"
             app:key="DrawAllCellBackground"

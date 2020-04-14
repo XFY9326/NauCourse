@@ -61,6 +61,7 @@ object SettingsPref : BasePref() {
     val ShowNotThisWeekCourseInTable by pref.boolean(defValue = true)
     val EnableCourseTableTimeTextColor by pref.boolean(defValue = false)
     val CourseTableTimeTextColor by pref.int(defValue = Color.BLACK)
+    val HighLightCourseTableTodayDate by pref.boolean(defValue = true)
     private val CourseTableBackgroundScareType by pref.string(defValue = ImageView.ScaleType.CENTER_CROP.name)
 
     fun getCourseTableBackgroundScareType() = ImageView.ScaleType.valueOf(CourseTableBackgroundScareType!!)

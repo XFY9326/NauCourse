@@ -1,6 +1,8 @@
 package tool.xfy9326.naucourse.ui.views.table
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
@@ -15,10 +17,12 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.applyCanvas
 import androidx.core.view.setPadding
 import androidx.gridlayout.widget.GridLayout
-import kotlinx.android.synthetic.main.fragment_table.view.*
+import kotlinx.android.synthetic.main.view_course_table.view.*
 import kotlinx.android.synthetic.main.view_course_table_date.view.*
+import kotlinx.android.synthetic.main.view_course_table_header.view.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -27,11 +31,13 @@ import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseCell
 import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.beans.CoursePkg
+import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.ui.views.widgets.AdvancedGridLayout
 import tool.xfy9326.naucourse.ui.views.widgets.AdvancedLinearLayout
 import tool.xfy9326.naucourse.ui.views.widgets.CourseCellLayout
 import tool.xfy9326.naucourse.utils.courses.CourseStyleUtils
+import tool.xfy9326.naucourse.utils.courses.CourseUtils
 import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import tool.xfy9326.naucourse.utils.views.ColorUtils
 import kotlin.math.ceil
@@ -56,6 +62,75 @@ object CourseTableViewHelper {
         } else {
             DEFAULT_TABLE_WIDTH_SIZE - 3
         }
+
+    fun getCourseTableStyle() =
+        CourseTableStyle(
+            SettingsPref.SameCourseCellHeight,
+            SettingsPref.CourseTableRoundCompat,
+            SettingsPref.CenterHorizontalShowCourseText,
+            SettingsPref.CenterVerticalShowCourseText,
+            SettingsPref.UseRoundCornerCourseCell,
+            SettingsPref.DrawAllCellBackground,
+            SettingsPref.ForceShowCourseTableWeekends,
+            SettingsPref.CustomCourseTableBackground,
+            SettingsPref.CustomCourseTableAlpha / 100f,
+            SettingsPref.ShowNotThisWeekCourseInTable,
+            SettingsPref.EnableCourseTableTimeTextColor,
+            SettingsPref.CourseTableTimeTextColor,
+            SettingsPref.HighLightCourseTableTodayDate
+        )
+
+    @SuppressLint("InflateParams")
+    suspend fun drawCourseTableImage(
+        context: Context,
+        coursePkg: CoursePkg,
+        weekNum: Int,
+        targetWidth: Int,
+        courseTableStyle: CourseTableStyle
+    ): Bitmap = withContext(Dispatchers.Default) {
+        LayoutInflater.from(context).inflate(R.layout.layout_draw_table, null).let {
+            val compatStyle = courseTableStyle.copy(
+                bottomCornerCompat = false,
+                customCourseTableAlpha = 1f,
+                enableCourseTableTimeTextColor = false,
+                highLightCourseTableTodayDate = false
+            )
+
+            val array = context.theme.obtainStyledAttributes(IntArray(1) {
+                android.R.attr.colorBackground
+            })
+            val backgroundColor = array.getColor(0, ContextCompat.getColor(context, R.color.colorDefaultBackground))
+            array.recycle()
+
+            val showWeekend = compatStyle.forceShowCourseTableWeekends || CourseUtils.hasWeekendCourse(coursePkg.courseTable)
+            val showWeekDaySize = getShowWeekDaySize(showWeekend)
+            val columnSize = showWeekDaySize + 1
+
+            val header = async {
+                buildCourseTableHeader(context, coursePkg.termDate, weekNum, showWeekDaySize, it.layout_courseTableHeader, compatStyle)
+            }
+
+            val table = async {
+                buildCourseTable(context, coursePkg, targetWidth, columnSize, compatStyle).apply {
+                    applyViewToCourseTable(it.gl_courseTable, this, columnSize, compatStyle)
+                }
+            }
+
+            header.await()
+            table.await()
+
+            val widthSpec = View.MeasureSpec.makeMeasureSpec(targetWidth, View.MeasureSpec.AT_MOST)
+            val heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            it.measure(widthSpec, heightSpec)
+            it.layout(0, 0, it.measuredWidth, it.measuredHeight)
+            it.requestLayout()
+
+            Bitmap.createBitmap(it.width, it.height, Bitmap.Config.ARGB_8888).applyCanvas {
+                drawColor(backgroundColor)
+                it.draw(this)
+            }
+        }
+    }
 
     suspend fun applyViewToCourseTable(targetView: AdvancedGridLayout, views: Array<View>, columnSize: Int, courseTableStyle: CourseTableStyle) =
         withContext(Dispatchers.Main) {
@@ -387,7 +462,7 @@ object CourseTableViewHelper {
         context: Context,
         termDate: TermDate,
         weekNum: Int,
-        columnSize: Int,
+        weekDaySize: Int,
         headerLayout: AdvancedLinearLayout,
         courseTableStyle: CourseTableStyle
     ) = withContext(Dispatchers.Default) {
@@ -415,8 +490,12 @@ object CourseTableViewHelper {
                     0f
                 }
 
-            val views = Array(columnSize) {
-                val isToday = dateInfo[it] == today
+            val views = Array(weekDaySize) {
+                val isToday = if (courseTableStyle.highLightCourseTableTodayDate) {
+                    dateInfo[it] == today
+                } else {
+                    false
+                }
 
                 layoutInflater.inflate(R.layout.view_course_table_date, headerLayout, false).apply {
                     tv_cellWeekdayNum.text = weekDayNumStrArr[it]

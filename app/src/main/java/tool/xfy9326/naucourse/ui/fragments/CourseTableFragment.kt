@@ -29,6 +29,8 @@ import tool.xfy9326.naucourse.ui.models.fragment.CourseTableViewModel
 import tool.xfy9326.naucourse.ui.views.table.CourseTableViewHelper
 import tool.xfy9326.naucourse.ui.views.table.OnCourseCellClickListener
 import tool.xfy9326.naucourse.ui.views.viewpager.CourseTableViewPagerAdapter
+import tool.xfy9326.naucourse.utils.utility.ShareUtils
+import tool.xfy9326.naucourse.utils.views.ActivityUtils
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 import tool.xfy9326.naucourse.utils.views.I18NUtils
 import tool.xfy9326.naucourse.utils.views.ViewUtils
@@ -53,11 +55,21 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_courseTableControl -> showCourseTableControlPanel()
+            R.id.menu_courseTableShare -> shareCourseTable()
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun bindViewModel(viewModel: CourseTableViewModel) {
+        viewModel.getImageWhenCourseTableLoading.observeNotification(this, {
+            ActivityUtils.showSnackBar(layout_courseTableWindow, R.string.operation_when_data_loading)
+        })
+        viewModel.imageShareUri.observeEvent(this, Observer {
+            startActivity(ShareUtils.getShareImageIntent(requireContext(), it))
+        })
+        viewModel.imageOperation.observeEvent(this, Observer {
+            ActivityUtils.showSnackBar(layout_courseTableWindow, I18NUtils.getImageOperationTypeResId(it))
+        })
         viewModel.nowShowWeekNum.observe(viewLifecycleOwner, Observer {
             tv_nowShowWeekNum.text = getString(R.string.week_num, it)
             viewModel.requestShowWeekStatus(it)
@@ -123,6 +135,11 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
             }
         }
         super.onHiddenChanged(hidden)
+    }
+
+    private fun shareCourseTable() {
+        ActivityUtils.showSnackBar(layout_courseTableWindow, R.string.generating_image)
+        getViewModel().createShareImage(requireContext(), vp_courseTablePanel.currentItem + 1, resources.displayMetrics.widthPixels)
     }
 
     override fun initView(viewModel: CourseTableViewModel) {
@@ -243,5 +260,10 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
     override fun onDestroyView() {
         vp_courseTablePanel.unregisterOnPageChangeCallback(viewPagerCallback)
         super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        getViewModel().courseTableBackground.value = null
+        super.onDestroy()
     }
 }

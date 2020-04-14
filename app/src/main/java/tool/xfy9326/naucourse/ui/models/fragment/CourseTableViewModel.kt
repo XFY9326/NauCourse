@@ -1,6 +1,8 @@
 package tool.xfy9326.naucourse.ui.models.fragment
 
+import android.content.Context
 import android.graphics.Bitmap
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
@@ -19,10 +21,14 @@ import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourse.ui.views.table.CourseTableStyle
+import tool.xfy9326.naucourse.ui.views.table.CourseTableViewHelper
 import tool.xfy9326.naucourse.utils.courses.CourseUtils
 import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import tool.xfy9326.naucourse.utils.debug.LogUtils
+import tool.xfy9326.naucourse.utils.utility.ImageUriUtils
 import tool.xfy9326.naucourse.utils.utility.ImageUtils
+import java.lang.ref.WeakReference
+import kotlin.math.min
 
 class CourseTableViewModel : BaseViewModel() {
     companion object {
@@ -50,6 +56,9 @@ class CourseTableViewModel : BaseViewModel() {
     var showNextWeekAhead: Boolean? = null
     var currentWeekNum: Int? = null
 
+    val imageOperation = EventLiveData<ImageOperationType>()
+    val imageShareUri = EventLiveData<Uri>()
+
     val maxWeekNum = MutableLiveData<Int>()
 
     // 当前周数，是否要提前显示下一周课表
@@ -62,9 +71,10 @@ class CourseTableViewModel : BaseViewModel() {
     val courseAndTermEmpty = NotifyLivaData()
     val courseTableBackground = MutableLiveData<Bitmap?>()
 
+    val getImageWhenCourseTableLoading = NotifyLivaData()
+
     val courseTableRebuild = NotifyLivaData()
 
-    val coursePkgSavedTemp = arrayOfNulls<CoursePkg>(Constants.Course.MAX_WEEK_NUM_SIZE)
     val courseTablePkg = Array<MutableLiveData<CoursePkg>>(Constants.Course.MAX_WEEK_NUM_SIZE) { MutableLiveData() }
 
     enum class CurrentWeekStatus {
@@ -138,33 +148,37 @@ class CourseTableViewModel : BaseViewModel() {
     fun requestCourseTable(weekNum: Int, coursePkgHash: Int) {
         viewModelScope.launch(Dispatchers.Default) {
             if (initDeferred.isActive) initDeferred.await()
-            if (coursePkgHash == DEFAULT_COURSE_PKG_HASH || coursePkgSavedTemp[weekNum - 1].hashCode() != coursePkgHash) {
-                if (::termDate.isInitialized && ::courseTableArr.isInitialized && ::courseSet.isInitialized) {
-                    val pkg = CoursePkg(
-                        termDate,
-                        courseTableArr[weekNum - 1],
-                        CourseCellStyleDBHelper.loadCourseCellStyle(courseSet)
-                    )
-                    coursePkgSavedTemp[weekNum - 1] = pkg
-                    courseTablePkg[weekNum - 1].postValue(pkg)
-                } else if (::termDate.isInitialized && (!::courseTableArr.isInitialized || !::courseSet.isInitialized)) {
-                    val pkg = CoursePkg(
-                        termDate,
-                        CourseTable(emptyArray()),
-                        emptyArray()
-                    )
-                    coursePkgSavedTemp[weekNum - 1] = pkg
-                    courseTablePkg[weekNum - 1].postValue(pkg)
-
-                    LogUtils.i<CourseTableViewModel>("Init Empty Course Data For Week: $weekNum!")
-                } else {
-                    courseAndTermEmpty.notifyEvent()
-
-                    LogUtils.d<CourseTableViewModel>("Init Request Failed For Week: $weekNum!")
+            if (coursePkgHash == DEFAULT_COURSE_PKG_HASH) {
+                val pkg = getCoursePkg(weekNum)
+                if (pkg.hashCode() != coursePkgHash) {
+                    courseTablePkg[weekNum - 1].postValue(getCoursePkg(weekNum))
                 }
             }
         }
     }
+
+    private fun getCoursePkg(weekNum: Int) =
+        if (::termDate.isInitialized && ::courseTableArr.isInitialized && ::courseSet.isInitialized) {
+            val pkg = CoursePkg(
+                termDate,
+                courseTableArr[weekNum - 1],
+                CourseCellStyleDBHelper.loadCourseCellStyle(courseSet)
+            )
+
+            pkg
+        } else if (::termDate.isInitialized && (!::courseTableArr.isInitialized || !::courseSet.isInitialized)) {
+            val pkg = CoursePkg(
+                termDate,
+                CourseTable(emptyArray()),
+                emptyArray()
+            )
+            LogUtils.i<CourseTableViewModel>("Init Empty Course Data For Week: $weekNum!")
+            pkg
+        } else {
+            courseAndTermEmpty.notifyEvent()
+            LogUtils.d<CourseTableViewModel>("Init Request Failed For Week: $weekNum!")
+            null
+        }
 
     @Synchronized
     fun requestCourseDetailInfo(courseCell: CourseCell, cellStyle: CourseCellStyle) {
@@ -378,18 +392,14 @@ class CourseTableViewModel : BaseViewModel() {
             courseTableArr =
                 CourseUtils.generateAllCourseTable(courseSet, termDate, TimeUtils.getWeekLength(termDate))
             if (postValue) {
-                for (i in courseTablePkg.indices) {
-                    if (courseTablePkg[i].hasActiveObservers()) {
-                        courseTablePkg[i].postValue(
-                            CoursePkg(
-                                termDate,
-                                courseTableArr[i],
-                                CourseCellStyleDBHelper.loadCourseCellStyle(courseSet)
-                            ).also {
-                                coursePkgSavedTemp[i] = it
-                            }
+                for (i in 0 until min(courseTablePkg.size, courseTableArr.size)) {
+                    courseTablePkg[i].postValue(
+                        CoursePkg(
+                            termDate,
+                            courseTableArr[i],
+                            CourseCellStyleDBHelper.loadCourseCellStyle(courseSet)
                         )
-                    }
+                    )
                 }
             }
         }
@@ -397,20 +407,7 @@ class CourseTableViewModel : BaseViewModel() {
 
     fun getCourseTableStyle() = synchronized(courseTableStyleLock) {
         if (courseTableStyle == null) {
-            courseTableStyle = CourseTableStyle(
-                SettingsPref.SameCourseCellHeight,
-                SettingsPref.CourseTableRoundCompat,
-                SettingsPref.CenterHorizontalShowCourseText,
-                SettingsPref.CenterVerticalShowCourseText,
-                SettingsPref.UseRoundCornerCourseCell,
-                SettingsPref.DrawAllCellBackground,
-                SettingsPref.ForceShowCourseTableWeekends,
-                SettingsPref.CustomCourseTableBackground,
-                SettingsPref.CustomCourseTableAlpha / 100f,
-                SettingsPref.ShowNotThisWeekCourseInTable,
-                SettingsPref.EnableCourseTableTimeTextColor,
-                SettingsPref.CourseTableTimeTextColor
-            )
+            courseTableStyle = CourseTableViewHelper.getCourseTableStyle()
         }
         return@synchronized courseTableStyle!!
     }
@@ -423,11 +420,41 @@ class CourseTableViewModel : BaseViewModel() {
     fun requestCourseTableBackground() {
         viewModelScope.launch(Dispatchers.IO) {
             if (SettingsPref.CustomCourseTableBackground) {
-                val backgroundBitmap = ImageUtils.readLocalImage(Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE)
+                val backgroundBitmap = ImageUriUtils.readLocalImage(Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE)
                 courseTableBackground.postValue(backgroundBitmap)
             } else {
                 courseTableBackground.postValue(null)
             }
+        }
+    }
+
+    fun createShareImage(context: Context, weekNum: Int, targetWidth: Int) {
+        viewModelScope.launch(Dispatchers.Default) {
+            val weakContext = WeakReference(context)
+            if (!hasInit) {
+                getImageWhenCourseTableLoading.notifyEvent()
+            } else {
+                val pkg = getCoursePkg(weekNum)
+                if (pkg == null) {
+                    getImageWhenCourseTableLoading.notifyEvent()
+                } else {
+                    weakContext.get()?.let {
+                        CourseTableViewHelper.drawCourseTableImage(it, pkg, weekNum, targetWidth, getCourseTableStyle()).let { bitmap ->
+                            ImageUtils.drawDefaultWaterPrint(it, bitmap)
+                            shareCourseTable(bitmap)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private suspend fun shareCourseTable(bitmap: Bitmap) = withContext(Dispatchers.IO) {
+        val uri = ImageUriUtils.createImageShareTemp(null, bitmap, true)
+        if (uri == null) {
+            imageOperation.postEventValue(ImageOperationType.IMAGE_SHARE_FAILED)
+        } else {
+            imageShareUri.postEventValue(uri)
         }
     }
 }

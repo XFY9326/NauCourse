@@ -20,7 +20,7 @@ import tool.xfy9326.naucourse.providers.contents.methods.www.SchoolCalendarList
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourse.utils.debug.LogUtils
-import tool.xfy9326.naucourse.utils.utility.ImageUtils
+import tool.xfy9326.naucourse.utils.utility.ImageUriUtils
 
 class SchoolCalendarViewModel : BaseViewModel() {
     private val imageOperationMutex = Mutex()
@@ -83,7 +83,7 @@ class SchoolCalendarViewModel : BaseViewModel() {
                             if (bitmap != null) {
                                 // 图片保存到外置存储
                                 // 如果要改为缓存应该放在内置存储
-                                val uri = ImageUtils.saveImage(
+                                val uri = ImageUriUtils.saveImage(
                                     Constants.Image.SCHOOL_CALENDAR_IMAGE_NAME,
                                     bitmap,
                                     recycle = false,
@@ -114,8 +114,8 @@ class SchoolCalendarViewModel : BaseViewModel() {
     private suspend fun tryLoadCalendarTemp(): Bitmap? = withContext(Dispatchers.IO) {
         imageLoadMutex.withLock {
             return@withContext if (AppPref.contains(AppPref.CURRENT_SCHOOL_CALENDAR_IMAGE_URL)) {
-                val bitmap = if (ImageUtils.localImageExists(Constants.Image.SCHOOL_CALENDAR_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE)) {
-                    ImageUtils.readLocalImage(Constants.Image.SCHOOL_CALENDAR_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE)
+                val bitmap = if (ImageUriUtils.localImageExists(Constants.Image.SCHOOL_CALENDAR_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE)) {
+                    ImageUriUtils.readLocalImage(Constants.Image.SCHOOL_CALENDAR_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE)
                 } else {
                     null
                 }
@@ -147,7 +147,7 @@ class SchoolCalendarViewModel : BaseViewModel() {
         viewModelScope.launch(Dispatchers.Default) {
             // 直接通过Bitmap存储，防止复制图片的时候出现其他特殊问题
             imageOperationMutex.withLock {
-                if (ImageUtils.saveImageToAlbum(Constants.Image.SCHOOL_CALENDAR_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE, bitmap, false)) {
+                if (ImageUriUtils.saveImageToAlbum(Constants.Image.SCHOOL_CALENDAR_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE, bitmap, false)) {
                     imageOperation.postEventValue(ImageOperationType.IMAGE_SAVE_SUCCESS)
                 } else {
                     imageOperation.postEventValue(ImageOperationType.IMAGE_SAVE_FAILED)
@@ -160,7 +160,7 @@ class SchoolCalendarViewModel : BaseViewModel() {
         viewModelScope.launch(Dispatchers.Default) {
             // 通过存放bitmap的分享方式，而不是直接分享，防止更改分享uri时候使用了旧的图片或者其他情况
             imageOperationMutex.withLock {
-                val uri = ImageUtils.createImageShareTemp(Constants.Image.SCHOOL_CALENDAR_IMAGE_NAME, bitmap, false)
+                val uri = ImageUriUtils.createImageShareTemp(Constants.Image.SCHOOL_CALENDAR_IMAGE_NAME, bitmap, false)
                 if (uri == null) {
                     imageOperation.postEventValue(ImageOperationType.IMAGE_SHARE_FAILED)
                 } else {

@@ -355,4 +355,8 @@
     <string name="empty_credit_count_data">暂无可以计算绩点的课程！</string>
     <string name="select_credit_count_course">选择参与绩点计算的课程</string>
     <string name="credit_count_result">计算结果：%1$.6f\n\n注：该计算结果仅供参考</string>
+    <string name="share_course_table">分享课程表</string>
+    <string name="highlight_course_table_today_date">高亮显示当天日期</string>
+    <string name="highlight_course_table_today_date_sum">课程表日期高亮显示当天的日期</string>
+    <string name="water_print_text">\@NAU课程表</string>
 </resources>

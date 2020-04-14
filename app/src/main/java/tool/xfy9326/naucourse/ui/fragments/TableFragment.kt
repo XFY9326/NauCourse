@@ -8,7 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import kotlinx.android.synthetic.main.fragment_table.*
+import kotlinx.android.synthetic.main.view_course_table.*
+import kotlinx.android.synthetic.main.view_course_table_header.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -52,7 +53,7 @@ class TableFragment : Fragment() {
 
         bindObserver()
         if (savedInstanceState == null) {
-            prepareCourseTable()
+            contentViewModel.requestCourseTable(weekNum, coursePkgHash)
         }
         super.onViewCreated(view, savedInstanceState)
     }
@@ -62,30 +63,17 @@ class TableFragment : Fragment() {
             courseTablePkg[weekNum - 1].observe(viewLifecycleOwner, Observer {
                 startBuildTable(it)
             })
-
             courseAndTermEmpty.observeNotification(viewLifecycleOwner, {
                 showToast(requireContext(), R.string.course_and_term_data_empty)
             }, "${TableFragment::class.java.simpleName}-$weekNum")
-
             courseTableRebuild.observeNotification(viewLifecycleOwner, {
-                val temp = coursePkgSavedTemp[weekNum - 1]
+                val temp = courseTablePkg[weekNum - 1].value
                 if (temp != null) {
                     lifecycleScope.launch(Dispatchers.Default) {
                         buildCourseTableView(temp, getCourseTableStyle())
                     }
                 }
             }, "${TableFragment::class.java.simpleName}-$weekNum")
-        }
-    }
-
-    private fun prepareCourseTable() {
-        contentViewModel.apply {
-            val temp = coursePkgSavedTemp[weekNum - 1]
-            if (temp == null) {
-                requestCourseTable(weekNum, coursePkgHash)
-            } else {
-                startBuildTable(temp)
-            }
         }
     }
 

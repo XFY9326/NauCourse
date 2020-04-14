@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/menu_courseTableShare"
+        android:icon="@drawable/ic_share_black"
+        android:title="@string/share_course_table"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/menu_courseTableControl"
         android:icon="@drawable/ic_tune_dark"
         android:title="@string/course_table_control"

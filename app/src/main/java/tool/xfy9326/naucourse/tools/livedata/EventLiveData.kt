@@ -27,6 +27,14 @@ open class EventLiveData<T> : MutableLiveData<Event<T>> {
         })
     }
 
+    fun observeEventWithCheck(owner: LifecycleOwner, observer: (T) -> Boolean) {
+        super.observe(owner, Observer {
+            it.getContentIfNotHandled(null)?.let { value ->
+                if (observer.invoke(value.data)) it.setNullTagHandled()
+            }
+        })
+    }
+
     fun observeEventForever(observer: Observer<in T>, tag: String? = null) =
         Observer<Event<T>> {
             it.getContentIfNotHandled(tag)?.let { value ->

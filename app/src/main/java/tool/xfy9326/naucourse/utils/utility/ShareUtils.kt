@@ -12,10 +12,10 @@ object ShareUtils {
         Intent.createChooser(Intent().apply {
             action = Intent.ACTION_SEND
             type = Constants.MIME.IMAGE
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
             putExtra(Intent.EXTRA_STREAM, uri)
             putExtra(Intent.EXTRA_TITLE, context.getString(R.string.share_image))
             putExtra(Intent.EXTRA_MIME_TYPES, Constants.MIME.IMAGE)
-            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         }, null)
 
     fun getShareNewsIntent(context: Context, news: SerializableNews): Intent =
@@ -24,6 +24,6 @@ object ShareUtils {
             type = Constants.MIME.TEXT
             putExtra(Intent.EXTRA_TITLE, context.getString(R.string.share_news))
             putExtra(Intent.EXTRA_TEXT, news.getShareText(context))
-            putExtra(Intent.EXTRA_MIME_TYPES, Constants.MIME.IMAGE)
+            putExtra(Intent.EXTRA_MIME_TYPES, Constants.MIME.TEXT)
         }, null)
 }

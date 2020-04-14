@@ -135,5 +135,6 @@ object Constants {
         const val ShowNotThisWeekCourseInTable = "ShowNotThisWeekCourseInTable"
         const val CourseTableTimeTextColor = "CourseTableTimeTextColor"
         const val EnableCourseTableTimeTextColor = "EnableCourseTableTimeTextColor"
+        const val HighLightCourseTableTodayDate = "HighLightCourseTableTodayDate"
     }
 }
