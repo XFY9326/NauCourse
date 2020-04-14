@@ -17,10 +17,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import kotlinx.android.synthetic.main.fragment_course_table.*
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseCell
 import tool.xfy9326.naucourse.beans.CourseCellStyle
+import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.tools.NotifyBus
 import tool.xfy9326.naucourse.ui.dialogs.CourseDetailDialog
@@ -70,7 +70,7 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
         })
         viewModel.maxWeekNum.observe(viewLifecycleOwner, Observer {
             courseTableViewPagerAdapter.updateMaxWeekNum(it)
-            viewModel.maxWeekNumTemp = it
+            AppPref.MaxWeekNumCache = it
         })
         viewModel.nowWeekNum.observe(viewLifecycleOwner, Observer {
             synchronized(this) {
@@ -130,7 +130,7 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
 
         CourseTableViewHelper.setOnCourseCellClickListener(this)
 
-        courseTableViewPagerAdapter = CourseTableViewPagerAdapter(this, viewModel.maxWeekNumTemp ?: Constants.Course.MAX_WEEK_NUM_SIZE)
+        courseTableViewPagerAdapter = CourseTableViewPagerAdapter(this, AppPref.MaxWeekNumCache)
 
         vp_courseTablePanel.adapter = courseTableViewPagerAdapter
         vp_courseTablePanel.offscreenPageLimit = 1
@@ -230,7 +230,7 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
     private fun showCourseTableControlPanel() {
         DialogUtils.createCourseTableControlDialog(
             requireContext(), viewLifecycleOwner.lifecycle, getViewModel().currentWeekNum ?: 0, vp_courseTablePanel.currentItem + 1,
-            getViewModel().maxWeekNumTemp ?: Constants.Course.MAX_WEEK_NUM_SIZE
+            AppPref.MaxWeekNumCache
         ) {
             vp_courseTablePanel.setCurrentItem(it - 1, true)
         }.show()

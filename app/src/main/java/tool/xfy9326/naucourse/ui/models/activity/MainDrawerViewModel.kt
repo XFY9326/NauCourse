@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentInfo
@@ -25,11 +26,13 @@ class MainDrawerViewModel : BaseViewModel() {
     val logoutSuccess = NotifyLivaData()
 
     override fun onInitView(isRestored: Boolean) {
-        if (!isRestored) {
-            updatePersonalInfo(true)
-            updateBalance(true)
+        viewModelScope.launch(Dispatchers.Default) {
+            if (!isRestored) {
+                updateBalance(true)
+                updatePersonalInfo(true)
+            }
+            updatePersonalInfo()
         }
-        updatePersonalInfo()
     }
 
     @Synchronized
@@ -41,14 +44,12 @@ class MainDrawerViewModel : BaseViewModel() {
             false
         }
 
-    private fun updatePersonalInfo(initLoad: Boolean = false) {
-        viewModelScope.launch(Dispatchers.Default) {
-            val personalInfo = PersonalInfo.getInfo(loadCache = initLoad)
-            if (personalInfo.isSuccess) {
-                studentInfo.postValue(personalInfo.data!!)
-            } else {
-                LogUtils.d<MainDrawerViewModel>("PersonalInfo Error: ${personalInfo.errorReason}")
-            }
+    private suspend fun updatePersonalInfo(initLoad: Boolean = false) = withContext(Dispatchers.Default) {
+        val personalInfo = PersonalInfo.getInfo(loadCache = initLoad)
+        if (personalInfo.isSuccess) {
+            studentInfo.postValue(personalInfo.data!!)
+        } else {
+            LogUtils.d<MainDrawerViewModel>("PersonalInfo Error: ${personalInfo.errorReason}")
         }
     }
 

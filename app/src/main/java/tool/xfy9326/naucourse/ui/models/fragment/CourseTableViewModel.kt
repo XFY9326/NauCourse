@@ -49,7 +49,6 @@ class CourseTableViewModel : BaseViewModel() {
 
     var showNextWeekAhead: Boolean? = null
     var currentWeekNum: Int? = null
-    var maxWeekNumTemp: Int? = null
 
     val maxWeekNum = MutableLiveData<Int>()
 
@@ -163,8 +162,6 @@ class CourseTableViewModel : BaseViewModel() {
 
                     LogUtils.d<CourseTableViewModel>("Init Request Failed For Week: $weekNum!")
                 }
-            } else {
-                LogUtils.d<CourseTableViewModel>("Course Update Unnecessary For Week: $weekNum!")
             }
         }
     }
@@ -286,8 +283,6 @@ class CourseTableViewModel : BaseViewModel() {
                     }
                 }
             }
-        } else {
-            LogUtils.i<CourseTableViewModel>("Course Update Unnecessary!")
         }
     }
 
@@ -364,14 +359,10 @@ class CourseTableViewModel : BaseViewModel() {
                                 val styles = CourseCellStyleDBHelper.loadCourseCellStyle(courseInfo.data!!)
                                 updateCourseData(courseInfo.data, termInfo.data!!, styles)
                                 NotifyBus[NotifyBus.Type.COURSE_ASYNC_UPDATE].notifyEvent()
-                            } else {
-                                LogUtils.d<CourseTableViewModel>("Course Data Don't Need Update (Same Course Data)")
                             }
                         } else {
                             LogUtils.d<CourseTableViewModel>("CourseInfo Async Error: ${courseInfo.errorReason}")
                         }
-                    } else {
-                        LogUtils.d<CourseTableViewModel>("Course Async Don't Need Update (Same Term Date)")
                     }
                 } else {
                     LogUtils.d<CourseTableViewModel>("Term Date Async Error: ${termInfo.errorReason}")

@@ -91,7 +91,7 @@ open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = nu
         }.build()
     }
 
-    override fun getNetworkClient(): OkHttpClient = okHttpClient
+    final override fun getNetworkClient(): OkHttpClient = okHttpClient
 
     @Synchronized
     final override fun login(beforeLoginResponse: Response): LoginResponse {
@@ -194,9 +194,7 @@ open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = nu
                 login()
             }
             response.closeQuietly()
-            if (!result.isSuccess) {
-                LogUtils.d<SSOClient>("NgxClient Auto Login Failed! Reason: ${result.loginErrorReason}")
-            }
+            if (!result.isSuccess) LogUtils.d<SSOClient>("Auto Login Failed! Reason: ${result.loginErrorReason}")
             newClientCall(request)
         }
     }

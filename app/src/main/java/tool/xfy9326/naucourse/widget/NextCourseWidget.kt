@@ -19,7 +19,6 @@ import tool.xfy9326.naucourse.beans.NextCourseBundle
 import tool.xfy9326.naucourse.io.store.NextCourseBundleStore
 import tool.xfy9326.naucourse.ui.activities.MainIndexActivity
 import tool.xfy9326.naucourse.utils.courses.ExtraCourseUtils
-import tool.xfy9326.naucourse.utils.debug.LogUtils
 import tool.xfy9326.naucourse.utils.utility.AppWidgetUtils
 import tool.xfy9326.naucourse.utils.utility.AppWidgetUtils.goAsync
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
@@ -101,7 +100,6 @@ class NextCourseWidget : AppWidgetProvider() {
             // 初始化定时器
             IntentUtils.startNextCourseAlarm(context)
             goAsync {
-                LogUtils.d<NextCourseWidget>("Next Course Widget Update (Load Cache)")
                 // 载入缓存
                 NextCourseBundleStore.loadStore()?.let { bundle ->
                     AppWidgetUtils.updateNextCourseWidget(it, bundle)
@@ -112,7 +110,6 @@ class NextCourseWidget : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         goAsync {
-            LogUtils.d<NextCourseWidget>("Next Course Widget Update (Without Data)")
             // 数据刷新（无传入数据）
             ExtraCourseUtils.getLocalCourseData().let {
                 val nextCourseBundle = ExtraCourseUtils.getNextCourseInfo(it?.first, it?.second, it?.third)
@@ -127,7 +124,6 @@ class NextCourseWidget : AppWidgetProvider() {
             val componentName = ComponentName(it, NextCourseWidget::class.java)
             if (intent?.action == ACTION_NEXT_COURSE_WIDGET_UPDATE) {
                 goAsync {
-                    LogUtils.d<NextCourseWidget>("Next Course Widget Update (With Data)")
                     // 数据刷新（有传入数据）
                     val nextCourseBundle = intent.getSerializableExtra(EXTRA_NEXT_COURSE_WIDGET_DATA) as NextCourseBundle
                     AppWidgetManager.getInstance(it).updateAppWidget(componentName, generateView(it, nextCourseBundle))

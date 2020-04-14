@@ -186,9 +186,7 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
                 login()
             }
             response.closeQuietly()
-            if (!result.isSuccess) {
-                LogUtils.d<NgxClient>("NgxClient Auto Login Failed! Reason: ${result.loginErrorReason}")
-            }
+            if (!result.isSuccess) LogUtils.d<NgxClient>("Auto Login Failed! Reason: ${result.loginErrorReason}")
             newClientCall(request)
         }
     }

@@ -5,6 +5,7 @@ import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Request
 import okhttp3.Response
+import okhttp3.internal.closeQuietly
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.network.clients.base.LoginInfo
 import tool.xfy9326.naucourse.network.clients.base.LoginResponse
@@ -25,6 +26,7 @@ open class VPNClient(loginInfo: LoginInfo, loginUrl: HttpUrl? = null) :
         }
     ) {
     protected open var forceUseVPN: Boolean = false
+    private val timeoutClient = getNetworkClient().newBuilder().connectTimeout(TEST_CONNECT_TIME_OUT, TimeUnit.MILLISECONDS).build()
 
     companion object {
         const val VPN_HOST = "vpn.nau.edu.cn"
@@ -109,22 +111,30 @@ open class VPNClient(loginInfo: LoginInfo, loginUrl: HttpUrl? = null) :
 
     protected fun newVPNCall(request: Request): Response = getNetworkClient().newCall(request).execute()
 
-    private fun validateVPNNecessary(url: HttpUrl): Boolean = try {
-        getNetworkClient().newBuilder().connectTimeout(TEST_CONNECT_TIME_OUT, TimeUnit.MILLISECONDS).build()
-            .newCall(Request.Builder().url(url).build()).execute().use {
-                val body = it.body?.string()!!
-                (it.code == Constants.Network.HTTP_FORBIDDEN_STATUS && VPN_NECESSARY_STR in body) || ONLY_ALLOW_SCHOOL_IP_STR in body
-            }
-    } catch (e: SocketTimeoutException) {
-        true
-    }
-
-    protected fun useVPN(url: HttpUrl) = forceUseVPN || validateVPNNecessary(url)
-
     override fun newClientCall(request: Request): Response {
-        val useVPN = useVPN(request.url)
-        val newRequest = patchVPNRequest(useVPN, request)
-        var callResult = newVPNCall(newRequest)
+        var useVPN = forceUseVPN
+        var newRequest = patchVPNRequest(true, request)
+        var callResult = if (forceUseVPN) {
+            newVPNCall(newRequest)
+        } else {
+            try {
+                val response = timeoutClient.newCall(request).execute()
+                val body = NetworkTools.getResponseContent(response)
+                if ((response.code == Constants.Network.HTTP_FORBIDDEN_STATUS && VPN_NECESSARY_STR in body) || ONLY_ALLOW_SCHOOL_IP_STR in body) {
+                    response.closeQuietly()
+                    useVPN = true
+                    newVPNCall(newRequest)
+                } else {
+                    useVPN = false
+                    newRequest = patchVPNRequest(false, request)
+                    response
+                }
+            } catch (e: SocketTimeoutException) {
+                useVPN = true
+                newVPNCall(newRequest)
+            }
+        }
+
         if (!validateLoginWithResponse(NetworkTools.getResponseContent(callResult), callResult.request.url)) {
             val loginResponse = login(callResult)
             if (loginResponse.isSuccess) {
@@ -137,7 +147,9 @@ open class VPNClient(loginInfo: LoginInfo, loginUrl: HttpUrl? = null) :
         return if (validateNotInLoginPage(NetworkTools.getResponseContent(callResult))) {
             callResult
         } else {
-            newVPNCall(newRequest)
+            onVPNClientInLoginPage(useVPN, newRequest)
         }
     }
+
+    protected open fun onVPNClientInLoginPage(useVPN: Boolean, newRequest: Request): Response = newVPNCall(newRequest)
 }

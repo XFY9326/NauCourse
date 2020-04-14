@@ -53,8 +53,6 @@ class NewsViewModel : BaseViewModel() {
                     if (newsInfoResult.data.isEmpty()) {
                         errorMsg.postEventValue(ContentErrorReason.EMPTY_DATA)
                     }
-                } else {
-                    LogUtils.i<NewsViewModel>("New Info Don't Need Update")
                 }
             } else {
                 errorMsg.postEventValue(newsInfoResult.errorReason)

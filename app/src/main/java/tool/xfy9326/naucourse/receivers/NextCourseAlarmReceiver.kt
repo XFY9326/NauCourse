@@ -44,8 +44,6 @@ class NextCourseAlarmReceiver : BroadcastReceiver() {
                     val intent = getAlarmPendingIntent(context)
                     AlarmManagerCompat.setExactAndAllowWhileIdle(it, AlarmManager.RTC_WAKEUP, updateTime, intent)
                     LogUtils.d<NextCourseAlarmReceiver>("Set Next Course Alarm. Time: $updateTime")
-                } else {
-                    LogUtils.d<NextCourseAlarmReceiver>("Null Next Update Time!")
                 }
             }
         }
@@ -62,8 +60,6 @@ class NextCourseAlarmReceiver : BroadcastReceiver() {
                         AlarmManagerCompat.setExactAndAllowWhileIdle(it, AlarmManager.RTC_WAKEUP, updateTime, intent)
                         LogUtils.d<NextCourseAlarmReceiver>("Set Next Course Notify Alarm. Time: $updateTime")
                     }
-                } else {
-                    LogUtils.d<NextCourseAlarmReceiver>("Null Next Update Notify Time!")
                 }
             }
         }
@@ -187,12 +183,10 @@ class NextCourseAlarmReceiver : BroadcastReceiver() {
                             if (intent.getBooleanExtra(EXTRA_JUST_INIT, false)) {
                                 if (intent.getBooleanExtra(EXTRA_DATA_UPDATE, false)) {
                                     // 数据刷新
-                                    LogUtils.d<NextCourseAlarmReceiver>("Next Course Alarm Data Update")
                                     onAlarm(context, nextCourseBundle)
                                     setNextUpdateAlarm(context, nextCourseBundle)
                                 } else {
                                     // 定时器初始化
-                                    LogUtils.d<NextCourseAlarmReceiver>("Init Next Course Alarm")
                                     setNextUpdateAlarm(context)
                                 }
                             } else {
@@ -205,7 +199,6 @@ class NextCourseAlarmReceiver : BroadcastReceiver() {
                 } else {
                     // 不再需要定时器
                     cancelAlarm(context, getAlarmPendingIntent(context))
-                    LogUtils.d<NextCourseAlarmReceiver>("Not Necessary For Next Course Alarm!")
                 }
             }
         }
