@@ -17,13 +17,21 @@ import tool.xfy9326.naucourse.utils.utility.IntentUtils
 class MainIndexActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (intent?.getBooleanExtra(BaseUtils.CRASH_RESTART_FLAG, false) == true) {
-            Toast.makeText(App.instance, R.string.crash_msg, Toast.LENGTH_SHORT).show()
-        }
+        readIntent()
+        detectActivity()
+    }
+
+    private fun detectActivity() {
         if (intent.flags and Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT != 0) {
             finish()
         } else {
             selectStartActivity()
+        }
+    }
+
+    private fun readIntent() {
+        if (intent?.getBooleanExtra(BaseUtils.CRASH_RESTART_FLAG, false) == true) {
+            Toast.makeText(App.instance, R.string.crash_msg, Toast.LENGTH_SHORT).show()
         }
     }
 

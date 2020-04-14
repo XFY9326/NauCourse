@@ -2,9 +2,11 @@ package tool.xfy9326.naucourse.ui.views.widgets
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import tool.xfy9326.naucourse.R
+import kotlin.math.abs
 import kotlin.properties.Delegates
 
 class AdvancedRecyclerView : RecyclerView {
@@ -12,6 +14,8 @@ class AdvancedRecyclerView : RecyclerView {
         private const val ATTR_DEFAULT_RES_ID = 0
     }
 
+    private var startX = 0f
+    private var startY = 0f
     private var emptyViewResId by Delegates.notNull<Int>()
 
     constructor(context: Context) : super(context)
@@ -60,7 +64,7 @@ class AdvancedRecyclerView : RecyclerView {
         if (firstAdapter) {
             postDelayed({
                 modifyEmptyView()
-            }, 200)
+            }, 300)
         } else {
             modifyEmptyView()
         }
@@ -80,5 +84,29 @@ class AdvancedRecyclerView : RecyclerView {
                 }
             }
         }
+    }
+
+    // 修复ViewPager2滑动冲突
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        when (ev?.action) {
+            MotionEvent.ACTION_DOWN -> {
+                startX = ev.x
+                startY = ev.y
+                parent?.requestDisallowInterceptTouchEvent(true)
+            }
+            MotionEvent.ACTION_MOVE -> {
+                val endX = ev.x
+                val endY = ev.y
+                val disX = abs(endX - startX)
+                val disY = abs(endY - startY)
+                if (disX > disY) {
+                    parent?.requestDisallowInterceptTouchEvent(canScrollHorizontally((startX - endX).toInt()))
+                } else {
+                    parent?.requestDisallowInterceptTouchEvent(canScrollVertically((startY - endY).toInt()))
+                }
+            }
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> parent.requestDisallowInterceptTouchEvent(false)
+        }
+        return super.dispatchTouchEvent(ev)
     }
 }

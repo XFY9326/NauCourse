@@ -31,13 +31,14 @@ import java.util.*
 class NextCourseWidget : AppWidgetProvider() {
     companion object {
         const val ACTION_NEXT_COURSE_WIDGET_UPDATE = "${BuildConfig.APPLICATION_ID}.action.NEXT_COURSE_WIDGET_UPDATE"
+        const val ACTION_NEXT_COURSE_WIDGET_CLEAR = "${BuildConfig.APPLICATION_ID}.action.NEXT_COURSE_WIDGET_CLEAR"
         const val EXTRA_NEXT_COURSE_WIDGET_DATA = "EXTRA_NEXT_COURSE_WIDGET_DATA"
         private const val REQUEST_ON_CLICK_WIDGET_CONTENT = 1
 
         private val DATE_FORMAT_HM = SimpleDateFormat(Constants.Time.FORMAT_MD_HM, Locale.CHINA)
 
-        private fun generateView(context: Context, nextCourseBundle: NextCourseBundle): RemoteViews = when {
-            nextCourseBundle.courseDataEmpty -> RemoteViews(context.packageName, R.layout.widget_next_course_msg).apply {
+        private fun generateView(context: Context, nextCourseBundle: NextCourseBundle?): RemoteViews = when {
+            nextCourseBundle == null || nextCourseBundle.courseDataEmpty -> RemoteViews(context.packageName, R.layout.widget_next_course_msg).apply {
                 setWidgetMsg(context, this, R.string.widget_empty_course_or_term_data, R.drawable.ic_data)
                 setContentClickIntent(context, this)
             }
@@ -113,8 +114,8 @@ class NextCourseWidget : AppWidgetProvider() {
         goAsync {
             LogUtils.d<NextCourseWidget>("Next Course Widget Update (Without Data)")
             // 数据刷新（无传入数据）
-            ExtraCourseUtils.getLocalCourseData()?.let {
-                val nextCourseBundle = ExtraCourseUtils.getNextCourseInfo(it.first, it.second, it.third)
+            ExtraCourseUtils.getLocalCourseData().let {
+                val nextCourseBundle = ExtraCourseUtils.getNextCourseInfo(it?.first, it?.second, it?.third)
                 appWidgetManager.updateAppWidget(appWidgetIds, generateView(context, nextCourseBundle))
                 NextCourseBundleStore.saveStore(nextCourseBundle)
             }
@@ -123,14 +124,19 @@ class NextCourseWidget : AppWidgetProvider() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         context?.let {
+            val componentName = ComponentName(it, NextCourseWidget::class.java)
             if (intent?.action == ACTION_NEXT_COURSE_WIDGET_UPDATE) {
                 goAsync {
                     LogUtils.d<NextCourseWidget>("Next Course Widget Update (With Data)")
                     // 数据刷新（有传入数据）
                     val nextCourseBundle = intent.getSerializableExtra(EXTRA_NEXT_COURSE_WIDGET_DATA) as NextCourseBundle
-                    val componentName = ComponentName(it, NextCourseWidget::class.java)
                     AppWidgetManager.getInstance(it).updateAppWidget(componentName, generateView(it, nextCourseBundle))
                     NextCourseBundleStore.saveStore(nextCourseBundle)
+                }
+            } else if (intent?.action == ACTION_NEXT_COURSE_WIDGET_CLEAR) {
+                goAsync {
+                    AppWidgetManager.getInstance(it).updateAppWidget(componentName, generateView(it, null))
+                    NextCourseBundleStore.clearStore()
                 }
             }
         }

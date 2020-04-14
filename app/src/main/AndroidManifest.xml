@@ -145,6 +145,7 @@
                 <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="${ApplicationId}.action.NEXT_COURSE_WIDGET_UPDATE" />
+                <action android:name="${ApplicationId}.action.NEXT_COURSE_WIDGET_CLEAR" />
             </intent-filter>
 
             <meta-data

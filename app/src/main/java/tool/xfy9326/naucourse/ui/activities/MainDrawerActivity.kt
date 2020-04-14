@@ -143,7 +143,8 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         })
         viewModel.logoutSuccess.observeNotification(this, {
             FullScreenLoadingDialog.close(supportFragmentManager)
-            BaseUtils.restartApplication(this)
+            BaseUtils.restartApplication()
+            finish()
         })
         // 需要Activity在后台时也监听夜间模式设定变化，防止延迟的界面更新
         tryRemoveNightModeObserver()

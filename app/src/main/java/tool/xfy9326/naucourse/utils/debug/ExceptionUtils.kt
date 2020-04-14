@@ -1,6 +1,5 @@
 package tool.xfy9326.naucourse.utils.debug
 
-import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.BuildConfig
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
@@ -43,9 +42,9 @@ object ExceptionUtils : Thread.UncaughtExceptionHandler {
             if (recordThisCrash()) {
                 if (DebugIOUtils.FORCE_DEBUG_ON || GLOBAL_THROWS_SAVE_ON) {
                     saveError(getStackTraceString(e))
-                    BaseUtils.restartApplication(App.instance, true)
+                    BaseUtils.restartApplication(true)
                 } else {
-                    BaseUtils.restartApplication(App.instance, true)
+                    BaseUtils.restartApplication(true)
                 }
             } else {
                 exceptionHandler?.uncaughtException(t, e)

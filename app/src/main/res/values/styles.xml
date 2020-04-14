@@ -107,6 +107,11 @@
     <style name="AppTheme.AppWidgetNextCourse" parent="AppTheme.SelectableItemBackground">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">70dp</item>
+    </style>
+
+    <style name="AppTheme.AppWidgetNextCourse.Inside" parent="AppTheme.SelectableItemBackground">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:alpha">0.7</item>
         <item name="android:background">@drawable/bg_app_widget</item>
         <item name="android:paddingStart">20dp</item>

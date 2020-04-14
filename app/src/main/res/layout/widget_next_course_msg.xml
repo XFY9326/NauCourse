@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout_widgetNextCourse"
-    style="@style/AppTheme.AppWidgetNextCourse"
-    android:gravity="center"
-    android:orientation="horizontal"
-    tools:ignore="UseCompoundDrawables">
+    style="@style/AppTheme.AppWidgetNextCourse">
 
-    <ImageView
-        android:id="@+id/iv_widgetIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:ignore="ContentDescription" />
+    <LinearLayout
+        android:id="@+id/layout_widgetNextCourse"
+        style="@style/AppTheme.AppWidgetNextCourse.Inside"
+        android:gravity="center"
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
 
-    <TextView
-        android:id="@+id/tv_widgetMsg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="15dp"
-        android:paddingEnd="15dp"
-        android:textColor="@color/colorSecondaryText"
-        android:textSize="13sp" />
+        <ImageView
+            android:id="@+id/iv_widgetIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="ContentDescription" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/tv_widgetMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:textColor="@color/colorSecondaryText"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+</FrameLayout>

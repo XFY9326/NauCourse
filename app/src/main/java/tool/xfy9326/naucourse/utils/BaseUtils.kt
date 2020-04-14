@@ -2,13 +2,13 @@ package tool.xfy9326.naucourse.utils
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.IBinder
 import android.util.TypedValue
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatDelegate
 import okhttp3.internal.toHexString
+import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import java.util.*
 import kotlin.system.exitProcess
@@ -60,13 +60,13 @@ object BaseUtils {
             SettingsPref.NightModeType.DISABLED -> AppCompatDelegate.MODE_NIGHT_NO
         }
 
-    fun restartApplication(context: Context, crashRestart: Boolean = false) {
-        val packageManager: PackageManager = context.applicationContext.packageManager
-        val intent = packageManager.getLaunchIntentForPackage(context.packageName)!!
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        if (crashRestart) intent.putExtra(CRASH_RESTART_FLAG, true)
-        context.applicationContext.startActivity(intent)
-        exitProcess(0)
+    fun restartApplication(crashRestart: Boolean = false) {
+        val intent = App.instance.packageManager.getLaunchIntentForPackage(App.instance.packageName)!!.apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            if (crashRestart) putExtra(CRASH_RESTART_FLAG, true)
+        }
+        App.instance.startActivity(intent)
+        if (crashRestart) exitProcess(0)
     }
 
     fun hideKeyboard(context: Context, windowToken: IBinder) =

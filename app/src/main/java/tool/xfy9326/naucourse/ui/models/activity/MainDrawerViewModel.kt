@@ -14,6 +14,7 @@ import tool.xfy9326.naucourse.ui.activities.MainDrawerActivity
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourse.utils.debug.LogUtils
 import tool.xfy9326.naucourse.utils.secure.AccountUtils
+import tool.xfy9326.naucourse.utils.utility.AppWidgetUtils
 
 class MainDrawerViewModel : BaseViewModel() {
     private var hasInitFragmentShow = false
@@ -90,6 +91,7 @@ class MainDrawerViewModel : BaseViewModel() {
 
             LoginNetworkManager.clearAllCacheAndCookies()
             AccountUtils.clearAllUserData()
+            AppWidgetUtils.clearWidget()
 
             logoutSuccess.notifyEvent()
         }

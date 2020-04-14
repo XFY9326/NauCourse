@@ -11,7 +11,6 @@ import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.providers.info.methods.CourseInfo
 import tool.xfy9326.naucourse.providers.info.methods.TermDateInfo
 import tool.xfy9326.naucourse.utils.debug.LogUtils
-import tool.xfy9326.naucourse.utils.utility.AppWidgetUtils
 
 object ExtraCourseUtils {
     suspend fun getLocalCourseData() = supervisorScope {
@@ -41,13 +40,13 @@ object ExtraCourseUtils {
         if (termDateInfo.isSuccess) {
             termDateData = termDateInfo.data!!
         } else {
-            LogUtils.d<AppWidgetUtils>("Term Date Get Error! Reason: ${termDateInfo.errorReason}")
+            LogUtils.d<ExtraCourseUtils>("Term Date Get Error! Reason: ${termDateInfo.errorReason}")
         }
 
         if (termDateInfo.isSuccess && courseInfo.isSuccess) {
             courseData = courseInfo.data
         } else if (!courseInfo.isSuccess) {
-            LogUtils.d<AppWidgetUtils>("Course Data Get Error! Reason: ${courseInfo.errorReason}")
+            LogUtils.d<ExtraCourseUtils>("Course Data Get Error! Reason: ${courseInfo.errorReason}")
         }
 
         if (courseData != null && termDateData != null) {
@@ -70,9 +69,9 @@ object ExtraCourseUtils {
             }
         }
 
-    suspend fun getNextCourseInfo(courseSet: CourseSet, termDate: TermDate, styleList: Array<CourseCellStyle>) =
+    suspend fun getNextCourseInfo(courseSet: CourseSet?, termDate: TermDate?, styleList: Array<CourseCellStyle>?) =
         supervisorScope {
-            return@supervisorScope if (!courseSet.hasCourse) {
+            return@supervisorScope if (courseSet == null || termDate == null || styleList == null || !courseSet.hasCourse) {
                 NextCourseBundle()
             } else if (termDate.inVacation) {
                 NextCourseBundle(true)
