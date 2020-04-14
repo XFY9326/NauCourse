@@ -10,7 +10,6 @@ import tool.xfy9326.naucourse.network.clients.base.LoginInfo
 import tool.xfy9326.naucourse.network.clients.base.LoginResponse
 import tool.xfy9326.naucourse.network.tools.NetworkTools
 import tool.xfy9326.naucourse.network.tools.NetworkTools.Companion.hasSameHost
-import tool.xfy9326.naucourse.utils.debug.LogUtils
 import java.io.IOException
 
 // http://sso.nau.edu.cn
@@ -176,26 +175,5 @@ open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = nu
             url(loginUrl)
         }.build())
 
-    final override fun newAutoLoginCall(request: Request): Response {
-        val response = newClientCall(request)
-        val url = response.request.url
-        val content = NetworkTools.getResponseContent(response)
-        return if (validateLoginWithResponse(content, url)) {
-            if (validateNotInLoginPage(content)) {
-                response
-            } else {
-                response.closeQuietly()
-                newClientCall(request)
-            }
-        } else {
-            val result = if (url.hasSameHost(SSO_HOST) || SSO_LOGIN_PAGE_STR in content) {
-                login(response)
-            } else {
-                login()
-            }
-            response.closeQuietly()
-            if (!result.isSuccess) LogUtils.d<SSOClient>("Auto Login Failed! Reason: ${result.loginErrorReason}")
-            newClientCall(request)
-        }
-    }
+    override fun validateUseResponseToLogin(url: HttpUrl, content: String) = url.hasSameHost(SSO_HOST) || SSO_LOGIN_PAGE_STR in content
 }

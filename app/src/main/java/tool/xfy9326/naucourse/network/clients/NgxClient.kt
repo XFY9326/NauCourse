@@ -11,7 +11,6 @@ import tool.xfy9326.naucourse.network.clients.base.LoginInfo
 import tool.xfy9326.naucourse.network.clients.base.LoginResponse
 import tool.xfy9326.naucourse.network.tools.NetworkTools
 import tool.xfy9326.naucourse.network.tools.NetworkTools.Companion.hasSameHost
-import tool.xfy9326.naucourse.utils.debug.LogUtils
 
 // http://ngx.nau.edu.cn
 open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null) : BaseLoginClient(loginInfo) {
@@ -83,7 +82,7 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
 
     override fun getNetworkClient(): OkHttpClient = okHttpClient
 
-    override fun login(beforeLoginResponse: Response): LoginResponse {
+    final override fun login(beforeLoginResponse: Response): LoginResponse {
         val responseUrl = beforeLoginResponse.request.url
         val responseContent = beforeLoginResponse.body?.string()!!
         beforeLoginResponse.closeQuietly()
@@ -105,21 +104,9 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
                     val content = it.body?.string()!!
                     return if (isFromPathLogin) {
                         when {
-                            url.hasSameHost(fromUrl) -> {
-                                LoginResponse(true, url, content)
-                            }
-                            url.hasSameHost(NGX_HOST) -> {
-                                LoginResponse(
-                                    false,
-                                    loginErrorReason = getLoginStatus(content)
-                                )
-                            }
-                            else -> {
-                                LoginResponse(
-                                    false,
-                                    loginErrorReason = LoginResponse.ErrorReason.SERVER_ERROR
-                                )
-                            }
+                            url.hasSameHost(fromUrl) -> LoginResponse(true, url, content)
+                            url.hasSameHost(NGX_HOST) -> LoginResponse(false, loginErrorReason = getLoginStatus(content))
+                            else -> LoginResponse(false, loginErrorReason = LoginResponse.ErrorReason.SERVER_ERROR)
                         }
                     } else {
                         val status = getLoginStatus(content)
@@ -168,26 +155,5 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
             url(loginUrl)
         }.build())
 
-    final override fun newAutoLoginCall(request: Request): Response {
-        val response = newClientCall(request)
-        val url = response.request.url
-        val content = NetworkTools.getResponseContent(response)
-        return if (validateLoginWithResponse(content, url)) {
-            if (validateNotInLoginPage(content)) {
-                response
-            } else {
-                response.closeQuietly()
-                newClientCall(request)
-            }
-        } else {
-            val result = if (url.hasSameHost(NGX_HOST) || LOGIN_PAGE_STR in content) {
-                login(response)
-            } else {
-                login()
-            }
-            response.closeQuietly()
-            if (!result.isSuccess) LogUtils.d<NgxClient>("Auto Login Failed! Reason: ${result.loginErrorReason}")
-            newClientCall(request)
-        }
-    }
+    override fun validateUseResponseToLogin(url: HttpUrl, content: String) = url.hasSameHost(NGX_HOST) || LOGIN_PAGE_STR in content
 }

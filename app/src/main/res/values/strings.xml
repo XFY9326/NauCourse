@@ -211,7 +211,7 @@
     <string name="night_mode_auto">跟随系统设置</string>
     <string name="night_mode_enabled">开启夜间模式</string>
     <string name="night_mode_disabled">关闭夜间模式</string>
-    <string name="course_table_round_compat">课程表圆角适配</string>
+    <string name="course_table_round_compat">课程表屏幕圆角适配</string>
     <string name="course_table_round_compat_sum">防止圆角屏幕设备上部分内容被遮挡</string>
     <string name="ui">界面</string>
     <string name="more">more</string>

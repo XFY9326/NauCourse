@@ -3,11 +3,15 @@ package tool.xfy9326.naucourse.network.clients.base
 import okhttp3.HttpUrl
 import okhttp3.Request
 import okhttp3.Response
+import okhttp3.internal.closeQuietly
 import org.jsoup.HttpStatusException
+import tool.xfy9326.naucourse.network.tools.NetworkTools
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
+import tool.xfy9326.naucourse.utils.debug.LogUtils
 import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
+import java.util.concurrent.locks.ReentrantLock
 
 /**
  * 基础网络客户端
@@ -15,6 +19,7 @@ import java.net.SocketTimeoutException
  * @param loginInfo 登录信息
  */
 abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkClient() {
+    private val loginLock = ReentrantLock()
 
     fun setLoginInfo(loginInfo: LoginInfo) {
         this.loginInfo = loginInfo
@@ -30,7 +35,7 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
 
     /**
      * 登录
-     *（会主动请求一次SSO页面获取登录参数）
+     *（会主动请求一次页面获取登录参数）
      * @return 登录状态
      */
     @Synchronized
@@ -88,7 +93,43 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
      * @param request 请求
      * @return 响应
      */
-    abstract fun newAutoLoginCall(request: Request): Response
+    fun newAutoLoginCall(request: Request): Response {
+        val response = newClientCall(request)
+        val url = response.request.url
+        val content = NetworkTools.getResponseContent(response)
+        return if (validateLoginWithResponse(content, url)) {
+            if (validateNotInLoginPage(content)) {
+                response
+            } else {
+                response.closeQuietly()
+                newClientCall(request)
+            }
+        } else {
+            if (loginLock.tryLock()) {
+                try {
+                    val result = if (validateUseResponseToLogin(url, content)) {
+                        login(response)
+                    } else {
+                        login()
+                    }
+                    response.closeQuietly()
+                    if (!result.isSuccess) LogUtils.d<BaseLoginClient>("Auto Login Failed! Reason: ${result.loginErrorReason}")
+                } finally {
+                    loginLock.unlock()
+                }
+                newClientCall(request)
+            } else {
+                response.closeQuietly()
+
+                loginLock.lock()
+                loginLock.unlock()
+
+                newAutoLoginCall(request)
+            }
+        }
+    }
+
+    abstract fun validateUseResponseToLogin(url: HttpUrl, content: String): Boolean
 
     protected open fun validateNotInLoginPage(responseContent: String): Boolean = true
 
