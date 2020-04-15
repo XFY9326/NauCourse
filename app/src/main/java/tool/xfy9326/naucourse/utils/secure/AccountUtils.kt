@@ -9,7 +9,7 @@ import tool.xfy9326.naucourse.io.db.room.JwcDB
 import tool.xfy9326.naucourse.io.db.room.NetworkDB
 import tool.xfy9326.naucourse.io.prefs.*
 import tool.xfy9326.naucourse.utils.io.BaseIOUtils
-import tool.xfy9326.naucourse.utils.utility.ImageUriUtils
+import tool.xfy9326.naucourse.utils.utility.ImageUtils
 
 object AccountUtils {
     fun validateUserLoginStatus(): Boolean = UserPref.HasLogin
@@ -36,8 +36,8 @@ object AccountUtils {
         BaseIOUtils.deleteFile(App.instance.filesDir.absolutePath)
         BaseIOUtils.deleteFile(App.instance.codeCacheDir.absolutePath)
 
-        ImageUriUtils.clearLocalImageBySubDir(Constants.Image.DIR_NEWS_DETAIL_IMAGE)
-        ImageUriUtils.clearLocalImageBySubDir(Constants.Image.DIR_APP_IMAGE)
+        ImageUtils.clearLocalImageBySubDir(Constants.Image.DIR_NEWS_DETAIL_IMAGE)
+        ImageUtils.clearLocalImageBySubDir(Constants.Image.DIR_APP_IMAGE)
 
         AppDB.getDB().clearAll()
         CoursesDB.getDB().clearAll()

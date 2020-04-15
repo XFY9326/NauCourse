@@ -7,6 +7,7 @@ import android.os.IBinder
 import android.util.TypedValue
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatDelegate
+import kotlinx.coroutines.sync.Mutex
 import okhttp3.internal.toHexString
 import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
@@ -51,6 +52,16 @@ object BaseUtils {
             result[i] = (tmp.toInt(16) and 0xFF).toByte()
         }
         return result
+    }
+
+    inline fun Mutex.tryWithLock(owner: Any? = null, action: () -> Unit) {
+        if (tryLock(owner)) {
+            try {
+                action()
+            } finally {
+                unlock(owner)
+            }
+        }
     }
 
     fun getNightModeInt(type: SettingsPref.NightModeType) =

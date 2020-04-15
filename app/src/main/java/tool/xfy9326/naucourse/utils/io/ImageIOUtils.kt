@@ -5,7 +5,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
-import tool.xfy9326.naucourse.utils.utility.ImageUriUtils
+import tool.xfy9326.naucourse.utils.utility.ImageUtils
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -43,7 +43,7 @@ object ImageIOUtils {
                 return result
             }
         } catch (e: Exception) {
-            ExceptionUtils.printStackTrace<ImageUriUtils>(e)
+            ExceptionUtils.printStackTrace<ImageUtils>(e)
         }
         return false
     }

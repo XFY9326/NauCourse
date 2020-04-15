@@ -36,8 +36,9 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
         viewModel.imageOperation.observeEvent(this, Observer {
             ActivityUtils.showSnackBar(layout_schoolCalendar, I18NUtils.getImageOperationTypeResId(it))
         })
-        viewModel.calendarImage.observeEvent(this, Observer {
-            if (it != null) setImageView(it)
+        viewModel.calendarImage.observeEventWithCheck(this, {
+            setImageView(it)
+            true
         })
         viewModel.calendarList.observeEvent(this, Observer {
             showCalendarList(it)
@@ -121,10 +122,5 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
 
         pv_calendarImage.visibility = View.GONE
         pb_calendarLoading.show()
-    }
-
-    override fun onDestroy() {
-        getViewModel().calendarImage.setEventValue(null)
-        super.onDestroy()
     }
 }

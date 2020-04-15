@@ -1,11 +1,14 @@
 package tool.xfy9326.naucourse.beans
 
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
+import tool.xfy9326.naucourse.ui.views.table.CourseTableStyle
 
 data class CoursePkg(
     val termDate: TermDate,
     val courseTable: CourseTable,
-    val styles: Array<CourseCellStyle>
+    val styles: Array<CourseCellStyle>,
+    val courseTableStyle: CourseTableStyle,
+    val showWeekDaySize: Int
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

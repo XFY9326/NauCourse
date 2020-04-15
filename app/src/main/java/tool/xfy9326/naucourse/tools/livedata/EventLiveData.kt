@@ -15,6 +15,10 @@ open class EventLiveData<T> : MutableLiveData<Event<T>> {
         super.postValue(Event(value))
     }
 
+    fun postCheckEventValue(value: T) {
+        super.postValue(Event(value, true))
+    }
+
     fun setEventValue(value: T) {
         super.setValue(Event(value))
     }

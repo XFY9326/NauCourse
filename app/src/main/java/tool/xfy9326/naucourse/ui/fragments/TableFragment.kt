@@ -18,11 +18,12 @@ import kotlinx.coroutines.withContext
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CoursePkg
 import tool.xfy9326.naucourse.ui.models.fragment.CourseTableViewModel
-import tool.xfy9326.naucourse.ui.views.table.CourseTableStyle
 import tool.xfy9326.naucourse.ui.views.table.CourseTableViewHelper
 import tool.xfy9326.naucourse.ui.views.viewpager.CourseTableViewPagerAdapter
-import tool.xfy9326.naucourse.utils.courses.CourseUtils
+import tool.xfy9326.naucourse.utils.BaseUtils.tryWithLock
+import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
+import tool.xfy9326.naucourse.utils.views.ViewUtils.runInMain
 import kotlin.properties.Delegates
 
 class TableFragment : Fragment() {
@@ -36,6 +37,10 @@ class TableFragment : Fragment() {
         super.onCreate(savedInstanceState)
         weekNum = arguments?.getInt(CourseTableViewPagerAdapter.COURSE_TABLE_WEEK_NUM)!!
         contentViewModel = ViewModelProvider(requireParentFragment())[CourseTableViewModel::class.java]
+
+        if (savedInstanceState == null) {
+            contentViewModel.requestCourseTable(weekNum, coursePkgHash)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -50,12 +55,7 @@ class TableFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         gl_courseTable?.layoutTransition?.setAnimateParentHierarchy(false)
-
         bindObserver()
-        if (savedInstanceState == null) {
-            contentViewModel.requestCourseTable(weekNum, coursePkgHash)
-        }
-        super.onViewCreated(view, savedInstanceState)
     }
 
     private fun bindObserver() {
@@ -67,11 +67,8 @@ class TableFragment : Fragment() {
                 showToast(requireContext(), R.string.course_and_term_data_empty)
             }, "${TableFragment::class.java.simpleName}-$weekNum")
             courseTableRebuild.observeNotification(viewLifecycleOwner, {
-                val temp = courseTablePkg[weekNum - 1].value
-                if (temp != null) {
-                    lifecycleScope.launch(Dispatchers.Default) {
-                        buildCourseTableView(temp, getCourseTableStyle())
-                    }
+                courseTablePkg[weekNum - 1].value?.let {
+                    startBuildTable(it)
                 }
             }, "${TableFragment::class.java.simpleName}-$weekNum")
         }
@@ -79,47 +76,47 @@ class TableFragment : Fragment() {
 
     private fun startBuildTable(coursePkg: CoursePkg) {
         lifecycleScope.launch(Dispatchers.Default) {
-            buildCourseTableView(coursePkg, contentViewModel.getCourseTableStyle())
+            buildCourseTableView(coursePkg)
             coursePkgHash = coursePkg.hashCode()
         }
     }
 
-    private suspend fun buildCourseTableView(coursePkg: CoursePkg, courseTableStyle: CourseTableStyle) =
+    private suspend fun buildCourseTableView(coursePkg: CoursePkg) =
         withContext(Dispatchers.Default) {
-            if (courseUpdateLock.tryLock()) {
-                try {
-                    val showWeekend = courseTableStyle.forceShowCourseTableWeekends || CourseUtils.hasWeekendCourse(coursePkg.courseTable)
-                    val showWeekDaySize = CourseTableViewHelper.getShowWeekDaySize(showWeekend)
-                    val columnSize = showWeekDaySize + 1
+            courseUpdateLock.tryWithLock {
+                val columnSize = coursePkg.showWeekDaySize + 1
 
-                    val table = async {
-                        CourseTableViewHelper.buildCourseTable(
-                            requireContext(), coursePkg,
-                            requireContext().resources.displayMetrics.widthPixels, columnSize, courseTableStyle
+                val table = async {
+                    CourseTableViewHelper.buildCourseTable(requireContext(), coursePkg, resources.displayMetrics.widthPixels, columnSize)
+                }
+
+                val dateInfo = TimeUtils.getWeekNumDateArray(coursePkg.termDate, weekNum)
+
+                val headerAsync = if (layout_courseTableHeader != null) {
+                    async {
+                        CourseTableViewHelper.buildCourseTableHeader(
+                            requireContext(),
+                            coursePkg.showWeekDaySize,
+                            dateInfo,
+                            layout_courseTableHeader,
+                            coursePkg.courseTableStyle
                         )
                     }
-                    val header = if (layout_courseTableHeader != null) {
-                        async {
-                            CourseTableViewHelper.buildCourseTableHeader(
-                                requireContext(),
-                                coursePkg.termDate,
-                                weekNum,
-                                showWeekDaySize,
-                                layout_courseTableHeader,
-                                courseTableStyle
-                            )
-                        }
-                    } else {
-                        null
-                    }
+                } else {
+                    null
+                }
 
-                    if (gl_courseTable != null) {
-                        CourseTableViewHelper.applyViewToCourseTable(gl_courseTable, table.await(), columnSize, courseTableStyle)
-                    }
+                gl_courseTable?.runInMain {
+                    CourseTableViewHelper.applyViewToCourseTable(it, table.await(), columnSize, coursePkg.courseTableStyle)
+                }
 
-                    header?.await()
-                } finally {
-                    courseUpdateLock.unlock()
+                headerAsync?.await()?.let { views ->
+                    layout_courseTableHeader.runInMain {
+                        CourseTableViewHelper.applyViewToCourseTableHeader(
+                            requireContext(), it,
+                            views, dateInfo, coursePkg.courseTableStyle
+                        )
+                    }
                 }
             }
         }

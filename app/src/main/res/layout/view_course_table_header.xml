@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginEnd="@dimen/course_cell_padding_half"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:minHeight="@dimen/course_table_header_min_height">
 
     <FrameLayout
         android:layout_width="@dimen/course_table_course_time_row_size"

@@ -22,10 +22,11 @@ import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourse.ui.views.table.CourseTableStyle
 import tool.xfy9326.naucourse.ui.views.table.CourseTableViewHelper
+import tool.xfy9326.naucourse.utils.BaseUtils.tryWithLock
 import tool.xfy9326.naucourse.utils.courses.CourseUtils
 import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import tool.xfy9326.naucourse.utils.debug.LogUtils
-import tool.xfy9326.naucourse.utils.utility.ImageUriUtils
+import tool.xfy9326.naucourse.utils.utility.BitmapUtils
 import tool.xfy9326.naucourse.utils.utility.ImageUtils
 import java.lang.ref.WeakReference
 import kotlin.math.min
@@ -159,10 +160,14 @@ class CourseTableViewModel : BaseViewModel() {
 
     private fun getCoursePkg(weekNum: Int) =
         if (::termDate.isInitialized && ::courseTableArr.isInitialized && ::courseSet.isInitialized) {
+            val table = courseTableArr[weekNum - 1]
+            val style = getCourseTableStyle()
             val pkg = CoursePkg(
                 termDate,
-                courseTableArr[weekNum - 1],
-                CourseCellStyleDBHelper.loadCourseCellStyle(courseSet)
+                table,
+                CourseCellStyleDBHelper.loadCourseCellStyle(courseSet),
+                style,
+                CourseTableViewHelper.getShowWeekDaySize(table, style)
             )
 
             pkg
@@ -170,7 +175,9 @@ class CourseTableViewModel : BaseViewModel() {
             val pkg = CoursePkg(
                 termDate,
                 CourseTable(emptyArray()),
-                emptyArray()
+                emptyArray(),
+                getCourseTableStyle(),
+                CourseTableViewHelper.getShowWeekDaySize(false)
             )
             LogUtils.i<CourseTableViewModel>("Init Empty Course Data For Week: $weekNum!")
             pkg
@@ -352,37 +359,33 @@ class CourseTableViewModel : BaseViewModel() {
     }
 
     private suspend fun asyncCourseTable() = withContext(Dispatchers.Default) {
-        if (courseTableAsyncLock.tryLock()) {
-            try {
-                val termInfo = TermDateInfo.getInfo()
-                if (termInfo.isSuccess) {
-                    val termNeedUpdate = if (::termDate.isInitialized) {
-                        termDate != termInfo.data!!
-                    } else {
-                        true
-                    }
-                    if (termNeedUpdate) {
-                        val courseInfo = CourseInfo.getInfo(CourseInfo.OperationType.ASYNC_COURSE)
-                        if (courseInfo.isSuccess) {
-                            val courseDataNeedUpdate = if (::courseSet.isInitialized) {
-                                courseSet != courseInfo.data!!
-                            } else {
-                                true
-                            }
-                            if (courseDataNeedUpdate) {
-                                val styles = CourseCellStyleDBHelper.loadCourseCellStyle(courseInfo.data!!)
-                                updateCourseData(courseInfo.data, termInfo.data!!, styles)
-                                NotifyBus[NotifyBus.Type.COURSE_ASYNC_UPDATE].notifyEvent()
-                            }
-                        } else {
-                            LogUtils.d<CourseTableViewModel>("CourseInfo Async Error: ${courseInfo.errorReason}")
-                        }
-                    }
+        courseTableAsyncLock.tryWithLock {
+            val termInfo = TermDateInfo.getInfo()
+            if (termInfo.isSuccess) {
+                val termNeedUpdate = if (::termDate.isInitialized) {
+                    termDate != termInfo.data!!
                 } else {
-                    LogUtils.d<CourseTableViewModel>("Term Date Async Error: ${termInfo.errorReason}")
+                    true
                 }
-            } finally {
-                courseTableAsyncLock.unlock()
+                if (termNeedUpdate) {
+                    val courseInfo = CourseInfo.getInfo(CourseInfo.OperationType.ASYNC_COURSE)
+                    if (courseInfo.isSuccess) {
+                        val courseDataNeedUpdate = if (::courseSet.isInitialized) {
+                            courseSet != courseInfo.data!!
+                        } else {
+                            true
+                        }
+                        if (courseDataNeedUpdate) {
+                            val styles = CourseCellStyleDBHelper.loadCourseCellStyle(courseInfo.data!!)
+                            updateCourseData(courseInfo.data, termInfo.data!!, styles)
+                            NotifyBus[NotifyBus.Type.COURSE_ASYNC_UPDATE].notifyEvent()
+                        }
+                    } else {
+                        LogUtils.d<CourseTableViewModel>("CourseInfo Async Error: ${courseInfo.errorReason}")
+                    }
+                }
+            } else {
+                LogUtils.d<CourseTableViewModel>("Term Date Async Error: ${termInfo.errorReason}")
             }
         }
     }
@@ -392,12 +395,16 @@ class CourseTableViewModel : BaseViewModel() {
             courseTableArr =
                 CourseUtils.generateAllCourseTable(courseSet, termDate, TimeUtils.getWeekLength(termDate))
             if (postValue) {
+                val style = getCourseTableStyle()
                 for (i in 0 until min(courseTablePkg.size, courseTableArr.size)) {
+                    val table = courseTableArr[i]
                     courseTablePkg[i].postValue(
                         CoursePkg(
                             termDate,
-                            courseTableArr[i],
-                            CourseCellStyleDBHelper.loadCourseCellStyle(courseSet)
+                            table,
+                            CourseCellStyleDBHelper.loadCourseCellStyle(courseSet),
+                            style,
+                            CourseTableViewHelper.getShowWeekDaySize(table, style)
                         )
                     )
                 }
@@ -405,7 +412,7 @@ class CourseTableViewModel : BaseViewModel() {
         }
     }
 
-    fun getCourseTableStyle() = synchronized(courseTableStyleLock) {
+    private fun getCourseTableStyle() = synchronized(courseTableStyleLock) {
         if (courseTableStyle == null) {
             courseTableStyle = CourseTableViewHelper.getCourseTableStyle()
         }
@@ -420,7 +427,7 @@ class CourseTableViewModel : BaseViewModel() {
     fun requestCourseTableBackground() {
         viewModelScope.launch(Dispatchers.IO) {
             if (SettingsPref.CustomCourseTableBackground) {
-                val backgroundBitmap = ImageUriUtils.readLocalImage(Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE)
+                val backgroundBitmap = ImageUtils.readLocalImage(Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE)
                 courseTableBackground.postValue(backgroundBitmap)
             } else {
                 courseTableBackground.postValue(null)
@@ -440,7 +447,7 @@ class CourseTableViewModel : BaseViewModel() {
                 } else {
                     weakContext.get()?.let {
                         CourseTableViewHelper.drawCourseTableImage(it, pkg, weekNum, targetWidth, getCourseTableStyle()).let { bitmap ->
-                            ImageUtils.drawDefaultWaterPrint(it, bitmap)
+                            BitmapUtils.drawDefaultWaterPrint(it, bitmap)
                             shareCourseTable(bitmap)
                         }
                     }
@@ -450,7 +457,7 @@ class CourseTableViewModel : BaseViewModel() {
     }
 
     private suspend fun shareCourseTable(bitmap: Bitmap) = withContext(Dispatchers.IO) {
-        val uri = ImageUriUtils.createImageShareTemp(null, bitmap, true)
+        val uri = ImageUtils.createImageShareTemp(null, bitmap, true)
         if (uri == null) {
             imageOperation.postEventValue(ImageOperationType.IMAGE_SHARE_FAILED)
         } else {

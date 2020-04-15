@@ -19,6 +19,7 @@ import tool.xfy9326.naucourse.tools.NotifyBus
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
+import tool.xfy9326.naucourse.utils.BaseUtils.tryWithLock
 import tool.xfy9326.naucourse.utils.courses.CourseStyleUtils
 import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import tool.xfy9326.naucourse.utils.debug.LogUtils
@@ -103,21 +104,17 @@ class CourseManageViewModel : BaseViewModel() {
 
     fun importCourse(type: ImportCourseType) {
         viewModelScope.launch(Dispatchers.Default) {
-            if (importLock.tryLock()) {
-                try {
-                    val operationType = when (type) {
-                        ImportCourseType.CURRENT_TERM -> CourseInfo.OperationType.THIS_TERM_COURSE
-                        ImportCourseType.NEXT_TERM -> CourseInfo.OperationType.NEXT_TERM_COURSE
-                    }
-                    val asyncResult = CourseInfo.getInfo(operationType, forceRefresh = true)
-                    if (asyncResult.isSuccess) {
-                        importCourseResult.postEventValue(Pair(asyncResult.data!!, type))
-                    } else {
-                        importCourseResult.postEventValue(null)
-                        LogUtils.d<CourseManageViewModel>("Course Import Failed! Type: $type  Reason: ${asyncResult.errorReason}")
-                    }
-                } finally {
-                    importLock.unlock()
+            importLock.tryWithLock {
+                val operationType = when (type) {
+                    ImportCourseType.CURRENT_TERM -> CourseInfo.OperationType.THIS_TERM_COURSE
+                    ImportCourseType.NEXT_TERM -> CourseInfo.OperationType.NEXT_TERM_COURSE
+                }
+                val asyncResult = CourseInfo.getInfo(operationType, forceRefresh = true)
+                if (asyncResult.isSuccess) {
+                    importCourseResult.postEventValue(Pair(asyncResult.data!!, type))
+                } else {
+                    importCourseResult.postEventValue(null)
+                    LogUtils.d<CourseManageViewModel>("Course Import Failed! Type: $type  Reason: ${asyncResult.errorReason}")
                 }
             }
         }
@@ -125,29 +122,25 @@ class CourseManageViewModel : BaseViewModel() {
 
     fun saveAll(courseSet: CourseSet, styles: Array<CourseCellStyle>, termDate: TermDate) {
         viewModelScope.launch(Dispatchers.Default) {
-            if (saveLock.tryLock()) {
-                try {
-                    CourseInfo.saveNewCourses(courseSet)
-                    CourseCellStyleDBHelper.saveCourseCellStyle(styles)
-                    if (requireCleanTermDate) {
-                        TermDateInfo.clearCustomTermDate()
-                    } else {
-                        val result = TermDateInfo.getInfo(TermDateInfo.TermType.RAW_TERM, loadCache = true)
-                        if (result.isSuccess) {
-                            if (result.data!!.startDate == termDate.startDate && result.data.endDate == termDate.endDate) {
-                                TermDateInfo.clearCustomTermDate()
-                            } else {
-                                TermDateInfo.saveCustomTermDate(termDate)
-                            }
+            saveLock.tryWithLock {
+                CourseInfo.saveNewCourses(courseSet)
+                CourseCellStyleDBHelper.saveCourseCellStyle(styles)
+                if (requireCleanTermDate) {
+                    TermDateInfo.clearCustomTermDate()
+                } else {
+                    val result = TermDateInfo.getInfo(TermDateInfo.TermType.RAW_TERM, loadCache = true)
+                    if (result.isSuccess) {
+                        if (result.data!!.startDate == termDate.startDate && result.data.endDate == termDate.endDate) {
+                            TermDateInfo.clearCustomTermDate()
                         } else {
                             TermDateInfo.saveCustomTermDate(termDate)
                         }
+                    } else {
+                        TermDateInfo.saveCustomTermDate(termDate)
                     }
-                    saveSuccess.notifyEvent()
-                    NotifyBus[NotifyBus.Type.COURSE_STYLE_TERM_UPDATE].notifyEvent()
-                } finally {
-                    saveLock.unlock()
                 }
+                saveSuccess.notifyEvent()
+                NotifyBus[NotifyBus.Type.COURSE_STYLE_TERM_UPDATE].notifyEvent()
             }
         }
     }

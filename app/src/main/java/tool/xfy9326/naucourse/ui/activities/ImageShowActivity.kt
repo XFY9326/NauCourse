@@ -37,12 +37,11 @@ class ImageShowActivity : ViewModelActivity<ImageShowViewModel>(), View.OnLongCl
         viewModel.imageDownloadFailed.observeNotification(this, {
             ActivityUtils.showSnackBar(layout_imageView, R.string.image_load_failed)
         })
-        viewModel.image.observeEvent(this, Observer {
-            if (it != null) {
-                pv_imageView.setImageBitmap(it)
-                pb_imageLoading.hide()
-                pv_imageView.visibility = View.VISIBLE
-            }
+        viewModel.image.observeEventWithCheck(this, {
+            pv_imageView.setImageBitmap(it)
+            pb_imageLoading.hide()
+            pv_imageView.visibility = View.VISIBLE
+            true
         })
     }
 
@@ -72,11 +71,5 @@ class ImageShowActivity : ViewModelActivity<ImageShowViewModel>(), View.OnLongCl
     override fun onBackPressed() {
         finish()
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-    }
-
-    override fun onDestroy() {
-        // 清空Bitmap持有
-        getViewModel().image.setEventValue(null)
-        super.onDestroy()
     }
 }

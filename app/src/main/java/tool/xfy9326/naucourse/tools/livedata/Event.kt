@@ -2,34 +2,46 @@ package tool.xfy9326.naucourse.tools.livedata
 
 import java.util.*
 
-class Event<out T>(private val content: T, private val manuallyCheckHandled: Boolean = false) {
+// manuallyCheckHandled 仅针对空tag有效
+class Event<out T>(content: T, private val manuallyCheckHandled: Boolean = false) {
+    private var container: Container<T>? = Container(content)
     private var hasNullTagBeenHandled = false
 
     // 同一tag只会被消费一次
-    private var hasBeenHandled = Hashtable<String, Boolean>()
+    private val hasBeenHandled = Hashtable<String, Boolean>()
 
     @Synchronized
     fun getContentIfNotHandled(tag: String?): Container<out T>? {
-        return if (tag == null) {
-            if (hasNullTagBeenHandled) {
-                null
+        return if (container != null) {
+            if (tag == null) {
+                if (hasNullTagBeenHandled) {
+                    null
+                } else {
+                    if (!manuallyCheckHandled) {
+                        hasNullTagBeenHandled = true
+                    }
+                    container
+                }
             } else {
-                setNullTagHandled()
-                Container(content)
+                if (hasBeenHandled[tag] == true) {
+                    null
+                } else {
+                    hasBeenHandled[tag] = true
+                    container
+                }
             }
         } else {
-            if (hasBeenHandled[tag] == true) {
-                null
-            } else {
-                hasBeenHandled[tag] = true
-                Container(content)
-            }
+            null
         }
     }
 
     @Synchronized
     fun setNullTagHandled() {
-        if (!manuallyCheckHandled) hasNullTagBeenHandled = true
+        if (manuallyCheckHandled) {
+            hasNullTagBeenHandled = true
+            container = null
+            hasBeenHandled.clear()
+        }
     }
 
     // 防止需要返回null时被当作已经处理

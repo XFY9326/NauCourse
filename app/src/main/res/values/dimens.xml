@@ -26,6 +26,7 @@
     <dimen name="credit_count_course_select_dialog_padding">10dp</dimen>
     <dimen name="water_print_text_size">14dp</dimen>
     <dimen name="water_print_text_padding">10dp</dimen>
+    <dimen name="course_table_header_min_height">35dp</dimen>
 
     <dimen name="preference_seekbar_padding_horizontal" tools:ignore="PrivateResource">10dp</dimen>
 </resources>

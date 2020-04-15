@@ -31,8 +31,8 @@ import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseCell
 import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.beans.CoursePkg
+import tool.xfy9326.naucourse.beans.CourseTable
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
-import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.ui.views.widgets.AdvancedGridLayout
 import tool.xfy9326.naucourse.ui.views.widgets.AdvancedLinearLayout
 import tool.xfy9326.naucourse.ui.views.widgets.CourseCellLayout
@@ -55,6 +55,9 @@ object CourseTableViewHelper {
     private val courseTimeStrArr = Array(TimeUtils.CLASS_TIME_ARR.size) {
         Pair(TimeUtils.CLASS_TIME_ARR[it].getStartTimeStr(), TimeUtils.CLASS_TIME_ARR[it].getEndTimeStr())
     }
+
+    fun getShowWeekDaySize(courseTable: CourseTable, courseTableStyle: CourseTableStyle) =
+        getShowWeekDaySize(courseTableStyle.forceShowCourseTableWeekends || CourseUtils.hasWeekendCourse(courseTable))
 
     fun getShowWeekDaySize(hasWeekendCourse: Boolean) =
         if (hasWeekendCourse) {
@@ -102,22 +105,24 @@ object CourseTableViewHelper {
             val backgroundColor = array.getColor(0, ContextCompat.getColor(context, R.color.colorDefaultBackground))
             array.recycle()
 
-            val showWeekend = compatStyle.forceShowCourseTableWeekends || CourseUtils.hasWeekendCourse(coursePkg.courseTable)
-            val showWeekDaySize = getShowWeekDaySize(showWeekend)
+            val showWeekDaySize = getShowWeekDaySize(coursePkg.courseTable, compatStyle)
             val columnSize = showWeekDaySize + 1
+            val dateInfo = TimeUtils.getWeekNumDateArray(coursePkg.termDate, weekNum)
 
-            val header = async {
-                buildCourseTableHeader(context, coursePkg.termDate, weekNum, showWeekDaySize, it.layout_courseTableHeader, compatStyle)
+            val headerAsync = async {
+                buildCourseTableHeader(context, showWeekDaySize, dateInfo, it.layout_courseTableHeader, compatStyle).apply {
+                    applyViewToCourseTableHeader(context, it.layout_courseTableHeader, this, dateInfo, courseTableStyle)
+                }
             }
 
-            val table = async {
-                buildCourseTable(context, coursePkg, targetWidth, columnSize, compatStyle).apply {
+            val tableAsync = async {
+                buildCourseTable(context, coursePkg, targetWidth, columnSize).apply {
                     applyViewToCourseTable(it.gl_courseTable, this, columnSize, compatStyle)
                 }
             }
 
-            header.await()
-            table.await()
+            headerAsync.await()
+            tableAsync.await()
 
             val widthSpec = View.MeasureSpec.makeMeasureSpec(targetWidth, View.MeasureSpec.AT_MOST)
             val heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
@@ -132,37 +137,36 @@ object CourseTableViewHelper {
         }
     }
 
-    suspend fun applyViewToCourseTable(targetView: AdvancedGridLayout, views: Array<View>, columnSize: Int, courseTableStyle: CourseTableStyle) =
-        withContext(Dispatchers.Main) {
-            if (targetView.childCount != 0) {
-                targetView.removeAllViews()
-            }
-            if (targetView.columnCount != columnSize) {
-                targetView.columnCount = columnSize
-            }
-
-            if (targetView.alpha != courseTableStyle.customCourseTableAlpha) {
-                targetView.alpha = courseTableStyle.customCourseTableAlpha
-            }
-
-            // 增加最后一行用于填充用的Cell
-            val rowMax = DEFAULT_TABLE_HEIGHT_SIZE + 1
-
-            if (targetView.rowCount != rowMax) {
-                targetView.rowCount = rowMax
-            }
-            targetView.replaceAllViews(views)
+    fun applyViewToCourseTable(targetView: AdvancedGridLayout, views: Array<View>, columnSize: Int, courseTableStyle: CourseTableStyle) {
+        if (targetView.childCount != 0) {
+            targetView.removeAllViews()
         }
+        if (targetView.columnCount != columnSize) {
+            targetView.columnCount = columnSize
+        }
+
+        if (targetView.alpha != courseTableStyle.customCourseTableAlpha) {
+            targetView.alpha = courseTableStyle.customCourseTableAlpha
+        }
+
+        // 增加最后一行用于填充用的Cell
+        val rowMax = DEFAULT_TABLE_HEIGHT_SIZE + 1
+
+        if (targetView.rowCount != rowMax) {
+            targetView.rowCount = rowMax
+        }
+        targetView.replaceAllViews(views)
+    }
 
     suspend fun buildCourseTable(
         context: Context,
         coursePkg: CoursePkg,
         targetWidth: Int,
-        columnSize: Int,
-        courseTableStyle: CourseTableStyle
+        columnSize: Int
     ) = withContext(Dispatchers.Default) {
         val courseTable = coursePkg.courseTable
         val styles = coursePkg.styles
+        val courseTableStyle = coursePkg.courseTableStyle
 
         val timeColWidth = context.resources.getDimensionPixelSize(R.dimen.course_table_course_time_row_size)
         val courseColWidth = floor((targetWidth - timeColWidth) * 1f / (columnSize - 1)).toInt()
@@ -458,84 +462,80 @@ object CourseTableViewHelper {
             })
         }
 
+    fun applyViewToCourseTableHeader(
+        context: Context,
+        headerLayout: AdvancedLinearLayout,
+        views: Array<View>,
+        dateInfo: Array<Pair<Int, Int>>,
+        courseTableStyle: CourseTableStyle
+    ) {
+        val defaultTextColor = getDefaultTextColor(context, courseTableStyle)
+        val otherCourseCellBackground = ContextCompat.getColor(context, R.color.colorOtherCourseCellBackground)
+        val backgroundRadius = getBackgroundRadius(context, courseTableStyle)
+
+        if (headerLayout.alpha != courseTableStyle.customCourseTableAlpha) {
+            headerLayout.alpha = courseTableStyle.customCourseTableAlpha
+        }
+
+        if (headerLayout.childCount > 1) {
+            headerLayout.removeViewsInLayout(1, headerLayout.childCount - 1)
+        }
+
+        headerLayout.tv_cellMonth.apply {
+            text = context.getString(R.string.month, dateInfo.first().first)
+            setTextColor(defaultTextColor)
+            background =
+                if (courseTableStyle.drawAllCellBackground) {
+                    buildRadiusDrawable(otherCourseCellBackground, backgroundRadius)
+                } else {
+                    null
+                }
+        }
+        headerLayout.addViewsInLayout(views, true)
+    }
+
     suspend fun buildCourseTableHeader(
         context: Context,
-        termDate: TermDate,
-        weekNum: Int,
         weekDaySize: Int,
+        dateInfo: Array<Pair<Int, Int>>,
         headerLayout: AdvancedLinearLayout,
         courseTableStyle: CourseTableStyle
     ) = withContext(Dispatchers.Default) {
-        context.apply {
-            val layoutInflater = LayoutInflater.from(context)
+        val layoutInflater = LayoutInflater.from(context)
 
-            val weekDayNumStrArr = resources.getStringArray(R.array.weekday_num)
-            val dateInfo = TimeUtils.getWeekNumDateArray(termDate, weekNum)
-            val today = TimeUtils.getTodayDate()
+        val weekDayNumStrArr = context.resources.getStringArray(R.array.weekday_num)
+        val today = TimeUtils.getTodayDate()
 
-            val defaultTextColor =
-                if (courseTableStyle.enableCourseTableTimeTextColor) {
-                    courseTableStyle.courseTableTimeTextColor
-                } else {
-                    ContextCompat.getColor(context, R.color.colorCourseTimeDefault)
-                }
-            val highLightTextColor = ContextCompat.getColor(this, R.color.colorCourseTimeHighLight)
-            val highLightTextColorBackground = ContextCompat.getColor(this, R.color.colorCourseTimeHighLightBackground)
-            val otherCourseCellBackground = ContextCompat.getColor(context, R.color.colorOtherCourseCellBackground)
+        val defaultTextColor = getDefaultTextColor(context, courseTableStyle)
+        val highLightTextColor = ContextCompat.getColor(context, R.color.colorCourseTimeHighLight)
+        val highLightTextColorBackground = ContextCompat.getColor(context, R.color.colorCourseTimeHighLightBackground)
+        val otherCourseCellBackground = ContextCompat.getColor(context, R.color.colorOtherCourseCellBackground)
 
-            val backgroundRadius =
-                if (courseTableStyle.useRoundCornerCourseCell) {
-                    context.resources.getDimensionPixelSize(R.dimen.course_cell_background_radius).toFloat()
-                } else {
-                    0f
-                }
-
-            val views = Array(weekDaySize) {
-                val isToday = if (courseTableStyle.highLightCourseTableTodayDate) {
-                    dateInfo[it] == today
-                } else {
-                    false
-                }
-
-                layoutInflater.inflate(R.layout.view_course_table_date, headerLayout, false).apply {
-                    tv_cellWeekdayNum.text = weekDayNumStrArr[it]
-                    tv_cellDateNum.text = dateInfo[it].second.toString()
-                    if (isToday) {
-                        tv_cellWeekdayNum.setTextColor(highLightTextColor)
-                        tv_cellDateNum.setTextColor(highLightTextColor)
-                        tv_cellWeekdayNum.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
-                        tv_cellDateNum.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
-                        background = buildRadiusDrawable(
-                            highLightTextColorBackground,
-                            context.resources.getDimensionPixelSize(R.dimen.course_date_highlight_background_radius).toFloat()
-                        )
-                    } else {
-                        tv_cellWeekdayNum.setTextColor(defaultTextColor)
-                        tv_cellDateNum.setTextColor(defaultTextColor)
-                        tv_cellWeekdayNum.typeface = Typeface.DEFAULT
-                        tv_cellDateNum.typeface = Typeface.DEFAULT
-                        background =
-                            if (courseTableStyle.drawAllCellBackground) {
-                                buildRadiusDrawable(otherCourseCellBackground, backgroundRadius)
-                            } else {
-                                null
-                            }
-                    }
-                }
+        val backgroundRadius = getBackgroundRadius(context, courseTableStyle)
+        return@withContext Array(weekDaySize) {
+            val isToday = if (courseTableStyle.highLightCourseTableTodayDate) {
+                dateInfo[it] == today
+            } else {
+                false
             }
 
-            launch(Dispatchers.Main) {
-                if (headerLayout.alpha != courseTableStyle.customCourseTableAlpha) {
-                    headerLayout.alpha = courseTableStyle.customCourseTableAlpha
-                }
-
-                if (headerLayout.childCount > 1) {
-                    headerLayout.removeViewsInLayout(1, headerLayout.childCount - 1)
-                }
-
-                headerLayout.tv_cellMonth.apply {
-                    text = getString(R.string.month, dateInfo.first().first)
-                    setTextColor(defaultTextColor)
+            layoutInflater.inflate(R.layout.view_course_table_date, headerLayout, false).apply {
+                tv_cellWeekdayNum.text = weekDayNumStrArr[it]
+                tv_cellDateNum.text = dateInfo[it].second.toString()
+                if (isToday) {
+                    tv_cellWeekdayNum.setTextColor(highLightTextColor)
+                    tv_cellDateNum.setTextColor(highLightTextColor)
+                    tv_cellWeekdayNum.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
+                    tv_cellDateNum.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
+                    background = buildRadiusDrawable(
+                        highLightTextColorBackground,
+                        context.resources.getDimensionPixelSize(R.dimen.course_date_highlight_background_radius).toFloat()
+                    )
+                } else {
+                    tv_cellWeekdayNum.setTextColor(defaultTextColor)
+                    tv_cellDateNum.setTextColor(defaultTextColor)
+                    tv_cellWeekdayNum.typeface = Typeface.DEFAULT
+                    tv_cellDateNum.typeface = Typeface.DEFAULT
                     background =
                         if (courseTableStyle.drawAllCellBackground) {
                             buildRadiusDrawable(otherCourseCellBackground, backgroundRadius)
@@ -543,10 +543,23 @@ object CourseTableViewHelper {
                             null
                         }
                 }
-                headerLayout.addViewsInLayout(views, true)
             }
         }
     }
+
+    private fun getBackgroundRadius(context: Context, courseTableStyle: CourseTableStyle) =
+        if (courseTableStyle.useRoundCornerCourseCell) {
+            context.resources.getDimensionPixelSize(R.dimen.course_cell_background_radius).toFloat()
+        } else {
+            0f
+        }
+
+    private fun getDefaultTextColor(context: Context, courseTableStyle: CourseTableStyle) =
+        if (courseTableStyle.enableCourseTableTimeTextColor) {
+            courseTableStyle.courseTableTimeTextColor
+        } else {
+            ContextCompat.getColor(context, R.color.colorCourseTimeDefault)
+        }
 
     fun setOnCourseCellClickListener(listener: OnCourseCellClickListener) {
         this.listener = listener

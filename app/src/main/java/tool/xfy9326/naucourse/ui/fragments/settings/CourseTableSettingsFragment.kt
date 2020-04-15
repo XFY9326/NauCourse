@@ -19,7 +19,7 @@ import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.tools.NotifyBus
 import tool.xfy9326.naucourse.ui.dialogs.FullScreenLoadingDialog
 import tool.xfy9326.naucourse.ui.fragments.base.BaseSettingsPreferenceFragment
-import tool.xfy9326.naucourse.utils.utility.ImageUriUtils
+import tool.xfy9326.naucourse.utils.utility.ImageUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBar
 
@@ -84,7 +84,7 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment(), Preference
     }
 
     private fun modifyCourseTableBackgroundQuality(quality: Int) {
-        if (ImageUriUtils.localImageExists(Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE)) {
+        if (ImageUtils.localImageExists(Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE)) {
             lifecycleScope.launch(Dispatchers.IO) {
                 imageMutex.withLock {
                     launch(Dispatchers.Main) {
@@ -92,7 +92,7 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment(), Preference
                     }
 
                     val result =
-                        ImageUriUtils.modifyLocalImage(
+                        ImageUtils.modifyLocalImage(
                             Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_NAME,
                             Constants.Image.DIR_APP_IMAGE,
                             quality = quality
@@ -119,14 +119,14 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment(), Preference
                 launch(Dispatchers.Main) {
                     FullScreenLoadingDialog().show(childFragmentManager)
                 }
-                val result = ImageUriUtils.saveImageToLocalFromUri(
+                val result = ImageUtils.saveImageToLocalFromUri(
                     Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_NAME,
                     uri,
                     Constants.Image.DIR_APP_IMAGE
                 )
                 val qualityModifyResult =
                     if (result != null) {
-                        ImageUriUtils.modifyLocalImage(
+                        ImageUtils.modifyLocalImage(
                             Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE, quality =
                             SettingsPref.CourseTableImageQuality
                         )
@@ -134,7 +134,7 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment(), Preference
                         false
                     }
                 if (result == null || !qualityModifyResult) {
-                    ImageUriUtils.deleteLocalImage(Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE)
+                    ImageUtils.deleteLocalImage(Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE)
                 }
                 launch(Dispatchers.Main) {
                     FullScreenLoadingDialog.close(childFragmentManager)

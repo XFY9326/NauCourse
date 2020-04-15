@@ -25,7 +25,7 @@ import tool.xfy9326.naucourse.ui.models.activity.NewsDetailViewModel
 import tool.xfy9326.naucourse.ui.views.html.AdvancedLinkMovementMethod
 import tool.xfy9326.naucourse.ui.views.html.AdvancedTagHandler
 import tool.xfy9326.naucourse.ui.views.html.HtmlImageGetter
-import tool.xfy9326.naucourse.utils.utility.ImageUtils
+import tool.xfy9326.naucourse.utils.utility.BitmapUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import tool.xfy9326.naucourse.utils.utility.ShareUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
@@ -81,7 +81,7 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
                         lifecycleScope.launch {
                             try {
                                 layout_newsContent.drawToBitmap().let {
-                                    ImageUtils.drawDefaultWaterPrint(this@NewsDetailActivity, it)
+                                    BitmapUtils.drawDefaultWaterPrint(this@NewsDetailActivity, it)
                                     getViewModel().shareNewsImage(it)
                                 }
                             } catch (e: Exception) {
