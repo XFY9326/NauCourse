@@ -55,6 +55,7 @@ class TableFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         gl_courseTable?.layoutTransition?.setAnimateParentHierarchy(false)
+        layout_courseTableHeader?.layoutTransition?.setAnimateParentHierarchy(false)
         bindObserver()
     }
 

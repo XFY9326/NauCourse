@@ -10,7 +10,7 @@ rootProject.ext {
 
 android {
     compileSdkVersion 29
-    buildToolsVersion '29.0.2'
+    buildToolsVersion '29.0.3'
 
     defaultConfig {
         applicationId rootProject.ext.applicationId
@@ -109,7 +109,7 @@ dependencies {
 
     // Material Design
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.android.material:material:1.2.0-alpha05'
+    implementation 'com.google.android.material:material:1.2.0-alpha06'
 
     // AndroidX Core
     implementation 'androidx.core:core-ktx:1.2.0'
@@ -117,7 +117,7 @@ dependencies {
     // AppCompat
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation "androidx.appcompat:appcompat-resources:1.1.0"
-    implementation 'androidx.preference:preference-ktx:1.1.0'
+    implementation 'androidx.preference:preference-ktx:1.1.1'
     implementation "androidx.fragment:fragment-ktx:1.2.4"
 
     // AndroidX View

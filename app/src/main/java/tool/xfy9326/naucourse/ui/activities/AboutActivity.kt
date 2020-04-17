@@ -41,8 +41,5 @@ class AboutActivity : AppCompatActivity() {
         layout_aboutOpenSourceLicense.setOnClickListener {
             DialogUtils.createOpenSourceLicenseDialog(this, lifecycle).show()
         }
-        layout_aboutDonate.setOnClickListener {
-
-        }
     }
 }

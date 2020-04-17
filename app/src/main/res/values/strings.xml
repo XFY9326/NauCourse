@@ -103,8 +103,6 @@
     <string name="online_feedback_back_url" translatable="false">https://support.qq.com/products/114856?</string>
     <string name="qq_group_title">QQ反馈群</string>
     <string name="qq_group" translatable="false">704668624</string>
-    <string name="donate">捐赠</string>
-    <string name="donate_summary">开发App不易，可否赞助一杯咖啡钱？</string>
     <string name="no_next_course">今日已无待上课程</string>
     <string name="no_today_course">今日无课程</string>
     <string name="no_tomorrow_course">明日无课程</string>
