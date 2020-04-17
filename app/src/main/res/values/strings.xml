@@ -357,4 +357,5 @@
     <string name="highlight_course_table_today_date">高亮显示当天日期</string>
     <string name="highlight_course_table_today_date_sum">课程表日期高亮显示当天的日期</string>
     <string name="water_print_text">\@NAU课程表</string>
+    <string name="advanced_function_on">高级功能已启用</string>
 </resources>

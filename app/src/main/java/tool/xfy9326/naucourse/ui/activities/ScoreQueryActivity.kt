@@ -3,6 +3,7 @@ package tool.xfy9326.naucourse.ui.activities
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayoutMediator
@@ -68,6 +69,7 @@ class ScoreQueryActivity : ViewModelActivity<ScoreQueryViewModel>(), CreditCount
         vp_scoreQuery.apply {
             offscreenPageLimit = 1
             adapter = ScoreQueryViewPagerAdapter(this@ScoreQueryActivity)
+            getChildAt(0)?.overScrollMode = View.OVER_SCROLL_NEVER
         }
 
         tb_general.setOnClickListener {

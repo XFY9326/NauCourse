@@ -99,6 +99,7 @@ object Constants {
 
     object Others {
         const val FORGET_PASSWORD = "http://sso.nau.edu.cn/sso/login"
+        const val ADVANCED_FUNCTION_CLICK_TIME = 5;
     }
 
     object Image {

@@ -37,6 +37,7 @@
                     android:orientation="vertical">
 
                     <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/layout_aboutApp"
                         style="@style/AppTheme.SelectableItemBackground"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"

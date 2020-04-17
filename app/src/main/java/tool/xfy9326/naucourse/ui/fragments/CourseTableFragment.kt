@@ -160,6 +160,7 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
             }
         }
         vp_courseTablePanel.registerOnPageChangeCallback(viewPagerCallback)
+        vp_courseTablePanel.getChildAt(0)?.overScrollMode = View.OVER_SCROLL_NEVER
 
         layout_dateInfoBar.setOnClickListener {
             turnToDefaultWeek(viewModel)

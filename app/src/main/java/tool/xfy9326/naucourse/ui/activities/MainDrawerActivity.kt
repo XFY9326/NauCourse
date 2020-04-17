@@ -11,9 +11,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.view_nav_header.*
 import kotlinx.android.synthetic.main.view_nav_header.view.*
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourse.tools.NotifyBus
@@ -54,20 +56,29 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     override fun onCreateViewModel(): MainDrawerViewModel = ViewModelProvider(this)[MainDrawerViewModel::class.java]
 
     override fun initView(savedInstanceState: Bundle?, viewModel: MainDrawerViewModel) {
-        drawer_main.addDrawerListener(object : DrawerLayout.DrawerListener {
-            override fun onDrawerStateChanged(newState: Int) {}
-
-            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
-
-            override fun onDrawerClosed(drawerView: View) {}
-
-            override fun onDrawerOpened(drawerView: View) = viewModel.updateBalance()
-        })
         nav_main.setNavigationItemSelectedListener(this)
         nav_main.getHeaderView(DEFAULT_NAV_HEADER_INDEX).setOnClickListener {
             startActivity(Intent(this, UserInfoActivity::class.java))
             drawer_main.closeDrawers()
         }
+        nav_main.getChildAt(0)?.isVerticalScrollBarEnabled = false
+        setAdvancedFunctions()
+    }
+
+    private fun setAdvancedFunctions() {
+        val advancedFunctionSwitch = AppPref.EnableAdvancedFunctions
+        if (advancedFunctionSwitch) {
+            drawer_main.addDrawerListener(object : DrawerLayout.DrawerListener {
+                override fun onDrawerStateChanged(newState: Int) {}
+
+                override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+
+                override fun onDrawerClosed(drawerView: View) {}
+
+                override fun onDrawerOpened(drawerView: View) = getViewModel().updateBalance()
+            })
+        }
+        nav_main.menu.setGroupVisible(R.id.menu_groupAdvancedFunction, advancedFunctionSwitch)
     }
 
     private fun preloadFragments() {
@@ -134,17 +145,28 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
 
     override fun bindViewModel(viewModel: MainDrawerViewModel) {
         viewModel.studentCardBalance.observe(this, Observer {
-            nav_main.getHeaderView(DEFAULT_NAV_HEADER_INDEX).tv_cardBalance.text =
-                getString(R.string.balance, String.format(Constants.KEEP_TWO_DECIMAL_PLACES, it))
+            nav_main.getHeaderView(DEFAULT_NAV_HEADER_INDEX).tv_cardBalanceOrClass.post {
+                tv_cardBalanceOrClass.text = getString(R.string.balance, String.format(Constants.KEEP_TWO_DECIMAL_PLACES, it))
+            }
         })
         viewModel.studentInfo.observe(this, Observer {
-            nav_main.getHeaderView(DEFAULT_NAV_HEADER_INDEX).tv_userId.text = it.personalInfo.stuId.second
-            nav_main.getHeaderView(DEFAULT_NAV_HEADER_INDEX).tv_userName.text = StudentInfo.trimExtra(it.personalInfo.name.second)
+            nav_main.getHeaderView(DEFAULT_NAV_HEADER_INDEX).apply {
+                tv_userId.text = it.personalInfo.stuId.second
+                tv_userName.text = StudentInfo.trimExtra(it.personalInfo.name.second)
+                if (!AppPref.EnableAdvancedFunctions) {
+                    tv_cardBalanceOrClass.text = it.personalInfo.currentClass.second
+                }
+            }
         })
         viewModel.logoutSuccess.observeNotification(this, {
             FullScreenLoadingDialog.close(supportFragmentManager)
             BaseUtils.restartApplication()
             finish()
+        })
+        NotifyBus[NotifyBus.Type.ADVANCED_FUNCTION_MODE_CHANGED].observe(this, Observer {
+            setAdvancedFunctions()
+            viewModel.updateBalance()
+            viewModel.refreshPersonalInfo()
         })
         // 需要Activity在后台时也监听夜间模式设定变化，防止延迟的界面更新
         tryRemoveNightModeObserver()

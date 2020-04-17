@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import tool.xfy9326.naucourse.R
 import kotlin.math.abs
@@ -75,13 +76,8 @@ class AdvancedRecyclerView : RecyclerView {
         if (parent != null) {
             val emptyView = (parent as View).findViewById<View>(emptyViewResId)
             if (emptyView != null) {
-                if (adapter == null || adapter!!.itemCount == 0) {
-                    if (visibility != View.GONE) visibility = View.GONE
-                    if (emptyView.visibility != View.VISIBLE) emptyView.visibility = View.VISIBLE
-                } else {
-                    if (visibility != View.VISIBLE) visibility = View.VISIBLE
-                    if (emptyView.visibility != View.GONE) emptyView.visibility = View.GONE
-                }
+                isVisible = adapter != null && adapter!!.itemCount != 0
+                emptyView.isVisible = !isVisible
             }
         }
     }

@@ -88,11 +88,10 @@ object CourseTableViewHelper {
         context: Context,
         coursePkg: CoursePkg,
         weekNum: Int,
-        targetWidth: Int,
-        courseTableStyle: CourseTableStyle
+        targetWidth: Int
     ): Bitmap = withContext(Dispatchers.Default) {
         LayoutInflater.from(context).inflate(R.layout.layout_draw_table, null).let {
-            val compatStyle = courseTableStyle.copy(
+            val compatStyle = coursePkg.courseTableStyle.copy(
                 bottomCornerCompat = false,
                 customCourseTableAlpha = 1f,
                 enableCourseTableTimeTextColor = false,
@@ -111,12 +110,12 @@ object CourseTableViewHelper {
 
             val headerAsync = async {
                 buildCourseTableHeader(context, showWeekDaySize, dateInfo, it.layout_courseTableHeader, compatStyle).apply {
-                    applyViewToCourseTableHeader(context, it.layout_courseTableHeader, this, dateInfo, courseTableStyle)
+                    applyViewToCourseTableHeader(context, it.layout_courseTableHeader, this, dateInfo, compatStyle)
                 }
             }
 
             val tableAsync = async {
-                buildCourseTable(context, coursePkg, targetWidth, columnSize).apply {
+                buildCourseTable(context, coursePkg.copy(courseTableStyle = compatStyle), targetWidth, columnSize).apply {
                     applyViewToCourseTable(it.gl_courseTable, this, columnSize, compatStyle)
                 }
             }

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentInfo
@@ -28,7 +29,9 @@ class MainDrawerViewModel : BaseViewModel() {
     override fun onInitView(isRestored: Boolean) {
         viewModelScope.launch(Dispatchers.Default) {
             if (!isRestored) {
-                updateBalance(true)
+                if (AppPref.EnableAdvancedFunctions) {
+                    updateBalance(true)
+                }
                 updatePersonalInfo(true)
             }
             updatePersonalInfo()
@@ -50,6 +53,12 @@ class MainDrawerViewModel : BaseViewModel() {
             studentInfo.postValue(personalInfo.data!!)
         } else {
             LogUtils.d<MainDrawerViewModel>("PersonalInfo Error: ${personalInfo.errorReason}")
+        }
+    }
+
+    fun refreshPersonalInfo() {
+        viewModelScope.launch(Dispatchers.Default) {
+            updatePersonalInfo(true)
         }
     }
 

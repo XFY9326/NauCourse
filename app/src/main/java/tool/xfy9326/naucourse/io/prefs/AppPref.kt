@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourse.io.prefs
 
+import tool.xfy9326.naucourse.BuildConfig
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.io.prefs.base.BasePref
 import tool.xfy9326.naucourse.providers.beans.GeneralNews
@@ -70,4 +71,6 @@ object AppPref : BasePref() {
     var CurrentSchoolCalendarImageUrl by pref.string(key = CURRENT_SCHOOL_CALENDAR_IMAGE_URL)
 
     var MaxWeekNumCache by pref.int(defValue = Constants.Course.MAX_WEEK_NUM_SIZE)
+
+    var EnableAdvancedFunctions by pref.boolean(defValue = BuildConfig.DEBUG)
 }

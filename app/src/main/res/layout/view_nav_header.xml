@@ -32,7 +32,7 @@
         app:layout_constraintTop_toBottomOf="@id/tv_userName" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_cardBalance"
+        android:id="@+id/tv_cardBalanceOrClass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"

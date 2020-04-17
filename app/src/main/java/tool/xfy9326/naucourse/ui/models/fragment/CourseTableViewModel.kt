@@ -446,7 +446,7 @@ class CourseTableViewModel : BaseViewModel() {
                     getImageWhenCourseTableLoading.notifyEvent()
                 } else {
                     weakContext.get()?.let {
-                        CourseTableViewHelper.drawCourseTableImage(it, pkg, weekNum, targetWidth, getCourseTableStyle()).let { bitmap ->
+                        CourseTableViewHelper.drawCourseTableImage(it, pkg, weekNum, targetWidth).let { bitmap ->
                             BitmapUtils.drawDefaultWaterPrint(it, bitmap)
                             shareCourseTable(bitmap)
                         }
