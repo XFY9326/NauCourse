@@ -7,6 +7,7 @@ import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.ui.activities.AboutActivity
 import tool.xfy9326.naucourse.ui.fragments.base.BaseSettingsPreferenceFragment
+import tool.xfy9326.naucourse.utils.BaseUtils
 
 class MainSettingsScreenFragment : BaseSettingsPreferenceFragment() {
     override val preferenceResId = R.xml.settings_main_screen
@@ -16,6 +17,9 @@ class MainSettingsScreenFragment : BaseSettingsPreferenceFragment() {
         findPreference<Preference>(Constants.Pref.AboutIntent)?.setOnPreferenceClickListener {
             startActivity(Intent(requireActivity(), AboutActivity::class.java))
             false
+        }
+        if (BaseUtils.isBeta()) {
+            findPreference<Preference>(Constants.Pref.ApplicationUpdate)?.isVisible = false
         }
     }
 }

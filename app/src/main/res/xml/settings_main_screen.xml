@@ -27,6 +27,7 @@
     <androidx.preference.Preference
         app:fragment="tool.xfy9326.naucourse.ui.fragments.settings.UpdateSettingsFragment"
         app:icon="@drawable/ic_update"
+        app:key="ApplicationUpdate"
         app:summary="@string/settings_update_sum"
         app:title="@string/settings_update" />
 

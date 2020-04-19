@@ -101,6 +101,8 @@ object Constants {
     object Others {
         const val FORGET_PASSWORD = "http://sso.nau.edu.cn/sso/login"
         const val ADVANCED_FUNCTION_CLICK_TIME = 5
+
+        const val FLAVOR_BETA = "beta"
     }
 
     object Image {
@@ -113,6 +115,7 @@ object Constants {
     }
 
     object Pref {
+        const val ApplicationUpdate = "ApplicationUpdate"
         const val ClearDebugLogs = "ClearDebugLogs"
         const val AboutIntent = "AboutIntent"
         const val NightMode = "NightMode"

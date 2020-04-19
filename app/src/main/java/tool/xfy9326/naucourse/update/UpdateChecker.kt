@@ -11,6 +11,7 @@ import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.network.SimpleNetworkManager
 import tool.xfy9326.naucourse.update.beans.UpdateIndex
 import tool.xfy9326.naucourse.update.beans.UpdateInfo
+import tool.xfy9326.naucourse.utils.BaseUtils
 
 @Suppress("unused")
 object UpdateChecker {
@@ -26,6 +27,9 @@ object UpdateChecker {
         HttpUrl.Builder().scheme(Constants.Network.HTTPS).host(UPDATE_SERVER).addPathSegment(UPDATE_TYPE).addPathSegment(UPDATE_INDEX).build()
 
     suspend fun getNewUpdateInfo(forceCheck: Boolean = false): UpdateInfo? = withContext(Dispatchers.IO) {
+        if (BaseUtils.isBeta()) {
+            return@withContext null
+        }
         try {
             getLatestVersionInfo()?.let {
                 if (it.versionCode > BuildConfig.VERSION_CODE) {
