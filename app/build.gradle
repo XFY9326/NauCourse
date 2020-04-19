@@ -2,10 +2,16 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'bugly'
 
 rootProject.ext {
     applicationId = 'tool.xfy9326.naucourse'
     applicationName = 'NAU课程表'
+}
+
+bugly {
+    appId = '7b78d5ccdc'
+    appKey = 'a5a6c50e-b240-4f5c-b7bd-f1087d308bd1'
 }
 
 android {
@@ -46,6 +52,7 @@ android {
         debug {
             minifyEnabled false
             signingConfig signingConfigs.release
+            manifestPlaceholders = ['DEBUG': "true"]
         }
 
         release {
@@ -54,6 +61,7 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+            manifestPlaceholders = ['DEBUG': "false"]
         }
     }
 
@@ -149,6 +157,9 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.2.5'
     kapt 'androidx.room:room-compiler:2.2.5'
     implementation 'androidx.room:room-ktx:2.2.5'
+
+    // Bugly
+    implementation 'com.tencent.bugly:crashreport:3.1.0'
 
     // DB Debug
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.0'

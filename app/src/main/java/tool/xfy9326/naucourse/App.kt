@@ -6,6 +6,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.tencent.bugly.crashreport.CrashReport
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -26,7 +27,7 @@ class App : Application(), LifecycleObserver {
         super.onCreate()
         instance = this
 
-        ExceptionUtils.initCrashHandler()
+        initCrashReport()
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
@@ -34,6 +35,14 @@ class App : Application(), LifecycleObserver {
         GlobalScope.launch(Dispatchers.Default) {
             clearOldCache()
             IntentUtils.startNextCourseAlarm(this@App)
+        }
+    }
+
+    private fun initCrashReport() {
+        ExceptionUtils.initCrashHandler()
+        if (!BuildConfig.DEBUG) {
+            CrashReport.initCrashReport(this)
+            CrashReport.setIsDevelopmentDevice(this, BuildConfig.DEBUG)
         }
     }
 
