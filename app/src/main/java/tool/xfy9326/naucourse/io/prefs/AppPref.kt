@@ -15,6 +15,8 @@ object AppPref : BasePref() {
 
     const val CURRENT_SCHOOL_CALENDAR_URL = "CurrentSchoolCalendarUrl"
     const val CURRENT_SCHOOL_CALENDAR_IMAGE_URL = "CurrentSchoolCalendarImageUrl"
+    const val IGNORE_UPDATE_VERSION_CODE = "IgnoreUpdateVersionCode"
+    const val FORCE_UPDATE_VERSION_CODE = "ForceUpdateVersionCode"
 
     private const val DEFAULT_TERM_DATE_MILLS = 0L
     private const val DEFAULT_LAST_CRASH_TIME_MILLS = 0L
@@ -73,4 +75,10 @@ object AppPref : BasePref() {
     var MaxWeekNumCache by pref.int(defValue = Constants.Course.MAX_WEEK_NUM_SIZE)
 
     var EnableAdvancedFunctions by pref.boolean(defValue = BuildConfig.DEBUG)
+
+    var IgnoreUpdateVersionCode by pref.int(key = IGNORE_UPDATE_VERSION_CODE, defValue = 0)
+
+    var ForceUpdateVersionCode by pref.int(key = FORCE_UPDATE_VERSION_CODE, defValue = 0)
+
+    var UpdateDownloadId by pref.long(defValue = 0)
 }

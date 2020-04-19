@@ -14,12 +14,12 @@ import tool.xfy9326.naucourse.beans.CourseItem
 import tool.xfy9326.naucourse.beans.NextCourseBundle
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.services.NextCourseNotifyService
+import tool.xfy9326.naucourse.utils.BaseUtils.goAsync
 import tool.xfy9326.naucourse.utils.courses.CourseUtils
 import tool.xfy9326.naucourse.utils.courses.ExtraCourseUtils
 import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import tool.xfy9326.naucourse.utils.debug.LogUtils
 import tool.xfy9326.naucourse.utils.utility.AppWidgetUtils
-import tool.xfy9326.naucourse.utils.utility.AppWidgetUtils.goAsync
 import tool.xfy9326.naucourse.widget.NextCourseWidget
 import java.util.*
 

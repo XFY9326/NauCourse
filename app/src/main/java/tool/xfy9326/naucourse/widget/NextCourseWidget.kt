@@ -18,9 +18,9 @@ import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.NextCourseBundle
 import tool.xfy9326.naucourse.io.store.NextCourseBundleStore
 import tool.xfy9326.naucourse.ui.activities.MainIndexActivity
+import tool.xfy9326.naucourse.utils.BaseUtils.goAsync
 import tool.xfy9326.naucourse.utils.courses.ExtraCourseUtils
 import tool.xfy9326.naucourse.utils.utility.AppWidgetUtils
-import tool.xfy9326.naucourse.utils.utility.AppWidgetUtils.goAsync
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import tool.xfy9326.naucourse.utils.views.ViewUtils
 import java.text.SimpleDateFormat

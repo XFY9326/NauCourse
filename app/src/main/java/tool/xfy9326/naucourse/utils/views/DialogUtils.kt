@@ -35,7 +35,7 @@ object DialogUtils {
             addAutoCloseListener(lifecycle, it)
         }
 
-    fun createCourseColorPickerDialog(context: Context, color: Int, dialogId: Int) =
+    fun createCourseColorPickerDialog(context: Context, color: Int, dialogId: Int): ColorPickerDialog =
         ColorPickerDialog.newBuilder().apply {
             setColor(color)
             setDialogTitle(R.string.course_color_edit)

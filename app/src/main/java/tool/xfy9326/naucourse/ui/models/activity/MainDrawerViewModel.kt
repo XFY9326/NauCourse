@@ -11,9 +11,12 @@ import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourse.providers.info.methods.CardBalanceInfo
 import tool.xfy9326.naucourse.providers.info.methods.PersonalInfo
+import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
 import tool.xfy9326.naucourse.ui.activities.MainDrawerActivity
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
+import tool.xfy9326.naucourse.update.UpdateChecker
+import tool.xfy9326.naucourse.update.beans.UpdateInfo
 import tool.xfy9326.naucourse.utils.debug.LogUtils
 import tool.xfy9326.naucourse.utils.secure.AccountUtils
 import tool.xfy9326.naucourse.utils.utility.AppWidgetUtils
@@ -25,6 +28,7 @@ class MainDrawerViewModel : BaseViewModel() {
     val studentCardBalance = MutableLiveData<Float>()
     val studentInfo = MutableLiveData<StudentInfo>()
     val logoutSuccess = NotifyLivaData()
+    val updateInfo = EventLiveData<UpdateInfo>()
 
     override fun onInitView(isRestored: Boolean) {
         viewModelScope.launch(Dispatchers.Default) {
@@ -94,6 +98,14 @@ class MainDrawerViewModel : BaseViewModel() {
             SettingsPref.EnterInterfaceType.COURSE_TABLE -> MainDrawerActivity.FragmentType.COURSE_TABLE
             SettingsPref.EnterInterfaceType.NEWS -> MainDrawerActivity.FragmentType.NEWS
         }
+
+    fun checkUpdate() {
+        viewModelScope.launch(Dispatchers.Default) {
+            UpdateChecker.getNewUpdateInfo()?.let {
+                updateInfo.postEventValue(it)
+            }
+        }
+    }
 
     fun requestLogout() {
         viewModelScope.launch(Dispatchers.Default) {

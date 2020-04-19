@@ -13,6 +13,7 @@ import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_nav_header.*
 import kotlinx.android.synthetic.main.view_nav_header.view.*
+import tool.xfy9326.naucourse.BuildConfig
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.io.prefs.AppPref
@@ -22,12 +23,16 @@ import tool.xfy9326.naucourse.tools.NotifyBus
 import tool.xfy9326.naucourse.tools.livedata.Event
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourse.ui.dialogs.FullScreenLoadingDialog
+import tool.xfy9326.naucourse.ui.dialogs.UpdateDialog
 import tool.xfy9326.naucourse.ui.fragments.CourseArrangeFragment
 import tool.xfy9326.naucourse.ui.fragments.CourseTableFragment
 import tool.xfy9326.naucourse.ui.fragments.NewsFragment
 import tool.xfy9326.naucourse.ui.fragments.base.DrawerToolbarFragment
 import tool.xfy9326.naucourse.ui.models.activity.MainDrawerViewModel
+import tool.xfy9326.naucourse.update.UpdateChecker
 import tool.xfy9326.naucourse.utils.BaseUtils
+import tool.xfy9326.naucourse.utils.utility.IntentUtils
+import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 
 class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationView.OnNavigationItemSelectedListener {
@@ -49,6 +54,21 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
             preloadFragments()
             showFragment(getViewModel().getNowShowFragment())
         }
+        if (savedInstanceState == null) {
+            if (intent.getBooleanExtra(IntentUtils.NEW_VERSION_FLAG, false)) {
+                onUpdateNewVersion()
+            }
+            if (AppPref.ForceUpdateVersionCode > BuildConfig.VERSION_CODE) {
+                showToast(R.string.force_update_attention)
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (SettingsPref.AutoCheckUpdates) {
+            getViewModel().checkUpdate()
+        }
     }
 
     override fun onCreateContentView(): Int = R.layout.activity_main
@@ -63,6 +83,10 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         }
         nav_main.getChildAt(0)?.isVerticalScrollBarEnabled = false
         setAdvancedFunctions()
+    }
+
+    private fun onUpdateNewVersion() {
+        UpdateChecker.clearOldUpdatePref()
     }
 
     private fun setAdvancedFunctions() {
@@ -162,6 +186,9 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
             FullScreenLoadingDialog.close(supportFragmentManager)
             BaseUtils.restartApplication()
             finish()
+        })
+        viewModel.updateInfo.observeEvent(this, Observer {
+            UpdateDialog.showDialog(supportFragmentManager, it)
         })
         NotifyBus[NotifyBus.Type.ADVANCED_FUNCTION_MODE_CHANGED].observe(this, Observer {
             setAdvancedFunctions()

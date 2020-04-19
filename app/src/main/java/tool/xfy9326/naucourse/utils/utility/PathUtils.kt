@@ -9,7 +9,10 @@ import java.io.File
 object PathUtils {
     fun getUrlFileName(source: String): String? =
         if (Constants.Network.DIR in source) {
-            val name = source.substring(source.lastIndexOf(Constants.Network.DIR) + 1).trim()
+            var name = source.substring(source.lastIndexOf(Constants.Network.DIR) + 1)
+            if (name.contains(Constants.Network.URL_QUERY_DIVIDE_SYMBOL)) {
+                name = name.substring(0, name.lastIndexOf(Constants.Network.URL_QUERY_DIVIDE_SYMBOL))
+            }
             if (name.isNotBlank() && name.isNotEmpty()) {
                 name
             } else {

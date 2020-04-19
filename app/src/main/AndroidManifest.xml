@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <permission
         android:name="${ApplicationId}.permission.NextCourseWidget"
@@ -130,6 +131,12 @@
                 <action android:name="${ApplicationId}.action.NOTIFY_NEXT_COURSE" />
             </intent-filter>
         </service>
+
+        <receiver android:name=".receivers.DownloadCompleteListener">
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+            </intent-filter>
+        </receiver>
 
         <receiver android:name=".receivers.NextCourseAlarmReceiver">
             <intent-filter>

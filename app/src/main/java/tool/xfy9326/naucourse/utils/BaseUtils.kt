@@ -1,12 +1,15 @@
 package tool.xfy9326.naucourse.utils
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
+import android.net.Uri
 import android.os.IBinder
 import android.util.TypedValue
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatDelegate
+import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import okhttp3.internal.toHexString
 import tool.xfy9326.naucourse.App
@@ -54,6 +57,21 @@ object BaseUtils {
         return result
     }
 
+    fun BroadcastReceiver.goAsync(
+        coroutineScope: CoroutineScope = GlobalScope,
+        dispatcher: CoroutineDispatcher = Dispatchers.Default,
+        block: suspend () -> Unit
+    ) {
+        val result = goAsync()
+        coroutineScope.launch(dispatcher) {
+            try {
+                block()
+            } finally {
+                result.finish()
+            }
+        }
+    }
+
     inline fun Mutex.tryWithLock(owner: Any? = null, action: () -> Unit) {
         if (tryLock(owner)) {
             try {
@@ -84,4 +102,6 @@ object BaseUtils {
         (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).apply {
             if (isActive) hideSoftInputFromWindow(windowToken, 0)
         }
+
+    fun Context.getPackageUri(): Uri = Uri.parse("package:${packageName}")
 }

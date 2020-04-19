@@ -22,6 +22,7 @@ object Constants {
         const val IMAGE_PNG = "image/png"
         const val IMAGE_WEBP = "image/webp"
         const val IMAGE_JPEG = "image/jpeg"
+        const val APK = "application/vnd.android.package-archive"
     }
 
     object Network {
@@ -100,6 +101,9 @@ object Constants {
     object Others {
         const val FORGET_PASSWORD = "http://sso.nau.edu.cn/sso/login"
         const val ADVANCED_FUNCTION_CLICK_TIME = 5;
+
+        const val FLAVOR_BETA = "beta"
+        const val FLAVOR_STABLE = "stable"
     }
 
     object Image {

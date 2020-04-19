@@ -13,6 +13,8 @@ import tool.xfy9326.naucourse.providers.GlobalCacheManager
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
+import tool.xfy9326.naucourse.update.UpdateChecker
+import tool.xfy9326.naucourse.update.beans.UpdateInfo
 import tool.xfy9326.naucourse.utils.secure.AccountUtils
 
 class LoginViewModel : BaseViewModel() {
@@ -21,6 +23,7 @@ class LoginViewModel : BaseViewModel() {
     val loginProcess = EventLiveData<LoadingProcess>()
     val compatData = EventLiveData<LoginInfo>()
     val loginSuccess = NotifyLivaData()
+    val updateInfo = EventLiveData<UpdateInfo>()
 
     enum class LoadingProcess {
         DATA_COMPAT,
@@ -28,6 +31,14 @@ class LoginViewModel : BaseViewModel() {
         LOGGING_JWC,
         CACHING,
         NONE
+    }
+
+    fun checkUpdate() {
+        viewModelScope.launch(Dispatchers.Default) {
+            UpdateChecker.getNewUpdateInfo()?.let {
+                updateInfo.postEventValue(it)
+            }
+        }
     }
 
     fun doLoginFromOldData() {

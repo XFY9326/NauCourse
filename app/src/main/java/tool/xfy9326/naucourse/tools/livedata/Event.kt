@@ -44,6 +44,8 @@ class Event<out T>(content: T, private val manuallyCheckHandled: Boolean = false
         }
     }
 
+    fun peekContent(): T? = container?.data
+
     // 防止需要返回null时被当作已经处理
     data class Container<T>(val data: T)
 }

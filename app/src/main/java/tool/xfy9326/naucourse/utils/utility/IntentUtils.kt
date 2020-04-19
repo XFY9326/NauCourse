@@ -1,12 +1,16 @@
 package tool.xfy9326.naucourse.utils.utility
 
+import android.app.DownloadManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Environment
+import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.receivers.NextCourseAlarmReceiver
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 
@@ -52,4 +56,31 @@ object IntentUtils {
             putExtra(NextCourseAlarmReceiver.EXTRA_JUST_INIT, true)
             putExtra(NextCourseAlarmReceiver.EXTRA_DATA_UPDATE, true)
         })
+
+    fun installApk(context: Context, uri: Uri) {
+        try {
+            context.startActivity(Intent(Intent.ACTION_VIEW).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
+                setDataAndType(uri, Constants.MIME.APK)
+            })
+        } catch (e: Exception) {
+            showToast(context, R.string.application_launch_failed)
+        }
+    }
+
+    fun requestDownloadUpdate(context: Context, url: String, updateVersionCode: Int, updateVersionName: String) {
+        try {
+            context.getSystemService<DownloadManager>()?.let {
+                AppPref.UpdateDownloadId = it.enqueue(DownloadManager.Request(Uri.parse(url)).apply {
+                    val fileName = PathUtils.getUrlFileName(url)
+                    setTitle(context.getString(R.string.app_name))
+                    setDescription(context.getString(R.string.downloading_update, updateVersionName, updateVersionCode))
+                    setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
+                    setMimeType(Constants.MIME.APK)
+                })
+            }
+        } catch (e: Exception) {
+            showToast(context, R.string.application_launch_failed)
+        }
+    }
 }

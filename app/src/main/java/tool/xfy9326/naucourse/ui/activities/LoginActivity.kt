@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.view_login_panel.*
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
+import tool.xfy9326.naucourse.ui.dialogs.UpdateDialog
 import tool.xfy9326.naucourse.ui.models.activity.LoginViewModel
 import tool.xfy9326.naucourse.utils.secure.AccountUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
@@ -26,6 +27,11 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
     override fun onCreateContentView() = R.layout.activity_login
 
     override fun onCreateViewModel() = ViewModelProvider(this)[LoginViewModel::class.java]
+
+    override fun onStart() {
+        super.onStart()
+        getViewModel().checkUpdate()
+    }
 
     override fun initView(savedInstanceState: Bundle?, viewModel: LoginViewModel) {
         AccountUtils.readSavedCacheUserId()?.let {
@@ -89,6 +95,13 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
             et_userId.setText(it.userId)
             et_userPassword.setText(it.userPw)
             cb_acceptEULA.isChecked = true
+        })
+        viewModel.updateInfo.observeEvent(this, Observer { data ->
+            viewModel.isLoginLoading.value?.peekContent()?.let {
+                if (!it) {
+                    UpdateDialog.showDialog(supportFragmentManager, data)
+                }
+            }
         })
     }
 

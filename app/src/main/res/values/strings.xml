@@ -189,7 +189,7 @@
     <string name="settings_display_sum">应用界面显示以及主题设置</string>
     <string name="settings_course_table">课程表</string>
     <string name="settings_course_table_sum">课程表样式以及操作方式设置</string>
-    <string name="settings_update">更新</string>
+    <string name="settings_update">应用更新</string>
     <string name="settings_update_sum">应用更新相关设置</string>
     <string name="settings_debug">调试</string>
     <string name="settings_debug_sum">错误报告以及调试设置</string>
@@ -358,4 +358,16 @@
     <string name="highlight_course_table_today_date_sum">课程表日期高亮显示当天的日期</string>
     <string name="water_print_text">\@NAU课程表</string>
     <string name="advanced_function_on">高级功能已启用</string>
+    <string name="found_new_version">检测到版本更新！</string>
+    <string name="force_update_warning">这是一个重要的版本更新，请立即更新！</string>
+    <string name="update_version_info">v%1$s(%2$d) -> v%3$s(%4$d)</string>
+    <string name="update_now">立即更新</string>
+    <string name="ignore_update">忽略本次更新</string>
+    <string name="change_log">更新日志：</string>
+    <string name="force_update_attention">检测到您有一个重要版本可能没有更新！</string>
+    <string name="downloading_update">NAU课程表 v%1$s(%2$d)版本更新</string>
+    <string name="start_download_update">开始下载更新！</string>
+    <string name="no_update_source">暂无可用更新源</string>
+    <string name="checking_update">正在检查更新中… …</string>
+    <string name="no_new_update">您已经在使用最新版本！</string>
 </resources>
