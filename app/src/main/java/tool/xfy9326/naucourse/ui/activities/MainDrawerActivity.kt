@@ -125,7 +125,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         if (type != getViewModel().getNowShowFragment() || !getViewModel().initFragmentShow()) {
             val oldFragment = supportFragmentManager.findFragmentByTag(getViewModel().getNowShowFragment().name)
             supportFragmentManager.beginTransaction().apply {
-                if (withAnimation) setCustomAnimations(0, R.anim.fragment_fade_exit)
+                if (withAnimation) setCustomAnimations(0, R.anim.fade_exit)
                 if (oldFragment != null) {
                     hide(oldFragment)
                 }

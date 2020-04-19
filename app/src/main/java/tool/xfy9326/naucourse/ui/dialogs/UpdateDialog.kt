@@ -64,31 +64,32 @@ class UpdateDialog : DialogFragment() {
                 tv_updateAttention.isVisible = updateInfo.forceUpdate
                 tv_updateChangeLog.text = updateInfo.changeLog
 
-                if (updateInfo.downloadSource.size > 1) {
-                    val menu = PopupMenu(context, btn_updateNow).apply {
-                        for ((i, source) in updateInfo.downloadSource.withIndex()) {
-                            menu.add(Menu.NONE, i, Menu.NONE, source.sourceName)
-                        }
-                        gravity = Gravity.BOTTOM or Gravity.END
-                    }
-                    menu.setOnMenuItemClickListener {
-                        val source = updateInfo.downloadSource[it.itemId]
-                        if (source.isDirectLink) {
-                            selectedSource = source
-                            if (checkPackageInstallPermission(true)) {
-                                downloadUpdateFile(source.url)
+                when {
+                    updateInfo.downloadSource.size > 1 -> {
+                        val menu = PopupMenu(context, btn_updateNow).apply {
+                            for ((i, source) in updateInfo.downloadSource.withIndex()) {
+                                menu.add(Menu.NONE, i, Menu.NONE, source.sourceName)
                             }
-                        } else {
-                            IntentUtils.launchUrlInBrowser(requireContext(), source.url)
+                            gravity = Gravity.BOTTOM or Gravity.END
                         }
-                        return@setOnMenuItemClickListener true
-                    }
+                        menu.setOnMenuItemClickListener {
+                            val source = updateInfo.downloadSource[it.itemId]
+                            if (source.isDirectLink) {
+                                selectedSource = source
+                                if (checkPackageInstallPermission(true)) {
+                                    downloadUpdateFile(source.url)
+                                }
+                            } else {
+                                IntentUtils.launchUrlInBrowser(requireContext(), source.url)
+                            }
+                            return@setOnMenuItemClickListener true
+                        }
 
-                    btn_updateNow.setOnClickListener {
-                        menu.show()
+                        btn_updateNow.setOnClickListener {
+                            menu.show()
+                        }
                     }
-                } else if (updateInfo.downloadSource.isNotEmpty()) {
-                    btn_updateNow.setOnClickListener {
+                    updateInfo.downloadSource.isNotEmpty() -> btn_updateNow.setOnClickListener {
                         updateInfo.downloadSource.first().let {
                             selectedSource = it
                             if (checkPackageInstallPermission(true)) {
@@ -96,8 +97,7 @@ class UpdateDialog : DialogFragment() {
                             }
                         }
                     }
-                } else {
-                    btn_updateNow.setOnClickListener {
+                    else -> btn_updateNow.setOnClickListener {
                         showToast(R.string.no_update_source)
                     }
                 }

@@ -15,7 +15,7 @@ import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 
 class AboutActivity : AppCompatActivity() {
-    private var advancedFunctionClickTime = 0;
+    private var advancedFunctionClickTime = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +56,7 @@ class AboutActivity : AppCompatActivity() {
         if (AppPref.EnableAdvancedFunctions) {
             showToast(this, R.string.advanced_function_on)
         } else {
-            advancedFunctionClickTime++;
+            advancedFunctionClickTime++
             if (advancedFunctionClickTime >= Constants.Others.ADVANCED_FUNCTION_CLICK_TIME) {
                 AppPref.EnableAdvancedFunctions = true
                 NotifyBus[NotifyBus.Type.ADVANCED_FUNCTION_MODE_CHANGED].notifyEvent()

@@ -23,7 +23,6 @@ class TermDateEditDialog : DialogFragment() {
         private val DATE_FORMAT_YMD = SimpleDateFormat(Constants.Time.FORMAT_YMD, Locale.CHINA)
     }
 
-    private var listener: OnTermEditListener? = null
     private lateinit var termDate: TermDate
     private lateinit var nowStartDate: Date
     private lateinit var nowEndDate: Date
