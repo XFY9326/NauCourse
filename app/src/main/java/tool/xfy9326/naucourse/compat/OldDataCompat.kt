@@ -14,6 +14,7 @@ import tool.xfy9326.naucourse.beans.UserInfo
 import tool.xfy9326.naucourse.compat.beans.CourseCompat
 import tool.xfy9326.naucourse.compat.beans.CourseDetailCompat
 import tool.xfy9326.naucourse.io.db.CourseCellStyleDBHelper
+import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.network.clients.base.LoginInfo
 import tool.xfy9326.naucourse.providers.beans.jwc.*
 import tool.xfy9326.naucourse.providers.info.methods.CourseInfo
@@ -39,8 +40,11 @@ object OldDataCompat {
             } else {
                 null
             }
+        val showHiddenFunction = readHiddenFunctionConfigFromOld()
 
         clearOldData()
+
+        AppPref.EnableAdvancedFunctions = showHiddenFunction
 
         if (loginInfo != null) {
             AccountUtils.saveUserInfo(UserInfo(loginInfo.userId, loginInfo.userPw))
@@ -172,6 +176,12 @@ object OldDataCompat {
         }
         LogUtils.w<OldDataCompat>("User Info Compat Empty!")
         return null
+    }
+
+    private fun readHiddenFunctionConfigFromOld(): Boolean {
+        PreferenceManager.getDefaultSharedPreferences(App.instance).apply {
+            return getBoolean("SHOW_HIDDEN_FUNCTION", false)
+        }
     }
 
     fun hasOldData() = PreferenceManager.getDefaultSharedPreferences(App.instance).contains("HAS_LOGIN") && File(CourseDataPath).exists()

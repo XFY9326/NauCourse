@@ -28,10 +28,10 @@ abstract class BaseListViewModel<E> : BaseViewModel() {
         }
     }
 
-    fun getData(isInit: Boolean = false) = viewModelScope.launch(Dispatchers.Default) {
+    fun getData(isInit: Boolean = false, forceUpdate: Boolean = false) = viewModelScope.launch(Dispatchers.Default) {
         dataGetMutex.withLock {
             isRefreshing.postValue(true)
-            val result = onUpdateData(isInit)
+            val result = onUpdateData(isInit, forceUpdate)
             if (result.isSuccess) {
                 listData.postValue(result.data!!)
             } else {
@@ -41,5 +41,5 @@ abstract class BaseListViewModel<E> : BaseViewModel() {
         }
     }
 
-    protected abstract suspend fun onUpdateData(isInit: Boolean): InfoResult<List<E>>
+    protected abstract suspend fun onUpdateData(isInit: Boolean, forceUpdate: Boolean): InfoResult<List<E>>
 }

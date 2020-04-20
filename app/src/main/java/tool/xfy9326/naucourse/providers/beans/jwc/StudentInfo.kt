@@ -8,6 +8,7 @@ data class StudentInfo(
 ) {
     companion object {
         private const val LEFT_EXTRA_SYMBOL = "【"
+        private const val CREDIT_STR = "学分绩点"
 
         fun trimExtra(text: String): String =
             if (LEFT_EXTRA_SYMBOL in text) {
@@ -15,6 +16,15 @@ data class StudentInfo(
             } else {
                 text
             }
+    }
+
+    fun getCredit(): Float? {
+        for (entry in creditInfo) {
+            if (CREDIT_STR in entry.key) {
+                return entry.value
+            }
+        }
+        return null
     }
 
     override fun equals(other: Any?): Boolean {

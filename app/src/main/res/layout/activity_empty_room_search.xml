@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_emptyRoom"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activities.EmptyRoomSearch">
+
+    <include layout="@layout/view_general_toolbar" />
+
+    <tool.xfy9326.naucourse.ui.views.widgets.AdvancedSwipeRefreshLayout
+        android:id="@+id/asl_emptyRoom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        app:color_scheme="@array/refresh_layout_color_scheme"
+        app:trigger_async_distance="@integer/default_refresh_layout_trigger_async_distance">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="2dp">
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/AppTheme.ContentCardView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="3dp">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tv_emptyRoomTerm"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:textColor="@color/colorPrimaryText"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tv_emptyRoomStartEndDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="5dp" />
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginEnd="5dp"
+                            android:gravity="center_vertical">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/et_emptyRoomDate"
+                                android:layout_width="0dp"
+                                android:layout_height="30dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_edit"
+                                android:ems="6"
+                                android:enabled="false"
+                                android:paddingStart="7dp"
+                                android:paddingTop="3dp"
+                                android:paddingEnd="7dp"
+                                android:paddingBottom="3dp"
+                                android:textSize="14sp" />
+
+                            <androidx.appcompat.widget.AppCompatImageButton
+                                android:id="@+id/btn_emptyRoomDate"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginEnd="10dp"
+                                android:background="@android:color/transparent"
+                                android:src="@drawable/ic_school_calendar_dark"
+                                android:tint="@color/colorControlIcon" />
+
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:gravity="center_vertical">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/empty_room_course_num" />
+
+                            <androidx.appcompat.widget.AppCompatSpinner
+                                android:id="@+id/sp_emptyRoomStart"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:layout_weight="1" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/duration"
+                                android:textSize="20sp" />
+
+                            <androidx.appcompat.widget.AppCompatSpinner
+                                android:id="@+id/sp_emptyRoomEnd"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:layout_weight="1" />
+
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_emptyRoomSearch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="8dp"
+                            android:text="@android:string/search_go"
+                            android:textColor="@color/colorPrimaryTextWhenDark" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <include layout="@layout/layout_list" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </tool.xfy9326.naucourse.ui.views.widgets.AdvancedSwipeRefreshLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

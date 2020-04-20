@@ -77,11 +77,11 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
                     when (which) {
                         0 -> addNewCourse()
                         1 -> {
-                            FullScreenLoadingDialog().show(supportFragmentManager)
+                            FullScreenLoadingDialog.showDialog(supportFragmentManager)
                             getViewModel().importCourse(CourseManageViewModel.ImportCourseType.CURRENT_TERM)
                         }
                         2 -> {
-                            FullScreenLoadingDialog().show(supportFragmentManager)
+                            FullScreenLoadingDialog.showDialog(supportFragmentManager)
                             getViewModel().importCourse(CourseManageViewModel.ImportCourseType.NEXT_TERM)
                         }
                     }

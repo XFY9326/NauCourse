@@ -3,7 +3,7 @@
     <color name="colorPrimary">#282828</color>
     <color name="colorPrimaryDark">#212121</color>
     <color name="colorAccent">#363636</color>
-    <color name="colorPrimaryText">#DBDBDB</color>
+    <color name="colorPrimaryText">#FFFFFF</color>
     <color name="colorSecondaryText">#C7C7C7</color>
     <color name="colorCourseTimeDefault">#FFFFFF</color>
     <color name="colorBaseIcon">#DBDBDB</color>

@@ -88,7 +88,7 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment(), Preference
             lifecycleScope.launch(Dispatchers.IO) {
                 imageMutex.withLock {
                     launch(Dispatchers.Main) {
-                        FullScreenLoadingDialog().show(childFragmentManager)
+                        FullScreenLoadingDialog.showDialog(childFragmentManager)
                     }
 
                     val result =
@@ -117,7 +117,7 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment(), Preference
         lifecycleScope.launch(Dispatchers.IO) {
             imageMutex.withLock {
                 launch(Dispatchers.Main) {
-                    FullScreenLoadingDialog().show(childFragmentManager)
+                    FullScreenLoadingDialog.showDialog(childFragmentManager)
                 }
                 val result = ImageUtils.saveImageToLocalFromUri(
                     Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_NAME,

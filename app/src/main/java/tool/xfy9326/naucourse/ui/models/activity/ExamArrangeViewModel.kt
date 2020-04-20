@@ -6,8 +6,8 @@ import tool.xfy9326.naucourse.providers.info.methods.ExamInfo
 import tool.xfy9326.naucourse.ui.models.base.BaseListViewModel
 
 class ExamArrangeViewModel : BaseListViewModel<Exam>() {
-    override suspend fun onUpdateData(isInit: Boolean): InfoResult<List<Exam>> {
-        val data = ExamInfo.getInfo(loadCache = isInit)
+    override suspend fun onUpdateData(isInit: Boolean, forceUpdate: Boolean): InfoResult<List<Exam>> {
+        val data = ExamInfo.getInfo(loadCache = isInit, forceRefresh = forceUpdate)
         return if (data.isSuccess) {
             InfoResult(true, data.data!!.asList())
         } else {

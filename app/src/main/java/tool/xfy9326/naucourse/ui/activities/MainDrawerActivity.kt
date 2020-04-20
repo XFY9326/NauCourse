@@ -146,12 +146,14 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
                 R.id.menu_navCourseArrange -> showFragment(FragmentType.COURSE_ARRANGE)
                 R.id.menu_navCourseTable -> showFragment(FragmentType.COURSE_TABLE)
                 R.id.menu_navNews -> showFragment(FragmentType.NEWS)
-                R.id.menu_navSchoolCalendar -> startActivity(Intent(this@MainDrawerActivity, SchoolCalendarActivity::class.java))
-                R.id.menu_navLevelExam -> startActivity(Intent(this@MainDrawerActivity, LevelExamActivity::class.java))
-                R.id.menu_navExamArrange -> startActivity(Intent(this@MainDrawerActivity, ExamArrangeActivity::class.java))
-                R.id.menu_navScoreQuery -> startActivity(Intent(this@MainDrawerActivity, ScoreQueryActivity::class.java))
-                R.id.menu_navCourseManage -> startActivity(Intent(this@MainDrawerActivity, CourseManageActivity::class.java))
-                R.id.menu_navSettings -> startActivity(Intent(this@MainDrawerActivity, SettingsActivity::class.java))
+                R.id.menu_navSchoolCalendar -> openFunctionActivity(SchoolCalendarActivity::class.java)
+                R.id.menu_navLevelExam -> openFunctionActivity(LevelExamActivity::class.java)
+                R.id.menu_navExamArrange -> openFunctionActivity(ExamArrangeActivity::class.java)
+                R.id.menu_navSuspendCourseNotification -> openFunctionActivity(SuspendCourseActivity::class.java)
+                R.id.menu_navEmptyRoomSearch -> openFunctionActivity(EmptyRoomSearch::class.java)
+                R.id.menu_navScoreQuery -> openFunctionActivity(ScoreQueryActivity::class.java)
+                R.id.menu_navCourseManage -> openFunctionActivity(CourseManageActivity::class.java)
+                R.id.menu_navSettings -> openFunctionActivity(SettingsActivity::class.java)
                 R.id.menu_navLogout -> logout()
                 R.id.menu_navExit -> finishAndRemoveTask()
             }
@@ -160,9 +162,13 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         return true
     }
 
+    private fun <T> openFunctionActivity(clazz: Class<T>) {
+        startActivity(Intent(this, clazz))
+    }
+
     private fun logout() {
         DialogUtils.createLogoutAttentionDialog(this, lifecycle, DialogInterface.OnClickListener { _, _ ->
-            FullScreenLoadingDialog().show(supportFragmentManager)
+            FullScreenLoadingDialog.showDialog(supportFragmentManager)
             getViewModel().requestLogout()
         }).show()
     }

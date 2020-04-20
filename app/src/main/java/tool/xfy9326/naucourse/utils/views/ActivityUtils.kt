@@ -16,6 +16,9 @@ import tool.xfy9326.naucourse.R
 
 object ActivityUtils {
 
+    fun showSnackBar(context: Context, view: CoordinatorLayout, @StringRes strId: Int, vararg params: Any) =
+        Snackbar.make(view, context.getString(strId, *params), Snackbar.LENGTH_SHORT).show()
+
     fun showSnackBar(view: CoordinatorLayout, @StringRes strId: Int) =
         Snackbar.make(view, strId, Snackbar.LENGTH_SHORT).show()
 

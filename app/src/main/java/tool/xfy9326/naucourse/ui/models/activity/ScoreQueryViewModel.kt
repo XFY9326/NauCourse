@@ -13,6 +13,7 @@ import tool.xfy9326.naucourse.providers.beans.jwc.CourseScore
 import tool.xfy9326.naucourse.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourse.providers.info.methods.MyCourseHistoryInfo
 import tool.xfy9326.naucourse.providers.info.methods.MyCourseInfo
+import tool.xfy9326.naucourse.providers.info.methods.PersonalInfo
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
@@ -33,7 +34,7 @@ class ScoreQueryViewModel : BaseViewModel() {
     val courseHistory = MutableLiveData<List<CourseHistory>>()
     val courseScore = MutableLiveData<List<CourseScore>>()
     val scrollToTop = NotifyLivaData()
-    val credit = EventLiveData<Float>()
+    val credit = EventLiveData<Pair<Float, Float?>>()
     val creditCountStatus = EventLiveData<CreditCountStatus>()
     val creditCourseSelect = EventLiveData<Pair<ArrayList<CreditCountItem>, ArrayList<CreditCountItem>>>()
 
@@ -56,12 +57,12 @@ class ScoreQueryViewModel : BaseViewModel() {
         }
     }
 
-    fun refreshData(isInit: Boolean = false) = viewModelScope.launch(Dispatchers.Default) {
+    fun refreshData(isInit: Boolean = false, forceUpdate: Boolean = false) = viewModelScope.launch(Dispatchers.Default) {
         dataGetMutex.withLock {
             isRefreshing.postValue(true)
 
-            val courseScoreAsync = async { MyCourseInfo.getInfo(loadCache = isInit) }
-            val courseHistoryAsync = async { MyCourseHistoryInfo.getInfo(loadCache = isInit) }
+            val courseScoreAsync = async { MyCourseInfo.getInfo(loadCache = isInit, forceRefresh = forceUpdate) }
+            val courseHistoryAsync = async { MyCourseHistoryInfo.getInfo(loadCache = isInit, forceRefresh = forceUpdate) }
 
             val courseHistoryData = courseHistoryAsync.await()
             if (courseHistoryData.isSuccess) {
@@ -88,7 +89,7 @@ class ScoreQueryViewModel : BaseViewModel() {
             if (historyItems.isEmpty() && currentItems.isEmpty()) {
                 creditCountStatus.postEventValue(CreditCountStatus.EMPTY_DATA)
             } else {
-                credit.postEventValue(CreditCountUtils.countCredit(currentItems, historyItems))
+                credit.postEventValue(CreditCountUtils.countCredit(currentItems, historyItems) to getJwcCredit())
             }
         }
     }
@@ -109,7 +110,7 @@ class ScoreQueryViewModel : BaseViewModel() {
                         if (historyArr.isEmpty() && currentArr.isEmpty()) {
                             creditCountStatus.postEventValue(CreditCountStatus.EMPTY_DATA)
                         } else if (currentArr.isEmpty() || currentArr.size == 1) {
-                            credit.postEventValue(CreditCountUtils.countCredit(currentArr, historyArr))
+                            credit.postEventValue(CreditCountUtils.countCredit(currentArr, historyArr) to getJwcCredit())
                         } else {
                             creditCourseSelect.postEventValue(Pair(currentArr, historyArr))
                         }
@@ -118,6 +119,15 @@ class ScoreQueryViewModel : BaseViewModel() {
                     creditCountStatus.postEventValue(CreditCountStatus.DATA_LOADING)
                 }
             }
+        }
+    }
+
+    private suspend fun getJwcCredit(): Float? {
+        val personalInfo = PersonalInfo.getInfo(loadCache = true)
+        return if (personalInfo.isSuccess) {
+            personalInfo.data!!.getCredit()
+        } else {
+            null
         }
     }
 }

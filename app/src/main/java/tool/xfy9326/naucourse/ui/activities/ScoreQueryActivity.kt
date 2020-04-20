@@ -77,7 +77,7 @@ class ScoreQueryActivity : ViewModelActivity<ScoreQueryViewModel>(), CreditCount
         }
 
         asl_scoreQuery.setOnRefreshListener {
-            viewModel.refreshData()
+            viewModel.refreshData(forceUpdate = true)
         }
 
         TabLayoutMediator(tabLayout_scoreQuery, vp_scoreQuery,

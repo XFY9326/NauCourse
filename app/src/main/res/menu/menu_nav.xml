@@ -32,6 +32,14 @@
             android:id="@+id/menu_navLevelExam"
             android:icon="@drawable/ic_level_exam"
             android:title="@string/level_exam" />
+        <item
+            android:id="@+id/menu_navSuspendCourseNotification"
+            android:icon="@drawable/ic_suspend_course"
+            android:title="@string/suspend_course_notification" />
+        <item
+            android:id="@+id/menu_navEmptyRoomSearch"
+            android:icon="@drawable/ic_search"
+            android:title="@string/empty_room_search" />
     </group>
 
     <group android:id="@+id/menu_groupAdvancedFunction">

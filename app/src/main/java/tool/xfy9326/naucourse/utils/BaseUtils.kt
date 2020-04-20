@@ -84,6 +84,10 @@ object BaseUtils {
         }
     }
 
+    fun String.insert(offset: Int, str: String): String {
+        return StringBuilder(this).insert(offset, str).toString()
+    }
+
     fun getNightModeInt(type: SettingsPref.NightModeType) =
         when (type) {
             SettingsPref.NightModeType.AUTO -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM

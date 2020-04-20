@@ -19,6 +19,12 @@ class FullScreenLoadingDialog : DialogFragment() {
     companion object {
         private const val LOADING_DIALOG_TAG = "LOADING_DIALOG"
 
+        fun showDialog(fragmentManager: FragmentManager) {
+            if (fragmentManager.findFragmentByTag(LOADING_DIALOG_TAG) == null) {
+                FullScreenLoadingDialog().show(fragmentManager, LOADING_DIALOG_TAG)
+            }
+        }
+
         fun close(fragmentManager: FragmentManager) =
             (fragmentManager.findFragmentByTag(LOADING_DIALOG_TAG) as DialogFragment?)?.dismissAllowingStateLoss()
     }

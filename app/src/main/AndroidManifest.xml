@@ -88,6 +88,22 @@
         </activity>
 
         <activity
+            android:name=".ui.activities.SuspendCourseActivity"
+            android:label="@string/suspend_course_notification">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="tool.xfy9326.naucourse.ui.activities.MainDrawerActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.activities.EmptyRoomSearch"
+            android:label="@string/empty_room_search">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="tool.xfy9326.naucourse.ui.activities.MainDrawerActivity" />
+        </activity>
+
+        <activity
             android:name=".ui.activities.ExamArrangeActivity"
             android:label="@string/exam_arrange">
             <meta-data

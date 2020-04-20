@@ -43,7 +43,7 @@ abstract class ListViewModelActivity<E, T : BaseListViewModel<E>, VH : RecyclerV
         arv_dataList.adapter = adapter
 
         asl_refreshLayout.setOnRefreshListener {
-            viewModel.getData()
+            viewModel.getData(forceUpdate = true)
         }
     }
 

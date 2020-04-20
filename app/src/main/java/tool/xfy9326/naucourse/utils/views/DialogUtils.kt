@@ -6,6 +6,8 @@ import android.content.DialogInterface
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Button
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -25,10 +27,16 @@ import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import kotlin.math.min
 
 object DialogUtils {
-    fun createCreditShowDialog(context: Context, lifecycle: Lifecycle, credit: Float) =
+    fun createCreditShowDialog(context: Context, lifecycle: Lifecycle, credit: Pair<Float, Float?>) =
         MaterialAlertDialogBuilder(context).apply {
             setTitle(R.string.credit_count)
-            setMessage(context.getString(R.string.credit_count_result, credit))
+            setMessage(
+                if (credit.second == null) {
+                    context.getString(R.string.credit_count_result, credit.first)
+                } else {
+                    context.getString(R.string.jwc_credit, credit.second) + context.getString(R.string.credit_count_result, credit.first)
+                }
+            )
             setPositiveButton(android.R.string.yes, null)
             background = context.getDrawable(R.drawable.bg_dialog)
         }.create().also {
@@ -185,6 +193,17 @@ object DialogUtils {
         }.also {
             addAutoCloseListener(lifecycle, it)
         }
+
+    fun applyButtonTextAndBackground(context: Context, dialog: Dialog) {
+        dialog.apply {
+            findViewById<Button>(android.R.id.button1)?.setTextColor(ContextCompat.getColor(context, R.color.colorDialogButtonText))
+            findViewById<Button>(android.R.id.button2)?.setTextColor(ContextCompat.getColor(context, R.color.colorDialogButtonText))
+            findViewById<Button>(android.R.id.button3)?.setTextColor(ContextCompat.getColor(context, R.color.colorDialogButtonText))
+            window?.apply {
+                setBackgroundDrawable(context.getDrawable(R.drawable.bg_dialog))
+            }
+        }
+    }
 
     // Activity销毁时自动关闭Dialog，防止窗体泄漏
     fun addAutoCloseListener(lifecycle: Lifecycle, dialog: Dialog) {

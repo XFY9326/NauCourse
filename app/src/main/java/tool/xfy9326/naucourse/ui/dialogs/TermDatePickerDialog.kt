@@ -4,12 +4,10 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.widget.Button
 import android.widget.DatePicker
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
+import tool.xfy9326.naucourse.utils.views.DialogUtils
 import java.util.*
 
 class TermDatePickerDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
@@ -58,18 +56,13 @@ class TermDatePickerDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
                     fragment.onTermDatePartEditCanceled(termDate)
                 }
             }
-
         }
     }
 
     override fun onStart() {
         super.onStart()
-        dialog?.apply {
-            findViewById<Button>(android.R.id.button1)?.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorDialogButtonText))
-            findViewById<Button>(android.R.id.button2)?.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorDialogButtonText))
-            window?.apply {
-                setBackgroundDrawable(activity?.getDrawable(R.drawable.bg_dialog))
-            }
+        dialog?.let {
+            DialogUtils.applyButtonTextAndBackground(requireContext(), it)
         }
     }
 
