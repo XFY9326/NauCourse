@@ -384,7 +384,7 @@
     <string name="suspend_course_notification">调停课通知</string>
     <string name="suspend_course_time">时间：%1$s\u3000%2$s</string>
     <string name="jwc_credit">教务当前学分绩点：%1$.2f\n</string>
-    <string name="personal_photo">个人图片</string>
+    <string name="personal_photo">个人照片</string>
     <string name="cache_settings">缓存设置</string>
     <string name="clear_network_cache">清空网络缓存</string>
     <string name="clear_network_cache_sum">清空网页与图片的本地缓存</string>

@@ -94,6 +94,7 @@
 -keepclassmembers class **$WhenMappings {
     <fields>;
 }
+-keepclassmembers class java.util.Iterator { *; }
 -keepclassmembers class kotlin.Metadata {
     public <methods>;
 }
