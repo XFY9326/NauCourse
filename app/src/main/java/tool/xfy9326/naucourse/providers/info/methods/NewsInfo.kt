@@ -1,6 +1,5 @@
 package tool.xfy9326.naucourse.providers.info.methods
 
-import android.graphics.Bitmap
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -89,11 +88,13 @@ object NewsInfo : BaseSimpleContentInfo<List<GeneralNews>, PostSource>() {
             CONTENT_MAP[newsType]?.getContentDetailData(url)!!
         }
 
-    fun getImageForNewsInfo(source: String, newsType: PostSource): Pair<String, Bitmap>? {
+    fun getImageUrlForNewsInfo(source: String, newsType: PostSource): HttpUrl {
         if (newsType == PostSource.UNKNOWN) {
             throw IllegalArgumentException("Unknown Post Source")
+        } else if (!CONTENT_MAP.containsKey(newsType)) {
+            throw IllegalArgumentException("Unknown News Type")
         } else {
-            return CONTENT_MAP[newsType]?.getNewsImage(source)
+            return CONTENT_MAP[newsType]?.getNewsImageUrl(source)!!
         }
     }
 

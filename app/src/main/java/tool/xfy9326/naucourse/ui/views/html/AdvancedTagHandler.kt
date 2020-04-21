@@ -1,7 +1,6 @@
 package tool.xfy9326.naucourse.ui.views.html
 
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.text.Editable
 import android.text.Html
 import android.text.Spanned
@@ -9,6 +8,8 @@ import android.text.style.ImageSpan
 import android.view.View
 import org.xml.sax.XMLReader
 import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
+import tool.xfy9326.naucourse.utils.utility.BitmapUtils
 import java.util.*
 
 class AdvancedTagHandler : Html.TagHandler {
@@ -25,10 +26,11 @@ class AdvancedTagHandler : Html.TagHandler {
                             @Suppress("UNCHECKED_CAST")
                             val htmlDrawable = it.drawable as HtmlDrawable?
                             if (htmlDrawable?.downloadUrl != null && htmlDrawable.nowStatus == ImageStatus.SHOWING) {
-                                clickListener?.onHtmlTextImageClick(htmlDrawable.downloadUrl!!, (htmlDrawable.drawable as BitmapDrawable?)?.bitmap!!)
+                                clickListener?.onHtmlTextImageClick(htmlDrawable.downloadUrl!!)
                                 super.onClick(widget, x, y)
                             }
                         } catch (e: Exception) {
+                            ExceptionUtils.printStackTrace<AdvancedTagHandler>(e)
                         }
                     }
 
@@ -39,11 +41,12 @@ class AdvancedTagHandler : Html.TagHandler {
                             if (htmlDrawable?.downloadUrl != null && htmlDrawable.nowStatus == ImageStatus.SHOWING) {
                                 longPressListener?.onHtmlTextImageLongPress(
                                     htmlDrawable.downloadUrl!!,
-                                    (htmlDrawable.drawable as BitmapDrawable?)?.bitmap!!
+                                    BitmapUtils.getBitmapFromDrawable(htmlDrawable.drawable)!!
                                 )
                                 super.onLongPress(widget, x, y)
                             }
                         } catch (e: Exception) {
+                            ExceptionUtils.printStackTrace<AdvancedTagHandler>(e)
                         }
                     }
                 }, len - 1, len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -60,12 +63,10 @@ class AdvancedTagHandler : Html.TagHandler {
     }
 
     interface OnImageLongPressListener {
-        // Bitmap不需要回收，通过HtmlImageGetter统一回收
         fun onHtmlTextImageLongPress(source: String, bitmap: Bitmap)
     }
 
     interface OnImageClickListener {
-        // Bitmap不需要回收，通过HtmlImageGetter统一回收
-        fun onHtmlTextImageClick(source: String, bitmap: Bitmap)
+        fun onHtmlTextImageClick(source: String)
     }
 }

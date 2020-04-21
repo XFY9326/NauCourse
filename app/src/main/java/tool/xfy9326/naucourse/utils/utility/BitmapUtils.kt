@@ -4,8 +4,11 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Paint
 import android.graphics.Rect
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.applyCanvas
+import com.bumptech.glide.load.resource.gif.GifDrawable
 import tool.xfy9326.naucourse.R
 
 object BitmapUtils {
@@ -29,4 +32,12 @@ object BitmapUtils {
             drawText(text, width - rect.width().toFloat() - textPadding, height - rect.height().toFloat() + baseLineHeight - textPadding, paint)
         }
     }
+
+    fun getBitmapFromDrawable(drawable: Drawable?) =
+        when (drawable) {
+            null -> null
+            is BitmapDrawable -> drawable.bitmap
+            is GifDrawable -> drawable.firstFrame
+            else -> null
+        }
 }

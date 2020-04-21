@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.io.prefs.AppPref
+import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.receivers.NextCourseAlarmReceiver
 import tool.xfy9326.naucourse.ui.activities.ImageShowActivity
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
@@ -46,9 +47,10 @@ object IntentUtils {
         }
     }
 
-    fun viewUrlPhoto(activity: Activity, url: String) {
+    fun viewLargePhotoByUrl(activity: Activity, url: String, loginClientType: LoginNetworkManager.ClientType? = null) {
         activity.startActivity(Intent(activity, ImageShowActivity::class.java).apply {
             putExtra(ImageShowActivity.EXTRA_IMAGE_URL, url)
+            if (loginClientType != null) putExtra(ImageShowActivity.EXTRA_LOGIN_CLIENT_TYPE, loginClientType)
         })
         activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }

@@ -20,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentLearningProcess
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentPersonalInfo
@@ -50,7 +51,7 @@ class UserInfoActivity : ViewModelActivity<UserInfoViewModel>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_personalPhoto) {
-            IntentUtils.viewUrlPhoto(this, StudentIndex.JWC_STU_PHOTO_URL.toString())
+            IntentUtils.viewLargePhotoByUrl(this, StudentIndex.JWC_STU_PHOTO_URL.toString(), LoginNetworkManager.ClientType.JWC)
         }
         return super.onOptionsItemSelected(item)
     }

@@ -17,11 +17,11 @@ open class MutableDrawable<T : Enum<*>>(drawable: Drawable? = null, nowStatus: T
         private set
 
     @Synchronized
-    fun setDrawable(drawable: Drawable?, nowStatus: T?) {
+    open fun setDrawable(drawable: Drawable?, nowStatus: T?, recycleOld: Boolean = true) {
         if (drawable != this.drawable && nowStatus != this.nowStatus) {
             this.drawable?.let {
                 it.callback = null
-                if (it is BitmapDrawable) {
+                if (recycleOld && it is BitmapDrawable) {
                     try {
                         if (!it.bitmap.isRecycled) it.bitmap.recycle()
                     } catch (e: Exception) {

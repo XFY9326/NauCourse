@@ -116,6 +116,7 @@ object Constants {
     }
 
     object Pref {
+        const val ClearNetworkCache = "ClearNetworkCache"
         const val ApplicationUpdate = "ApplicationUpdate"
         const val ClearDebugLogs = "ClearDebugLogs"
         const val AboutIntent = "AboutIntent"

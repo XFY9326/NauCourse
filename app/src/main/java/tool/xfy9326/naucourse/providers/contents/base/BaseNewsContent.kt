@@ -1,7 +1,5 @@
 package tool.xfy9326.naucourse.providers.contents.base
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Response
@@ -45,23 +43,12 @@ abstract class BaseNewsContent<T> : BaseNoParamContent<Set<GeneralNews>>() {
 
     protected open fun onBuildImageUrl(source: String): HttpUrl = source.toHttpUrl()
 
-    fun getNewsImage(source: String): Pair<String, Bitmap>? {
-        try {
-            val imageUrl = if (source.startsWith(Constants.Network.HTTP)) {
-                source.toHttpUrl()
-            } else {
-                onBuildImageUrl(source)
-            }
-            val response = onRequestDetailData(imageUrl)
-            response.body?.byteStream()?.let {
-                return Pair(imageUrl.toString(), BitmapFactory.decodeStream(it))
-            }
-        } catch (e: Exception) {
-            ExceptionUtils.printStackTrace<BaseNewsContent<T>>(e)
-            return null
+    fun getNewsImageUrl(source: String) =
+        if (source.startsWith(Constants.Network.HTTP)) {
+            source.toHttpUrl()
+        } else {
+            onBuildImageUrl(source)
         }
-        return null
-    }
 
     protected abstract fun onParseDetailData(document: Document): GeneralNewsDetail
 

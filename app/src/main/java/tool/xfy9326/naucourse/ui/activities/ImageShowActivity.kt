@@ -1,16 +1,25 @@
 package tool.xfy9326.naucourse.ui.activities
 
-import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.github.chrisbanes.photoview.PhotoView
 import kotlinx.android.synthetic.main.activity_image_show.*
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.network.LoginNetworkManager
+import tool.xfy9326.naucourse.tools.glide.ClientRequest
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourse.ui.models.activity.ImageShowViewModel
+import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
+import tool.xfy9326.naucourse.utils.utility.BitmapUtils
 import tool.xfy9326.naucourse.utils.utility.ShareUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils
 import tool.xfy9326.naucourse.utils.views.DialogUtils
@@ -18,9 +27,11 @@ import tool.xfy9326.naucourse.utils.views.I18NUtils
 
 class ImageShowActivity : ViewModelActivity<ImageShowViewModel>(), View.OnLongClickListener, View.OnClickListener {
     private lateinit var imageUrl: String
+    private var loginClientType: LoginNetworkManager.ClientType? = null
 
     companion object {
         const val EXTRA_IMAGE_URL = "EXTRA_IMAGE_URL"
+        const val EXTRA_LOGIN_CLIENT_TYPE = "EXTRA_LOGIN_CLIENT_TYPE"
     }
 
     override fun onCreateContentView(): Int = R.layout.activity_image_show
@@ -34,25 +45,42 @@ class ImageShowActivity : ViewModelActivity<ImageShowViewModel>(), View.OnLongCl
         viewModel.imageOperation.observeEvent(this, Observer {
             ActivityUtils.showSnackBar(layout_imageView, I18NUtils.getImageOperationTypeResId(it))
         })
-        viewModel.imageDownloadFailed.observeNotification(this, {
-            ActivityUtils.showSnackBar(layout_imageView, R.string.image_load_failed)
-        })
-        viewModel.image.observeEventWithCheck(this, {
-            pv_imageView.setImageBitmap(it)
-            pb_imageLoading.hide()
-            pv_imageView.visibility = View.VISIBLE
-            true
-        })
     }
 
     override fun initView(savedInstanceState: Bundle?, viewModel: ImageShowViewModel) {
         imageUrl = intent?.extras?.getString(EXTRA_IMAGE_URL)!!
+        loginClientType = intent?.extras?.getSerializable(EXTRA_LOGIN_CLIENT_TYPE) as LoginNetworkManager.ClientType?
 
         pv_imageView.setOnLongClickListener(this)
         pv_imageView.setOnClickListener(this)
         layout_imageView.setOnClickListener(this)
 
-        viewModel.loadBitmap(imageUrl)
+        Glide.with(this).let {
+            val type = loginClientType
+            if (type == null) {
+                it.load(imageUrl)
+            } else {
+                it.load(ClientRequest(type, imageUrl))
+            }
+        }.override(resources.displayMetrics.widthPixels, resources.displayMetrics.heightPixels)
+            .listener(object : RequestListener<Drawable> {
+                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                    e?.let {
+                        ExceptionUtils.printStackTrace(this@ImageShowActivity, it)
+                    }
+                    ActivityUtils.showSnackBar(layout_imageView, R.string.image_load_failed)
+                    return false
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable?, model: Any?, target: Target<Drawable>?,
+                    dataSource: DataSource?, isFirstResource: Boolean
+                ): Boolean {
+                    pb_imageLoading.hide()
+                    pv_imageView.visibility = View.VISIBLE
+                    return false
+                }
+            }).fitCenter().into(pv_imageView)
     }
 
     override fun onClick(v: View?) {
@@ -60,7 +88,7 @@ class ImageShowActivity : ViewModelActivity<ImageShowViewModel>(), View.OnLongCl
     }
 
     override fun onLongClick(v: View?): Boolean {
-        val bitmap = ((v as PhotoView).drawable.current as BitmapDrawable).bitmap
+        val bitmap = BitmapUtils.getBitmapFromDrawable((v as PhotoView).drawable.current)!!
         DialogUtils.createImageOperationDialog(this, lifecycle,
             { getViewModel().shareImage(imageUrl, bitmap) },
             { getViewModel().saveImage(imageUrl, bitmap) }).show()

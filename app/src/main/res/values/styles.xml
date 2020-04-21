@@ -34,8 +34,7 @@
         <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
     </style>
 
-    <style name="AppTheme.ImageShowActivity" parent="AppTheme.TranslucentStatusBar.Base">
-        <item name="android:windowFullscreen">true</item>
+    <style name="AppTheme.ImageShowActivity" parent="AppTheme.TranslucentStatusBar.DarkActionBar">
         <item name="android:windowDrawsSystemBarBackgrounds">false</item>
         <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
         <item name="android:windowBackground">@color/colorImageViewActivityBackground</item>

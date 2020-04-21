@@ -16,6 +16,7 @@ import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.BuildConfig
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
+import tool.xfy9326.naucourse.utils.io.BaseIOUtils
 import java.util.*
 import kotlin.system.exitProcess
 
@@ -83,6 +84,8 @@ object BaseUtils {
             }
         }
     }
+
+    fun clearCache(context: Context) = BaseIOUtils.deleteFile(context.cacheDir)
 
     fun String.insert(offset: Int, str: String): String {
         return StringBuilder(this).insert(offset, str).toString()

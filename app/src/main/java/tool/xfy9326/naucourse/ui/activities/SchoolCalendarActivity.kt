@@ -1,13 +1,18 @@
 package tool.xfy9326.naucourse.ui.activities
 
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.activity_school_calendar.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
@@ -15,6 +20,7 @@ import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CalendarItem
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourse.ui.models.activity.SchoolCalendarViewModel
+import tool.xfy9326.naucourse.utils.utility.BitmapUtils
 import tool.xfy9326.naucourse.utils.utility.ShareUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
@@ -36,7 +42,7 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
         viewModel.imageOperation.observeEvent(this, Observer {
             ActivityUtils.showSnackBar(layout_schoolCalendar, I18NUtils.getImageOperationTypeResId(it))
         })
-        viewModel.calendarImage.observeEventWithCheck(this, {
+        viewModel.calendarImageUrl.observeEventWithCheck(this, {
             setImageView(it)
             true
         })
@@ -84,7 +90,7 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
 
             setItems(itemList) { _, which ->
                 resetImageView()
-                getViewModel().loadCalendarImage(list[which].url)
+                getViewModel().loadCalendarImage(list[which].url, true)
             }
             setNeutralButton(R.string.restore_to_default_calendar) { _, _ ->
                 resetImageView()
@@ -98,18 +104,35 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
     }
 
     @Synchronized
-    private fun setImageView(bitmap: Bitmap) {
-        pv_calendarImage.setImageBitmap(bitmap)
-        isCalendarSet = true
+    private fun setImageView(url: String) {
+        Glide.with(this).load(url).override(resources.displayMetrics.widthPixels, resources.displayMetrics.heightPixels)
+            .listener(object : RequestListener<Drawable> {
+                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                    ActivityUtils.showSnackBar(
+                        layout_schoolCalendar,
+                        I18NUtils.getCalendarLoadStatusResId(SchoolCalendarViewModel.CalendarLoadStatus.IMAGE_LOAD_FAILED)
+                    )
+                    return false
+                }
 
-        pb_calendarLoading.hide()
-        pv_calendarImage.visibility = View.VISIBLE
+                override fun onResourceReady(
+                    resource: Drawable?, model: Any?, target: Target<Drawable>?,
+                    dataSource: DataSource?, isFirstResource: Boolean
+                ): Boolean {
+                    isCalendarSet = true
+
+                    pb_calendarLoading.hide()
+                    pv_calendarImage.visibility = View.VISIBLE
+
+                    return false
+                }
+            }).fitCenter().into(pv_calendarImage)
     }
 
     @Synchronized
     private fun getBitmapFromImageView(): Bitmap? {
         return if (isCalendarSet) {
-            (pv_calendarImage.drawable.current as BitmapDrawable?)?.bitmap
+            BitmapUtils.getBitmapFromDrawable(pv_calendarImage.drawable.current)!!
         } else {
             ActivityUtils.showSnackBar(layout_schoolCalendar, R.string.image_operation_when_calendar_loading)
             null

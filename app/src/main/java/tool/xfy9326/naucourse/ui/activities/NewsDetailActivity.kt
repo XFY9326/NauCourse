@@ -37,7 +37,6 @@ import java.util.*
 
 class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTagHandler.OnImageLongPressListener,
     AdvancedTagHandler.OnImageClickListener {
-    private var imageGetter: HtmlImageGetter? = null
     private var isNewsDetailSet = false
     private lateinit var newsData: SerializableNews
 
@@ -152,10 +151,7 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
 
         tv_newsDetailContent.text = try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                imageGetter = HtmlImageGetter(
-                    lifecycleScope, tv_newsDetailContent, this,
-                    newsData.postSource
-                )
+                val imageGetter = HtmlImageGetter(this, tv_newsDetailContent, newsData.postSource)
                 val tagHandler = AdvancedTagHandler().apply {
                     setOnImageClickListener(this@NewsDetailActivity)
                     setOnImageLongPressListener(this@NewsDetailActivity)
@@ -172,8 +168,8 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
         tv_newsDetailContent.movementMethod = AdvancedLinkMovementMethod
     }
 
-    override fun onHtmlTextImageClick(source: String, bitmap: Bitmap) {
-        IntentUtils.viewUrlPhoto(this, source)
+    override fun onHtmlTextImageClick(source: String) {
+        IntentUtils.viewLargePhotoByUrl(this, source)
     }
 
     override fun onHtmlTextImageLongPress(source: String, bitmap: Bitmap) =
@@ -183,7 +179,6 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
 
     override fun onDestroy() {
         AdvancedLinkMovementMethod.clearHandler()
-        imageGetter?.recycleDrawable()
         System.gc()
         super.onDestroy()
     }

@@ -26,4 +26,16 @@
             app:title="@string/auto_async_news_info" />
 
     </tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory>
+
+    <tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/cache_settings">
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="ClearNetworkCache"
+            app:summary="@string/clear_network_cache_sum"
+            app:title="@string/clear_network_cache" />
+
+    </tool.xfy9326.naucourse.ui.views.preference.StyledPreferenceCategory>
 </androidx.preference.PreferenceScreen>
