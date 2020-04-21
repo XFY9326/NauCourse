@@ -18,7 +18,6 @@ import tool.xfy9326.naucourse.utils.BaseUtils.goAsync
 import tool.xfy9326.naucourse.utils.courses.CourseUtils
 import tool.xfy9326.naucourse.utils.courses.ExtraCourseUtils
 import tool.xfy9326.naucourse.utils.courses.TimeUtils
-import tool.xfy9326.naucourse.utils.debug.LogUtils
 import tool.xfy9326.naucourse.utils.utility.AppWidgetUtils
 import tool.xfy9326.naucourse.widget.NextCourseWidget
 import java.util.*
@@ -43,7 +42,6 @@ class NextCourseAlarmReceiver : BroadcastReceiver() {
                 if (updateTime != null) {
                     val intent = getAlarmPendingIntent(context)
                     AlarmManagerCompat.setExactAndAllowWhileIdle(it, AlarmManager.RTC_WAKEUP, updateTime, intent)
-                    LogUtils.d<NextCourseAlarmReceiver>("Set Next Course Alarm. Time: $updateTime")
                 }
             }
         }
@@ -54,11 +52,9 @@ class NextCourseAlarmReceiver : BroadcastReceiver() {
                 if (updateTime != null) {
                     if (updateTime == 0L) {
                         context.startService(getNotifyIntent(context, courseItem))
-                        LogUtils.d<NextCourseAlarmReceiver>("Notify Next Course Now!")
                     } else {
                         val intent = getNotifyPendingIntent(context, courseItem)
                         AlarmManagerCompat.setExactAndAllowWhileIdle(it, AlarmManager.RTC_WAKEUP, updateTime, intent)
-                        LogUtils.d<NextCourseAlarmReceiver>("Set Next Course Notify Alarm. Time: $updateTime")
                     }
                 }
             }

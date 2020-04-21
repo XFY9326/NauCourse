@@ -9,10 +9,6 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
-    <permission
-        android:name="${ApplicationId}.permission.NextCourseWidget"
-        android:protectionLevel="signature" />
-
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -168,14 +164,12 @@
             </intent-filter>
         </receiver>
 
-        <receiver
-            android:name=".widget.NextCourseWidget"
-            android:permission="${ApplicationId}.permission.NextCourseWidget">
+        <receiver android:name=".widget.NextCourseWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="${ApplicationId}.action.COURSE_WIDGET_CLEAR" />
                 <action android:name="${ApplicationId}.action.NEXT_COURSE_WIDGET_UPDATE" />
-                <action android:name="${ApplicationId}.action.NEXT_COURSE_WIDGET_CLEAR" />
             </intent-filter>
 
             <meta-data

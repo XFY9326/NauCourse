@@ -67,11 +67,6 @@ class TableFragment : Fragment() {
             courseAndTermEmpty.observeNotification(viewLifecycleOwner, {
                 showToast(requireContext(), R.string.course_and_term_data_empty)
             }, "${TableFragment::class.java.simpleName}-$weekNum")
-            courseTableRebuild.observeNotification(viewLifecycleOwner, {
-                courseTablePkg[weekNum - 1].value?.let {
-                    startBuildTable(it)
-                }
-            }, "${TableFragment::class.java.simpleName}-$weekNum")
         }
     }
 

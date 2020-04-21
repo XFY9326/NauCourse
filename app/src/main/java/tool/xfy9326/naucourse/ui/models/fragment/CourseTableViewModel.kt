@@ -74,8 +74,6 @@ class CourseTableViewModel : BaseViewModel() {
 
     val getImageWhenCourseTableLoading = NotifyLivaData()
 
-    val courseTableRebuild = NotifyLivaData()
-
     val courseTablePkg = Array<MutableLiveData<CoursePkg>>(Constants.Course.MAX_WEEK_NUM_SIZE) { MutableLiveData() }
 
     enum class CurrentWeekStatus {
@@ -412,16 +410,24 @@ class CourseTableViewModel : BaseViewModel() {
         }
     }
 
-    private fun getCourseTableStyle() = synchronized(courseTableStyleLock) {
-        if (courseTableStyle == null) {
+    fun rebuildCourseTable() {
+        viewModelScope.launch(Dispatchers.Default) {
+            val newStyle = getCourseTableStyle(true)
+            for (liveData in courseTablePkg) {
+                if (liveData.hasObservers()) {
+                    liveData.value?.let {
+                        liveData.postValue(it.copy(courseTableStyle = newStyle))
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getCourseTableStyle(forceRefresh: Boolean = false) = synchronized(courseTableStyleLock) {
+        if (courseTableStyle == null || forceRefresh) {
             courseTableStyle = CourseTableViewHelper.getCourseTableStyle()
         }
         return@synchronized courseTableStyle!!
-    }
-
-    fun refreshCourseTableStyle() = synchronized(courseTableStyleLock) {
-        courseTableStyle = null
-        getCourseTableStyle()
     }
 
     fun requestCourseTableBackground() {

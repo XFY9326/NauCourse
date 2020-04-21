@@ -1,7 +1,6 @@
 package tool.xfy9326.naucourse.ui.activities
 
 import android.content.Intent
-import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
@@ -20,10 +19,13 @@ import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBar
 import tool.xfy9326.naucourse.utils.views.AnimUtils
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 import tool.xfy9326.naucourse.utils.views.I18NUtils
+import tool.xfy9326.naucourse.utils.views.ViewUtils
 import tool.xfy9326.naucourse.utils.views.ViewUtils.clear
 
 
 class LoginActivity : ViewModelActivity<LoginViewModel>() {
+    private lateinit var loadingAnimateDrawable: AnimatedVectorDrawableCompat
+
     override fun onCreateContentView() = R.layout.activity_login
 
     override fun onCreateViewModel() = ViewModelProvider(this)[LoginViewModel::class.java]
@@ -34,6 +36,8 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
     }
 
     override fun initView(savedInstanceState: Bundle?, viewModel: LoginViewModel) {
+        loadingAnimateDrawable = AnimatedVectorDrawableCompat.create(this, R.drawable.avd_anim_loading)!!
+        iv_loginLoading.setImageDrawable(loadingAnimateDrawable)
         AccountUtils.readSavedCacheUserId()?.let {
             et_userId.setText(it)
         }
@@ -106,41 +110,35 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
     }
 
     private fun setLoadingAnimation(setShow: Boolean) {
-        (iv_loginLoading.drawable as AnimatedVectorDrawable).apply {
-            if (setShow) {
-                btn_login.apply {
-                    visibility = View.GONE
-                    animation = AnimUtils.getAnimationFadeGone(this@LoginActivity)
-                }
+        if (setShow) {
+            btn_login.apply {
+                visibility = View.GONE
+                animation = AnimUtils.getAnimationFadeGone(this@LoginActivity)
+            }
 
-                iv_loginLoading.apply {
-                    visibility = View.VISIBLE
-                    animation = AnimUtils.getAnimationFadeVisible(this@LoginActivity)
-                }
-                AnimatedVectorDrawableCompat.registerAnimationCallback(this, AnimUtils.getAnimationLoopCallback())
-                start()
-            } else {
-                AnimatedVectorDrawableCompat.clearAnimationCallbacks(this)
-                stop()
-                iv_loginLoading.apply {
-                    visibility = View.GONE
-                    animation = AnimUtils.getAnimationFadeGone(this@LoginActivity)
-                }
+            iv_loginLoading.apply {
+                visibility = View.VISIBLE
+                animation = AnimUtils.getAnimationFadeVisible(this@LoginActivity)
+            }
+            loadingAnimateDrawable.registerAnimationCallback(AnimUtils.getAnimationLoopCallback())
+            ViewUtils.tryStartAnimateDrawable(loadingAnimateDrawable)
+        } else {
+            loadingAnimateDrawable.clearAnimationCallbacks()
+            ViewUtils.tryStopAnimateDrawable(loadingAnimateDrawable)
+            iv_loginLoading.apply {
+                visibility = View.GONE
+                animation = AnimUtils.getAnimationFadeGone(this@LoginActivity)
+            }
 
-                btn_login.apply {
-                    visibility = View.VISIBLE
-                    animation = AnimUtils.getAnimationFadeVisible(this@LoginActivity)
-                }
+            btn_login.apply {
+                visibility = View.VISIBLE
+                animation = AnimUtils.getAnimationFadeVisible(this@LoginActivity)
             }
         }
     }
 
-    override fun onBackPressed() {
-        moveTaskToBack(false)
-    }
-
     override fun onDestroy() {
-        AnimatedVectorDrawableCompat.clearAnimationCallbacks(iv_loginLoading.drawable)
+        loadingAnimateDrawable.clearAnimationCallbacks()
         System.gc()
         super.onDestroy()
     }

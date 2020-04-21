@@ -13,7 +13,9 @@ import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import tool.xfy9326.naucourse.utils.BaseUtils.dpToPx
+import tool.xfy9326.naucourse.utils.views.ViewUtils
 import kotlin.math.abs
 
 
@@ -63,7 +65,9 @@ class SwipeItemCallback<T : SwipeItemViewHolder>(private val listener: OnItemSwi
                 resetSwipeView(swipeViewHolder)
             }
             setupForegroundCorner(swipeViewHolder, dX)
-            if (swipeViewHolder.imageViewSwipeIcon.drawable is AnimatedVectorDrawable) {
+            if (swipeViewHolder.imageViewSwipeIcon.drawable is AnimatedVectorDrawable
+                || swipeViewHolder.imageViewSwipeIcon.drawable is AnimatedVectorDrawableCompat
+            ) {
                 setupSwipeIcon(swipeViewHolder, dX, isCurrentlyActive)
             }
             setupBackground(recyclerView, swipeViewHolder, dX)
@@ -127,13 +131,13 @@ class SwipeItemCallback<T : SwipeItemViewHolder>(private val listener: OnItemSwi
         if (viewHolder.itemView.right + dX < viewHolder.imageViewSwipeIcon.left) {
             if (hasAnimatedIcon) {
                 hasAnimatedIcon = false
-                (viewHolder.imageViewSwipeIcon.drawable as AnimatedVectorDrawable).start()
+                ViewUtils.tryStartAnimateDrawable(viewHolder.imageViewSwipeIcon.drawable)
             }
         } else {
             if (!hasAnimatedIcon) {
                 hasAnimatedIcon = true
                 if (isCurrentlyActive) {
-                    (viewHolder.imageViewSwipeIcon.drawable as AnimatedVectorDrawable).start()
+                    ViewUtils.tryStartAnimateDrawable(viewHolder.imageViewSwipeIcon.drawable)
                 }
             }
         }

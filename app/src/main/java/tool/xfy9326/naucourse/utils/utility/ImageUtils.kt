@@ -72,7 +72,7 @@ object ImageUtils {
 
     // 保存图片到本地（..Android/data/{packageName}/files/Pictures/{dirName}/..）或系统相册（..Pictures/NauCourse/{dirName}/..）
     // 保存的本地的图片如果要对外分享，请使用fileProviderUri = true，并在xml里面注册路径
-    fun saveImage(
+    private fun saveImage(
         fileName: String?,
         bitmap: Bitmap,
         recycle: Boolean = true,

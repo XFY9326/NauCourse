@@ -2,7 +2,6 @@ package tool.xfy9326.naucourse.utils.views
 
 import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
 import android.view.animation.AnimationUtils
 import android.view.animation.LinearInterpolator
@@ -21,7 +20,9 @@ object AnimUtils {
 
     fun getAnimationLoopCallback() = object : Animatable2Compat.AnimationCallback() {
         override fun onAnimationEnd(drawable: Drawable?) {
-            (drawable as AnimatedVectorDrawable).start()
+            drawable?.let {
+                ViewUtils.tryStartAnimateDrawable(it)
+            }
         }
     }
 

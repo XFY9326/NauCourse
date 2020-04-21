@@ -30,7 +30,6 @@ import java.util.*
 class NextCourseWidget : AppWidgetProvider() {
     companion object {
         const val ACTION_NEXT_COURSE_WIDGET_UPDATE = "${BuildConfig.APPLICATION_ID}.action.NEXT_COURSE_WIDGET_UPDATE"
-        const val ACTION_NEXT_COURSE_WIDGET_CLEAR = "${BuildConfig.APPLICATION_ID}.action.NEXT_COURSE_WIDGET_CLEAR"
         const val EXTRA_NEXT_COURSE_WIDGET_DATA = "EXTRA_NEXT_COURSE_WIDGET_DATA"
         private const val REQUEST_ON_CLICK_WIDGET_CONTENT = 1
 
@@ -129,7 +128,7 @@ class NextCourseWidget : AppWidgetProvider() {
                     AppWidgetManager.getInstance(it).updateAppWidget(componentName, generateView(it, nextCourseBundle))
                     NextCourseBundleStore.saveStore(nextCourseBundle)
                 }
-            } else if (intent?.action == ACTION_NEXT_COURSE_WIDGET_CLEAR) {
+            } else if (intent?.action == AppWidgetUtils.ACTION_COURSE_WIDGET_CLEAR) {
                 goAsync {
                     AppWidgetManager.getInstance(it).updateAppWidget(componentName, generateView(it, null))
                     NextCourseBundleStore.clearStore()

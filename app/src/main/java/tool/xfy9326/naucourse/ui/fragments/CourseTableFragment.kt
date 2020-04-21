@@ -119,8 +119,7 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
             viewModel.refreshTimeInfo()
         }, CourseTableFragment::class.java.simpleName)
         NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE].observeNotification(viewLifecycleOwner, {
-            viewModel.refreshCourseTableStyle()
-            viewModel.courseTableRebuild.notifyEvent()
+            viewModel.rebuildCourseTable()
         }, CourseTableFragment::class.java.simpleName)
         NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE_BACKGROUND].observeNotification(viewLifecycleOwner, {
             viewModel.requestCourseTableBackground()
@@ -143,8 +142,6 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
     }
 
     override fun initView(viewModel: CourseTableViewModel) {
-        viewModel.refreshCourseTableStyle()
-
         CourseTableViewHelper.setOnCourseCellClickListener(this)
 
         courseTableViewPagerAdapter = CourseTableViewPagerAdapter(this, AppPref.MaxWeekNumCache)

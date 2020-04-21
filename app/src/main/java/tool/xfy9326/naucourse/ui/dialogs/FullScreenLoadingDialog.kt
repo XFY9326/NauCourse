@@ -1,6 +1,5 @@
 package tool.xfy9326.naucourse.ui.dialogs
 
-import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +14,7 @@ import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.utils.views.AnimUtils
 
 class FullScreenLoadingDialog : DialogFragment() {
+    private lateinit var animateDrawable: AnimatedVectorDrawableCompat
 
     companion object {
         private const val LOADING_DIALOG_TAG = "LOADING_DIALOG"
@@ -39,7 +39,10 @@ class FullScreenLoadingDialog : DialogFragment() {
         dialog?.apply {
             requestWindowFeature(Window.FEATURE_NO_TITLE)
         }
-        return inflater.inflate(R.layout.dialog_full_screen_loading, container, false)
+        return inflater.inflate(R.layout.dialog_full_screen_loading, container, false).apply {
+            animateDrawable = AnimatedVectorDrawableCompat.create(requireContext(), R.drawable.avd_anim_loading_circle)!!
+            iv_dialogFullScreenLoading.setImageDrawable(animateDrawable)
+        }
     }
 
     override fun onStart() {
@@ -48,17 +51,13 @@ class FullScreenLoadingDialog : DialogFragment() {
             isCancelable = false
             setBackgroundDrawable(resources.getDrawable(android.R.color.transparent, null))
         }
-        (view?.iv_dialogFullScreenLoading?.drawable as AnimatedVectorDrawable?)?.apply {
-            AnimatedVectorDrawableCompat.registerAnimationCallback(this, AnimUtils.getAnimationLoopCallback())
-            start()
-        }
+        animateDrawable.registerAnimationCallback(AnimUtils.getAnimationLoopCallback())
+        animateDrawable.start()
     }
 
     override fun onStop() {
-        (view?.iv_dialogFullScreenLoading?.drawable as AnimatedVectorDrawable?)?.apply {
-            AnimatedVectorDrawableCompat.clearAnimationCallbacks(this)
-            stop()
-        }
+        animateDrawable.clearAnimationCallbacks()
+        animateDrawable.stop()
         super.onStop()
     }
 
