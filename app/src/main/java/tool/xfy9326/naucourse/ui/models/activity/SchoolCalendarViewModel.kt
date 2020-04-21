@@ -38,14 +38,16 @@ class SchoolCalendarViewModel : BaseViewModel() {
     }
 
     override fun onInitView(isRestored: Boolean) {
-        viewModelScope.launch(Dispatchers.Default) {
-            val imageUrl = AppPref.CurrentSchoolCalendarImageUrl
-            if (imageUrl != null) {
-                calendarImageUrl.postEventValue(imageUrl)
+        if (tryInit()) {
+            viewModelScope.launch(Dispatchers.Default) {
+                val imageUrl = AppPref.CurrentSchoolCalendarImageUrl
+                if (imageUrl != null) {
+                    calendarImageUrl.postEventValue(imageUrl)
+                }
+                // 默认先从指定位置读取校历，如果有其他设置就从其他地方读取
+                val currentUseUrl = AppPref.CurrentSchoolCalendarUrl?.toHttpUrlOrNull() ?: getDefaultCalendarUrl()
+                loadCalendarImage(currentUseUrl, imageUrl == null)
             }
-            // 默认先从指定位置读取校历，如果有其他设置就从其他地方读取
-            val currentUseUrl = AppPref.CurrentSchoolCalendarUrl?.toHttpUrlOrNull() ?: getDefaultCalendarUrl()
-            loadCalendarImage(currentUseUrl, imageUrl == null)
         }
     }
 

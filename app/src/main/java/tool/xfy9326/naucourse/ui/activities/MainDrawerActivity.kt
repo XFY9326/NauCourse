@@ -38,30 +38,44 @@ import tool.xfy9326.naucourse.utils.views.DialogUtils
 class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationView.OnNavigationItemSelectedListener {
     companion object {
         private const val DEFAULT_NAV_HEADER_INDEX = 0
-
-        private val FRAGMENTS = mapOf<FragmentType, DrawerToolbarFragment<*>>(
-            FragmentType.COURSE_TABLE to CourseTableFragment(),
-            FragmentType.COURSE_ARRANGE to CourseArrangeFragment(),
-            FragmentType.NEWS to NewsFragment()
-        )
+        private const val DOUBLE_PRESS_BACK_TIME = 1200L
+        private const val NOW_SHOW_FRAGMENT_TYPE = "NOW_SHOW_FRAGMENT_TYPE"
     }
 
+    private var lastRequestBackTime: Long = 0
     private var nightModeObserver: Observer<in Event<Unit>>? = null
+    private val fragmentTypeLock = Any()
+    private lateinit var nowShowFragmentType: FragmentType
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (savedInstanceState == null) {
-            preloadFragments()
-            showFragment(getViewModel().getNowShowFragment())
+        (savedInstanceState?.getSerializable(NOW_SHOW_FRAGMENT_TYPE) as FragmentType?)?.let {
+            setNowShowFragment(it)
+            getViewModel().initFragmentShow()
         }
         if (savedInstanceState == null) {
-            if (intent.getBooleanExtra(IntentUtils.NEW_VERSION_FLAG, false)) {
-                onUpdateNewVersion()
-            }
-            if (AppPref.ForceUpdateVersionCode > BuildConfig.VERSION_CODE) {
-                showToast(R.string.force_update_attention)
-            }
+            fragmentInit()
+            startAppInit()
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putSerializable(NOW_SHOW_FRAGMENT_TYPE, getNowShowFragment())
+        super.onSaveInstanceState(outState)
+    }
+
+    private fun startAppInit() {
+        if (intent.getBooleanExtra(IntentUtils.NEW_VERSION_FLAG, false)) {
+            onUpdateNewVersion()
+        }
+        if (AppPref.ForceUpdateVersionCode > BuildConfig.VERSION_CODE) {
+            showToast(R.string.force_update_attention)
+        }
+    }
+
+    private fun fragmentInit() {
+        preloadFragments()
+        showFragment(getNowShowFragment())
     }
 
     override fun onStart() {
@@ -108,7 +122,8 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     private fun preloadFragments() {
         if (supportFragmentManager.fragments.isEmpty()) {
             supportFragmentManager.beginTransaction().apply {
-                for ((type, fragment) in FRAGMENTS) {
+                for (type in FragmentType.values()) {
+                    val fragment = createFragmentByType(type)
                     add(R.id.fg_mainContent, fragment.apply {
                         arguments = Bundle().apply {
                             putInt(DrawerToolbarFragment.DRAWER_ID, R.id.drawer_main)
@@ -120,21 +135,28 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         }
     }
 
+    private fun createFragmentByType(type: FragmentType) =
+        when (type) {
+            FragmentType.COURSE_TABLE -> CourseTableFragment()
+            FragmentType.COURSE_ARRANGE -> CourseArrangeFragment()
+            FragmentType.NEWS -> NewsFragment()
+        }
+
     @Synchronized
     fun showFragment(type: FragmentType, withAnimation: Boolean = true) {
-        if (type != getViewModel().getNowShowFragment() || !getViewModel().initFragmentShow()) {
-            val oldFragment = supportFragmentManager.findFragmentByTag(getViewModel().getNowShowFragment().name)
+        if (type != getNowShowFragment() || !getViewModel().initFragmentShow()) {
+            val oldFragment = supportFragmentManager.findFragmentByTag(getNowShowFragment().name)
             supportFragmentManager.beginTransaction().apply {
-                if (withAnimation) setCustomAnimations(0, R.anim.fade_exit)
+                if (withAnimation) setCustomAnimations(R.anim.fade_enter, R.anim.fade_exit)
                 if (oldFragment != null) {
                     hide(oldFragment)
                 }
                 val newFragment = supportFragmentManager.findFragmentByTag(type.name)
                 if (newFragment != null) {
                     show(newFragment)
-                    getViewModel().setNowShowFragment(type)
+                    setNowShowFragment(type)
                 } else {
-                    error("Fragment Not Preload Before Show!")
+                    add(createFragmentByType(type), type.name)
                 }
             }.commit()
         }
@@ -213,7 +235,13 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
             drawer_main.closeDrawer(GravityCompat.START)
         } else {
             if (SettingsPref.ExitApplicationDirectly) {
-                finishAndRemoveTask()
+                val current = System.currentTimeMillis()
+                if (current - lastRequestBackTime <= DOUBLE_PRESS_BACK_TIME) {
+                    finishAndRemoveTask()
+                } else {
+                    showToast(R.string.double_press_exit)
+                }
+                lastRequestBackTime = current
             } else {
                 moveTaskToBack(false)
             }
@@ -228,6 +256,28 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         }
     }
 
+    private fun setNowShowFragment(type: FragmentType) {
+        synchronized(fragmentTypeLock) {
+            nowShowFragmentType = type
+        }
+    }
+
+    private fun getNowShowFragment(): FragmentType {
+        synchronized(fragmentTypeLock) {
+            if (!::nowShowFragmentType.isInitialized) {
+                nowShowFragmentType = getDefaultFragmentType()
+            }
+            return nowShowFragmentType
+        }
+    }
+
+    private fun getDefaultFragmentType() =
+        when (SettingsPref.getDefaultEnterInterface()) {
+            SettingsPref.EnterInterfaceType.COURSE_ARRANGE -> FragmentType.COURSE_ARRANGE
+            SettingsPref.EnterInterfaceType.COURSE_TABLE -> FragmentType.COURSE_TABLE
+            SettingsPref.EnterInterfaceType.NEWS -> FragmentType.NEWS
+        }
+
     override fun onDestroy() {
         tryRemoveNightModeObserver()
         super.onDestroy()
@@ -236,7 +286,6 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     enum class FragmentType {
         COURSE_TABLE,
         COURSE_ARRANGE,
-        NEWS,
-        NONE
+        NEWS
     }
 }

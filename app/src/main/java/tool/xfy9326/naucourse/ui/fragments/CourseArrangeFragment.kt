@@ -45,8 +45,8 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         retainInstance = true
+        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateContentView(): Int = R.layout.fragment_course_arrange

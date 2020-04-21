@@ -65,7 +65,7 @@ class AdvancedRecyclerView : RecyclerView {
         if (firstAdapter) {
             postDelayed({
                 modifyEmptyView()
-            }, 300)
+            }, 250)
         } else {
             modifyEmptyView()
         }

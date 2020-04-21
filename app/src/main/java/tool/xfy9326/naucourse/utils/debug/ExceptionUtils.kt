@@ -12,6 +12,8 @@ import java.net.UnknownHostException
 @Suppress("unused")
 object ExceptionUtils : Thread.UncaughtExceptionHandler {
     private const val CRASH_RESTART_PERIOD_MILLS = 3000L
+
+    @Suppress("MayBeConstant")
     private val THROWS_ON = BuildConfig.DEBUG
     private val THROWS_SAVE_ON get() = SettingsPref.DebugMode && SettingsPref.DebugExceptionCatch
     private val GLOBAL_THROWS_SAVE_ON get() = SettingsPref.CrashCatch

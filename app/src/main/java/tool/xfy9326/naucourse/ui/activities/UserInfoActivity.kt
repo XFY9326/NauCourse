@@ -25,7 +25,6 @@ import tool.xfy9326.naucourse.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentLearningProcess
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentPersonalInfo
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentPersonalInfo.Companion.toPlainText
-import tool.xfy9326.naucourse.providers.contents.methods.jwc.StudentIndex
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourse.ui.models.activity.UserInfoViewModel
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
@@ -51,7 +50,7 @@ class UserInfoActivity : ViewModelActivity<UserInfoViewModel>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_personalPhoto) {
-            IntentUtils.viewLargePhotoByUrl(this, StudentIndex.JWC_STU_PHOTO_URL.toString(), LoginNetworkManager.ClientType.JWC)
+            getViewModel().requestStuPhoto()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -64,6 +63,9 @@ class UserInfoActivity : ViewModelActivity<UserInfoViewModel>() {
     override fun bindViewModel(viewModel: UserInfoViewModel) {
         viewModel.studentInfo.observe(this, Observer {
             updateView(it)
+        })
+        viewModel.studentPhotoUrl.observeEvent(this, Observer {
+            IntentUtils.viewLargePhotoByUrl(this, it, LoginNetworkManager.ClientType.JWC)
         })
     }
 

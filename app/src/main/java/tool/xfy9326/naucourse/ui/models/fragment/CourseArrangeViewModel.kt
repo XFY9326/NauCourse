@@ -53,7 +53,7 @@ class CourseArrangeViewModel : BaseViewModel() {
     }
 
     override fun onInitView(isRestored: Boolean) {
-        if (!isRestored) initJob = loadInitCache()
+        if (tryInit()) initJob = loadInitCache()
 
         viewModelScope.launch {
             if (initJob != null) {

@@ -45,15 +45,16 @@
 # 优化时允许访问并修改有修饰符的类和类的成员
 -allowaccessmodification
 
-# 将文件来源重命名为“SourceFile”字符串
--renamesourcefileattribute SourceFile
+# 将文件来源重命名为“Source”字符串
+-renamesourcefileattribute Source
+
+-repackageclasses guard
 
 # 保留行号
 -keepattributes SourceFile,LineNumberTable
 
 -keepattributes *Annotation*,InnerClasses
 -keepattributes Signature
--printmapping proguardMapping.txt
 
 # 保持所有实现 Serializable 接口的类成员
 -keepclassmembers class * implements java.io.Serializable {
@@ -90,11 +91,9 @@
 # Kotlin
 -keep class kotlin.** { *; }
 -keep class kotlin.Metadata { *; }
--dontwarn kotlin.**
 -keepclassmembers class **$WhenMappings {
     <fields>;
 }
--keepclassmembers class java.util.Iterator { *; }
 -keepclassmembers class kotlin.Metadata {
     public <methods>;
 }

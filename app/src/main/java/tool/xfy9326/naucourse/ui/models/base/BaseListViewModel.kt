@@ -20,7 +20,7 @@ abstract class BaseListViewModel<E> : BaseViewModel() {
 
     @CallSuper
     override fun onInitView(isRestored: Boolean) {
-        if (!isRestored) {
+        if (listData.value == null) {
             viewModelScope.launch(Dispatchers.Default) {
                 getData(true).join()
                 getData()

@@ -27,8 +27,8 @@ class NewsFragment : DrawerToolbarFragment<NewsViewModel>(), NewsAdapter.OnNewsI
     private lateinit var newsAdapter: NewsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         retainInstance = true
+        super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 

@@ -22,7 +22,7 @@ class NewsViewModel : BaseViewModel() {
     val errorMsg = EventLiveData<ContentErrorReason>()
 
     override fun onInitView(isRestored: Boolean) {
-        if (!isRestored) {
+        if (tryInit()) {
             isRefreshing.postValue(true)
             viewModelScope.launch(Dispatchers.Default) {
                 val newsInfoResult = NewsInfo.getInfo(loadCache = true)

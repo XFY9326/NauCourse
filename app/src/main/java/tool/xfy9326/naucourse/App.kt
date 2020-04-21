@@ -40,6 +40,7 @@ class App : Application(), LifecycleObserver {
 
     private fun initCrashReport() {
         ExceptionUtils.initCrashHandler()
+        @Suppress("ConstantConditionIf")
         if (!BuildConfig.DEBUG) {
             CrashReport.initCrashReport(this)
             CrashReport.setIsDevelopmentDevice(this, BuildConfig.DEBUG)

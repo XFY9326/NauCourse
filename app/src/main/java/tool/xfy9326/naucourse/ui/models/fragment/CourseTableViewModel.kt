@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.beans.*
 import tool.xfy9326.naucourse.io.db.CourseCellStyleDBHelper
@@ -36,15 +37,13 @@ class CourseTableViewModel : BaseViewModel() {
         const val DEFAULT_COURSE_PKG_HASH = 0
     }
 
-    @Volatile
-    private var hasInit = false
-    private val initLock = Any()
-
     private lateinit var initDeferred: Deferred<Boolean>
 
     private lateinit var courseSet: CourseSet
     private lateinit var termDate: TermDate
     private lateinit var courseTableArr: Array<CourseTable>
+
+    private val initLock = Mutex()
 
     @Volatile
     private var courseTableStyle: CourseTableStyle? = null
@@ -52,6 +51,7 @@ class CourseTableViewModel : BaseViewModel() {
 
     private val courseTableAsyncLock = Mutex()
 
+    private var hasInit = false
     var hasInitWithNowWeekNum = false
 
     var showNextWeekAhead: Boolean? = null
@@ -84,28 +84,27 @@ class CourseTableViewModel : BaseViewModel() {
     }
 
     override fun onInitView(isRestored: Boolean) {
-        if (!isRestored) {
-            viewModelScope.launch(Dispatchers.Default) {
-                val today = TimeUtils.getTodayDate()
-                todayDate.postValue(today)
-            }
+        viewModelScope.launch(Dispatchers.Default) {
+            val today = TimeUtils.getTodayDate()
+            todayDate.postValue(today)
         }
     }
 
     override fun onInitCache(isRestored: Boolean) {
-        if (!isRestored) {
-            viewModelScope.launch(Dispatchers.Default) {
-                synchronized(initLock) {
-                    if (!hasInit) {
-                        initDeferred = viewModelScope.async(Dispatchers.Default) {
-                            initCourseData()
-                            hasInit = true
-                            true
-                        }
-                        if (SettingsPref.AutoAsyncCourseData) {
-                            startOnlineDataAsync()
-                        }
-                    }
+        viewModelScope.launch {
+            initTableCache()
+        }
+    }
+
+    private suspend fun initTableCache() = withContext(Dispatchers.Default) {
+        initLock.withLock {
+            if (tryInit()) {
+                initDeferred = viewModelScope.async(Dispatchers.Default) {
+                    initCourseData()
+                    true
+                }
+                if (SettingsPref.AutoAsyncCourseData) {
+                    startOnlineDataAsync()
                 }
             }
         }
@@ -145,13 +144,20 @@ class CourseTableViewModel : BaseViewModel() {
     }
 
     fun requestCourseTable(weekNum: Int, coursePkgHash: Int) {
-        viewModelScope.launch(Dispatchers.Default) {
-            if (initDeferred.isActive) initDeferred.await()
-            if (coursePkgHash == DEFAULT_COURSE_PKG_HASH) {
-                val pkg = getCoursePkg(weekNum)
-                if (pkg.hashCode() != coursePkgHash) {
-                    courseTablePkg[weekNum - 1].postValue(getCoursePkg(weekNum))
+        if (::initDeferred.isInitialized) {
+            viewModelScope.launch(Dispatchers.Default) {
+                if (initDeferred.isActive) initDeferred.await()
+                if (coursePkgHash == DEFAULT_COURSE_PKG_HASH) {
+                    val pkg = getCoursePkg(weekNum)
+                    if (pkg.hashCode() != coursePkgHash) {
+                        courseTablePkg[weekNum - 1].postValue(getCoursePkg(weekNum))
+                    }
                 }
+            }
+        } else {
+            viewModelScope.launch(Dispatchers.Default) {
+                initTableCache()
+                requestCourseTable(weekNum, coursePkgHash)
             }
         }
     }

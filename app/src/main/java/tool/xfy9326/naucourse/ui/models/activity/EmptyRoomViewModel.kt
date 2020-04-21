@@ -21,7 +21,7 @@ class EmptyRoomViewModel : BaseViewModel() {
     val errorMsg = EventLiveData<Pair<ContentErrorReason, Boolean>>()
 
     override fun onInitView(isRestored: Boolean) {
-        if (!isRestored) {
+        if (tryInit()) {
             viewModelScope.launch(Dispatchers.Default) {
                 isLoading.postEventValue(true)
                 getSearchData(true)

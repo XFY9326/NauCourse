@@ -44,15 +44,12 @@ class ScoreQueryViewModel : BaseViewModel() {
     }
 
     override fun onInitView(isRestored: Boolean) {
-        if (!isRestored) {
-            viewModelScope.launch(Dispatchers.Default) {
-                initLock.withLock {
-                    if (!hasInit) {
-                        hasInit = true
-                        refreshData(true).join()
-                        refreshData()
-                    }
+        viewModelScope.launch(Dispatchers.Default) {
+            initLock.withLock {
+                if (tryInit()) {
+                    refreshData(true).join()
                 }
+                refreshData()
             }
         }
     }

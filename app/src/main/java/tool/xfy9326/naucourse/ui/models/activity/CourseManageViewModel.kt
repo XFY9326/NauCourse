@@ -46,7 +46,7 @@ class CourseManageViewModel : BaseViewModel() {
     private val importLock = Mutex()
 
     override fun onInitView(isRestored: Boolean) {
-        if (!isRestored) requestCourseManagePkg()
+        if (tryInit()) requestCourseManagePkg()
     }
 
     enum class ImportCourseType {

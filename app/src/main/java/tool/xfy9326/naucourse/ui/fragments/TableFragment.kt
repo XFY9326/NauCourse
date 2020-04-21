@@ -38,7 +38,7 @@ class TableFragment : Fragment() {
         weekNum = arguments?.getInt(CourseTableViewPagerAdapter.COURSE_TABLE_WEEK_NUM)!!
         contentViewModel = ViewModelProvider(requireParentFragment())[CourseTableViewModel::class.java]
 
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null || coursePkgHash == CourseTableViewModel.DEFAULT_COURSE_PKG_HASH) {
             contentViewModel.requestCourseTable(weekNum, coursePkgHash)
         }
     }

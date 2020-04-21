@@ -41,8 +41,8 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
     private lateinit var viewPagerCallback: ViewPager2.OnPageChangeCallback
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         retainInstance = true
+        super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 

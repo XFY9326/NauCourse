@@ -9,6 +9,7 @@ import java.util.*
 
 @Suppress("unused")
 object LogUtils {
+    @Suppress("MayBeConstant")
     private val LOG_ON = BuildConfig.DEBUG
     private val LOG_SAVE_ON get() = SettingsPref.DebugMode && SettingsPref.DebugLogCatch
     private val DATE_FORMAT_YMD_HM_S = SimpleDateFormat(Constants.Time.FORMAT_YMD_HM_S, Locale.CHINA)
