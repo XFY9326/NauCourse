@@ -7,6 +7,7 @@ import okhttp3.Response
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.network.clients.base.LoginInfo
 import tool.xfy9326.naucourse.network.clients.base.LoginResponse
+import tool.xfy9326.naucourse.network.clients.base.ServerErrorException
 
 // http://jwc.nau.edu.cn
 class JwcClient(loginInfo: LoginInfo) : SSOClient(loginInfo, JWC_SSO_LOGIN_URL) {
@@ -98,7 +99,7 @@ class JwcClient(loginInfo: LoginInfo) : SSOClient(loginInfo, JWC_SSO_LOGIN_URL) 
             if (result.isSuccess) {
                 newAutoLoginCall(jwcMainUrl!!)
             } else {
-                throw IllegalStateException("Client Login Failed! Reason: ${result.loginErrorReason}")
+                throw ServerErrorException("Client Login Failed! Reason: ${result.loginErrorReason}")
             }
         } else {
             newAutoLoginCall(jwcMainUrl!!)

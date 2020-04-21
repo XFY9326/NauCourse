@@ -3,6 +3,8 @@ package tool.xfy9326.naucourse.ui.activities
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -22,8 +24,10 @@ import tool.xfy9326.naucourse.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentLearningProcess
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentPersonalInfo
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentPersonalInfo.Companion.toPlainText
+import tool.xfy9326.naucourse.providers.contents.methods.jwc.StudentIndex
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourse.ui.models.activity.UserInfoViewModel
+import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
 import tool.xfy9326.naucourse.utils.views.I18NUtils
 
@@ -38,6 +42,18 @@ class UserInfoActivity : ViewModelActivity<UserInfoViewModel>() {
     override fun onCreateContentView(): Int = R.layout.activity_user_info
 
     override fun onCreateViewModel(): UserInfoViewModel = ViewModelProvider(this)[UserInfoViewModel::class.java]
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_user_info, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menu_personalPhoto) {
+            IntentUtils.viewUrlPhoto(this, StudentIndex.JWC_STU_PHOTO_URL.toString())
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     override fun initView(savedInstanceState: Bundle?, viewModel: UserInfoViewModel) {
         setSupportActionBar(tb_userInfo)

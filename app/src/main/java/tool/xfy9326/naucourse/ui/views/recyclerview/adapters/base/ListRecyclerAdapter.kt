@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 abstract class ListRecyclerAdapter<VH : RecyclerView.ViewHolder, E>(context: Context, callBack: DiffUtil.ItemCallback<E>? = null) :
     ListAdapter<E, VH>(callBack ?: SimpleDifferItemCallBack<E>()) {
-    protected val layoutInflater = LayoutInflater.from(context)
+    protected val layoutInflater: LayoutInflater = LayoutInflater.from(context)
 
     final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH =
         onCreateViewHolder(layoutInflater.inflate(onBindLayout(), parent, false))

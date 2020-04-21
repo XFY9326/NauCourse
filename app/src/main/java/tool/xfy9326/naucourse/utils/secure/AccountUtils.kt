@@ -27,7 +27,7 @@ object AccountUtils {
         return if (hasLogin && userId != null && userPw != null) {
             UserInfo(userId, userPw)
         } else {
-            throw IllegalStateException("You Can't Read User Info While Not Login or Not Completely Saved!")
+            error("You Can't Read User Info While Not Login or Not Completely Saved!")
         }
     }
 

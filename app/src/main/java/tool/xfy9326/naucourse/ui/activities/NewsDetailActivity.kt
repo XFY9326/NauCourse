@@ -1,6 +1,5 @@
 package tool.xfy9326.naucourse.ui.activities
 
-import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
@@ -174,10 +173,7 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
     }
 
     override fun onHtmlTextImageClick(source: String, bitmap: Bitmap) {
-        startActivity(Intent(this, ImageShowActivity::class.java).apply {
-            putExtra(ImageShowActivity.EXTRA_IMAGE_URL, source)
-        })
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        IntentUtils.viewUrlPhoto(this, source)
     }
 
     override fun onHtmlTextImageLongPress(source: String, bitmap: Bitmap) =

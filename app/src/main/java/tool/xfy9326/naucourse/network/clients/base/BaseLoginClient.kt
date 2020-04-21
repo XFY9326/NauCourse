@@ -7,7 +7,6 @@ import okhttp3.internal.closeQuietly
 import org.jsoup.HttpStatusException
 import tool.xfy9326.naucourse.network.tools.NetworkTools
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
-import tool.xfy9326.naucourse.utils.debug.LogUtils
 import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
@@ -53,7 +52,7 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
             when (e) {
                 is SocketTimeoutException, is IOException, is NullPointerException, is ConnectException ->
                     LoginResponse(false, loginErrorReason = LoginResponse.ErrorReason.CONNECTION_ERROR)
-                is HttpStatusException -> LoginResponse(false, loginErrorReason = LoginResponse.ErrorReason.SERVER_ERROR)
+                is HttpStatusException, is ServerErrorException -> LoginResponse(false, loginErrorReason = LoginResponse.ErrorReason.SERVER_ERROR)
                 else -> LoginResponse(false, loginErrorReason = LoginResponse.ErrorReason.UNKNOWN)
             }
         }
@@ -113,7 +112,9 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
                         login()
                     }
                     response.closeQuietly()
-                    if (!result.isSuccess) LogUtils.d<BaseLoginClient>("Auto Login Failed! Reason: ${result.loginErrorReason}")
+                    if (!result.isSuccess) {
+                        throw ServerErrorException("Auto Login Failed! Reason: ${result.loginErrorReason}")
+                    }
                 } finally {
                     loginLock.unlock()
                 }

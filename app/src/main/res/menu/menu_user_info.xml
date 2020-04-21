@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_personalPhoto"
+        android:icon="@drawable/ic_personal_photo"
+        android:title="@string/personal_photo"
+        app:showAsAction="always" />
+
+</menu>

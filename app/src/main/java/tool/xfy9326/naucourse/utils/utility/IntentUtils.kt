@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourse.utils.utility
 
+import android.app.Activity
 import android.app.DownloadManager
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -12,6 +13,7 @@ import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.receivers.NextCourseAlarmReceiver
+import tool.xfy9326.naucourse.ui.activities.ImageShowActivity
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 
 
@@ -42,6 +44,13 @@ object IntentUtils {
         } catch (e: ActivityNotFoundException) {
             fragment.showToast(R.string.application_launch_failed)
         }
+    }
+
+    fun viewUrlPhoto(activity: Activity, url: String) {
+        activity.startActivity(Intent(activity, ImageShowActivity::class.java).apply {
+            putExtra(ImageShowActivity.EXTRA_IMAGE_URL, url)
+        })
+        activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 
     fun startNextCourseAlarm(context: Context) =

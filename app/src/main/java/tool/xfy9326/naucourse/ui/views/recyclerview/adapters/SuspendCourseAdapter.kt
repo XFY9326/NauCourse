@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourse.ui.views.recyclerview.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.View
 import kotlinx.android.synthetic.main.view_suspend_course_detail_item.view.*
@@ -21,6 +22,7 @@ class SuspendCourseAdapter(private val context: Context) :
 
     override fun onCreateViewHolder(view: View): SuspendCourseViewHolder = SuspendCourseViewHolder(view)
 
+    @SuppressLint("InflateParams")
     override fun onBindViewHolder(holder: SuspendCourseViewHolder, position: Int, element: SuspendCourse) {
         holder.apply {
             tvSuspendCourseName.text = element.name

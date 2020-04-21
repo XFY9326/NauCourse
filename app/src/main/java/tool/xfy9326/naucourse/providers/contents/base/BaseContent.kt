@@ -6,6 +6,7 @@ import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.network.SimpleNetworkManager
 import tool.xfy9326.naucourse.network.clients.base.BaseLoginClient
 import tool.xfy9326.naucourse.network.clients.base.BaseNetworkClient
+import tool.xfy9326.naucourse.network.clients.base.ServerErrorException
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 import java.io.IOException
 import java.net.ConnectException
@@ -24,7 +25,7 @@ abstract class BaseContent<T> {
     private fun requestData(): RequestResult = try {
         onRequestData().use {
             if (!it.isSuccessful) {
-                throw HttpStatusException("Content Request Failed!", it.code, it.request.url.toString())
+                throw ServerErrorException("Content Request Failed! Status: ${it.code} Url: ${it.request.url}")
             } else {
                 RequestResult(true, contentData = it.body?.string()!!)
             }
@@ -33,7 +34,7 @@ abstract class BaseContent<T> {
         ExceptionUtils.printStackTrace<BaseContent<T>>(e)
         when (e) {
             is SocketTimeoutException -> RequestResult(false, ContentErrorReason.TIMEOUT)
-            is UnknownHostException, is HttpStatusException -> RequestResult(false, ContentErrorReason.SERVER_ERROR)
+            is UnknownHostException, is HttpStatusException, is ServerErrorException -> RequestResult(false, ContentErrorReason.SERVER_ERROR)
             is IOException, is NullPointerException -> RequestResult(false, ContentErrorReason.OPERATION)
             is ConnectException -> RequestResult(false, ContentErrorReason.CONNECTION_ERROR)
             else -> RequestResult(false, ContentErrorReason.UNKNOWN)

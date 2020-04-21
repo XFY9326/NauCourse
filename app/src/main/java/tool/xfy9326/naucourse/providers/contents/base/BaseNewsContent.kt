@@ -9,6 +9,7 @@ import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.network.clients.base.ServerErrorException
 import tool.xfy9326.naucourse.providers.beans.GeneralNews
 import tool.xfy9326.naucourse.providers.beans.GeneralNewsDetail
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
@@ -25,7 +26,7 @@ abstract class BaseNewsContent<T> : BaseNoParamContent<Set<GeneralNews>>() {
     private fun requestDetailData(url: HttpUrl): RequestResult = try {
         onRequestDetailData(url).use {
             if (!it.isSuccessful) {
-                throw HttpStatusException("Detail Request Failed!", it.code, it.request.url.toString())
+                throw ServerErrorException("Content Request Failed! Status: ${it.code} Url: ${it.request.url}")
             } else {
                 RequestResult(true, contentData = it.body?.string()!!)
             }
@@ -34,7 +35,7 @@ abstract class BaseNewsContent<T> : BaseNoParamContent<Set<GeneralNews>>() {
         ExceptionUtils.printStackTrace<BaseNewsContent<T>>(e)
         when (e) {
             is SocketTimeoutException -> RequestResult(false, ContentErrorReason.TIMEOUT)
-            is HttpStatusException -> RequestResult(false, ContentErrorReason.SERVER_ERROR)
+            is HttpStatusException, is ServerErrorException -> RequestResult(false, ContentErrorReason.SERVER_ERROR)
             is IOException, is NullPointerException -> RequestResult(false, ContentErrorReason.OPERATION)
             else -> RequestResult(false, ContentErrorReason.UNKNOWN)
         }
