@@ -1,8 +1,9 @@
 ## 欢迎使用NAU课程表
+[![codebeat badge](https://codebeat.co/badges/5b5f1fdf-4421-4145-a84c-3040377e8617)](https://codebeat.co/projects/github-com-xfy9326-naucourse-master)  
 本应用是南京审计大学的非官方开源课程表  
 你可以在[酷安](https://www.coolapk.com/apk/178329) 下载到本应用最新的版本
 
-#### 本仓库仅会同步稳定版本迭代的更新 
+#### 本仓库仅会同步稳定版本迭代的更新
 
     NauCourse Android Application
     Copyright (C) 2020  XFY9326

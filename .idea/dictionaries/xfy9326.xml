@@ -18,6 +18,7 @@
       <w>blocklen</w>
       <w>campusname</w>
       <w>ciphertext</w>
+      <w>codebeat</w>
       <w>coroutine</w>
       <w>cppcoreguidelines</w>
       <w>dcim</w>
