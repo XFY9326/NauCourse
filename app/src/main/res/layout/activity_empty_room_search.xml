@@ -5,7 +5,7 @@
     android:id="@+id/layout_emptyRoom"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activities.EmptyRoomSearch">
+    tools:context=".ui.activities.EmptyRoomSearchActivity">
 
     <include layout="@layout/view_general_toolbar" />
 

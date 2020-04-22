@@ -25,7 +25,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class EmptyRoomSearch : ViewModelActivity<EmptyRoomViewModel>(), DatePickerDialog.OnDateSetListener {
+class EmptyRoomSearchActivity : ViewModelActivity<EmptyRoomViewModel>(), DatePickerDialog.OnDateSetListener {
     private lateinit var adapter: EmptyRoomAdapter
     private var emptyRoomInfo: EmptyRoomInfo? = null
 
@@ -77,7 +77,7 @@ class EmptyRoomSearch : ViewModelActivity<EmptyRoomViewModel>(), DatePickerDialo
             val calendar = Calendar.getInstance(Locale.CHINA).apply {
                 time = DATE_FORMAT_YMD.parse(et_emptyRoomDate.text.toString()) ?: Date()
             }
-            val dialog = DatePickerDialog(
+            DatePickerDialog(
                 this,
                 this,
                 calendar.get(Calendar.YEAR),
@@ -86,7 +86,7 @@ class EmptyRoomSearch : ViewModelActivity<EmptyRoomViewModel>(), DatePickerDialo
             ).apply {
                 DialogUtils.addAutoCloseListener(lifecycle, this)
                 show()
-                DialogUtils.applyButtonTextAndBackground(this@EmptyRoomSearch, this)
+                DialogUtils.applyButtonTextAndBackground(this@EmptyRoomSearchActivity, this)
             }
         }
         btn_emptyRoomSearch.setOnClickListener {

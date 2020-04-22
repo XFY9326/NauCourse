@@ -6,7 +6,6 @@ apply plugin: 'bugly'
 
 rootProject.ext {
     applicationId = 'tool.xfy9326.naucourse'
-    applicationName = 'NAU课程表'
 }
 
 bugly {
@@ -72,7 +71,6 @@ android {
             dimension 'version'
             applicationId rootProject.ext.applicationId
 
-            resValue('string', 'app_name', rootProject.ext.applicationName)
             manifestPlaceholders = ['ApplicationId': "${applicationId}"]
         }
         beta {
@@ -82,7 +80,6 @@ android {
             applicationIdSuffix '.beta'
             versionNameSuffix '-beta'
 
-            resValue('string', 'app_name', "${rootProject.ext.applicationName} Beta")
             manifestPlaceholders = ['ApplicationId': "${applicationId}${applicationIdSuffix}"]
         }
     }
@@ -138,11 +135,10 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
 
-    // Color Picker
-    implementation 'com.jaredrummler:colorpicker:1.1.0'
-
-    // Photo View
-    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+    // Room
+    implementation 'androidx.room:room-runtime:2.2.5'
+    implementation 'androidx.room:room-ktx:2.2.5'
+    kapt 'androidx.room:room-compiler:2.2.5'
 
     // Gson
     implementation 'com.google.code.gson:gson:2.8.6'
@@ -153,10 +149,11 @@ dependencies {
     // Jsoup
     implementation 'org.jsoup:jsoup:1.13.1'
 
-    // Room
-    implementation 'androidx.room:room-runtime:2.2.5'
-    implementation 'androidx.room:room-ktx:2.2.5'
-    kapt 'androidx.room:room-compiler:2.2.5'
+    // Color Picker
+    implementation 'com.jaredrummler:colorpicker:1.1.0'
+
+    // Photo View
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.11.0'

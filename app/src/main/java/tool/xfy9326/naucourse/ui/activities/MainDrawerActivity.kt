@@ -172,7 +172,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
                 R.id.menu_navLevelExam -> openFunctionActivity(LevelExamActivity::class.java)
                 R.id.menu_navExamArrange -> openFunctionActivity(ExamArrangeActivity::class.java)
                 R.id.menu_navSuspendCourseNotification -> openFunctionActivity(SuspendCourseActivity::class.java)
-                R.id.menu_navEmptyRoomSearch -> openFunctionActivity(EmptyRoomSearch::class.java)
+                R.id.menu_navEmptyRoomSearch -> openFunctionActivity(EmptyRoomSearchActivity::class.java)
                 R.id.menu_navScoreQuery -> openFunctionActivity(ScoreQueryActivity::class.java)
                 R.id.menu_navCourseManage -> openFunctionActivity(CourseManageActivity::class.java)
                 R.id.menu_navSettings -> openFunctionActivity(SettingsActivity::class.java)

@@ -48,6 +48,7 @@
 
         <activity
             android:name=".ui.activities.LoginActivity"
+            android:label="@string/login"
             android:launchMode="singleTask"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:theme="@style/AppTheme.TranslucentStatusBar" />
@@ -92,7 +93,7 @@
         </activity>
 
         <activity
-            android:name=".ui.activities.EmptyRoomSearch"
+            android:name=".ui.activities.EmptyRoomSearchActivity"
             android:label="@string/empty_room_search">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
