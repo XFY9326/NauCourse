@@ -26,11 +26,7 @@ object SuspendCourseInfo : BaseNoParamContent<Array<SuspendCourse>>() {
 
     override fun onRequestData(): Response = networkClient.newClientCall(JW_SUSPEND_COURSE_URL)
 
-    override fun onParseData(content: String): Array<SuspendCourse> {
-        val document = Jsoup.parse(content)
-        val bodyElement = document.body()
-        return getSuspendCourseArr(bodyElement)
-    }
+    override fun onParseData(content: String): Array<SuspendCourse> = getSuspendCourseArr(Jsoup.parse(content).body())
 
     private fun getSuspendCourseArr(bodyElement: Element): Array<SuspendCourse> {
         val trTags = bodyElement.getElementById(TABLE_ID).getElementsByTag(Constants.HTML.ELEMENT_TAG_TR)

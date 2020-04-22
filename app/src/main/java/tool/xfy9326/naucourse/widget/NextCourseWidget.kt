@@ -1,6 +1,5 @@
 package tool.xfy9326.naucourse.widget
 
-import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
@@ -17,7 +16,6 @@ import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.NextCourseBundle
 import tool.xfy9326.naucourse.io.store.NextCourseBundleStore
-import tool.xfy9326.naucourse.ui.activities.MainIndexActivity
 import tool.xfy9326.naucourse.utils.BaseUtils.goAsync
 import tool.xfy9326.naucourse.utils.courses.ExtraCourseUtils
 import tool.xfy9326.naucourse.utils.utility.AppWidgetUtils
@@ -73,12 +71,8 @@ class NextCourseWidget : AppWidgetProvider() {
 
         private fun setContentClickIntent(context: Context, remoteViews: RemoteViews) =
             remoteViews.setOnClickPendingIntent(
-                R.id.layout_widgetNextCourse, PendingIntent.getActivity(
-                    context,
-                    REQUEST_ON_CLICK_WIDGET_CONTENT,
-                    Intent(context, MainIndexActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
-                    PendingIntent.FLAG_UPDATE_CURRENT
-                )
+                R.id.layout_widgetNextCourse,
+                IntentUtils.getLaunchMainPendingIntent(context, REQUEST_ON_CLICK_WIDGET_CONTENT)
             )
 
         private fun setWidgetMsg(context: Context, remoteViews: RemoteViews, @StringRes strResId: Int, @DrawableRes iconResId: Int) {

@@ -8,8 +8,14 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.beans.ImageOperationType
+import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.utils.io.BaseIOUtils
 import tool.xfy9326.naucourse.utils.io.ImageIOUtils
 import java.io.File
@@ -24,6 +30,32 @@ object ImageUtils {
     private const val IMAGE_WEBP = ".webp"
 
     private const val DIR_PICTURE_MAIN_DIR = "NauCourse"
+
+    suspend fun saveImage(source: String, bitmap: Bitmap, imageOperationMutex: Mutex, imageOperation: EventLiveData<ImageOperationType>) =
+        withContext(Dispatchers.IO) {
+            imageOperationMutex.withLock {
+                if (saveImageToAlbum(PathUtils.getUrlFileName(source), Constants.Image.DIR_NEWS_DETAIL_IMAGE, bitmap, false)) {
+                    imageOperation.postEventValue(ImageOperationType.IMAGE_SAVE_SUCCESS)
+                } else {
+                    imageOperation.postEventValue(ImageOperationType.IMAGE_SAVE_FAILED)
+                }
+            }
+        }
+
+    suspend fun shareImage(
+        source: String, bitmap: Bitmap, imageOperationMutex: Mutex,
+        imageOperation: EventLiveData<ImageOperationType>, imageShareUri: EventLiveData<Uri>
+    ) =
+        withContext(Dispatchers.IO) {
+            imageOperationMutex.withLock {
+                val uri = createImageShareTemp(PathUtils.getUrlFileName(source), bitmap, false)
+                if (uri == null) {
+                    imageOperation.postEventValue(ImageOperationType.IMAGE_SHARE_FAILED)
+                } else {
+                    imageShareUri.postEventValue(uri)
+                }
+            }
+        }
 
     fun clearLocalImageBySubDir(dirName: String) = BaseIOUtils.deleteFile(PathUtils.getImageLocalSavePath(dirName))
 

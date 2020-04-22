@@ -25,11 +25,7 @@ object MyExamArrangeList : BaseNoParamContent<Array<Exam>>() {
 
     override fun onRequestData(): Response = networkClient.newAutoLoginCall(JWC_MY_EXAM_ARRANGE_LIST_URL)
 
-    override fun onParseData(content: String): Array<Exam> {
-        val document = Jsoup.parse(content)
-        val bodyElement = document.body()
-        return getExamArr(bodyElement)
-    }
+    override fun onParseData(content: String): Array<Exam> = getExamArr(Jsoup.parse(content).body())
 
     private fun getExamArr(bodyElement: Element): Array<Exam> {
         val trElements = bodyElement.getElementById(Constants.HTML.ELEMENT_ID_CONTENT).getElementsByTag(Constants.HTML.ELEMENT_TAG_TR)

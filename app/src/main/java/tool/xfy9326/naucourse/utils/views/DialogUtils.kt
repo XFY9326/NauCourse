@@ -194,6 +194,16 @@ object DialogUtils {
             addAutoCloseListener(lifecycle, it)
         }
 
+    fun applyBackgroundAndWidth(context: Context?, dialog: Dialog?, widthPercent: Double) {
+        dialog?.apply {
+            val displayMetrics = context?.resources?.displayMetrics!!
+            window?.apply {
+                setLayout((displayMetrics.widthPixels * widthPercent).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT)
+                setBackgroundDrawable(context.getDrawable(R.drawable.bg_dialog))
+            }
+        }
+    }
+
     fun applyButtonTextAndBackground(context: Context, dialog: Dialog) {
         dialog.apply {
             findViewById<Button>(android.R.id.button1)?.setTextColor(ContextCompat.getColor(context, R.color.colorDialogButtonText))

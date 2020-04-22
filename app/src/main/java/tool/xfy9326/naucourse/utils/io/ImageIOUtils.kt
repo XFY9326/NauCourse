@@ -54,14 +54,7 @@ object ImageIOUtils {
     ): Boolean {
         try {
             if (!bitmap.isRecycled) {
-                if (file.exists() || file.mkdirs()) {
-                    if (file.exists()) {
-                        if (overWrite) {
-                            if (!file.delete()) throw IOException("File Delete Failed!")
-                        } else {
-                            return false
-                        }
-                    }
+                if (BaseIOUtils.prepareFile(file, overWrite)) {
                     FileOutputStream(file).use {
                         bitmap.compress(compressFormat, quality, it)
                         it.flush()
@@ -71,6 +64,8 @@ object ImageIOUtils {
                         }
                     }
                     return true
+                } else {
+                    throw IOException("File Prepared Failed!")
                 }
             }
         } catch (e: Exception) {
@@ -103,14 +98,7 @@ object ImageIOUtils {
 
     fun saveImageFromUri(uri: Uri, file: File, overWrite: Boolean = true): Boolean {
         try {
-            if (file.exists() || file.mkdirs()) {
-                if (file.exists()) {
-                    if (overWrite) {
-                        if (!file.delete()) throw IOException("File Delete Failed!")
-                    } else {
-                        return false
-                    }
-                }
+            if (BaseIOUtils.prepareFile(file, overWrite)) {
                 App.instance.contentResolver.openAssetFileDescriptor(uri, FILE_MODE_READ)?.createInputStream()?.channel?.use { input ->
                     FileOutputStream(file).channel.use { output ->
                         var size: Long = input.size()
@@ -124,6 +112,8 @@ object ImageIOUtils {
                         return true
                     }
                 }
+            } else {
+                throw IOException("File Prepared Failed!")
             }
         } catch (e: Exception) {
             ExceptionUtils.printStackTrace<ImageIOUtils>(e)

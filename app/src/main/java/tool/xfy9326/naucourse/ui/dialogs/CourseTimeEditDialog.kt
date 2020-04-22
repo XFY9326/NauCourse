@@ -21,6 +21,7 @@ import tool.xfy9326.naucourse.providers.beans.jwc.WeekMode
 import tool.xfy9326.naucourse.ui.views.widgets.AdvancedFrameLayout
 import tool.xfy9326.naucourse.ui.views.widgets.CourseTimeEditCell
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
+import tool.xfy9326.naucourse.utils.views.DialogUtils
 import kotlin.properties.Delegates
 
 class CourseTimeEditDialog : DialogFragment() {
@@ -218,13 +219,7 @@ class CourseTimeEditDialog : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        dialog?.apply {
-            val displayMetrics = activity?.resources?.displayMetrics!!
-            window?.apply {
-                setLayout((displayMetrics.widthPixels * CONTENT_WIDTH_PERCENT).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT)
-                setBackgroundDrawable(activity?.getDrawable(R.drawable.bg_dialog))
-            }
-        }
+        DialogUtils.applyBackgroundAndWidth(requireContext(), dialog, CONTENT_WIDTH_PERCENT)
     }
 
     private fun generateCourseTime(): CourseTime {

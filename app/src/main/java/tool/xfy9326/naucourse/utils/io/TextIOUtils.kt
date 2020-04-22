@@ -39,7 +39,7 @@ object TextIOUtils {
                     }
                 }
             } else {
-                throw IOException("File Prepare Failed!")
+                throw IOException("File Prepared Failed!")
             }
             true
         } catch (e: Exception) {

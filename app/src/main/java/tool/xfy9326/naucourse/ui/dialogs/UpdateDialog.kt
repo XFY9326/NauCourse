@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.Gravity
 import android.view.Menu
-import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
@@ -23,6 +22,7 @@ import tool.xfy9326.naucourse.update.beans.UpdateInfo
 import tool.xfy9326.naucourse.utils.BaseUtils.getPackageUri
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
+import tool.xfy9326.naucourse.utils.views.DialogUtils
 
 class UpdateDialog : DialogFragment() {
     companion object {
@@ -144,12 +144,7 @@ class UpdateDialog : DialogFragment() {
         dialog?.apply {
             setCancelable(!updateInfo.forceUpdate)
             setCanceledOnTouchOutside(!updateInfo.forceUpdate)
-
-            val displayMetrics = activity?.resources?.displayMetrics!!
-            window?.apply {
-                setLayout((displayMetrics.widthPixels * CONTENT_WIDTH_PERCENT).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT)
-                setBackgroundDrawable(activity?.getDrawable(R.drawable.bg_dialog))
-            }
+            DialogUtils.applyBackgroundAndWidth(requireContext(), dialog, CONTENT_WIDTH_PERCENT)
         }
     }
 

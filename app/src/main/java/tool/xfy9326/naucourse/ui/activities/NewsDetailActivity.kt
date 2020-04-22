@@ -175,7 +175,7 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
     override fun onHtmlTextImageLongPress(source: String, bitmap: Bitmap) =
         DialogUtils.createImageOperationDialog(this, lifecycle,
             { getViewModel().shareImage(source, bitmap) },
-            { getViewModel().saveNewsImage(source, bitmap) }).show()
+            { getViewModel().saveImage(source, bitmap) }).show()
 
     override fun onDestroy() {
         AdvancedLinkMovementMethod.clearHandler()

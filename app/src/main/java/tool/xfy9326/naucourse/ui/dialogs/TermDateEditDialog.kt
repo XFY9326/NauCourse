@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.dialog_term_date_edit.view.*
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
+import tool.xfy9326.naucourse.utils.views.DialogUtils
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -84,13 +85,7 @@ class TermDateEditDialog : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        dialog?.apply {
-            val displayMetrics = activity?.resources?.displayMetrics!!
-            window?.apply {
-                setLayout((displayMetrics.widthPixels * CONTENT_WIDTH_PERCENT).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT)
-                setBackgroundDrawable(activity?.getDrawable(R.drawable.bg_dialog))
-            }
-        }
+        DialogUtils.applyBackgroundAndWidth(requireContext(), dialog, CONTENT_WIDTH_PERCENT)
     }
 
     interface OnTermEditListener {

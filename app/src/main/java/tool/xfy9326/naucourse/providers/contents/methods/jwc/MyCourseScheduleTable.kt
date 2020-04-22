@@ -156,9 +156,6 @@ object MyCourseScheduleTable : BaseNoParamContent<CourseSet>() {
         var coursesNumPeriodArray: ArrayList<TimePeriod>
 
         courseLocationSplit.forEach {
-            weeksArr = null
-            courseNumArr = null
-            weekMode = WeekMode.ALL_WEEKS
             weeksPeriodArray = ArrayList(1)
             coursesNumPeriodArray = ArrayList(1)
 
@@ -166,78 +163,18 @@ object MyCourseScheduleTable : BaseNoParamContent<CourseSet>() {
             location = courseTimeSplit[0].trimEnd()
             val timeSplit = courseTimeSplit[1].split(COURSE_TIME_JOIN_SYMBOL)
 
-            if (timeSplit[0].startsWith(TIMES_CHAR)) {
-                val weekNumStr = timeSplit[0].substring(1, timeSplit[0].indexOf(WEEK_NUM_CHAR))
-                if (MULTI_TIME_JOIN_SYMBOL in weekNumStr) {
-                    weekNumStr.split(MULTI_TIME_JOIN_SYMBOL).forEach { time ->
-                        weeksArr = if (FROM_TO_TIME_JOIN_SYMBOL in time) {
-                            val temp = time.split(FROM_TO_TIME_JOIN_SYMBOL)
-                            val periodTemp = TimePeriod(temp[0].toInt(), temp[1].toInt())
-                            weeksPeriodArray.add(periodTemp)
-                            periodTemp.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE, source = weeksArr)
-                        } else {
-                            val periodTemp = TimePeriod(time.toInt())
-                            weeksPeriodArray.add(periodTemp)
-                            periodTemp.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE, source = weeksArr)
-                        }
-                    }
-                } else {
-                    weeksArr = if (FROM_TO_TIME_JOIN_SYMBOL in weekNumStr) {
-                        val temp = weekNumStr.split(FROM_TO_TIME_JOIN_SYMBOL)
-                        val periodTemp = TimePeriod(temp[0].toInt(), temp[1].toInt())
-                        weeksPeriodArray.add(periodTemp)
-                        periodTemp.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE, source = weeksArr)
-                    } else {
-                        val periodTemp = TimePeriod(weekNumStr.toInt())
-                        weeksPeriodArray.add(periodTemp)
-                        periodTemp.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE, source = weeksArr)
-                    }
-                }
-            } else if (WEEK_TYPE_AND_CHAR in timeSplit[0]) {
-                val weekNum = timeSplit[0].subSequence(0, timeSplit[0].indexOf(WEEK_TYPE_AND_CHAR)).split(FROM_TO_TIME_JOIN_SYMBOL)
-                val periodTemp = TimePeriod(weekNum[0].toInt(), weekNum[1].toInt())
-                if (WEEK_TYPE_SINGLE_CHAR in timeSplit[0]) {
-                    weekMode = WeekMode.ODD_WEEK_ONLY
-                    weeksArr = periodTemp.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE, oddMode = true, source = weeksArr)
-                } else if (WEEK_TYPE_DOUBLE_CHAR in timeSplit[0]) {
-                    weekMode = WeekMode.EVEN_WEEK_ONLY
-                    weeksArr = periodTemp.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE, evenMode = true, source = weeksArr)
-                }
-                weeksPeriodArray.add(periodTemp)
-            } else {
-                val weekNum = timeSplit[0].subSequence(0, timeSplit[0].indexOf(WEEK_NUM_CHAR)).split(FROM_TO_TIME_JOIN_SYMBOL)
-                val periodTemp = TimePeriod(weekNum[0].toInt(), weekNum[1].toInt())
-                weeksPeriodArray.add(periodTemp)
-                weeksArr = periodTemp.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE, source = weeksArr)
+            val weekStr = timeSplit[0]
+            weekNumAnalyse(weekStr, weeksPeriodArray).let { data ->
+                weeksArr = data.first
+                weekMode = data.second
             }
 
             weekDay = timeSplit[2].toShort()
 
             val courseNumText = timeSplit[4].substring(0, timeSplit[4].indexOf(COURSE_NUM_CHAR))
-            when {
-                MULTI_TIME_JOIN_SYMBOL in courseNumText -> courseNumText.split(MULTI_TIME_JOIN_SYMBOL).forEach { time ->
-                    val periodTemp = TimePeriod(time.toInt())
-                    coursesNumPeriodArray.add(periodTemp)
-                    courseNumArr = periodTemp.convertToCharArray(Constants.Course.MAX_COURSE_LENGTH, source = courseNumArr)
-                }
-                FROM_TO_TIME_JOIN_SYMBOL in courseNumText -> {
-                    val splitTemp = courseNumText.split(FROM_TO_TIME_JOIN_SYMBOL)
-                    val periodTemp = TimePeriod(splitTemp[0].toInt(), splitTemp[1].toInt())
-                    coursesNumPeriodArray.add(periodTemp)
-                    courseNumArr = periodTemp.convertToCharArray(Constants.Course.MAX_COURSE_LENGTH, source = courseNumArr)
-                }
-                else -> {
-                    val periodTemp = TimePeriod(courseNumText.toInt())
-                    coursesNumPeriodArray.add(periodTemp)
-                    courseNumArr = periodTemp.convertToCharArray(Constants.Course.MAX_COURSE_LENGTH, source = courseNumArr)
-                }
-            }
+            courseNumArr = courseNumAnalyse(courseNumText, coursesNumPeriodArray)
 
-            rawWeeksStr = if (!timeSplit[0].startsWith(TIMES_CHAR)) {
-                TIMES_CHAR + timeSplit[0]
-            } else {
-                timeSplit[0]
-            }
+            rawWeeksStr = rawWeekStrAnalyse(weekStr)
 
             rawCourseNumStr = if (!courseNumText.startsWith(TIMES_CHAR)) {
                 TIMES_CHAR + timeSplit[4]
@@ -262,5 +199,87 @@ object MyCourseScheduleTable : BaseNoParamContent<CourseSet>() {
         }
 
         return courseTimeSet
+    }
+
+    internal fun rawWeekStrAnalyse(weekStr: String) =
+        if (!weekStr.startsWith(TIMES_CHAR)) {
+            TIMES_CHAR + weekStr
+        } else {
+            weekStr
+        }
+
+    internal fun weekNumAnalyse(weekStr: String, weeksPeriodArray: ArrayList<TimePeriod>): Pair<CharArray?, WeekMode> {
+        var weeksArrTemp: CharArray? = null
+        var weekMode = WeekMode.ALL_WEEKS
+
+        if (weekStr.startsWith(TIMES_CHAR)) {
+            val weekNumStr = weekStr.substring(1, weekStr.indexOf(WEEK_NUM_CHAR))
+            if (MULTI_TIME_JOIN_SYMBOL in weekNumStr) {
+                weekNumStr.split(MULTI_TIME_JOIN_SYMBOL).forEach { time ->
+                    weeksArrTemp = if (FROM_TO_TIME_JOIN_SYMBOL in time) {
+                        val temp = time.split(FROM_TO_TIME_JOIN_SYMBOL)
+                        val periodTemp = TimePeriod(temp[0].toInt(), temp[1].toInt())
+                        weeksPeriodArray.add(periodTemp)
+                        periodTemp.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE, source = weeksArrTemp)
+                    } else {
+                        val periodTemp = TimePeriod(time.toInt())
+                        weeksPeriodArray.add(periodTemp)
+                        periodTemp.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE, source = weeksArrTemp)
+                    }
+                }
+            } else {
+                weeksArrTemp = if (FROM_TO_TIME_JOIN_SYMBOL in weekNumStr) {
+                    val temp = weekNumStr.split(FROM_TO_TIME_JOIN_SYMBOL)
+                    val periodTemp = TimePeriod(temp[0].toInt(), temp[1].toInt())
+                    weeksPeriodArray.add(periodTemp)
+                    periodTemp.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE, source = weeksArrTemp)
+                } else {
+                    val periodTemp = TimePeriod(weekNumStr.toInt())
+                    weeksPeriodArray.add(periodTemp)
+                    periodTemp.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE, source = weeksArrTemp)
+                }
+            }
+        } else if (WEEK_TYPE_AND_CHAR in weekStr) {
+            val weekNum = weekStr.subSequence(0, weekStr.indexOf(WEEK_TYPE_AND_CHAR)).split(FROM_TO_TIME_JOIN_SYMBOL)
+            val periodTemp = TimePeriod(weekNum[0].toInt(), weekNum[1].toInt())
+            if (WEEK_TYPE_SINGLE_CHAR in weekStr) {
+                weekMode = WeekMode.ODD_WEEK_ONLY
+                weeksArrTemp = periodTemp.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE, oddMode = true, source = weeksArrTemp)
+            } else if (WEEK_TYPE_DOUBLE_CHAR in weekStr) {
+                weekMode = WeekMode.EVEN_WEEK_ONLY
+                weeksArrTemp = periodTemp.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE, evenMode = true, source = weeksArrTemp)
+            }
+            weeksPeriodArray.add(periodTemp)
+        } else {
+            val weekNum = weekStr.subSequence(0, weekStr.indexOf(WEEK_NUM_CHAR)).split(FROM_TO_TIME_JOIN_SYMBOL)
+            val periodTemp = TimePeriod(weekNum[0].toInt(), weekNum[1].toInt())
+            weeksPeriodArray.add(periodTemp)
+            weeksArrTemp = periodTemp.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE, source = weeksArrTemp)
+        }
+
+        return weeksArrTemp to weekMode
+    }
+
+    internal fun courseNumAnalyse(courseNumText: String, coursesNumPeriodArray: ArrayList<TimePeriod>): CharArray? {
+        var courseNumArrTemp: CharArray? = null
+        when {
+            MULTI_TIME_JOIN_SYMBOL in courseNumText -> courseNumText.split(MULTI_TIME_JOIN_SYMBOL).forEach { time ->
+                val periodTemp = TimePeriod(time.toInt())
+                coursesNumPeriodArray.add(periodTemp)
+                courseNumArrTemp = periodTemp.convertToCharArray(Constants.Course.MAX_COURSE_LENGTH, source = courseNumArrTemp)
+            }
+            FROM_TO_TIME_JOIN_SYMBOL in courseNumText -> {
+                val splitTemp = courseNumText.split(FROM_TO_TIME_JOIN_SYMBOL)
+                val periodTemp = TimePeriod(splitTemp[0].toInt(), splitTemp[1].toInt())
+                coursesNumPeriodArray.add(periodTemp)
+                courseNumArrTemp = periodTemp.convertToCharArray(Constants.Course.MAX_COURSE_LENGTH, source = courseNumArrTemp)
+            }
+            else -> {
+                val periodTemp = TimePeriod(courseNumText.toInt())
+                coursesNumPeriodArray.add(periodTemp)
+                courseNumArrTemp = periodTemp.convertToCharArray(Constants.Course.MAX_COURSE_LENGTH, source = courseNumArrTemp)
+            }
+        }
+        return courseNumArrTemp
     }
 }

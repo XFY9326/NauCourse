@@ -95,11 +95,7 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
             }
         })
         viewModel.courseDetailInfo.observeEvent(viewLifecycleOwner, Observer {
-            CourseDetailDialog().apply {
-                arguments = Bundle().apply {
-                    putSerializable(CourseDetailDialog.COURSE_DETAIL_DATA, it)
-                }
-            }.show(childFragmentManager, null)
+            CourseDetailDialog.showDialog(childFragmentManager, it)
         })
         viewModel.courseTableBackground.observe(viewLifecycleOwner, Observer {
             if (it != null) {

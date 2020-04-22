@@ -16,30 +16,47 @@ import java.net.UnknownHostException
 abstract class BaseContent<T> {
     protected abstract val networkClient: BaseNetworkClient
 
+    companion object {
+        internal fun <T> requestAndParse(requestResult: RequestResult, parseCallback: (String) -> ParseResult<T>): ContentResult<T> {
+            return if (requestResult.isRequestSuccess) {
+                val parseResult = parseCallback.invoke(requestResult.contentData!!)
+                if (parseResult.isParseSuccess) {
+                    ContentResult(true, contentData = parseResult.parseData)
+                } else {
+                    ContentResult(false, ContentErrorReason.PARSE_FAILED)
+                }
+            } else {
+                ContentResult(false, requestResult.requestContentErrorResult)
+            }
+        }
+
+        internal fun requestData(requestCallback: () -> Response) = try {
+            requestCallback.invoke().use {
+                if (!it.isSuccessful) {
+                    throw ServerErrorException("Content Request Failed! Status: ${it.code} Url: ${it.request.url}")
+                } else {
+                    RequestResult(true, contentData = it.body?.string()!!)
+                }
+            }
+        } catch (e: Exception) {
+            ExceptionUtils.printStackTrace<BaseContent<*>>(e)
+            when (e) {
+                is SocketTimeoutException -> RequestResult(false, ContentErrorReason.TIMEOUT)
+                is UnknownHostException, is HttpStatusException, is ServerErrorException -> RequestResult(false, ContentErrorReason.SERVER_ERROR)
+                is IOException, is NullPointerException -> RequestResult(false, ContentErrorReason.OPERATION)
+                is ConnectException -> RequestResult(false, ContentErrorReason.CONNECTION_ERROR)
+                else -> RequestResult(false, ContentErrorReason.UNKNOWN)
+            }
+        }
+    }
+
     @Suppress("UNCHECKED_CAST")
     protected fun <E : BaseLoginClient> getLoginClient(type: LoginNetworkManager.ClientType): E =
         LoginNetworkManager.getClient(type) as E
 
     protected fun getSimpleClient() = SimpleNetworkManager.getClient()
 
-    private fun requestData(): RequestResult = try {
-        onRequestData().use {
-            if (!it.isSuccessful) {
-                throw ServerErrorException("Content Request Failed! Status: ${it.code} Url: ${it.request.url}")
-            } else {
-                RequestResult(true, contentData = it.body?.string()!!)
-            }
-        }
-    } catch (e: Exception) {
-        ExceptionUtils.printStackTrace<BaseContent<T>>(e)
-        when (e) {
-            is SocketTimeoutException -> RequestResult(false, ContentErrorReason.TIMEOUT)
-            is UnknownHostException, is HttpStatusException, is ServerErrorException -> RequestResult(false, ContentErrorReason.SERVER_ERROR)
-            is IOException, is NullPointerException -> RequestResult(false, ContentErrorReason.OPERATION)
-            is ConnectException -> RequestResult(false, ContentErrorReason.CONNECTION_ERROR)
-            else -> RequestResult(false, ContentErrorReason.UNKNOWN)
-        }
-    }
+    private fun requestData(): RequestResult = requestData { onRequestData() }
 
     protected abstract fun onRequestData(): Response
 
@@ -52,17 +69,7 @@ abstract class BaseContent<T> {
 
     protected abstract fun onParseData(content: String): T
 
-    protected fun requestAndParse(): ContentResult<T> {
-        val requestResult = requestData()
-        return if (requestResult.isRequestSuccess) {
-            val parseResult = parseData(requestResult.contentData!!)
-            if (parseResult.isParseSuccess) {
-                ContentResult(true, contentData = parseResult.parseData)
-            } else {
-                ContentResult(false, ContentErrorReason.PARSE_FAILED)
-            }
-        } else {
-            ContentResult(false, requestResult.requestContentErrorResult)
-        }
+    protected fun requestAndParse() = requestAndParse(requestData()) {
+        parseData(it)
     }
 }

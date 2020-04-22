@@ -10,7 +10,6 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import okhttp3.HttpUrl
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.beans.ImageOperationType
 import tool.xfy9326.naucourse.providers.beans.GeneralNews
 import tool.xfy9326.naucourse.providers.beans.GeneralNewsDetail
@@ -19,7 +18,6 @@ import tool.xfy9326.naucourse.providers.info.methods.NewsInfo
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourse.utils.utility.ImageUtils
-import tool.xfy9326.naucourse.utils.utility.PathUtils
 import java.util.concurrent.locks.ReentrantLock
 
 class NewsDetailViewModel : BaseViewModel() {
@@ -67,28 +65,15 @@ class NewsDetailViewModel : BaseViewModel() {
         }
     }
 
-    fun saveNewsImage(source: String, bitmap: Bitmap) {
-        viewModelScope.launch(Dispatchers.IO) {
-            imageOperationMutex.withLock {
-                if (ImageUtils.saveImageToAlbum(PathUtils.getUrlFileName(source), Constants.Image.DIR_NEWS_DETAIL_IMAGE, bitmap, false)) {
-                    imageOperation.postEventValue(ImageOperationType.IMAGE_SAVE_SUCCESS)
-                } else {
-                    imageOperation.postEventValue(ImageOperationType.IMAGE_SAVE_FAILED)
-                }
-            }
+    fun saveImage(source: String, bitmap: Bitmap) {
+        viewModelScope.launch {
+            ImageUtils.saveImage(source, bitmap, imageOperationMutex, imageOperation)
         }
     }
 
     fun shareImage(source: String, bitmap: Bitmap) {
-        viewModelScope.launch(Dispatchers.IO) {
-            imageOperationMutex.withLock {
-                val uri = ImageUtils.createImageShareTemp(PathUtils.getUrlFileName(source), bitmap, false)
-                if (uri == null) {
-                    imageOperation.postEventValue(ImageOperationType.IMAGE_SHARE_FAILED)
-                } else {
-                    imageShareUri.postEventValue(uri)
-                }
-            }
+        viewModelScope.launch {
+            ImageUtils.shareImage(source, bitmap, imageOperationMutex, imageOperation, imageShareUri)
         }
     }
 }

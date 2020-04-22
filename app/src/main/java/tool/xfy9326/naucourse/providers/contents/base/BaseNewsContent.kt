@@ -3,16 +3,12 @@ package tool.xfy9326.naucourse.providers.contents.base
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Response
-import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import tool.xfy9326.naucourse.Constants
-import tool.xfy9326.naucourse.network.clients.base.ServerErrorException
 import tool.xfy9326.naucourse.providers.beans.GeneralNews
 import tool.xfy9326.naucourse.providers.beans.GeneralNewsDetail
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
-import java.io.IOException
-import java.net.SocketTimeoutException
 
 abstract class BaseNewsContent<T> : BaseNoParamContent<Set<GeneralNews>>() {
     protected open fun getDetailNetworkClient() = networkClient
@@ -21,23 +17,7 @@ abstract class BaseNewsContent<T> : BaseNoParamContent<Set<GeneralNews>>() {
 
     protected abstract fun onParseRawData(content: String): Set<T>
 
-    private fun requestDetailData(url: HttpUrl): RequestResult = try {
-        onRequestDetailData(url).use {
-            if (!it.isSuccessful) {
-                throw ServerErrorException("Content Request Failed! Status: ${it.code} Url: ${it.request.url}")
-            } else {
-                RequestResult(true, contentData = it.body?.string()!!)
-            }
-        }
-    } catch (e: Exception) {
-        ExceptionUtils.printStackTrace<BaseNewsContent<T>>(e)
-        when (e) {
-            is SocketTimeoutException -> RequestResult(false, ContentErrorReason.TIMEOUT)
-            is HttpStatusException, is ServerErrorException -> RequestResult(false, ContentErrorReason.SERVER_ERROR)
-            is IOException, is NullPointerException -> RequestResult(false, ContentErrorReason.OPERATION)
-            else -> RequestResult(false, ContentErrorReason.UNKNOWN)
-        }
-    }
+    private fun requestDetailData(url: HttpUrl): RequestResult = requestData { onRequestDetailData(url) }
 
     protected abstract fun onRequestDetailData(url: HttpUrl): Response
 
@@ -76,17 +56,7 @@ abstract class BaseNewsContent<T> : BaseNoParamContent<Set<GeneralNews>>() {
     final override fun onParseData(content: String): Set<GeneralNews> = convertToGeneralNews(onParseRawData(content))
 
     @Synchronized
-    fun getContentDetailData(url: HttpUrl): ContentResult<GeneralNewsDetail> {
-        val requestResult = requestDetailData(url)
-        return if (requestResult.isRequestSuccess) {
-            val parseResult = parseDetailData(requestResult.contentData!!)
-            if (parseResult.isParseSuccess) {
-                ContentResult(true, contentData = parseResult.parseData)
-            } else {
-                ContentResult(false, ContentErrorReason.PARSE_FAILED)
-            }
-        } else {
-            ContentResult(false, requestResult.requestContentErrorResult)
-        }
+    fun getContentDetailData(url: HttpUrl): ContentResult<GeneralNewsDetail> = requestAndParse(requestDetailData(url)) {
+        parseDetailData(it)
     }
 }

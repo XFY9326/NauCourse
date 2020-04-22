@@ -24,11 +24,7 @@ object MyCourse : BaseNoParamContent<Array<CourseScore>>() {
 
     override fun onRequestData(): Response = networkClient.newAutoLoginCall(JWC_MY_COURSE_URL)
 
-    override fun onParseData(content: String): Array<CourseScore> {
-        val document = Jsoup.parse(content)
-        val bodyElement = document.body()
-        return getCourseScoreArr(bodyElement)
-    }
+    override fun onParseData(content: String): Array<CourseScore> = getCourseScoreArr(Jsoup.parse(content).body())
 
     private fun getCourseScoreArr(bodyElement: Element): Array<CourseScore> {
         val trElements = bodyElement.getElementById(Constants.HTML.ELEMENT_ID_CONTENT).getElementsByTag(Constants.HTML.ELEMENT_TAG_TR)

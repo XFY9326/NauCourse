@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.utils.utility
 
 import android.app.Activity
 import android.app.DownloadManager
+import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -15,12 +16,19 @@ import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.receivers.NextCourseAlarmReceiver
 import tool.xfy9326.naucourse.ui.activities.ImageShowActivity
+import tool.xfy9326.naucourse.ui.activities.MainIndexActivity
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 
 
 object IntentUtils {
     const val NEW_VERSION_FLAG = "NEW_VERSION_FLAG"
     const val UPDATE_FROM_OLD_DATA_FLAG = "UPDATE_FROM_OLD_DATA_FLAG"
+
+    fun getLaunchMainPendingIntent(context: Context, requestCode: Int): PendingIntent = PendingIntent.getActivity(
+        context, requestCode,
+        Intent(context, MainIndexActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+        PendingIntent.FLAG_UPDATE_CURRENT
+    )
 
     fun launchUrlInBrowser(context: Context, url: String) {
         try {

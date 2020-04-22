@@ -9,6 +9,7 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import kotlinx.android.synthetic.main.dialog_course_detail.view.*
 import kotlinx.android.synthetic.main.view_course_detail_item.view.*
 import tool.xfy9326.naucourse.Constants
@@ -17,6 +18,7 @@ import tool.xfy9326.naucourse.beans.CourseDetail
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import tool.xfy9326.naucourse.utils.views.ColorUtils
+import tool.xfy9326.naucourse.utils.views.DialogUtils
 import tool.xfy9326.naucourse.utils.views.ViewUtils
 import java.text.SimpleDateFormat
 import java.util.*
@@ -26,12 +28,20 @@ class CourseDetailDialog : DialogFragment() {
     private var isMoreInfoExpanded = SettingsPref.ExpandCourseDetailInDefault
 
     companion object {
-        const val COURSE_DETAIL_DATA = "COURSE_DETAIL_DATA"
+        private const val COURSE_DETAIL_DATA = "COURSE_DETAIL_DATA"
         private const val VIEW_EXPANDED = "VIEW_EXPANDED"
 
         private const val CONTENT_WIDTH_PERCENT = 0.75
 
         private val DATE_FORMAT_MD_HM_CH = SimpleDateFormat(Constants.Time.FORMAT_MD_HM_CH, Locale.CHINA)
+
+        fun showDialog(fragmentManager: FragmentManager, courseDetail: CourseDetail) {
+            CourseDetailDialog().apply {
+                arguments = Bundle().apply {
+                    putSerializable(COURSE_DETAIL_DATA, courseDetail)
+                }
+            }.show(fragmentManager, null)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -171,12 +181,6 @@ class CourseDetailDialog : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        dialog?.apply {
-            val displayMetrics = activity?.resources?.displayMetrics!!
-            window?.apply {
-                setLayout((displayMetrics.widthPixels * CONTENT_WIDTH_PERCENT).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT)
-                setBackgroundDrawable(activity?.getDrawable(R.drawable.bg_dialog))
-            }
-        }
+        DialogUtils.applyBackgroundAndWidth(requireContext(), dialog, CONTENT_WIDTH_PERCENT)
     }
 }

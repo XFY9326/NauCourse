@@ -3,16 +3,13 @@ package tool.xfy9326.naucourse.utils.utility
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
-import tool.xfy9326.naucourse.ui.activities.MainIndexActivity
 import tool.xfy9326.naucourse.utils.views.ViewUtils
 import java.text.SimpleDateFormat
 import java.util.*
@@ -46,12 +43,7 @@ object NotificationUtils {
                 setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 setLargeIcon(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
 
-                val pendingIntent = PendingIntent.getActivity(
-                    context,
-                    ACTIVITY_REQUEST_CODE,
-                    Intent(context, MainIndexActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
-                    PendingIntent.FLAG_UPDATE_CURRENT
-                )
+                val pendingIntent = IntentUtils.getLaunchMainPendingIntent(context, ACTIVITY_REQUEST_CODE)
                 setContentIntent(pendingIntent)
 
                 setContentTitle(nextCourseNotification.courseName)

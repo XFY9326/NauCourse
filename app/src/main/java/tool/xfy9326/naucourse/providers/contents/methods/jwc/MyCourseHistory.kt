@@ -22,11 +22,7 @@ object MyCourseHistory : BaseNoParamContent<Array<CourseHistory>>() {
 
     override fun onRequestData(): Response = networkClient.newAutoLoginCall(JWC_MY_COURSE_HISTORY_URL)
 
-    override fun onParseData(content: String): Array<CourseHistory> {
-        val document = Jsoup.parse(content)
-        val bodyElement = document.body()
-        return getCourseHistoryArr(bodyElement)
-    }
+    override fun onParseData(content: String): Array<CourseHistory> = getCourseHistoryArr(Jsoup.parse(content).body())
 
     private fun getCourseHistoryArr(bodyElement: Element): Array<CourseHistory> {
         val trElements = bodyElement.getElementById(ELEMENT_ID_MAJOR_APPLY_LIST).getElementsByTag(Constants.HTML.ELEMENT_TAG_TR)

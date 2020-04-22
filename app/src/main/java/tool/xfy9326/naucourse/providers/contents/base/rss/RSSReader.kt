@@ -55,30 +55,21 @@ object RSSReader {
                 when (tagName) {
                     RSS_TAG_CHANNEL -> startChannel = true
                     RSS_TAG_ITEM -> startItem = true
-                    RSS_TAG_TITLE -> {
-                        if (startChannel && !startItem) {
-                            channelTitle = parser.nextText()
-                        } else {
-                            title = parser.nextText().trim()
-                            if (title.startsWith(RSS_TYPE_START_STR_1)) {
-                                type = title.substring(1, title.indexOf(RSS_TYPE_END_STR_1))
-                                title = title.substring(title.indexOf(RSS_TYPE_END_STR_1) + 1)
-                            } else if (title.startsWith(RSS_TYPE_START_STR_2)) {
-                                type = title.substring(1, title.indexOf(RSS_TYPE_END_STR_2))
-                                title = title.substring(title.indexOf(RSS_TYPE_END_STR_2) + 1)
-                            }
+                    RSS_TAG_TITLE -> if (startChannel && !startItem) {
+                        channelTitle = parser.nextText()
+                    } else {
+                        title = parser.nextText().trim()
+                        getTypeByTitle(title)?.let {
+                            type = it.first
+                            title = it.second
                         }
                     }
-                    RSS_TAG_LINK -> {
-                        if (startChannel && !startItem) {
-                            channelLink = parser.nextText().toHttpUrl()
-                        } else {
-                            link = parser.nextText().toHttpUrl()
-                        }
+                    RSS_TAG_LINK -> if (startChannel && !startItem) {
+                        channelLink = parser.nextText().toHttpUrl()
+                    } else {
+                        link = parser.nextText().toHttpUrl()
                     }
-                    RSS_TAG_DATE -> {
-                        date = readTime(parser.nextText())
-                    }
+                    RSS_TAG_DATE -> date = readTime(parser.nextText())
                 }
             } else if (eventType == XmlPullParser.END_TAG) {
                 when (tagName) {
@@ -111,8 +102,7 @@ object RSSReader {
                         type = null
                     }
                     RSS_TAG -> {
-                        rssObject =
-                            RSSObject(rssChannelArrayList.toTypedArray())
+                        rssObject = RSSObject(rssChannelArrayList.toTypedArray())
                         rssChannelArrayList.clear()
                     }
                 }
@@ -121,6 +111,16 @@ object RSSReader {
         }
         return rssObject
     }
+
+    private fun getTypeByTitle(title: String) =
+        when {
+            title.startsWith(RSS_TYPE_START_STR_1) ->
+                title.substring(1, title.indexOf(RSS_TYPE_END_STR_1)) to title.substring(title.indexOf(RSS_TYPE_END_STR_1) + 1)
+
+            title.startsWith(RSS_TYPE_START_STR_2) ->
+                title.substring(1, title.indexOf(RSS_TYPE_END_STR_2)) to title.substring(title.indexOf(RSS_TYPE_END_STR_2) + 1)
+            else -> null
+        }
 
     // 解决SimpleDateFormat线程不安全问题
     @Synchronized
