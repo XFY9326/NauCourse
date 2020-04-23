@@ -76,6 +76,7 @@
 # Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
+-keep class com.bumptech.glide.GeneratedAppGlideModuleImpl
 -keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
   **[] $VALUES;
   public *;
@@ -90,6 +91,7 @@
 
 # Kotlin
 -keep class kotlin.** { *; }
+# -keepnames class kotlinx.** { *; }
 -keep class kotlin.Metadata { *; }
 -keepclassmembers class **$WhenMappings {
     <fields>;
@@ -98,7 +100,26 @@
     public <methods>;
 }
 -assumenosideeffects class kotlin.jvm.internal.Intrinsics {
-    static void checkParameterIsNotNull(java.lang.Object, java.lang.String);
+    public static void checkExpressionValueIsNotNull(java.lang.Object, java.lang.String);
+    public static void checkFieldIsNotNull(java.lang.Object, java.lang.String);
+    public static void checkFieldIsNotNull(java.lang.Object, java.lang.String, java.lang.String);
+    public static void checkNotNull(java.lang.Object);
+    public static void checkNotNull(java.lang.Object, java.lang.String);
+    public static void checkNotNullExpressionValue(java.lang.Object, java.lang.String);
+    public static void checkNotNullParameter(java.lang.Object, java.lang.String);
+    public static void checkParameterIsNotNull(java.lang.Object, java.lang.String);
+    public static void checkReturnedValueIsNotNull(java.lang.Object, java.lang.String);
+    public static void checkReturnedValueIsNotNull(java.lang.Object, java.lang.String, java.lang.String);
+    public static void throwUninitializedPropertyAccessException(java.lang.String);
+}
+
+-keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
+-keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}
+-keepnames class kotlinx.coroutines.android.AndroidExceptionPreHandler {}
+-keepnames class kotlinx.coroutines.android.AndroidDispatcherFactory {}
+
+-keepclassmembernames class kotlinx.** {
+    volatile <fields>;
 }
 
 # -----------------------------
@@ -157,9 +178,3 @@
 # Bugly
 -dontwarn com.tencent.bugly.**
 -keep public class com.tencent.bugly.**{*;}
-
-# -----------------------------
-
-# Glide
--keep public class * extends com.bumptech.glide.module.AppGlideModule
--keep class com.bumptech.glide.GeneratedAppGlideModuleImpl

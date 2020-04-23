@@ -18,6 +18,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.SerializableNews
+import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.providers.beans.GeneralNewsDetail
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourse.ui.models.activity.NewsDetailViewModel
@@ -168,8 +169,8 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
         tv_newsDetailContent.movementMethod = AdvancedLinkMovementMethod
     }
 
-    override fun onHtmlTextImageClick(source: String) {
-        IntentUtils.viewLargePhotoByUrl(this, source)
+    override fun onHtmlTextImageClick(source: String, clientType: LoginNetworkManager.ClientType?) {
+        ImageShowActivity.showImageActivity(this, source, clientType)
     }
 
     override fun onHtmlTextImageLongPress(source: String, bitmap: Bitmap) =

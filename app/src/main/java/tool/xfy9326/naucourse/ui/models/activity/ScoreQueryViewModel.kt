@@ -20,10 +20,6 @@ import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourse.utils.courses.CreditCountUtils
 
 class ScoreQueryViewModel : BaseViewModel() {
-    @Volatile
-    private var hasInit = false
-    private val initLock = Mutex()
-
     private val dataGetMutex = Mutex()
 
     private var courseHistoryTemp: List<CourseHistory> = emptyList()
@@ -45,12 +41,10 @@ class ScoreQueryViewModel : BaseViewModel() {
 
     override fun onInitView(isRestored: Boolean) {
         viewModelScope.launch(Dispatchers.Default) {
-            initLock.withLock {
-                if (tryInit()) {
-                    refreshData(true).join()
-                }
-                refreshData()
+            if (tryInit()) {
+                refreshData(true).join()
             }
+            refreshData()
         }
     }
 
@@ -93,28 +87,26 @@ class ScoreQueryViewModel : BaseViewModel() {
 
     fun requestCreditCount() {
         viewModelScope.launch(Dispatchers.Default) {
-            initLock.withLock {
-                if (hasInit) {
-                    val current = courseScoreTemp
-                    val history = courseHistoryTemp
+            if (hasInit()) {
+                val current = courseScoreTemp
+                val history = courseHistoryTemp
 
-                    if (current.isEmpty() && history.isEmpty()) {
-                        creditCountStatus.postEventValue(CreditCountStatus.EMPTY_DATA)
-                    } else {
-                        val currentArr = CreditCountUtils.getCountItemFromCourseScore(current)
-                        val historyArr = CreditCountUtils.getCountItemFromCourseHistory(history)
-
-                        if (historyArr.isEmpty() && currentArr.isEmpty()) {
-                            creditCountStatus.postEventValue(CreditCountStatus.EMPTY_DATA)
-                        } else if (currentArr.isEmpty() || currentArr.size == 1) {
-                            credit.postEventValue(CreditCountUtils.countCredit(currentArr, historyArr) to getJwcCredit())
-                        } else {
-                            creditCourseSelect.postEventValue(Pair(currentArr, historyArr))
-                        }
-                    }
+                if (current.isEmpty() && history.isEmpty()) {
+                    creditCountStatus.postEventValue(CreditCountStatus.EMPTY_DATA)
                 } else {
-                    creditCountStatus.postEventValue(CreditCountStatus.DATA_LOADING)
+                    val currentArr = CreditCountUtils.getCountItemFromCourseScore(current)
+                    val historyArr = CreditCountUtils.getCountItemFromCourseHistory(history)
+
+                    if (historyArr.isEmpty() && currentArr.isEmpty()) {
+                        creditCountStatus.postEventValue(CreditCountStatus.EMPTY_DATA)
+                    } else if (currentArr.isEmpty() || currentArr.size == 1) {
+                        credit.postEventValue(CreditCountUtils.countCredit(currentArr, historyArr) to getJwcCredit())
+                    } else {
+                        creditCourseSelect.postEventValue(Pair(currentArr, historyArr))
+                    }
                 }
+            } else {
+                creditCountStatus.postEventValue(CreditCountStatus.DATA_LOADING)
             }
         }
     }

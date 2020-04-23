@@ -42,9 +42,8 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
         viewModel.imageOperation.observeEvent(this, Observer {
             ActivityUtils.showSnackBar(layout_schoolCalendar, I18NUtils.getImageOperationTypeResId(it))
         })
-        viewModel.calendarImageUrl.observeEventWithCheck(this, {
+        viewModel.calendarImageUrl.observe(this, Observer {
             setImageView(it)
-            true
         })
         viewModel.calendarList.observeEvent(this, Observer {
             showCalendarList(it)
@@ -132,7 +131,9 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
     @Synchronized
     private fun getBitmapFromImageView(): Bitmap? {
         return if (isCalendarSet) {
-            BitmapUtils.getBitmapFromDrawable(pv_calendarImage.drawable.current)!!
+            BitmapUtils.getBitmapFromDrawable(pv_calendarImage.drawable.current).also {
+                if (it == null) ActivityUtils.showSnackBar(layout_schoolCalendar, R.string.image_operation_when_calendar_loading)
+            }
         } else {
             ActivityUtils.showSnackBar(layout_schoolCalendar, R.string.image_operation_when_calendar_loading)
             null

@@ -15,6 +15,7 @@ class AdvancedRecyclerView : RecyclerView {
         private const val ATTR_DEFAULT_RES_ID = 0
     }
 
+    var enableEmptyViewShowDelay = true
     private var startX = 0f
     private var startY = 0f
     private var emptyViewResId by Delegates.notNull<Int>()
@@ -62,7 +63,7 @@ class AdvancedRecyclerView : RecyclerView {
         super.setAdapter(adapter)
         adapter?.registerAdapterDataObserver(emptyViewAdapterObserver)
 
-        if (firstAdapter) {
+        if (firstAdapter && enableEmptyViewShowDelay) {
             postDelayed({
                 modifyEmptyView()
             }, 250)

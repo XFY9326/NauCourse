@@ -17,4 +17,7 @@ abstract class BaseViewModel : ViewModel() {
             hasInit = true
             true
         }
+
+    @Synchronized
+    fun hasInit() = hasInit
 }

@@ -1,5 +1,7 @@
 package tool.xfy9326.naucourse.ui.activities
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
@@ -32,6 +34,14 @@ class ImageShowActivity : ViewModelActivity<ImageShowViewModel>(), View.OnLongCl
     companion object {
         const val EXTRA_IMAGE_URL = "EXTRA_IMAGE_URL"
         const val EXTRA_LOGIN_CLIENT_TYPE = "EXTRA_LOGIN_CLIENT_TYPE"
+
+        fun showImageActivity(activity: Activity, url: String, loginClientType: LoginNetworkManager.ClientType? = null) {
+            activity.startActivity(Intent(activity, ImageShowActivity::class.java).apply {
+                putExtra(EXTRA_IMAGE_URL, url)
+                if (loginClientType != null) putExtra(EXTRA_LOGIN_CLIENT_TYPE, loginClientType)
+            })
+            activity.overridePendingTransition(R.anim.fade_enter, R.anim.fade_exit)
+        }
     }
 
     override fun onCreateContentView(): Int = R.layout.activity_image_show
@@ -98,6 +108,6 @@ class ImageShowActivity : ViewModelActivity<ImageShowViewModel>(), View.OnLongCl
 
     override fun onBackPressed() {
         finish()
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        overridePendingTransition(R.anim.fade_enter, R.anim.fade_exit)
     }
 }

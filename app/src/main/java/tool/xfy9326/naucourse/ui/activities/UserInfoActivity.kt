@@ -27,7 +27,6 @@ import tool.xfy9326.naucourse.providers.beans.jwc.StudentPersonalInfo
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentPersonalInfo.Companion.toPlainText
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourse.ui.models.activity.UserInfoViewModel
-import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
 import tool.xfy9326.naucourse.utils.views.I18NUtils
 
@@ -65,7 +64,7 @@ class UserInfoActivity : ViewModelActivity<UserInfoViewModel>() {
             updateView(it)
         })
         viewModel.studentPhotoUrl.observeEvent(this, Observer {
-            IntentUtils.viewLargePhotoByUrl(this, it, LoginNetworkManager.ClientType.JWC)
+            ImageShowActivity.showImageActivity(this, it, LoginNetworkManager.ClientType.JWC)
         })
     }
 
@@ -95,7 +94,7 @@ class UserInfoActivity : ViewModelActivity<UserInfoViewModel>() {
     private fun updateLearningProcess(learningProcess: Array<StudentLearningProcess>) {
         layout_userLearningProcess.removeViewsInLayout(1, layout_userLearningProcess.childCount - 1)
         for (process in learningProcess) {
-            layout_userLearningProcess.addViewInLayout(
+            layout_userLearningProcess.addView(
                 inflater.inflate(R.layout.view_learning_process_item, layout_userLearningProcess, false).apply {
                     tv_processCourseType.setText(I18NUtils.getCourseTypeResId(process.courseType))
                     pb_processBar.progress = process.progress
@@ -110,7 +109,6 @@ class UserInfoActivity : ViewModelActivity<UserInfoViewModel>() {
                     gl_processCourseType.replaceAllViews(views.requireNoNulls(), false)
                 })
         }
-        layout_userLearningProcess.refreshLayout()
     }
 
     @SuppressLint("SetTextI18n")

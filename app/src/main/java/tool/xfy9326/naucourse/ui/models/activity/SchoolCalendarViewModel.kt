@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.ui.models.activity
 
 import android.graphics.Bitmap
 import android.net.Uri
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,7 +18,6 @@ import tool.xfy9326.naucourse.providers.contents.methods.www.SchoolCalendarImage
 import tool.xfy9326.naucourse.providers.contents.methods.www.SchoolCalendarList
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
-import tool.xfy9326.naucourse.utils.debug.LogUtils
 import tool.xfy9326.naucourse.utils.utility.ImageUtils
 
 class SchoolCalendarViewModel : BaseViewModel() {
@@ -28,7 +28,7 @@ class SchoolCalendarViewModel : BaseViewModel() {
     val imageShareUri = EventLiveData<Uri>()
 
     val calendarList = EventLiveData<Array<CalendarItem>>()
-    val calendarImageUrl = EventLiveData<String>()
+    val calendarImageUrl = MutableLiveData<String>()
     val calendarLoadStatus = EventLiveData<CalendarLoadStatus>()
 
     enum class CalendarLoadStatus {
@@ -38,16 +38,14 @@ class SchoolCalendarViewModel : BaseViewModel() {
     }
 
     override fun onInitView(isRestored: Boolean) {
-        if (tryInit()) {
-            viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(Dispatchers.Default) {
+            if (tryInit()) {
                 val imageUrl = AppPref.CurrentSchoolCalendarImageUrl
                 if (imageUrl != null) {
-                    calendarImageUrl.postEventValue(imageUrl)
+                    calendarImageUrl.postValue(imageUrl)
                 }
-                // 默认先从指定位置读取校历，如果有其他设置就从其他地方读取
-                val currentUseUrl = AppPref.CurrentSchoolCalendarUrl?.toHttpUrlOrNull() ?: getDefaultCalendarUrl()
-                loadCalendarImage(currentUseUrl, imageUrl == null)
             }
+            loadCalendarImage(AppPref.CurrentSchoolCalendarUrl?.toHttpUrlOrNull() ?: getDefaultCalendarUrl())
         }
     }
 
@@ -74,13 +72,12 @@ class SchoolCalendarViewModel : BaseViewModel() {
                         val imageUrl = it.contentData!!.toString()
                         val storeUrl = AppPref.CurrentSchoolCalendarImageUrl
                         if (imageUrl != storeUrl || forceRefresh) {
-                            calendarImageUrl.postEventValue(imageUrl)
+                            calendarImageUrl.postValue(imageUrl)
                             // 保存当前获取到的校历所在页面的地址以及解析的图片地址
                             AppPref.CurrentSchoolCalendarUrl = url.toString()
                             AppPref.CurrentSchoolCalendarImageUrl = imageUrl
                         }
                     } else if (forceRefresh) {
-                        LogUtils.d<SchoolCalendarViewModel>("School Calendar Load Failed! Reason: ${it.contentErrorResult}")
                         calendarLoadStatus.postEventValue(CalendarLoadStatus.IMAGE_LOAD_FAILED)
                     }
                 }
@@ -95,7 +92,6 @@ class SchoolCalendarViewModel : BaseViewModel() {
                 if (it.isSuccess) {
                     calendarList.postEventValue(it.contentData!!)
                 } else {
-                    LogUtils.d<SchoolCalendarViewModel>("School Calendar List Load Failed! Reason: ${it.contentErrorResult}")
                     calendarLoadStatus.postEventValue(CalendarLoadStatus.IMAGE_LIST_LOAD_FAILED)
                 }
             }

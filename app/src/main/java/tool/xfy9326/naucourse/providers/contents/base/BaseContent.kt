@@ -15,6 +15,7 @@ import java.net.UnknownHostException
 
 abstract class BaseContent<T> {
     protected abstract val networkClient: BaseNetworkClient
+    var clientType: LoginNetworkManager.ClientType? = null
 
     companion object {
         internal fun <T> requestAndParse(requestResult: RequestResult, parseCallback: (String) -> ParseResult<T>): ContentResult<T> {
@@ -51,8 +52,10 @@ abstract class BaseContent<T> {
     }
 
     @Suppress("UNCHECKED_CAST")
-    protected fun <E : BaseLoginClient> getLoginClient(type: LoginNetworkManager.ClientType): E =
-        LoginNetworkManager.getClient(type) as E
+    protected fun <E : BaseLoginClient> getLoginClient(type: LoginNetworkManager.ClientType): E {
+        clientType = type
+        return LoginNetworkManager.getClient(type) as E
+    }
 
     protected fun getSimpleClient() = SimpleNetworkManager.getClient()
 

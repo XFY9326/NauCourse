@@ -67,6 +67,7 @@ class EmptyRoomSearchActivity : ViewModelActivity<EmptyRoomViewModel>(), DatePic
             et_emptyRoomDate.setText(DATE_FORMAT_YMD.format(Date()))
         }
         adapter = EmptyRoomAdapter(this)
+        arv_dataList.enableEmptyViewShowDelay = false
         arv_dataList.adapter = adapter
 
         asl_emptyRoom.setOnRefreshListener {

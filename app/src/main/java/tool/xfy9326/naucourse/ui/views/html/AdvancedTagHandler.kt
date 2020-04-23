@@ -8,6 +8,7 @@ import android.text.style.ImageSpan
 import android.view.View
 import org.xml.sax.XMLReader
 import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 import tool.xfy9326.naucourse.utils.utility.BitmapUtils
 import java.util.*
@@ -26,7 +27,7 @@ class AdvancedTagHandler : Html.TagHandler {
                             @Suppress("UNCHECKED_CAST")
                             val htmlDrawable = it.drawable as HtmlDrawable?
                             if (htmlDrawable?.downloadUrl != null && htmlDrawable.nowStatus == ImageStatus.SHOWING) {
-                                clickListener?.onHtmlTextImageClick(htmlDrawable.downloadUrl!!)
+                                clickListener?.onHtmlTextImageClick(htmlDrawable.downloadUrl!!, htmlDrawable.clientType)
                                 super.onClick(widget, x, y)
                             }
                         } catch (e: Exception) {
@@ -67,6 +68,6 @@ class AdvancedTagHandler : Html.TagHandler {
     }
 
     interface OnImageClickListener {
-        fun onHtmlTextImageClick(source: String)
+        fun onHtmlTextImageClick(source: String, clientType: LoginNetworkManager.ClientType?)
     }
 }

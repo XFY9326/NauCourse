@@ -98,6 +98,15 @@ object NewsInfo : BaseSimpleContentInfo<List<GeneralNews>, PostSource>() {
         }
     }
 
+    fun getLoginClientTypeByPostSource(postSource: PostSource) =
+        if (postSource == PostSource.RSS_JW || postSource == PostSource.RSS_TW ||
+            postSource == PostSource.RSS_XGC || postSource == PostSource.RSS_XXB
+        ) {
+            null
+        } else {
+            CONTENT_MAP[postSource]?.clientType
+        }
+
     override fun saveSimpleInfo(info: List<GeneralNews>) {
         NewsDBHelper.clearAll()
         NewsDBHelper.putGeneralNewsSet(info)

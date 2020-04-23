@@ -10,6 +10,7 @@ import com.bumptech.glide.request.transition.Transition
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.providers.beans.GeneralNews
 import tool.xfy9326.naucourse.providers.info.methods.NewsInfo
+import tool.xfy9326.naucourse.tools.glide.ClientRequest
 import kotlin.math.min
 
 class HtmlImageGetter(private val context: Context, private val textView: TextView, private val newsType: GeneralNews.PostSource) : Html.ImageGetter {
@@ -26,6 +27,8 @@ class HtmlImageGetter(private val context: Context, private val textView: TextVi
 
     override fun getDrawable(source: String?): Drawable {
         val drawable = HtmlDrawable()
+        val clientType = NewsInfo.getLoginClientTypeByPostSource(newsType)
+        drawable.clientType = clientType
 
         if (source != null) {
             refreshTextView()
@@ -64,7 +67,13 @@ class HtmlImageGetter(private val context: Context, private val textView: TextVi
                     refreshTextView()
                 }
             }
-            Glide.with(context).load(url.toString()).placeholder(defaultIcon).error(errorIcon).into(target)
+            Glide.with(context).load(
+                if (clientType == null) {
+                    url.toString()
+                } else {
+                    ClientRequest(clientType, url.toString())
+                }
+            ).placeholder(defaultIcon).error(errorIcon).into(target)
         } else {
             drawable.updateDrawable(errorIcon, ImageStatus.BROKEN)
         }

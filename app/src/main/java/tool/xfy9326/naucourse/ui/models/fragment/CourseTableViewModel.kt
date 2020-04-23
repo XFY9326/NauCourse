@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.beans.*
 import tool.xfy9326.naucourse.io.db.CourseCellStyleDBHelper
@@ -43,15 +42,12 @@ class CourseTableViewModel : BaseViewModel() {
     private lateinit var termDate: TermDate
     private lateinit var courseTableArr: Array<CourseTable>
 
-    private val initLock = Mutex()
-
     @Volatile
     private var courseTableStyle: CourseTableStyle? = null
     private val courseTableStyleLock = Any()
 
     private val courseTableAsyncLock = Mutex()
 
-    private var hasInit = false
     var hasInitWithNowWeekNum = false
 
     var showNextWeekAhead: Boolean? = null
@@ -97,15 +93,13 @@ class CourseTableViewModel : BaseViewModel() {
     }
 
     private suspend fun initTableCache() = withContext(Dispatchers.Default) {
-        initLock.withLock {
-            if (tryInit()) {
-                initDeferred = viewModelScope.async(Dispatchers.Default) {
-                    initCourseData()
-                    true
-                }
-                if (SettingsPref.AutoAsyncCourseData) {
-                    startOnlineDataAsync()
-                }
+        if (tryInit()) {
+            initDeferred = viewModelScope.async(Dispatchers.Default) {
+                initCourseData()
+                true
+            }
+            if (SettingsPref.AutoAsyncCourseData) {
+                startOnlineDataAsync()
             }
         }
     }
@@ -450,9 +444,7 @@ class CourseTableViewModel : BaseViewModel() {
     fun createShareImage(context: Context, weekNum: Int, targetWidth: Int) {
         viewModelScope.launch(Dispatchers.Default) {
             val weakContext = WeakReference(context)
-            if (!hasInit) {
-                getImageWhenCourseTableLoading.notifyEvent()
-            } else {
+            if (hasInit()) {
                 val pkg = getCoursePkg(weekNum)
                 if (pkg == null) {
                     getImageWhenCourseTableLoading.notifyEvent()
@@ -464,6 +456,8 @@ class CourseTableViewModel : BaseViewModel() {
                         }
                     }
                 }
+            } else {
+                getImageWhenCourseTableLoading.notifyEvent()
             }
         }
     }
