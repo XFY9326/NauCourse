@@ -138,22 +138,19 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
     }
 
     override fun initView(viewModel: CourseTableViewModel) {
+        setToolbarTitleEnabled(false)
         CourseTableViewHelper.setOnCourseCellClickListener(this)
 
         courseTableViewPagerAdapter = CourseTableViewPagerAdapter(this, AppPref.MaxWeekNumCache)
 
         vp_courseTablePanel.adapter = courseTableViewPagerAdapter
         vp_courseTablePanel.offscreenPageLimit = 1
-
-        setToolbarTitleEnabled(false)
-
         viewPagerCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 viewModel.nowShowWeekNum.postValue(position + 1)
             }
         }
         vp_courseTablePanel.registerOnPageChangeCallback(viewPagerCallback)
-        vp_courseTablePanel.getChildAt(0)?.overScrollMode = View.OVER_SCROLL_NEVER
 
         layout_dateInfoBar.setOnClickListener {
             turnToDefaultWeek(viewModel)

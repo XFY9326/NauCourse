@@ -4,17 +4,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/view_course_table_header" />
+    <FrameLayout
+        android:id="@+id/layout_emptyCourseTableHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:minHeight="@dimen/course_table_header_min_height" />
 
     <ScrollView
-        android:id="@+id/layout_courseTable"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
         android:overScrollMode="never"
         android:scrollbars="none">
 
-        <include layout="@layout/view_course_table" />
+        <FrameLayout
+            android:id="@+id/layout_emptyCourseTable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true" />
 
     </ScrollView>
 

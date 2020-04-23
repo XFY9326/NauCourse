@@ -24,7 +24,7 @@ import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBar
 
 @Suppress("unused")
-class CourseTableSettingsFragment : BaseSettingsPreferenceFragment(), Preference.OnPreferenceChangeListener {
+class CourseTableSettingsFragment : BaseSettingsPreferenceFragment() {
     private val imageMutex = Mutex()
 
     companion object {
@@ -155,7 +155,10 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment(), Preference
     }
 
     private fun addRefreshCourseTableListener(key: String) {
-        findPreference<Preference>(key)?.onPreferenceChangeListener = this
+        findPreference<Preference>(key)?.setOnPreferenceChangeListener { _, _ ->
+            NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE].notifyEvent()
+            true
+        }
     }
 
     private fun addRefreshAllTableListener(key: String) {
@@ -171,11 +174,5 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment(), Preference
             NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE_BACKGROUND].notifyEvent()
             true
         }
-    }
-
-    // 刷新课表视图
-    override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
-        NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE].notifyEvent()
-        return true
     }
 }

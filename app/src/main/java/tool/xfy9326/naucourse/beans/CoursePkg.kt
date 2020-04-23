@@ -7,8 +7,7 @@ data class CoursePkg(
     val termDate: TermDate,
     val courseTable: CourseTable,
     val styles: Array<CourseCellStyle>,
-    val courseTableStyle: CourseTableStyle,
-    val showWeekDaySize: Int
+    val courseTableStyle: CourseTableStyle
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -20,7 +19,6 @@ data class CoursePkg(
         if (courseTable != other.courseTable) return false
         if (!styles.contentEquals(other.styles)) return false
         if (courseTableStyle != other.courseTableStyle) return false
-        if (showWeekDaySize != other.showWeekDaySize) return false
 
         return true
     }
@@ -30,7 +28,6 @@ data class CoursePkg(
         result = 31 * result + courseTable.hashCode()
         result = 31 * result + styles.contentHashCode()
         result = 31 * result + courseTableStyle.hashCode()
-        result = 31 * result + showWeekDaySize
         return result
     }
 }

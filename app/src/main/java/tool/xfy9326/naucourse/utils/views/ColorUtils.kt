@@ -1,6 +1,9 @@
 package tool.xfy9326.naucourse.utils.views
 
+import android.content.Context
+import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.R
@@ -14,4 +17,15 @@ object ColorUtils {
     fun isLightColor(color: Int) = ColorUtils.calculateLuminance(color) >= LUMINANCE_IS_LIGHT_COLOR
 
     fun getRandomMaterialColor() = MATERIAL_COLOR.random()
+
+    @ColorInt
+    fun getBackgroundColor(context: Context): Int {
+        context.theme.obtainStyledAttributes(IntArray(1) {
+            android.R.attr.colorBackground
+        }).let { array ->
+            return array.getColor(0, ContextCompat.getColor(context, R.color.colorDefaultBackground)).also {
+                array.recycle()
+            }
+        }
+    }
 }

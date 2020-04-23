@@ -14,6 +14,10 @@ class AdvancedGridLayout : GridLayout {
 
     constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)
 
+    fun addViewInLayout(view: View, requestLayout: Boolean = false) {
+        addViewInLayout(view, -1, view.layoutParams, !requestLayout)
+    }
+
     fun replaceAllViews(views: Array<out View>, refreshLayout: Boolean = true) {
         if (childCount != 0) {
             removeAllViewsInLayout()

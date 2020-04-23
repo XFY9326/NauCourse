@@ -32,15 +32,12 @@ import java.lang.ref.WeakReference
 import kotlin.math.min
 
 class CourseTableViewModel : BaseViewModel() {
-    companion object {
-        const val DEFAULT_COURSE_PKG_HASH = 0
-    }
-
     private lateinit var initDeferred: Deferred<Boolean>
 
     private lateinit var courseSet: CourseSet
     private lateinit var termDate: TermDate
     private lateinit var courseTableArr: Array<CourseTable>
+    private val hasTableInit = BooleanArray(Constants.Course.MAX_WEEK_NUM_SIZE) { false }
 
     @Volatile
     private var courseTableStyle: CourseTableStyle? = null
@@ -130,28 +127,26 @@ class CourseTableViewModel : BaseViewModel() {
         }
     }
 
-    fun startOnlineDataAsync() = viewModelScope.launch(Dispatchers.Default) {
-        if (::initDeferred.isInitialized) {
-            if (initDeferred.isActive) initDeferred.await()
-            asyncCourseTable()
+    fun startOnlineDataAsync() {
+        viewModelScope.launch(Dispatchers.Default) {
+            if (::initDeferred.isInitialized) {
+                if (initDeferred.isActive) initDeferred.await()
+                asyncCourseTable()
+            } else {
+                initTableCache()
+                startOnlineDataAsync()
+            }
         }
     }
 
-    fun requestCourseTable(weekNum: Int, coursePkgHash: Int) {
-        if (::initDeferred.isInitialized) {
-            viewModelScope.launch(Dispatchers.Default) {
+    fun requestCourseTable(weekNum: Int) {
+        viewModelScope.launch(Dispatchers.Default) {
+            if (::initDeferred.isInitialized) {
                 if (initDeferred.isActive) initDeferred.await()
-                if (coursePkgHash == DEFAULT_COURSE_PKG_HASH) {
-                    val pkg = getCoursePkg(weekNum)
-                    if (pkg.hashCode() != coursePkgHash) {
-                        courseTablePkg[weekNum - 1].postValue(getCoursePkg(weekNum))
-                    }
-                }
-            }
-        } else {
-            viewModelScope.launch(Dispatchers.Default) {
+                courseTablePkg[weekNum - 1].postValue(getCoursePkg(weekNum))
+            } else {
                 initTableCache()
-                requestCourseTable(weekNum, coursePkgHash)
+                requestCourseTable(weekNum)
             }
         }
     }
@@ -164,18 +159,15 @@ class CourseTableViewModel : BaseViewModel() {
                 termDate,
                 table,
                 CourseCellStyleDBHelper.loadCourseCellStyle(courseSet),
-                style,
-                CourseTableViewHelper.getShowWeekDaySize(table, style)
+                style
             )
-
             pkg
         } else if (::termDate.isInitialized && (!::courseTableArr.isInitialized || !::courseSet.isInitialized)) {
             val pkg = CoursePkg(
                 termDate,
                 CourseTable(emptyArray()),
                 emptyArray(),
-                getCourseTableStyle(),
-                CourseTableViewHelper.getShowWeekDaySize(false)
+                getCourseTableStyle()
             )
             LogUtils.i<CourseTableViewModel>("Init Empty Course Data For Week: $weekNum!")
             pkg
@@ -401,8 +393,7 @@ class CourseTableViewModel : BaseViewModel() {
                             termDate,
                             table,
                             CourseCellStyleDBHelper.loadCourseCellStyle(courseSet),
-                            style,
-                            CourseTableViewHelper.getShowWeekDaySize(table, style)
+                            style
                         )
                     )
                 }
@@ -414,10 +405,8 @@ class CourseTableViewModel : BaseViewModel() {
         viewModelScope.launch(Dispatchers.Default) {
             val newStyle = getCourseTableStyle(true)
             for (liveData in courseTablePkg) {
-                if (liveData.hasObservers()) {
-                    liveData.value?.let {
-                        liveData.postValue(it.copy(courseTableStyle = newStyle))
-                    }
+                liveData.value?.let {
+                    liveData.postValue(it.copy(courseTableStyle = newStyle))
                 }
             }
         }
@@ -470,4 +459,13 @@ class CourseTableViewModel : BaseViewModel() {
             imageShareUri.postEventValue(uri)
         }
     }
+
+    @Synchronized
+    fun tryInitTable(weekNum: Int) =
+        if (hasTableInit[weekNum - 1]) {
+            false
+        } else {
+            hasTableInit[weekNum - 1] = true
+            true
+        }
 }

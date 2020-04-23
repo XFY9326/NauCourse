@@ -1,7 +1,9 @@
 package tool.xfy9326.naucourse.ui.views.viewpager
 
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import tool.xfy9326.naucourse.ui.fragments.TableFragment
 
@@ -18,11 +20,16 @@ class CourseTableViewPagerAdapter(context: Fragment, private var maxWeekNum: Int
         }
     }
 
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        recyclerView.overScrollMode = View.OVER_SCROLL_NEVER
+        super.onAttachedToRecyclerView(recyclerView)
+    }
+
     override fun getItemCount(): Int = maxWeekNum
 
     override fun createFragment(position: Int): Fragment =
         if (position < 0 || position > maxWeekNum - 1) {
-            throw error("Course Table Fragment Can't Generate Table. WeekNum ${position + 1} must in [1,${maxWeekNum}]")
+            error("Course Table Fragment Can't Generate Table. WeekNum ${position + 1} must in [1,${maxWeekNum}]")
         } else {
             TableFragment().apply {
                 arguments = Bundle().apply {
