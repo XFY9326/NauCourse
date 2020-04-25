@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourse.ui.fragments.base
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,12 @@ import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
 
 abstract class ViewModelFragment<T : BaseViewModel> : Fragment() {
     private lateinit var contentViewModel: T
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        contentViewModel = onCreateViewModel()
+        contentViewModel.onFragmentAttach()
+    }
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +40,6 @@ abstract class ViewModelFragment<T : BaseViewModel> : Fragment() {
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        contentViewModel = onCreateViewModel()
         prepareCacheInit(contentViewModel, savedInstanceState != null)
         contentViewModel.onInitCache(savedInstanceState != null)
 

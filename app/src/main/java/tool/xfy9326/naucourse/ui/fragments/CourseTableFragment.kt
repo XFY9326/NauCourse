@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourse.ui.fragments
 
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
@@ -61,13 +62,18 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
     }
 
     override fun bindViewModel(viewModel: CourseTableViewModel) {
-        viewModel.getImageWhenCourseTableLoading.observeNotification(this, {
+        bindLocalObserver(viewModel)
+        bindGlobalObserver(viewModel)
+    }
+
+    private fun bindLocalObserver(viewModel: CourseTableViewModel) {
+        viewModel.getImageWhenCourseTableLoading.observeNotification(viewLifecycleOwner, {
             ActivityUtils.showSnackBar(layout_courseTableWindow, R.string.operation_when_data_loading)
         })
-        viewModel.imageShareUri.observeEvent(this, Observer {
+        viewModel.imageShareUri.observeEvent(viewLifecycleOwner, Observer {
             startActivity(ShareUtils.getShareImageIntent(requireContext(), it))
         })
-        viewModel.imageOperation.observeEvent(this, Observer {
+        viewModel.imageOperation.observeEvent(viewLifecycleOwner, Observer {
             ActivityUtils.showSnackBar(layout_courseTableWindow, I18NUtils.getImageOperationTypeResId(it))
         })
         viewModel.nowShowWeekNum.observe(viewLifecycleOwner, Observer {
@@ -85,29 +91,17 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
             AppPref.MaxWeekNumCache = it
         })
         viewModel.nowWeekNum.observe(viewLifecycleOwner, Observer {
-            synchronized(this) {
-                if (!viewModel.hasInitWithNowWeekNum) {
-                    viewModel.hasInitWithNowWeekNum = true
-                    val showWeekNum = if (it.first == 0) 1 else if (it.second) it.first + 1 else it.first
-                    viewModel.nowShowWeekNum.postValue(showWeekNum - 1)
-                    vp_courseTablePanel.setCurrentItem(showWeekNum - 1, false)
-                }
-            }
+            updateNowWeekNum(viewModel, it)
         })
         viewModel.courseDetailInfo.observeEvent(viewLifecycleOwner, Observer {
             CourseDetailDialog.showDialog(childFragmentManager, it)
         })
         viewModel.courseTableBackground.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                iv_courseTableBackground.setImageBitmap(it)
-                iv_courseTableBackground.alpha = SettingsPref.CourseTableBackgroundAlpha / 100f
-                iv_courseTableBackground.scaleType = SettingsPref.getCourseTableBackgroundScareType()
-                iv_courseTableBackground.visibility = View.VISIBLE
-            } else {
-                iv_courseTableBackground.visibility = View.GONE
-            }
+            setCourseTableBackground(it)
         })
+    }
 
+    private fun bindGlobalObserver(viewModel: CourseTableViewModel) {
         NotifyBus[NotifyBus.Type.COURSE_STYLE_TERM_UPDATE].observeNotification(viewLifecycleOwner, {
             viewModel.refreshCourseData()
         }, CourseTableFragment::class.java.simpleName)
@@ -130,6 +124,27 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
             }
         }
         super.onHiddenChanged(hidden)
+    }
+
+    @Synchronized
+    private fun updateNowWeekNum(viewModel: CourseTableViewModel, weekNum: Pair<Int, Boolean>) {
+        if (!viewModel.hasInitWithNowWeekNum) {
+            viewModel.hasInitWithNowWeekNum = true
+            val showWeekNum = if (weekNum.first == 0) 1 else if (weekNum.second) weekNum.first + 1 else weekNum.first
+            viewModel.nowShowWeekNum.postValue(showWeekNum - 1)
+            vp_courseTablePanel.setCurrentItem(showWeekNum - 1, false)
+        }
+    }
+
+    private fun setCourseTableBackground(bitmap: Bitmap?) {
+        if (bitmap != null) {
+            iv_courseTableBackground.setImageBitmap(bitmap)
+            iv_courseTableBackground.alpha = SettingsPref.CourseTableBackgroundAlpha / 100f
+            iv_courseTableBackground.scaleType = SettingsPref.getCourseTableBackgroundScareType()
+            iv_courseTableBackground.visibility = View.VISIBLE
+        } else {
+            iv_courseTableBackground.visibility = View.GONE
+        }
     }
 
     private fun shareCourseTable() {

@@ -76,16 +76,15 @@ class CourseTableViewModel : BaseViewModel() {
         IN_VACATION
     }
 
-    override fun onInitView(isRestored: Boolean) {
-        viewModelScope.launch(Dispatchers.Default) {
-            val today = TimeUtils.getTodayDate()
-            todayDate.postValue(today)
+    override fun onFragmentAttach() {
+        viewModelScope.launch {
+            initTableCache()
         }
     }
 
     override fun onInitCache(isRestored: Boolean) {
-        viewModelScope.launch {
-            initTableCache()
+        viewModelScope.launch(Dispatchers.Default) {
+            todayDate.postValue(TimeUtils.getTodayDate())
         }
     }
 

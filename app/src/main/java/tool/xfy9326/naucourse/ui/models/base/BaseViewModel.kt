@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 abstract class BaseViewModel : ViewModel() {
     private var hasInit = false
 
+    open fun onFragmentAttach() {}
+
     open fun onInitCache(isRestored: Boolean) {}
 
     open fun onInitView(isRestored: Boolean) {}
