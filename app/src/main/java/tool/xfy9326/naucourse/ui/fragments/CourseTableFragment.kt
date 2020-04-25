@@ -13,6 +13,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.iterator
+import androidx.core.view.setMargins
 import androidx.core.view.setPadding
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -177,59 +178,73 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
 
     private fun setFullScreenBackground(isInit: Boolean) {
         if (SettingsPref.CustomCourseTableBackground && SettingsPref.CourseTableBackgroundFullScreen) {
-            layout_courseTableWindow.fitsSystemWindows = false
-            ViewCompat.requestApplyInsets(layout_courseTableWindow)
-            layout_courseTableWindow.setPadding(0)
-
-            layout_courseTableAppBar.fitsSystemWindows = true
-            ViewCompat.requestApplyInsets(layout_courseTableAppBar)
-
-            iv_courseTableBackground.layoutParams = CoordinatorLayout.LayoutParams(iv_courseTableBackground.layoutParams).apply {
-                setMargins(0, 0, 0, 0)
-            }
-            layout_courseTableAppBar.apply {
-                outlineProvider = null
-                background = null
-            }
-            tb_courseTable.background = null
-
-            val colorTimeText =
-                if (SettingsPref.EnableCourseTableTimeTextColor) {
-                    SettingsPref.CourseTableTimeTextColor
-                } else {
-                    ContextCompat.getColor(requireContext(), R.color.colorCourseTimeDefault)
-                }
-            tv_nowShowWeekNum.setTextColor(colorTimeText)
-            tv_todayDate.setTextColor(colorTimeText)
-            tv_notCurrentWeek.setTextColor(colorTimeText)
-            tb_courseTable.navigationIcon?.colorFilter = PorterDuffColorFilter(colorTimeText, PorterDuff.Mode.SRC)
-            tb_courseTable.menu.iterator().forEach {
-                it.icon?.colorFilter = PorterDuffColorFilter(colorTimeText, PorterDuff.Mode.SRC_ATOP)
-            }
+            enableFullScreenBackground()
         } else {
-            layout_courseTableWindow.fitsSystemWindows = true
-            ViewCompat.requestApplyInsets(layout_courseTableWindow)
+            disableFullScreenBackground(isInit)
+        }
+    }
 
-            layout_courseTableAppBar.fitsSystemWindows = false
-            ViewCompat.requestApplyInsets(layout_courseTableAppBar)
+    private fun enableFullScreenBackground() {
+        layout_courseTableWindow.fitsSystemWindows = false
+        ViewCompat.requestApplyInsets(layout_courseTableWindow)
+        layout_courseTableWindow.setPadding(0)
 
-            if (!isInit) {
-                iv_courseTableBackground.layoutParams = CoordinatorLayout.LayoutParams(iv_courseTableBackground.layoutParams).apply {
+        layout_courseTableAppBar.fitsSystemWindows = true
+        ViewCompat.requestApplyInsets(layout_courseTableAppBar)
+
+        iv_courseTableBackground.apply {
+            layoutParams = CoordinatorLayout.LayoutParams(layoutParams).apply {
+                setMargins(0)
+            }
+        }
+        layout_courseTableAppBar.apply {
+            outlineProvider = null
+            background = null
+            alpha = SettingsPref.CustomCourseTableAlpha / 100f
+        }
+        tb_courseTable.background = null
+
+        val colorTimeText =
+            if (SettingsPref.EnableCourseTableTimeTextColor) {
+                SettingsPref.CourseTableTimeTextColor
+            } else {
+                ContextCompat.getColor(requireContext(), R.color.colorCourseTimeDefault)
+            }
+        tv_nowShowWeekNum.setTextColor(colorTimeText)
+        tv_todayDate.setTextColor(colorTimeText)
+        tv_notCurrentWeek.setTextColor(colorTimeText)
+        tb_courseTable.navigationIcon?.colorFilter = PorterDuffColorFilter(colorTimeText, PorterDuff.Mode.SRC)
+        tb_courseTable.menu.iterator().forEach {
+            it.icon?.colorFilter = PorterDuffColorFilter(colorTimeText, PorterDuff.Mode.SRC_ATOP)
+        }
+    }
+
+    private fun disableFullScreenBackground(isInit: Boolean) {
+        layout_courseTableWindow.fitsSystemWindows = true
+        ViewCompat.requestApplyInsets(layout_courseTableWindow)
+
+        layout_courseTableAppBar.fitsSystemWindows = false
+        ViewCompat.requestApplyInsets(layout_courseTableAppBar)
+
+        if (!isInit) {
+            iv_courseTableBackground.apply {
+                layoutParams = CoordinatorLayout.LayoutParams(layoutParams).apply {
                     setMargins(0, ViewUtils.getActionBarSize(requireContext()), 0, 0)
                 }
-                layout_courseTableAppBar.apply {
-                    outlineProvider = ViewOutlineProvider.BOUNDS
-                    setBackgroundResource(R.color.colorPrimary)
-                }
-                tb_courseTable.setBackgroundResource(R.color.colorPrimary)
+            }
+            layout_courseTableAppBar.apply {
+                outlineProvider = ViewOutlineProvider.BOUNDS
+                setBackgroundResource(R.color.colorPrimary)
+                alpha = 1f
+            }
+            tb_courseTable.setBackgroundResource(R.color.colorPrimary)
 
-                tv_nowShowWeekNum.setTextColor(Color.WHITE)
-                tv_todayDate.setTextColor(Color.WHITE)
-                tv_notCurrentWeek.setTextColor(Color.WHITE)
-                tb_courseTable.navigationIcon?.clearColorFilter()
-                tb_courseTable.menu.iterator().forEach {
-                    it.icon?.clearColorFilter()
-                }
+            tv_nowShowWeekNum.setTextColor(Color.WHITE)
+            tv_todayDate.setTextColor(Color.WHITE)
+            tv_notCurrentWeek.setTextColor(Color.WHITE)
+            tb_courseTable.navigationIcon?.clearColorFilter()
+            tb_courseTable.menu.iterator().forEach {
+                it.icon?.clearColorFilter()
             }
         }
     }

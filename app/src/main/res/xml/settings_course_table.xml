@@ -106,7 +106,7 @@
             app:defaultValue="100"
             app:iconSpaceReserved="false"
             app:key="CustomCourseTableAlpha"
-            app:min="0"
+            app:min="30"
             app:seekBarIncrement="1"
             app:showSeekBarValue="true"
             app:summary="@string/custom_course_table_alpha_sum"

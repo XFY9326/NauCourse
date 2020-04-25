@@ -49,7 +49,6 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment() {
         addRefreshCourseTableListener(Constants.Pref.CenterVerticalShowCourseText)
         addRefreshCourseTableListener(Constants.Pref.UseRoundCornerCourseCell)
         addRefreshCourseTableListener(Constants.Pref.DrawAllCellBackground)
-        addRefreshCourseTableListener(Constants.Pref.CustomCourseTableAlpha)
         addRefreshCourseTableListener(Constants.Pref.HighLightCourseTableTodayDate)
 
         addRefreshCourseTableBackgroundListener(Constants.Pref.CustomCourseTableBackground)
@@ -59,6 +58,7 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment() {
 
         addRefreshAllTableListener(Constants.Pref.EnableCourseTableTimeTextColor)
         addRefreshAllTableListener(Constants.Pref.CourseTableTimeTextColor)
+        addRefreshAllTableListener(Constants.Pref.CustomCourseTableAlpha)
 
         findPreference<Preference>(Constants.Pref.ChooseCourseTableBackgroundPicture)?.setOnPreferenceClickListener {
             IntentUtils.selectPicture(this, SELECT_COURSE_TABLE_PICTURE_REQUEST_CODE)

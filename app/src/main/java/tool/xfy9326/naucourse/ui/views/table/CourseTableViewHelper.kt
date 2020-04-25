@@ -179,7 +179,6 @@ object CourseTableViewHelper {
         val targetView = (layoutInflater.inflate(R.layout.view_course_table, null) as AdvancedGridLayout).apply {
             columnCount = columnSize
             rowCount = rowMax
-            alpha = courseTableStyle.customCourseTableAlpha
         }
 
         val resultDeferred = ArrayList<Deferred<View>>((columnSize * rowMax * 0.75).toInt())
@@ -222,6 +221,7 @@ object CourseTableViewHelper {
                         defaultTextColor, timeCellTimeNumSize, timeCellTimeSize, courseCellPadding, timeTextPaddingTop
                     ), courseTableStyle
                 ).also {
+                    it.alpha = courseTableStyle.customCourseTableAlpha
                     // 时间列高度一致因此只计算第一个的高度
                     if (row == 0 && courseTableStyle.sameCellHeight) {
                         val viewHeight = getCellHeightByWidth(it, timeColWidth)
@@ -258,6 +258,7 @@ object CourseTableViewHelper {
                                             courseCellTextPadding, courseTextColorDark, courseTextColorLight
                                         ), courseTableStyle
                                     ).also {
+                                        it.alpha = courseTableStyle.customCourseTableAlpha
                                         if (courseTableStyle.sameCellHeight) {
                                             val viewHeight = getCellHeightByWidth(it, courseColWidth, cell.timeDuration.durationLength)
                                             lock.withLock {
@@ -291,7 +292,9 @@ object CourseTableViewHelper {
                                     backgroundRadius,
                                     courseCellPadding
                                 )
-                            )
+                            ).also {
+                                it.alpha = courseTableStyle.customCourseTableAlpha
+                            }
                         })
                     }
                     rowCount++
@@ -486,6 +489,7 @@ object CourseTableViewHelper {
             }
 
             layoutInflater.inflate(R.layout.view_course_table_date, headerLayout, false).apply {
+                alpha = courseTableStyle.customCourseTableAlpha
                 tv_cellWeekdayNum.text = weekDayNumStrArr[i]
                 tv_cellDateNum.text = dateInfo[i].second.toString()
                 if (isToday) {
@@ -514,12 +518,9 @@ object CourseTableViewHelper {
             }
         }
 
-        if (headerLayout.alpha != courseTableStyle.customCourseTableAlpha) {
-            headerLayout.alpha = courseTableStyle.customCourseTableAlpha
-        }
-
         headerLayout.tv_cellMonth.apply {
             text = context.getString(R.string.month, dateInfo.first().first)
+            alpha = courseTableStyle.customCourseTableAlpha
             setTextColor(defaultTextColor)
             background =
                 if (courseTableStyle.drawAllCellBackground) {
