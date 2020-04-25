@@ -46,6 +46,7 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
         private const val POST_AUTH_TYPE_VALUE = "local"
 
         private const val LOGIN_PAGE_STR = "南京审计大学应用认证"
+        private const val LOGIN_STR = "登录"
         private const val INDEX_PAGE_STR = "首页"
         private const val CAPTCHA_HTML_STR = "<input type=\"hidden\" name=\"needCaptcha\" value=\"true\">"
         private const val PASSWORD_ERROR_STR = "用户名密码错误"
@@ -89,7 +90,7 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
         if (CAPTCHA_HTML_STR in responseContent) {
             cookieStore.clearCookies()
         }
-        if (LOGIN_PAGE_STR in responseContent || responseUrl.hasSameHost(NGX_HOST)) {
+        if (LOGIN_PAGE_STR in responseContent && LOGIN_STR in responseContent && responseUrl.hasSameHost(NGX_HOST)) {
             if (!isFromPathLogin && getLoginStatus(responseContent) == LoginResponse.ErrorReason.NONE) {
                 return LoginResponse(true, responseUrl, responseContent)
             }
@@ -120,11 +121,10 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
                         }
                     }
                 } else {
-                    throw java.io.IOException("NGX Login Failed!")
+                    throw IOException("NGX Login Failed!")
                 }
             }
-        } else if (responseUrl.hasSameHost(fromUrl)) return LoginResponse(true, responseUrl, responseContent)
-        else throw IOException("NGX Jump Url Error! $responseUrl")
+        } else return LoginResponse(true, responseUrl, responseContent)
     }
 
     override fun logoutInternal(): Boolean = ngxLogout()

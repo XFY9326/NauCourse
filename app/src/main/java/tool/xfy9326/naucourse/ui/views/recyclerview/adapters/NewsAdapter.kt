@@ -28,11 +28,7 @@ class NewsAdapter(context: Context, private val listener: OnNewsItemClickListene
         contextReference.get()?.apply {
             holder.apply {
                 val newsSource = getString(I18NUtils.getNewsPostSourceResId(element.postSource)!!)
-                if (element.type != null) {
-                    tvNewsType.text = getString(R.string.news_type, element.type)
-                } else {
-                    tvNewsType.text = getString(R.string.news_type, newsSource + getString(R.string.news))
-                }
+                tvNewsType.text = getString(R.string.news_type, element.type ?: newsSource)
                 tvNewsTitle.text = element.title
                 tvNewsSource.text = newsSource
                 if (element.clickAmount == null) {

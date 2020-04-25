@@ -18,7 +18,7 @@ abstract class ListRecyclerAdapter<VH : RecyclerView.ViewHolder, E>(context: Con
         onCreateViewHolder(layoutInflater.inflate(onBindLayout(), parent, false))
 
     final override fun onBindViewHolder(holder: VH, position: Int) {
-        onBindViewHolder(holder, position, getItem(holder.adapterPosition))
+        onBindViewHolder(holder, position, getItem(position))
     }
 
     @LayoutRes
