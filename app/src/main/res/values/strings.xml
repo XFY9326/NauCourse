@@ -390,4 +390,6 @@
     <string name="clear_network_cache">清空网络缓存</string>
     <string name="clear_network_cache_sum">清空网页与图片的本地缓存</string>
     <string name="double_press_exit">再按一次返回键退出</string>
+    <string name="advanced_function_warning">\u3000高级功能仅限内部使用，若擅自使用后果自负！</string>
+    <string name="attention">注意</string>
 </resources>

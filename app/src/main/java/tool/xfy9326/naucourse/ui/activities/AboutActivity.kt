@@ -3,6 +3,7 @@ package tool.xfy9326.naucourse.ui.activities
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.activity_about.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourse.BuildConfig
@@ -58,10 +59,25 @@ class AboutActivity : AppCompatActivity() {
         } else {
             advancedFunctionClickTime++
             if (advancedFunctionClickTime >= Constants.Others.ADVANCED_FUNCTION_CLICK_TIME) {
-                AppPref.EnableAdvancedFunctions = true
-                NotifyBus[NotifyBus.Type.ADVANCED_FUNCTION_MODE_CHANGED].notifyEvent()
-                showToast(this, R.string.advanced_function_on)
+                showAdvancedFunctionDialog()
+                advancedFunctionClickTime = 0
             }
         }
+    }
+
+    private fun showAdvancedFunctionDialog() {
+        MaterialAlertDialogBuilder(this).apply {
+            setTitle(R.string.attention)
+            setMessage(R.string.advanced_function_warning)
+            setNegativeButton(android.R.string.cancel, null)
+            setPositiveButton(android.R.string.yes) { _, _ ->
+                AppPref.EnableAdvancedFunctions = true
+                NotifyBus[NotifyBus.Type.ADVANCED_FUNCTION_MODE_CHANGED].notifyEvent()
+                showToast(this@AboutActivity, R.string.advanced_function_on)
+            }
+            setCancelable(false)
+        }.create().also {
+            DialogUtils.addAutoCloseListener(lifecycle, it)
+        }.show()
     }
 }

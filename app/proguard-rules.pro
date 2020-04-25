@@ -91,7 +91,6 @@
 
 # Kotlin
 -keep class kotlin.** { *; }
-# -keepnames class kotlinx.** { *; }
 -keep class kotlin.Metadata { *; }
 -keepclassmembers class **$WhenMappings {
     <fields>;
@@ -113,11 +112,18 @@
     public static void throwUninitializedPropertyAccessException(java.lang.String);
 }
 
+# ServiceLoader support
 -keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
 -keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}
 -keepnames class kotlinx.coroutines.android.AndroidExceptionPreHandler {}
 -keepnames class kotlinx.coroutines.android.AndroidDispatcherFactory {}
 
+-keep class kotlinx.coroutines.internal.MainDispatcherFactory {}
+-keep class kotlinx.coroutines.CoroutineExceptionHandler {}
+-keep class kotlinx.coroutines.android.AndroidExceptionPreHandler {}
+-keep class kotlinx.coroutines.android.AndroidDispatcherFactory {}
+
+# Most of volatile fields are updated with AFU and should not be mangled
 -keepclassmembernames class kotlinx.** {
     volatile <fields>;
 }
