@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.network.clients
 
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.internal.closeQuietly
 import okio.IOException
 import org.jsoup.Jsoup
@@ -56,10 +57,10 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
         private val NGX_LOGOUT_URL =
             HttpUrl.Builder().scheme(Constants.Network.HTTP).host(NGX_HOST).addPathSegment(PATH_WENGINE_AUTH).addPathSegment(PATH_LOGOUT).build()
 
-        private fun getLoginStatus(htmlContent: String): LoginResponse.ErrorReason = when {
-            INDEX_PAGE_STR in htmlContent -> LoginResponse.ErrorReason.NONE
+        private fun getLoginStatus(htmlContent: String, isFromPathLogin: Boolean): LoginResponse.ErrorReason = when {
             PASSWORD_ERROR_STR in htmlContent -> LoginResponse.ErrorReason.PASSWORD_ERROR
-            LOGIN_PAGE_STR in htmlContent -> LoginResponse.ErrorReason.INPUT_ERROR
+            LOGIN_PAGE_STR in htmlContent && LOGIN_STR in htmlContent -> LoginResponse.ErrorReason.INPUT_ERROR
+            INDEX_PAGE_STR in htmlContent || isFromPathLogin -> LoginResponse.ErrorReason.NONE
             else -> LoginResponse.ErrorReason.UNKNOWN
         }
 
@@ -87,11 +88,20 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
         val responseUrl = beforeLoginResponse.request.url
         val responseContent = beforeLoginResponse.body?.string()!!
         beforeLoginResponse.closeQuietly()
+
+        val fromUrl =
+            if (this.isFromPathLogin) {
+                this.fromUrl
+            } else {
+                responseUrl.queryParameter(PARAM_FROM)?.toHttpUrlOrNull()
+            }
+        val isFromPathLogin = this.isFromPathLogin || fromUrl != null
+
         if (CAPTCHA_HTML_STR in responseContent) {
             cookieStore.clearCookies()
         }
         if (LOGIN_PAGE_STR in responseContent && LOGIN_STR in responseContent && responseUrl.hasSameHost(NGX_HOST)) {
-            if (!isFromPathLogin && getLoginStatus(responseContent) == LoginResponse.ErrorReason.NONE) {
+            if (!isFromPathLogin && getLoginStatus(responseContent, isFromPathLogin) == LoginResponse.ErrorReason.NONE) {
                 return LoginResponse(true, responseUrl, responseContent)
             }
             val postForm = getLoginPostForm(getLoginInfo().userId, getLoginInfo().userPw)
@@ -106,18 +116,16 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
                     return if (isFromPathLogin) {
                         when {
                             url.hasSameHost(fromUrl) -> LoginResponse(true, url, content)
-                            url.hasSameHost(NGX_HOST) -> LoginResponse(false, loginErrorReason = getLoginStatus(content))
+                            url.hasSameHost(NGX_HOST) && LOGIN_PAGE_STR !in content && LOGIN_STR !in content ->
+                                LoginResponse(true, url, content)
                             else -> LoginResponse(false, loginErrorReason = LoginResponse.ErrorReason.SERVER_ERROR)
                         }
                     } else {
-                        val status = getLoginStatus(content)
+                        val status = getLoginStatus(content, isFromPathLogin)
                         if (status == LoginResponse.ErrorReason.NONE) {
                             LoginResponse(true, url, content)
                         } else {
-                            LoginResponse(
-                                false,
-                                loginErrorReason = getLoginStatus(content)
-                            )
+                            LoginResponse(false, loginErrorReason = status)
                         }
                     }
                 } else {
@@ -155,5 +163,6 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
             url(loginUrl)
         }.build())
 
-    override fun validateUseResponseToLogin(url: HttpUrl, content: String) = url.hasSameHost(NGX_HOST) || LOGIN_PAGE_STR in content
+    override fun validateUseResponseToLogin(url: HttpUrl, content: String) =
+        LOGIN_PAGE_STR in content && LOGIN_STR in content && url.hasSameHost(NGX_HOST)
 }
