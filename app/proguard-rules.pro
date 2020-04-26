@@ -26,6 +26,7 @@
 -keep class tool.xfy9326.naucourse.compat.beans.** { *; }
 -keep class tool.xfy9326.naucourse.update.beans.** { *; }
 -keep class tool.xfy9326.naucourse.providers.beans.** { *; }
+-keepnames class tool.xfy9326.naucourse.providers.info.methods.** {}
 
 # -----------------------------
 
