@@ -5,7 +5,6 @@ import okhttp3.CookieJar
 import okhttp3.HttpUrl
 import tool.xfy9326.naucourse.io.db.NetworkDBHelper
 
-
 class CookieStore(private val type: NetworkDBHelper.CookiesType) : CookieJar {
     override fun loadForRequest(url: HttpUrl): List<Cookie> = NetworkDBHelper.loadForRequest(url, type)
 

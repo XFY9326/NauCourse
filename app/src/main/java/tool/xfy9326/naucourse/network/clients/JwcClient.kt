@@ -65,7 +65,7 @@ class JwcClient(loginInfo: LoginInfo) : SSOClient(loginInfo, JWC_SSO_LOGIN_URL) 
             return if (status == LoginResponse.ErrorReason.NONE && validateJwcLoginUrl(ssoResult.url!!)) {
                 jwcMainUrl = ssoResult.url
                 ssoResult
-            } else if (!loginOnce && status == LoginResponse.ErrorReason.ALREADY_LOGIN) {
+            } else if (!loginOnce && status == LoginResponse.ErrorReason.ALREADY_LOGIN) { // 如果已登录则注销后重试，只尝试一次
                 if (jwcLogout()) {
                     jwcLogin(true)
                 } else {

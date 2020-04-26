@@ -10,6 +10,7 @@ import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
+// VPN的url加密
 object VPNTools {
     private const val VPN_URL_ENCRYPT_KEY = "wrdvpnisthebest!"
     private const val VPN_URL_ENCRYPT_IV = "wrdvpnisthebest!"

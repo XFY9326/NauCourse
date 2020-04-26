@@ -79,7 +79,7 @@ object NewsInfo : BaseSimpleContentInfo<List<GeneralNews>, PostSource>() {
         }
     }
 
-    fun isNewsOutOfDateTimeStamp() = System.currentTimeMillis() - Constants.News.NEWS_STORE_DAY_LENGTH * 24 * 60 * 60 * 1000L
+    fun isNewsOutOfDateTimeStamp() = System.currentTimeMillis() - Constants.Others.NEWS_STORE_DAY_LENGTH * 24 * 60 * 60 * 1000L
 
     fun getDetailNewsInfo(url: HttpUrl, newsType: PostSource) =
         if (newsType == PostSource.UNKNOWN) {

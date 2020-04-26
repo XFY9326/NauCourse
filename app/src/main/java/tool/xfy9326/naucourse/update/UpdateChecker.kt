@@ -13,7 +13,6 @@ import tool.xfy9326.naucourse.update.beans.UpdateIndex
 import tool.xfy9326.naucourse.update.beans.UpdateInfo
 import tool.xfy9326.naucourse.utils.BaseUtils
 
-@Suppress("unused")
 object UpdateChecker {
     private const val UPDATE_SERVER = "update.xfy9326.top"
     private const val UPDATE_TYPE = "NauCourse"
@@ -83,6 +82,7 @@ object UpdateChecker {
         }
     }
 
+    @Suppress("unused")
     fun getSpecificVersionInfo(version: Int): UpdateInfo? {
         try {
             SimpleNetworkManager.getClient().newClientCall(buildSpecificVersionInfoUrl(version)).use {

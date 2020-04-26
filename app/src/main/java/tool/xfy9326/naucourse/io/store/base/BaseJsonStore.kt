@@ -2,7 +2,7 @@ package tool.xfy9326.naucourse.io.store.base
 
 import java.util.*
 
-@Suppress("unused")
+// 基础JSON存储
 abstract class BaseJsonStore<T : Any> : JsonStoreConfig<T> {
     protected abstract val useCache: Boolean
     protected abstract val useEncrypt: Boolean
@@ -59,6 +59,7 @@ abstract class BaseJsonStore<T : Any> : JsonStoreConfig<T> {
         }
     }
 
+    @Suppress("unused")
     fun addListener(listener: OnStoreChangedListener<T>, receiveNowData: Boolean = false) {
         listenerList.add(listener)
         if (receiveNowData) {
@@ -68,6 +69,7 @@ abstract class BaseJsonStore<T : Any> : JsonStoreConfig<T> {
         }
     }
 
+    @Suppress("unused")
     fun removeListener(listener: OnStoreChangedListener<T>) {
         listenerList.remove(listener)
     }

@@ -41,8 +41,6 @@ open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = nu
         private val SSO_LOGOUT_URL =
             HttpUrl.Builder().scheme(Constants.Network.HTTP).host(SSO_HOST).addPathSegment(SSO_PATH).addEncodedPathSegment(SSO_LOGOUT_PATH).build()
 
-        // 防止错误次数过多
-        // private val SSO_LOGIN_PARAM = arrayOf("lt", "execution", "_eventId", "useVCode", "isUseVCode", "sessionVcode", "errorCount")
         private val SSO_LOGIN_PARAM = arrayOf("lt", "execution", "_eventId", "useVCode", "isUseVCode", "sessionVcode")
         private const val SSO_LOGIN_PARAM_ERROR_COUNT = "errorCount"
         private const val SSO_LOGIN_PARAM_ERROR_COUNT_VALUE = ""
@@ -85,7 +83,6 @@ open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = nu
                 val input = htmlContent.select(SSO_POST_FORMAT.format(param)).first()
                 add(param, input.attr(SSO_INPUT_TAG_VALUE_ATTR))
             }
-            // 防止错误次数过多
             add(SSO_LOGIN_PARAM_ERROR_COUNT, SSO_LOGIN_PARAM_ERROR_COUNT_VALUE)
         }.build()
     }

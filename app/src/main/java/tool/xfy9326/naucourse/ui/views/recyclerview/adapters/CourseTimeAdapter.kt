@@ -57,11 +57,11 @@ class CourseTimeAdapter(context: Context, private val timeList: ArrayList<Course
             tvCourseTimeLocation.text = contextReference.get()!!.getString(R.string.course_detail_location, courseTime.location)
             layoutCourseTimeDelete.setOnClickListener {
                 timeList.remove(courseTime)
-                notifyItemRemoved(position)
-                listener.onDeleteCourseTime(this@CourseTimeAdapter, courseTime, position)
+                listener.onDeleteCourseTime(this@CourseTimeAdapter, courseTime, holder.adapterPosition)
+                notifyItemRemoved(holder.adapterPosition)
             }
             cvCourseEditTime.setOnClickListener {
-                listener.onEditCourseTime(this@CourseTimeAdapter, courseTime, position)
+                listener.onEditCourseTime(this@CourseTimeAdapter, courseTime, holder.adapterPosition)
             }
         }
     }

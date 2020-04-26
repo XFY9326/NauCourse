@@ -12,10 +12,6 @@ object Constants {
 
     const val FILE_PROVIDER_AUTH = BuildConfig.APPLICATION_ID + ".file.provider"
 
-    object News {
-        const val NEWS_STORE_DAY_LENGTH = 90
-    }
-
     object MIME {
         const val TEXT = "text/*"
         const val IMAGE = "image/*"
@@ -100,6 +96,8 @@ object Constants {
     }
 
     object Others {
+        const val NEWS_STORE_DAY_LENGTH = 90
+
         const val FORGET_PASSWORD = "http://sso.nau.edu.cn/sso/login"
         const val ADVANCED_FUNCTION_CLICK_TIME = 5
 

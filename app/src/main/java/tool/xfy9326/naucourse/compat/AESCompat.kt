@@ -13,6 +13,7 @@ object AESCompat {
     private const val FILL_ZERO = "0"
     private const val PASSWORD_LENGTH = 32
 
+    // 解码旧版本的加密数据
     fun decrypt(content: String, password: String) = decrypt(content.hexToByteArray(), password)
         ?.toString(StandardCharsets.UTF_8)
 

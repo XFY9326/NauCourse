@@ -12,11 +12,7 @@ import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.util.concurrent.locks.ReentrantLock
 
-/**
- * 基础网络客户端
- * @author XFY9326
- * @param loginInfo 登录信息
- */
+// 基础网络客户端
 abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkClient() {
     private val loginLock = ReentrantLock()
 
@@ -26,17 +22,10 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
 
     fun getLoginInfo() = this.loginInfo
 
-    /**
-     * 获取登录前对页面的一次请求（获取登录参数）
-     * @return 响应
-     */
+    // 获取登录前对页面的一次请求（获取登录参数）
     abstract fun getBeforeLoginResponse(): Response
 
-    /**
-     * 登录
-     *（会主动请求一次页面获取登录参数）
-     * @return 登录状态
-     */
+    // 登录（会主动请求一次页面获取登录参数）
     @Synchronized
     open fun login(): LoginResponse {
         return try {
@@ -58,19 +47,13 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
         }
     }
 
-    /**
-     * 登录
-     * @param beforeLoginResponse 首次SSO请求返回的Response（用于获取登录参数）
-     * @return 登录状态
-     */
+    // 登录
     protected abstract fun login(beforeLoginResponse: Response): LoginResponse
 
-    /**
-     * 注销所有该客户端相关登录
-     * @return 是否注销成功
-     */
+    // 注销 内部使用
     protected abstract fun logoutInternal(): Boolean
 
+    // 注销
     fun logout(): Boolean =
         try {
             logoutInternal()
@@ -79,19 +62,10 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
             false
         }
 
-    /**
-     * 通过返回的数据判断是否登录成功
-     * @param responseContent 返回的网页内容
-     * @param responseUrl 跳转的URL
-     * @return 是否处于登录状态
-     */
+    // 通过返回的数据判断是否登录成功
     abstract fun validateLoginWithResponse(responseContent: String, responseUrl: HttpUrl): Boolean
 
-    /**
-     * 使用可自动登录的方式进行请求
-     * @param request 请求
-     * @return 响应
-     */
+    // 使用可自动登录的方式进行请求
     fun newAutoLoginCall(request: Request): Response {
         val response = newClientCall(request)
         val url = response.request.url
@@ -104,6 +78,7 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
                 newClientCall(request)
             }
         } else {
+            // 加锁防止重复登录
             if (loginLock.tryLock()) {
                 try {
                     val result = if (validateUseResponseToLogin(url, content)) {
@@ -122,16 +97,22 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
             } else {
                 response.closeQuietly()
 
-                loginLock.lock()
-                loginLock.unlock()
+                // 等待登录完成后重试
+                try {
+                    loginLock.lock()
+                } finally {
+                    loginLock.unlock()
+                }
 
                 newAutoLoginCall(request)
             }
         }
     }
 
+    // 判断是否可以用返回的数据去登录
     abstract fun validateUseResponseToLogin(url: HttpUrl, content: String): Boolean
 
+    // 判断是否不在登录页面
     protected open fun validateNotInLoginPage(responseContent: String): Boolean = true
 
     fun newAutoLoginCall(url: HttpUrl): Response = newAutoLoginCall(Request.Builder().url(url).build())

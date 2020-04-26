@@ -142,7 +142,11 @@ class CourseAdapter(context: Context, @Volatile private var courseManagePkg: Cou
                     layoutCourseManageColor.setOnClickListener {
                         synchronized(isOperationEnabledLock) {
                             if (courseManagePkg != null) {
-                                callback.onEditCourseColor(this@CourseAdapter, position, courseManagePkg!!.courses[position].second)
+                                callback.onEditCourseColor(
+                                    this@CourseAdapter,
+                                    holder.adapterPosition,
+                                    courseManagePkg!!.courses[holder.adapterPosition].second
+                                )
                             }
                         }
                     }
@@ -151,7 +155,11 @@ class CourseAdapter(context: Context, @Volatile private var courseManagePkg: Cou
                         synchronized(isOperationEnabledLock) {
                             if (courseManagePkg != null) {
                                 if (courseManagePkg != null) {
-                                    callback.onEditCourse(this@CourseAdapter, courseManagePkg!!.termDate, courseManagePkg!!.courses[position])
+                                    callback.onEditCourse(
+                                        this@CourseAdapter,
+                                        courseManagePkg!!.termDate,
+                                        courseManagePkg!!.courses[holder.adapterPosition]
+                                    )
                                 }
                             }
                         }

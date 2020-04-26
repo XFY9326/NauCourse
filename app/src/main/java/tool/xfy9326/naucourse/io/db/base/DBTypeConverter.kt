@@ -9,6 +9,7 @@ import tool.xfy9326.naucourse.providers.beans.jwc.TimePeriodList
 import tool.xfy9326.naucourse.providers.beans.jwc.WeekMode
 import java.util.*
 
+// 数据库类型存储转换
 class DBTypeConverter {
     @TypeConverter
     fun fromTimestamp(value: Long?): Date? = value?.let { Date(it) }

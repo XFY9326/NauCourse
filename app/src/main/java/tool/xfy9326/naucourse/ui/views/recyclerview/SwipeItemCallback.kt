@@ -18,7 +18,7 @@ import tool.xfy9326.naucourse.utils.BaseUtils.dpToPx
 import tool.xfy9326.naucourse.utils.views.ViewUtils
 import kotlin.math.abs
 
-
+// 滑动删除
 class SwipeItemCallback<T : SwipeItemViewHolder>(private val listener: OnItemSwipedListener<T>) : ItemTouchHelper.Callback() {
     private var savedHasSwipedStatus = false
     private var hasChangedCorner = false

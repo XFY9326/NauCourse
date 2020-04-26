@@ -30,7 +30,7 @@ class ScoreQueryViewModel : BaseViewModel() {
     val courseHistory = MutableLiveData<List<CourseHistory>>()
     val courseScore = MutableLiveData<List<CourseScore>>()
     val scrollToTop = NotifyLivaData()
-    val credit = EventLiveData<Pair<Float, Float?>>()
+    val credit = EventLiveData<Pair<Float, Float?>>() // 计算绩点 to 教务绩点
     val creditCountStatus = EventLiveData<CreditCountStatus>()
     val creditCourseSelect = EventLiveData<Pair<ArrayList<CreditCountItem>, ArrayList<CreditCountItem>>>()
 

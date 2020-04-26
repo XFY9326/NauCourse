@@ -7,6 +7,7 @@ import kotlinx.coroutines.withContext
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.providers.info.methods.*
 
+// 全局缓存管理
 object GlobalCacheManager {
     private const val CACHE_CLEAN_TIMEOUT = 5000L
     private val cacheHandler = Handler()
@@ -20,6 +21,7 @@ object GlobalCacheManager {
         for (job in jobs) job.join()
     }
 
+    // 后台时间长时，清空部分cache数据
     @Synchronized
     fun startCacheCleanerTimer() {
         tryCancelCacheCleaner()

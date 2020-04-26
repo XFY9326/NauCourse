@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.compat.beans;
 
 import androidx.annotation.Nullable;
 
+// 旧版本的课程数据
 @SuppressWarnings({"FieldCanBeLocal", "ConstantConditions", "CanBeFinal"})
 public class CourseCompat {
     @Nullable

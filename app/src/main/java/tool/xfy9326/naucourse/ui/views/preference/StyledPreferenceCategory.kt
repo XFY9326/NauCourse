@@ -16,6 +16,7 @@ class StyledPreferenceCategory : PreferenceCategory {
 
     constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)
 
+    // 修复标题颜色问题
     override fun onBindViewHolder(holder: PreferenceViewHolder?) {
         super.onBindViewHolder(holder)
         holder?.itemView?.findViewById<TextView>(android.R.id.title)?.setTextColor(ContextCompat.getColor(context, R.color.colorPreferenceText))

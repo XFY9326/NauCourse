@@ -1,6 +1,5 @@
 package tool.xfy9326.naucourse.compat
 
-import android.annotation.SuppressLint
 import android.content.Context
 import androidx.preference.PreferenceManager
 import com.google.gson.Gson
@@ -28,10 +27,11 @@ import tool.xfy9326.naucourse.utils.io.TextIOUtils
 import tool.xfy9326.naucourse.utils.secure.AccountUtils
 import java.io.File
 
-
+// 旧版本数据适配
 object OldDataCompat {
     private val CourseDataPath = App.instance.filesDir.absolutePath + File.separator + "Course.txn"
 
+    // 旧版本数据转移
     suspend fun applyCompatDataToCurrentStore() = withContext(Dispatchers.IO) {
         val loginInfo = readLoginInfoFromOld()
         val courseData =
@@ -58,6 +58,7 @@ object OldDataCompat {
         return@withContext loginInfo
     }
 
+    // 从旧版本数据中读取课程数据
     private fun readCourseDataFromOld(userId: String): Pair<CourseSet, Array<CourseCellStyle>>? {
         try {
             val text = TextIOUtils.readTextFromFile(CourseDataPath)
@@ -77,6 +78,7 @@ object OldDataCompat {
         return null
     }
 
+    // 将旧版本课程数据转为当前版本的数据
     private fun convertOldDataToCourseSet(context: Context, oldData: ArrayList<CourseCompat>): Pair<CourseSet, Array<CourseCellStyle>>? {
         if (oldData.isNotEmpty()) {
             val courseSet = HashSet<Course>(oldData.size)
@@ -120,6 +122,7 @@ object OldDataCompat {
         return null
     }
 
+    // 将旧版本课程数据转为当前版本的课程时间数据
     private fun convertOldDataToCourseTime(context: Context, id: String, oldData: Array<CourseDetailCompat>?) =
         if (oldData != null) {
             HashSet<CourseTime>(oldData.size).apply {
@@ -159,6 +162,7 @@ object OldDataCompat {
             HashSet()
         }
 
+    // 从旧版本读取登录信息
     private fun readLoginInfoFromOld(): LoginInfo? {
         try {
             PreferenceManager.getDefaultSharedPreferences(App.instance).apply {
@@ -178,15 +182,17 @@ object OldDataCompat {
         return null
     }
 
+    // 从旧版本读取高级功能是否启用
     private fun readHiddenFunctionConfigFromOld(): Boolean {
         PreferenceManager.getDefaultSharedPreferences(App.instance).apply {
             return getBoolean("SHOW_HIDDEN_FUNCTION", false)
         }
     }
 
+    // 判断是否存在旧版本数据
     fun hasOldData() = PreferenceManager.getDefaultSharedPreferences(App.instance).contains("HAS_LOGIN") && File(CourseDataPath).exists()
 
-    @SuppressLint("ApplySharedPref")
+    // 清空旧版本数据
     private fun clearOldData() {
         BaseIOUtils.deleteFile(App.instance.filesDir.absolutePath)
         BaseIOUtils.deleteFile(App.instance.cacheDir.absolutePath)

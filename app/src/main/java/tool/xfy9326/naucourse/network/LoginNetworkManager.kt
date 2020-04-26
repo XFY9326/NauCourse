@@ -9,6 +9,7 @@ import tool.xfy9326.naucourse.network.tools.NetworkTools
 import tool.xfy9326.naucourse.utils.debug.LogUtils
 import tool.xfy9326.naucourse.utils.secure.AccountUtils
 
+// 可登录客户端管理
 object LoginNetworkManager {
     private lateinit var loginInfo: LoginInfo
 

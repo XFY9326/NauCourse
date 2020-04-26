@@ -85,10 +85,11 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
     override fun getNetworkClient(): OkHttpClient = okHttpClient
 
     final override fun login(beforeLoginResponse: Response): LoginResponse {
-        val responseUrl = beforeLoginResponse.request.url
-        val responseContent = beforeLoginResponse.body?.string()!!
+        var responseUrl = beforeLoginResponse.request.url
+        var responseContent = beforeLoginResponse.body?.string()!!
         beforeLoginResponse.closeQuietly()
 
+        // NGX会自动跳转服务页面登录，这里重判断一次
         val fromUrl =
             if (this.isFromPathLogin) {
                 this.fromUrl
@@ -97,9 +98,15 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
             }
         val isFromPathLogin = this.isFromPathLogin || fromUrl != null
 
+        // 错误次数太多需要验证码，清空cookies重试
         if (CAPTCHA_HTML_STR in responseContent) {
             cookieStore.clearCookies()
+            getBeforeLoginResponse().use {
+                responseUrl = beforeLoginResponse.request.url
+                responseContent = beforeLoginResponse.body?.string()!!
+            }
         }
+
         if (LOGIN_PAGE_STR in responseContent && LOGIN_STR in responseContent && responseUrl.hasSameHost(NGX_HOST)) {
             if (!isFromPathLogin && getLoginStatus(responseContent, isFromPathLogin) == LoginResponse.ErrorReason.NONE) {
                 return LoginResponse(true, responseUrl, responseContent)
