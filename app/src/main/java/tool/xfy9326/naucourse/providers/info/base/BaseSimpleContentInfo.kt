@@ -47,6 +47,9 @@ abstract class BaseSimpleContentInfo<Element : Any, Param> : BaseContentInfo<Bas
     open suspend fun getInfo(params: Set<Param> = emptySet(), loadCache: Boolean = false, forceRefresh: Boolean = false): InfoResult<Element> =
         getInfoProcess(SimpleType.DEFAULT, params, loadCache, forceRefresh)
 
+    fun isCacheExpired(params: Set<Param> = emptySet()) =
+        isCacheExpired(SimpleType.DEFAULT, params, onGetCacheExpire())
+
 
     protected open fun onReadSimpleCache(data: Element): Element = data
 

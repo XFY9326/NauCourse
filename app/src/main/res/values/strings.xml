@@ -260,12 +260,12 @@
     <string name="course_table_background_scare_type">课程表背景图片缩放方式</string>
     <string name="course_table_background_scare_type_sum">设定课程表背景图片缩放方式</string>
     <string name="scare_type_fit_xy">缩放并完全填充</string>
-    <string name="scare_type_fit_start">等比缩放，从开始方向填充</string>
-    <string name="scare_type_fit_center">等比缩放，从中间开始填充</string>
-    <string name="scare_type_fit_end">等比缩放，从结束方向填充</string>
+    <string name="scare_type_fit_start">等比缩放，从开始方向填充满</string>
+    <string name="scare_type_fit_center">等比缩放，从中间开始填充满</string>
+    <string name="scare_type_fit_end">等比缩放，从结束方向填充满</string>
     <string name="scare_type_center">居中显示</string>
     <string name="scare_type_center_crop">等比缩放直到完全填充</string>
-    <string name="scare_type_center_inside">等比缩放到能够完整展示</string>
+    <string name="scare_type_center_inside">等比缩放到能完整展示</string>
     <string name="show_next_week_course_ahead">提前显示下周课表</string>
     <string name="show_next_week_course_ahead_sum">周末没有课程时提前显示下周课表</string>
     <string name="course_table_background_fullscreen">沉浸显示课程表背景</string>

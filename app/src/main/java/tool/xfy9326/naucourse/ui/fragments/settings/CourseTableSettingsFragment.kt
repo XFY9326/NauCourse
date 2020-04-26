@@ -13,8 +13,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.tools.NotifyBus
 import tool.xfy9326.naucourse.ui.dialogs.FullScreenLoadingDialog
@@ -22,6 +24,7 @@ import tool.xfy9326.naucourse.ui.fragments.base.BaseSettingsPreferenceFragment
 import tool.xfy9326.naucourse.utils.utility.ImageUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBar
+import java.util.*
 
 @Suppress("unused")
 class CourseTableSettingsFragment : BaseSettingsPreferenceFragment() {
@@ -84,7 +87,8 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment() {
     }
 
     private fun modifyCourseTableBackgroundQuality(quality: Int) {
-        if (ImageUtils.localImageExists(Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE)) {
+        val imageName = AppPref.CourseTableBackgroundImageName
+        if (imageName != null && ImageUtils.localImageExists(imageName, Constants.Image.DIR_APP_IMAGE)) {
             lifecycleScope.launch(Dispatchers.IO) {
                 imageMutex.withLock {
                     launch(Dispatchers.Main) {
@@ -93,7 +97,7 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment() {
 
                     val result =
                         ImageUtils.modifyLocalImage(
-                            Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_NAME,
+                            imageName,
                             Constants.Image.DIR_APP_IMAGE,
                             quality = quality
                         )
@@ -116,27 +120,33 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment() {
     private fun saveCourseTableBackground(uri: Uri) {
         lifecycleScope.launch(Dispatchers.IO) {
             imageMutex.withLock {
-                launch(Dispatchers.Main) {
+                withContext(Dispatchers.Main) {
                     FullScreenLoadingDialog.showDialog(childFragmentManager)
                 }
+                AppPref.CourseTableBackgroundImageName?.let {
+                    ImageUtils.deleteLocalImage(it, Constants.Image.DIR_APP_IMAGE)
+                }
+                val newImageName = Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_PREFIX + UUID.randomUUID().toString()
                 val result = ImageUtils.saveImageToLocalFromUri(
-                    Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_NAME,
+                    newImageName,
                     uri,
                     Constants.Image.DIR_APP_IMAGE
                 )
                 val qualityModifyResult =
                     if (result != null) {
                         ImageUtils.modifyLocalImage(
-                            Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE, quality =
+                            newImageName, Constants.Image.DIR_APP_IMAGE, quality =
                             SettingsPref.CourseTableImageQuality
                         )
                     } else {
                         false
                     }
                 if (result == null || !qualityModifyResult) {
-                    ImageUtils.deleteLocalImage(Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE)
+                    ImageUtils.deleteLocalImage(newImageName, Constants.Image.DIR_APP_IMAGE)
+                } else {
+                    AppPref.CourseTableBackgroundImageName = newImageName
                 }
-                launch(Dispatchers.Main) {
+                withContext(Dispatchers.Main) {
                     FullScreenLoadingDialog.close(childFragmentManager)
                     showSnackBar(
                         requireActivity().layout_settings, if (result != null) {

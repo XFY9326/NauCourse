@@ -81,4 +81,6 @@ object AppPref : BasePref() {
     var ForceUpdateVersionCode by pref.int(key = FORCE_UPDATE_VERSION_CODE, defValue = 0)
 
     var UpdateDownloadId by pref.long(defValue = 0)
+
+    var CourseTableBackgroundImageName by pref.string()
 }

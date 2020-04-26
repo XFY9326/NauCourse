@@ -63,7 +63,6 @@ class CourseTableViewModel : BaseViewModel() {
     val currentWeekStatus = MutableLiveData<CurrentWeekStatus>()
     val courseDetailInfo = EventLiveData<CourseDetail>()
     val courseAndTermEmpty = NotifyLivaData()
-    val courseTableBackground = MutableLiveData<Bitmap?>()
 
     val getImageWhenCourseTableLoading = NotifyLivaData()
 
@@ -94,9 +93,7 @@ class CourseTableViewModel : BaseViewModel() {
                 initCourseData()
                 true
             }
-            if (SettingsPref.AutoAsyncCourseData) {
-                startOnlineDataAsync()
-            }
+            startOnlineDataAsync()
         }
     }
 
@@ -127,13 +124,17 @@ class CourseTableViewModel : BaseViewModel() {
     }
 
     fun startOnlineDataAsync() {
-        viewModelScope.launch(Dispatchers.Default) {
-            if (::initDeferred.isInitialized) {
-                if (initDeferred.isActive) initDeferred.await()
-                asyncCourseTable()
-            } else {
-                initTableCache()
-                startOnlineDataAsync()
+        if (SettingsPref.AutoAsyncCourseData) {
+            viewModelScope.launch(Dispatchers.Default) {
+                if (CourseInfo.isCacheExpired()) {
+                    if (::initDeferred.isInitialized) {
+                        if (initDeferred.isActive) initDeferred.await()
+                        asyncCourseTable()
+                    } else {
+                        initTableCache()
+                        startOnlineDataAsync()
+                    }
+                }
             }
         }
     }
@@ -416,17 +417,6 @@ class CourseTableViewModel : BaseViewModel() {
             courseTableStyle = CourseTableViewHelper.getCourseTableStyle()
         }
         return@synchronized courseTableStyle!!
-    }
-
-    fun requestCourseTableBackground() {
-        viewModelScope.launch(Dispatchers.IO) {
-            if (SettingsPref.CustomCourseTableBackground) {
-                val backgroundBitmap = ImageUtils.readLocalImage(Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE)
-                courseTableBackground.postValue(backgroundBitmap)
-            } else {
-                courseTableBackground.postValue(null)
-            }
-        }
     }
 
     fun createShareImage(context: Context, weekNum: Int, targetWidth: Int) {

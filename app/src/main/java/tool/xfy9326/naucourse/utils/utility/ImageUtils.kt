@@ -64,8 +64,12 @@ object ImageUtils {
 
     fun localImageExists(fileName: String, dirName: String? = null) = File(PathUtils.getImageLocalSavePath(dirName), fileName).exists()
 
+    fun getLocalImageFile(fileName: String, dirName: String? = null) =
+        File(PathUtils.getImageLocalSavePath(dirName), fileName)
+
+    @Suppress("unused")
     fun readLocalImage(fileName: String, dirName: String? = null): Bitmap? {
-        val localStorageFile = File(PathUtils.getImageLocalSavePath(dirName), fileName)
+        val localStorageFile = getLocalImageFile(fileName, dirName)
         return if (localStorageFile.exists()) {
             ImageIOUtils.readBitmap(localStorageFile)
         } else {

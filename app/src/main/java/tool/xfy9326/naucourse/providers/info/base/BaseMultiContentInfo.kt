@@ -12,4 +12,7 @@ abstract class BaseMultiContentInfo<Type : Enum<*>, Param> : BaseContentInfo<Typ
         forceRefresh: Boolean = false
     ): InfoResult<E> =
         getInfoProcess(type, params, loadCache, forceRefresh)
+
+    fun isCacheExpired(type: Type, params: Set<Param> = emptySet()) =
+        isCacheExpired(type, params, onGetCacheExpire())
 }

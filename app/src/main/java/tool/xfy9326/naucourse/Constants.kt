@@ -109,7 +109,7 @@ object Constants {
         const val DIR_SHARE_TEMP_IMAGE = "ShareTempImage"
         const val DIR_APP_IMAGE = "Application"
 
-        const val COURSE_TABLE_BACKGROUND_IMAGE_NAME = "CourseTableBackgroundImage"
+        const val COURSE_TABLE_BACKGROUND_IMAGE_PREFIX = "CTB_"
         const val SCHOOL_CALENDAR_IMAGE_NAME = "SchoolCalendarImage"
     }
 

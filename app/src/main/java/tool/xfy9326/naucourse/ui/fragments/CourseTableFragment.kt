@@ -1,9 +1,9 @@
 package tool.xfy9326.naucourse.ui.fragments
 
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -18,7 +18,14 @@ import androidx.core.view.setPadding
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import kotlinx.android.synthetic.main.fragment_course_table.*
+import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseCell
 import tool.xfy9326.naucourse.beans.CourseCellStyle
@@ -31,8 +38,10 @@ import tool.xfy9326.naucourse.ui.models.fragment.CourseTableViewModel
 import tool.xfy9326.naucourse.ui.views.table.CourseTableViewHelper
 import tool.xfy9326.naucourse.ui.views.table.OnCourseCellClickListener
 import tool.xfy9326.naucourse.ui.views.viewpager.CourseTableViewPagerAdapter
+import tool.xfy9326.naucourse.utils.utility.ImageUtils
 import tool.xfy9326.naucourse.utils.utility.ShareUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils
+import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 import tool.xfy9326.naucourse.utils.views.I18NUtils
 import tool.xfy9326.naucourse.utils.views.ViewUtils
@@ -97,9 +106,6 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
         viewModel.courseDetailInfo.observeEvent(viewLifecycleOwner, Observer {
             CourseDetailDialog.showDialog(childFragmentManager, it)
         })
-        viewModel.courseTableBackground.observe(viewLifecycleOwner, Observer {
-            setCourseTableBackground(it)
-        })
     }
 
     private fun bindGlobalObserver(viewModel: CourseTableViewModel) {
@@ -113,18 +119,14 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
             viewModel.rebuildCourseTable()
         }, CourseTableFragment::class.java.simpleName)
         NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE_BACKGROUND].observeNotification(viewLifecycleOwner, {
-            viewModel.requestCourseTableBackground()
+            setCourseTableBackground()
             setFullScreenBackground(false)
         }, CourseTableFragment::class.java.simpleName)
     }
 
-    override fun onHiddenChanged(hidden: Boolean) {
-        if (!hidden) {
-            if (SettingsPref.AutoAsyncCourseData) {
-                getViewModel().startOnlineDataAsync()
-            }
-        }
-        super.onHiddenChanged(hidden)
+    override fun onStart() {
+        getViewModel().startOnlineDataAsync()
+        super.onStart()
     }
 
     @Synchronized
@@ -137,25 +139,16 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
         }
     }
 
-    private fun setCourseTableBackground(bitmap: Bitmap?) {
-        if (bitmap != null) {
-            iv_courseTableBackground.setImageBitmap(bitmap)
-            iv_courseTableBackground.alpha = SettingsPref.CourseTableBackgroundAlpha / 100f
-            iv_courseTableBackground.scaleType = SettingsPref.getCourseTableBackgroundScareType()
-            iv_courseTableBackground.visibility = View.VISIBLE
-        } else {
-            iv_courseTableBackground.visibility = View.GONE
-        }
-    }
-
     private fun shareCourseTable() {
-        ActivityUtils.showSnackBar(layout_courseTableWindow, R.string.generating_image)
+        showToast(R.string.generating_image)
         getViewModel().createShareImage(requireContext(), vp_courseTablePanel.currentItem + 1, resources.displayMetrics.widthPixels)
     }
 
     override fun initView(viewModel: CourseTableViewModel) {
         setToolbarTitleEnabled(false)
         CourseTableViewHelper.setOnCourseCellClickListener(this)
+        setCourseTableBackground()
+        setFullScreenBackground(true)
 
         courseTableViewPagerAdapter = CourseTableViewPagerAdapter(this, AppPref.MaxWeekNumCache)
 
@@ -171,9 +164,42 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
         layout_dateInfoBar.setOnClickListener {
             turnToDefaultWeek(viewModel)
         }
+    }
 
-        viewModel.requestCourseTableBackground()
-        setFullScreenBackground(true)
+    private fun setCourseTableBackground() {
+        if (SettingsPref.CustomCourseTableBackground) {
+            val imageFileName = AppPref.CourseTableBackgroundImageName
+            if (imageFileName != null) {
+                val imageFile = ImageUtils.getLocalImageFile(imageFileName, Constants.Image.DIR_APP_IMAGE)
+                if (imageFile.exists()) {
+                    iv_courseTableBackground.apply {
+                        alpha = SettingsPref.CourseTableBackgroundAlpha / 100f
+                        scaleType = SettingsPref.getCourseTableBackgroundScareType()
+                        visibility = View.VISIBLE
+                    }
+                    Glide.with(this@CourseTableFragment).load(imageFile).transition(DrawableTransitionOptions.withCrossFade())
+                        .listener(object : RequestListener<Drawable> {
+                            override fun onLoadFailed(
+                                e: GlideException?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                iv_courseTableBackground.visibility = View.GONE
+                                return false
+                            }
+
+                            override fun onResourceReady(
+                                resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean
+                            ): Boolean {
+                                return false
+                            }
+                        }).into(iv_courseTableBackground)
+                    return
+                }
+            }
+        }
+        iv_courseTableBackground.visibility = View.GONE
     }
 
     private fun setFullScreenBackground(isInit: Boolean) {
@@ -210,6 +236,7 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
             } else {
                 ContextCompat.getColor(requireContext(), R.color.colorCourseTimeDefault)
             }
+
         tv_nowShowWeekNum.setTextColor(colorTimeText)
         tv_todayDate.setTextColor(colorTimeText)
         tv_notCurrentWeek.setTextColor(colorTimeText)
@@ -281,10 +308,5 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
     override fun onDestroyView() {
         vp_courseTablePanel.unregisterOnPageChangeCallback(viewPagerCallback)
         super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        getViewModel().courseTableBackground.value = null
-        super.onDestroy()
     }
 }
