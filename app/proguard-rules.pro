@@ -46,9 +46,6 @@
 # 优化时允许访问并修改有修饰符的类和类的成员
 -allowaccessmodification
 
-# 将文件来源重命名为“Source”字符串
--renamesourcefileattribute Source
-
 -repackageclasses guard
 
 # 保留行号

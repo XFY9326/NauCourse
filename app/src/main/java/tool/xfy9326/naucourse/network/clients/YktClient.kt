@@ -25,6 +25,7 @@ class YktClient(loginInfo: LoginInfo) : VPNClient(loginInfo) {
         private const val LOGIN_URL_PAGE = "login.aspx"
         private const val LOGIN_PAGE_STR = "欢迎登录"
         private const val USER_LOGIN_STR = "用户登录"
+        private const val SAFE_EXIT_STR = "安全退出"
 
         private const val ID_FORM = "form"
         private const val ID_USERNAME = "username"
@@ -49,28 +50,40 @@ class YktClient(loginInfo: LoginInfo) : VPNClient(loginInfo) {
     override fun onVPNClientInLoginPage(useVPN: Boolean, newRequest: Request): Response {
         val loginResponse = newVPNCall(patchVPNRequest(useVPN, Request.Builder().url(YKT_LOGIN_URL).build()))
         if (loginResponse.isSuccessful) {
-            val content = NetworkTools.getResponseContent(loginResponse)
+            var content = NetworkTools.getResponseContent(loginResponse)
             if (!validateLoginWithResponse(content, loginResponse.request.url)) {
                 val loginResult = login(loginResponse)
                 if (!loginResult.isSuccess) {
                     LogUtils.d<YktClient>("YktClient SSO Login Failed! Reason: ${loginResult.loginErrorReason} Url: ${loginResult.url}")
+                } else {
+                    loginResult.htmlContent?.let {
+                        if (validateNotInLoginPage(it) && SAFE_EXIT_STR in it) {
+                            return newVPNCall(newRequest)
+                        }
+                    }
+                    newVPNCall(patchVPNRequest(useVPN, Request.Builder().url(YKT_LOGIN_URL).build())).use { response ->
+                        response.body?.string()?.let {
+                            content = it
+                        }
+                    }
                 }
             }
+            if (SAFE_EXIT_STR !in content) {
+                val body = Jsoup.parse(content).body()
+                val loginRequest = Request.Builder().apply {
+                    url(body.getElementById(ID_FORM).attr(ATTR_ACTION))
+                    post(FormBody.Builder().apply {
+                        val userName = body.getElementById(ID_USERNAME)
+                        val timeStamp = body.getElementById(ID_TIMESTAMP)
+                        val auid = body.getElementById(ID_AUID)
+                        add(userName.attr(ATTR_NAME), userName.attr(ATTR_VALUE))
+                        add(timeStamp.attr(ATTR_NAME), timeStamp.attr(ATTR_VALUE))
+                        add(auid.attr(ATTR_NAME), auid.attr(ATTR_VALUE))
+                    }.build())
+                }.build()
 
-            val body = Jsoup.parse(content).body()
-            val loginRequest = Request.Builder().apply {
-                url(body.getElementById(ID_FORM).attr(ATTR_ACTION))
-                post(FormBody.Builder().apply {
-                    val userName = body.getElementById(ID_USERNAME)
-                    val timeStamp = body.getElementById(ID_TIMESTAMP)
-                    val auid = body.getElementById(ID_AUID)
-                    add(userName.attr(ATTR_NAME), userName.attr(ATTR_VALUE))
-                    add(timeStamp.attr(ATTR_NAME), timeStamp.attr(ATTR_VALUE))
-                    add(auid.attr(ATTR_NAME), auid.attr(ATTR_VALUE))
-                }.build())
-            }.build()
-
-            newVPNCall(patchVPNRequest(useVPN, loginRequest)).closeQuietly()
+                newVPNCall(patchVPNRequest(useVPN, loginRequest)).closeQuietly()
+            }
         } else {
             LogUtils.d<YktClient>("YktClient SSO Login Failed!")
         }

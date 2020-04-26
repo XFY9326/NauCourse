@@ -14,7 +14,7 @@ object CardBalanceInfo : BaseSimpleContentInfo<CardBalance, Nothing>() {
 
     override fun loadSimpleStoredInfo(): CardBalance? = CardBalanceDBHelper.readCardBalance()
 
-    override fun onGetCacheExpire(): CacheExpire = CacheExpire(CacheExpireRule.PER_TIME, CACHE_EXPIRE_MINUTE, CacheExpireTimeUnit.MINUTE)
+    override fun onGetCacheExpire(): CacheExpire = CacheExpire(CacheExpireRule.AFTER_TIME, CACHE_EXPIRE_MINUTE, CacheExpireTimeUnit.MINUTE)
 
     override suspend fun getSimpleInfoContent(params: Set<Nothing>): ContentResult<CardBalance> {
         return StudentCardBalance.getContentData()
