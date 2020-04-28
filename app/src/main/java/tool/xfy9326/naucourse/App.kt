@@ -10,7 +10,9 @@ import com.tencent.bugly.crashreport.CrashReport
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
+import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.providers.GlobalCacheManager
 import tool.xfy9326.naucourse.utils.BaseUtils
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
@@ -32,6 +34,11 @@ class App : Application(), LifecycleObserver {
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
         setupNightMode()
+
+        runBlocking {
+            LoginNetworkManager.initLoginInfo()
+        }
+
         GlobalScope.launch(Dispatchers.Default) {
             clearOldCache()
             IntentUtils.startNextCourseAlarm(this@App)

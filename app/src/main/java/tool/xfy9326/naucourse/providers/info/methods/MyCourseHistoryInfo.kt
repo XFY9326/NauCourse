@@ -17,11 +17,11 @@ object MyCourseHistoryInfo : BaseSimpleContentInfo<Array<CourseHistory>, Nothing
         CACHE_EXPIRE_DAY, CacheExpireTimeUnit.DAY
     )
 
-    override fun loadSimpleStoredInfo(): Array<CourseHistory>? = CourseHistoryDBHelper.getCourseHistoryArr()
+    override suspend fun loadSimpleStoredInfo(): Array<CourseHistory>? = CourseHistoryDBHelper.getCourseHistoryArr()
 
     override suspend fun getSimpleInfoContent(params: Set<Nothing>): ContentResult<Array<CourseHistory>> = MyCourseHistory.getContentData()
 
-    override fun saveSimpleInfo(info: Array<CourseHistory>) = CourseHistoryDBHelper.putCourseHistoryArr(info)
+    override suspend fun saveSimpleInfo(info: Array<CourseHistory>) = CourseHistoryDBHelper.putCourseHistoryArr(info)
 
-    override fun clearSimpleStoredInfo() = CourseHistoryDBHelper.clearAll()
+    override suspend fun clearSimpleStoredInfo() = CourseHistoryDBHelper.clearAll()
 }

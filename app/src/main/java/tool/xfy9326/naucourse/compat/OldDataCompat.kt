@@ -59,7 +59,7 @@ object OldDataCompat {
     }
 
     // 从旧版本数据中读取课程数据
-    private fun readCourseDataFromOld(userId: String): Pair<CourseSet, Array<CourseCellStyle>>? {
+    private suspend fun readCourseDataFromOld(userId: String): Pair<CourseSet, Array<CourseCellStyle>>? {
         try {
             val text = TextIOUtils.readTextFromFile(CourseDataPath)
             if (!text.isNullOrEmpty()) {

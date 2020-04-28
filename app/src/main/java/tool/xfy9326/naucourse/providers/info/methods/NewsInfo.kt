@@ -31,7 +31,7 @@ object NewsInfo : BaseSimpleContentInfo<List<GeneralNews>, PostSource>() {
         PostSource.RSS_XXB to XxbRSS
     )
 
-    override fun loadSimpleStoredInfo(): List<GeneralNews>? =
+    override suspend fun loadSimpleStoredInfo(): List<GeneralNews>? =
         sortNewsList(NewsDBHelper.getGeneralNewsArray())
 
     override fun onReadSimpleCache(data: List<GeneralNews>): List<GeneralNews> {
@@ -107,12 +107,12 @@ object NewsInfo : BaseSimpleContentInfo<List<GeneralNews>, PostSource>() {
             CONTENT_MAP[postSource]?.clientType
         }
 
-    override fun saveSimpleInfo(info: List<GeneralNews>) {
+    override suspend fun saveSimpleInfo(info: List<GeneralNews>) {
         NewsDBHelper.clearAll()
         NewsDBHelper.putGeneralNewsSet(info)
     }
 
-    override fun clearSimpleStoredInfo() = NewsDBHelper.clearAll()
+    override suspend fun clearSimpleStoredInfo() = NewsDBHelper.clearAll()
 
     private fun sortNewsList(list: List<GeneralNews>): List<GeneralNews> =
         list.sortedWith(Comparator { o1, o2 ->

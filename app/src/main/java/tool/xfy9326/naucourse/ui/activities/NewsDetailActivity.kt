@@ -25,6 +25,7 @@ import tool.xfy9326.naucourse.ui.models.activity.NewsDetailViewModel
 import tool.xfy9326.naucourse.ui.views.html.AdvancedLinkMovementMethod
 import tool.xfy9326.naucourse.ui.views.html.AdvancedTagHandler
 import tool.xfy9326.naucourse.ui.views.html.HtmlImageGetter
+import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 import tool.xfy9326.naucourse.utils.utility.BitmapUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import tool.xfy9326.naucourse.utils.utility.ShareUtils
@@ -157,12 +158,13 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
                     setOnImageClickListener(this@NewsDetailActivity)
                     setOnImageLongPressListener(this@NewsDetailActivity)
                 }
-                Html.fromHtml(detail.htmlContent, Html.FROM_HTML_MODE_LEGACY, imageGetter, tagHandler)
+                Html.fromHtml(detail.htmlContent, Html.FROM_HTML_MODE_COMPACT, imageGetter, tagHandler)
             } else {
                 @Suppress("DEPRECATION")
                 Html.fromHtml(detail.htmlContent)
             }
         } catch (e: Exception) {
+            ExceptionUtils.printStackTrace<NewsDetailActivity>(e)
             detail.htmlContent
         }
 
@@ -180,7 +182,6 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
 
     override fun onDestroy() {
         AdvancedLinkMovementMethod.clearHandler()
-        System.gc()
         super.onDestroy()
     }
 }

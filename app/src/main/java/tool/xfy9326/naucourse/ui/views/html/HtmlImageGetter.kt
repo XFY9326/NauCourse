@@ -1,6 +1,8 @@
 package tool.xfy9326.naucourse.ui.views.html
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.text.Html
 import android.widget.TextView
@@ -33,26 +35,33 @@ class HtmlImageGetter(private val context: Context, private val textView: TextVi
         if (source != null) {
             refreshTextView()
             val url = NewsInfo.getImageUrlForNewsInfo(source, newsType)
-            val target = object : CustomTarget<Drawable>() {
+            val target = object : CustomTarget<Bitmap>() {
                 override fun onLoadStarted(placeholder: Drawable?) {
                     drawable.updateDrawable(placeholder, ImageStatus.LOADING)
                     refreshTextView()
                 }
 
-                override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     drawable.apply {
                         downloadUrl = url.toString()
 
                         val zoom = min(
                             if (screenWidth < screenHeight) {
-                                (screenWidth * BITMAP_MAX_PERCENT) / resource.intrinsicWidth
+                                (screenWidth * BITMAP_MAX_PERCENT) / resource.width
                             } else {
-                                (screenHeight * BITMAP_MIN_PERCENT) / resource.intrinsicHeight
+                                (screenHeight * BITMAP_MIN_PERCENT) / resource.height
                             }, BITMAP_MAX_ZOOM
                         )
 
-                        updateDrawable(resource, ImageStatus.SHOWING)
-                        setBounds(0, 0, (resource.intrinsicWidth * zoom).toInt(), (resource.intrinsicHeight * zoom).toInt())
+                        val newWidth = (resource.width * zoom).toInt()
+                        val newHeight = (resource.height * zoom).toInt()
+
+                        updateDrawable(
+                            BitmapDrawable(context.resources, Bitmap.createScaledBitmap(resource, newWidth, newHeight, true)),
+                            ImageStatus.SHOWING,
+                            newWidth,
+                            newHeight
+                        )
                     }
                     refreshTextView()
                 }
@@ -67,7 +76,7 @@ class HtmlImageGetter(private val context: Context, private val textView: TextVi
                     refreshTextView()
                 }
             }
-            Glide.with(context).load(
+            Glide.with(context).asBitmap().load(
                 if (clientType == null) {
                     url.toString()
                 } else {

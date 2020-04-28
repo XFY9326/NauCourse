@@ -18,12 +18,12 @@ object AccountUtils {
         UserPref.HasLogin = isLogin
     }
 
-    fun readSavedCacheUserId(): String? = UserPref.UserId
+    suspend fun readSavedCacheUserId(): String? = UserPref.readUserId()
 
-    fun readUserInfo(): UserInfo {
+    suspend fun readUserInfo(): UserInfo {
         val hasLogin = UserPref.HasLogin
-        val userId = UserPref.UserId
-        val userPw = UserPref.UserPassword
+        val userId = UserPref.readUserId()
+        val userPw = UserPref.readUserPassword()
         return if (hasLogin && userId != null && userPw != null) {
             UserInfo(userId, userPw)
         } else {
@@ -51,13 +51,13 @@ object AccountUtils {
         SettingsPref.clear()
     }
 
-    fun saveUserInfo(userInfo: UserInfo) {
-        UserPref.UserId = userInfo.userId
-        UserPref.UserPassword = userInfo.userPw
+    suspend fun saveUserInfo(userInfo: UserInfo) {
+        UserPref.saveUserId(userInfo.userId)
+        UserPref.saveUserPassword(userInfo.userPw)
     }
 
-    fun saveUserId(userId: String) {
-        UserPref.UserId = userId
+    suspend fun saveUserId(userId: String) {
+        UserPref.saveUserId(userId)
     }
 
 }

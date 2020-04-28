@@ -12,7 +12,7 @@ import tool.xfy9326.naucourse.providers.info.base.CacheExpireTimeUnit
 object CardBalanceInfo : BaseSimpleContentInfo<CardBalance, Nothing>() {
     private const val CACHE_EXPIRE_MINUTE = 5
 
-    override fun loadSimpleStoredInfo(): CardBalance? = CardBalanceDBHelper.readCardBalance()
+    override suspend fun loadSimpleStoredInfo(): CardBalance? = CardBalanceDBHelper.readCardBalance()
 
     override fun onGetCacheExpire(): CacheExpire = CacheExpire(CacheExpireRule.AFTER_TIME, CACHE_EXPIRE_MINUTE, CacheExpireTimeUnit.MINUTE)
 
@@ -20,9 +20,9 @@ object CardBalanceInfo : BaseSimpleContentInfo<CardBalance, Nothing>() {
         return StudentCardBalance.getContentData()
     }
 
-    override fun saveSimpleInfo(info: CardBalance) {
+    override suspend fun saveSimpleInfo(info: CardBalance) {
         CardBalanceDBHelper.saveCardBalance(info)
     }
 
-    override fun clearSimpleStoredInfo() = CardBalanceDBHelper.clearAll()
+    override suspend fun clearSimpleStoredInfo() = CardBalanceDBHelper.clearAll()
 }

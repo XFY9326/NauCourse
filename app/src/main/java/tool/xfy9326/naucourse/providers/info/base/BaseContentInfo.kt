@@ -15,6 +15,7 @@ abstract class BaseContentInfo<Type : Enum<*>, Param> {
     @Volatile
     private var hasInit = false
 
+    private val initMutex = Mutex()
     private val infoMutex = Mutex()
     private val cacheMutex = Mutex()
 
@@ -22,7 +23,7 @@ abstract class BaseContentInfo<Type : Enum<*>, Param> {
         private const val KEY_JOIN_SYMBOL = "_"
     }
 
-    private fun initCache() {
+    private suspend fun initCache() {
         val stored = loadStoredInfo()
         cacheMap.clear()
         cacheMap.putAll(stored)
@@ -37,7 +38,7 @@ abstract class BaseContentInfo<Type : Enum<*>, Param> {
     protected open fun onGetCacheExpire(): CacheExpire = CacheExpire()
 
     @Suppress("UNCHECKED_CAST")
-    protected open fun <E : Any> onSaveResult(type: Type, params: Set<Param>, data: E) {
+    protected open suspend fun <E : Any> onSaveResult(type: Type, params: Set<Param>, data: E) {
         saveInfo(type, data)
         InfoStoredTimePref.saveStoredTime(getKeyName(type), System.currentTimeMillis())
     }
@@ -49,16 +50,16 @@ abstract class BaseContentInfo<Type : Enum<*>, Param> {
 
     protected open fun onReadCache(data: Any): Any = data
 
-    protected abstract fun loadStoredInfo(): Map<Type, Any>
+    protected abstract suspend fun loadStoredInfo(): Map<Type, Any>
 
     protected abstract suspend fun getInfoContent(type: Type, params: Set<Param>): ContentResult<*>
 
-    protected abstract fun saveInfo(type: Type, info: Any)
+    protected abstract suspend fun saveInfo(type: Type, info: Any)
 
-    abstract fun clearStoredInfo(type: Type)
+    abstract suspend fun clearStoredInfo(type: Type)
 
-    protected open fun hasCachedItem(type: Type): Boolean {
-        synchronized(this) {
+    protected open suspend fun hasCachedItem(type: Type): Boolean {
+        initMutex.withLock {
             if (!hasInit) {
                 initCache()
             }
@@ -66,8 +67,8 @@ abstract class BaseContentInfo<Type : Enum<*>, Param> {
         return cacheMap.containsKey(type) && cacheMap[type] != null
     }
 
-    protected open fun getCachedItem(type: Type): Any? {
-        synchronized(this) {
+    protected open suspend fun getCachedItem(type: Type): Any? {
+        initMutex.withLock {
             if (!hasInit) {
                 initCache()
             }

@@ -12,4 +12,10 @@ class HtmlDrawable(drawable: Drawable? = null, nowStatus: ImageStatus? = null) :
         super.setDrawable(drawable, nowStatus, false)
         setBounds(0, 0, intrinsicWidth, intrinsicHeight)
     }
+
+    fun updateDrawable(drawable: Drawable?, nowStatus: ImageStatus?, width: Int, height: Int) {
+        drawable?.setBounds(0, 0, width, height)
+        super.setDrawable(drawable, nowStatus, false)
+        setBounds(0, 0, width, height)
+    }
 }

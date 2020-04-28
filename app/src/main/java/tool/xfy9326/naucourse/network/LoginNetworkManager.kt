@@ -1,5 +1,9 @@
 package tool.xfy9326.naucourse.network
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import tool.xfy9326.naucourse.io.db.NetworkDBHelper
 import tool.xfy9326.naucourse.io.prefs.UserPref
 import tool.xfy9326.naucourse.network.clients.*
@@ -12,8 +16,9 @@ import tool.xfy9326.naucourse.utils.secure.AccountUtils
 // 可登录客户端管理
 object LoginNetworkManager {
     private lateinit var loginInfo: LoginInfo
+    private val loginMutex = Mutex()
 
-    init {
+    suspend fun initLoginInfo() = withContext(Dispatchers.Default) {
         if (UserPref.HasLogin) {
             loginInfo = AccountUtils.readUserInfo().toLoginInfo()
         }
@@ -38,7 +43,11 @@ object LoginNetworkManager {
     }
 
     fun getClient(clientType: ClientType) = synchronized(this) {
-        clientMap[clientType]?.value!!
+        return@synchronized if (::loginInfo.isInitialized) {
+            clientMap[clientType]?.value!!
+        } else {
+            error("Login Info Must Init First")
+        }
     }
 
     private fun setLoginInfo(loginInfo: LoginInfo) {
@@ -50,7 +59,7 @@ object LoginNetworkManager {
         }
     }
 
-    fun login(loginInfo: LoginInfo): LoginResponse = synchronized(this) {
+    suspend fun login(loginInfo: LoginInfo): LoginResponse = loginMutex.withLock {
         setLoginInfo(loginInfo)
         val ssoResult = (getClient(ClientType.SSO)).login()
         if (!ssoResult.isSuccess) {
@@ -67,7 +76,7 @@ object LoginNetworkManager {
         ssoResult
     }
 
-    fun logout() = synchronized(this) {
+    suspend fun logout() = loginMutex.withLock {
         val jwcLogout = (getClient(ClientType.JWC)).logout()
         val ssoLogout = (getClient(ClientType.SSO)).logout()
         val ngxLogout = (getClient(ClientType.NGX)).logout()

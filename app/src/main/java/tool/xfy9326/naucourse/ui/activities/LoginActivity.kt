@@ -13,7 +13,6 @@ import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourse.ui.dialogs.UpdateDialog
 import tool.xfy9326.naucourse.ui.models.activity.LoginViewModel
-import tool.xfy9326.naucourse.utils.secure.AccountUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBar
 import tool.xfy9326.naucourse.utils.views.AnimUtils
@@ -38,9 +37,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
     override fun initView(savedInstanceState: Bundle?, viewModel: LoginViewModel) {
         loadingAnimateDrawable = AnimatedVectorDrawableCompat.create(this, R.drawable.avd_anim_loading)!!
         iv_loginLoading.setImageDrawable(loadingAnimateDrawable)
-        AccountUtils.readSavedCacheUserId()?.let {
-            et_userId.setText(it)
-        }
+        viewModel.requestSavedCacheUserId()
         tv_EULALicense.setOnClickListener {
             DialogUtils.createUsingLicenseDialog(this, lifecycle).show()
         }
@@ -77,6 +74,9 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
             btn_login.isEnabled = !it
 
             setLoadingAnimation(it)
+        })
+        viewModel.savedCacheUserId.observeEvent(this, Observer {
+            et_userId.setText(it)
         })
         viewModel.errorReasonType.observeEvent(this, Observer {
             showSnackBar(layout_activityLogin, I18NUtils.getErrorMsgResId(it)!!)

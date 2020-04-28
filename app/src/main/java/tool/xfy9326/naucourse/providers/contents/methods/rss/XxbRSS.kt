@@ -2,6 +2,8 @@ package tool.xfy9326.naucourse.providers.contents.methods.rss
 
 import okhttp3.HttpUrl
 import okhttp3.Response
+import tool.xfy9326.naucourse.network.LoginNetworkManager
+import tool.xfy9326.naucourse.network.clients.VPNClient
 import tool.xfy9326.naucourse.providers.beans.GeneralNews
 import tool.xfy9326.naucourse.providers.contents.base.BaseRSSContent
 
@@ -15,5 +17,5 @@ object XxbRSS : BaseRSSContent() {
     override val rssDetailServerHost: String = XXB_HOST
     override val postSource: GeneralNews.PostSource = GeneralNews.PostSource.RSS_XXB
 
-    override fun onRequestDetailData(url: HttpUrl): Response = networkClient.newAutoLoginCall(url)
+    override fun onRequestDetailData(url: HttpUrl): Response = getLoginClient<VPNClient>(LoginNetworkManager.ClientType.VPN).newAutoLoginCall(url)
 }

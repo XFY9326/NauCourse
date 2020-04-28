@@ -17,11 +17,11 @@ object LevelExamInfo : BaseSimpleContentInfo<Array<LevelExam>, Nothing>() {
         CACHE_EXPIRE_DAY, CacheExpireTimeUnit.DAY
     )
 
-    override fun loadSimpleStoredInfo(): Array<LevelExam>? = LevelExamDBHelper.getLevelExam()
+    override suspend fun loadSimpleStoredInfo(): Array<LevelExam>? = LevelExamDBHelper.getLevelExam()
 
     override suspend fun getSimpleInfoContent(params: Set<Nothing>): ContentResult<Array<LevelExam>> = MyLevelExam.getContentData()
 
-    override fun saveSimpleInfo(info: Array<LevelExam>) = LevelExamDBHelper.putLevelExam(info)
+    override suspend fun saveSimpleInfo(info: Array<LevelExam>) = LevelExamDBHelper.putLevelExam(info)
 
-    override fun clearSimpleStoredInfo() = LevelExamDBHelper.clearAll()
+    override suspend fun clearSimpleStoredInfo() = LevelExamDBHelper.clearAll()
 }

@@ -24,7 +24,7 @@ object CourseInfo : BaseSimpleContentInfo<CourseSet, CourseInfo.OperationType>()
         NEXT_TERM_COURSE
     }
 
-    override fun onSaveSimpleResult(params: Set<OperationType>, data: CourseSet) {
+    override suspend fun onSaveSimpleResult(params: Set<OperationType>, data: CourseSet) {
         if (OperationType.ASYNC_COURSE in params || OperationType.INIT_DATA in params) {
             super.onSaveSimpleResult(params, data)
         }
@@ -45,7 +45,7 @@ object CourseInfo : BaseSimpleContentInfo<CourseSet, CourseInfo.OperationType>()
 
     override fun onGetCacheExpire(): CacheExpire = CacheExpire(CacheExpireRule.PER_TIME, CACHE_EXPIRE_DAY, CacheExpireTimeUnit.DAY)
 
-    override fun loadSimpleStoredInfo(): CourseSet? = CourseSetDBHelper.readCourseSet()
+    override suspend fun loadSimpleStoredInfo(): CourseSet? = CourseSetDBHelper.readCourseSet()
 
     override suspend fun getSimpleInfoContent(params: Set<OperationType>): ContentResult<CourseSet> {
         if (params.size != 1) {
@@ -118,7 +118,7 @@ object CourseInfo : BaseSimpleContentInfo<CourseSet, CourseInfo.OperationType>()
         updateSimpleCache(courseSet)
     }
 
-    override fun saveSimpleInfo(info: CourseSet) = CourseSetDBHelper.storeNewCourseSet(info)
+    override suspend fun saveSimpleInfo(info: CourseSet) = CourseSetDBHelper.storeNewCourseSet(info)
 
-    override fun clearSimpleStoredInfo() = CourseSetDBHelper.clearAll()
+    override suspend fun clearSimpleStoredInfo() = CourseSetDBHelper.clearAll()
 }

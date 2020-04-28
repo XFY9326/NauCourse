@@ -15,7 +15,7 @@ object TermDateInfo : BaseSimpleContentInfo<TermDate, TermDateInfo.TermType>() {
         RAW_TERM
     }
 
-    override fun loadSimpleStoredInfo(): TermDate? = TermDateDBHelper.getTermDate()
+    override suspend fun loadSimpleStoredInfo(): TermDate? = TermDateDBHelper.getTermDate()
 
     override fun onGetCacheExpire(): CacheExpire = CacheExpire(
         CacheExpireRule.PER_TIME,
@@ -63,9 +63,9 @@ object TermDateInfo : BaseSimpleContentInfo<TermDate, TermDateInfo.TermType>() {
     override fun onReadSimpleCache(data: TermDate): TermDate =
         fixTermDate(data)
 
-    override fun saveSimpleInfo(info: TermDate) = TermDateDBHelper.putTermDate(info)
+    override suspend fun saveSimpleInfo(info: TermDate) = TermDateDBHelper.putTermDate(info)
 
-    override fun clearSimpleStoredInfo() = TermDateDBHelper.clearAll()
+    override suspend fun clearSimpleStoredInfo() = TermDateDBHelper.clearAll()
 
     private fun fixTermDate(termDate: TermDate): TermDate = TermDate(TimeUtils.getWeekNum(termDate), termDate.startDate, termDate.endDate)
 }

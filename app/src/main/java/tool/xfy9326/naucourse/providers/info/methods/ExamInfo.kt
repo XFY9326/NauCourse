@@ -17,11 +17,11 @@ object ExamInfo : BaseSimpleContentInfo<Array<Exam>, Nothing>() {
         CACHE_EXPIRE_HOUR, CacheExpireTimeUnit.HOUR
     )
 
-    override fun loadSimpleStoredInfo(): Array<Exam>? = ExamDBHelper.getExam()
+    override suspend fun loadSimpleStoredInfo(): Array<Exam>? = ExamDBHelper.getExam()
 
     override suspend fun getSimpleInfoContent(params: Set<Nothing>): ContentResult<Array<Exam>> = MyExamArrangeList.getContentData()
 
-    override fun saveSimpleInfo(info: Array<Exam>) = ExamDBHelper.putExam(info)
+    override suspend fun saveSimpleInfo(info: Array<Exam>) = ExamDBHelper.putExam(info)
 
-    override fun clearSimpleStoredInfo() = ExamDBHelper.clearAll()
+    override suspend fun clearSimpleStoredInfo() = ExamDBHelper.clearAll()
 }

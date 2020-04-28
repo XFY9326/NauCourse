@@ -24,6 +24,7 @@ class LoginViewModel : BaseViewModel() {
     val compatData = EventLiveData<LoginInfo>()
     val loginSuccess = NotifyLivaData()
     val updateInfo = EventLiveData<UpdateInfo>()
+    val savedCacheUserId = EventLiveData<String>()
 
     enum class LoadingProcess {
         DATA_COMPAT,
@@ -37,6 +38,14 @@ class LoginViewModel : BaseViewModel() {
         viewModelScope.launch(Dispatchers.Default) {
             UpdateChecker.getNewUpdateInfo()?.let {
                 updateInfo.postEventValue(it)
+            }
+        }
+    }
+
+    fun requestSavedCacheUserId() {
+        viewModelScope.launch(Dispatchers.Default) {
+            AccountUtils.readSavedCacheUserId()?.let {
+                savedCacheUserId.postEventValue(it)
             }
         }
     }

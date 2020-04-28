@@ -1,6 +1,8 @@
 package tool.xfy9326.naucourse.io.store.base
 
 import com.google.gson.Gson
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.io.prefs.JsonStoreVersionPref
 import tool.xfy9326.naucourse.utils.io.BaseIOUtils
@@ -10,6 +12,7 @@ import java.io.File
 object JsonStoreManager {
     private const val JSON_FILE_DIR_NAME = "JsonStore"
     private const val JSON_FILE_PREFIX = ".sjf"
+    private val jsonMutex = Mutex()
 
     private var jsonFilePath: String = App.instance.filesDir.absolutePath + File.separator + JSON_FILE_DIR_NAME + File.separator
 
@@ -19,7 +22,7 @@ object JsonStoreManager {
         BaseIOUtils.deleteFile(getStoredPath(config.fileName))
     }
 
-    fun <T : Any> writeData(config: JsonStoreConfig<T>, data: T, encrypt: Boolean = false): Boolean = synchronized(config) {
+    suspend fun <T : Any> writeData(config: JsonStoreConfig<T>, data: T, encrypt: Boolean = false): Boolean = jsonMutex.withLock {
         JsonStoreVersionPref.saveStoredVersion(config.fileName, config.versionCode)
         TextIOUtils.saveTextToFile(
             convertToJson(data),
@@ -27,7 +30,7 @@ object JsonStoreManager {
         )
     }
 
-    fun <T : Any> readData(config: JsonStoreConfig<T>, encrypt: Boolean = false): T? = synchronized(config) {
+    suspend fun <T : Any> readData(config: JsonStoreConfig<T>, encrypt: Boolean = false): T? = jsonMutex.withLock {
         if (JsonStoreVersionPref.loadStoredVersion(config.fileName) != config.versionCode) {
             clearData(config)
             null

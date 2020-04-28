@@ -1,5 +1,8 @@
 package tool.xfy9326.naucourse.utils.secure
 
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import tool.xfy9326.naucourse.io.db.UUIDDBHelper
 import java.util.*
 
@@ -8,8 +11,9 @@ object CryptoUtils {
         System.loadLibrary("Secure")
     }
 
-    @Synchronized
-    private fun readUUID(): String = synchronized(this) {
+    private val uuidMutex = Mutex()
+
+    private suspend fun readUUID(): String = uuidMutex.withLock {
         val uuid = UUIDDBHelper.readUUID()
         if (uuid == null) {
             val newUUID = UUID.randomUUID().toString()
@@ -20,9 +24,13 @@ object CryptoUtils {
         }
     }
 
-    fun encryptText(content: String) = encryptText(content, readUUID())
+    suspend fun encryptText(content: String) = coroutineScope {
+        encryptText(content, readUUID())
+    }
 
-    fun decryptText(content: String) = decryptText(content, readUUID())
+    suspend fun decryptText(content: String) = coroutineScope {
+        decryptText(content, readUUID())
+    }
 
     private external fun encryptText(content: String, key: String): String
 

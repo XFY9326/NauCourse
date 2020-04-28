@@ -7,7 +7,7 @@ abstract class BaseSimpleContentInfo<Element : Any, Param> : BaseContentInfo<Bas
         DEFAULT
     }
 
-    final override fun loadStoredInfo(): Map<SimpleType, Any> = loadSimpleStoredInfo().let {
+    final override suspend fun loadStoredInfo(): Map<SimpleType, Any> = loadSimpleStoredInfo().let {
         if (it != null || (it is Collection<*> && (it as Collection<*>).size > 0)) {
             mapOf(SimpleType.DEFAULT to loadSimpleStoredInfo() as Any)
         } else {
@@ -21,16 +21,16 @@ abstract class BaseSimpleContentInfo<Element : Any, Param> : BaseContentInfo<Bas
     final override suspend fun getInfoContent(type: SimpleType, params: Set<Param>): ContentResult<*> = getSimpleInfoContent(params)
 
     @Suppress("UNCHECKED_CAST")
-    final override fun saveInfo(type: SimpleType, info: Any) = saveSimpleInfo(info as Element)
+    final override suspend fun saveInfo(type: SimpleType, info: Any) = saveSimpleInfo(info as Element)
 
-    final override fun clearStoredInfo(type: SimpleType) = clearSimpleStoredInfo()
+    final override suspend fun clearStoredInfo(type: SimpleType) = clearSimpleStoredInfo()
 
-    final override fun getCachedItem(type: SimpleType): Any? = super.getCachedItem(type)
+    final override suspend fun getCachedItem(type: SimpleType): Any? = super.getCachedItem(type)
 
-    final override fun hasCachedItem(type: SimpleType): Boolean = super.hasCachedItem(type)
+    final override suspend fun hasCachedItem(type: SimpleType): Boolean = super.hasCachedItem(type)
 
     @Suppress("UNCHECKED_CAST")
-    final override fun <E : Any> onSaveResult(type: SimpleType, params: Set<Param>, data: E) = onSaveSimpleResult(params, data as Element)
+    final override suspend fun <E : Any> onSaveResult(type: SimpleType, params: Set<Param>, data: E) = onSaveSimpleResult(params, data as Element)
 
     @Suppress("UNCHECKED_CAST")
     final override fun <E : Any> onSaveCache(type: SimpleType, params: Set<Param>, data: E) = onSaveSimpleCache(params, data as Element)
@@ -53,20 +53,20 @@ abstract class BaseSimpleContentInfo<Element : Any, Param> : BaseContentInfo<Bas
 
     protected open fun onReadSimpleCache(data: Element): Element = data
 
-    protected abstract fun loadSimpleStoredInfo(): Element?
+    protected abstract suspend fun loadSimpleStoredInfo(): Element?
 
     protected abstract suspend fun getSimpleInfoContent(params: Set<Param>): ContentResult<Element>
 
-    protected abstract fun saveSimpleInfo(info: Element)
+    protected abstract suspend fun saveSimpleInfo(info: Element)
 
-    protected abstract fun clearSimpleStoredInfo()
+    protected abstract suspend fun clearSimpleStoredInfo()
 
     @Suppress("UNCHECKED_CAST")
-    protected fun getSimpleCachedItem(): Element? = super.getCachedItem(SimpleType.DEFAULT) as Element?
+    protected suspend fun getSimpleCachedItem(): Element? = super.getCachedItem(SimpleType.DEFAULT) as Element?
 
-    protected fun hasSimpleCachedItem(): Boolean = super.hasCachedItem(SimpleType.DEFAULT)
+    protected suspend fun hasSimpleCachedItem(): Boolean = super.hasCachedItem(SimpleType.DEFAULT)
 
-    protected open fun onSaveSimpleResult(params: Set<Param>, data: Element) = super.onSaveResult(SimpleType.DEFAULT, params, data)
+    protected open suspend fun onSaveSimpleResult(params: Set<Param>, data: Element) = super.onSaveResult(SimpleType.DEFAULT, params, data)
 
     protected open fun onSaveSimpleCache(params: Set<Param>, data: Element) = super.onSaveCache(SimpleType.DEFAULT, params, data)
 
