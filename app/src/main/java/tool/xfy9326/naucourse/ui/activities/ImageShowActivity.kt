@@ -22,6 +22,7 @@ import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourse.ui.models.activity.ImageShowViewModel
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 import tool.xfy9326.naucourse.utils.utility.BitmapUtils
+import tool.xfy9326.naucourse.utils.utility.PermissionUtils
 import tool.xfy9326.naucourse.utils.utility.ShareUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils
 import tool.xfy9326.naucourse.utils.views.DialogUtils
@@ -101,7 +102,11 @@ class ImageShowActivity : ViewModelActivity<ImageShowViewModel>(), View.OnLongCl
         val bitmap = BitmapUtils.getBitmapFromDrawable((v as PhotoView).drawable.current)!!
         DialogUtils.createImageOperationDialog(this, lifecycle,
             { getViewModel().shareImage(imageUrl, bitmap) },
-            { getViewModel().saveImage(imageUrl, bitmap) }).show()
+            {
+                if (PermissionUtils.prepareStoragePermission(this)) {
+                    getViewModel().saveImage(imageUrl, bitmap)
+                }
+            }).show()
         v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
         return true
     }

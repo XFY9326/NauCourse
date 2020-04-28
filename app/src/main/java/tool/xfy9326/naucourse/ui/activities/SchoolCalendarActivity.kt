@@ -21,6 +21,7 @@ import tool.xfy9326.naucourse.beans.CalendarItem
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourse.ui.models.activity.SchoolCalendarViewModel
 import tool.xfy9326.naucourse.utils.utility.BitmapUtils
+import tool.xfy9326.naucourse.utils.utility.PermissionUtils
 import tool.xfy9326.naucourse.utils.utility.ShareUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
@@ -70,7 +71,9 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_calendarSave -> getBitmapFromImageView()?.let {
-                getViewModel().saveImage(it)
+                if (PermissionUtils.prepareStoragePermission(this)) {
+                    getViewModel().saveImage(it)
+                }
             }
             R.id.menu_calendarShare -> getBitmapFromImageView()?.let {
                 getViewModel().shareImage(it)

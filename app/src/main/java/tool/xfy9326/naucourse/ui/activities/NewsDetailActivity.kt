@@ -28,6 +28,7 @@ import tool.xfy9326.naucourse.ui.views.html.HtmlImageGetter
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 import tool.xfy9326.naucourse.utils.utility.BitmapUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
+import tool.xfy9326.naucourse.utils.utility.PermissionUtils
 import tool.xfy9326.naucourse.utils.utility.ShareUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBar
@@ -178,7 +179,11 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
     override fun onHtmlTextImageLongPress(source: String, bitmap: Bitmap) =
         DialogUtils.createImageOperationDialog(this, lifecycle,
             { getViewModel().shareImage(source, bitmap) },
-            { getViewModel().saveImage(source, bitmap) }).show()
+            {
+                if (PermissionUtils.prepareStoragePermission(this)) {
+                    getViewModel().saveImage(source, bitmap)
+                }
+            }).show()
 
     override fun onDestroy() {
         AdvancedLinkMovementMethod.clearHandler()
