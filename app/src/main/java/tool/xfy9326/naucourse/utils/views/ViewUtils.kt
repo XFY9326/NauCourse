@@ -24,6 +24,7 @@ object ViewUtils {
         this.text = Constants.EMPTY
     }
 
+    @Suppress("unused")
     suspend fun <T : View> T.runInMain(block: suspend (T) -> Unit) {
         withContext(Dispatchers.Main) {
             block.invoke(this@runInMain)

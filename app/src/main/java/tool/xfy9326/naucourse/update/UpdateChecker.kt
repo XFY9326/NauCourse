@@ -46,6 +46,8 @@ object UpdateChecker {
                         }
                     }
                     return@withContext fixedData
+                } else {
+                    AppPref.remove(AppPref.FORCE_UPDATE_VERSION_CODE)
                 }
             }
         } catch (e: Exception) {

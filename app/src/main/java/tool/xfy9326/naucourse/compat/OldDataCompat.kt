@@ -85,30 +85,34 @@ object OldDataCompat {
             val styles = ArrayList<CourseCellStyle>(oldData.size)
             var term: String? = null
             for (oldDatum in oldData) {
-                if (!oldDatum.courseId.isNullOrEmpty() && !oldDatum.courseName.isNullOrEmpty()) {
-                    val courseId = oldDatum.courseId!!.trim()
-                    val fixedCourseId =
-                        if (courseId.startsWith("Custom")) {
-                            CourseUtils.getNewCourseId()
-                        } else {
-                            courseId
-                        }
-                    val timeSet = convertOldDataToCourseTime(context, fixedCourseId, oldDatum.courseDetail!!)
-                    courseSet.add(
-                        Course(
-                            fixedCourseId,
-                            oldDatum.courseName!!.trim(),
-                            oldDatum.courseTeacher?.trim() ?: Constants.EMPTY,
-                            oldDatum.courseCombinedClass?.trim(),
-                            oldDatum.courseClass?.trim() ?: Constants.EMPTY,
-                            oldDatum.courseScore?.trim()?.toFloat() ?: 0f,
-                            oldDatum.courseType?.trim() ?: Constants.EMPTY,
-                            null,
-                            timeSet
+                try {
+                    if (!oldDatum.courseId.isNullOrEmpty() && !oldDatum.courseName.isNullOrEmpty()) {
+                        val courseId = oldDatum.courseId!!.trim()
+                        val fixedCourseId =
+                            if (courseId.startsWith("Custom")) {
+                                CourseUtils.getNewCourseId()
+                            } else {
+                                courseId
+                            }
+                        val timeSet = convertOldDataToCourseTime(context, fixedCourseId, oldDatum.courseDetail!!)
+                        courseSet.add(
+                            Course(
+                                fixedCourseId,
+                                oldDatum.courseName!!.trim(),
+                                oldDatum.courseTeacher?.trim() ?: Constants.EMPTY,
+                                oldDatum.courseCombinedClass?.trim(),
+                                oldDatum.courseClass?.trim() ?: Constants.EMPTY,
+                                oldDatum.courseScore?.trim()?.toFloatOrNull() ?: 0f,
+                                oldDatum.courseType?.trim() ?: Constants.EMPTY,
+                                null,
+                                timeSet
+                            )
                         )
-                    )
-                    styles.add(CourseStyleUtils.getDefaultCellStyle(courseId, oldDatum.courseColor))
-                    if (oldDatum.courseTerm != null) term = oldDatum.courseTerm.trim()
+                        styles.add(CourseStyleUtils.getDefaultCellStyle(courseId, oldDatum.courseColor))
+                        if (oldDatum.courseTerm != null) term = oldDatum.courseTerm.trim()
+                    }
+                } catch (e: Exception) {
+                    ExceptionUtils.printStackTrace<OldDataCompat>(e)
                 }
             }
             val newTerm =

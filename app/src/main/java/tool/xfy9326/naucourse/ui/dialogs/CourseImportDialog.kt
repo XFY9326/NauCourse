@@ -63,6 +63,11 @@ class CourseImportDialog : DialogFragment(), DialogInterface.OnMultiChoiceClickL
         checkedArray[which] = isChecked
     }
 
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setBackgroundDrawable(requireContext().getDrawable(R.drawable.bg_dialog))
+    }
+
     override fun onDestroy() {
         System.gc()
         super.onDestroy()

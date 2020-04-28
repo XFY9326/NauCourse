@@ -58,7 +58,7 @@ object CourseTableViewHelper {
     fun getShowWeekDaySize(courseTable: CourseTable, courseTableStyle: CourseTableStyle) =
         getShowWeekDaySize(courseTableStyle.forceShowCourseTableWeekends || CourseUtils.hasWeekendCourse(courseTable))
 
-    fun getShowWeekDaySize(hasWeekendCourse: Boolean) =
+    private fun getShowWeekDaySize(hasWeekendCourse: Boolean) =
         if (hasWeekendCourse) {
             DEFAULT_TABLE_WIDTH_SIZE - 1
         } else {

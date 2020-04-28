@@ -16,6 +16,7 @@ open class AdvancedLinearLayout : LinearLayoutCompat {
         addViewInLayout(view, -1, view.layoutParams, !requestLayout)
     }
 
+    @Suppress("unused")
     fun addViewsInLayout(views: Array<View>, requestLayout: Boolean = true) {
         for (view in views) {
             addViewInLayout(view, -1, view.layoutParams, true)
