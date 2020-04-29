@@ -20,6 +20,8 @@ import tool.xfy9326.naucourse.providers.beans.jwc.TimePeriodList
 import tool.xfy9326.naucourse.providers.beans.jwc.WeekMode
 import tool.xfy9326.naucourse.ui.views.widgets.AdvancedFrameLayout
 import tool.xfy9326.naucourse.ui.views.widgets.CourseTimeEditCell
+import tool.xfy9326.naucourse.utils.BaseUtils.isEven
+import tool.xfy9326.naucourse.utils.BaseUtils.isOdd
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 import kotlin.properties.Delegates
@@ -126,23 +128,31 @@ class CourseTimeEditDialog : DialogFragment() {
 
     private fun buildWeekNumGrid(view: View) = view.apply {
         timeViewList.clear()
-        val size = resources.getDimension(R.dimen.course_time_button_size).toInt()
+        val size = resources.getDimensionPixelSize(R.dimen.course_time_button_size)
+        val margin = resources.getDimensionPixelSize(R.dimen.course_time_button_margin)
+        val count = gl_courseWeeks.width / (size + margin * 2)
+        gl_courseWeeks.columnCount =
+            if (count.isOdd()) {
+                count - 1
+            } else {
+                count
+            }
         val views = Array(maxWeekNum) {
-            createCourseTimeButton(view, it + 1, size, courseTime?.isWeekNumTrue(it + 1) ?: DEFAULT_WEEK_NUM_CHECK)
+            createCourseTimeButton(view, it + 1, size, margin, courseTime?.isWeekNumTrue(it + 1) ?: DEFAULT_WEEK_NUM_CHECK)
         }
-        layout_courseWeeks.replaceAllViews(views)
+        gl_courseWeeks.replaceAllViews(views)
     }
 
     private fun setupRadioGroup(view: View) = view.apply {
         radioGroup_weekMode.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
-                R.id.radioBtn_oddWeekMode -> for (cell in timeViewList) cell.isChecked = cell.showNum % 2 != 0
-                R.id.radioBtn_evenWeekMode -> for (cell in timeViewList) cell.isChecked = cell.showNum % 2 == 0
+                R.id.radioBtn_oddWeekMode -> for (cell in timeViewList) cell.isChecked = cell.showNum.isOdd()
+                R.id.radioBtn_evenWeekMode -> for (cell in timeViewList) cell.isChecked = cell.showNum.isEven()
             }
         }
     }
 
-    private fun createCourseTimeButton(view: View, num: Int, size: Int, checked: Boolean) =
+    private fun createCourseTimeButton(view: View, num: Int, size: Int, margin: Int, checked: Boolean) =
         AdvancedFrameLayout(requireContext()).apply {
             layoutParams = GridLayout.LayoutParams().apply {
                 rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
@@ -151,14 +161,14 @@ class CourseTimeEditDialog : DialogFragment() {
             val cellView = CourseTimeEditCell(requireContext(), num, checked).apply {
                 layoutParams = FrameLayout.LayoutParams(size, size).apply {
                     this.gravity = Gravity.CENTER
-                    setMargins(resources.getDimension(R.dimen.course_time_button_margin).toInt())
+                    setMargins(margin)
                 }
                 setOnCheckedChangeListener(object : CourseTimeEditCell.OnCheckedChangeListener {
                     override fun onCheckedChanged(cellView: CourseTimeEditCell, isChecked: Boolean) {
                         if (isChecked) {
                             when (view.radioGroup_weekMode.checkedRadioButtonId) {
-                                R.id.radioBtn_oddWeekMode -> if (cellView.showNum % 2 == 0) view.radioBtn_allWeeksMode.isChecked = true
-                                R.id.radioBtn_evenWeekMode -> if (cellView.showNum % 2 != 0) view.radioBtn_allWeeksMode.isChecked = true
+                                R.id.radioBtn_oddWeekMode -> if (cellView.showNum.isEven()) view.radioBtn_allWeeksMode.isChecked = true
+                                R.id.radioBtn_evenWeekMode -> if (cellView.showNum.isOdd()) view.radioBtn_allWeeksMode.isChecked = true
                             }
                         }
                     }
@@ -231,9 +241,9 @@ class CourseTimeEditDialog : DialogFragment() {
             var lastCheckedNum: Int? = null
             for (cell in timeViewList) {
                 if (weekMode == WeekMode.ODD_WEEK_ONLY) {
-                    if (cell.showNum % 2 == 0) continue
+                    if (cell.showNum.isEven()) continue
                 } else if (weekMode == WeekMode.EVEN_WEEK_ONLY) {
-                    if (cell.showNum % 2 != 0) continue
+                    if (cell.showNum.isOdd()) continue
                 }
 
                 if (cell.isChecked) {

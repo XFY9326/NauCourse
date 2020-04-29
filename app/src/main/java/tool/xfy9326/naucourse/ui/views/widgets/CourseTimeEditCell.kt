@@ -27,7 +27,7 @@ class CourseTimeEditCell : AppCompatCheckedTextView, View.OnClickListener {
     constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)
 
     init {
-        elevation = resources.getDimension(R.dimen.course_time_button_elevation)
+        elevation = resources.getDimensionPixelSize(R.dimen.course_time_button_elevation).toFloat()
         gravity = Gravity.CENTER
         textAlignment = View.TEXT_ALIGNMENT_CENTER
         setBackgroundResource(R.drawable.bg_course_time)

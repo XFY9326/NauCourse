@@ -33,6 +33,10 @@ object BaseUtils {
 
     fun Int.spToPx() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this.toFloat(), Resources.getSystem().displayMetrics).toInt()
 
+    fun Int.isOdd(): Boolean = this % 2 != 0
+
+    fun Int.isEven(): Boolean = this % 2 == 0
+
     fun ByteArray.toHex(): String {
         var tmp: String
         val textBuilder = StringBuilder()

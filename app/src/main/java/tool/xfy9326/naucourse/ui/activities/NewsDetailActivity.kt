@@ -159,7 +159,7 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
                     setOnImageClickListener(this@NewsDetailActivity)
                     setOnImageLongPressListener(this@NewsDetailActivity)
                 }
-                Html.fromHtml(detail.htmlContent, Html.FROM_HTML_MODE_COMPACT, imageGetter, tagHandler)
+                Html.fromHtml(detail.htmlContent, Html.FROM_HTML_MODE_LEGACY, imageGetter, tagHandler)
             } else {
                 @Suppress("DEPRECATION")
                 Html.fromHtml(detail.htmlContent)

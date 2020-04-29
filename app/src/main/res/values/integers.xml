@@ -5,7 +5,6 @@
     <integer name="default_course_table_row_count">13</integer>
     <integer name="learning_process_max">100</integer>
     <integer name="user_info_column_count">2</integer>
-    <integer name="course_time_edit_column_count">6</integer>
     <integer name="very_short_anim_time">100</integer>
     <integer name="water_print_alpha">90</integer>
 </resources>
