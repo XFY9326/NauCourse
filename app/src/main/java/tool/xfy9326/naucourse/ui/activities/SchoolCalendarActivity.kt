@@ -99,9 +99,9 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
                 getViewModel().restoreToDefaultImage()
             }
             setNegativeButton(android.R.string.cancel, null)
+            background = context.getDrawable(R.drawable.bg_dialog)
         }.create().apply {
             DialogUtils.addAutoCloseListener(lifecycle, this)
-            DialogUtils.applyButtonTextAndBackground(this@SchoolCalendarActivity, this)
             show()
         }
     }

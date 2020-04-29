@@ -83,4 +83,6 @@ object AppPref : BasePref() {
     var UpdateDownloadId by pref.long(defValue = 0)
 
     var CourseTableBackgroundImageName by pref.string()
+
+    var EditAsyncCourseAttention by pref.boolean(defValue = false)
 }

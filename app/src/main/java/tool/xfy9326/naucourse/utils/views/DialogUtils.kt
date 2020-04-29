@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.dialog_course_control_panel.*
 import kotlinx.android.synthetic.main.dialog_image_operation.*
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.ui.views.widgets.AnimateSlider
 import tool.xfy9326.naucourse.utils.io.TextIOUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
@@ -38,6 +39,19 @@ object DialogUtils {
                 }
             )
             setPositiveButton(android.R.string.yes, null)
+            background = context.getDrawable(R.drawable.bg_dialog)
+        }.create().also {
+            addAutoCloseListener(lifecycle, it)
+        }
+
+    fun createEditAsyncCourseAttention(context: Context, lifecycle: Lifecycle) =
+        MaterialAlertDialogBuilder(context).apply {
+            setTitle(R.string.attention)
+            setMessage(R.string.edit_async_course_attention)
+            setCancelable(false)
+            setPositiveButton(R.string.i_see) { _, _ ->
+                AppPref.EditAsyncCourseAttention = true
+            }
             background = context.getDrawable(R.drawable.bg_dialog)
         }.create().also {
             addAutoCloseListener(lifecycle, it)

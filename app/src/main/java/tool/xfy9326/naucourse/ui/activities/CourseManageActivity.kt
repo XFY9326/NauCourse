@@ -16,6 +16,8 @@ import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseCellStyle
+import tool.xfy9326.naucourse.io.prefs.AppPref
+import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.providers.beans.jwc.*
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourse.ui.dialogs.CourseImportDialog
@@ -86,6 +88,10 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
                         }
                     }
                 }).show()
+        }
+
+        if (!AppPref.EditAsyncCourseAttention && SettingsPref.AutoAsyncCourseData) {
+            DialogUtils.createEditAsyncCourseAttention(this, lifecycle).show()
         }
     }
 
