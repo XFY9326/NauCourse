@@ -51,6 +51,9 @@ class EmptyRoomViewModel : BaseViewModel() {
             val result = GetEmptyRoomInfo.getContentData(param)
             if (result.isSuccess) {
                 searchResult.postValue(result.contentData!!)
+                if (result.contentData.isEmpty()) {
+                    errorMsg.postEventValue(ContentErrorReason.EMPTY_DATA to false)
+                }
             } else {
                 errorMsg.postEventValue(result.contentErrorResult to false)
             }

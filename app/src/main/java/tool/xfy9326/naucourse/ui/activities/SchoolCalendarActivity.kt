@@ -101,6 +101,7 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
             setNegativeButton(android.R.string.cancel, null)
         }.create().apply {
             DialogUtils.addAutoCloseListener(lifecycle, this)
+            DialogUtils.applyButtonTextAndBackground(this@SchoolCalendarActivity, this)
             show()
         }
     }

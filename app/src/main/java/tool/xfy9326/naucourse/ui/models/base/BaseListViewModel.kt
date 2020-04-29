@@ -34,6 +34,9 @@ abstract class BaseListViewModel<E> : BaseViewModel() {
             val result = onUpdateData(isInit, forceUpdate)
             if (result.isSuccess) {
                 listData.postValue(result.data!!)
+                if (!isInit && result.data.isEmpty()) {
+                    errorMsg.postEventValue(ContentErrorReason.EMPTY_DATA)
+                }
             } else {
                 errorMsg.postEventValue(result.errorReason)
             }
