@@ -5,6 +5,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.io.prefs.JsonStoreVersionPref
+import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 import tool.xfy9326.naucourse.utils.io.BaseIOUtils
 import tool.xfy9326.naucourse.utils.io.TextIOUtils
 import java.io.File
@@ -24,10 +25,15 @@ object JsonStoreManager {
 
     suspend fun <T : Any> writeData(config: JsonStoreConfig<T>, data: T, encrypt: Boolean = false): Boolean = jsonMutex.withLock {
         JsonStoreVersionPref.saveStoredVersion(config.fileName, config.versionCode)
-        TextIOUtils.saveTextToFile(
-            convertToJson(data),
-            getStoredPath(config.fileName), encrypt, true
-        )
+        try {
+            TextIOUtils.saveTextToFile(
+                convertToJson(data),
+                getStoredPath(config.fileName), encrypt, true
+            )
+        } catch (e: Exception) {
+            ExceptionUtils.printStackTrace<JsonStoreManager>(e)
+            false
+        }
     }
 
     suspend fun <T : Any> readData(config: JsonStoreConfig<T>, encrypt: Boolean = false): T? = jsonMutex.withLock {
@@ -39,7 +45,12 @@ object JsonStoreManager {
             return if (text == null || text.isEmpty()) {
                 null
             } else {
-                convertFromJson(config.storeClass, text)
+                try {
+                    convertFromJson(config.storeClass, text)
+                } catch (e: Exception) {
+                    ExceptionUtils.printStackTrace<JsonStoreManager>(e)
+                    null
+                }
             }
         }
     }

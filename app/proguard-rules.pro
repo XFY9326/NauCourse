@@ -48,6 +48,8 @@
 
 -repackageclasses guard
 
+-renamesourcefileattribute Source
+
 # 保留行号
 -keepattributes SourceFile,LineNumberTable
 

@@ -135,7 +135,7 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
     @Synchronized
     private fun getBitmapFromImageView(): Bitmap? {
         return if (isCalendarSet) {
-            BitmapUtils.getBitmapFromDrawable(pv_calendarImage.drawable.current).also {
+            BitmapUtils.getBitmapFromDrawable(pv_calendarImage.drawable).also {
                 if (it == null) ActivityUtils.showSnackBar(layout_schoolCalendar, R.string.image_operation_when_calendar_loading)
             }
         } else {

@@ -143,7 +143,9 @@ class CourseTableViewModel : BaseViewModel() {
         viewModelScope.launch(Dispatchers.Default) {
             if (::initDeferred.isInitialized) {
                 if (initDeferred.isActive) initDeferred.await()
-                courseTablePkg[weekNum - 1].postValue(getCoursePkg(weekNum))
+                getCoursePkg(weekNum)?.let {
+                    courseTablePkg[weekNum - 1].postValue(it)
+                }
             } else {
                 initTableCache()
                 requestCourseTable(weekNum)

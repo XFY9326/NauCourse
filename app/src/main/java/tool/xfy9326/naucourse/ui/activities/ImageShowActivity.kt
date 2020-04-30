@@ -99,14 +99,18 @@ class ImageShowActivity : ViewModelActivity<ImageShowViewModel>(), View.OnLongCl
     }
 
     override fun onLongClick(v: View?): Boolean {
-        val bitmap = BitmapUtils.getBitmapFromDrawable((v as PhotoView).drawable.current)!!
-        DialogUtils.createImageOperationDialog(this, lifecycle,
-            { getViewModel().shareImage(imageUrl, bitmap) },
-            {
-                if (PermissionUtils.prepareStoragePermission(this)) {
-                    getViewModel().saveImage(imageUrl, bitmap)
-                }
-            }).show()
+        val bitmap = BitmapUtils.getBitmapFromDrawable((v as PhotoView).drawable)
+        if (bitmap != null) {
+            DialogUtils.createImageOperationDialog(this, lifecycle,
+                { getViewModel().shareImage(imageUrl, bitmap) },
+                {
+                    if (PermissionUtils.prepareStoragePermission(this)) {
+                        getViewModel().saveImage(imageUrl, bitmap)
+                    }
+                }).show()
+        } else {
+            ActivityUtils.showSnackBar(layout_imageView, R.string.image_load_failed)
+        }
         v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
         return true
     }
