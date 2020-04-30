@@ -30,14 +30,18 @@ object MyExamArrangeList : BaseNoParamContent<Array<Exam>>() {
     private fun getExamArr(bodyElement: Element): Array<Exam> {
         val trElements = bodyElement.getElementById(Constants.HTML.ELEMENT_ID_CONTENT).getElementsByTag(Constants.HTML.ELEMENT_TAG_TR)
 
+        if (trElements.size - 2 == 0) {
+            return emptyArray()
+        }
+
         val examArr = arrayOfNulls<Exam>(trElements.size - 2)
 
         var courseId: String
         var name: String
         var credit: Float
         var teachClass: String
-        var startDate: Date
-        var endDate: Date
+        var startDate: Date?
+        var endDate: Date?
         var location: String
         var property: String
         var type: String
@@ -51,16 +55,25 @@ object MyExamArrangeList : BaseNoParamContent<Array<Exam>>() {
             teachClass = tdElements[4].text()
 
             val dateStr = tdElements[5].text()
-            val daySplit = dateStr.split(Constants.SPACE)
-            val timeSplit = daySplit[1].split(TIME_SPLIT_SYMBOL)
-            startDate = readTime("${daySplit[0]} ${timeSplit[0]}")!!
-            endDate = readTime("${daySplit[0]} ${timeSplit[1]}")!!
+
+            startDate = null
+            endDate = null
+
+            if (TIME_SPLIT_SYMBOL in dateStr) {
+                try {
+                    val daySplit = dateStr.split(Constants.SPACE)
+                    val timeSplit = daySplit[1].split(TIME_SPLIT_SYMBOL)
+                    startDate = readTime("${daySplit[0]} ${timeSplit[0]}")!!
+                    endDate = readTime("${daySplit[0]} ${timeSplit[1]}")!!
+                } catch (e: Exception) {
+                }
+            }
 
             location = tdElements[6].text()
             property = tdElements[7].text()
             type = tdElements[8].text()
 
-            examArr[arrIndex] = Exam(courseId, name, credit, teachClass, startDate, endDate, location, property, type)
+            examArr[arrIndex] = Exam(courseId, name, credit, teachClass, startDate, endDate, dateStr, location, property, type)
         }
 
         return examArr.requireNoNulls()

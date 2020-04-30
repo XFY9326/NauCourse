@@ -205,7 +205,9 @@ object TimeUtils {
         }
     }
 
-    fun getCountDownTime(countDownDate: Date): Pair<Int, TimeUnit>? {
+    fun getCountDownTime(countDownDate: Date?): Pair<Int, TimeUnit>? {
+        if (countDownDate == null) return null
+
         val currentMills = System.currentTimeMillis()
         val countDownMills = countDownDate.time
 

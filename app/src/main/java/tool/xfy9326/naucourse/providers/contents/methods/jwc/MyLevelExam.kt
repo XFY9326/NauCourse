@@ -31,6 +31,10 @@ object MyLevelExam : BaseNoParamContent<Array<LevelExam>>() {
     private fun getLevelExamArr(bodyElement: Element): Array<LevelExam> {
         val trElements = bodyElement.getElementById(ELEMENT_ID_TABLE2).getElementsByTag(Constants.HTML.ELEMENT_TAG_TR)
 
+        if (trElements.size - 2 == 0) {
+            return emptyArray()
+        }
+
         val levelExamArr = arrayOfNulls<LevelExam>(trElements.size - 2)
 
         var type: String

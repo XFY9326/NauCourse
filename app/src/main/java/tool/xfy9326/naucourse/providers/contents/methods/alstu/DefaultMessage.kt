@@ -77,6 +77,10 @@ object DefaultMessage : BaseNewsContent<AlstuMessage>() {
         val dataGridElement = document.getElementById(ELEMENT_ID_MY_DATA_GRID)
         val trElements = dataGridElement.getElementsByTag(Constants.HTML.ELEMENT_TAG_TR)
 
+        if (trElements.isEmpty()) {
+            return HashSet()
+        }
+
         val msgSet = HashSet<AlstuMessage>(trElements.size)
 
         var title: String

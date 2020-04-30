@@ -20,10 +20,12 @@ abstract class BaseDB<T : RoomDatabase> {
     @Synchronized
     fun getDB(): T {
         if (db == null) {
-            db = Room.databaseBuilder(App.instance, dbClass, dbName).build()
+            db = onBuildDB(Room.databaseBuilder(App.instance, dbClass, dbName))
         }
         return db!!
     }
+
+    protected open fun onBuildDB(builder: RoomDatabase.Builder<T>) = builder.build()
 
     abstract class DB : RoomDatabase() {
         // 清空所有数据

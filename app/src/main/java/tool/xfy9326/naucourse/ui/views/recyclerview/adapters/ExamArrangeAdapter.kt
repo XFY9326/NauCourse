@@ -30,9 +30,16 @@ class ExamArrangeAdapter(context: Context) : ListRecyclerAdapter<ExamArrangeView
             tvExamTypeAndCredit.text = weakContext.get()?.getString(R.string.exam_course_credit_and_type, element.credit, element.type)
             tvExamName.text = element.name
             tvExamTeachClass.text = weakContext.get()?.getString(R.string.course_class, element.teachClass)
-            tvExamStartTime.text = weakContext.get()?.getString(R.string.exam_start_time, DATE_FORMAT_YMD_HM_CH.format(element.startDate))
-            tvExamEndTime.text = weakContext.get()?.getString(R.string.exam_end_time, DATE_FORMAT_YMD_HM_CH.format(element.endDate))
             tvExamLocation.text = weakContext.get()?.getString(R.string.exam_location, element.location)
+
+            if (element.startDate == null || element.endDate == null) {
+                tvExamStartTime.text = weakContext.get()?.getString(R.string.exam_time, element.dateRawText)
+                tvExamEndTime.visibility = View.GONE
+            } else {
+                tvExamStartTime.text = weakContext.get()?.getString(R.string.exam_start_time, DATE_FORMAT_YMD_HM_CH.format(element.startDate))
+                tvExamEndTime.text = weakContext.get()?.getString(R.string.exam_end_time, DATE_FORMAT_YMD_HM_CH.format(element.endDate))
+                tvExamEndTime.visibility = View.VISIBLE
+            }
 
             val countDown = TimeUtils.getCountDownTime(element.startDate)
             if (countDown == null) {

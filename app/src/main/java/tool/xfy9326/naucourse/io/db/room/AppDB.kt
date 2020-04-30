@@ -19,8 +19,7 @@ object AppDB : BaseDB<AppDB.AppDataBase>() {
 
     @Database(
         entities = [GeneralNews::class, UUIDContent::class, CardBalance::class],
-        version = APP_DB_VERSION,
-        exportSchema = false
+        version = APP_DB_VERSION
     )
     @TypeConverters(DBTypeConverter::class)
     abstract class AppDataBase : DB() {

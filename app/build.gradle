@@ -22,8 +22,8 @@ android {
 
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 68
-        versionName '7.0'
+        versionCode 69
+        versionName '7.0.1'
 
         resConfigs 'zh'
         applicationVariants.all {
@@ -35,6 +35,12 @@ android {
 
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+        }
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
         }
     }
 

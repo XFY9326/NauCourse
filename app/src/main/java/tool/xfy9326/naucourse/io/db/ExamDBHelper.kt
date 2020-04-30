@@ -6,7 +6,7 @@ import tool.xfy9326.naucourse.providers.beans.jwc.Exam
 
 object ExamDBHelper : BaseDBHelper<JwcDB.JwcDataBase>() {
     const val EXAM_TABLE_NAME = "Exam"
-    const val COLUMN_START_DATE = "startDate"
+    const val COLUMN_DATE_RAW_TEXT = "dateRawText"
 
     override val db: JwcDB.JwcDataBase = JwcDB.getDB()
 

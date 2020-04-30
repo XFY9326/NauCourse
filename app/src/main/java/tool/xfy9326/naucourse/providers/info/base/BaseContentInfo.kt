@@ -64,6 +64,7 @@ abstract class BaseContentInfo<Type : Enum<*>, Param> {
                 initCache()
             }
         }
+
         return cacheMap.containsKey(type) && cacheMap[type] != null
     }
 
@@ -110,25 +111,34 @@ abstract class BaseContentInfo<Type : Enum<*>, Param> {
                 }
             }
         }
-
         val cacheExpire = onGetCacheExpire()
-        val useCache = !forceRefresh && hasCachedItem(type) && !isCacheExpired(type, params, cacheExpire)
-        if (useCache) {
+        if (!forceRefresh && !isCacheExpired(type, params, cacheExpire)) {
             cacheMutex.withLock {
-                return@withContext InfoResult(true, onReadCache(getCachedItem(type)!!) as E)
-            }
-        } else {
-            infoMutex.withLock {
-                val result = getInfoContent(type, params)
-                if (result.isSuccess) {
-                    onSaveResult(type, params, result.contentData!! as E)
-                    if (cacheExpire.expireRule != CacheExpireRule.INSTANTLY) {
-                        onSaveCache(type, params, result.contentData as E)
+                if (hasCachedItem(type)) {
+                    val cacheItem = onReadCache(getCachedItem(type)!!) as E
+                    val useCache =
+                        when (cacheItem) {
+                            is Array<*> -> cacheItem.isNotEmpty()
+                            is Collection<*> -> !cacheItem.isEmpty()
+                            else -> true
+                        }
+                    if (useCache) {
+                        return@withContext InfoResult(true, cacheItem)
                     }
-                    return@withContext InfoResult(true, result.contentData as E)
-                } else {
-                    return@withContext InfoResult<E>(false, errorReason = result.contentErrorResult)
                 }
+            }
+        }
+
+        infoMutex.withLock {
+            val result = getInfoContent(type, params)
+            if (result.isSuccess) {
+                onSaveResult(type, params, result.contentData!! as E)
+                if (cacheExpire.expireRule != CacheExpireRule.INSTANTLY) {
+                    onSaveCache(type, params, result.contentData as E)
+                }
+                return@withContext InfoResult(true, result.contentData as E)
+            } else {
+                return@withContext InfoResult<E>(false, errorReason = result.contentErrorResult)
             }
         }
     }

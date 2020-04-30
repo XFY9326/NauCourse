@@ -37,7 +37,7 @@ abstract class BaseListViewModel<E> : BaseViewModel() {
                 if (!isInit && result.data.isEmpty()) {
                     errorMsg.postEventValue(ContentErrorReason.EMPTY_DATA)
                 }
-            } else {
+            } else if (!isInit) {
                 errorMsg.postEventValue(result.errorReason)
             }
             isRefreshing.postValue(false)

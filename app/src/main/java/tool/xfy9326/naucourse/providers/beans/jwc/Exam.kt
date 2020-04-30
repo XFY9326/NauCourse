@@ -16,18 +16,19 @@ data class Exam(
     val name: String,
     val credit: Float,
     val teachClass: String,
-    @ColumnInfo(name = ExamDBHelper.COLUMN_START_DATE)
-    val startDate: Date,
-    val endDate: Date,
+    val startDate: Date?,
+    val endDate: Date?,
+    @ColumnInfo(name = ExamDBHelper.COLUMN_DATE_RAW_TEXT)
+    val dateRawText: String,
     val location: String,
     val property: String,
     val type: String
 ) {
     constructor(
         courseId: String, name: String, credit: Float, teachClass: String,
-        startDate: Date, endDate: Date, location: String, property: String, type: String
+        startDate: Date?, endDate: Date?, dateRawText: String, location: String, property: String, type: String
     ) :
-            this(Constants.DB.DEFAULT_ID, courseId, name, credit, teachClass, startDate, endDate, location, property, type)
+            this(Constants.DB.DEFAULT_ID, courseId, name, credit, teachClass, startDate, endDate, dateRawText, location, property, type)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -41,6 +42,7 @@ data class Exam(
         if (teachClass != other.teachClass) return false
         if (startDate != other.startDate) return false
         if (endDate != other.endDate) return false
+        if (dateRawText != other.dateRawText) return false
         if (location != other.location) return false
         if (property != other.property) return false
         if (type != other.type) return false
@@ -53,13 +55,12 @@ data class Exam(
         result = 31 * result + name.hashCode()
         result = 31 * result + credit.hashCode()
         result = 31 * result + teachClass.hashCode()
-        result = 31 * result + startDate.hashCode()
-        result = 31 * result + endDate.hashCode()
+        result = 31 * result + (startDate?.hashCode() ?: 0)
+        result = 31 * result + (endDate?.hashCode() ?: 0)
+        result = 31 * result + dateRawText.hashCode()
         result = 31 * result + location.hashCode()
         result = 31 * result + property.hashCode()
         result = 31 * result + type.hashCode()
         return result
     }
-
-
 }

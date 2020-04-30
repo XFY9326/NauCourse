@@ -20,8 +20,7 @@ object CoursesDB : BaseDB<CoursesDB.CoursesDataBase>() {
 
     @Database(
         entities = [Course::class, CourseTime::class, Term::class, CourseScore::class, CourseHistory::class, CourseCellStyle::class],
-        version = COURSES_DB_VERSION,
-        exportSchema = false
+        version = COURSES_DB_VERSION
     )
     @TypeConverters(DBTypeConverter::class)
     abstract class CoursesDataBase : DB() {

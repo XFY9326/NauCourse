@@ -36,6 +36,7 @@ class CourseTimeEditDialog : DialogFragment() {
         private const val OLD_COURSE_TIME = "OLD_COURSE_TIME"
 
         private const val CONTENT_WIDTH_PERCENT = 0.85
+        private const val DEFAULT_BUTTON_COUNT_IN_ROW = 4
         private const val DEFAULT_WEEK_NUM_CHECK = true
     }
 
@@ -130,12 +131,17 @@ class CourseTimeEditDialog : DialogFragment() {
         timeViewList.clear()
         val size = resources.getDimensionPixelSize(R.dimen.course_time_button_size)
         val margin = resources.getDimensionPixelSize(R.dimen.course_time_button_margin)
-        val count = gl_courseWeeks.width / (size + margin * 2)
-        gl_courseWeeks.columnCount =
-            if (count.isOdd()) {
-                count - 1
+        val count =
+            if (gl_courseWeeks.measuredWidth != 0) {
+                gl_courseWeeks.measuredWidth / (size + margin * 2)
             } else {
-                count
+                DEFAULT_BUTTON_COUNT_IN_ROW
+            }
+        gl_courseWeeks.columnCount =
+            when {
+                count <= 0 -> 1
+                count.isOdd() -> count - 1
+                else -> count
             }
         val views = Array(maxWeekNum) {
             createCourseTimeButton(view, it + 1, size, margin, courseTime?.isWeekNumTrue(it + 1) ?: DEFAULT_WEEK_NUM_CHECK)
@@ -155,8 +161,8 @@ class CourseTimeEditDialog : DialogFragment() {
     private fun createCourseTimeButton(view: View, num: Int, size: Int, margin: Int, checked: Boolean) =
         AdvancedFrameLayout(requireContext()).apply {
             layoutParams = GridLayout.LayoutParams().apply {
-                rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
-                columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+                rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1, 1f)
+                columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1, 1f)
             }
             val cellView = CourseTimeEditCell(requireContext(), num, checked).apply {
                 layoutParams = FrameLayout.LayoutParams(size, size).apply {

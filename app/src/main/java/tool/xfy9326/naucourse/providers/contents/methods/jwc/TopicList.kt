@@ -47,6 +47,10 @@ object TopicList : BaseNewsContent<JwcTopic>() {
         val tableContentElement = document.body().getElementsByClass(ELEMENT_CLASS_TABLE_CONTENT).first()
         val trElements = tableContentElement.getElementsByTag(Constants.HTML.ELEMENT_TAG_TR)
 
+        if (trElements.isEmpty()) {
+            return HashSet()
+        }
+
         val topicSet = HashSet<JwcTopic>(trElements.size)
 
         var title: String

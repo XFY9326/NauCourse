@@ -394,4 +394,5 @@
     <string name="edit_async_course_attention">\u3000\u3000由于您已经开启了自动同步课程数据功能，因此修改导入的课程时可能会出现修改的数据被重置的情况。\n\u3000\u3000注：您可以在 设置-数据-每天自动同步课程数据 手动设置</string>
     <string name="i_see">我已知晓</string>
     <string name="attention">注意</string>
+    <string name="exam_time">考试时间：%1$s</string>
 </resources>

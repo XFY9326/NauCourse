@@ -15,8 +15,7 @@ object NetworkDB : BaseDB<NetworkDB.NetworkDataBase>() {
 
     @Database(
         entities = [SSOCookieData::class, NGXCookieData::class],
-        version = NETWORK_DB_VERSION,
-        exportSchema = false
+        version = NETWORK_DB_VERSION
     )
     abstract class NetworkDataBase : DB() {
         abstract fun getSSOCookiesDataDao(): SSOCookieDataDao

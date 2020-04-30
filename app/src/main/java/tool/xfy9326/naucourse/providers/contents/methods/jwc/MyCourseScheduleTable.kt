@@ -86,6 +86,10 @@ object MyCourseScheduleTable : BaseNoParamContent<CourseSet>() {
         val contentElement = document.getElementById(Constants.HTML.ELEMENT_ID_CONTENT)
         val trElements = contentElement.getElementsByTag(Constants.HTML.ELEMENT_TAG_TR)
 
+        if (trElements.isEmpty()) {
+            return HashSet()
+        }
+
         val courseSet = HashSet<Course>(trElements.size)
 
         var id: String? = null

@@ -29,6 +29,10 @@ object MyCourse : BaseNoParamContent<Array<CourseScore>>() {
     private fun getCourseScoreArr(bodyElement: Element): Array<CourseScore> {
         val trElements = bodyElement.getElementById(Constants.HTML.ELEMENT_ID_CONTENT).getElementsByTag(Constants.HTML.ELEMENT_TAG_TR)
 
+        if (trElements.size - 2 == 0) {
+            return emptyArray()
+        }
+
         val courseScoreArr = arrayOfNulls<CourseScore>(trElements.size - 2)
 
         var courseId: String

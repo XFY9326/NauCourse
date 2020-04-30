@@ -34,6 +34,10 @@ object SchoolCalendarList : BaseNoParamContent<Array<CalendarItem>>() {
     private fun getCalendarListMap(bodyElement: Element): Array<CalendarItem> {
         val spanElements = bodyElement.select(SELECT_CALENDAR_PAGE_PATH)
 
+        if (spanElements.isEmpty()) {
+            return emptyArray()
+        }
+
         val calendarMap = arrayOfNulls<CalendarItem>(spanElements.size)
 
         for ((i, spanElement) in spanElements.withIndex()) {
