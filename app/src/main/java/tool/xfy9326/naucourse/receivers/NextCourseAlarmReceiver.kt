@@ -50,12 +50,8 @@ class NextCourseAlarmReceiver : BroadcastReceiver() {
             context.getSystemService<AlarmManager>()?.let {
                 val updateTime = getNextCourseNotifyTime(courseItem)
                 if (updateTime != null) {
-                    if (updateTime == 0L) {
-                        context.startService(getNotifyIntent(context, courseItem))
-                    } else {
-                        val intent = getNotifyPendingIntent(context, courseItem)
-                        AlarmManagerCompat.setExactAndAllowWhileIdle(it, AlarmManager.RTC_WAKEUP, updateTime, intent)
-                    }
+                    val intent = getNotifyPendingIntent(context, courseItem)
+                    AlarmManagerCompat.setExactAndAllowWhileIdle(it, AlarmManager.RTC_WAKEUP, updateTime, intent)
                 }
             }
         }
@@ -94,7 +90,7 @@ class NextCourseAlarmReceiver : BroadcastReceiver() {
                     // 已经上课
                     passStartTime -> null
                     // 立即通知（未上课但是已经过了通知时间）
-                    else -> 0L
+                    else -> currentTime
                 }
             }
         }
