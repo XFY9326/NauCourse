@@ -173,7 +173,7 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
                     }
                     Glide.with(this@CourseTableFragment).load(imageFile).transition(DrawableTransitionOptions.withCrossFade())
                         .into(iv_courseTableBackground)
-                    return@let
+                    return
                 }
             }
         }
