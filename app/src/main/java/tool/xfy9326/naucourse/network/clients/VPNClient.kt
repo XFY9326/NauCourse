@@ -136,13 +136,21 @@ open class VPNClient(loginInfo: LoginInfo, loginUrl: HttpUrl? = null) :
         }
 
         if (!validateLoginWithResponse(NetworkTools.getResponseContent(callResult), callResult.request.url)) {
-            val loginResponse = login(callResult)
-            if (loginResponse.isSuccess) {
-                callResult = newVPNCall(newRequest)
-            } else {
+            val loginResponse =
+                if (useVPN) {
+                    login(callResult)
+                } else {
+                    super.login(callResult)
+                }
+            if (!loginResponse.isSuccess) {
                 LogUtils.d<VPNClient>("VPN Login While Call Failed")
-                return newVPNCall(newRequest)
             }
+            callResult =
+                if (useVPN) {
+                    newVPNCall(newRequest)
+                } else {
+                    super.newClientCall(newRequest)
+                }
         }
         return if (validateNotInLoginPage(NetworkTools.getResponseContent(callResult))) {
             callResult
