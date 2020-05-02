@@ -3,7 +3,6 @@ package tool.xfy9326.naucourse.ui.fragments
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -19,11 +18,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import kotlinx.android.synthetic.main.fragment_course_table.*
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
@@ -168,9 +163,8 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
 
     private fun setCourseTableBackground() {
         if (SettingsPref.CustomCourseTableBackground) {
-            val imageFileName = AppPref.CourseTableBackgroundImageName
-            if (imageFileName != null) {
-                val imageFile = ImageUtils.getLocalImageFile(imageFileName, Constants.Image.DIR_APP_IMAGE)
+            AppPref.CourseTableBackgroundImageName?.let {
+                val imageFile = ImageUtils.getLocalImageFile(it, Constants.Image.DIR_APP_IMAGE)
                 if (imageFile.exists()) {
                     iv_courseTableBackground.apply {
                         alpha = SettingsPref.CourseTableBackgroundAlpha / 100f
@@ -178,24 +172,8 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
                         visibility = View.VISIBLE
                     }
                     Glide.with(this@CourseTableFragment).load(imageFile).transition(DrawableTransitionOptions.withCrossFade())
-                        .listener(object : RequestListener<Drawable> {
-                            override fun onLoadFailed(
-                                e: GlideException?,
-                                model: Any?,
-                                target: Target<Drawable>?,
-                                isFirstResource: Boolean
-                            ): Boolean {
-                                iv_courseTableBackground.visibility = View.GONE
-                                return false
-                            }
-
-                            override fun onResourceReady(
-                                resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean
-                            ): Boolean {
-                                return false
-                            }
-                        }).into(iv_courseTableBackground)
-                    return
+                        .into(iv_courseTableBackground)
+                    return@let
                 }
             }
         }

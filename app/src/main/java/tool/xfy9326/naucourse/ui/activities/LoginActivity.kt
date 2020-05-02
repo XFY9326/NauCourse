@@ -38,6 +38,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
         loadingAnimateDrawable = AnimatedVectorDrawableCompat.create(this, R.drawable.avd_anim_loading)!!
         iv_loginLoading.setImageDrawable(loadingAnimateDrawable)
         viewModel.requestSavedCacheUserId()
+
         tv_EULALicense.setOnClickListener {
             DialogUtils.createUsingLicenseDialog(this, lifecycle).show()
         }
@@ -111,29 +112,25 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
 
     private fun setLoadingAnimation(setShow: Boolean) {
         if (setShow) {
-            btn_login.apply {
-                visibility = View.GONE
-                animation = AnimUtils.getAnimationFadeGone(this@LoginActivity)
-            }
-
-            iv_loginLoading.apply {
-                visibility = View.VISIBLE
-                animation = AnimUtils.getAnimationFadeVisible(this@LoginActivity)
-            }
+            setupAnimationWidget(iv_loginLoading, btn_login)
             loadingAnimateDrawable.registerAnimationCallback(AnimUtils.getAnimationLoopCallback())
             ViewUtils.tryStartAnimateDrawable(loadingAnimateDrawable)
         } else {
             loadingAnimateDrawable.clearAnimationCallbacks()
             ViewUtils.tryStopAnimateDrawable(loadingAnimateDrawable)
-            iv_loginLoading.apply {
-                visibility = View.GONE
-                animation = AnimUtils.getAnimationFadeGone(this@LoginActivity)
-            }
+            setupAnimationWidget(btn_login, iv_loginLoading)
+        }
+    }
 
-            btn_login.apply {
-                visibility = View.VISIBLE
-                animation = AnimUtils.getAnimationFadeVisible(this@LoginActivity)
-            }
+    private fun setupAnimationWidget(visibleView: View, goneView: View) {
+        goneView.apply {
+            visibility = View.GONE
+            animation = AnimUtils.getAnimationFadeGone(this@LoginActivity)
+        }
+
+        visibleView.apply {
+            visibility = View.VISIBLE
+            animation = AnimUtils.getAnimationFadeVisible(this@LoginActivity)
         }
     }
 
