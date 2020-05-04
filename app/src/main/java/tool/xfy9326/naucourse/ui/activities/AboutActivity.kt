@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourse.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -50,6 +51,9 @@ class AboutActivity : AppCompatActivity() {
         }
         layout_aboutApp.setOnClickListener {
             activeAdvancedFunction()
+        }
+        layout_aboutFeedback.setOnClickListener {
+            startActivity(Intent(this, FeedbackActivity::class.java))
         }
     }
 

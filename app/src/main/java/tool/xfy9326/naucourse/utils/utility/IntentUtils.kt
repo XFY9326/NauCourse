@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Environment
+import android.widget.Toast
 import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import tool.xfy9326.naucourse.Constants
@@ -72,7 +73,7 @@ object IntentUtils {
                 setDataAndType(uri, Constants.MIME.APK)
             })
         } catch (e: Exception) {
-            showToast(context, R.string.application_launch_failed)
+            Toast.makeText(context, R.string.application_launch_failed, Toast.LENGTH_SHORT).show()
         }
     }
 

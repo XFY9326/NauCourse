@@ -91,13 +91,7 @@ class NextCourseWidget : AppWidgetProvider() {
     override fun onEnabled(context: Context?) {
         context?.let {
             // 初始化定时器
-            IntentUtils.startNextCourseAlarm(context)
-            goAsync {
-                // 载入缓存
-                NextCourseBundleStore.loadStore()?.let { bundle ->
-                    AppWidgetUtils.updateNextCourseWidget(it, bundle)
-                }
-            }
+            IntentUtils.startNextCourseAlarm(it)
         }
     }
 

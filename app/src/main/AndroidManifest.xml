@@ -148,6 +148,10 @@
             android:name=".ui.activities.ImageShowActivity"
             android:theme="@style/AppTheme.ImageShowActivity" />
 
+        <activity
+            android:name=".ui.activities.FeedbackActivity"
+            android:label="@string/feedback" />
+
         <service
             android:name=".services.NextCourseNotifyService"
             android:exported="false">

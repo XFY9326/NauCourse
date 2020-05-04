@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activities.FeedbackActivity">
+
+    <include layout="@layout/view_general_toolbar" />
+
+    <WebView
+        android:id="@+id/wv_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:scrollbars="none" />
+
+    <ProgressBar
+        android:id="@+id/pb_feedbackLoading"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:max="100"
+        android:min="0"
+        android:progress="0"
+        android:progressDrawable="@drawable/layer_progress_bar"
+        tools:ignore="UnusedAttribute" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

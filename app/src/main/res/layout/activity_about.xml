@@ -256,7 +256,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="10dp"
-                        android:text="@string/feed_back"
+                        android:text="@string/feedback"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="17sp"
                         android:textStyle="bold" />
@@ -266,6 +266,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="55dp"
                         android:layout_marginTop="8dp"
+                        android:id="@+id/layout_aboutFeedback"
                         android:gravity="center_vertical"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp">
@@ -293,8 +294,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:autoLink="web"
-                                android:text="@string/online_feedback_back_url"
+                                android:text="@string/online_feedback_back_sum"
                                 android:textSize="12sp" />
 
                         </androidx.appcompat.widget.LinearLayoutCompat>

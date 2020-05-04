@@ -22,6 +22,8 @@ object Constants {
     }
 
     object Network {
+        const val SCHEMA_WEIXIN = "weixin"
+
         const val HTTP = "http"
         const val HTTP_PORT = 80
         const val HTTPS = "https"
@@ -97,6 +99,8 @@ object Constants {
 
     object Others {
         const val NEWS_STORE_DAY_LENGTH = 90
+
+        const val ONLINE_FEEDBACK_URL = "https://support.qq.com/product/114856?d-wx-push=1"
 
         const val FORGET_PASSWORD = "http://sso.nau.edu.cn/sso/login"
         const val ADVANCED_FUNCTION_CLICK_TIME = 5

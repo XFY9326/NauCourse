@@ -64,7 +64,14 @@ object CourseUtils {
             for (time in course.timeSet) {
                 val thisWeekCourse = time.isWeekNumTrue(weekNum)
                 time.coursesNumArray.timePeriods.forEach {
-                    if (thisWeekCourse || temp[time.weekDay - 1][it.start - 1] == null || temp[time.weekDay - 1][it.start - 1]!!.courseTime < time) {
+                    val oldTemp = temp[time.weekDay - 1][it.start - 1]
+                    val overwrite =
+                        if (oldTemp != null && oldTemp.thisWeekCourse) {
+                            false
+                        } else {
+                            thisWeekCourse || oldTemp == null || oldTemp.courseTime < time
+                        }
+                    if (overwrite) {
                         temp[time.weekDay - 1][it.start - 1] = CourseCell(
                             course.id,
                             course.name,
