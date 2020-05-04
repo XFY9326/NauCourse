@@ -262,11 +262,11 @@
                         android:textStyle="bold" />
 
                     <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/layout_aboutFeedbackOnline"
                         style="@style/AppTheme.SelectableItemBackground"
                         android:layout_width="match_parent"
                         android:layout_height="55dp"
                         android:layout_marginTop="8dp"
-                        android:id="@+id/layout_aboutFeedback"
                         android:gravity="center_vertical"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp">
@@ -302,6 +302,7 @@
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
                     <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/layout_aboutFeedbackQQGroup"
                         style="@style/AppTheme.SelectableItemBackground"
                         android:layout_width="match_parent"
                         android:layout_height="55dp"

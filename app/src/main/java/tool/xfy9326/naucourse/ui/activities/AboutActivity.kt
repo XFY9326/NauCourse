@@ -12,6 +12,7 @@ import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.tools.NotifyBus
+import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 import tool.xfy9326.naucourse.utils.views.DialogUtils
@@ -52,8 +53,11 @@ class AboutActivity : AppCompatActivity() {
         layout_aboutApp.setOnClickListener {
             activeAdvancedFunction()
         }
-        layout_aboutFeedback.setOnClickListener {
+        layout_aboutFeedbackOnline.setOnClickListener {
             startActivity(Intent(this, FeedbackActivity::class.java))
+        }
+        layout_aboutFeedbackQQGroup.setOnClickListener {
+            IntentUtils.joinFeedbackQQGroup(this)
         }
     }
 

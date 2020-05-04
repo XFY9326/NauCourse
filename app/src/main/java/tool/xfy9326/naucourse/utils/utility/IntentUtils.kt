@@ -28,6 +28,18 @@ object IntentUtils {
         PendingIntent.FLAG_UPDATE_CURRENT
     )
 
+    fun joinFeedbackQQGroup(context: Context) {
+        val key = "TCoF0ryy-exOFVeKAe1jTAxmgj-PS1t-"
+        try {
+            context.startActivity(Intent().apply {
+                data =
+                    Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D$key")
+            })
+        } catch (e: java.lang.Exception) {
+            showToast(context, R.string.application_launch_failed)
+        }
+    }
+
     fun launchUrlInBrowser(context: Context, url: String) {
         try {
             context.startActivity(Intent().apply {
