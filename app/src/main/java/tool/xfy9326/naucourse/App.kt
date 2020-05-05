@@ -49,8 +49,9 @@ class App : Application(), LifecycleObserver {
         ExceptionUtils.initCrashHandler()
         @Suppress("ConstantConditionIf")
         if (!BuildConfig.DEBUG) {
-            CrashReport.initCrashReport(this)
-            CrashReport.setIsDevelopmentDevice(this, BuildConfig.DEBUG)
+            CrashReport.initCrashReport(this, CrashReport.UserStrategy(this).apply {
+                appChannel = BuildConfig.FLAVOR
+            })
         }
     }
 

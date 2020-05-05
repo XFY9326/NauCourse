@@ -6,10 +6,11 @@ apply plugin: 'bugly'
 
 rootProject.ext {
     applicationId = 'tool.xfy9326.naucourse'
+    buglyAppId = '7b78d5ccdc'
 }
 
 bugly {
-    appId = '7b78d5ccdc'
+    appId = rootProject.ext.buglyAppId
     appKey = 'a5a6c50e-b240-4f5c-b7bd-f1087d308bd1'
 }
 
@@ -22,8 +23,10 @@ android {
 
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 70
-        versionName '7.0.2'
+        versionCode 71
+        versionName '7.0.3'
+
+        manifestPlaceholders = ['BUGLY_APP_ID': rootProject.ext.buglyAppId]
 
         resConfigs 'zh'
         applicationVariants.all {

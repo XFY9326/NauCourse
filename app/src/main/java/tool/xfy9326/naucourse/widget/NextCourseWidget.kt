@@ -18,6 +18,7 @@ import tool.xfy9326.naucourse.beans.NextCourseBundle
 import tool.xfy9326.naucourse.io.store.NextCourseBundleStore
 import tool.xfy9326.naucourse.utils.BaseUtils.goAsync
 import tool.xfy9326.naucourse.utils.courses.ExtraCourseUtils
+import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 import tool.xfy9326.naucourse.utils.utility.AppWidgetUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import tool.xfy9326.naucourse.utils.views.ViewUtils
@@ -97,11 +98,15 @@ class NextCourseWidget : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         goAsync {
-            // 数据刷新（无传入数据）
-            ExtraCourseUtils.getLocalCourseData().let {
-                val nextCourseBundle = ExtraCourseUtils.getNextCourseInfo(it?.first, it?.second, it?.third)
-                appWidgetManager.updateAppWidget(appWidgetIds, generateView(context, nextCourseBundle))
-                NextCourseBundleStore.saveStore(nextCourseBundle)
+            try {
+                // 数据刷新（无传入数据）
+                ExtraCourseUtils.getLocalCourseData().let {
+                    val nextCourseBundle = ExtraCourseUtils.getNextCourseInfo(it?.first, it?.second, it?.third)
+                    appWidgetManager.updateAppWidget(appWidgetIds, generateView(context, nextCourseBundle))
+                    NextCourseBundleStore.saveStore(nextCourseBundle)
+                }
+            } catch (e: Exception) {
+                ExceptionUtils.printStackTrace(this, e)
             }
         }
     }
@@ -112,14 +117,22 @@ class NextCourseWidget : AppWidgetProvider() {
             if (intent?.action == ACTION_NEXT_COURSE_WIDGET_UPDATE) {
                 goAsync {
                     // 数据刷新（有传入数据）
-                    val nextCourseBundle = intent.getSerializableExtra(EXTRA_NEXT_COURSE_WIDGET_DATA) as NextCourseBundle
-                    AppWidgetManager.getInstance(it).updateAppWidget(componentName, generateView(it, nextCourseBundle))
-                    NextCourseBundleStore.saveStore(nextCourseBundle)
+                    try {
+                        val nextCourseBundle = intent.getSerializableExtra(EXTRA_NEXT_COURSE_WIDGET_DATA) as NextCourseBundle
+                        AppWidgetManager.getInstance(it).updateAppWidget(componentName, generateView(it, nextCourseBundle))
+                        NextCourseBundleStore.saveStore(nextCourseBundle)
+                    } catch (e: Exception) {
+                        ExceptionUtils.printStackTrace(this, e)
+                    }
                 }
             } else if (intent?.action == AppWidgetUtils.ACTION_COURSE_WIDGET_CLEAR) {
                 goAsync {
-                    AppWidgetManager.getInstance(it).updateAppWidget(componentName, generateView(it, null))
-                    NextCourseBundleStore.clearStore()
+                    try {
+                        AppWidgetManager.getInstance(it).updateAppWidget(componentName, generateView(it, null))
+                        NextCourseBundleStore.clearStore()
+                    } catch (e: Exception) {
+                        ExceptionUtils.printStackTrace(this, e)
+                    }
                 }
             }
         }
