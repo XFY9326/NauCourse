@@ -53,6 +53,17 @@
             app:summary="@string/course_table_cell_same_height_sum"
             app:title="@string/course_table_cell_same_height" />
 
+        <androidx.preference.SeekBarPreference
+            android:max="10"
+            app:defaultValue="3"
+            app:iconSpaceReserved="false"
+            app:key="CourseCellTextSize"
+            app:min="1"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true"
+            app:summary="@string/course_cell_text_size_sum"
+            app:title="@string/course_cell_text_size" />
+
         <androidx.preference.CheckBoxPreference
             app:defaultValue="true"
             app:iconSpaceReserved="false"

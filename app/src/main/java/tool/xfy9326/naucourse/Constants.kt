@@ -118,6 +118,7 @@ object Constants {
     }
 
     object Pref {
+        const val CourseCellTextSize = "CourseCellTextSize"
         const val ClearNetworkCache = "ClearNetworkCache"
         const val ApplicationUpdate = "ApplicationUpdate"
         const val ClearDebugLogs = "ClearDebugLogs"

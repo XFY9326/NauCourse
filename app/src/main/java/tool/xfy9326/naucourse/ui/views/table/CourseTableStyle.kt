@@ -13,5 +13,6 @@ data class CourseTableStyle(
     val showNotThisWeekCourseInTable: Boolean,
     val enableCourseTableTimeTextColor: Boolean,
     val courseTableTimeTextColor: Int,
-    val highLightCourseTableTodayDate: Boolean
+    val highLightCourseTableTodayDate: Boolean,
+    val courseCellTextSize: Float
 )

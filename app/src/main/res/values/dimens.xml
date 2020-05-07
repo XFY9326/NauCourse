@@ -19,10 +19,10 @@
     <dimen name="slider_thumb_radius_touched">12dp</dimen>
     <dimen name="slider_tracker_height">18dp</dimen>
     <dimen name="course_time_cell_text_size">3.3dp</dimen>
-    <dimen name="course_time_text_padding">4dp</dimen>
+    <dimen name="course_time_text_padding">1dp</dimen>
     <dimen name="course_time_cell_num_text_size">6dp</dimen>
     <dimen name="course_date_highlight_background_radius">8dp</dimen>
-    <dimen name="course_time_cell_vertical_padding">4dp</dimen>
+    <dimen name="course_time_cell_vertical_padding">1dp</dimen>
     <dimen name="credit_count_course_select_dialog_padding">10dp</dimen>
     <dimen name="water_print_text_size">14dp</dimen>
     <dimen name="water_print_text_padding">10dp</dimen>

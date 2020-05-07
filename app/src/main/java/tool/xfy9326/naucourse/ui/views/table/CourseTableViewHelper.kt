@@ -79,7 +79,8 @@ object CourseTableViewHelper {
             SettingsPref.ShowNotThisWeekCourseInTable,
             SettingsPref.EnableCourseTableTimeTextColor,
             SettingsPref.CourseTableTimeTextColor,
-            SettingsPref.HighLightCourseTableTodayDate
+            SettingsPref.HighLightCourseTableTodayDate,
+            SettingsPref.CourseCellTextSize + 10f
         )
 
     @SuppressLint("InflateParams")
@@ -339,7 +340,7 @@ object CourseTableViewHelper {
             addViewInLayout(TextView(context).apply {
                 layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 
-                textSize = 13f
+                textSize = courseTableStyle.courseCellTextSize
 
                 background = buildRadiusDrawable(cellStyle.color, internalStyle.radius)
                 setTextColor(

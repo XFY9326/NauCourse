@@ -62,6 +62,7 @@ object SettingsPref : BasePref() {
     val EnableCourseTableTimeTextColor by pref.boolean(defValue = false)
     val CourseTableTimeTextColor by pref.int(defValue = Color.BLACK)
     val HighLightCourseTableTodayDate by pref.boolean(defValue = true)
+    val CourseCellTextSize by pref.int(defValue = 3) // +10 表示SP单位的文字大小
     private val CourseTableBackgroundScareType by pref.string(defValue = ImageView.ScaleType.CENTER_CROP.name)
 
     fun getCourseTableBackgroundScareType() = ImageView.ScaleType.valueOf(CourseTableBackgroundScareType!!)

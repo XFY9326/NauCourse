@@ -11,11 +11,12 @@ import android.widget.RemoteViews
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.graphics.drawable.toBitmap
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import tool.xfy9326.naucourse.BuildConfig
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.NextCourseBundle
-import tool.xfy9326.naucourse.io.store.NextCourseBundleStore
 import tool.xfy9326.naucourse.utils.BaseUtils.goAsync
 import tool.xfy9326.naucourse.utils.courses.ExtraCourseUtils
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
@@ -31,6 +32,7 @@ class NextCourseWidget : AppWidgetProvider() {
         const val ACTION_NEXT_COURSE_WIDGET_UPDATE = "${BuildConfig.APPLICATION_ID}.action.NEXT_COURSE_WIDGET_UPDATE"
         const val EXTRA_NEXT_COURSE_WIDGET_DATA = "EXTRA_NEXT_COURSE_WIDGET_DATA"
         private const val REQUEST_ON_CLICK_WIDGET_CONTENT = 1
+        private val updateLock = Mutex()
 
         private val DATE_FORMAT_HM = SimpleDateFormat(Constants.Time.FORMAT_MD_HM, Locale.CHINA)
 
@@ -93,20 +95,24 @@ class NextCourseWidget : AppWidgetProvider() {
         context?.let {
             // 初始化定时器
             IntentUtils.startNextCourseAlarm(it)
+            val componentName = ComponentName(it, NextCourseWidget::class.java)
+            val appWidgetManager = AppWidgetManager.getInstance(it)
+            onUpdate(it, appWidgetManager, appWidgetManager.getAppWidgetIds(componentName))
         }
     }
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         goAsync {
-            try {
-                // 数据刷新（无传入数据）
-                ExtraCourseUtils.getLocalCourseData().let {
-                    val nextCourseBundle = ExtraCourseUtils.getNextCourseInfo(it?.first, it?.second, it?.third)
-                    appWidgetManager.updateAppWidget(appWidgetIds, generateView(context, nextCourseBundle))
-                    NextCourseBundleStore.saveStore(nextCourseBundle)
+            updateLock.withLock {
+                try {
+                    // 数据刷新（无传入数据）
+                    ExtraCourseUtils.getLocalCourseData().let {
+                        val nextCourseBundle = ExtraCourseUtils.getNextCourseInfo(it?.first, it?.second, it?.third)
+                        appWidgetManager.updateAppWidget(appWidgetIds, generateView(context, nextCourseBundle))
+                    }
+                } catch (e: Exception) {
+                    ExceptionUtils.printStackTrace(this, e)
                 }
-            } catch (e: Exception) {
-                ExceptionUtils.printStackTrace(this, e)
             }
         }
     }
@@ -116,22 +122,24 @@ class NextCourseWidget : AppWidgetProvider() {
             val componentName = ComponentName(it, NextCourseWidget::class.java)
             if (intent?.action == ACTION_NEXT_COURSE_WIDGET_UPDATE) {
                 goAsync {
-                    // 数据刷新（有传入数据）
-                    try {
-                        val nextCourseBundle = intent.getSerializableExtra(EXTRA_NEXT_COURSE_WIDGET_DATA) as NextCourseBundle
-                        AppWidgetManager.getInstance(it).updateAppWidget(componentName, generateView(it, nextCourseBundle))
-                        NextCourseBundleStore.saveStore(nextCourseBundle)
-                    } catch (e: Exception) {
-                        ExceptionUtils.printStackTrace(this, e)
+                    updateLock.withLock {
+                        // 数据刷新（有传入数据）
+                        try {
+                            val nextCourseBundle = intent.getSerializableExtra(EXTRA_NEXT_COURSE_WIDGET_DATA) as NextCourseBundle
+                            AppWidgetManager.getInstance(it).updateAppWidget(componentName, generateView(it, nextCourseBundle))
+                        } catch (e: Exception) {
+                            ExceptionUtils.printStackTrace(this, e)
+                        }
                     }
                 }
             } else if (intent?.action == AppWidgetUtils.ACTION_COURSE_WIDGET_CLEAR) {
                 goAsync {
-                    try {
-                        AppWidgetManager.getInstance(it).updateAppWidget(componentName, generateView(it, null))
-                        NextCourseBundleStore.clearStore()
-                    } catch (e: Exception) {
-                        ExceptionUtils.printStackTrace(this, e)
+                    updateLock.withLock {
+                        try {
+                            AppWidgetManager.getInstance(it).updateAppWidget(componentName, generateView(it, null))
+                        } catch (e: Exception) {
+                            ExceptionUtils.printStackTrace(this, e)
+                        }
                     }
                 }
             }

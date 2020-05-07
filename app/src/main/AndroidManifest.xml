@@ -160,7 +160,9 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".receivers.DownloadCompleteListener">
+        <receiver
+            android:name=".receivers.DownloadCompleteListener"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
@@ -173,7 +175,9 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".widget.NextCourseWidget">
+        <receiver
+            android:name=".widget.NextCourseWidget"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

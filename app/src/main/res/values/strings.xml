@@ -396,4 +396,6 @@
     <string name="attention">注意</string>
     <string name="exam_time">考试时间：%1$s</string>
     <string name="refresh">刷新</string>
+    <string name="course_cell_text_size">课程格文字大小</string>
+    <string name="course_cell_text_size_sum">调整课程信息格文字大小</string>
 </resources>

@@ -53,6 +53,7 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment() {
         addRefreshCourseTableListener(Constants.Pref.UseRoundCornerCourseCell)
         addRefreshCourseTableListener(Constants.Pref.DrawAllCellBackground)
         addRefreshCourseTableListener(Constants.Pref.HighLightCourseTableTodayDate)
+        addRefreshCourseTableListener(Constants.Pref.CourseCellTextSize)
 
         addRefreshCourseTableBackgroundListener(Constants.Pref.CustomCourseTableBackground)
         addRefreshCourseTableBackgroundListener(Constants.Pref.CourseTableBackgroundScareType)

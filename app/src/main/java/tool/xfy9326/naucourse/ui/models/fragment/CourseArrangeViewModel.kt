@@ -8,7 +8,6 @@ import kotlinx.coroutines.sync.withLock
 import tool.xfy9326.naucourse.beans.*
 import tool.xfy9326.naucourse.io.db.CourseCellStyleDBHelper
 import tool.xfy9326.naucourse.io.store.CourseArrangeStore
-import tool.xfy9326.naucourse.io.store.NextCourseBundleStore
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.providers.info.methods.CourseInfo
 import tool.xfy9326.naucourse.providers.info.methods.TermDateInfo
@@ -135,10 +134,7 @@ class CourseArrangeViewModel : BaseViewModel() {
                                 } else {
                                     ExtraCourseUtils.getNextCourseInfo(courseInfo.data, termInfo.data)
                                 }
-                                val cache = NextCourseBundleStore.loadStore()
-                                if (cache == null || cache != bundle) {
-                                    nextCourseBundle.postEventValue(bundle)
-                                }
+                                nextCourseBundle.postEventValue(bundle)
                             }
                             output
                         }
