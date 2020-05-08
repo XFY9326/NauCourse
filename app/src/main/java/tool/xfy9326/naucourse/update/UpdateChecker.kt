@@ -12,6 +12,7 @@ import tool.xfy9326.naucourse.network.SimpleNetworkManager
 import tool.xfy9326.naucourse.update.beans.UpdateIndex
 import tool.xfy9326.naucourse.update.beans.UpdateInfo
 import tool.xfy9326.naucourse.utils.BaseUtils
+import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 
 object UpdateChecker {
     private const val UPDATE_SERVER = "update.xfy9326.top"
@@ -25,9 +26,9 @@ object UpdateChecker {
     private val INDEX_VERSION_URL =
         HttpUrl.Builder().scheme(Constants.Network.HTTPS).host(UPDATE_SERVER).addPathSegment(UPDATE_TYPE).addPathSegment(UPDATE_INDEX).build()
 
-    suspend fun getNewUpdateInfo(forceCheck: Boolean = false): UpdateInfo? = withContext(Dispatchers.IO) {
+    suspend fun getNewUpdateInfo(forceCheck: Boolean = false): Pair<Boolean, UpdateInfo?>? = withContext(Dispatchers.IO) {
         if (BaseUtils.isBeta()) {
-            return@withContext null
+            return@withContext Pair(false, null)
         }
         try {
             getLatestVersionInfo()?.let {
@@ -42,17 +43,19 @@ object UpdateChecker {
                     } else {
                         AppPref.remove(AppPref.FORCE_UPDATE_VERSION_CODE)
                         if (!forceCheck && it.versionCode == AppPref.IgnoreUpdateVersionCode) {
-                            return@withContext null
+                            return@withContext Pair(false, null)
                         }
                     }
-                    return@withContext fixedData
+                    return@withContext Pair(true, fixedData)
                 } else {
                     AppPref.remove(AppPref.FORCE_UPDATE_VERSION_CODE)
                 }
             }
         } catch (e: Exception) {
+            ExceptionUtils.printStackTrace<UpdateChecker>(e)
+            return@withContext null
         }
-        null
+        return@withContext Pair(false, null)
     }
 
     fun clearOldUpdatePref() {
@@ -65,8 +68,6 @@ object UpdateChecker {
         for (i in index) {
             if (i.version > BuildConfig.VERSION_CODE && i.forceUpdate) {
                 return true
-            } else {
-                break
             }
         }
         return false
@@ -91,6 +92,7 @@ object UpdateChecker {
                 return parseUpdateInfo(it)
             }
         } catch (e: Exception) {
+            ExceptionUtils.printStackTrace<UpdateChecker>(e)
         }
         return null
     }
@@ -101,6 +103,7 @@ object UpdateChecker {
                 try {
                     return Gson().fromJson(it, Array<UpdateIndex>::class.java)
                 } catch (e: Exception) {
+                    ExceptionUtils.printStackTrace<UpdateChecker>(e)
                 }
             }
         }
@@ -113,6 +116,7 @@ object UpdateChecker {
                 try {
                     return Gson().fromJson(it, UpdateInfo::class.java)
                 } catch (e: Exception) {
+                    ExceptionUtils.printStackTrace<UpdateChecker>(e)
                 }
             }
         }

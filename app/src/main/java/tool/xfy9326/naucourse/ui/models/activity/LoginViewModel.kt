@@ -37,7 +37,9 @@ class LoginViewModel : BaseViewModel() {
     fun checkUpdate() {
         viewModelScope.launch(Dispatchers.Default) {
             UpdateChecker.getNewUpdateInfo()?.let {
-                updateInfo.postEventValue(it)
+                if (it.first) {
+                    updateInfo.postEventValue(it.second!!)
+                }
             }
         }
     }

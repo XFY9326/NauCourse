@@ -28,9 +28,13 @@ class UpdateSettingsFragment : BaseSettingsPreferenceFragment() {
         lifecycleScope.launch {
             val updateInfo = UpdateChecker.getNewUpdateInfo(true)
             if (updateInfo == null) {
-                showToast(R.string.no_new_update)
+                showToast(R.string.update_check_failed)
             } else {
-                UpdateDialog.showDialog(parentFragmentManager, updateInfo)
+                if (updateInfo.first) {
+                    UpdateDialog.showDialog(parentFragmentManager, updateInfo.second!!)
+                } else {
+                    showToast(R.string.no_new_update)
+                }
             }
         }
     }
