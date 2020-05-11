@@ -34,6 +34,7 @@ import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBar
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBarWithCallback
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 import tool.xfy9326.naucourse.utils.views.DialogUtils
+import tool.xfy9326.naucourse.utils.views.I18NUtils
 import java.util.*
 
 
@@ -111,15 +112,21 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
         viewModel.rawTermDate.observeEvent(this, Observer {
             courseAdapter.updateTermDate(it)
         })
+        viewModel.onlineCourseConflict.observeNotification(this, {
+            DialogUtils.createBottomMsgDialog(
+                this, lifecycle, getString(R.string.online_course_conflict_attention_title),
+                getString(R.string.online_course_conflict_attention_msg)
+            ).show()
+        })
         viewModel.importCourseResult.observeEvent(this, Observer {
             FullScreenLoadingDialog.close(supportFragmentManager)
-            if (it == null) {
-                showSnackBar(layout_courseManage, R.string.course_import_failed)
+            if (it.third != null) {
+                showSnackBar(layout_courseManage, R.string.course_import_failed, getString(I18NUtils.getContentErrorResId(it.third!!)!!))
             } else {
                 CourseImportDialog().apply {
                     arguments = Bundle().apply {
-                        putSerializable(CourseImportDialog.COURSE_SET, it.first)
-                        putSerializable(CourseImportDialog.COURSE_TYPE, it.second)
+                        putSerializable(CourseImportDialog.COURSE_SET, it.first!!)
+                        putSerializable(CourseImportDialog.COURSE_TYPE, it.second!!)
                     }
                     isCancelable = false
                 }.show(supportFragmentManager, null)

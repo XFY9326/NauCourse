@@ -19,8 +19,8 @@ object ActivityUtils {
     fun showSnackBar(context: Context, view: CoordinatorLayout, @StringRes strId: Int, vararg params: Any) =
         Snackbar.make(view, context.getString(strId, *params), Snackbar.LENGTH_SHORT).show()
 
-    fun showSnackBar(view: CoordinatorLayout, @StringRes strId: Int) =
-        Snackbar.make(view, strId, Snackbar.LENGTH_SHORT).show()
+    fun showSnackBar(view: CoordinatorLayout, @StringRes strId: Int, vararg params: Any) =
+        Snackbar.make(view, view.context.getString(strId, *params), Snackbar.LENGTH_SHORT).show()
 
     fun showSnackBarWithCallback(view: CoordinatorLayout, @StringRes strId: Int, @StringRes actionStrId: Int, callback: View.OnClickListener) =
         Snackbar.make(view, strId, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(actionStrId, callback).show()

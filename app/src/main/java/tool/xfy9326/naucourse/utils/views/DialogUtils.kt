@@ -28,6 +28,17 @@ import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import kotlin.math.min
 
 object DialogUtils {
+    fun createCourseInitConflictDialog(context: Context, lifecycle: Lifecycle) =
+        MaterialAlertDialogBuilder(context).apply {
+            setTitle(R.string.online_course_conflict_attention_title)
+            setMessage(R.string.online_course_init_conflict_attention_msg)
+            setPositiveButton(android.R.string.yes, null)
+            setCancelable(false)
+            background = context.getDrawable(R.drawable.bg_dialog)
+        }.create().also {
+            addAutoCloseListener(lifecycle, it)
+        }
+
     fun createCreditShowDialog(context: Context, lifecycle: Lifecycle, credit: Pair<Float, Float?>) =
         MaterialAlertDialogBuilder(context).apply {
             setTitle(R.string.credit_count)

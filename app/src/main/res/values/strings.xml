@@ -110,7 +110,7 @@
     <string name="tomorrow_course">明日课程</string>
     <string name="course_arrange">课程安排</string>
     <string name="not_this_week_course">非本周课程</string>
-    <string name="no_not_this_week_course">所有课程本周都有课</string>
+    <string name="no_not_this_week_course">无非本周课程</string>
     <string name="course_simple_time">周%1$s %2$s %3$s</string>
     <string name="logout">注销</string>
     <string name="logout_msg">您是否确定要继续注销登录并清空所有用户数据？</string>
@@ -180,7 +180,7 @@
     <string name="import_current_term_course">从教务导入本学期的课程</string>
     <string name="import_next_term_course">从教务导入下学期的课程</string>
     <string name="add_new_course">添加新的课程</string>
-    <string name="course_import_failed">课程导入失败！</string>
+    <string name="course_import_failed">课程导入失败！原因：%1$s</string>
     <string name="course_import">课程导入</string>
     <string name="next_course_import_attention">学期更改提示</string>
     <string name="delete_all_courses">删除全部课程</string>
@@ -399,4 +399,8 @@
     <string name="refresh">刷新</string>
     <string name="course_cell_text_size">课程格文字大小</string>
     <string name="course_cell_text_size_sum">调整课程信息格文字大小</string>
+    <string name="data_error">数据错误！</string>
+    <string name="online_course_conflict_attention_title">教务课程数据冲突！</string>
+    <string name="online_course_init_conflict_attention_msg">\u3000\u3000课程初始化时由于检测到教务课程时间存在冲突，无法自动导入课程！请您手动在课程管理中导入课程并处理课程冲突后保存。</string>
+    <string name="online_course_conflict_attention_msg">由于教务课程冲突问题，您无法使用自动课程同步功能。如果教务课程出现更改，请手动更新课程并处理冲突。</string>
 </resources>

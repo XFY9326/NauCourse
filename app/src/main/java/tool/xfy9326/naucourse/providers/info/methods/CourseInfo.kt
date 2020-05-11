@@ -74,41 +74,15 @@ object CourseInfo : BaseSimpleContentInfo<CourseSet, CourseInfo.OperationType>()
                                 result
                             } else {
                                 LogUtils.d<CourseInfo>("Async/Init New Courses Has Conflicts!\n${conflictCheck.printText()}")
-                                ContentResult(false, ContentErrorReason.OPERATION)
+                                ContentResult(false, ContentErrorReason.DATA_ERROR)
                             }
                         }
                     } else {
                         result
                     }
                 }
-                OperationType.THIS_TERM_COURSE -> {
-                    val result = MyCourseScheduleTable.getContentData()
-                    if (result.isSuccess) {
-                        val conflictCheck = CourseSet.checkCourseTimeConflict(result.contentData!!.courses)
-                        if (conflictCheck.isSuccess) {
-                            result
-                        } else {
-                            LogUtils.d<CourseInfo>("Init or This Term Courses Has Conflicts!\n${conflictCheck.printText()}")
-                            ContentResult(false, ContentErrorReason.OPERATION)
-                        }
-                    } else {
-                        result
-                    }
-                }
-                OperationType.NEXT_TERM_COURSE -> {
-                    val result = MyCourseScheduleTableNext.getContentData()
-                    if (result.isSuccess) {
-                        val conflictCheck = CourseSet.checkCourseTimeConflict(result.contentData!!.courses)
-                        if (conflictCheck.isSuccess) {
-                            result
-                        } else {
-                            LogUtils.d<CourseInfo>("Next Term Courses Has Conflicts!\n${conflictCheck.printText()}")
-                            ContentResult(false, ContentErrorReason.OPERATION)
-                        }
-                    } else {
-                        result
-                    }
-                }
+                OperationType.THIS_TERM_COURSE -> MyCourseScheduleTable.getContentData()
+                OperationType.NEXT_TERM_COURSE -> MyCourseScheduleTableNext.getContentData()
             }
         }
     }

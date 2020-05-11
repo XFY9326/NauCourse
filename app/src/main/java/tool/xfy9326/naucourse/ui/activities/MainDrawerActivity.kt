@@ -68,7 +68,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         if (intent.getBooleanExtra(IntentUtils.NEW_VERSION_FLAG, false)) {
             onUpdateNewVersion()
         }
-        if (AppPref.ForceUpdateVersionCode > BuildConfig.VERSION_CODE) {
+        if (BuildConfig.FLAVOR != Constants.Others.FLAVOR_BETA && AppPref.ForceUpdateVersionCode > BuildConfig.VERSION_CODE) {
             showToast(R.string.force_update_attention)
         }
     }
@@ -218,10 +218,13 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         viewModel.updateInfo.observeEvent(this, Observer {
             UpdateDialog.showDialog(supportFragmentManager, it)
         })
-        NotifyBus[NotifyBus.Type.ADVANCED_FUNCTION_MODE_CHANGED].observe(this, Observer {
+        NotifyBus[NotifyBus.Type.ADVANCED_FUNCTION_MODE_CHANGED].observeNotification(this, {
             setAdvancedFunctions()
             viewModel.updateBalance()
             viewModel.refreshPersonalInfo()
+        })
+        NotifyBus[NotifyBus.Type.COURSE_INIT_CONFLICT].observeNotification(this, {
+            DialogUtils.createCourseInitConflictDialog(this, lifecycle).show()
         })
         // 需要Activity在后台时也监听夜间模式设定变化，防止延迟的界面更新
         tryRemoveNightModeObserver()

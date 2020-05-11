@@ -84,6 +84,7 @@ object I18NUtils {
             ContentErrorReason.OPERATION -> R.string.content_error_operation
             ContentErrorReason.PARSE_FAILED -> R.string.content_error_parse_failed
             ContentErrorReason.EMPTY_DATA -> R.string.content_error_empty_data
+            ContentErrorReason.DATA_ERROR -> R.string.data_error
             ContentErrorReason.CONNECTION_ERROR -> R.string.connection_error
             ContentErrorReason.UNKNOWN -> R.string.unknown_error
         }

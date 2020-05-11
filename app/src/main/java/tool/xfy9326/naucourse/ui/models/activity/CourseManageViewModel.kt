@@ -13,6 +13,7 @@ import tool.xfy9326.naucourse.providers.beans.jwc.Course
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourse.providers.beans.jwc.Term
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
+import tool.xfy9326.naucourse.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourse.providers.info.methods.CourseInfo
 import tool.xfy9326.naucourse.providers.info.methods.TermDateInfo
 import tool.xfy9326.naucourse.tools.NotifyBus
@@ -26,9 +27,12 @@ import tool.xfy9326.naucourse.utils.debug.LogUtils
 
 class CourseManageViewModel : BaseViewModel() {
     val rawTermDate = EventLiveData<TermDate>()
-    val importCourseResult = EventLiveData<Pair<CourseSet, ImportCourseType>?>()
+
+    // 存在第三个时前两个空，否则不为空
+    val importCourseResult = EventLiveData<Triple<CourseSet?, ImportCourseType?, ContentErrorReason?>>()
     val courseManagePkg = MutableLiveData<CourseManagePkg>()
     val saveSuccess = NotifyLivaData()
+    val onlineCourseConflict = NotifyLivaData()
 
     var dataChanged = false
         private set
@@ -111,10 +115,14 @@ class CourseManageViewModel : BaseViewModel() {
                 }
                 val asyncResult = CourseInfo.getInfo(operationType, forceRefresh = true)
                 if (asyncResult.isSuccess) {
-                    importCourseResult.postEventValue(Pair(asyncResult.data!!, type))
+                    importCourseResult.postEventValue(Triple(asyncResult.data, type, null))
+                    val conflictCheck = CourseSet.checkCourseTimeConflict(asyncResult.data!!.courses)
+                    if (!conflictCheck.isSuccess) {
+                        onlineCourseConflict.notifyEvent()
+                        LogUtils.d<CourseManageViewModel>("Import Courses Has Conflicts!\n${conflictCheck.printText()}")
+                    }
                 } else {
-                    importCourseResult.postEventValue(null)
-                    LogUtils.d<CourseManageViewModel>("Course Import Failed! Type: $type  Reason: ${asyncResult.errorReason}")
+                    importCourseResult.postEventValue(Triple(null, null, asyncResult.errorReason))
                 }
             }
         }
