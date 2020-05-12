@@ -1,6 +1,8 @@
 package tool.xfy9326.naucourse.utils.utility
 
 import android.appwidget.AppWidgetManager
+import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import tool.xfy9326.naucourse.App
@@ -16,11 +18,18 @@ object AppWidgetUtils {
             action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
         })
 
-    fun clearWidget() = App.instance.sendBroadcast(Intent(ACTION_COURSE_WIDGET_CLEAR))
+    fun clearWidget() = App.instance.sendBroadcast(Intent(App.instance, NextCourseWidget::class.java).apply {
+        action = ACTION_COURSE_WIDGET_CLEAR
+    })
 
     fun updateNextCourseWidget(context: Context, nextCourseBundle: NextCourseBundle) =
         context.sendBroadcast(Intent(context, NextCourseWidget::class.java).apply {
             action = NextCourseWidget.ACTION_NEXT_COURSE_WIDGET_UPDATE
             putExtra(NextCourseWidget.EXTRA_NEXT_COURSE_WIDGET_DATA, nextCourseBundle)
         })
+
+    fun hasWidget(context: Context, widgetClass: Class<out AppWidgetProvider>): Boolean {
+        val componentName = ComponentName(context, widgetClass)
+        return AppWidgetManager.getInstance(context).getAppWidgetIds(componentName).isNotEmpty()
+    }
 }

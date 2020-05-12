@@ -3,15 +3,15 @@
     style="@style/AppTheme.AppWidgetNextCourse">
 
     <LinearLayout
-        style="@style/AppTheme.AppWidgetNextCourse.Inside"
+        style="@style/AppTheme.AppWidgetNextCourse.Inside.Base"
         android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_widget_init"
-            android:textColor="@color/colorSecondaryText"
-            android:textSize="13sp" />
+            android:textColor="@color/colorAppWidgetTextDark"
+            android:textSize="14sp" />
 
     </LinearLayout>
 

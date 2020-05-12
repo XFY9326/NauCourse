@@ -108,15 +108,33 @@
         <item name="android:layout_height">70dp</item>
     </style>
 
-    <style name="AppTheme.AppWidgetNextCourse.Inside" parent="AppTheme.SelectableItemBackground">
+    <style name="AppTheme.AppWidgetNextCourse.Inside.Base" parent="AppTheme.SelectableItemBackground">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:alpha">0.75</item>
-        <item name="android:background">@drawable/bg_app_widget</item>
         <item name="android:paddingStart">20dp</item>
+        <item name="android:background">@drawable/bg_app_widget</item>
         <item name="android:paddingTop">7dp</item>
         <item name="android:paddingEnd">20dp</item>
         <item name="android:paddingBottom">7dp</item>
+    </style>
+
+    <style name="AppTheme.AppWidgetNextCourse.Inside" parent="AppTheme.AppWidgetNextCourse.Inside.Base">
+        <item name="android:backgroundTint">@color/colorAppWidgetBackground</item>
+    </style>
+
+    <style name="AppTheme.AppWidgetNextCourse.Inside.Dark" parent="AppTheme.AppWidgetNextCourse.Inside.Base">
+        <item name="android:backgroundTint">@color/colorAppWidgetBackgroundDark</item>
+    </style>
+
+    <style name="AppTheme.AppWidgetNextCourseTextTheme">
+        <item name="android:tint">@color/colorAppWidgetIcon</item>
+        <item name="android:textColor">@color/colorAppWidgetText</item>
+    </style>
+
+    <style name="AppTheme.AppWidgetNextCourseTextTheme.Dark">
+        <item name="android:tint">@color/colorAppWidgetIconDark</item>
+        <item name="android:textColor">@color/colorAppWidgetTextDark</item>
     </style>
 
 </resources>

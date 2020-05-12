@@ -1,7 +1,6 @@
 package tool.xfy9326.naucourse
 
 import android.app.Application
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -11,7 +10,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.providers.GlobalCacheManager
 import tool.xfy9326.naucourse.utils.BaseUtils
@@ -33,7 +31,7 @@ class App : Application(), LifecycleObserver {
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
-        setupNightMode()
+        BaseUtils.setupNightMode()
 
         runBlocking {
             LoginNetworkManager.initLoginInfo()
@@ -54,8 +52,6 @@ class App : Application(), LifecycleObserver {
             })
         }
     }
-
-    private fun setupNightMode() = AppCompatDelegate.setDefaultNightMode(BaseUtils.getNightModeInt(SettingsPref.getNightMode()))
 
     private fun clearOldCache() = ImageUtils.clearLocalImageBySubDir(Constants.Image.DIR_SHARE_TEMP_IMAGE)
 

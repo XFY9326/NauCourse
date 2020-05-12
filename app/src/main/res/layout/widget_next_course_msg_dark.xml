@@ -5,10 +5,10 @@
 
     <LinearLayout
         android:id="@+id/layout_widgetNextCourse"
-        style="@style/AppTheme.AppWidgetNextCourse.Inside"
+        style="@style/AppTheme.AppWidgetNextCourse.Inside.Dark"
         android:gravity="center"
         android:orientation="horizontal"
-        android:theme="@style/AppTheme.AppWidgetNextCourseTextTheme"
+        android:theme="@style/AppTheme.AppWidgetNextCourseTextTheme.Dark"
         tools:ignore="UseCompoundDrawables">
 
         <ImageView

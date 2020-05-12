@@ -5,9 +5,9 @@
 
     <LinearLayout
         android:id="@+id/layout_widgetNextCourse"
-        style="@style/AppTheme.AppWidgetNextCourse.Inside"
+        style="@style/AppTheme.AppWidgetNextCourse.Inside.Dark"
         android:gravity="center_vertical"
-        android:theme="@style/AppTheme.AppWidgetNextCourseTextTheme">
+        android:theme="@style/AppTheme.AppWidgetNextCourseTextTheme.Dark">
 
         <ImageView
             android:id="@+id/iv_widgetCourseColor"

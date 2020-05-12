@@ -17,6 +17,7 @@ import tool.xfy9326.naucourse.BuildConfig
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.NextCourseBundle
+import tool.xfy9326.naucourse.utils.BaseUtils
 import tool.xfy9326.naucourse.utils.BaseUtils.goAsync
 import tool.xfy9326.naucourse.utils.courses.ExtraCourseUtils
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
@@ -37,17 +38,13 @@ class NextCourseWidget : AppWidgetProvider() {
         private val DATE_FORMAT_HM = SimpleDateFormat(Constants.Time.FORMAT_MD_HM, Locale.CHINA)
 
         private fun generateView(context: Context, nextCourseBundle: NextCourseBundle?): RemoteViews = when {
-            nextCourseBundle == null || nextCourseBundle.courseDataEmpty -> RemoteViews(context.packageName, R.layout.widget_next_course_msg).apply {
-                setWidgetMsg(context, this, R.string.widget_empty_course_or_term_data, R.drawable.ic_data)
-                setContentClickIntent(context, this)
-            }
-            nextCourseBundle.inVacation -> RemoteViews(context.packageName, R.layout.widget_next_course_msg).apply {
-                setWidgetMsg(context, this, R.string.widget_in_vacation, R.drawable.ic_break)
-                setContentClickIntent(context, this)
-            }
+            nextCourseBundle == null || nextCourseBundle.courseDataEmpty ->
+                getNextCourseMsgRemoteViews(context, R.string.widget_empty_course_or_term_data, R.drawable.ic_data)
+            nextCourseBundle.inVacation ->
+                getNextCourseMsgRemoteViews(context, R.string.widget_in_vacation, R.drawable.ic_break)
             nextCourseBundle.hasNextCourse -> {
                 val courseBundle = nextCourseBundle.courseBundle!!
-                RemoteViews(context.packageName, R.layout.widget_next_course).apply {
+                RemoteViews(context.packageName, getNextCourseLayoutId(context)).apply {
                     val colorDrawable = context.getDrawable(R.drawable.shape_today_course_color)!!
                     colorDrawable.colorFilter = PorterDuffColorFilter(courseBundle.courseCellStyle.color, PorterDuff.Mode.SRC_ATOP)
                     setImageViewBitmap(R.id.iv_widgetCourseColor, colorDrawable.toBitmap())
@@ -66,29 +63,35 @@ class NextCourseWidget : AppWidgetProvider() {
                     setContentClickIntent(context, this)
                 }
             }
-            else -> RemoteViews(context.packageName, R.layout.widget_next_course_msg).apply {
-                setWidgetMsg(context, this, R.string.no_next_course, R.drawable.ic_break)
+            else -> getNextCourseMsgRemoteViews(context, R.string.no_next_course, R.drawable.ic_break)
+        }
+
+        private fun getNextCourseMsgRemoteViews(context: Context, @StringRes strResId: Int, @DrawableRes iconResId: Int) =
+            RemoteViews(context.packageName, getNextCourseMsgLayoutId(context)).apply {
+                setImageViewResource(R.id.iv_widgetIcon, iconResId)
+                setTextViewText(R.id.tv_widgetMsg, context.getString(strResId))
                 setContentClickIntent(context, this)
             }
-        }
+
+        private fun getNextCourseLayoutId(context: Context) =
+            if (BaseUtils.isNightModeUsing(context)) {
+                R.layout.widget_next_course_dark
+            } else {
+                R.layout.widget_next_course
+            }
+
+        private fun getNextCourseMsgLayoutId(context: Context) =
+            if (BaseUtils.isNightModeUsing(context)) {
+                R.layout.widget_next_course_msg_dark
+            } else {
+                R.layout.widget_next_course_msg
+            }
 
         private fun setContentClickIntent(context: Context, remoteViews: RemoteViews) =
             remoteViews.setOnClickPendingIntent(
                 R.id.layout_widgetNextCourse,
                 IntentUtils.getLaunchMainPendingIntent(context, REQUEST_ON_CLICK_WIDGET_CONTENT)
             )
-
-        private fun setWidgetMsg(context: Context, remoteViews: RemoteViews, @StringRes strResId: Int, @DrawableRes iconResId: Int) {
-            remoteViews.apply {
-                setImageViewResource(R.id.iv_widgetIcon, iconResId)
-                setTextViewText(R.id.tv_widgetMsg, context.getString(strResId))
-            }
-        }
-
-        fun hasWidget(context: Context): Boolean {
-            val componentName = ComponentName(context, NextCourseWidget::class.java)
-            return AppWidgetManager.getInstance(context).getAppWidgetIds(componentName).isNotEmpty()
-        }
     }
 
     override fun onEnabled(context: Context?) {
@@ -118,6 +121,7 @@ class NextCourseWidget : AppWidgetProvider() {
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
+        println(intent)
         context?.let {
             val componentName = ComponentName(it, NextCourseWidget::class.java)
             if (intent?.action == ACTION_NEXT_COURSE_WIDGET_UPDATE) {

@@ -35,6 +35,13 @@
     <color name="colorNavHeader">#2196F3</color>
     <color name="colorImageViewActivityBackground">#B2000000</color>
 
+    <color name="colorAppWidgetBackground">#FAFAFA</color>
+    <color name="colorAppWidgetBackgroundDark">#303030</color>
+    <color name="colorAppWidgetText">#212121</color>
+    <color name="colorAppWidgetTextDark">#FFFFFF</color>
+    <color name="colorAppWidgetIcon">#858585</color>
+    <color name="colorAppWidgetIconDark">#DBDBDB</color>
+
     <color name="colorLaunchScreenWindowsBackground">#FFFFFF</color>
 
     <!--  Material Colors -->

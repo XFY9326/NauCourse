@@ -31,7 +31,7 @@ class NextCourseAlarmReceiver : BroadcastReceiver() {
         private const val REQUEST_NEXT_COURSE_ALARM = 1
         private const val REQUEST_NEXT_COURSE_NOTIFY = 2
 
-        private fun needAlarm(context: Context) = NextCourseWidget.hasWidget(context) || SettingsPref.NotifyNextCourse
+        private fun needAlarm(context: Context) = AppWidgetUtils.hasWidget(context, NextCourseWidget::class.java) || SettingsPref.NotifyNextCourse
 
         private fun cancelAlarm(context: Context, intent: PendingIntent) =
             context.getSystemService<AlarmManager>()?.cancel(intent)
@@ -198,7 +198,7 @@ class NextCourseAlarmReceiver : BroadcastReceiver() {
 
     private suspend fun onAlarm(context: Context, nextCourseBundle: NextCourseBundle) = coroutineScope {
         launch {
-            if (NextCourseWidget.hasWidget(context)) {
+            if (AppWidgetUtils.hasWidget(context, NextCourseWidget::class.java)) {
                 AppWidgetUtils.updateNextCourseWidget(context, nextCourseBundle)
             }
         }

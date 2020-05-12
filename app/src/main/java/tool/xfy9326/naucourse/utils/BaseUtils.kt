@@ -3,6 +3,7 @@ package tool.xfy9326.naucourse.utils
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.content.res.Resources
 import android.net.Uri
 import android.os.IBinder
@@ -89,11 +90,16 @@ object BaseUtils {
         }
     }
 
+    fun setupNightMode() = AppCompatDelegate.setDefaultNightMode(getNightModeInt(SettingsPref.getNightMode()))
+
     fun clearCache(context: Context) = BaseIOUtils.deleteFile(context.cacheDir)
 
     fun String.insert(offset: Int, str: String): String {
         return StringBuilder(this).insert(offset, str).toString()
     }
+
+    fun isNightModeUsing(context: Context) =
+        context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
     fun getNightModeInt(type: SettingsPref.NightModeType) =
         when (type) {
