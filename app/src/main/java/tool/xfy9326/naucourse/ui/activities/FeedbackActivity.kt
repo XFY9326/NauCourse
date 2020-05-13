@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourse.BuildConfig
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.utils.secure.AccountUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
 
@@ -80,7 +81,10 @@ class FeedbackActivity : AppCompatActivity() {
     }
 
     private fun getPostData() =
-        "clientVersion=${BuildConfig.VERSION_NAME}-${BuildConfig.FLAVOR}(${BuildConfig.VERSION_CODE})&os=Android&osVersion=${Build.VERSION.SDK_INT}"
+        "nickname=${getString(R.string.feedback_user_nickname)}&avatar=${getAvatarUrl()}&openid=${AccountUtils.getAccountOpenId()}&" +
+                "clientVersion=${BuildConfig.VERSION_NAME}-${BuildConfig.FLAVOR}(${BuildConfig.VERSION_CODE})&os=Android&osVersion=${Build.VERSION.SDK_INT}"
+
+    private fun getAvatarUrl() = "https://txc.gtimg.com/static/v2/img/avatar/${AccountUtils.getSpecialNumByUserId(1, 260)}.svg"
 
     override fun onBackPressed() {
         wv_feedback.apply {

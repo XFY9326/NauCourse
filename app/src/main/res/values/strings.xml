@@ -409,4 +409,5 @@
     <string name="not_this_week_course_show_type_sum">自定义非本周课程的课程格样式</string>
     <string name="not_this_week_course_show_type_text">显示\'[非本周]\'文字</string>
     <string name="not_this_week_course_show_type_color">使用灰色课程格颜色</string>
+    <string name="feedback_user_nickname">客户端用户</string>
 </resources>

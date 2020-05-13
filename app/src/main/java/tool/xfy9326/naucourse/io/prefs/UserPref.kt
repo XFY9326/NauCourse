@@ -14,6 +14,8 @@ object UserPref : BasePref() {
 
     private var UserId by pref.string(commit = true)
 
+    var OpenId by pref.string(commit = true)
+
     suspend fun readUserId() = withContext(Dispatchers.IO) {
         val userId = UserId
         return@withContext if (userId == null) {
