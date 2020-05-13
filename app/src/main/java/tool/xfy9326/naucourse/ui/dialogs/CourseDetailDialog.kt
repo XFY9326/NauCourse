@@ -34,6 +34,7 @@ class CourseDetailDialog : DialogFragment() {
         private const val CONTENT_WIDTH_PERCENT = 0.75
 
         private val DATE_FORMAT_MD_HM_CH = SimpleDateFormat(Constants.Time.FORMAT_MD_HM_CH, Locale.CHINA)
+        private val DATE_FORMAT_HM = SimpleDateFormat(Constants.Time.FORMAT_HM, Locale.CHINA)
 
         fun showDialog(fragmentManager: FragmentManager, courseDetail: CourseDetail) {
             CourseDetailDialog().apply {
@@ -73,7 +74,12 @@ class CourseDetailDialog : DialogFragment() {
                     courseDetail.termDate.startDate, courseDetail.timeDetail!!.weekNum, courseDetail.timeDetail!!.weekDayNum,
                     courseDetail.timeDetail!!.timePeriod
                 )
-                tv_courseCellTime.text = DATE_FORMAT_MD_HM_CH.format(timePeriod.startDateTime)
+                tv_courseCellTime.text =
+                    getString(
+                        R.string.time_duration,
+                        DATE_FORMAT_MD_HM_CH.format(timePeriod.startDateTime),
+                        DATE_FORMAT_HM.format(timePeriod.endDateTime)
+                    )
                 tv_courseCellLocation.text = courseDetail.timeDetail!!.courseLocation
             } else {
                 tv_courseCellTime.visibility = View.GONE

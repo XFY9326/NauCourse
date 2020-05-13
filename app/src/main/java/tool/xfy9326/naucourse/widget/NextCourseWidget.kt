@@ -35,7 +35,7 @@ class NextCourseWidget : AppWidgetProvider() {
         private const val REQUEST_ON_CLICK_WIDGET_CONTENT = 1
         private val updateLock = Mutex()
 
-        private val DATE_FORMAT_HM = SimpleDateFormat(Constants.Time.FORMAT_MD_HM, Locale.CHINA)
+        private val DATE_FORMAT_HM = SimpleDateFormat(Constants.Time.FORMAT_HM, Locale.CHINA)
 
         private fun generateView(context: Context, nextCourseBundle: NextCourseBundle?): RemoteViews = when {
             nextCourseBundle == null || nextCourseBundle.courseDataEmpty ->

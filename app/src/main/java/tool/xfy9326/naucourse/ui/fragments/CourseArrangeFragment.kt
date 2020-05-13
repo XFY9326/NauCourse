@@ -42,7 +42,7 @@ import java.util.*
 class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
     companion object {
         private val DATE_FORMAT_YMD = SimpleDateFormat(Constants.Time.FORMAT_YMD, Locale.CHINA)
-        private val DATE_FORMAT_HM = SimpleDateFormat(Constants.Time.FORMAT_MD_HM, Locale.CHINA)
+        private val DATE_FORMAT_HM = SimpleDateFormat(Constants.Time.FORMAT_HM, Locale.CHINA)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

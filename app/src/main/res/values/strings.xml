@@ -377,6 +377,7 @@
     <string name="empty_room_start_end_date">起止日期：%1$s ~ %2$s</string>
     <string name="empty_room_course_num">课程节次：</string>
     <string name="duration">~</string>
+    <string name="time_duration">%1$s～%2$s</string>
     <string name="empty_room_name">教室名称：%1$s</string>
     <string name="empty_room_size">教室容量：%1$s</string>
     <string name="empty_room_type">教室类型：%1$s</string>

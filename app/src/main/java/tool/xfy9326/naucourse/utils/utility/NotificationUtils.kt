@@ -21,7 +21,7 @@ object NotificationUtils {
     private const val NOTIFY_ID_NEXT_COURSE = 1
     private const val ACTIVITY_REQUEST_CODE = 1
 
-    private val DATE_FORMAT_HM = SimpleDateFormat(Constants.Time.FORMAT_MD_HM, Locale.CHINA)
+    private val DATE_FORMAT_HM = SimpleDateFormat(Constants.Time.FORMAT_HM, Locale.CHINA)
 
     data class NextCourseNotification(
         val courseName: String,
