@@ -3,6 +3,7 @@ package tool.xfy9326.naucourse.ui.activities
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.os.Environment
 import android.view.MenuItem
 import android.view.View
 import androidx.core.view.GravityCompat
@@ -31,6 +32,7 @@ import tool.xfy9326.naucourse.ui.fragments.base.DrawerToolbarFragment
 import tool.xfy9326.naucourse.ui.models.activity.MainDrawerViewModel
 import tool.xfy9326.naucourse.update.UpdateChecker
 import tool.xfy9326.naucourse.utils.BaseUtils
+import tool.xfy9326.naucourse.utils.io.BaseIOUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 import tool.xfy9326.naucourse.utils.views.DialogUtils
@@ -100,6 +102,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     }
 
     private fun onUpdateNewVersion() {
+        BaseIOUtils.deleteExternalFiles(Environment.DIRECTORY_DOWNLOADS)
         UpdateChecker.clearOldUpdatePref()
     }
 

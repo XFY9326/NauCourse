@@ -3,4 +3,7 @@
     <external-files-path
         name="pictures"
         path="Pictures/ShareTempImage/" />
+    <external-files-path
+        name="download"
+        path="Download/" />
 </paths>
