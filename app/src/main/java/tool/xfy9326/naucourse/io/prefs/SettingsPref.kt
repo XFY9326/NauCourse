@@ -64,12 +64,28 @@ object SettingsPref : BasePref() {
     val HighLightCourseTableTodayDate by pref.boolean(defValue = true)
     val CourseCellTextSize by pref.int(defValue = 3) // +10 表示SP单位的文字大小
     private val CourseTableBackgroundScareType by pref.string(defValue = ImageView.ScaleType.CENTER_CROP.name)
-
     fun getCourseTableBackgroundScareType() = ImageView.ScaleType.valueOf(CourseTableBackgroundScareType!!)
+
+    enum class NotThisWeekCourseCellStyle {
+        TEXT,
+        COLOR
+    }
+
+    private val NotThisWeekCourseShowType by pref.stringSet(defValue = setOf(NotThisWeekCourseCellStyle.TEXT.name))
+
+    fun getNotThisWeekCourseShowType(): HashSet<NotThisWeekCourseCellStyle> {
+        val data = NotThisWeekCourseShowType!!
+        val result = HashSet<NotThisWeekCourseCellStyle>(data.size)
+        for (type in data) {
+            result.add(NotThisWeekCourseCellStyle.valueOf(type))
+        }
+        return result
+    }
 
 
     // UpdateSettings
     val AutoCheckUpdates by pref.boolean(defValue = true)
+    val UseBrowserDownloadDirectLinkUpdate by pref.boolean(defValue = false)
 
 
     // DebugSettings

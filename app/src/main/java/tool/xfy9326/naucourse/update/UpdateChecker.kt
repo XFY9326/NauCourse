@@ -32,7 +32,7 @@ object UpdateChecker {
         }
         try {
             getLatestVersionInfo()?.let {
-                if (it.versionCode > BuildConfig.VERSION_CODE) {
+                if (it.versionCode <= BuildConfig.VERSION_CODE) {
                     val fixedData = if (!it.forceUpdate) {
                         it.copy(forceUpdate = checkForceUpdate())
                     } else {

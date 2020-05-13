@@ -13,9 +13,9 @@ import tool.xfy9326.naucourse.providers.GlobalCacheManager
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
-import tool.xfy9326.naucourse.update.UpdateChecker
 import tool.xfy9326.naucourse.update.beans.UpdateInfo
 import tool.xfy9326.naucourse.utils.secure.AccountUtils
+import tool.xfy9326.naucourse.utils.utility.UpdateUtils
 
 class LoginViewModel : BaseViewModel() {
     val isLoginLoading = EventLiveData(false)
@@ -36,11 +36,7 @@ class LoginViewModel : BaseViewModel() {
 
     fun checkUpdate() {
         viewModelScope.launch(Dispatchers.Default) {
-            UpdateChecker.getNewUpdateInfo()?.let {
-                if (it.first) {
-                    updateInfo.postEventValue(it.second!!)
-                }
-            }
+            UpdateUtils.checkUpdate(updateInfo)
         }
     }
 

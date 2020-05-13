@@ -80,7 +80,8 @@ object CourseTableViewHelper {
             SettingsPref.EnableCourseTableTimeTextColor,
             SettingsPref.CourseTableTimeTextColor,
             SettingsPref.HighLightCourseTableTodayDate,
-            SettingsPref.CourseCellTextSize + 10f
+            SettingsPref.CourseCellTextSize + 10f,
+            SettingsPref.getNotThisWeekCourseShowType()
         )
 
     @SuppressLint("InflateParams")
@@ -176,6 +177,7 @@ object CourseTableViewHelper {
         val courseTextColorLight = ContextCompat.getColor(context, R.color.colorCourseTextLight)
         val courseTextColorDark = ContextCompat.getColor(context, R.color.colorCourseTextDark)
         val otherCourseCellBackground = ContextCompat.getColor(context, R.color.colorOtherCourseCellBackground)
+        val notThisWeekCourseColor = ContextCompat.getColor(context, R.color.colorNotThisWeekCourseCell)
 
         val targetView = (layoutInflater.inflate(R.layout.view_course_table, null) as AdvancedGridLayout).apply {
             columnCount = columnSize
@@ -256,7 +258,7 @@ object CourseTableViewHelper {
                                         context, col, cell, CourseStyleUtils.getStyleByCourseId(cell.courseId, styles, true)!!,
                                         CourseTableInternalStyle.CourseCellView(
                                             courseColWidth, backgroundRadius, courseCellPadding,
-                                            courseCellTextPadding, courseTextColorDark, courseTextColorLight
+                                            courseCellTextPadding, courseTextColorDark, courseTextColorLight, notThisWeekCourseColor
                                         ), courseTableStyle
                                     ).also {
                                         it.alpha = courseTableStyle.customCourseTableAlpha
@@ -342,7 +344,13 @@ object CourseTableViewHelper {
 
                 textSize = courseTableStyle.courseCellTextSize
 
-                background = buildRadiusDrawable(cellStyle.color, internalStyle.radius)
+                background =
+                    if (!courseInfo.thisWeekCourse && courseTableStyle.notThisWeekCourseShowType.contains(SettingsPref.NotThisWeekCourseCellStyle.COLOR)) {
+                        buildRadiusDrawable(internalStyle.notThisWeekCourseColor, internalStyle.radius)
+                    } else {
+                        buildRadiusDrawable(cellStyle.color, internalStyle.radius)
+                    }
+
                 setTextColor(
                     if (ColorUtils.isLightColor(cellStyle.color)) {
                         internalStyle.darkTextColor
@@ -360,7 +368,7 @@ object CourseTableViewHelper {
                     }
 
                 text =
-                    if (courseInfo.thisWeekCourse) {
+                    if (courseInfo.thisWeekCourse || !courseTableStyle.notThisWeekCourseShowType.contains(SettingsPref.NotThisWeekCourseCellStyle.TEXT)) {
                         baseShowText
                     } else {
                         val notThisWeekText = "${context.getString(R.string.not_current_week_course)}${Constants.CHANGE_LINE}"

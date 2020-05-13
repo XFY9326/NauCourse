@@ -38,20 +38,16 @@ class NextCourseAlarmReceiver : BroadcastReceiver() {
 
         private suspend fun setNextUpdateAlarm(context: Context, nextCourseBundle: NextCourseBundle? = null) {
             context.getSystemService<AlarmManager>()?.let {
-                val updateTime = getNextUpdateTime(nextCourseBundle)
-                if (updateTime != null) {
-                    val intent = getAlarmPendingIntent(context)
-                    AlarmManagerCompat.setExactAndAllowWhileIdle(it, AlarmManager.RTC_WAKEUP, updateTime, intent)
+                getNextUpdateTime(nextCourseBundle)?.let { time ->
+                    AlarmManagerCompat.setExactAndAllowWhileIdle(it, AlarmManager.RTC_WAKEUP, time, getAlarmPendingIntent(context))
                 }
             }
         }
 
         private fun setNextUpdateNotifyAlarm(context: Context, courseItem: CourseItem) {
             context.getSystemService<AlarmManager>()?.let {
-                val updateTime = getNextCourseNotifyTime(courseItem)
-                if (updateTime != null) {
-                    val intent = getNotifyPendingIntent(context, courseItem)
-                    AlarmManagerCompat.setExactAndAllowWhileIdle(it, AlarmManager.RTC_WAKEUP, updateTime, intent)
+                getNextCourseNotifyTime(courseItem)?.let { time ->
+                    AlarmManagerCompat.setExactAndAllowWhileIdle(it, AlarmManager.RTC_WAKEUP, time, getNotifyPendingIntent(context, courseItem))
                 }
             }
         }

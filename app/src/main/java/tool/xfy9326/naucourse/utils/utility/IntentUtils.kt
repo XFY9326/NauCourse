@@ -91,17 +91,20 @@ object IntentUtils {
 
     fun requestDownloadUpdate(context: Context, url: String, updateVersionCode: Int, updateVersionName: String) {
         try {
-            context.getSystemService<DownloadManager>()?.let {
-                AppPref.UpdateDownloadId = it.enqueue(DownloadManager.Request(Uri.parse(url)).apply {
+            val downloadManager = context.getSystemService<DownloadManager>()
+            if (downloadManager != null) {
+                AppPref.UpdateDownloadId = downloadManager.enqueue(DownloadManager.Request(Uri.parse(url)).apply {
                     val fileName = PathUtils.getUrlFileName(url)
                     setTitle(context.getString(R.string.app_name))
                     setDescription(context.getString(R.string.downloading_update, updateVersionName, updateVersionCode))
-                    setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
+                    setDestinationInExternalFilesDir(context, Environment.DIRECTORY_DOWNLOADS, fileName)
                     setMimeType(Constants.MIME.APK)
                 })
+            } else {
+                launchUrlInBrowser(context, url)
             }
         } catch (e: Exception) {
-            showToast(context, R.string.application_launch_failed)
+            launchUrlInBrowser(context, url)
         }
     }
 }

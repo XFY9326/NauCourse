@@ -121,7 +121,6 @@ class NextCourseWidget : AppWidgetProvider() {
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        println(intent)
         context?.let {
             val componentName = ComponentName(it, NextCourseWidget::class.java)
             if (intent?.action == ACTION_NEXT_COURSE_WIDGET_UPDATE) {

@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import tool.xfy9326.naucourse.BuildConfig
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.utils.views.ViewUtils
@@ -16,7 +17,7 @@ import java.util.*
 
 
 object NotificationUtils {
-    private const val CHANNEL_ID_NEXT_COURSE = "NEXT_COURSE"
+    private const val CHANNEL_ID_NEXT_COURSE = "${BuildConfig.APPLICATION_ID}.notification.channel.NEXT_COURSE"
     private const val NOTIFY_ID_NEXT_COURSE = 1
     private const val ACTIVITY_REQUEST_CODE = 1
 

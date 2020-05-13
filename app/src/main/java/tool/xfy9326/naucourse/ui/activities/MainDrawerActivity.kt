@@ -80,7 +80,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
 
     override fun onStart() {
         super.onStart()
-        if (!BaseUtils.isBeta() && SettingsPref.AutoCheckUpdates) {
+        if (SettingsPref.AutoCheckUpdates) {
             getViewModel().checkUpdate()
         }
     }

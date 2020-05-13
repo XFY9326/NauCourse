@@ -234,7 +234,7 @@
     <string name="current_in_vacation">当前放假中</string>
     <string name="update_check">检查更新</string>
     <string name="update_check_sum">立即检查应用程序的更新</string>
-    <string name="auto_update_check_settings">自动更新设置</string>
+    <string name="update_check_settings">更新检查设置</string>
     <string name="auto_update_check">自动检查更新</string>
     <string name="auto_update_check_sum">应用每次启动时自动检查更新</string>
     <string name="data_compat">正在适配旧版数据</string>
@@ -366,7 +366,7 @@
     <string name="ignore_update">忽略本次更新</string>
     <string name="change_log">更新日志：</string>
     <string name="force_update_attention">检测到您有一个重要版本可能没有更新！</string>
-    <string name="downloading_update">NAU课程表 v%1$s(%2$d)版本更新</string>
+    <string name="downloading_update">v%1$s(%2$d)</string>
     <string name="start_download_update">开始下载更新！</string>
     <string name="no_update_source">暂无可用更新源</string>
     <string name="checking_update">正在检查更新中… …</string>
@@ -403,4 +403,10 @@
     <string name="online_course_conflict_attention_title">教务课程数据冲突！</string>
     <string name="online_course_init_conflict_attention_msg">\u3000\u3000课程初始化时由于检测到教务课程时间存在冲突，无法自动导入课程！请您手动在课程管理中导入课程并处理课程冲突后保存。</string>
     <string name="online_course_conflict_attention_msg">由于教务课程冲突问题，您无法使用自动课程同步功能。如果教务课程出现更改，请手动更新课程并处理冲突。</string>
+    <string name="use_browser_download_direct_link_update">使用浏览器下载\'直接下载\'的更新</string>
+    <string name="use_browser_download_direct_link_update_sum">可以解决无法内部直接下载的问题</string>
+    <string name="not_this_week_course_show_type">非本周类型课程格显示样式</string>
+    <string name="not_this_week_course_show_type_sum">自定义非本周课程的课程格样式</string>
+    <string name="not_this_week_course_show_type_text">显示\'[非本周]\'文字</string>
+    <string name="not_this_week_course_show_type_color">使用灰色课程格颜色</string>
 </resources>

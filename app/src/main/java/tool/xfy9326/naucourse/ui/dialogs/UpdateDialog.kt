@@ -1,11 +1,7 @@
 package tool.xfy9326.naucourse.ui.dialogs
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.view.Gravity
 import android.view.Menu
 import androidx.appcompat.widget.PopupMenu
@@ -17,9 +13,8 @@ import kotlinx.android.synthetic.main.dialog_update.view.*
 import tool.xfy9326.naucourse.BuildConfig
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.io.prefs.AppPref
-import tool.xfy9326.naucourse.update.beans.DownloadSource
+import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.update.beans.UpdateInfo
-import tool.xfy9326.naucourse.utils.BaseUtils.getPackageUri
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 import tool.xfy9326.naucourse.utils.views.DialogUtils
@@ -29,7 +24,6 @@ class UpdateDialog : DialogFragment() {
         const val UPDATE_INFO = "UPDATE_INFO"
 
         private const val UPDATE_DIALOG_TAG = "UPDATE_DIALOG_TAG"
-        private const val REQUEST_INSTALL_PACKAGE_PERMISSION = 1
         private const val CONTENT_WIDTH_PERCENT = 0.85
 
         fun showDialog(fragmentManager: FragmentManager, updateInfo: UpdateInfo) {
@@ -44,7 +38,6 @@ class UpdateDialog : DialogFragment() {
     }
 
     private lateinit var updateInfo: UpdateInfo
-    private var selectedSource: DownloadSource? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,11 +67,8 @@ class UpdateDialog : DialogFragment() {
                         }
                         menu.setOnMenuItemClickListener {
                             val source = updateInfo.downloadSource[it.itemId]
-                            if (source.isDirectLink) {
-                                selectedSource = source
-                                if (checkPackageInstallPermission(true)) {
-                                    downloadUpdateFile(source.url)
-                                }
+                            if (source.isDirectLink && !SettingsPref.UseBrowserDownloadDirectLinkUpdate) {
+                                downloadUpdateFile(source.url)
                             } else {
                                 IntentUtils.launchUrlInBrowser(requireContext(), source.url)
                             }
@@ -90,12 +80,7 @@ class UpdateDialog : DialogFragment() {
                         }
                     }
                     updateInfo.downloadSource.isNotEmpty() -> btn_updateNow.setOnClickListener {
-                        updateInfo.downloadSource.first().let {
-                            selectedSource = it
-                            if (checkPackageInstallPermission(true)) {
-                                downloadUpdateFile(it.url)
-                            }
-                        }
+                        downloadUpdateFile(updateInfo.downloadSource.first().url)
                     }
                     else -> btn_updateNow.setOnClickListener {
                         showToast(R.string.no_update_source)
@@ -117,23 +102,6 @@ class UpdateDialog : DialogFragment() {
             setView(view)
         }.create()
 
-    private fun checkPackageInstallPermission(requestPermission: Boolean): Boolean {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (!requireContext().packageManager.canRequestPackageInstalls()) {
-                if (requestPermission) {
-                    startActivityForResult(
-                        Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, requireContext().getPackageUri()),
-                        REQUEST_INSTALL_PACKAGE_PERMISSION
-                    )
-                }
-                return false
-            }
-            return true
-        } else {
-            return true
-        }
-    }
-
     private fun downloadUpdateFile(url: String) {
         IntentUtils.requestDownloadUpdate(requireContext(), url, updateInfo.versionCode, updateInfo.versionName)
         showToast(R.string.start_download_update)
@@ -146,16 +114,5 @@ class UpdateDialog : DialogFragment() {
             setCanceledOnTouchOutside(!updateInfo.forceUpdate)
             DialogUtils.applyBackgroundAndWidth(requireContext(), dialog, CONTENT_WIDTH_PERCENT)
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_INSTALL_PACKAGE_PERMISSION) {
-            if (checkPackageInstallPermission(false)) {
-                selectedSource?.let {
-                    downloadUpdateFile(it.url)
-                }
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 }

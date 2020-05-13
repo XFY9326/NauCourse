@@ -26,6 +26,7 @@ object CourseTableInternalStyle {
         val padding: Int,
         val textPadding: Int,
         val darkTextColor: Int,
-        val lightTextColor: Int
+        val lightTextColor: Int,
+        val notThisWeekCourseColor: Int
     )
 }

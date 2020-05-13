@@ -68,6 +68,21 @@
         <item>CENTER_INSIDE</item>
     </string-array>
 
+    <string-array name="not_this_week_course_show_type_text">
+        <item>@string/not_this_week_course_show_type_text</item>
+        <item>@string/not_this_week_course_show_type_color</item>
+    </string-array>
+
+    <!-- SettingsPref.NotThisWeekCourseCellStyle -->
+    <string-array name="not_this_week_course_show_type_value">
+        <item>TEXT</item>
+        <item>COLOR</item>
+    </string-array>
+
+    <string-array name="not_this_week_course_show_type_default_value">
+        <item>TEXT</item>
+    </string-array>
+
     <string-array name="news_share_type">
         <item>@string/share_news_by_url</item>
         <item>@string/share_news_by_image</item>

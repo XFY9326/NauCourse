@@ -71,6 +71,17 @@
             app:summary="@string/highlight_course_table_today_date_sum"
             app:title="@string/highlight_course_table_today_date" />
 
+        <!-- SettingsPref.NotThisWeekCourseCellStyle -->
+        <androidx.preference.MultiSelectListPreference
+            app:defaultValue="@array/not_this_week_course_show_type_default_value"
+            app:dependency="ShowNotThisWeekCourseInTable"
+            app:entries="@array/not_this_week_course_show_type_text"
+            app:entryValues="@array/not_this_week_course_show_type_value"
+            app:iconSpaceReserved="false"
+            app:key="NotThisWeekCourseShowType"
+            app:summary="@string/not_this_week_course_show_type_sum"
+            app:title="@string/not_this_week_course_show_type" />
+
         <androidx.preference.CheckBoxPreference
             app:defaultValue="false"
             app:iconSpaceReserved="false"

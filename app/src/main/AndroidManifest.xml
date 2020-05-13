@@ -168,7 +168,9 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".receivers.NextCourseAlarmReceiver">
+        <receiver
+            android:name=".receivers.NextCourseAlarmReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="${ApplicationId}.action.NEXT_COURSE_ALARM" />

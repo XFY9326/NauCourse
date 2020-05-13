@@ -13,11 +13,11 @@ import tool.xfy9326.naucourse.providers.info.methods.PersonalInfo
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
-import tool.xfy9326.naucourse.update.UpdateChecker
 import tool.xfy9326.naucourse.update.beans.UpdateInfo
 import tool.xfy9326.naucourse.utils.debug.LogUtils
 import tool.xfy9326.naucourse.utils.secure.AccountUtils
 import tool.xfy9326.naucourse.utils.utility.AppWidgetUtils
+import tool.xfy9326.naucourse.utils.utility.UpdateUtils
 
 class MainDrawerViewModel : BaseViewModel() {
     private var hasInitFragmentShow = false
@@ -75,11 +75,7 @@ class MainDrawerViewModel : BaseViewModel() {
 
     fun checkUpdate() {
         viewModelScope.launch(Dispatchers.Default) {
-            UpdateChecker.getNewUpdateInfo()?.let {
-                if (it.first) {
-                    updateInfo.postEventValue(it.second!!)
-                }
-            }
+            UpdateUtils.checkUpdate(updateInfo)
         }
     }
 
