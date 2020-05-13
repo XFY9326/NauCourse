@@ -21,7 +21,6 @@ import tool.xfy9326.naucourse.utils.courses.CourseStyleUtils
 import tool.xfy9326.naucourse.utils.courses.CourseUtils
 import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
-import tool.xfy9326.naucourse.utils.debug.LogUtils
 import tool.xfy9326.naucourse.utils.io.BaseIOUtils
 import tool.xfy9326.naucourse.utils.io.TextIOUtils
 import tool.xfy9326.naucourse.utils.secure.AccountUtils
@@ -72,9 +71,7 @@ object OldDataCompat {
             }
         } catch (e: Exception) {
             ExceptionUtils.printStackTrace<OldDataCompat>(e)
-            LogUtils.w<OldDataCompat>("Course Data Compat Failed!")
         }
-        LogUtils.w<OldDataCompat>("Course Data Compat Empty!")
         return null
     }
 
@@ -180,9 +177,7 @@ object OldDataCompat {
             }
         } catch (e: Exception) {
             ExceptionUtils.printStackTrace<OldDataCompat>(e)
-            LogUtils.w<OldDataCompat>("User Info Compat Failed!")
         }
-        LogUtils.w<OldDataCompat>("User Info Compat Empty!")
         return null
     }
 

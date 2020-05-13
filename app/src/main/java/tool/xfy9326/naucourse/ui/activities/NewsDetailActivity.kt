@@ -128,9 +128,7 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
 
     override fun bindViewModel(viewModel: NewsDetailViewModel) {
         viewModel.isRefreshing.observeEvent(this, Observer {
-            asl_newsDetail.post {
-                asl_newsDetail.isRefreshing = it
-            }
+            asl_newsDetail.postStopRefreshing()
         })
         viewModel.newsDetail.observe(this, Observer {
             showNewsDetail(it)

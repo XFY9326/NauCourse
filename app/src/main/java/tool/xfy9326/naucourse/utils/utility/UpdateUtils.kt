@@ -11,9 +11,7 @@ object UpdateUtils {
     suspend fun checkUpdate(event: EventLiveData<UpdateInfo>, autoUpdateFunctionCheck: Boolean = false) = withContext(Dispatchers.IO) {
         if (!autoUpdateFunctionCheck || SettingsPref.AutoCheckUpdates) {
             UpdateChecker.getNewUpdateInfo()?.let {
-                if (it.first) {
-                    event.postEventValue(it.second!!)
-                }
+                if (it.first) event.postEventValue(it.second!!)
             }
         }
     }

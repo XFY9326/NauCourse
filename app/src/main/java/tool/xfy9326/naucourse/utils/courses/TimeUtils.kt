@@ -12,21 +12,23 @@ import kotlin.math.ceil
 
 
 object TimeUtils {
-    val CLASS_TIME_ARR = arrayOf(
-        ClassTime(8, 30, 9, 10),
-        ClassTime(9, 20, 10, 0),
-        ClassTime(10, 20, 11, 0),
-        ClassTime(11, 10, 11, 50),
-        ClassTime(12, 0, 12, 40),
-        ClassTime(13, 30, 14, 10),
-        ClassTime(14, 20, 15, 0),
-        ClassTime(15, 20, 16, 0),
-        ClassTime(16, 10, 16, 50),
-        ClassTime(17, 0, 17, 40),
-        ClassTime(18, 30, 19, 10),
-        ClassTime(19, 20, 20, 0),
-        ClassTime(20, 10, 20, 50)
-    )
+    val CLASS_TIME_ARR by lazy {
+        arrayOf(
+            ClassTime(8, 30, 9, 10),
+            ClassTime(9, 20, 10, 0),
+            ClassTime(10, 20, 11, 0),
+            ClassTime(11, 10, 11, 50),
+            ClassTime(12, 0, 12, 40),
+            ClassTime(13, 30, 14, 10),
+            ClassTime(14, 20, 15, 0),
+            ClassTime(15, 20, 16, 0),
+            ClassTime(16, 10, 16, 50),
+            ClassTime(17, 0, 17, 40),
+            ClassTime(18, 30, 19, 10),
+            ClassTime(19, 20, 20, 0),
+            ClassTime(20, 10, 20, 50)
+        )
+    }
 
     private fun getNewCalendar(date: Date? = null): Calendar {
         val calendar = Calendar.getInstance(Locale.CHINA)

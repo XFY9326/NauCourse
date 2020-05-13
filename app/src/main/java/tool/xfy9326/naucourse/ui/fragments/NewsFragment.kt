@@ -59,9 +59,7 @@ class NewsFragment : DrawerToolbarFragment<NewsViewModel>(), NewsAdapter.OnNewsI
 
     override fun bindViewModel(viewModel: NewsViewModel) {
         viewModel.isRefreshing.observe(viewLifecycleOwner, Observer {
-            asl_news.post {
-                asl_news.isRefreshing = it
-            }
+            asl_news.postStopRefreshing()
         })
         viewModel.newsList.observe(viewLifecycleOwner, Observer {
             newsAdapter.submitList(it)

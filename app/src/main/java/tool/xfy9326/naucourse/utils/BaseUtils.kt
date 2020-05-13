@@ -10,6 +10,7 @@ import android.os.IBinder
 import android.util.TypedValue
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.getSystemService
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import okhttp3.internal.toHexString
@@ -94,9 +95,7 @@ object BaseUtils {
 
     fun clearCache(context: Context) = BaseIOUtils.deleteFile(context.cacheDir)
 
-    fun String.insert(offset: Int, str: String): String {
-        return StringBuilder(this).insert(offset, str).toString()
-    }
+    fun String.insert(offset: Int, str: String) = StringBuilder(this).insert(offset, str).toString()
 
     fun isNightModeUsing(context: Context) =
         context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
@@ -118,7 +117,7 @@ object BaseUtils {
     }
 
     fun hideKeyboard(context: Context, windowToken: IBinder) =
-        (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).apply {
+        context.getSystemService<InputMethodManager>()?.apply {
             if (isActive) hideSoftInputFromWindow(windowToken, 0)
         }
 

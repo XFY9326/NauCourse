@@ -29,7 +29,6 @@ object AppWidgetUtils {
         })
 
     fun hasWidget(context: Context, widgetClass: Class<out AppWidgetProvider>): Boolean {
-        val componentName = ComponentName(context, widgetClass)
-        return AppWidgetManager.getInstance(context).getAppWidgetIds(componentName).isNotEmpty()
+        return AppWidgetManager.getInstance(context).getAppWidgetIds(ComponentName(context, widgetClass)).isNotEmpty()
     }
 }

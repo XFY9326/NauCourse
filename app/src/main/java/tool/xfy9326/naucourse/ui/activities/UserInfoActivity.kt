@@ -8,7 +8,6 @@ import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.activity_user_info.*
 import kotlinx.android.synthetic.main.view_card_credit_info.*
 import kotlinx.android.synthetic.main.view_card_learning_process.*
@@ -16,8 +15,6 @@ import kotlinx.android.synthetic.main.view_card_rank_info.*
 import kotlinx.android.synthetic.main.view_card_user_info.*
 import kotlinx.android.synthetic.main.view_grid_text_item.view.*
 import kotlinx.android.synthetic.main.view_learning_process_item.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.network.LoginNetworkManager
@@ -70,12 +67,10 @@ class UserInfoActivity : ViewModelActivity<UserInfoViewModel>() {
 
     @Synchronized
     private fun updateView(studentInfo: StudentInfo) {
-        lifecycleScope.launch(Dispatchers.Main) {
-            launch { updateBaseInfo(studentInfo.personalInfo) }
-            launch { updateLearningProcess(studentInfo.learningProcess) }
-            launch { updateCreditInfo(studentInfo.creditInfo) }
-            launch { updateRankInfo(studentInfo.rankingInfo) }
-        }
+        updateBaseInfo(studentInfo.personalInfo)
+        updateLearningProcess(studentInfo.learningProcess)
+        updateCreditInfo(studentInfo.creditInfo)
+        updateRankInfo(studentInfo.rankingInfo)
     }
 
     @SuppressLint("SetTextI18n")

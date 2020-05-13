@@ -38,9 +38,4 @@ class SettingsActivity : AppCompatActivity() {
             supportFragmentManager.popBackStack()
         }
     }
-
-    override fun onDestroy() {
-        System.gc()
-        super.onDestroy()
-    }
 }

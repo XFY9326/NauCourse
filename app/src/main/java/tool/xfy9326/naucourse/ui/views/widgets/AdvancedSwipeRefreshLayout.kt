@@ -26,6 +26,10 @@ class AdvancedSwipeRefreshLayout : SwipeRefreshLayout {
         mTouchSlop = ViewConfiguration.get(context).scaledTouchSlop
     }
 
+    fun postStopRefreshing() = post {
+        isRefreshing = false
+    }
+
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
         when (ev.action) {
             MotionEvent.ACTION_DOWN -> {

@@ -79,9 +79,7 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
 
     override fun bindViewModel(viewModel: CourseArrangeViewModel) {
         viewModel.isRefreshing.observe(viewLifecycleOwner, Observer {
-            asl_todayCourse.post {
-                asl_todayCourse.isRefreshing = it
-            }
+            asl_todayCourse.postStopRefreshing()
         })
         viewModel.notifyMsg.observeEvent(viewLifecycleOwner, Observer {
             showSnackBar(layout_todayCourse, I18NUtils.getTodayCourseNotifyTypeResId(it))

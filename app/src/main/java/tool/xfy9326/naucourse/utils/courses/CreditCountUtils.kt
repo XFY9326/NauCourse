@@ -5,7 +5,10 @@ import tool.xfy9326.naucourse.providers.beans.jwc.CourseHistory
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseScore
 
 object CreditCountUtils {
-    fun countCredit(current: List<CreditCountItem>, history: List<CreditCountItem>) = getCredit(combineCourses(current, history))
+    fun countCredit(current: List<CreditCountItem>, history: List<CreditCountItem>) =
+        getCredit(HashSet(current).apply {
+            addAll(history)
+        })
 
     private fun getCredit(courseSet: Set<CreditCountItem>): Float {
         var temp = 0f
@@ -20,11 +23,6 @@ object CreditCountUtils {
         }
         return temp / totalStudyScore
     }
-
-    private fun combineCourses(current: List<CreditCountItem>, history: List<CreditCountItem>) =
-        HashSet(current).apply {
-            addAll(history)
-        }
 
     fun getCountItemFromCourseHistory(arr: List<CourseHistory>) =
         ArrayList<CreditCountItem>(arr.size).apply {
