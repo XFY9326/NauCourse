@@ -126,13 +126,11 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         if (supportFragmentManager.fragments.isEmpty()) {
             supportFragmentManager.beginTransaction().apply {
                 for (type in FragmentType.values()) {
-                    val fragment = createFragmentByType(type)
-                    add(R.id.fg_mainContent, fragment.apply {
-                        arguments = Bundle().apply {
-                            putInt(DrawerToolbarFragment.DRAWER_ID, R.id.drawer_main)
-                        }
-                    }, type.name)
-                    hide(fragment)
+                    createFragmentByType(type).let {
+                        add(R.id.fg_mainContent, it, type.name)
+                        attach(it)
+                        hide(it)
+                    }
                 }
             }.commitNow()
         }
@@ -143,16 +141,20 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
             FragmentType.COURSE_TABLE -> CourseTableFragment()
             FragmentType.COURSE_ARRANGE -> CourseArrangeFragment()
             FragmentType.NEWS -> NewsFragment()
+        }.apply {
+            arguments = Bundle().apply {
+                putInt(DrawerToolbarFragment.DRAWER_ID, R.id.drawer_main)
+            }
         }
 
     @Synchronized
     fun showFragment(type: FragmentType, withAnimation: Boolean = true) {
-        if (type != getNowShowFragment() || !getViewModel().initFragmentShow()) {
-            val oldFragment = supportFragmentManager.findFragmentByTag(getNowShowFragment().name)
+        val nowShowFragmentType = getNowShowFragment()
+        if (type != nowShowFragmentType || !getViewModel().initFragmentShow()) {
             supportFragmentManager.beginTransaction().apply {
                 if (withAnimation) setCustomAnimations(0, R.anim.fade_exit)
-                if (oldFragment != null) {
-                    hide(oldFragment)
+                supportFragmentManager.findFragmentByTag(nowShowFragmentType.name)?.let {
+                    hide(it)
                 }
                 val newFragment = supportFragmentManager.findFragmentByTag(type.name)
                 if (newFragment != null) {
