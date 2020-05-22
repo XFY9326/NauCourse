@@ -2,7 +2,6 @@ package tool.xfy9326.naucourse.ui.views.table
 
 object CourseTableInternalStyle {
     data class EmptyView(
-        val width: Int,
         val backgroundColor: Int,
         val radius: Float,
         val padding: Int
@@ -21,7 +20,6 @@ object CourseTableInternalStyle {
     )
 
     data class CourseCellView(
-        val width: Int,
         val radius: Float,
         val padding: Int,
         val textPadding: Int,

@@ -22,16 +22,12 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import kotlinx.android.synthetic.main.fragment_course_table.*
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
-import tool.xfy9326.naucourse.beans.CourseCell
-import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.tools.NotifyBus
 import tool.xfy9326.naucourse.ui.dialogs.CourseDetailDialog
 import tool.xfy9326.naucourse.ui.fragments.base.DrawerToolbarFragment
 import tool.xfy9326.naucourse.ui.models.fragment.CourseTableViewModel
-import tool.xfy9326.naucourse.ui.views.table.CourseTableViewHelper
-import tool.xfy9326.naucourse.ui.views.table.OnCourseCellClickListener
 import tool.xfy9326.naucourse.ui.views.viewpager.CourseTableViewPagerAdapter
 import tool.xfy9326.naucourse.utils.utility.ImageUtils
 import tool.xfy9326.naucourse.utils.utility.ShareUtils
@@ -41,8 +37,7 @@ import tool.xfy9326.naucourse.utils.views.DialogUtils
 import tool.xfy9326.naucourse.utils.views.I18NUtils
 import tool.xfy9326.naucourse.utils.views.ViewUtils
 
-class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
-    OnCourseCellClickListener {
+class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>() {
     private lateinit var courseTableViewPagerAdapter: CourseTableViewPagerAdapter
     private lateinit var viewPagerCallback: ViewPager2.OnPageChangeCallback
 
@@ -141,7 +136,6 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
 
     override fun initView(viewModel: CourseTableViewModel) {
         setToolbarTitleEnabled(false)
-        CourseTableViewHelper.setOnCourseCellClickListener(this)
         setCourseTableBackground()
         setFullScreenBackground(true)
 
@@ -277,10 +271,6 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>(),
         ) {
             vp_courseTablePanel.setCurrentItem(it - 1, true)
         }.show()
-    }
-
-    override fun onCourseCellClick(courseCell: CourseCell, cellStyle: CourseCellStyle) {
-        getViewModel().requestCourseDetailInfo(courseCell, cellStyle)
     }
 
     override fun onDestroyView() {

@@ -7,7 +7,7 @@ import androidx.gridlayout.widget.GridLayout
 
 
 @Suppress("MemberVisibilityCanBePrivate")
-class AdvancedGridLayout : GridLayout {
+open class AdvancedGridLayout : GridLayout {
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)

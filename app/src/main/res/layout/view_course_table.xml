@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<tool.xfy9326.naucourse.ui.views.widgets.AdvancedGridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/gl_courseTable"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:columnCount="@integer/default_course_table_column_count"
-    app:orientation="vertical"
-    app:rowCount="@integer/default_course_table_row_count" />
