@@ -158,12 +158,20 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
 
     private fun newNGXCall(request: Request): Response = okHttpClient.newCall(request.newBuilder().build()).execute()
 
-    override fun validateLoginWithResponse(responseContent: String, responseUrl: HttpUrl): Boolean =
-        if (isFromPathLogin) {
-            responseUrl.hasSameHost(fromUrl)
+    override fun validateLoginWithResponse(responseContent: String, responseUrl: HttpUrl): Boolean {
+        val fromUrl =
+            if (this.isFromPathLogin) {
+                this.fromUrl
+            } else {
+                responseUrl
+            }
+        val isFromPathLogin = this.isFromPathLogin || fromUrl != null
+        return if (isFromPathLogin && fromUrl != null) {
+            !fromUrl.hasSameHost(NGX_HOST)
         } else {
             INDEX_PAGE_STR in responseContent && LOGIN_PAGE_STR !in responseContent
         }
+    }
 
     override fun getBeforeLoginResponse(): Response =
         newNGXCall(Request.Builder().apply {
