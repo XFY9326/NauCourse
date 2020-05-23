@@ -83,18 +83,16 @@ class CourseCellView : AdvancedFrameLayout {
 
     fun setCellAsEmptyCell(col: Int, row: Int, internalStyle: CourseTableInternalStyle.EmptyView, courseTableStyle: CourseTableStyle) {
         this.row = row
-        this.col = 0
+        this.col = col
         this.rowSize = 1
         this.courseCellType = CellType.EMPTY
 
-        if (childCount > 0) {
-            removeAllViewsInLayout()
-        }
+        removeAllViewsInLayout()
 
         alpha = courseTableStyle.customCourseTableAlpha
 
         layoutParams = GridLayout.LayoutParams().apply {
-            columnSpec = GridLayout.spec(col, 1)
+            columnSpec = GridLayout.spec(col)
             rowSpec = GridLayout.spec(row, 1f)
         }
 
@@ -117,9 +115,7 @@ class CourseCellView : AdvancedFrameLayout {
         this.rowSize = 1
         this.courseCellType = CellType.TIME
 
-        if (childCount > 0) {
-            removeAllViewsInLayout()
-        }
+        removeAllViewsInLayout()
 
         alpha = courseTableStyle.customCourseTableAlpha
 
@@ -187,9 +183,7 @@ class CourseCellView : AdvancedFrameLayout {
         this.rowSize = courseInfo.timeDuration.durationLength
         this.courseCellType = CellType.COURSE
 
-        if (childCount > 0) {
-            removeAllViewsInLayout()
-        }
+        removeAllViewsInLayout()
 
         alpha = courseTableStyle.customCourseTableAlpha
 

@@ -159,7 +159,7 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>() {
         if (SettingsPref.CustomCourseTableBackground) {
             AppPref.CourseTableBackgroundImageName?.let {
                 val imageFile = ImageUtils.getLocalImageFile(it, Constants.Image.DIR_APP_IMAGE)
-                if (imageFile.exists()) {
+                if (imageFile?.exists() == true) {
                     iv_courseTableBackground.apply {
                         alpha = SettingsPref.CourseTableBackgroundAlpha / 100f
                         scaleType = SettingsPref.getCourseTableBackgroundScareType()

@@ -57,40 +57,74 @@ object ImageUtils {
             }
         }
 
-    fun clearLocalImageBySubDir(dirName: String) = BaseIOUtils.deleteFile(PathUtils.getImageLocalSavePath(dirName))
+    fun clearLocalImageBySubDir(dirName: String): Boolean {
+        val path = PathUtils.getImageLocalSavePath(dirName)
+        return if (path == null) {
+            false
+        } else {
+            BaseIOUtils.deleteFile(path)
+        }
+    }
 
-    @Suppress("unused")
-    fun clearAllLocalImageDir() = BaseIOUtils.deleteFile(PathUtils.getImageLocalSavePath())
+    fun localImageExists(fileName: String, dirName: String? = null): Boolean {
+        val path = PathUtils.getImageLocalSavePath(dirName)
+        return if (path == null) {
+            false
+        } else {
+            File(path, fileName).exists()
+        }
+    }
 
-    fun localImageExists(fileName: String, dirName: String? = null) = File(PathUtils.getImageLocalSavePath(dirName), fileName).exists()
-
-    fun getLocalImageFile(fileName: String, dirName: String? = null) =
-        File(PathUtils.getImageLocalSavePath(dirName), fileName)
+    fun getLocalImageFile(fileName: String, dirName: String? = null): File? {
+        val path = PathUtils.getImageLocalSavePath(dirName)
+        return if (path == null) {
+            null
+        } else {
+            File(path, fileName)
+        }
+    }
 
     @Suppress("unused")
     fun readLocalImage(fileName: String, dirName: String? = null): Bitmap? {
         val localStorageFile = getLocalImageFile(fileName, dirName)
-        return if (localStorageFile.exists()) {
+        return if (localStorageFile?.exists() == true) {
             ImageIOUtils.readBitmap(localStorageFile)
         } else {
             null
         }
     }
 
-    fun deleteLocalImage(fileName: String, dirName: String? = null) = File(PathUtils.getImageLocalSavePath(dirName), fileName).delete()
+    fun deleteLocalImage(fileName: String, dirName: String? = null): Boolean {
+        val path = PathUtils.getImageLocalSavePath(dirName)
+        return if (path == null) {
+            false
+        } else {
+            File(path, fileName).delete()
+        }
+    }
 
     fun modifyLocalImage(
         fileName: String, dirName: String? = null,
         compressFormat: Bitmap.CompressFormat = Bitmap.CompressFormat.WEBP, quality: Int = 100
     ): Boolean {
-        val localStorageFile = File(PathUtils.getImageLocalSavePath(dirName), fileName)
-        return ImageIOUtils.modifyLocalImage(localStorageFile, compressFormat, quality)
+        val path = PathUtils.getImageLocalSavePath(dirName)
+        return if (path == null) {
+            false
+        } else {
+            val localStorageFile = File(path, fileName)
+            ImageIOUtils.modifyLocalImage(localStorageFile, compressFormat, quality)
+        }
     }
 
     fun saveImageToLocalFromUri(fileName: String?, uri: Uri, dirName: String? = null, overWrite: Boolean = true): String? {
         val newFileName = fileName ?: UUID.randomUUID().toString()
-        val localStorageFile = File(PathUtils.getImageLocalSavePath(dirName), newFileName)
-        return if (ImageIOUtils.saveImageFromUri(uri, localStorageFile, overWrite)) newFileName else null
+        val path = PathUtils.getImageLocalSavePath(dirName)
+        return if (path == null) {
+            null
+        } else {
+            val localStorageFile = File(path, newFileName)
+            if (ImageIOUtils.saveImageFromUri(uri, localStorageFile, overWrite)) newFileName else null
+        }
     }
 
     fun saveImageToAlbum(fileName: String?, dirName: String? = null, bitmap: Bitmap, recycle: Boolean) =
@@ -127,23 +161,28 @@ object ImageUtils {
         val format = getSaveImageFormatFromFileName(newFileName, compressFormat)!!
 
         if (saveToLocal) {
-            val localStorageFile = File(PathUtils.getImageLocalSavePath(dirName), newFileName)
-            return if (ImageIOUtils.saveBitmap(
-                    bitmap,
-                    localStorageFile,
-                    compressFormat = format,
-                    recycle = recycle,
-                    overWrite = overWrite,
-                    quality = quality
-                )
-            ) {
-                if (fileProviderUri) {
-                    FileProvider.getUriForFile(App.instance, Constants.FILE_PROVIDER_AUTH, localStorageFile)
-                } else {
-                    Uri.fromFile(localStorageFile)
-                }
-            } else {
+            val path = PathUtils.getImageLocalSavePath(dirName)
+            return if (path == null) {
                 null
+            } else {
+                val localStorageFile = File(path, newFileName)
+                if (ImageIOUtils.saveBitmap(
+                        bitmap,
+                        localStorageFile,
+                        compressFormat = format,
+                        recycle = recycle,
+                        overWrite = overWrite,
+                        quality = quality
+                    )
+                ) {
+                    if (fileProviderUri) {
+                        FileProvider.getUriForFile(App.instance, Constants.FILE_PROVIDER_AUTH, localStorageFile)
+                    } else {
+                        Uri.fromFile(localStorageFile)
+                    }
+                } else {
+                    null
+                }
             }
         } else {
             val contentValues = getImageContentValues(newFileName, dirName, format, bitmap)

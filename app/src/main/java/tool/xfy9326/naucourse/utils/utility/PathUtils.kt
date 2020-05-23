@@ -22,11 +22,16 @@ object PathUtils {
             null
         }
 
-    fun getImageLocalSavePath(dirName: String? = null) =
-        ContextCompat.getExternalFilesDirs(App.instance, Environment.DIRECTORY_PICTURES)[0].absolutePath +
-                if (dirName == null) {
-                    File.separator
-                } else {
-                    File.separator + dirName + File.separator
-                }
+    fun getImageLocalSavePath(dirName: String? = null): String? {
+        val picturePath = ContextCompat.getExternalFilesDirs(App.instance, Environment.DIRECTORY_PICTURES)[0]?.absolutePath
+        return if (picturePath != null) {
+            picturePath + if (dirName == null) {
+                File.separator
+            } else {
+                File.separator + dirName + File.separator
+            }
+        } else {
+            null
+        }
+    }
 }
