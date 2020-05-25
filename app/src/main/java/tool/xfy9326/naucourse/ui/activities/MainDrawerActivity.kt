@@ -47,7 +47,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     private var lastRequestBackTime: Long = 0
     private var nightModeObserver: Observer<in Event<Unit>>? = null
     private val fragmentTypeLock = Any()
-    private lateinit var nowShowFragmentType: FragmentType
+    private var nowShowFragmentType: FragmentType? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +62,9 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putSerializable(NOW_SHOW_FRAGMENT_TYPE, getNowShowFragment())
+        nowShowFragmentType?.let {
+            outState.putSerializable(NOW_SHOW_FRAGMENT_TYPE, it)
+        }
         super.onSaveInstanceState(outState)
     }
 
@@ -272,10 +274,10 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
 
     private fun getNowShowFragment(): FragmentType {
         synchronized(fragmentTypeLock) {
-            if (!::nowShowFragmentType.isInitialized) {
+            if (nowShowFragmentType == null) {
                 nowShowFragmentType = getDefaultFragmentType()
             }
-            return nowShowFragmentType
+            return nowShowFragmentType!!
         }
     }
 

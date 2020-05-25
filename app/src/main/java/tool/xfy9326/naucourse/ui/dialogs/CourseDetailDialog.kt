@@ -80,7 +80,11 @@ class CourseDetailDialog : DialogFragment() {
                         DATE_FORMAT_MD_HM_CH.format(timePeriod.startDateTime),
                         DATE_FORMAT_HM.format(timePeriod.endDateTime)
                     )
-                tv_courseCellLocation.text = courseDetail.timeDetail!!.courseLocation
+                if (courseDetail.timeDetail!!.courseLocation.isNotEmpty() && courseDetail.timeDetail!!.courseLocation.isNotBlank()) {
+                    tv_courseCellLocation.text = courseDetail.timeDetail!!.courseLocation
+                } else {
+                    tv_courseCellLocation.visibility = View.GONE
+                }
             } else {
                 tv_courseCellTime.visibility = View.GONE
                 tv_courseCellLocation.visibility = View.GONE
