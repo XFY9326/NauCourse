@@ -55,14 +55,11 @@ data class TimePeriodList(
         other as TimePeriodList
 
         if (!timePeriods.contentEquals(other.timePeriods)) return false
-        if (size != other.size) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = timePeriods.contentHashCode()
-        result = 31 * result + size
-        return result
+        return timePeriods.contentHashCode()
     }
 }

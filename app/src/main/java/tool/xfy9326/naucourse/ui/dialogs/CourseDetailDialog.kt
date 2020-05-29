@@ -22,6 +22,7 @@ import tool.xfy9326.naucourse.utils.views.DialogUtils
 import tool.xfy9326.naucourse.utils.views.ViewUtils
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.Comparator
 
 class CourseDetailDialog : DialogFragment() {
     private lateinit var courseDetail: CourseDetail
@@ -80,7 +81,10 @@ class CourseDetailDialog : DialogFragment() {
                         DATE_FORMAT_MD_HM_CH.format(timePeriod.startDateTime),
                         DATE_FORMAT_HM.format(timePeriod.endDateTime)
                     )
-                if (courseDetail.timeDetail!!.courseLocation.isNotEmpty() && courseDetail.timeDetail!!.courseLocation.isNotBlank()) {
+                if (courseDetail.timeDetail!!.courseLocation.isNotEmpty() &&
+                    courseDetail.timeDetail!!.courseLocation.isNotBlank() &&
+                    courseDetail.timeDetail!!.courseLocation != getString(R.string.no_data)
+                ) {
                     tv_courseCellLocation.text = courseDetail.timeDetail!!.courseLocation
                 } else {
                     tv_courseCellLocation.visibility = View.GONE
@@ -155,7 +159,10 @@ class CourseDetailDialog : DialogFragment() {
 
     private fun loadMore(contentView: View, inflater: LayoutInflater) {
         val weekDayNumStrArray = resources.getStringArray(R.array.weekday_num)
-        for ((i, courseTime) in courseDetail.course.timeSet.withIndex()) {
+        val showList = courseDetail.course.timeSet.toList().sortedWith(Comparator { o1, o2 ->
+            o1.compareTo(o2)
+        })
+        for ((i, courseTime) in showList.withIndex()) {
             contentView.layout_moreCourseInfo.addViewInLayout(
                 inflater.inflate(
                     R.layout.view_course_detail_item,

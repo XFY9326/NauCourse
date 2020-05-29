@@ -87,7 +87,7 @@ class CourseTableView : AdvancedGridLayout {
 
             for (child in children) {
                 if (child is CourseCellView) {
-                    if (child.col == 0) {
+                    if (child.courseCellType == CourseCellView.CellType.TIME) {
                         child.layoutParams.width = timeColWidth
                     } else {
                         child.layoutParams.width = courseColWidth

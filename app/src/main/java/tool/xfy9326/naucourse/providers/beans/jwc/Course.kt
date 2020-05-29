@@ -53,6 +53,9 @@ data class Course(
         if (credit < 0) {
             throw IllegalArgumentException("Course Credit Error! Credit: $credit")
         }
+        timeSet.forEach {
+            it.courseId = id
+        }
     }
 
     override fun equals(other: Any?): Boolean {

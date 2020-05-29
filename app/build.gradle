@@ -23,8 +23,8 @@ android {
 
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 72
-        versionName '7.0.4'
+        versionCode 73
+        versionName '7.0.5'
 
         manifestPlaceholders = ['BUGLY_APP_ID': rootProject.ext.buglyAppId]
 
@@ -123,10 +123,10 @@ dependencies {
 
     // Material Design
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.android.material:material:1.2.0-alpha06'
+    implementation 'com.google.android.material:material:1.2.0-beta01'
 
     // AndroidX Core
-    implementation 'androidx.core:core-ktx:1.2.0'
+    implementation 'androidx.core:core-ktx:1.3.0'
 
     // AppCompat
     implementation 'androidx.appcompat:appcompat:1.1.0'

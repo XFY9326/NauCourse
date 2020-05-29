@@ -219,7 +219,10 @@ class CourseCellView : AdvancedFrameLayout {
             setPadding(internalStyle.textPadding)
 
             val baseShowText =
-                if (courseInfo.courseTime.location.isEmpty() || courseInfo.courseTime.location.isBlank()) {
+                if (courseInfo.courseTime.location.isEmpty() ||
+                    courseInfo.courseTime.location.isBlank() ||
+                    courseInfo.courseTime.location == resources.getString(R.string.no_data)
+                ) {
                     courseInfo.courseName
                 } else {
                     "${courseInfo.courseName}${COURSE_INFO_JOIN_SYMBOL}${courseInfo.courseTime.location}"

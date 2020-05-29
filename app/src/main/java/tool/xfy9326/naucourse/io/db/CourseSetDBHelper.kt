@@ -11,23 +11,17 @@ object CourseSetDBHelper : BaseDBHelper<CoursesDB.CoursesDataBase>() {
     const val COURSES_TIME_TABLE_NAME = "CoursesTime"
 
     const val COLUMN_COURSE_ID = "courseId"
+    const val COLUMN_WEEK_MODE = "weekMode"
     const val COLUMN_WEEK_DAY = "weekDay"
+    const val COLUMN_WEEKS_STR = "weeksStr"
+    const val COLUMN_COURSES_NUM_STR = "coursesNumStr"
     const val COLUMN_NAME = "name"
 
     override val db: CoursesDB.CoursesDataBase = CoursesDB.getDB()
 
     @Synchronized
     fun storeNewCourseSet(courseSet: CourseSet) = with(db.getCoursesDataDao()) {
-        clearAll()
-        putTerm(courseSet.term)
-        putCourses(*courseSet.courses.toTypedArray())
-        courseSet.courses.forEach {
-            val putArray = it.timeSet.toTypedArray()
-            putArray.forEach { courseTime ->
-                courseTime.courseId = it.id
-            }
-            putCoursesTime(*putArray)
-        }
+        storeCourseSet(courseSet)
     }
 
     @Synchronized
@@ -48,11 +42,7 @@ object CourseSetDBHelper : BaseDBHelper<CoursesDB.CoursesDataBase>() {
 
     @Synchronized
     override fun clearAll() = with(db.getCoursesDataDao()) {
-        clearTerm()
-        clearTableIndex(TERM_TABLE_NAME)
-        clearCoursesTime()
-        clearTableIndex(COURSES_TIME_TABLE_NAME)
-        clearCourses()
+        clearAll()
     }
 
 }

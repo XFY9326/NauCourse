@@ -137,4 +137,14 @@
         <item name="android:textColor">@color/colorAppWidgetTextDark</item>
     </style>
 
+    <style name="AppTheme.AnimateSlider" parent="Widget.MaterialComponents.Slider">
+        <item name="tickColor">@android:color/transparent</item>
+        <item name="haloColor">@android:color/transparent</item>
+        <item name="trackColorActive">@color/colorSliderTrackerActive</item>
+        <item name="trackColorInactive">@color/colorSliderTrackerInActive</item>
+        <item name="haloRadius">0dp</item>
+        <item name="thumbRadius">@dimen/slider_thumb_radius_not_touched</item>
+        <item name="trackHeight">@dimen/slider_tracker_height</item>
+    </style>
+
 </resources>

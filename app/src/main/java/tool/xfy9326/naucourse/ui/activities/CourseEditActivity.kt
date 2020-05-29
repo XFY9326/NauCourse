@@ -113,11 +113,6 @@ class CourseEditActivity : AppCompatActivity(), CourseTimeAdapter.CourseTimeCall
 
     override fun onBackPressed() = checkSaveForExit()
 
-    override fun onDestroy() {
-        System.gc()
-        super.onDestroy()
-    }
-
     private fun readIntentData() {
         intent!!.apply {
             termDate = getSerializableExtra(TERM_DATE) as TermDate

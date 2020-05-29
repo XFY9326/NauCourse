@@ -109,7 +109,10 @@ class CourseTableViewModel : BaseViewModel() {
             if (courseInfo.isSuccess) {
                 courseSet = courseInfo.data!!
                 val cacheCourseTableArr = cacheCourseTableArrAsync.await()
-                if (cacheCourseTableArr == null) {
+                // 课表的缓存有效期为一天
+                if (cacheCourseTableArr == null ||
+                    System.currentTimeMillis() - (cacheCourseTableArr.firstOrNull()?.saveDate ?: 0) > 1000 * 60 * 60 * 24
+                ) {
                     makeCourseTable(courseSet, termDate)
                 } else {
                     courseTableArr = cacheCourseTableArr
@@ -264,36 +267,29 @@ class CourseTableViewModel : BaseViewModel() {
         courseSet: CourseSet? = null, termDate: TermDate? = null, styleList: Array<CourseCellStyle>? = null,
         forceUpdate: Boolean = false
     ) {
-        if (validateUpdateNecessary(courseSet, termDate, styleList)) {
-            var hasTermUpdateInfo = false
-            var hasCourseUpdateInfo = false
-            if (courseSet != null) {
-                this.courseSet = courseSet
-                hasCourseUpdateInfo = true
-            }
-            if (termDate != null) {
-                this.termDate = termDate
-                hasTermUpdateInfo = true
-            }
-            if (styleList != null) {
-                CourseCellStyleDBHelper.saveCourseCellStyle(styleList)
-                hasCourseUpdateInfo = true
-            }
-            if (hasCourseUpdateInfo || hasTermUpdateInfo || forceUpdate) {
-                viewModelScope.launch(Dispatchers.Default) {
-                    if (hasCourseUpdateInfo || forceUpdate) {
-                        makeCourseTable(
-                            this@CourseTableViewModel.courseSet,
-                            this@CourseTableViewModel.termDate,
-                            true
-                        )
-                    }
-                    if (hasTermUpdateInfo || forceUpdate) {
-                        setWeekInfoByTermDate(
-                            this@CourseTableViewModel.termDate,
-                            if (this@CourseTableViewModel::courseSet.isInitialized) this@CourseTableViewModel.courseSet else null
-                        )
-                    }
+        var hasTermUpdateInfo = false
+        var hasCourseUpdateInfo = false
+        if (styleList != null) {
+            hasCourseUpdateInfo = true
+        }
+        if (courseSet != null && (!this::courseSet.isInitialized || this.courseSet != courseSet)) {
+            this.courseSet = courseSet
+            hasCourseUpdateInfo = true
+        }
+        if (termDate != null && (!this::termDate.isInitialized || this.termDate != termDate)) {
+            this.termDate = termDate
+            hasTermUpdateInfo = true
+        }
+        if (hasCourseUpdateInfo || hasTermUpdateInfo || forceUpdate) {
+            viewModelScope.launch(Dispatchers.Default) {
+                if (hasCourseUpdateInfo || forceUpdate) {
+                    makeCourseTable(this@CourseTableViewModel.courseSet, this@CourseTableViewModel.termDate, true)
+                }
+                if (hasTermUpdateInfo || forceUpdate) {
+                    setWeekInfoByTermDate(
+                        this@CourseTableViewModel.termDate,
+                        if (this@CourseTableViewModel::courseSet.isInitialized) this@CourseTableViewModel.courseSet else null
+                    )
                 }
             }
         }
@@ -325,16 +321,6 @@ class CourseTableViewModel : BaseViewModel() {
             this.showNextWeekAhead = showAhead
             nowWeekNum.postValue(Pair(currentWeekNum, showAhead))
         }
-    }
-
-    private fun validateUpdateNecessary(
-        courseSet: CourseSet? = null,
-        termDate: TermDate? = null,
-        styleList: Array<CourseCellStyle>? = null
-    ): Boolean {
-        val storedStyle = CourseCellStyleDBHelper.loadCourseCellStyle()
-        return !this::courseSet.isInitialized || !this::termDate.isInitialized || this.courseSet != courseSet || this.termDate != termDate ||
-                storedStyle.isEmpty() || (styleList != null && storedStyle.contentEquals(styleList))
     }
 
     fun requestShowWeekStatus(nowShowWeekNum: Int) {
@@ -382,23 +368,20 @@ class CourseTableViewModel : BaseViewModel() {
         }
     }
 
-    private suspend fun makeCourseTable(courseSet: CourseSet, termDate: TermDate, postValue: Boolean = false) {
-        withContext(Dispatchers.Default) {
-            courseTableArr =
-                CourseUtils.generateAllCourseTable(courseSet, termDate, TimeUtils.getWeekLength(termDate))
-            if (postValue) {
-                val style = getCourseTableStyle()
-                for (i in 0 until min(courseTablePkg.size, courseTableArr.size)) {
-                    val table = courseTableArr[i]
-                    courseTablePkg[i].postValue(
-                        CoursePkg(
-                            termDate,
-                            table,
-                            CourseCellStyleDBHelper.loadCourseCellStyle(courseSet),
-                            style
-                        )
+    private suspend fun makeCourseTable(courseSet: CourseSet, termDate: TermDate, postValue: Boolean = false) = withContext(Dispatchers.Default) {
+        courseTableArr = CourseUtils.generateAllCourseTable(courseSet, termDate, TimeUtils.getWeekLength(termDate))
+        if (postValue) {
+            val style = getCourseTableStyle()
+            for (i in 0 until min(courseTablePkg.size, courseTableArr.size)) {
+                val table = courseTableArr[i]
+                courseTablePkg[i].postValue(
+                    CoursePkg(
+                        termDate,
+                        table,
+                        CourseCellStyleDBHelper.loadCourseCellStyle(courseSet),
+                        style
                     )
-                }
+                )
             }
         }
     }

@@ -13,18 +13,13 @@ object CourseCellStyleDBHelper : BaseDBHelper<CoursesDB.CoursesDataBase>() {
 
     @Synchronized
     fun saveCourseCellStyle(styles: Array<CourseCellStyle>) = with(db.getCoursesCellStyleDao()) {
+        clearCourseCellStyle()
         putCourseCellStyle(*styles)
     }
 
     @Synchronized
     fun loadCourseCellStyle(courseSet: CourseSet) = with(db.getCoursesCellStyleDao()) {
-        val storedStyles = getCourseCellStyle()
-        CourseStyleUtils.asyncCellStyle(courseSet, storedStyles)
-    }
-
-    @Synchronized
-    fun loadCourseCellStyle() = with(db.getCoursesCellStyleDao()) {
-        getCourseCellStyle()
+        CourseStyleUtils.asyncCellStyle(courseSet, getCourseCellStyle())
     }
 
     @Synchronized

@@ -11,6 +11,7 @@ object CourseHistoryDBHelper : BaseDBHelper<CoursesDB.CoursesDataBase>() {
 
     @Synchronized
     fun putCourseHistoryArr(courseHistoryArr: Array<CourseHistory>) = with(db.getCoursesHistoryDao()) {
+        clearAll()
         putCourseHistory(*courseHistoryArr)
     }
 

@@ -1,17 +1,34 @@
 package tool.xfy9326.naucourse.io.db.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.io.db.CourseSetDBHelper
 import tool.xfy9326.naucourse.providers.beans.jwc.Course
+import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseTime
 import tool.xfy9326.naucourse.providers.beans.jwc.Term
 
 @Dao
 interface CoursesDataDao {
+    @Transaction
+    fun storeCourseSet(courseSet: CourseSet) {
+        clearAll()
+        putTerm(courseSet.term)
+        putCourses(*courseSet.courses.toTypedArray())
+        courseSet.courses.forEach {
+            putCoursesTime(*it.timeSet.toTypedArray())
+        }
+    }
+
+    @Transaction
+    fun clearAll() {
+        clearTerm()
+        clearTableIndex(CourseSetDBHelper.TERM_TABLE_NAME)
+        clearCoursesTime()
+        clearTableIndex(CourseSetDBHelper.COURSES_TIME_TABLE_NAME)
+        clearCourses()
+    }
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun putTerm(term: Term)
 

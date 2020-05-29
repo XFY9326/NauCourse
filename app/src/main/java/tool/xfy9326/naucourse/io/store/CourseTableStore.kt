@@ -5,7 +5,7 @@ import tool.xfy9326.naucourse.io.store.base.BaseJsonStore
 
 object CourseTableStore : BaseJsonStore<Array<CourseTable>>() {
     override val fileName: String = "CourseTable"
-    override val versionCode: Int = 1
+    override val versionCode: Int = 2
     override val storeClass: Class<Array<CourseTable>> = Array<CourseTable>::class.java
 
     override val useCache: Boolean = true

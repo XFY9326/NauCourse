@@ -85,7 +85,11 @@ class CourseTimeEditDialog : DialogFragment() {
                 buildTimeWheel(this@apply)
             }
 
-            et_courseLocation.setText(courseTime?.location)
+            if (courseTime?.location == getString(R.string.no_data)) {
+                et_courseLocation.setText(Constants.EMPTY)
+            } else {
+                et_courseLocation.setText(courseTime?.location)
+            }
 
             btn_courseTimeEditConfirm.setOnClickListener {
                 lifecycleScope.launch(Dispatchers.Main) {
@@ -286,7 +290,13 @@ class CourseTimeEditDialog : DialogFragment() {
             }
 
             val weekDay = picker_courseTimeWeekDay.value.toShort()
-            val location = et_courseLocation.text?.toString()?.trim() ?: getString(R.string.no_data)
+            val locationInput = et_courseLocation.text?.toString()?.trim()
+            val location =
+                if (locationInput.isNullOrEmpty() || locationInput.isNullOrBlank()) {
+                    getString(R.string.no_data)
+                } else {
+                    locationInput
+                }
 
             val courseStart = picker_courseStartTime.value
             val courseEnd = picker_courseEndTime.value

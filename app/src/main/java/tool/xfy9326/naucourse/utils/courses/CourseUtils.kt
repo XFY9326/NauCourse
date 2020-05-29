@@ -1,9 +1,6 @@
 package tool.xfy9326.naucourse.utils.courses
 
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.beans.CourseCell
 import tool.xfy9326.naucourse.beans.CourseCellStyle
@@ -223,7 +220,7 @@ object CourseUtils {
                 result[i] = waitArr[i]?.await()
             }
             val output = result.requireNoNulls()
-            launch { CourseTableStore.saveStore(output) }
+            launch(Dispatchers.IO) { CourseTableStore.saveStore(output) }
             output
         }
 

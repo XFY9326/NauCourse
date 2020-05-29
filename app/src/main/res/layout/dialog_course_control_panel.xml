@@ -49,6 +49,7 @@
 
                 <tool.xfy9326.naucourse.ui.views.widgets.AnimateSlider
                     android:id="@+id/slider_courseControlWeekNum"
+                    style="@style/AppTheme.AnimateSlider"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:stepSize="1"

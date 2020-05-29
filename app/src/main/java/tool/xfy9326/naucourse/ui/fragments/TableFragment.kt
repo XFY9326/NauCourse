@@ -11,10 +11,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.fragment_table.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseCell
 import tool.xfy9326.naucourse.beans.CourseCellStyle
@@ -64,8 +64,10 @@ class TableFragment : Fragment(), Observer<CoursePkg>, OnCourseCellClickListener
     }
 
     override fun onChanged(t: CoursePkg) {
-        lifecycleScope.launch(Dispatchers.Default) {
-            buildCourseTableView(t)
+        lifecycleScope.launch {
+            courseUpdateLock.withLock {
+                buildCourseTableView(t)
+            }
         }
     }
 
@@ -76,50 +78,50 @@ class TableFragment : Fragment(), Observer<CoursePkg>, OnCourseCellClickListener
         }
     }
 
-    private suspend fun buildCourseTableView(coursePkg: CoursePkg) = coroutineScope {
-        courseUpdateLock.withLock {
-            val showWeekDaySize = CourseTableViewHelper.getShowWeekDaySize(coursePkg.courseTable, coursePkg.courseTableStyle)
-            val dateInfo = TimeUtils.getWeekNumDateArray(coursePkg.termDate, weekNum)
+    private suspend fun buildCourseTableView(coursePkg: CoursePkg) = withContext(Dispatchers.Default) {
+        val showWeekDaySize = CourseTableViewHelper.getShowWeekDaySize(coursePkg.courseTable, coursePkg.courseTableStyle)
+        val dateInfo = TimeUtils.getWeekNumDateArray(coursePkg.termDate, weekNum)
 
-            if (view != null) {
-                layout_emptyCourseTable.apply {
-                    if (childCount > 0) {
-                        (getChildAt(0) as CourseTableView).setTableData(coursePkg, showWeekDaySize + 1)
-                    } else {
-                        val courseTable = CourseTableView.create(requireContext(), coursePkg, showWeekDaySize + 1).apply {
-                            setOnCourseCellClickListener(this@TableFragment)
-                        }
-                        runInMain {
-                            addView(courseTable)
-                        }
+        if (view != null) {
+            layout_emptyCourseTable.apply {
+                if (childCount > 0) {
+                    (getChildAt(0) as CourseTableView).setTableData(coursePkg, showWeekDaySize + 1)
+                } else {
+                    val courseTable = CourseTableView.create(requireContext(), coursePkg, showWeekDaySize + 1).apply {
+                        setOnCourseCellClickListener(this@TableFragment)
                     }
-                }
-                layout_emptyCourseTableHeader.apply {
-                    if (childCount > 0) {
-                        runInMain {
-                            (getChildAt(0) as CourseTableHeaderView).setHeaderData(showWeekDaySize, dateInfo, coursePkg.courseTableStyle)
-                        }
-                    } else {
-                        val courseTableHeader = CourseTableHeaderView.create(requireContext(), showWeekDaySize, dateInfo, coursePkg.courseTableStyle)
-                        runInMain {
-                            addView(courseTableHeader)
-                        }
+                    runInMain {
+                        it.addView(courseTable)
                     }
-                }
-            } else {
-                val courseTable = CourseTableView.create(requireContext(), coursePkg, showWeekDaySize + 1).apply {
-                    setOnCourseCellClickListener(this@TableFragment)
-                }
-                lifecycleScope.launchWhenStarted {
-                    layout_emptyCourseTable.addView(courseTable)
-                }
-
-                val courseTableHeader = CourseTableHeaderView.create(requireContext(), showWeekDaySize, dateInfo, coursePkg.courseTableStyle)
-                lifecycleScope.launchWhenStarted {
-                    layout_emptyCourseTableHeader.addView(courseTableHeader)
                 }
             }
+            layout_emptyCourseTableHeader.apply {
+                if (childCount > 0) {
+                    runInMain {
+                        (it.getChildAt(0) as CourseTableHeaderView).setHeaderData(showWeekDaySize, dateInfo, coursePkg.courseTableStyle)
+                    }
+                } else {
+                    val courseTableHeader =
+                        CourseTableHeaderView.create(requireContext(), showWeekDaySize, dateInfo, coursePkg.courseTableStyle)
+                    runInMain {
+                        it.addView(courseTableHeader)
+                    }
+                }
+            }
+        } else {
+            val courseTable = CourseTableView.create(requireContext(), coursePkg, showWeekDaySize + 1).apply {
+                setOnCourseCellClickListener(this@TableFragment)
+            }
+            lifecycleScope.launchWhenStarted {
+                layout_emptyCourseTable.addView(courseTable)
+            }
+
+            val courseTableHeader = CourseTableHeaderView.create(requireContext(), showWeekDaySize, dateInfo, coursePkg.courseTableStyle)
+            lifecycleScope.launchWhenStarted {
+                layout_emptyCourseTableHeader.addView(courseTableHeader)
+            }
         }
+        return@withContext
     }
 
     private fun applyLayoutTransition(container: ViewGroup) {

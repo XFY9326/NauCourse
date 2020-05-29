@@ -2,37 +2,22 @@ package tool.xfy9326.naucourse.ui.views.widgets
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.util.AttributeSet
 import android.view.MotionEvent
-import androidx.core.content.ContextCompat
 import com.google.android.material.slider.Slider
-import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.utils.views.AnimUtils
 
 class AnimateSlider : Slider, Slider.OnSliderTouchListener {
     private var startValue = -1f
     private var listener: OnSlideFinishListener? = null
 
-    constructor(context: Context) : super(context)
+    constructor(context: Context) : this(context, null)
 
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        setAttrs(context)
-    }
+    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
 
-    constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle) {
-        setAttrs(context)
-    }
+    constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)
 
-    private fun setAttrs(context: Context) {
-        tickColor = ColorStateList.valueOf(Color.TRANSPARENT)
-        haloColor = ColorStateList.valueOf(Color.TRANSPARENT)
-        haloRadius = 0
-        thumbRadius = context.resources.getDimensionPixelSize(R.dimen.slider_thumb_radius_not_touched)
-        trackColorActive = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.colorSliderTrackerActive))
-        trackColorInactive = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.colorSliderTrackerInActive))
-        trackHeight = context.resources.getDimensionPixelSize(R.dimen.slider_tracker_height)
+    init {
         addOnSliderTouchListener(this)
     }
 

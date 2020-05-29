@@ -10,21 +10,32 @@ import kotlin.math.min
 
 @Entity(
     tableName = CourseSetDBHelper.COURSES_TIME_TABLE_NAME,
-    indices = [Index(value = [CourseSetDBHelper.COLUMN_COURSE_ID]), Index(value = [CourseSetDBHelper.COLUMN_WEEK_DAY])],
-    foreignKeys = [ForeignKey(entity = Course::class, parentColumns = [Constants.DB.COLUMN_ID], childColumns = [CourseSetDBHelper.COLUMN_COURSE_ID])]
+    indices = [Index(
+        value = [CourseSetDBHelper.COLUMN_COURSE_ID, CourseSetDBHelper.COLUMN_WEEK_MODE, CourseSetDBHelper.COLUMN_WEEK_DAY,
+            CourseSetDBHelper.COLUMN_WEEKS_STR, CourseSetDBHelper.COLUMN_COURSES_NUM_STR], unique = true
+    )],
+    foreignKeys = [ForeignKey(
+        entity = Course::class,
+        parentColumns = [Constants.DB.COLUMN_ID],
+        childColumns = [CourseSetDBHelper.COLUMN_COURSE_ID]
+    )]
 )
 data class CourseTime(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = Constants.DB.COLUMN_ID)
     val id: Int,
+    @ColumnInfo(name = CourseSetDBHelper.COLUMN_COURSE_ID)
     var courseId: String,
     val location: String,
+    @ColumnInfo(name = CourseSetDBHelper.COLUMN_WEEKS_STR)
     val weeksStr: String,
+    @ColumnInfo(name = CourseSetDBHelper.COLUMN_WEEK_MODE)
     val weekMode: WeekMode,
     val weeksArray: TimePeriodList,
     val rawWeeksStr: String,
     @ColumnInfo(name = CourseSetDBHelper.COLUMN_WEEK_DAY)
     val weekDay: Short,
+    @ColumnInfo(name = CourseSetDBHelper.COLUMN_COURSES_NUM_STR)
     val coursesNumStr: String,
     // 课程时间在单个时间项只被允许设定一段，此处为冗余设计，防止解析教务的时间段出现多段
     // 实际计算课程时按照多段计算，编辑时仅编辑第一段
@@ -164,10 +175,10 @@ data class CourseTime(
 
         if (courseId != other.courseId) return false
         if (location != other.location) return false
-        if (weeksStr != other.weeksStr) return false
         if (weekMode != other.weekMode) return false
+        if (weeksArray != other.weeksArray) return false
         if (weekDay != other.weekDay) return false
-        if (coursesNumStr != other.coursesNumStr) return false
+        if (coursesNumArray != other.coursesNumArray) return false
 
         return true
     }
@@ -175,10 +186,10 @@ data class CourseTime(
     override fun hashCode(): Int {
         var result = courseId.hashCode()
         result = 31 * result + location.hashCode()
-        result = 31 * result + weeksStr.hashCode()
         result = 31 * result + weekMode.hashCode()
+        result = 31 * result + weeksArray.hashCode()
         result = 31 * result + weekDay
-        result = 31 * result + coursesNumStr.hashCode()
+        result = 31 * result + coursesNumArray.hashCode()
         return result
     }
 }
