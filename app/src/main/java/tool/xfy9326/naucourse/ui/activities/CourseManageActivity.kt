@@ -257,11 +257,6 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun onDestroy() {
-        System.gc()
-        super.onDestroy()
-    }
-
     override fun onCourseImport(courses: ArrayList<Course>, term: Term, type: CourseManageViewModel.ImportCourseType) {
         getViewModel().setDataChanged()
         if (type == CourseManageViewModel.ImportCourseType.NEXT_TERM) {

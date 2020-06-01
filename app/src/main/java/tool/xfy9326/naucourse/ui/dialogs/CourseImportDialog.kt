@@ -68,11 +68,6 @@ class CourseImportDialog : DialogFragment(), DialogInterface.OnMultiChoiceClickL
         dialog?.window?.setBackgroundDrawable(requireContext().getDrawable(R.drawable.bg_dialog))
     }
 
-    override fun onDestroy() {
-        System.gc()
-        super.onDestroy()
-    }
-
     private fun getCourseNameArray() =
         Array(courseList.size) {
             courseList[it].name

@@ -138,7 +138,6 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
 
     override fun onDestroy() {
         loadingAnimateDrawable.clearAnimationCallbacks()
-        System.gc()
         super.onDestroy()
     }
 }

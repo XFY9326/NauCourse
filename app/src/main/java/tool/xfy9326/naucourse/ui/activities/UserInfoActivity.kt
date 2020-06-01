@@ -129,9 +129,4 @@ class UserInfoActivity : ViewModelActivity<UserInfoViewModel>() {
         }
         gl_userRankInfo.replaceAllViews(views.requireNoNulls())
     }
-
-    override fun onDestroy() {
-        System.gc()
-        super.onDestroy()
-    }
 }

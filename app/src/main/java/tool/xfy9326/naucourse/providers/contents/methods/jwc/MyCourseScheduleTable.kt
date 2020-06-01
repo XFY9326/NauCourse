@@ -138,7 +138,7 @@ object MyCourseScheduleTable : BaseNoParamContent<CourseSet>() {
         return courseSet
     }
 
-    private fun getCourseTimeSet(courseId: String, element: Element): HashSet<CourseTime> {
+    internal fun getCourseTimeSet(courseId: String, element: Element, isNextTermCourse: Boolean = false): HashSet<CourseTime> {
         val text = element.text().trim()
 
         val courseLocationSplit = text.split(COURSE_LOCATION_STR).filter {
@@ -159,32 +159,46 @@ object MyCourseScheduleTable : BaseNoParamContent<CourseSet>() {
         var weeksPeriodArray: ArrayList<TimePeriod>
         var coursesNumPeriodArray: ArrayList<TimePeriod>
 
+        var weekStr: String
+        var courseNumText: String
+
         courseLocationSplit.forEach {
             weeksPeriodArray = ArrayList(1)
             coursesNumPeriodArray = ArrayList(1)
 
             val courseTimeSplit = it.split(COURSE_TIME_STR)
             location = courseTimeSplit[0].trimEnd()
-            val timeSplit = courseTimeSplit[1].split(COURSE_TIME_JOIN_SYMBOL)
 
-            val weekStr = timeSplit[0]
+            if (isNextTermCourse) {
+                weekStr = courseTimeSplit[1].substring(0, courseTimeSplit[1].indexOf(WEEK_NUM_CHAR) + 1)
+
+                weekDay = courseTimeSplit[1].substring(weekStr.length + 1, weekStr.length + 1 + 1).toShort()
+
+                rawCourseNumStr = courseTimeSplit[1].substring(weekStr.length + 1 + 1, courseTimeSplit[1].length)
+
+                courseNumText = rawCourseNumStr.substring(1, rawCourseNumStr.indexOf(COURSE_NUM_CHAR))
+            } else {
+                val timeSplit = courseTimeSplit[1].split(COURSE_TIME_JOIN_SYMBOL)
+                weekStr = timeSplit[0]
+
+                weekDay = timeSplit[2].toShort()
+
+                courseNumText = timeSplit[4].substring(0, timeSplit[4].indexOf(COURSE_NUM_CHAR))
+
+                rawCourseNumStr = if (!courseNumText.startsWith(TIMES_CHAR)) {
+                    TIMES_CHAR + timeSplit[4]
+                } else {
+                    timeSplit[4]
+                }
+            }
+
             weekNumAnalyse(weekStr, weeksPeriodArray).let { data ->
                 weeksArr = data.first
                 weekMode = data.second
             }
 
-            weekDay = timeSplit[2].toShort()
-
-            val courseNumText = timeSplit[4].substring(0, timeSplit[4].indexOf(COURSE_NUM_CHAR))
-            courseNumArr = courseNumAnalyse(courseNumText, coursesNumPeriodArray)
-
             rawWeeksStr = rawWeekStrAnalyse(weekStr)
-
-            rawCourseNumStr = if (!courseNumText.startsWith(TIMES_CHAR)) {
-                TIMES_CHAR + timeSplit[4]
-            } else {
-                timeSplit[4]
-            }
+            courseNumArr = courseNumAnalyse(courseNumText, coursesNumPeriodArray)
 
             courseTimeSet.add(
                 CourseTime(
@@ -205,14 +219,14 @@ object MyCourseScheduleTable : BaseNoParamContent<CourseSet>() {
         return courseTimeSet
     }
 
-    internal fun rawWeekStrAnalyse(weekStr: String) =
+    private fun rawWeekStrAnalyse(weekStr: String) =
         if (!weekStr.startsWith(TIMES_CHAR)) {
             TIMES_CHAR + weekStr
         } else {
             weekStr
         }
 
-    internal fun weekNumAnalyse(weekStr: String, weeksPeriodArray: ArrayList<TimePeriod>): Pair<CharArray?, WeekMode> {
+    private fun weekNumAnalyse(weekStr: String, weeksPeriodArray: ArrayList<TimePeriod>): Pair<CharArray?, WeekMode> {
         var weeksArrTemp: CharArray? = null
         var weekMode = WeekMode.ALL_WEEKS
 
@@ -264,7 +278,7 @@ object MyCourseScheduleTable : BaseNoParamContent<CourseSet>() {
         return weeksArrTemp to weekMode
     }
 
-    internal fun courseNumAnalyse(courseNumText: String, coursesNumPeriodArray: ArrayList<TimePeriod>): CharArray? {
+    private fun courseNumAnalyse(courseNumText: String, coursesNumPeriodArray: ArrayList<TimePeriod>): CharArray? {
         var courseNumArrTemp: CharArray? = null
         when {
             MULTI_TIME_JOIN_SYMBOL in courseNumText -> courseNumText.split(MULTI_TIME_JOIN_SYMBOL).forEach { time ->

@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.compat
 
 import android.annotation.SuppressLint
 import tool.xfy9326.naucourse.utils.BaseUtils.hexToByteArray
+import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 import java.nio.charset.StandardCharsets
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
@@ -36,7 +37,7 @@ object AESCompat {
                 return doFinal(content)
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            ExceptionUtils.printStackTrace<AESCompat>(e)
         }
         return null
     }

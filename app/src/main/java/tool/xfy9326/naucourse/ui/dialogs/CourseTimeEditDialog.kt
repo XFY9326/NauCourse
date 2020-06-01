@@ -242,10 +242,8 @@ class CourseTimeEditDialog : DialogFragment() {
         DialogUtils.applyBackgroundAndWidth(requireContext(), dialog, CONTENT_WIDTH_PERCENT)
     }
 
-    private fun generateCourseTime(): CourseTime {
+    private fun readWeeksList(weekMode: WeekMode): ArrayList<TimePeriod> {
         requireView().apply {
-            var weekMode = getWeekModeById(requireView().radioGroup_weekMode.checkedRadioButtonId)
-
             val weeksList = ArrayList<TimePeriod>(1)
             var weekStart: Int? = null
             var lastCheckedNum: Int? = null
@@ -283,6 +281,15 @@ class CourseTimeEditDialog : DialogFragment() {
                     }
                 )
             }
+
+            return weeksList
+        }
+    }
+
+    private fun generateCourseTime(): CourseTime {
+        requireView().apply {
+            var weekMode = getWeekModeById(requireView().radioGroup_weekMode.checkedRadioButtonId)
+            val weeksList = readWeeksList(weekMode)
 
             // 单双周若只有一个周上课，则改为任意周模式
             if (weeksList.size == 1 && !weeksList.first().hasEnd()) {

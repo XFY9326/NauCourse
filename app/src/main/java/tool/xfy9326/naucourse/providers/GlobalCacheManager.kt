@@ -48,6 +48,5 @@ object GlobalCacheManager {
         MyCourseHistoryInfo.clearCacheInfo()
         MyCourseInfo.clearCacheInfo()
         PersonalInfo.clearCacheInfo()
-        System.gc()
     }
 }
