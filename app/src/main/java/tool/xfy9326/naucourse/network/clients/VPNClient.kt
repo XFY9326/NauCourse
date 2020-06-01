@@ -9,6 +9,7 @@ import okhttp3.internal.closeQuietly
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.network.clients.base.LoginInfo
 import tool.xfy9326.naucourse.network.clients.base.LoginResponse
+import tool.xfy9326.naucourse.network.clients.base.ServerErrorException
 import tool.xfy9326.naucourse.network.tools.NetworkTools
 import tool.xfy9326.naucourse.network.tools.NetworkTools.Companion.hasSameHost
 import tool.xfy9326.naucourse.network.tools.VPNTools
@@ -32,6 +33,7 @@ open class VPNClient(loginInfo: LoginInfo, loginUrl: HttpUrl? = null) :
         const val VPN_HOST = "vpn.nau.edu.cn"
         private const val VPN_LOGIN_PATH = "login"
         private const val VPN_LOGOUT_PATH = "logout"
+        private const val VPN_EXPIRED = "expired"
 
         private const val VPN_CAS_LOGIN_PARAM = "cas_login"
         private const val VPN_CAS_LOGIN_PARAM_VALUE = "true"
@@ -44,6 +46,7 @@ open class VPNClient(loginInfo: LoginInfo, loginUrl: HttpUrl? = null) :
         private val VPN_LOGOUT_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(VPN_HOST).addPathSegment(VPN_LOGOUT_PATH).build()
 
         private const val VPN_LOGIN_PAGE_STR = "南京审计大学WEBVPN登录"
+        private const val VPN_EXPIRED_STR = "授权过期"
         private const val VPN_HOST_DATA_STR = "__vpn_hostname_data"
         private const val VPN_NECESSARY_STR = "通过VPN才可以访问"
         private const val ONLY_ALLOW_SCHOOL_IP_STR = "该信息仅允许校内地址访问"
@@ -135,7 +138,13 @@ open class VPNClient(loginInfo: LoginInfo, loginUrl: HttpUrl? = null) :
             }
         }
 
-        if (!validateLoginWithResponse(NetworkTools.getResponseContent(callResult), callResult.request.url)) {
+        val callContent = NetworkTools.getResponseContent(callResult)
+        if (VPN_EXPIRED_STR in callContent && VPN_EXPIRED in callResult.request.url.toString()) {
+            callResult.closeQuietly()
+            throw ServerErrorException("VPN Server Expired!")
+        }
+
+        if (!validateLoginWithResponse(callContent, callResult.request.url)) {
             val loginResponse =
                 if (useVPN) {
                     login(callResult)
@@ -155,6 +164,7 @@ open class VPNClient(loginInfo: LoginInfo, loginUrl: HttpUrl? = null) :
         return if (validateNotInLoginPage(NetworkTools.getResponseContent(callResult))) {
             callResult
         } else {
+            callResult.closeQuietly()
             onVPNClientInLoginPage(useVPN, newRequest)
         }
     }

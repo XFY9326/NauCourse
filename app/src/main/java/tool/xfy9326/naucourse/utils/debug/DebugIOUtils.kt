@@ -67,6 +67,7 @@ object DebugIOUtils {
                 var needGenerateDeviceInfo = false
                 val saveFile = getSaveFile(type)
                 if (!saveFile.exists()) {
+                    saveFile.parentFile?.mkdirs()
                     needGenerateDeviceInfo = true
                 }
                 FileWriter(saveFile, true).use {

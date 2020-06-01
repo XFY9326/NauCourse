@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.ViewConfiguration
 import android.widget.TextView
 import androidx.core.text.getSpans
+import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 
 
 object AdvancedLinkMovementMethod : LinkMovementMethod() {
@@ -30,11 +31,21 @@ object AdvancedLinkMovementMethod : LinkMovementMethod() {
                 if (link != null && image != null) {
                     if (event.action == MotionEvent.ACTION_UP) {
                         clearHandler()
-                        if (!isLongPress) link.onClick(widget, x, y)
+                        if (!isLongPress) {
+                            try {
+                                link.onClick(widget, x, y)
+                            } catch (e: Exception) {
+                                ExceptionUtils.printStackTrace<AdvancedLinkMovementMethod>(e)
+                            }
+                        }
                         isLongPress = false
                     } else {
                         longClickHandler.postDelayed({
-                            link.onLongPress(widget, x, y)
+                            try {
+                                link.onLongPress(widget, x, y)
+                            } catch (e: Exception) {
+                                ExceptionUtils.printStackTrace<AdvancedLinkMovementMethod>(e)
+                            }
                             isLongPress = true
                         }, ViewConfiguration.getLongPressTimeout().toLong())
                     }
