@@ -47,19 +47,9 @@ android {
         }
     }
 
-    signingConfigs {
-        release {
-            storeFile KEY_STORE_FILE
-            storePassword KEY_STORE_PASSWORD
-            keyAlias KEY_STORE_ALIAS
-            keyPassword KEY_STORE_KEY_PASSWORD
-        }
-    }
-
     buildTypes {
         debug {
             minifyEnabled false
-            signingConfig signingConfigs.release
             manifestPlaceholders = ['DEBUG': "true"]
         }
 
@@ -68,7 +58,6 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
             manifestPlaceholders = ['DEBUG': "false"]
         }
     }

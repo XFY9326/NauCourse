@@ -94,6 +94,7 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
                     }
                 }
             }
+            background = getDrawable(R.drawable.bg_dialog)
         }.create().apply {
             DialogUtils.addAutoCloseListener(lifecycle, this)
             show()
