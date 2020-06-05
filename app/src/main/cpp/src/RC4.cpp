@@ -15,7 +15,7 @@ void RC4::getKey(const u_char *key, int keyLen, u_char *output) {
 }
 
 void RC4::run(const u_char *content, int contentLen, const u_char *key, int keyLen, u_char *output, int *outputLen) {
-    u_char *realKey = new u_char[RC4_MAX_LEN];
+    auto *realKey = new u_char[RC4_MAX_LEN];
     getKey(key, keyLen, realKey);
 
     for (int i = 0, x = 0, y = 0; i < contentLen; i++) {
@@ -29,7 +29,7 @@ void RC4::run(const u_char *content, int contentLen, const u_char *key, int keyL
 }
 
 char *RC4::encrypt(const char *content, const char *key, int contentLen, int keyLen, int &outputLen) {
-    u_char *outputBuffer = new u_char[contentLen];
+    auto *outputBuffer = new u_char[contentLen];
     int outputBufferLen = 0;
     run((u_char *) content, contentLen, (u_char *) key, keyLen, outputBuffer, &outputBufferLen);
     char *output = byteToHex(outputBuffer, outputBufferLen);
@@ -40,9 +40,9 @@ char *RC4::encrypt(const char *content, const char *key, int contentLen, int key
 
 char *RC4::decrypt(const char *content, const char *key, int contentLen, int keyLen, int &outputLen) {
     u_char *byteBuffer = hexToByte(content);
-    u_char *output = new u_char[contentLen / 2 + 1];
+    auto *output = new u_char[contentLen / 2 + 1];
     outputLen = 0;
-    memset(output, contentLen / 2 + 1, 0);
+    memset(output, 0, contentLen / 2 + 1);
     run(byteBuffer, contentLen / 2, (u_char *) key, keyLen, output, &outputLen);
     output[outputLen++] = '\0';
     delete[] byteBuffer;
@@ -79,7 +79,7 @@ u_char *RC4::hexToByte(const char *hexContent) {
     if (hexLen <= 0 || 0 != hexLen % 2) {
         return nullptr;
     }
-    u_char *buffer = new u_char[hexLen / 2];
+    auto *buffer = new u_char[hexLen / 2];
     int temp1, temp2;
     for (int i = 0; i < hexLen / 2; i++) {
         temp1 = (int) hexContent[i * 2] - (((int) hexContent[i * 2] >= 'A') ? 'A' - 10 : '0');

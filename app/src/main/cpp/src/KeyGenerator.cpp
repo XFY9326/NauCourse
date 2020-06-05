@@ -26,6 +26,9 @@ int KeyGenerator::getKeySpace(int paramLen) {
     return paramLen * 2 + 1;
 }
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "hicpp-signed-bitwise"
+
 void KeyGenerator::getKey(const char *param, int paramLen, char *result) {
     int ivLen = getKeySpace(paramLen);
     int offset = 0;
@@ -39,3 +42,5 @@ void KeyGenerator::getKey(const char *param, int paramLen, char *result) {
 
     result[ivLen - 1] = '\0';
 }
+
+#pragma clang diagnostic pop
