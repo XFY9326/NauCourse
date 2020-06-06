@@ -17,6 +17,7 @@ bugly {
 android {
     compileSdkVersion 29
     buildToolsVersion '29.0.3'
+    ndkVersion '21.2.6472646'
 
     defaultConfig {
         applicationId rootProject.ext.applicationId
