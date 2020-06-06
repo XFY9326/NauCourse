@@ -1,17 +1,17 @@
-FROM ubuntu:20.10
+FROM ubuntu:20.04
 
 LABEL maintainer="XFY9326@xfy9326.top"
 
 # Environment
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
+RUN sed -i s@/archive.ubuntu.com/@/mirrors.tuna.tsinghua.edu.cn/@g /etc/apt/sources.list
 RUN apt-get clean
-
 RUN apt-get update
+
 RUN apt-get install --assume-yes apt-utils
 RUN apt-get upgrade -y --fix-missing
-RUN apt-get install git wget curl gcc cmake zip unzip tar openjdk-8-jdk -y --fix-missing
+RUN apt-get install git wget curl gcc cmake unzip openjdk-8-jdk -y --fix-missing
 
 # JAVA
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
@@ -35,7 +35,7 @@ WORKDIR /Android
 RUN mkdir ~/.android
 RUN touch ~/.android/repositories.cfg
 
-RUN wget --no-check-certificate -O ${ANDROID_SDK}/tools.zip https://dl.google.com/android/repository/commandlinetools-linux-6514223_latest.zip
+RUN wget --no-check-certificate -O ${ANDROID_SDK}/tools.zip "https://dl.google.com/android/repository/commandlinetools-linux-6514223_latest.zip"
 RUN unzip -d ${ANDROID_SDK} ${ANDROID_SDK}/tools.zip
 RUN rm -rf ${ANDROID_SDK}/tools.zip
 
