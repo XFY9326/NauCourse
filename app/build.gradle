@@ -122,7 +122,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation "androidx.appcompat:appcompat-resources:1.1.0"
     implementation 'androidx.preference:preference-ktx:1.1.1'
-    implementation "androidx.fragment:fragment-ktx:1.2.4"
+    implementation "androidx.fragment:fragment-ktx:1.2.5"
 
     // AndroidX View
     implementation 'androidx.gridlayout:gridlayout:1.0.0'

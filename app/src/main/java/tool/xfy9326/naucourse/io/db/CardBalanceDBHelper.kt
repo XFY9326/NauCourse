@@ -10,10 +10,7 @@ object CardBalanceDBHelper : BaseDBHelper<AppDB.AppDataBase>() {
     override val db: AppDB.AppDataBase = AppDB.getDB()
 
     @Synchronized
-    fun saveCardBalance(cardBalance: CardBalance) = with(db.getCardBalanceDao()) {
-        clearAll()
-        putCardBalance(cardBalance)
-    }
+    fun saveCardBalance(cardBalance: CardBalance) = db.getCardBalanceDao().setCardBalance(cardBalance)
 
     @Synchronized
     fun readCardBalance() = with(db.getCardBalanceDao()) {

@@ -77,7 +77,7 @@ class SchoolCalendarViewModel : BaseViewModel() {
                             AppPref.CurrentSchoolCalendarUrl = url.toString()
                             AppPref.CurrentSchoolCalendarImageUrl = imageUrl
                         }
-                    } else if (forceRefresh) {
+                    } else {
                         calendarLoadStatus.postEventValue(CalendarLoadStatus.IMAGE_LOAD_FAILED)
                     }
                 }

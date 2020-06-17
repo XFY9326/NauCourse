@@ -209,22 +209,26 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
             TermDatePickerDialog.DateType.START_DATE ->
                 if (date >= termDate.endDate) {
                     showToast(R.string.term_date_error_start)
-                } else {
+                } else if (checkWeekLength(date, termDate.endDate)) {
                     newTermDate = TermDate(date, termDate.endDate)
                 }
             TermDatePickerDialog.DateType.END_DATE ->
                 if (date <= termDate.startDate) {
                     showToast(R.string.term_date_error_end)
-                } else {
+                } else if (checkWeekLength(termDate.startDate, date)) {
                     newTermDate = TermDate(termDate.startDate, date)
                 }
         }
-        val weekLength = TimeUtils.getWeekLength(newTermDate, true)
+        startTermDateEditDialog(newTermDate)
+    }
+
+    private fun checkWeekLength(startDate: Date, endDate: Date): Boolean {
+        val weekLength = TimeUtils.getWeekLength(startDate, endDate, true)
         if (weekLength < Constants.Course.MIN_WEEK_NUM_SIZE || weekLength > Constants.Course.MAX_WEEK_NUM_SIZE) {
             showToast(R.string.term_date_length_error, Constants.Course.MIN_WEEK_NUM_SIZE, Constants.Course.MAX_WEEK_NUM_SIZE, weekLength)
-            newTermDate = termDate
+            return false
         }
-        startTermDateEditDialog(newTermDate)
+        return true
     }
 
     override fun onTermDatePartEditCanceled(termDate: TermDate) = startTermDateEditDialog(termDate)

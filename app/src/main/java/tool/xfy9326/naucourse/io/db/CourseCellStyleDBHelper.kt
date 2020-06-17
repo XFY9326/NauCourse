@@ -4,7 +4,6 @@ import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.io.db.base.BaseDBHelper
 import tool.xfy9326.naucourse.io.db.room.CoursesDB
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
-import tool.xfy9326.naucourse.utils.courses.CourseStyleUtils
 
 object CourseCellStyleDBHelper : BaseDBHelper<CoursesDB.CoursesDataBase>() {
     const val COURSES_CELL_STYLE_TABLE_NAME = "CoursesCellStyle"
@@ -12,15 +11,10 @@ object CourseCellStyleDBHelper : BaseDBHelper<CoursesDB.CoursesDataBase>() {
     override val db: CoursesDB.CoursesDataBase = CoursesDB.getDB()
 
     @Synchronized
-    fun saveCourseCellStyle(styles: Array<CourseCellStyle>) = with(db.getCoursesCellStyleDao()) {
-        clearCourseCellStyle()
-        putCourseCellStyle(*styles)
-    }
+    fun saveCourseCellStyle(styles: Array<CourseCellStyle>) = db.getCoursesCellStyleDao().setCourseCellStyle(styles)
 
     @Synchronized
-    fun loadCourseCellStyle(courseSet: CourseSet) = with(db.getCoursesCellStyleDao()) {
-        CourseStyleUtils.asyncCellStyle(courseSet, getCourseCellStyle())
-    }
+    fun loadCourseCellStyle(courseSet: CourseSet) = db.getCoursesCellStyleDao().getFixedCourseCellStyle(courseSet)
 
     @Synchronized
     override fun clearAll() = with(db.getCoursesCellStyleDao()) {

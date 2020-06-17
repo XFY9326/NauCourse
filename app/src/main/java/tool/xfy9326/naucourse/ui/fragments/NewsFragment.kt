@@ -63,6 +63,7 @@ class NewsFragment : DrawerToolbarFragment<NewsViewModel>(), NewsAdapter.OnNewsI
         })
         viewModel.newsList.observe(viewLifecycleOwner, Observer {
             newsAdapter.submitList(it)
+            arv_newsList.scrollToPosition(0)
         })
         viewModel.errorMsg.observeEvent(viewLifecycleOwner, Observer {
             showSnackBar(layout_news, I18NUtils.getContentErrorResId(it)!!)

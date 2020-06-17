@@ -131,9 +131,11 @@ object TimeUtils {
         }
     }
 
-    fun getWeekLength(termDate: TermDate, getRawLength: Boolean = false): Int {
-        val startMills = if (getRawLength) termDate.startDate.time else getFixedTermStartDateCalendar(termDate.startDate).timeInMillis
-        val endMills = if (getRawLength) termDate.endDate.time else getFixedTermEndDateCalendar(termDate.endDate).timeInMillis
+    fun getWeekLength(termDate: TermDate, getRawLength: Boolean = false) = getWeekLength(termDate.startDate, termDate.endDate, getRawLength)
+
+    fun getWeekLength(startDate: Date, endDate: Date, getRawLength: Boolean = false): Int {
+        val startMills = if (getRawLength) startDate.time else getFixedTermStartDateCalendar(startDate).timeInMillis
+        val endMills = if (getRawLength) endDate.time else getFixedTermEndDateCalendar(endDate).timeInMillis
         return if (getRawLength) {
             ((endMills - startMills + 24 * 60 * 60 * 1000f) / (7 * 24 * 60 * 60 * 1000f)).toInt()
         } else {

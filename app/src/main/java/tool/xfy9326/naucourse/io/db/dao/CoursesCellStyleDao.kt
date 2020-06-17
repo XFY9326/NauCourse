@@ -1,14 +1,22 @@
 package tool.xfy9326.naucourse.io.db.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.io.db.CourseCellStyleDBHelper
+import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
+import tool.xfy9326.naucourse.utils.courses.CourseStyleUtils
 
 @Dao
 interface CoursesCellStyleDao {
+    @Transaction
+    fun getFixedCourseCellStyle(courseSet: CourseSet) = CourseStyleUtils.asyncCellStyle(courseSet, getCourseCellStyle())
+
+    @Transaction
+    fun setCourseCellStyle(styles: Array<CourseCellStyle>) {
+        clearCourseCellStyle()
+        putCourseCellStyle(*styles)
+    }
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun putCourseCellStyle(vararg courseCellStyle: CourseCellStyle)
 
