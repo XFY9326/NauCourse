@@ -35,21 +35,25 @@ data class TermDate(
         }
     }
 
+    companion object {
+        fun getTerm(startDate: Date): Term {
+            val calendar = Calendar.getInstance(Locale.CHINA)
+            calendar.time = startDate
+
+            val year = calendar[Calendar.YEAR]
+
+            return if (calendar[Calendar.MONTH] + 1 > 6) {
+                Term(year, year + 1, 1)
+            } else {
+                Term(year - 1, year, 2)
+            }
+        }
+    }
+
     fun refreshCurrentWeekNum() {
         currentWeekNum = TimeUtils.getWeekNum(startDate, endDate)
         inVacation = currentWeekNum <= 0
     }
 
-    fun getTerm(): Term {
-        val calendar = Calendar.getInstance(Locale.CHINA)
-        calendar.time = startDate
-
-        val year = calendar[Calendar.YEAR]
-
-        return if (calendar[Calendar.MONTH] + 1 > 6) {
-            Term(year, year + 1, 1)
-        } else {
-            Term(year - 1, year, 2)
-        }
-    }
+    fun getTerm() = Companion.getTerm(startDate)
 }

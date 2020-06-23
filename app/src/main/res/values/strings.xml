@@ -163,6 +163,7 @@
     <string name="course_conflict_msg">课程1：%1$s\n时间1：%2$s 周%3$s %4$s\n课程1：%5$s\n时间2：%6$s 周%7$s %8$s</string>
     <string name="save">保存</string>
     <string name="save_failed">保存失败！</string>
+    <string name="course_time_save_empty">\"%1$s\"时间列表为空！</string>
     <string name="same_course_time_exists">存在相同的课程时间！保存失败！</string>
     <string name="course_name_empty">请输入课程名称！</string>
     <string name="course_time_empty">请设置至少一个课程时间！</string>
@@ -172,8 +173,7 @@
     <string name="current_term">当前学期：%1$s</string>
     <string name="current_term_date_start">开始日期：%1$s</string>
     <string name="current_term_date_end">结束日期：%1$s</string>
-    <string name="term_date_error_start">学期开始时间必须小于结束时间！</string>
-    <string name="term_date_error_end">学期结束时间必须大于开始时间！</string>
+    <string name="term_date_error">学期开始时间必须小于结束时间！</string>
     <string name="clear_term_edit">重置学期</string>
     <string name="term_date_length_error">学期周数长度必须\n为%1$d～%2$d周之间！\n当前长度：%3$d周</string>
     <string name="crash_msg">程序运行时出现错误！\n错误日志已保存！</string>

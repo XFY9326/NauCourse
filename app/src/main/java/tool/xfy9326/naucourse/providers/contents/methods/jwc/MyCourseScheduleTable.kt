@@ -140,6 +140,9 @@ object MyCourseScheduleTable : BaseNoParamContent<CourseSet>() {
 
     internal fun getCourseTimeSet(courseId: String, element: Element, isNextTermCourse: Boolean = false): HashSet<CourseTime> {
         val text = element.text().trim()
+        if (text.isBlank()) {
+            return HashSet()
+        }
 
         val courseLocationSplit = text.split(COURSE_LOCATION_STR).filter {
             it.isNotEmpty()
@@ -164,7 +167,7 @@ object MyCourseScheduleTable : BaseNoParamContent<CourseSet>() {
         var courseTimeSplit: List<String>
 
         for (str in courseLocationSplit) {
-            weeksPeriodArray = ArrayList(1)
+            weeksPeriodArray = ArrayList(2)
             coursesNumPeriodArray = ArrayList(1)
 
             courseTimeSplit = str.split(COURSE_TIME_STR)

@@ -6,32 +6,50 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
-import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
+import androidx.fragment.app.FragmentManager
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 import java.util.*
 
 class TermDatePickerDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
-    private lateinit var dateType: DateType
-    private lateinit var termDate: TermDate
     private val calendar = Calendar.getInstance(Locale.CHINA)
+    private lateinit var nowStartDate: Date
+    private lateinit var nowEndDate: Date
+    private lateinit var editDateType: DateType
+
+    companion object {
+        private const val DATE_TYPE = "DATE_TYPE"
+        private const val TERM_DATE_START = "TERM_DATE_START"
+        private const val TERM_DATE_END = "TERM_DATE_END"
+
+        fun showTermDatePickerDialog(fragmentManager: FragmentManager, startTermDate: Date, endTermDate: Date, editDateType: DateType) {
+            TermDatePickerDialog().apply {
+                arguments = Bundle().apply {
+                    putSerializable(DATE_TYPE, editDateType)
+                    putSerializable(TERM_DATE_START, startTermDate)
+                    putSerializable(TERM_DATE_END, endTermDate)
+                }
+            }.show(fragmentManager, null)
+        }
+    }
 
     enum class DateType {
         START_DATE,
         END_DATE
     }
 
-    companion object {
-        const val DATE_TYPE = "DATE_TYPE"
-        const val TERM_DATE = "TERM_DATE"
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        dateType = arguments?.getSerializable(DATE_TYPE) as DateType
-        termDate = arguments?.getSerializable(TERM_DATE) as TermDate
+        editDateType = arguments?.getSerializable(DATE_TYPE) as DateType
+        nowStartDate = arguments?.getSerializable(TERM_DATE_START) as Date
+        nowEndDate = arguments?.getSerializable(TERM_DATE_END) as Date
+        if (editDateType == DateType.START_DATE) {
+            setDate(nowStartDate)
+        } else if (editDateType == DateType.END_DATE) {
+            setDate(nowEndDate)
+        }
     }
 
-    fun setDate(date: Date) {
+    private fun setDate(date: Date) {
         calendar.time = date
         (dialog as DatePickerDialog?)?.updateDate(
             calendar.get(Calendar.YEAR),
@@ -53,7 +71,7 @@ class TermDatePickerDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
             setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.no)) { _, _ ->
                 val fragment = requireActivity()
                 if (fragment is DatePickDialogCallback) {
-                    fragment.onTermDatePartEditCanceled(termDate)
+                    fragment.onTermDatePartEditCanceled(nowStartDate, nowEndDate)
                 }
             }
         }
@@ -74,13 +92,17 @@ class TermDatePickerDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
         }.time
         val fragment = requireActivity()
         if (fragment is DatePickDialogCallback) {
-            fragment.onTermDatePartSet(date, dateType, termDate)
+            if (editDateType == DateType.START_DATE) {
+                fragment.onTermDatePartSet(date, nowEndDate)
+            } else if (editDateType == DateType.END_DATE) {
+                fragment.onTermDatePartSet(nowStartDate, date)
+            }
         }
     }
 
     interface DatePickDialogCallback {
-        fun onTermDatePartSet(date: Date, dateType: DateType, termDate: TermDate)
+        fun onTermDatePartSet(startTermDate: Date, endTermDate: Date)
 
-        fun onTermDatePartEditCanceled(termDate: TermDate)
+        fun onTermDatePartEditCanceled(startTermDate: Date, endTermDate: Date)
     }
 }

@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 import kotlinx.android.synthetic.main.activity_course_manage.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.io.prefs.AppPref
@@ -28,11 +27,9 @@ import tool.xfy9326.naucourse.ui.models.activity.CourseManageViewModel
 import tool.xfy9326.naucourse.ui.views.recyclerview.AdvancedDivider
 import tool.xfy9326.naucourse.ui.views.recyclerview.SwipeItemCallback
 import tool.xfy9326.naucourse.ui.views.recyclerview.adapters.CourseAdapter
-import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBar
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBarWithCallback
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 import tool.xfy9326.naucourse.utils.views.I18NUtils
 import java.util.*
@@ -155,7 +152,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
             R.id.menu_courseManageTermDate -> {
                 val term = courseAdapter.getTermDate()
                 if (term != null) {
-                    startTermDateEditDialog(term)
+                    TermDateEditDialog.startTermDateEditDialog(supportFragmentManager, term)
                 } else {
                     showSnackBar(layout_courseManage, R.string.term_date_empty)
                 }
@@ -181,14 +178,6 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
         return super.onOptionsItemSelected(item)
     }
 
-    private fun startTermDateEditDialog(termDate: TermDate) {
-        TermDateEditDialog().apply {
-            arguments = Bundle().apply {
-                putSerializable(TermDateEditDialog.TERM_DATE, termDate)
-            }
-        }.show(supportFragmentManager, null)
-    }
-
     override fun onTermDateChanged(termDate: TermDate) {
         if (courseAdapter.getTermDate() != termDate) {
             courseAdapter.updateTermDate(termDate)
@@ -203,35 +192,11 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
         getViewModel().setDataChanged()
     }
 
-    override fun onTermDatePartSet(date: Date, dateType: TermDatePickerDialog.DateType, termDate: TermDate) {
-        var newTermDate = termDate
-        when (dateType) {
-            TermDatePickerDialog.DateType.START_DATE ->
-                if (date >= termDate.endDate) {
-                    showToast(R.string.term_date_error_start)
-                } else if (checkWeekLength(date, termDate.endDate)) {
-                    newTermDate = TermDate(date, termDate.endDate)
-                }
-            TermDatePickerDialog.DateType.END_DATE ->
-                if (date <= termDate.startDate) {
-                    showToast(R.string.term_date_error_end)
-                } else if (checkWeekLength(termDate.startDate, date)) {
-                    newTermDate = TermDate(termDate.startDate, date)
-                }
-        }
-        startTermDateEditDialog(newTermDate)
-    }
+    override fun onTermDatePartSet(startTermDate: Date, endTermDate: Date) =
+        TermDateEditDialog.startTermDateEditDialog(supportFragmentManager, startTermDate, endTermDate)
 
-    private fun checkWeekLength(startDate: Date, endDate: Date): Boolean {
-        val weekLength = TimeUtils.getWeekLength(startDate, endDate, true)
-        if (weekLength < Constants.Course.MIN_WEEK_NUM_SIZE || weekLength > Constants.Course.MAX_WEEK_NUM_SIZE) {
-            showToast(R.string.term_date_length_error, Constants.Course.MIN_WEEK_NUM_SIZE, Constants.Course.MAX_WEEK_NUM_SIZE, weekLength)
-            return false
-        }
-        return true
-    }
-
-    override fun onTermDatePartEditCanceled(termDate: TermDate) = startTermDateEditDialog(termDate)
+    override fun onTermDatePartEditCanceled(startTermDate: Date, endTermDate: Date) =
+        TermDateEditDialog.startTermDateEditDialog(supportFragmentManager, startTermDate, endTermDate)
 
     override fun onBackPressed() = checkSaveForExit()
 
@@ -332,6 +297,13 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
     private fun getEditResult(): Triple<CourseSet, Array<CourseCellStyle>, TermDate>? {
         val courseSet = courseAdapter.getCourseSet()
         if (courseSet != null) {
+            for (course in courseSet.courses) {
+                if (course.timeSet.isEmpty()) {
+                    showSnackBar(layout_courseManage, R.string.course_time_save_empty, course.name)
+                    return null
+                }
+            }
+
             val conflictResult = CourseSet.checkCourseTimeConflict(courseSet.courses)
             if (conflictResult.isSuccess) {
                 val styles = courseAdapter.getCourseStyleArray()
