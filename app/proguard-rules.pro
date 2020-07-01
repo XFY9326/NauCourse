@@ -22,10 +22,15 @@
 
 # -----------------------------
 
+#noinspection ShrinkerUnresolvedReference
 -keep class tool.xfy9326.naucourse.beans.** { *; }
+#noinspection ShrinkerUnresolvedReference
 -keep class tool.xfy9326.naucourse.compat.beans.** { *; }
+#noinspection ShrinkerUnresolvedReference
 -keep class tool.xfy9326.naucourse.update.beans.** { *; }
+#noinspection ShrinkerUnresolvedReference
 -keep class tool.xfy9326.naucourse.providers.beans.** { *; }
+#noinspection ShrinkerUnresolvedReference
 -keepnames class tool.xfy9326.naucourse.providers.info.methods.** {}
 
 # -----------------------------
@@ -84,11 +89,13 @@
 # -----------------------------
 
 # Debug
+#noinspection ShrinkerUnresolvedReference
 -keep class com.amitshekhar.android.** { *; }
 
 # -----------------------------
 
 # Kotlin
+#noinspection ShrinkerUnresolvedReference
 -keep class kotlin.** { *; }
 -keep class kotlin.Metadata { *; }
 -keepclassmembers class **$WhenMappings {
@@ -123,6 +130,7 @@
 -keep class kotlinx.coroutines.android.AndroidDispatcherFactory {}
 
 # Most of volatile fields are updated with AFU and should not be mangled
+#noinspection ShrinkerUnresolvedReference
 -keepclassmembernames class kotlinx.** {
     volatile <fields>;
 }
@@ -166,10 +174,12 @@
 -keepattributes *Annotation*
 
 # Gson specific classes
+#noinspection ShrinkerUnresolvedReference
 -keep class sun.misc.Unsafe { *; }
 #-keep class com.google.gson.stream.** { *; }
 
 # Application classes that will be serialized/deserialized over Gson
+#noinspection ShrinkerUnresolvedReference
 -keep class com.google.gson.examples.android.model.** { *; }
 
 # Prevent proguard from stripping interface information from TypeAdapterFactory,
@@ -182,4 +192,5 @@
 
 # Bugly
 -dontwarn com.tencent.bugly.**
+#noinspection ShrinkerUnresolvedReference
 -keep public class com.tencent.bugly.**{*;}

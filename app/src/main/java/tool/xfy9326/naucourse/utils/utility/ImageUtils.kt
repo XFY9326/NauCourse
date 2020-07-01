@@ -105,14 +105,20 @@ object ImageUtils {
 
     fun modifyLocalImage(
         fileName: String, dirName: String? = null,
-        compressFormat: Bitmap.CompressFormat = Bitmap.CompressFormat.WEBP, quality: Int = 100
+        compressFormat: Bitmap.CompressFormat? = null, quality: Int = 100
     ): Boolean {
+        val format = compressFormat ?: if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Bitmap.CompressFormat.WEBP_LOSSLESS
+        } else {
+            @Suppress("DEPRECATION")
+            Bitmap.CompressFormat.WEBP
+        }
         val path = PathUtils.getImageLocalSavePath(dirName)
         return if (path == null) {
             false
         } else {
             val localStorageFile = File(path, fileName)
-            ImageIOUtils.modifyLocalImage(localStorageFile, compressFormat, quality)
+            ImageIOUtils.modifyLocalImage(localStorageFile, format, quality)
         }
     }
 
@@ -209,7 +215,16 @@ object ImageUtils {
                 MediaStore.Images.Media.MIME_TYPE, when (format) {
                     Bitmap.CompressFormat.PNG -> Constants.MIME.IMAGE_PNG
                     Bitmap.CompressFormat.JPEG -> Constants.MIME.IMAGE_JPEG
-                    Bitmap.CompressFormat.WEBP -> Constants.MIME.IMAGE_WEBP
+                    else -> {
+                        @Suppress("DEPRECATION")
+                        if (format == Bitmap.CompressFormat.WEBP || Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+                            (format == Bitmap.CompressFormat.WEBP_LOSSY || format == Bitmap.CompressFormat.WEBP_LOSSLESS)
+                        ) {
+                            Constants.MIME.IMAGE_WEBP
+                        } else {
+                            throw IllegalArgumentException("Unknown Bitmap Compress Format! $format")
+                        }
+                    }
                 }
             )
             put(MediaStore.Images.Media.DATE_ADDED, current)
@@ -264,7 +279,12 @@ object ImageUtils {
         } else if (lower.endsWith(IMAGE_JPEG) || lower.endsWith(IMAGE_JPG)) {
             Bitmap.CompressFormat.JPEG
         } else if (lower.endsWith(IMAGE_WEBP)) {
-            Bitmap.CompressFormat.WEBP
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                Bitmap.CompressFormat.WEBP_LOSSLESS
+            } else {
+                @Suppress("DEPRECATION")
+                Bitmap.CompressFormat.WEBP
+            }
         } else {
             compressFormat
         }
@@ -274,7 +294,15 @@ object ImageUtils {
         when (compressFormat) {
             Bitmap.CompressFormat.PNG -> IMAGE_PNG
             Bitmap.CompressFormat.JPEG -> IMAGE_JPEG
-            Bitmap.CompressFormat.WEBP -> IMAGE_WEBP
-            else -> defaultImagePrefix
+            else -> {
+                @Suppress("DEPRECATION")
+                if (compressFormat == Bitmap.CompressFormat.WEBP || Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+                    (compressFormat == Bitmap.CompressFormat.WEBP_LOSSY || compressFormat == Bitmap.CompressFormat.WEBP_LOSSLESS)
+                ) {
+                    IMAGE_WEBP
+                } else {
+                    defaultImagePrefix
+                }
+            }
         }
 }

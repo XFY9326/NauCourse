@@ -2,8 +2,6 @@ package tool.xfy9326.naucourse.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.activity_about.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
@@ -12,12 +10,13 @@ import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.tools.NotifyBus
+import tool.xfy9326.naucourse.ui.activities.base.BaseActivity
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 
-class AboutActivity : AppCompatActivity() {
+class AboutActivity : BaseActivity() {
     private var advancedFunctionClickTime = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,14 +25,6 @@ class AboutActivity : AppCompatActivity() {
         setSupportActionBar(tb_general)
         enableHomeButton()
         setView()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            super.onBackPressed()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun setView() {

@@ -29,6 +29,7 @@ object TextIOUtils {
                 }
                 val file = File(path)
                 if (BaseIOUtils.prepareFile(file)) {
+                    @Suppress("BlockingMethodInNonBlockingContext")
                     FileOutputStream(file).use {
                         val bytes = storeText.toByteArray()
                         if (zipStore) {
@@ -56,6 +57,7 @@ object TextIOUtils {
             try {
                 val file = File(path)
                 if (file.exists()) {
+                    @Suppress("BlockingMethodInNonBlockingContext")
                     val rawText = FileInputStream(file).use {
                         val bytes = if (zipStore) {
                             GZIPInputStream(it).use { gzip ->

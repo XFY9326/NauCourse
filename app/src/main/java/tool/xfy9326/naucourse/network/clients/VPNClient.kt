@@ -149,7 +149,7 @@ open class VPNClient(loginInfo: LoginInfo, loginUrl: HttpUrl? = null) :
                 if (useVPN) {
                     login(callResult)
                 } else {
-                    super.login(callResult)
+                    loginInternal(callResult, false)
                 }
             if (!loginResponse.isSuccess) {
                 LogUtils.d<VPNClient>("VPN Login While Call Failed")

@@ -91,6 +91,10 @@ open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = nu
 
     @Synchronized
     final override fun login(beforeLoginResponse: Response): LoginResponse {
+        return loginInternal(beforeLoginResponse, isServiceLogin)
+    }
+
+    protected fun loginInternal(beforeLoginResponse: Response, isServiceLogin: Boolean): LoginResponse {
         val ssoResponseUrl = beforeLoginResponse.request.url
         val ssoResponseContent = beforeLoginResponse.body?.string()!!
         beforeLoginResponse.closeQuietly()
@@ -108,21 +112,15 @@ open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = nu
                     val content = it.body?.string()!!
                     return if (isServiceLogin) {
                         when {
-                            url.hasSameHost(serviceUrl) -> {
-                                LoginResponse(true, url, content)
-                            }
-                            url.hasSameHost(SSO_HOST) -> {
-                                LoginResponse(
-                                    false,
-                                    loginErrorReason = getSSOLoginStatus(content)
-                                )
-                            }
-                            else -> {
-                                LoginResponse(
-                                    false,
-                                    loginErrorReason = LoginResponse.ErrorReason.SERVER_ERROR
-                                )
-                            }
+                            url.hasSameHost(serviceUrl) -> LoginResponse(true, url, content)
+                            url.hasSameHost(SSO_HOST) -> LoginResponse(
+                                false,
+                                loginErrorReason = getSSOLoginStatus(content)
+                            )
+                            else -> LoginResponse(
+                                false,
+                                loginErrorReason = LoginResponse.ErrorReason.SERVER_ERROR
+                            )
                         }
                     } else {
                         val status = getSSOLoginStatus(content)
@@ -139,7 +137,7 @@ open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = nu
                     throw IOException("SSO Login Failed!")
                 }
             }
-        } else if (ssoResponseUrl.hasSameHost(serviceUrl)) return LoginResponse(true, ssoResponseUrl, ssoResponseContent)
+        } else if (!isServiceLogin || ssoResponseUrl.hasSameHost(serviceUrl)) return LoginResponse(true, ssoResponseUrl, ssoResponseContent)
         else throw IOException("SSO Jump Url Error! $ssoResponseUrl")
     }
 

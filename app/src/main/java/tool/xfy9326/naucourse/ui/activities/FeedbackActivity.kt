@@ -10,18 +10,18 @@ import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.activity_feedback.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourse.BuildConfig
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.ui.activities.base.BaseActivity
 import tool.xfy9326.naucourse.utils.secure.AccountUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
 
-class FeedbackActivity : AppCompatActivity() {
+class FeedbackActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feedback)
@@ -35,7 +35,10 @@ class FeedbackActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> finish()
+            android.R.id.home -> {
+                finish()
+                return true
+            }
             R.id.menu_feedbackRefresh -> wv_feedback.reload()
             R.id.menu_feedbackOpenInBrowser -> IntentUtils.launchUrlInBrowser(this, Constants.Others.ONLINE_FEEDBACK_URL)
         }

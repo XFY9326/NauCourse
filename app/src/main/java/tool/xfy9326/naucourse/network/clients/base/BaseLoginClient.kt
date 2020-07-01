@@ -88,7 +88,7 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
                     }
                     response.closeQuietly()
                     if (!result.isSuccess) {
-                        throw IOException("Auto Login Failed! Url: $url Reason: ${result.loginErrorReason}")
+                        throw ServerErrorException("Auto Login Failed! Url: $url Reason: ${result.loginErrorReason}")
                     }
                 } finally {
                     loginLock.unlock()

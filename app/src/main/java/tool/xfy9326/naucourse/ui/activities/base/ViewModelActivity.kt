@@ -2,10 +2,9 @@ package tool.xfy9326.naucourse.ui.activities.base
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes
-import androidx.appcompat.app.AppCompatActivity
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
 
-abstract class ViewModelActivity<T : BaseViewModel> : AppCompatActivity() {
+abstract class ViewModelActivity<T : BaseViewModel> : BaseActivity() {
     private lateinit var contentViewModel: T
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -10,7 +10,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.widget.ImageViewCompat
@@ -25,6 +24,7 @@ import tool.xfy9326.naucourse.providers.beans.jwc.Course
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseTime
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
+import tool.xfy9326.naucourse.ui.activities.base.BaseActivity
 import tool.xfy9326.naucourse.ui.dialogs.CourseTimeEditDialog
 import tool.xfy9326.naucourse.ui.views.recyclerview.adapters.CourseTimeAdapter
 import tool.xfy9326.naucourse.utils.BaseUtils
@@ -37,7 +37,7 @@ import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBarWithCallback
 import tool.xfy9326.naucourse.utils.views.AnimUtils
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 
-class CourseEditActivity : AppCompatActivity(), CourseTimeAdapter.CourseTimeCallback, CourseTimeEditDialog.OnEditCompleteListener,
+class CourseEditActivity : BaseActivity(), CourseTimeAdapter.CourseTimeCallback, CourseTimeEditDialog.OnEditCompleteListener,
     ColorPickerDialogListener {
     companion object {
         const val COURSE_DATA = "COURSE_DATA"

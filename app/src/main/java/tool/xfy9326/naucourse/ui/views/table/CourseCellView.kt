@@ -57,10 +57,8 @@ class CourseCellView : AdvancedFrameLayout {
         }
     }
 
-    var row = 0
-        private set
-    var col = 0
-        private set
+    private var row = 0
+    private var col = 0
     var rowSize = 1
         private set
 

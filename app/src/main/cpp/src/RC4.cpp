@@ -42,7 +42,7 @@ char *RC4::decrypt(const char *content, const char *key, int contentLen, int key
     u_char *byteBuffer = hexToByte(content);
     auto *output = new u_char[contentLen / 2 + 1];
     outputLen = 0;
-    memset(output, 0, contentLen / 2 + 1);
+    memset(output, 0, static_cast<size_t>(contentLen / 2 + 1));
     run(byteBuffer, contentLen / 2, (u_char *) key, keyLen, output, &outputLen);
     output[outputLen++] = '\0';
     delete[] byteBuffer;

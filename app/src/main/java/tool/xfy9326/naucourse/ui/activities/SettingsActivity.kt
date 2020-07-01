@@ -2,13 +2,13 @@ package tool.xfy9326.naucourse.ui.activities
 
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.ui.activities.base.BaseActivity
 import tool.xfy9326.naucourse.ui.fragments.settings.MainSettingsScreenFragment
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)

@@ -15,17 +15,17 @@ bugly {
 }
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion '29.0.3'
-    ndkVersion '21.2.6472646'
+    compileSdkVersion 30
+    buildToolsVersion '30.0.0'
+    ndkVersion '21.3.6528147'
 
     defaultConfig {
         applicationId rootProject.ext.applicationId
 
         minSdkVersion 21
-        targetSdkVersion 29
-        versionCode 75
-        versionName '7.0.7'
+        targetSdkVersion 30
+        versionCode 76
+        versionName '7.0.8'
 
         manifestPlaceholders = ['BUGLY_APP_ID': rootProject.ext.buglyAppId]
 

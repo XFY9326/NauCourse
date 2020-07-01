@@ -60,81 +60,41 @@
         <activity
             android:name=".ui.activities.UserInfoActivity"
             android:label="@string/user_info"
-            android:theme="@style/AppTheme.TranslucentStatusBar.DarkActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="tool.xfy9326.naucourse.ui.activities.MainDrawerActivity" />
-        </activity>
+            android:theme="@style/AppTheme.TranslucentStatusBar.DarkActionBar" />
 
-        <activity android:name=".ui.activities.NewsDetailActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="tool.xfy9326.naucourse.ui.activities.MainDrawerActivity" />
-        </activity>
+        <activity android:name=".ui.activities.NewsDetailActivity" />
 
         <activity
             android:name=".ui.activities.SchoolCalendarActivity"
-            android:label="@string/school_calendar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="tool.xfy9326.naucourse.ui.activities.MainDrawerActivity" />
-        </activity>
+            android:label="@string/school_calendar" />
 
         <activity
             android:name=".ui.activities.LevelExamActivity"
-            android:label="@string/level_exam">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="tool.xfy9326.naucourse.ui.activities.MainDrawerActivity" />
-        </activity>
+            android:label="@string/level_exam" />
 
         <activity
             android:name=".ui.activities.SuspendCourseActivity"
-            android:label="@string/suspend_course_notification">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="tool.xfy9326.naucourse.ui.activities.MainDrawerActivity" />
-        </activity>
+            android:label="@string/suspend_course_notification" />
 
         <activity
             android:name=".ui.activities.EmptyRoomSearchActivity"
-            android:label="@string/empty_room_search">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="tool.xfy9326.naucourse.ui.activities.MainDrawerActivity" />
-        </activity>
+            android:label="@string/empty_room_search" />
 
         <activity
             android:name=".ui.activities.ExamArrangeActivity"
-            android:label="@string/exam_arrange">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="tool.xfy9326.naucourse.ui.activities.MainDrawerActivity" />
-        </activity>
+            android:label="@string/exam_arrange" />
 
         <activity
             android:name=".ui.activities.ScoreQueryActivity"
-            android:label="@string/score_query">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="tool.xfy9326.naucourse.ui.activities.MainDrawerActivity" />
-        </activity>
+            android:label="@string/score_query" />
 
         <activity
             android:name=".ui.activities.CourseManageActivity"
-            android:label="@string/course_manage">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="tool.xfy9326.naucourse.ui.activities.MainDrawerActivity" />
-        </activity>
+            android:label="@string/course_manage" />
 
         <activity
             android:name=".ui.activities.CourseEditActivity"
-            android:label="@string/course_edit">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="tool.xfy9326.naucourse.ui.activities.MainDrawerActivity" />
-        </activity>
+            android:label="@string/course_edit" />
 
         <activity
             android:name=".ui.activities.SettingsActivity"
