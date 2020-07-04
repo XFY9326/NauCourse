@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.ui.views.recyclerview.adapters
 
 import android.content.Context
 import android.view.View
+import androidx.core.view.isVisible
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.providers.beans.jwc.Exam
@@ -30,25 +31,31 @@ class ExamArrangeAdapter(context: Context) : ListRecyclerAdapter<ExamArrangeView
             tvExamTypeAndCredit.text = weakContext.get()?.getString(R.string.exam_course_credit_and_type, element.credit, element.type)
             tvExamName.text = element.name
             tvExamTeachClass.text = weakContext.get()?.getString(R.string.course_class, element.teachClass)
-            tvExamLocation.text = weakContext.get()?.getString(R.string.exam_location, element.location)
+
+            if (element.location.isBlank() || element.location.isEmpty()) {
+                tvExamLocation.isVisible = false
+            } else {
+                tvExamLocation.isVisible = true
+                tvExamLocation.text = weakContext.get()?.getString(R.string.exam_location, element.location)
+            }
 
             if (element.startDate == null || element.endDate == null) {
                 tvExamStartTime.text = weakContext.get()?.getString(R.string.exam_time, element.dateRawText)
-                tvExamEndTime.visibility = View.GONE
+                tvExamEndTime.isVisible = false
             } else {
                 tvExamStartTime.text = weakContext.get()?.getString(R.string.exam_start_time, DATE_FORMAT_YMD_HM_CH.format(element.startDate))
                 tvExamEndTime.text = weakContext.get()?.getString(R.string.exam_end_time, DATE_FORMAT_YMD_HM_CH.format(element.endDate))
-                tvExamEndTime.visibility = View.VISIBLE
+                tvExamEndTime.isVisible = true
             }
 
             val countDown = TimeUtils.getCountDownTime(element.startDate)
             if (countDown == null) {
-                layoutExamCountDown.visibility = View.GONE
+                layoutExamCountDown.isVisible = false
             } else {
                 tvExamCountDown.text = countDown.first.toString()
                 tvExamCountDownTimeUnit.setText(I18NUtils.getTimeUnitResId(countDown.second))
 
-                layoutExamCountDown.visibility = View.VISIBLE
+                layoutExamCountDown.isVisible = true
             }
 
         }
