@@ -35,6 +35,7 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
         private const val PATH_LOGIN = "login"
         private const val PATH_LOGOUT = "logout"
         private const val PARAM_FROM = "from"
+        private const val PARAM_FROM_VALUE = "gine-auth"
 
         private const val SELECT_POST_FORM = "form[method=POST]"
         private const val ATTR_ACTION = "action"
@@ -116,10 +117,14 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
                 url(getLoginPostUrl(responseContent))
                 post(postForm)
             }.build()
-            newNGXCall(request).use {
+            if (isFromPathLogin) {
+                newNGXCall(request)
+            } else {
+                newNGXLoginCall(request)
+            }.use {
+                val url = it.request.url
+                val content = it.body?.string()!!
                 if (it.isSuccessful) {
-                    val url = it.request.url
-                    val content = it.body?.string()!!
                     return if (isFromPathLogin) {
                         when {
                             url.hasSameHost(fromUrl) -> LoginResponse(true, url, content)
@@ -135,6 +140,10 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
                             LoginResponse(false, loginErrorReason = status)
                         }
                     }
+                } else if (!isFromPathLogin && it.isRedirect && content.isEmpty() &&
+                    url.queryParameter(PARAM_FROM)?.contains(PARAM_FROM_VALUE) == true
+                ) {
+                    return LoginResponse(true, url, content)
                 } else {
                     throw IOException("NGX Login Failed!")
                 }
@@ -157,6 +166,11 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
     override fun newClientCall(request: Request): Response = newNGXCall(request)
 
     private fun newNGXCall(request: Request): Response = okHttpClient.newCall(request.newBuilder().build()).execute()
+
+    // Fix: java.net.ProtocolException: Too many follow-up requests: 21
+    private fun newNGXLoginCall(request: Request): Response =
+        okHttpClient.newBuilder().followRedirects(false).followSslRedirects(false).build()
+            .newCall(request.newBuilder().build()).execute()
 
     override fun validateLoginWithResponse(responseContent: String, responseUrl: HttpUrl): Boolean {
         val fromUrl =

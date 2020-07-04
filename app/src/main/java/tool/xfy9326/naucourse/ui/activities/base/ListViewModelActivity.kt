@@ -28,7 +28,11 @@ abstract class ListViewModelActivity<E, T : BaseListViewModel<E>, VH : RecyclerV
             adapter.submitList(it)
         })
         viewModel.isRefreshing.observe(this, Observer {
-            asl_refreshLayout.postStopRefreshing()
+            if (it) {
+                asl_refreshLayout.isRefreshing = true
+            } else {
+                asl_refreshLayout.postStopRefreshing()
+            }
         })
     }
 

@@ -55,7 +55,7 @@ object DefaultMessage : BaseNewsContent<AlstuMessage>() {
 
     private const val FILE_DOWNLOAD_TITLE_HTML = "<br/><br/><br/><p>附件：</p>"
 
-    override fun onRequestData(): Response = networkClient.newAutoLoginCall(
+    override fun onRequestData(): Response = networkClient.newAlstuNoIndexCall(
         Request.Builder().header(Constants.Network.HEADER_REFERER, AlstuClient.ALSTU_INDEX_URL.toString()).url(ALSTU_MESSAGE_URL).build()
     )
 
@@ -68,10 +68,7 @@ object DefaultMessage : BaseNewsContent<AlstuMessage>() {
             if (source.startsWith(Constants.Network.DIR)) source.substring(1) else source
         ).build()
 
-    override fun onParseRawData(content: String): Set<AlstuMessage> {
-        val document = Jsoup.parse(content)
-        return getAlstuMessageSet(document)
-    }
+    override fun onParseRawData(content: String): Set<AlstuMessage> = getAlstuMessageSet(Jsoup.parse(content))
 
     private fun getAlstuMessageSet(document: Document): Set<AlstuMessage> {
         val dataGridElement = document.getElementById(ELEMENT_ID_MY_DATA_GRID)

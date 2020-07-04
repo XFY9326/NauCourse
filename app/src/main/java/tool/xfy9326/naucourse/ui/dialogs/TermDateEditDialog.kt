@@ -80,7 +80,7 @@ class TermDateEditDialog : DialogFragment() {
                 if (nowStartDate >= nowEndDate) {
                     showToast(R.string.term_date_error)
                 } else {
-                    val weekLength = TimeUtils.getWeekLength(nowStartDate, nowEndDate, true)
+                    val weekLength = TimeUtils.getWeekLength(nowStartDate, nowEndDate)
                     if (weekLength < Constants.Course.MIN_WEEK_NUM_SIZE || weekLength > Constants.Course.MAX_WEEK_NUM_SIZE) {
                         showToast(R.string.term_date_length_error, Constants.Course.MIN_WEEK_NUM_SIZE, Constants.Course.MAX_WEEK_NUM_SIZE, weekLength)
                     } else {

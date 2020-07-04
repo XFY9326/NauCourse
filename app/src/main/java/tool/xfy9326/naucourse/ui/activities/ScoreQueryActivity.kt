@@ -41,7 +41,11 @@ class ScoreQueryActivity : ViewModelActivity<ScoreQueryViewModel>(), CreditCount
             ActivityUtils.showSnackBar(layout_scoreQuery, I18NUtils.getContentErrorResId(it)!!)
         })
         viewModel.isRefreshing.observe(this, Observer {
-            asl_scoreQuery.postStopRefreshing()
+            if (it) {
+                asl_scoreQuery.isRefreshing = true
+            } else {
+                asl_scoreQuery.postStopRefreshing()
+            }
         })
         viewModel.credit.observeEvent(this, Observer {
             DialogUtils.createCreditShowDialog(this@ScoreQueryActivity, lifecycle, it).show()

@@ -40,7 +40,11 @@ class TableFragment : Fragment(), Observer<CoursePkg>, OnCourseCellClickListener
         weekNum = arguments?.getInt(CourseTableViewPagerAdapter.COURSE_TABLE_WEEK_NUM)!!
         contentViewModel = ViewModelProvider(requireParentFragment())[CourseTableViewModel::class.java]
 
-        initTableView()
+        contentViewModel.courseTablePkg[weekNum - 1].observeForever(this)
+        if (contentViewModel.tryInitTable(weekNum)) {
+            contentViewModel.requestCourseTable(weekNum)
+        }
+
         super.onAttach(context)
     }
 
@@ -68,13 +72,6 @@ class TableFragment : Fragment(), Observer<CoursePkg>, OnCourseCellClickListener
             courseUpdateLock.withLock {
                 buildCourseTableView(t)
             }
-        }
-    }
-
-    private fun initTableView() {
-        contentViewModel.courseTablePkg[weekNum - 1].observeForever(this)
-        if (contentViewModel.tryInitTable(weekNum)) {
-            contentViewModel.requestCourseTable(weekNum)
         }
     }
 

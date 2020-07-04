@@ -9,6 +9,7 @@ import tool.xfy9326.naucourse.providers.beans.jwc.TimePeriod
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.ceil
+import kotlin.math.floor
 
 
 object TimeUtils {
@@ -131,16 +132,12 @@ object TimeUtils {
         }
     }
 
-    fun getWeekLength(termDate: TermDate, getRawLength: Boolean = false) = getWeekLength(termDate.startDate, termDate.endDate, getRawLength)
+    fun getWeekLength(termDate: TermDate) = getWeekLength(termDate.startDate, termDate.endDate)
 
-    fun getWeekLength(startDate: Date, endDate: Date, getRawLength: Boolean = false): Int {
-        val startMills = if (getRawLength) startDate.time else getFixedTermStartDateCalendar(startDate).timeInMillis
-        val endMills = if (getRawLength) endDate.time else getFixedTermEndDateCalendar(endDate).timeInMillis
-        return if (getRawLength) {
-            ((endMills - startMills + 24 * 60 * 60 * 1000f) / (7 * 24 * 60 * 60 * 1000f)).toInt()
-        } else {
-            ceil((endMills - startMills) / (7 * 24 * 60 * 60 * 1000f)).toInt()
-        }
+    fun getWeekLength(startDate: Date, endDate: Date): Int {
+        val startMills = getFixedTermStartDateCalendar(startDate).timeInMillis
+        val endMills = getFixedTermEndDateCalendar(endDate).timeInMillis
+        return floor((endMills - startMills + 24 * 60 * 60 * 1000f) / (7 * 24 * 60 * 60 * 1000f)).toInt()
     }
 
     private fun getFixedTermEndDateCalendar(date: Date) =

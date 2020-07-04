@@ -3,12 +3,10 @@ package tool.xfy9326.naucourse.utils.courses
 import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.io.db.CourseCellStyleDBHelper
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
-import tool.xfy9326.naucourse.utils.debug.LogUtils
 import tool.xfy9326.naucourse.utils.views.ColorUtils
 
 object CourseStyleUtils {
     fun getDefaultCellStyle(courseId: String, color: Int? = null): CourseCellStyle {
-        LogUtils.d<CourseCellStyle>("Creating New Course Style For ID: $courseId")
         return CourseCellStyle(
             courseId,
             color ?: ColorUtils.getRandomMaterialColor()

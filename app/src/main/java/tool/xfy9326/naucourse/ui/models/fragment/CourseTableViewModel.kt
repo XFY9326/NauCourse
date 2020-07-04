@@ -299,6 +299,7 @@ class CourseTableViewModel : BaseViewModel() {
     @Synchronized
     private suspend fun setWeekInfoByTermDate(termDate: TermDate, courseSet: CourseSet?) {
         val maxWeek = TimeUtils.getWeekLength(termDate)
+        println(maxWeek)
         val currentWeekNum = TimeUtils.getWeekNum(termDate)
         val showAhead =
             if (courseSet != null && courseSet.hasCourse && SettingsPref.ShowNextWeekCourseTableAhead &&

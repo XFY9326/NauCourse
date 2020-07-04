@@ -28,11 +28,14 @@ class UpdateDialog : DialogFragment() {
 
         fun showDialog(fragmentManager: FragmentManager, updateInfo: UpdateInfo) {
             if (fragmentManager.findFragmentByTag(UPDATE_DIALOG_TAG) == null) {
-                UpdateDialog().apply {
-                    arguments = Bundle().apply {
-                        putSerializable(UPDATE_INFO, updateInfo)
-                    }
-                }.show(fragmentManager, UPDATE_DIALOG_TAG)
+                try {
+                    UpdateDialog().apply {
+                        arguments = Bundle().apply {
+                            putSerializable(UPDATE_INFO, updateInfo)
+                        }
+                    }.showNow(fragmentManager, UPDATE_DIALOG_TAG)
+                } catch (e: Exception) {
+                }
             }
         }
     }

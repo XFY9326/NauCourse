@@ -340,7 +340,7 @@ class CourseEditActivity : BaseActivity(), CourseTimeAdapter.CourseTimeCallback,
     private fun checkSaveForExit() {
         val newCourse = getEditResult(false)
         if (newCourse != courseData || (newCourseStyle ?: courseStyle) != courseStyle) {
-            showSnackBarWithCallback(layout_courseEdit, R.string.exit_edit_without_save, android.R.string.yes, View.OnClickListener {
+            showSnackBarWithCallback(layout_courseEdit, R.string.exit_edit_without_save, android.R.string.ok, View.OnClickListener {
                 setResult(RESULT_OK)
                 super.onBackPressed()
             })
