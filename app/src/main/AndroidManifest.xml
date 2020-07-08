@@ -112,6 +112,11 @@
             android:name=".ui.activities.FeedbackActivity"
             android:label="@string/feedback" />
 
+        <activity
+            android:name=".ui.activities.AppErrorActivity"
+            android:label="@string/app_error"
+            android:launchMode="singleTask" />
+
         <service
             android:name=".services.NextCourseNotifyService"
             android:exported="false">

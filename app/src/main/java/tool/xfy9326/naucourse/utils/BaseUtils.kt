@@ -26,6 +26,7 @@ import kotlin.system.exitProcess
 object BaseUtils {
     private const val FILL_ZERO = "0"
     const val CRASH_RESTART_FLAG = "CRASH_RESTART"
+    const val SHOW_ERROR_ACTIVITY_FLAG = "SHOW_ERROR_ACTIVITY_FLAG"
 
     fun Float.dpToPx() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, Resources.getSystem().displayMetrics)
 
@@ -107,10 +108,11 @@ object BaseUtils {
             SettingsPref.NightModeType.DISABLED -> AppCompatDelegate.MODE_NIGHT_NO
         }
 
-    fun restartApplication(crashRestart: Boolean = false) {
+    fun restartApplication(crashRestart: Boolean = false, showErrorActivity: Boolean = false) {
         val intent = App.instance.packageManager.getLaunchIntentForPackage(App.instance.packageName)!!.apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             if (crashRestart) putExtra(CRASH_RESTART_FLAG, true)
+            if (showErrorActivity) putExtra(SHOW_ERROR_ACTIVITY_FLAG, true)
         }
         App.instance.startActivity(intent)
         if (crashRestart) exitProcess(0)

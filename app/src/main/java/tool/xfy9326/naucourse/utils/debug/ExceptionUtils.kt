@@ -49,9 +49,8 @@ object ExceptionUtils : Thread.UncaughtExceptionHandler {
                     BaseUtils.restartApplication(true)
                 }
             } else {
-                exceptionHandler?.uncaughtException(t, e)
+                BaseUtils.restartApplication(crashRestart = true, showErrorActivity = true)
             }
-
         } catch (e: Exception) {
             exceptionHandler?.uncaughtException(t, e)
         }

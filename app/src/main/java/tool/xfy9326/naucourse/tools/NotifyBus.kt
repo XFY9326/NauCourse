@@ -20,7 +20,8 @@ object NotifyBus {
         COURSE_STYLE_TERM_UPDATE,
         REBUILD_COURSE_TABLE,
         REBUILD_COURSE_TABLE_BACKGROUND,
-        ADVANCED_FUNCTION_MODE_CHANGED
+        ADVANCED_FUNCTION_MODE_CHANGED,
+        DEFAULT_ENTER_INTERFACE_CHANGED
     }
 
     operator fun get(type: Type) = liveDataMap[type]!!

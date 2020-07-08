@@ -411,4 +411,6 @@
     <string name="not_this_week_course_show_type_text">显示\'[非本周]\'文字</string>
     <string name="not_this_week_course_show_type_color">使用灰色课程格颜色</string>
     <string name="feedback_user_nickname">客户端用户</string>
+    <string name="app_error">应用启动时出现错误！</string>
+    <string name="app_error_attention">\u3000\u3000监测到多次自动重启失败，这可能是因为应用数据出现错误或者应用漏洞导致。非常抱歉给您带来了不友好的使用体验，建议您尽快反馈错误以便修复该问题，您可以立即更新解决该问题或者尝试清空应用数据后重启。</string>
 </resources>

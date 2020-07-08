@@ -225,6 +225,9 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         viewModel.updateInfo.observeEvent(this, Observer {
             UpdateDialog.showDialog(supportFragmentManager, it)
         })
+        NotifyBus[NotifyBus.Type.DEFAULT_ENTER_INTERFACE_CHANGED].observeNotification(this, {
+            showFragment(getDefaultFragmentType())
+        })
         NotifyBus[NotifyBus.Type.ADVANCED_FUNCTION_MODE_CHANGED].observeNotification(this, {
             setAdvancedFunctions()
             viewModel.updateBalance()

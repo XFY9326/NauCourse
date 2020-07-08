@@ -22,6 +22,12 @@ class DisplaySettingsFragment : BaseSettingsPreferenceFragment() {
             }
             true
         }
+        findPreference<ListPreference>(Constants.Pref.DefaultEnterInterface)?.setOnPreferenceChangeListener { _, newValue ->
+            if (SettingsPref.getDefaultEnterInterface().name != newValue) {
+                NotifyBus[NotifyBus.Type.DEFAULT_ENTER_INTERFACE_CHANGED].notifyEvent()
+            }
+            true
+        }
     }
 
     @Synchronized

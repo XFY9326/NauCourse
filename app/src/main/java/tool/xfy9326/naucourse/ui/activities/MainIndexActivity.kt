@@ -17,22 +17,22 @@ import tool.xfy9326.naucourse.utils.utility.IntentUtils
 class MainIndexActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        readIntent()
-        detectActivity()
-    }
-
-    private fun detectActivity() {
-        if (intent.flags and Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT != 0) {
-            finish()
-        } else {
-            selectStartActivity()
+        when {
+            intent.flags and Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT != 0 -> finish()
+            intent?.getBooleanExtra(BaseUtils.SHOW_ERROR_ACTIVITY_FLAG, false) == true -> startAppErrorActivity()
+            else -> {
+                if (intent?.getBooleanExtra(BaseUtils.CRASH_RESTART_FLAG, false) == true) {
+                    Toast.makeText(App.instance, R.string.crash_msg, Toast.LENGTH_SHORT).show()
+                }
+                selectStartActivity()
+            }
         }
     }
 
-    private fun readIntent() {
-        if (intent?.getBooleanExtra(BaseUtils.CRASH_RESTART_FLAG, false) == true) {
-            Toast.makeText(App.instance, R.string.crash_msg, Toast.LENGTH_SHORT).show()
-        }
+    private fun startAppErrorActivity() {
+        startActivity(Intent(this, AppErrorActivity::class.java))
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        finishAfterTransition()
     }
 
     private fun selectStartActivity() {
