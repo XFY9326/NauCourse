@@ -4,7 +4,8 @@ import okhttp3.HttpUrl
 import okhttp3.Response
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.HTMLConst
+import tool.xfy9326.naucourse.constants.NetworkConst
 import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.network.clients.JwcClient
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseHistory
@@ -17,7 +18,7 @@ object MyCourseHistory : BaseNoParamContent<Array<CourseHistory>>() {
     private const val JWC_MY_COURSE_HISTORY_ASPX = "MyCourseHistory.aspx"
     private const val ELEMENT_ID_MAJOR_APPLY_LIST = "MajorApplyList"
 
-    private val JWC_MY_COURSE_HISTORY_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(JwcClient.JWC_HOST)
+    private val JWC_MY_COURSE_HISTORY_URL = HttpUrl.Builder().scheme(NetworkConst.HTTP).host(JwcClient.JWC_HOST)
         .addPathSegment(JwcClient.JWC_STUDENTS_PATH).addPathSegment(JWC_MY_COURSE_HISTORY_ASPX).build()
 
     override fun onRequestData(): Response = networkClient.newAutoLoginCall(JWC_MY_COURSE_HISTORY_URL)
@@ -25,7 +26,7 @@ object MyCourseHistory : BaseNoParamContent<Array<CourseHistory>>() {
     override fun onParseData(content: String): Array<CourseHistory> = getCourseHistoryArr(Jsoup.parse(content).body())
 
     private fun getCourseHistoryArr(bodyElement: Element): Array<CourseHistory> {
-        val trElements = bodyElement.getElementById(ELEMENT_ID_MAJOR_APPLY_LIST).getElementsByTag(Constants.HTML.ELEMENT_TAG_TR)
+        val trElements = bodyElement.getElementById(ELEMENT_ID_MAJOR_APPLY_LIST).getElementsByTag(HTMLConst.ELEMENT_TAG_TR)
 
         if (trElements.size - 3 == 0) {
             return emptyArray()
@@ -46,7 +47,7 @@ object MyCourseHistory : BaseNoParamContent<Array<CourseHistory>>() {
         var notes: String
 
         for ((arrIndex, i) in (2 until trElements.size - 1).withIndex()) {
-            val tdElements = trElements[i].getElementsByTag(Constants.HTML.ELEMENT_TAG_TD)
+            val tdElements = trElements[i].getElementsByTag(HTMLConst.ELEMENT_TAG_TD)
 
             courseId = tdElements[1].text()
             name = tdElements[2].text()

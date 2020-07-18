@@ -7,7 +7,9 @@ import okhttp3.Response
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.HTMLConst
+import tool.xfy9326.naucourse.constants.NetworkConst
+import tool.xfy9326.naucourse.constants.TimeConst
 import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.network.clients.AlstuClient
 import tool.xfy9326.naucourse.network.clients.VPNClient
@@ -25,7 +27,7 @@ import kotlin.collections.HashSet
 object DefaultMessage : BaseNewsContent<AlstuMessage>() {
     override val networkClient = getLoginClient<AlstuClient>(LoginNetworkManager.ClientType.ALSTU)
 
-    private val DATE_FORMAT_YMD = SimpleDateFormat(Constants.Time.FORMAT_YMD, Locale.CHINA)
+    private val DATE_FORMAT_YMD = SimpleDateFormat(TimeConst.FORMAT_YMD, Locale.CHINA)
 
     private const val ALSTU_MESSAGE_PATH = "MESSAGE"
     private const val ALSTU_DEFAULT_ASPX = "DEFAULT.ASPX"
@@ -36,7 +38,7 @@ object DefaultMessage : BaseNewsContent<AlstuMessage>() {
     private const val URL_PARAM_NAME_YLX = "ylx"
     private const val URL_PARAM_NAME_FILE = "file"
 
-    private val ALSTU_MESSAGE_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(AlstuClient.ALSTU_HOST)
+    private val ALSTU_MESSAGE_URL = HttpUrl.Builder().scheme(NetworkConst.HTTP).host(AlstuClient.ALSTU_HOST)
         .addPathSegment(ALSTU_MESSAGE_PATH).addPathSegment(ALSTU_DEFAULT_ASPX).build()
 
     private const val ELEMENT_ID_MY_DATA_GRID = "MyDataGrid"
@@ -52,28 +54,28 @@ object DefaultMessage : BaseNewsContent<AlstuMessage>() {
 
     private const val FILE_DOWNLOAD_NAME_SYMBOL = "\'"
 
-    private const val SELECT_A_ON_CLICK_PATH_URL = "${Constants.HTML.ELEMENT_TAG_A}[$ELEMENT_ATTR_ON_CLICK]"
+    private const val SELECT_A_ON_CLICK_PATH_URL = "${HTMLConst.ELEMENT_TAG_A}[$ELEMENT_ATTR_ON_CLICK]"
 
     private const val FILE_DOWNLOAD_TITLE_HTML = "<br/><br/><br/><p>附件：</p>"
 
     override fun onRequestData(): Response = networkClient.newAlstuNoIndexCall(
-        Request.Builder().header(Constants.Network.HEADER_REFERER, AlstuClient.ALSTU_INDEX_URL.toString()).url(ALSTU_MESSAGE_URL).build()
+        Request.Builder().header(NetworkConst.HEADER_REFERER, AlstuClient.ALSTU_INDEX_URL.toString()).url(ALSTU_MESSAGE_URL).build()
     )
 
     override fun onRequestDetailData(url: HttpUrl): Response = (getDetailNetworkClient() as BaseLoginClient).newAutoLoginCall(
-        Request.Builder().header(Constants.Network.HEADER_REFERER, ALSTU_MESSAGE_URL.toString()).url(url).build()
+        Request.Builder().header(NetworkConst.HEADER_REFERER, ALSTU_MESSAGE_URL.toString()).url(url).build()
     )
 
     override fun onBuildImageUrl(source: String): HttpUrl =
-        HttpUrl.Builder().scheme(Constants.Network.HTTP).host(AlstuClient.ALSTU_HOST).addEncodedPathSegments(
-            if (source.startsWith(Constants.Network.DIR)) source.substring(1) else source
+        HttpUrl.Builder().scheme(NetworkConst.HTTP).host(AlstuClient.ALSTU_HOST).addEncodedPathSegments(
+            if (source.startsWith(NetworkConst.DIR)) source.substring(1) else source
         ).build()
 
     override fun onParseRawData(content: String): Set<AlstuMessage> = getAlstuMessageSet(Jsoup.parse(content))
 
     private fun getAlstuMessageSet(document: Document): Set<AlstuMessage> {
         val dataGridElement = document.getElementById(ELEMENT_ID_MY_DATA_GRID)
-        val trElements = dataGridElement.getElementsByTag(Constants.HTML.ELEMENT_TAG_TR)
+        val trElements = dataGridElement.getElementsByTag(HTMLConst.ELEMENT_TAG_TR)
 
         if (trElements.isEmpty()) {
             return HashSet()
@@ -86,12 +88,14 @@ object DefaultMessage : BaseNewsContent<AlstuMessage>() {
         var date: Date
 
         for (i in 0 until trElements.size - 1) {
-            val tdElements = trElements[i].getElementsByTag(Constants.HTML.ELEMENT_TAG_TD)
+            val tdElements = trElements[i].getElementsByTag(HTMLConst.ELEMENT_TAG_TD)
 
-            val urlTemp = tdElements[0].select(Constants.HTML.SELECT_A_HREF_PATH_URL).first().attr(Constants.HTML.ELEMENT_ATTR_HREF)
+            val urlTemp = tdElements[0].select(HTMLConst.SELECT_A_HREF_PATH_URL).first().attr(
+                HTMLConst.ELEMENT_ATTR_HREF
+            )
             url = if (urlTemp.startsWith(URL_FRONT_PAGE)) {
-                val queryTemp = urlTemp.substring(URL_FRONT_PAGE.length).split(Constants.Network.URL_QUERY_DIVIDE_SYMBOL)
-                HttpUrl.Builder().scheme(Constants.Network.HTTP).host(AlstuClient.ALSTU_HOST)
+                val queryTemp = urlTemp.substring(URL_FRONT_PAGE.length).split(NetworkConst.URL_QUERY_DIVIDE_SYMBOL)
+                HttpUrl.Builder().scheme(NetworkConst.HTTP).host(AlstuClient.ALSTU_HOST)
                     .addPathSegment(ALSTU_MESSAGE_PATH).addEncodedPathSegments(queryTemp[0]).query(queryTemp[1]).build()
             } else {
                 urlTemp.toHttpUrl()
@@ -145,7 +149,7 @@ object DefaultMessage : BaseNewsContent<AlstuMessage>() {
         if (dataList != null) {
             textBuilder.append(FILE_DOWNLOAD_TITLE_HTML)
 
-            val tdElements = body.getElementById(ELEMENT_ID_MY_DATA_LIST).getElementsByTag(Constants.HTML.ELEMENT_TAG_TD)
+            val tdElements = body.getElementById(ELEMENT_ID_MY_DATA_LIST).getElementsByTag(HTMLConst.ELEMENT_TAG_TD)
 
             val calendar = Calendar.getInstance()
             calendar.time = postDate
@@ -159,7 +163,7 @@ object DefaultMessage : BaseNewsContent<AlstuMessage>() {
                     fileDownloadName.indexOf(FILE_DOWNLOAD_NAME_SYMBOL) + 1,
                     fileDownloadName.lastIndexOf(FILE_DOWNLOAD_NAME_SYMBOL)
                 )
-                var downloadUrl = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(AlstuClient.ALSTU_HOST).addPathSegment(ALSTU_ALDFDNF_ASPX)
+                var downloadUrl = HttpUrl.Builder().scheme(NetworkConst.HTTP).host(AlstuClient.ALSTU_HOST).addPathSegment(ALSTU_ALDFDNF_ASPX)
                     .addQueryParameter(URL_PARAM_NAME_LX, URL_PARAM_VALUE_ST).addQueryParameter(URL_PARAM_NAME_YLX, year)
                     .addEncodedQueryParameter(URL_PARAM_NAME_FILE, fileDownloadName).build()
                 if (isUsingVPN) {

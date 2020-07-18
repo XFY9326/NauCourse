@@ -4,7 +4,8 @@ import okhttp3.HttpUrl
 import okhttp3.Response
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.HTMLConst
+import tool.xfy9326.naucourse.constants.NetworkConst
 import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.network.clients.JwcClient
 import tool.xfy9326.naucourse.providers.beans.jwc.LevelExam
@@ -17,7 +18,7 @@ object MyLevelExam : BaseNoParamContent<Array<LevelExam>>() {
     private const val JWC_MY_LEVEL_EXAM_ASPX = "MyLevelExam.aspx"
     private const val ELEMENT_ID_TABLE2 = "Table2"
 
-    private val JWC_MY_COURSE_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(JwcClient.JWC_HOST)
+    private val JWC_MY_COURSE_URL = HttpUrl.Builder().scheme(NetworkConst.HTTP).host(JwcClient.JWC_HOST)
         .addPathSegment(JwcClient.JWC_STUDENTS_PATH).addPathSegment(JWC_MY_LEVEL_EXAM_ASPX).build()
 
     override fun onRequestData(): Response = networkClient.newAutoLoginCall(JWC_MY_COURSE_URL)
@@ -29,7 +30,7 @@ object MyLevelExam : BaseNoParamContent<Array<LevelExam>>() {
     }
 
     private fun getLevelExamArr(bodyElement: Element): Array<LevelExam> {
-        val trElements = bodyElement.getElementById(ELEMENT_ID_TABLE2).getElementsByTag(Constants.HTML.ELEMENT_TAG_TR)
+        val trElements = bodyElement.getElementById(ELEMENT_ID_TABLE2).getElementsByTag(HTMLConst.ELEMENT_TAG_TR)
 
         if (trElements.size - 2 == 0) {
             return emptyArray()
@@ -47,7 +48,7 @@ object MyLevelExam : BaseNoParamContent<Array<LevelExam>>() {
         var notes: String
 
         for ((arrIndex, i) in (2 until trElements.size).withIndex()) {
-            val tdElements = trElements[i].getElementsByTag(Constants.HTML.ELEMENT_TAG_TD)
+            val tdElements = trElements[i].getElementsByTag(HTMLConst.ELEMENT_TAG_TD)
 
             type = tdElements[1].text()
             name = tdElements[2].text()

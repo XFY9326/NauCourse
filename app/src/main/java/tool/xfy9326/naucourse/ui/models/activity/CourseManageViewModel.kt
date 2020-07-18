@@ -17,6 +17,7 @@ import tool.xfy9326.naucourse.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourse.providers.info.methods.CourseInfo
 import tool.xfy9326.naucourse.providers.info.methods.TermDateInfo
 import tool.xfy9326.naucourse.tools.NotifyBus
+import tool.xfy9326.naucourse.tools.NotifyType
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
@@ -148,7 +149,7 @@ class CourseManageViewModel : BaseViewModel() {
                     }
                 }
                 saveSuccess.notifyEvent()
-                NotifyBus[NotifyBus.Type.COURSE_STYLE_TERM_UPDATE].notifyEvent()
+                NotifyBus[NotifyType.COURSE_STYLE_TERM_UPDATE].notifyEvent()
             }
         }
     }

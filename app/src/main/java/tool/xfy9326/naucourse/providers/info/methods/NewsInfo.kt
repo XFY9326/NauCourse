@@ -4,7 +4,7 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import okhttp3.HttpUrl
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.OthersConst
 import tool.xfy9326.naucourse.io.db.NewsDBHelper
 import tool.xfy9326.naucourse.providers.beans.GeneralNews
 import tool.xfy9326.naucourse.providers.beans.PostSource
@@ -79,7 +79,7 @@ object NewsInfo : BaseSimpleContentInfo<List<GeneralNews>, PostSource>() {
         }
     }
 
-    fun isNewsOutOfDateTimeStamp() = System.currentTimeMillis() - Constants.Others.NEWS_STORE_DAY_LENGTH * 24 * 60 * 60 * 1000L
+    fun isNewsOutOfDateTimeStamp() = System.currentTimeMillis() - OthersConst.NEWS_STORE_DAY_LENGTH * 24 * 60 * 60 * 1000L
 
     fun getDetailNewsInfo(url: HttpUrl, newsType: PostSource) =
         if (newsType == PostSource.UNKNOWN) {

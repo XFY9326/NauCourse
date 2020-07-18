@@ -158,7 +158,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
                 }
             }
             R.id.menu_courseManageDeleteAll -> {
-                showSnackBarWithCallback(layout_courseManage, R.string.delete_all_courses_msg, android.R.string.yes, View.OnClickListener {
+                showSnackBarWithCallback(layout_courseManage, R.string.delete_all_courses_msg, android.R.string.ok, View.OnClickListener {
                     getViewModel().setDataChanged()
                     courseAdapter.deleteAllCourses()
                     showSnackBar(layout_courseManage, R.string.delete_course_success)
@@ -333,7 +333,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
 
     private fun checkSaveForExit() {
         if (getViewModel().dataChanged) {
-            showSnackBarWithCallback(layout_courseManage, R.string.exit_edit_without_save, android.R.string.yes, View.OnClickListener {
+            showSnackBarWithCallback(layout_courseManage, R.string.exit_edit_without_save, android.R.string.ok, View.OnClickListener {
                 super.onBackPressed()
             })
         } else {

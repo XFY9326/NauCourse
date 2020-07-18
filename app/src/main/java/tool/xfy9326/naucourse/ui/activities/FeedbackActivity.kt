@@ -14,8 +14,9 @@ import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.activity_feedback.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourse.BuildConfig
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.constants.NetworkConst
+import tool.xfy9326.naucourse.constants.OthersConst
 import tool.xfy9326.naucourse.ui.activities.base.BaseActivity
 import tool.xfy9326.naucourse.utils.secure.AccountUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
@@ -40,7 +41,7 @@ class FeedbackActivity : BaseActivity() {
                 return true
             }
             R.id.menu_feedbackRefresh -> wv_feedback.reload()
-            R.id.menu_feedbackOpenInBrowser -> IntentUtils.launchUrlInBrowser(this, Constants.Others.ONLINE_FEEDBACK_URL)
+            R.id.menu_feedbackOpenInBrowser -> IntentUtils.launchUrlInBrowser(this, OthersConst.ONLINE_FEEDBACK_URL)
         }
         return super.onOptionsItemSelected(item)
     }
@@ -59,7 +60,7 @@ class FeedbackActivity : BaseActivity() {
                     request?.let {
                         try {
                             val url = it.url
-                            if (url.scheme == Constants.Network.SCHEMA_WEIXIN) {
+                            if (url.scheme == NetworkConst.SCHEMA_WEIXIN) {
                                 startActivity(Intent(Intent.ACTION_VIEW, url))
                                 return true
                             }
@@ -79,7 +80,7 @@ class FeedbackActivity : BaseActivity() {
                     super.onProgressChanged(view, newProgress)
                 }
             }
-            postUrl(Constants.Others.ONLINE_FEEDBACK_URL, getPostData().toByteArray())
+            postUrl(OthersConst.ONLINE_FEEDBACK_URL, getPostData().toByteArray())
         }
     }
 

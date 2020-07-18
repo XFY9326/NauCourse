@@ -8,8 +8,9 @@ import android.view.Window
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import kotlinx.android.synthetic.main.dialog_term_date_edit.view.*
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.constants.CourseConst
+import tool.xfy9326.naucourse.constants.TimeConst
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
@@ -25,7 +26,7 @@ class TermDateEditDialog : DialogFragment() {
 
         private const val CONTENT_WIDTH_PERCENT = 0.85
 
-        private val DATE_FORMAT_YMD = SimpleDateFormat(Constants.Time.FORMAT_YMD, Locale.CHINA)
+        private val DATE_FORMAT_YMD = SimpleDateFormat(TimeConst.FORMAT_YMD, Locale.CHINA)
 
         fun startTermDateEditDialog(fragmentManager: FragmentManager, termDate: TermDate) {
             startTermDateEditDialog(fragmentManager, termDate.startDate, termDate.endDate)
@@ -81,8 +82,8 @@ class TermDateEditDialog : DialogFragment() {
                     showToast(R.string.term_date_error)
                 } else {
                     val weekLength = TimeUtils.getWeekLength(nowStartDate, nowEndDate)
-                    if (weekLength < Constants.Course.MIN_WEEK_NUM_SIZE || weekLength > Constants.Course.MAX_WEEK_NUM_SIZE) {
-                        showToast(R.string.term_date_length_error, Constants.Course.MIN_WEEK_NUM_SIZE, Constants.Course.MAX_WEEK_NUM_SIZE, weekLength)
+                    if (weekLength < CourseConst.MIN_WEEK_NUM_SIZE || weekLength > CourseConst.MAX_WEEK_NUM_SIZE) {
+                        showToast(R.string.term_date_length_error, CourseConst.MIN_WEEK_NUM_SIZE, CourseConst.MAX_WEEK_NUM_SIZE, weekLength)
                     } else {
                         val activity = requireActivity()
                         if (activity is OnTermEditListener) {

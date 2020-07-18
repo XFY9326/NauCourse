@@ -20,11 +20,12 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import kotlinx.android.synthetic.main.fragment_course_table.*
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.constants.ImageConst
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.tools.NotifyBus
+import tool.xfy9326.naucourse.tools.NotifyType
 import tool.xfy9326.naucourse.ui.dialogs.CourseDetailDialog
 import tool.xfy9326.naucourse.ui.fragments.base.DrawerToolbarFragment
 import tool.xfy9326.naucourse.ui.models.fragment.CourseTableViewModel
@@ -107,16 +108,16 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>() {
     }
 
     private fun bindGlobalObserver(viewModel: CourseTableViewModel) {
-        NotifyBus[NotifyBus.Type.COURSE_STYLE_TERM_UPDATE].observeNotification(viewLifecycleOwner, {
+        NotifyBus[NotifyType.COURSE_STYLE_TERM_UPDATE].observeNotification(viewLifecycleOwner, {
             viewModel.refreshCourseData()
         }, CourseTableFragment::class.java.simpleName)
-        NotifyBus[NotifyBus.Type.COURSE_TERM_UPDATE].observeNotification(viewLifecycleOwner, {
+        NotifyBus[NotifyType.COURSE_TERM_UPDATE].observeNotification(viewLifecycleOwner, {
             viewModel.refreshTimeInfo()
         }, CourseTableFragment::class.java.simpleName)
-        NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE].observeNotification(viewLifecycleOwner, {
+        NotifyBus[NotifyType.REBUILD_COURSE_TABLE].observeNotification(viewLifecycleOwner, {
             viewModel.rebuildCourseTable()
         }, CourseTableFragment::class.java.simpleName)
-        NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE_BACKGROUND].observeNotification(viewLifecycleOwner, {
+        NotifyBus[NotifyType.REBUILD_COURSE_TABLE_BACKGROUND].observeNotification(viewLifecycleOwner, {
             setCourseTableBackground()
             setFullScreenBackground(false)
         }, CourseTableFragment::class.java.simpleName)
@@ -166,7 +167,7 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>() {
     private fun setCourseTableBackground() {
         if (SettingsPref.CustomCourseTableBackground) {
             AppPref.CourseTableBackgroundImageName?.let {
-                val imageFile = ImageUtils.getLocalImageFile(it, Constants.Image.DIR_APP_IMAGE)
+                val imageFile = ImageUtils.getLocalImageFile(it, ImageConst.DIR_APP_IMAGE)
                 if (imageFile?.exists() == true) {
                     iv_courseTableBackground.apply {
                         alpha = SettingsPref.CourseTableBackgroundAlpha / 100f

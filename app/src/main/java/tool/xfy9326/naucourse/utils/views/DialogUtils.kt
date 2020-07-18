@@ -19,8 +19,8 @@ import com.jaredrummler.android.colorpicker.ColorPickerDialog
 import kotlinx.android.synthetic.main.dialog_bottom_msg.*
 import kotlinx.android.synthetic.main.dialog_course_control_panel.*
 import kotlinx.android.synthetic.main.dialog_image_operation.*
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.constants.OthersConst
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.ui.views.widgets.AnimateSlider
 import tool.xfy9326.naucourse.utils.io.TextIOUtils
@@ -32,7 +32,7 @@ object DialogUtils {
         MaterialAlertDialogBuilder(context).apply {
             setTitle(R.string.online_course_conflict_attention_title)
             setMessage(R.string.online_course_init_conflict_attention_msg)
-            setPositiveButton(android.R.string.yes, null)
+            setPositiveButton(android.R.string.ok, null)
             setCancelable(false)
             background = context.getDrawable(R.drawable.bg_dialog)
         }.create().also {
@@ -49,7 +49,7 @@ object DialogUtils {
                     context.getString(R.string.jwc_credit, credit.second) + context.getString(R.string.credit_count_result, credit.first)
                 }
             )
-            setPositiveButton(android.R.string.yes, null)
+            setPositiveButton(android.R.string.ok, null)
             background = context.getDrawable(R.drawable.bg_dialog)
         }.create().also {
             addAutoCloseListener(lifecycle, it)
@@ -94,7 +94,7 @@ object DialogUtils {
                     TextIOUtils.ASSETS_PATH_EULA_LICENSE
                 )
             )
-            setPositiveButton(android.R.string.yes, null)
+            setPositiveButton(android.R.string.ok, null)
             background = context.getDrawable(R.drawable.bg_dialog)
         }.create().also {
             addAutoCloseListener(lifecycle, it)
@@ -109,7 +109,7 @@ object DialogUtils {
                     TextIOUtils.ASSETS_PATH_OPEN_SOURCE_LICENSE
                 )
             )
-            setPositiveButton(android.R.string.yes, null)
+            setPositiveButton(android.R.string.ok, null)
             background = context.getDrawable(R.drawable.bg_dialog)
         }.create().also {
             addAutoCloseListener(lifecycle, it)
@@ -120,9 +120,9 @@ object DialogUtils {
             setTitle(R.string.forget_password)
             setMessage(R.string.forget_password_help)
             setNeutralButton(R.string.find_password) { _: DialogInterface, _: Int ->
-                IntentUtils.launchUrlInBrowser(context, Constants.Others.FORGET_PASSWORD)
+                IntentUtils.launchUrlInBrowser(context, OthersConst.FORGET_PASSWORD)
             }
-            setPositiveButton(android.R.string.yes, null)
+            setPositiveButton(android.R.string.ok, null)
             background = context.getDrawable(R.drawable.bg_dialog)
         }.create().also {
             addAutoCloseListener(lifecycle, it)
@@ -133,7 +133,7 @@ object DialogUtils {
             setTitle(R.string.logout)
             setMessage(R.string.logout_msg)
             setNegativeButton(android.R.string.cancel, null)
-            setPositiveButton(android.R.string.yes, logoutListener)
+            setPositiveButton(android.R.string.ok, logoutListener)
             background = context.getDrawable(R.drawable.bg_dialog)
         }.create().also {
             addAutoCloseListener(lifecycle, it)

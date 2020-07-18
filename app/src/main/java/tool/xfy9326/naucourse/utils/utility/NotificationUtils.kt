@@ -9,8 +9,8 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import tool.xfy9326.naucourse.BuildConfig
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.constants.TimeConst
 import tool.xfy9326.naucourse.utils.views.ViewUtils
 import java.text.SimpleDateFormat
 import java.util.*
@@ -21,7 +21,7 @@ object NotificationUtils {
     private const val NOTIFY_ID_NEXT_COURSE = 1
     private const val ACTIVITY_REQUEST_CODE = 1
 
-    private val DATE_FORMAT_HM = SimpleDateFormat(Constants.Time.FORMAT_HM, Locale.CHINA)
+    private val DATE_FORMAT_HM = SimpleDateFormat(TimeConst.FORMAT_HM, Locale.CHINA)
 
     data class NextCourseNotification(
         val courseName: String,

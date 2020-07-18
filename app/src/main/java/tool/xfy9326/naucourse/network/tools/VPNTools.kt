@@ -1,7 +1,7 @@
 package tool.xfy9326.naucourse.network.tools
 
 import okhttp3.HttpUrl
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.NetworkConst
 import tool.xfy9326.naucourse.network.clients.VPNClient
 import tool.xfy9326.naucourse.utils.BaseUtils.toHex
 import java.nio.charset.StandardCharsets
@@ -30,12 +30,12 @@ object VPNTools {
 
     fun buildVPNUrl(url: HttpUrl): HttpUrl {
         var vpnScheme = url.scheme
-        if (url.port != Constants.Network.HTTP_PORT && url.port != Constants.Network.HTTPS_PORT) {
+        if (url.port != NetworkConst.HTTP_PORT && url.port != NetworkConst.HTTPS_PORT) {
             vpnScheme += VPN_URL_SCHEME_JOIN_SYMBOL + url.port
         }
         val vpnPaths = url.encodedPathSegments
         return HttpUrl.Builder().apply {
-            scheme(Constants.Network.HTTP)
+            scheme(NetworkConst.HTTP)
             host(VPNClient.VPN_HOST)
             addPathSegment(vpnScheme)
             addPathSegment(encryptHost(url.host))

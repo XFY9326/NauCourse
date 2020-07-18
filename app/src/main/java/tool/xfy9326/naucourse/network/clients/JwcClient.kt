@@ -4,7 +4,7 @@ import okhttp3.Headers
 import okhttp3.HttpUrl
 import okhttp3.Request
 import okhttp3.Response
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.NetworkConst
 import tool.xfy9326.naucourse.network.clients.base.LoginInfo
 import tool.xfy9326.naucourse.network.clients.base.LoginResponse
 import tool.xfy9326.naucourse.network.clients.base.ServerErrorException
@@ -25,9 +25,9 @@ class JwcClient(loginInfo: LoginInfo) : SSOClient(loginInfo, JWC_SSO_LOGIN_URL) 
         private const val JWC_URL_PARAM_R = "r"
         private const val JWC_URL_PARAM_D = "d"
 
-        private val JWC_LOGIN_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(JWC_HOST).addPathSegment(JWC_LOGIN_ASPX).build()
-        private val JWC_LOGOUT_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(JWC_HOST).addPathSegment(JWC_LOGOUT_ASPX).build()
-        private val JWC_SSO_LOGIN_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(JWC_HOST).addPathSegment(JWC_SSO_LOGIN_ASPX).build()
+        private val JWC_LOGIN_URL = HttpUrl.Builder().scheme(NetworkConst.HTTP).host(JWC_HOST).addPathSegment(JWC_LOGIN_ASPX).build()
+        private val JWC_LOGOUT_URL = HttpUrl.Builder().scheme(NetworkConst.HTTP).host(JWC_HOST).addPathSegment(JWC_LOGOUT_ASPX).build()
+        private val JWC_SSO_LOGIN_URL = HttpUrl.Builder().scheme(NetworkConst.HTTP).host(JWC_HOST).addPathSegment(JWC_SSO_LOGIN_ASPX).build()
 
         private const val JWC_ALREADY_LOGIN_STR = "已经登录"
         private const val JWC_SERVER_ERROR_STR = "非法字符"

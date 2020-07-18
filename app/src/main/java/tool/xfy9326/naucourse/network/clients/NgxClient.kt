@@ -6,7 +6,8 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.internal.closeQuietly
 import okio.IOException
 import org.jsoup.Jsoup
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.BaseConst
+import tool.xfy9326.naucourse.constants.NetworkConst
 import tool.xfy9326.naucourse.network.clients.base.BaseLoginClient
 import tool.xfy9326.naucourse.network.clients.base.LoginInfo
 import tool.xfy9326.naucourse.network.clients.base.LoginResponse
@@ -54,9 +55,9 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
         private const val PASSWORD_ERROR_STR = "用户名密码错误"
 
         private val NGX_LOGIN_URL =
-            HttpUrl.Builder().scheme(Constants.Network.HTTP).host(NGX_HOST).addPathSegment(PATH_WENGINE_AUTH).addPathSegment(PATH_LOGIN).build()
+            HttpUrl.Builder().scheme(NetworkConst.HTTP).host(NGX_HOST).addPathSegment(PATH_WENGINE_AUTH).addPathSegment(PATH_LOGIN).build()
         private val NGX_LOGOUT_URL =
-            HttpUrl.Builder().scheme(Constants.Network.HTTP).host(NGX_HOST).addPathSegment(PATH_WENGINE_AUTH).addPathSegment(PATH_LOGOUT).build()
+            HttpUrl.Builder().scheme(NetworkConst.HTTP).host(NGX_HOST).addPathSegment(PATH_WENGINE_AUTH).addPathSegment(PATH_LOGOUT).build()
 
         private fun getLoginStatus(htmlContent: String, isFromPathLogin: Boolean): LoginResponse.ErrorReason = when {
             PASSWORD_ERROR_STR in htmlContent -> LoginResponse.ErrorReason.PASSWORD_ERROR
@@ -67,17 +68,17 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
 
         private fun getLoginPostUrl(ssoResponseContent: String): HttpUrl {
             val action = Jsoup.parse(ssoResponseContent).selectFirst(SELECT_POST_FORM).attr(ATTR_ACTION)
-            return if (action.startsWith(Constants.Network.HTTP)) {
+            return if (action.startsWith(NetworkConst.HTTP)) {
                 action.toHttpUrl()
             } else {
-                val url = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(NGX_HOST).addPathSegment(PATH_WENGINE_AUTH).build().toString()
-                (url + Constants.Network.DIR + action).toHttpUrl()
+                val url = HttpUrl.Builder().scheme(NetworkConst.HTTP).host(NGX_HOST).addPathSegment(PATH_WENGINE_AUTH).build().toString()
+                (url + NetworkConst.DIR + action).toHttpUrl()
             }
         }
 
         private fun getLoginPostForm(userId: String, userPw: String): FormBody = FormBody.Builder().apply {
             add(POST_AUTH_TYPE, POST_AUTH_TYPE_VALUE)
-            add(POST_SMS_CODE, Constants.EMPTY)
+            add(POST_SMS_CODE, BaseConst.EMPTY)
             add(POST_USER_NAME, userId)
             add(POST_PASSWORD, userPw)
         }.build()

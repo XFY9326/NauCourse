@@ -7,8 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.beans.*
+import tool.xfy9326.naucourse.constants.CourseConst
 import tool.xfy9326.naucourse.io.db.CourseCellStyleDBHelper
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.io.store.CourseTableStore
@@ -17,6 +17,7 @@ import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.providers.info.methods.CourseInfo
 import tool.xfy9326.naucourse.providers.info.methods.TermDateInfo
 import tool.xfy9326.naucourse.tools.NotifyBus
+import tool.xfy9326.naucourse.tools.NotifyType
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
@@ -37,7 +38,7 @@ class CourseTableViewModel : BaseViewModel() {
     private lateinit var courseSet: CourseSet
     private lateinit var termDate: TermDate
     private lateinit var courseTableArr: Array<CourseTable>
-    private val hasTableInit = BooleanArray(Constants.Course.MAX_WEEK_NUM_SIZE) { false }
+    private val hasTableInit = BooleanArray(CourseConst.MAX_WEEK_NUM_SIZE) { false }
 
     @Volatile
     private var courseTableStyle: CourseTableStyle? = null
@@ -66,7 +67,7 @@ class CourseTableViewModel : BaseViewModel() {
 
     val getImageWhenCourseTableLoading = NotifyLivaData()
 
-    val courseTablePkg = Array<MutableLiveData<CoursePkg>>(Constants.Course.MAX_WEEK_NUM_SIZE) { MutableLiveData() }
+    val courseTablePkg = Array<MutableLiveData<CoursePkg>>(CourseConst.MAX_WEEK_NUM_SIZE) { MutableLiveData() }
 
     enum class CurrentWeekStatus {
         IS_CURRENT_WEEK,
@@ -361,7 +362,7 @@ class CourseTableViewModel : BaseViewModel() {
                         if (courseDataNeedUpdate) {
                             val styles = CourseCellStyleDBHelper.loadCourseCellStyle(courseInfo.data!!)
                             updateCourseData(courseInfo.data, termInfo.data!!, styles)
-                            NotifyBus[NotifyBus.Type.COURSE_ASYNC_UPDATE].notifyEvent()
+                            NotifyBus[NotifyType.COURSE_ASYNC_UPDATE].notifyEvent()
                         }
                     } else {
                         LogUtils.d<CourseTableViewModel>("CourseInfo Async Error: ${courseInfo.errorReason}")

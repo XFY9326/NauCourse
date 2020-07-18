@@ -1,9 +1,10 @@
 package tool.xfy9326.naucourse.utils.courses
 
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.beans.ClassTime
 import tool.xfy9326.naucourse.beans.CourseTimeDuration
 import tool.xfy9326.naucourse.beans.DateTimePeriod
+import tool.xfy9326.naucourse.constants.CourseConst
+import tool.xfy9326.naucourse.constants.TimeConst
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.providers.beans.jwc.TimePeriod
 import java.util.*
@@ -51,7 +52,7 @@ object TimeUtils {
     }.time
 
     fun getCourseDateTimePeriod(courseDate: Date, timePeriod: TimePeriod): DateTimePeriod {
-        if (timePeriod.start < Constants.Course.MIN_COURSE_LENGTH || timePeriod.hasEnd() && timePeriod.end!! > Constants.Course.MAX_COURSE_LENGTH) {
+        if (timePeriod.start < CourseConst.MIN_COURSE_LENGTH || timePeriod.hasEnd() && timePeriod.end!! > CourseConst.MAX_COURSE_LENGTH) {
             throw IllegalArgumentException("Invalid Course Time Period! $timePeriod")
         }
         val startDateTime: Date
@@ -96,7 +97,7 @@ object TimeUtils {
             val dayOffset = 1 - getWeekDayNum(this) + (weekNum - 1) * 7 - 1
             if (dayOffset != 0) add(Calendar.DATE, dayOffset)
         }
-        return Array(Constants.Time.MAX_WEEK_DAY) {
+        return Array(TimeConst.MAX_WEEK_DAY) {
             calendar.add(Calendar.DATE, 1)
             Pair(calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DATE))
         }

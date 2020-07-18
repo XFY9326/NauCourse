@@ -2,8 +2,10 @@ package tool.xfy9326.naucourse.providers.beans.jwc
 
 import android.content.Context
 import androidx.room.*
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.constants.BaseConst
+import tool.xfy9326.naucourse.constants.DBConst
+import tool.xfy9326.naucourse.constants.TimeConst
 import tool.xfy9326.naucourse.io.db.CourseSetDBHelper
 import java.io.Serializable
 import kotlin.math.min
@@ -16,13 +18,13 @@ import kotlin.math.min
     )],
     foreignKeys = [ForeignKey(
         entity = Course::class,
-        parentColumns = [Constants.DB.COLUMN_ID],
+        parentColumns = [DBConst.COLUMN_ID],
         childColumns = [CourseSetDBHelper.COLUMN_COURSE_ID]
     )]
 )
 data class CourseTime(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = Constants.DB.COLUMN_ID)
+    @ColumnInfo(name = DBConst.COLUMN_ID)
     val id: Int,
     @ColumnInfo(name = CourseSetDBHelper.COLUMN_COURSE_ID)
     var courseId: String,
@@ -54,7 +56,7 @@ data class CourseTime(
         coursesNumArray: TimePeriodList,
         rawCourseNumStr: String
     ) : this(
-        Constants.DB.DEFAULT_ID, courseId, location, weeksStr, weekMode, weeksArray, rawWeeksStr, weekDay, courseNumStr,
+        DBConst.DEFAULT_ID, courseId, location, weeksStr, weekMode, weeksArray, rawWeeksStr, weekDay, courseNumStr,
         coursesNumArray,
         rawCourseNumStr
     )
@@ -75,7 +77,7 @@ data class CourseTime(
         weeksArray,
         getRawWeeksStr(context, weeksArray, weekMode),
         weekDay,
-        String(coursesNumArray.convertToCharArray(Constants.Course.MAX_COURSE_LENGTH)),
+        String(coursesNumArray.convertToCharArray(tool.xfy9326.naucourse.constants.CourseConst.MAX_COURSE_LENGTH)),
         coursesNumArray,
         getRawCourseNumStr(context, coursesNumArray)
     )
@@ -83,9 +85,15 @@ data class CourseTime(
     companion object {
         private fun getWeeksCharArray(weeksArray: TimePeriodList, weekMode: WeekMode): CharArray =
             when (weekMode) {
-                WeekMode.ODD_WEEK_ONLY -> weeksArray.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE, oddMode = true)
-                WeekMode.EVEN_WEEK_ONLY -> weeksArray.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE, evenMode = true)
-                WeekMode.ALL_WEEKS -> weeksArray.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE)
+                WeekMode.ODD_WEEK_ONLY -> weeksArray.convertToCharArray(
+                    tool.xfy9326.naucourse.constants.CourseConst.MAX_WEEK_NUM_SIZE,
+                    oddMode = true
+                )
+                WeekMode.EVEN_WEEK_ONLY -> weeksArray.convertToCharArray(
+                    tool.xfy9326.naucourse.constants.CourseConst.MAX_WEEK_NUM_SIZE,
+                    evenMode = true
+                )
+                WeekMode.ALL_WEEKS -> weeksArray.convertToCharArray(tool.xfy9326.naucourse.constants.CourseConst.MAX_WEEK_NUM_SIZE)
             }
 
         private fun getRawWeeksStr(context: Context, weeksArray: TimePeriodList, weekMode: WeekMode): String =
@@ -96,14 +104,14 @@ data class CourseTime(
                     WeekMode.ALL_WEEKS -> context.getString(R.string.weeks, weeksArray.toString())
                 }
             } else {
-                Constants.EMPTY
+                BaseConst.EMPTY
             }
 
         private fun getRawCourseNumStr(context: Context, coursesNumArray: TimePeriodList): String =
             if (coursesNumArray.size > 0) {
                 context.getString(R.string.courses, coursesNumArray.toString())
             } else {
-                Constants.EMPTY
+                BaseConst.EMPTY
             }
     }
 
@@ -114,13 +122,13 @@ data class CourseTime(
     private val coursesNumCharArray = coursesNumStr.toCharArray()
 
     init {
-        if (weekDay !in Constants.Time.MIN_WEEK_DAY..Constants.Time.MAX_WEEK_DAY) {
+        if (weekDay !in TimeConst.MIN_WEEK_DAY..TimeConst.MAX_WEEK_DAY) {
             throw IllegalArgumentException("Course Time Week Day Error! Week Day: $weekDay")
         }
-        if (coursesNumStr.length !in Constants.Course.MIN_COURSE_LENGTH..Constants.Course.MAX_COURSE_LENGTH) {
+        if (coursesNumStr.length !in tool.xfy9326.naucourse.constants.CourseConst.MIN_COURSE_LENGTH..tool.xfy9326.naucourse.constants.CourseConst.MAX_COURSE_LENGTH) {
             throw IllegalArgumentException("Course Time Course Num Length Error! Start Course Num Size: ${coursesNumStr.length}")
         }
-        if (weeksStr.length !in Constants.Course.MIN_WEEK_NUM_SIZE..Constants.Course.MAX_WEEK_NUM_SIZE) {
+        if (weeksStr.length !in tool.xfy9326.naucourse.constants.CourseConst.MIN_WEEK_NUM_SIZE..tool.xfy9326.naucourse.constants.CourseConst.MAX_WEEK_NUM_SIZE) {
             throw IllegalArgumentException("Course Time Weeks Length Error! Weeks Size: ${weeksStr.length}")
         }
     }

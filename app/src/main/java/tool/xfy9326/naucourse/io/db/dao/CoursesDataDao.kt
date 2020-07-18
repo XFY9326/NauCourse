@@ -1,7 +1,7 @@
 package tool.xfy9326.naucourse.io.db.dao
 
 import androidx.room.*
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.DBConst
 import tool.xfy9326.naucourse.io.db.CourseSetDBHelper
 import tool.xfy9326.naucourse.providers.beans.jwc.Course
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
@@ -57,6 +57,6 @@ interface CoursesDataDao {
     fun clearCoursesTime()
 
     @Suppress("AndroidUnresolvedRoomSqlReference")
-    @Query("delete from ${Constants.DB.SQL_LITE_TABLE} where ${Constants.DB.COLUMN_NAME} = :tableName")
+    @Query("delete from ${DBConst.SQL_LITE_TABLE} where ${DBConst.COLUMN_NAME} = :tableName")
     fun clearTableIndex(tableName: String)
 }

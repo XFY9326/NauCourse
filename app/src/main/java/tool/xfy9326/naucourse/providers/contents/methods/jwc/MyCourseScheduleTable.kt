@@ -5,7 +5,8 @@ import okhttp3.Response
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.HTMLConst
+import tool.xfy9326.naucourse.constants.NetworkConst
 import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.network.clients.JwcClient
 import tool.xfy9326.naucourse.providers.beans.jwc.*
@@ -18,7 +19,7 @@ object MyCourseScheduleTable : BaseNoParamContent<CourseSet>() {
     override val networkClient = getLoginClient<JwcClient>(LoginNetworkManager.ClientType.JWC)
 
     private const val COURSE_TABLE_ASPX = "MyCourseScheduleTable.aspx"
-    private val COURSE_TABLE_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(JwcClient.JWC_HOST)
+    private val COURSE_TABLE_URL = HttpUrl.Builder().scheme(NetworkConst.HTTP).host(JwcClient.JWC_HOST)
         .addPathSegment(JwcClient.JWC_STUDENTS_PATH).addPathSegment(COURSE_TABLE_ASPX).build()
 
     private const val STUDY_CHAR = '学'
@@ -47,7 +48,7 @@ object MyCourseScheduleTable : BaseNoParamContent<CourseSet>() {
     }
 
     private fun getTerm(document: Document): Term {
-        val termElement = document.body().getElementsByClass(Constants.HTML.ELEMENT_CLASS_TD_TITLE).first()
+        val termElement = document.body().getElementsByClass(HTMLConst.ELEMENT_CLASS_TD_TITLE).first()
         val text = termElement.text().trim()
 
         var startYear: Int? = null
@@ -83,8 +84,8 @@ object MyCourseScheduleTable : BaseNoParamContent<CourseSet>() {
     }
 
     private fun getCourseSet(document: Document): HashSet<Course> {
-        val contentElement = document.getElementById(Constants.HTML.ELEMENT_ID_CONTENT)
-        val trElements = contentElement.getElementsByTag(Constants.HTML.ELEMENT_TAG_TR)
+        val contentElement = document.getElementById(HTMLConst.ELEMENT_ID_CONTENT)
+        val trElements = contentElement.getElementsByTag(HTMLConst.ELEMENT_TAG_TR)
 
         if (trElements.isEmpty()) {
             return HashSet()
@@ -102,7 +103,7 @@ object MyCourseScheduleTable : BaseNoParamContent<CourseSet>() {
         var timeSet: HashSet<CourseTime>? = null
 
         for (tr in 1 until trElements.size) {
-            val tdElements = trElements[tr].getElementsByTag(Constants.HTML.ELEMENT_TAG_TD)
+            val tdElements = trElements[tr].getElementsByTag(HTMLConst.ELEMENT_TAG_TD)
 
             if (tdElements.size < 8) {
                 throw IOException("Incomplete Course Data!")
@@ -248,11 +249,11 @@ object MyCourseScheduleTable : BaseNoParamContent<CourseSet>() {
                         val temp = time.split(FROM_TO_TIME_JOIN_SYMBOL)
                         val periodTemp = TimePeriod(temp[0].toInt(), temp[1].toInt())
                         weeksPeriodArray.add(periodTemp)
-                        periodTemp.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE, source = weeksArrTemp)
+                        periodTemp.convertToCharArray(tool.xfy9326.naucourse.constants.CourseConst.MAX_WEEK_NUM_SIZE, source = weeksArrTemp)
                     } else {
                         val periodTemp = TimePeriod(time.toInt())
                         weeksPeriodArray.add(periodTemp)
-                        periodTemp.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE, source = weeksArrTemp)
+                        periodTemp.convertToCharArray(tool.xfy9326.naucourse.constants.CourseConst.MAX_WEEK_NUM_SIZE, source = weeksArrTemp)
                     }
                 }
             } else {
@@ -260,11 +261,11 @@ object MyCourseScheduleTable : BaseNoParamContent<CourseSet>() {
                     val temp = weekNumStr.split(FROM_TO_TIME_JOIN_SYMBOL)
                     val periodTemp = TimePeriod(temp[0].toInt(), temp[1].toInt())
                     weeksPeriodArray.add(periodTemp)
-                    periodTemp.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE, source = weeksArrTemp)
+                    periodTemp.convertToCharArray(tool.xfy9326.naucourse.constants.CourseConst.MAX_WEEK_NUM_SIZE, source = weeksArrTemp)
                 } else {
                     val periodTemp = TimePeriod(weekNumStr.toInt())
                     weeksPeriodArray.add(periodTemp)
-                    periodTemp.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE, source = weeksArrTemp)
+                    periodTemp.convertToCharArray(tool.xfy9326.naucourse.constants.CourseConst.MAX_WEEK_NUM_SIZE, source = weeksArrTemp)
                 }
             }
         } else if (WEEK_TYPE_AND_CHAR in weekStr) {
@@ -272,17 +273,25 @@ object MyCourseScheduleTable : BaseNoParamContent<CourseSet>() {
             val periodTemp = TimePeriod(weekNum[0].toInt(), weekNum[1].toInt())
             if (WEEK_TYPE_SINGLE_CHAR in weekStr) {
                 weekMode = WeekMode.ODD_WEEK_ONLY
-                weeksArrTemp = periodTemp.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE, oddMode = true, source = weeksArrTemp)
+                weeksArrTemp = periodTemp.convertToCharArray(
+                    tool.xfy9326.naucourse.constants.CourseConst.MAX_WEEK_NUM_SIZE,
+                    oddMode = true,
+                    source = weeksArrTemp
+                )
             } else if (WEEK_TYPE_DOUBLE_CHAR in weekStr) {
                 weekMode = WeekMode.EVEN_WEEK_ONLY
-                weeksArrTemp = periodTemp.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE, evenMode = true, source = weeksArrTemp)
+                weeksArrTemp = periodTemp.convertToCharArray(
+                    tool.xfy9326.naucourse.constants.CourseConst.MAX_WEEK_NUM_SIZE,
+                    evenMode = true,
+                    source = weeksArrTemp
+                )
             }
             weeksPeriodArray.add(periodTemp)
         } else {
             val weekNum = weekStr.substring(0, weekStr.indexOf(WEEK_NUM_CHAR)).split(FROM_TO_TIME_JOIN_SYMBOL)
             val periodTemp = TimePeriod(weekNum[0].toInt(), weekNum[1].toInt())
             weeksPeriodArray.add(periodTemp)
-            weeksArrTemp = periodTemp.convertToCharArray(Constants.Course.MAX_WEEK_NUM_SIZE, source = weeksArrTemp)
+            weeksArrTemp = periodTemp.convertToCharArray(tool.xfy9326.naucourse.constants.CourseConst.MAX_WEEK_NUM_SIZE, source = weeksArrTemp)
         }
 
         return weeksArrTemp to weekMode
@@ -294,18 +303,21 @@ object MyCourseScheduleTable : BaseNoParamContent<CourseSet>() {
             MULTI_TIME_JOIN_SYMBOL in courseNumText -> courseNumText.split(MULTI_TIME_JOIN_SYMBOL).forEach { time ->
                 val periodTemp = TimePeriod(time.toInt())
                 coursesNumPeriodArray.add(periodTemp)
-                courseNumArrTemp = periodTemp.convertToCharArray(Constants.Course.MAX_COURSE_LENGTH, source = courseNumArrTemp)
+                courseNumArrTemp =
+                    periodTemp.convertToCharArray(tool.xfy9326.naucourse.constants.CourseConst.MAX_COURSE_LENGTH, source = courseNumArrTemp)
             }
             FROM_TO_TIME_JOIN_SYMBOL in courseNumText -> {
                 val splitTemp = courseNumText.split(FROM_TO_TIME_JOIN_SYMBOL)
                 val periodTemp = TimePeriod(splitTemp[0].toInt(), splitTemp[1].toInt())
                 coursesNumPeriodArray.add(periodTemp)
-                courseNumArrTemp = periodTemp.convertToCharArray(Constants.Course.MAX_COURSE_LENGTH, source = courseNumArrTemp)
+                courseNumArrTemp =
+                    periodTemp.convertToCharArray(tool.xfy9326.naucourse.constants.CourseConst.MAX_COURSE_LENGTH, source = courseNumArrTemp)
             }
             else -> {
                 val periodTemp = TimePeriod(courseNumText.toInt())
                 coursesNumPeriodArray.add(periodTemp)
-                courseNumArrTemp = periodTemp.convertToCharArray(Constants.Course.MAX_COURSE_LENGTH, source = courseNumArrTemp)
+                courseNumArrTemp =
+                    periodTemp.convertToCharArray(tool.xfy9326.naucourse.constants.CourseConst.MAX_COURSE_LENGTH, source = courseNumArrTemp)
             }
         }
         return courseNumArrTemp

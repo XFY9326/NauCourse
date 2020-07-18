@@ -2,7 +2,8 @@ package tool.xfy9326.naucourse.providers.contents.methods.jwc
 
 import okhttp3.Response
 import org.jsoup.Jsoup
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.HTMLConst
+import tool.xfy9326.naucourse.constants.TimeConst
 import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.network.clients.JwcClient
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
@@ -13,7 +14,7 @@ import java.util.*
 object TermInfo : BaseNoParamContent<TermDate>() {
     override val networkClient = getLoginClient<JwcClient>(LoginNetworkManager.ClientType.JWC)
 
-    private val DATE_FORMAT_YMD = SimpleDateFormat(Constants.Time.FORMAT_YMD, Locale.CHINA)
+    private val DATE_FORMAT_YMD = SimpleDateFormat(TimeConst.FORMAT_YMD, Locale.CHINA)
 
     private const val ELEMENT_ID_TERM_INFO = "TermInfo"
 
@@ -24,7 +25,7 @@ object TermInfo : BaseNoParamContent<TermDate>() {
 
     override fun onParseData(content: String): TermDate {
         val document = Jsoup.parse(content)
-        val spanElements = document.body().getElementById(ELEMENT_ID_TERM_INFO).getElementsByTag(Constants.HTML.ELEMENT_TAG_SPAN)
+        val spanElements = document.body().getElementById(ELEMENT_ID_TERM_INFO).getElementsByTag(HTMLConst.ELEMENT_TAG_SPAN)
 
         val weekText = spanElements[2].text().trim()
         val currentWeek = if (IN_VACATION_STR == weekText) {

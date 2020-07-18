@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import tool.xfy9326.naucourse.constants.ImageConst
 import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.providers.GlobalCacheManager
 import tool.xfy9326.naucourse.utils.BaseUtils
@@ -53,7 +54,7 @@ class App : Application(), LifecycleObserver {
         }
     }
 
-    private fun clearOldCache() = ImageUtils.clearLocalImageBySubDir(Constants.Image.DIR_SHARE_TEMP_IMAGE)
+    private fun clearOldCache() = ImageUtils.clearLocalImageBySubDir(ImageConst.DIR_SHARE_TEMP_IMAGE)
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     private fun onAppForeground() {

@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import okhttp3.HttpUrl
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.DBConst
 import tool.xfy9326.naucourse.io.db.NewsDBHelper
 import java.util.*
 import kotlin.collections.HashSet
@@ -12,7 +12,7 @@ import kotlin.collections.HashSet
 @Entity(tableName = NewsDBHelper.NEWS_TABLE_NAME)
 data class GeneralNews(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = Constants.DB.COLUMN_ID)
+    @ColumnInfo(name = DBConst.COLUMN_ID)
     var id: Int,
     val title: String,
     @ColumnInfo(name = NewsDBHelper.COLUMN_POST_DATE)
@@ -25,15 +25,15 @@ data class GeneralNews(
 ) {
     // For RSSObject
     constructor(title: String, postDate: Date, detailUrl: HttpUrl, type: String?, postSource: PostSource) :
-            this(Constants.DB.DEFAULT_ID, title, postDate, detailUrl, type, postSource, null)
+            this(DBConst.DEFAULT_ID, title, postDate, detailUrl, type, postSource, null)
 
     // For AlstuMessage
     constructor(title: String, postDate: Date, detailUrl: HttpUrl, postSource: PostSource) :
-            this(Constants.DB.DEFAULT_ID, title, postDate, detailUrl, null, postSource, null)
+            this(DBConst.DEFAULT_ID, title, postDate, detailUrl, null, postSource, null)
 
     // For JwcTopic
     constructor(title: String, postDate: Date, detailUrl: HttpUrl, type: String, postSource: PostSource, clickAmount: Int) :
-            this(Constants.DB.DEFAULT_ID, title, postDate, detailUrl, type, postSource, clickAmount)
+            this(DBConst.DEFAULT_ID, title, postDate, detailUrl, type, postSource, clickAmount)
 
 
     companion object {

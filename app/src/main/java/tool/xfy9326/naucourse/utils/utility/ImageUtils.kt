@@ -13,8 +13,10 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import tool.xfy9326.naucourse.App
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.beans.ImageOperationType
+import tool.xfy9326.naucourse.constants.BaseConst
+import tool.xfy9326.naucourse.constants.ImageConst
+import tool.xfy9326.naucourse.constants.MIMEConst
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.utils.io.BaseIOUtils
 import tool.xfy9326.naucourse.utils.io.ImageIOUtils
@@ -34,7 +36,7 @@ object ImageUtils {
     suspend fun saveImage(source: String, bitmap: Bitmap, imageOperationMutex: Mutex, imageOperation: EventLiveData<ImageOperationType>) =
         withContext(Dispatchers.IO) {
             imageOperationMutex.withLock {
-                if (saveImageToAlbum(PathUtils.getUrlFileName(source), Constants.Image.DIR_NEWS_DETAIL_IMAGE, bitmap, false)) {
+                if (saveImageToAlbum(PathUtils.getUrlFileName(source), ImageConst.DIR_NEWS_DETAIL_IMAGE, bitmap, false)) {
                     imageOperation.postEventValue(ImageOperationType.IMAGE_SAVE_SUCCESS)
                 } else {
                     imageOperation.postEventValue(ImageOperationType.IMAGE_SAVE_FAILED)
@@ -141,7 +143,7 @@ object ImageUtils {
             fileName,
             bitmap,
             recycle = recycle,
-            dirName = Constants.Image.DIR_SHARE_TEMP_IMAGE,
+            dirName = ImageConst.DIR_SHARE_TEMP_IMAGE,
             fileProviderUri = true,
             addFileNameTypePrefix = true
         )
@@ -182,7 +184,7 @@ object ImageUtils {
                     )
                 ) {
                     if (fileProviderUri) {
-                        FileProvider.getUriForFile(App.instance, Constants.FILE_PROVIDER_AUTH, localStorageFile)
+                        FileProvider.getUriForFile(App.instance, BaseConst.FILE_PROVIDER_AUTH, localStorageFile)
                     } else {
                         Uri.fromFile(localStorageFile)
                     }
@@ -213,14 +215,14 @@ object ImageUtils {
             put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
             put(
                 MediaStore.Images.Media.MIME_TYPE, when (format) {
-                    Bitmap.CompressFormat.PNG -> Constants.MIME.IMAGE_PNG
-                    Bitmap.CompressFormat.JPEG -> Constants.MIME.IMAGE_JPEG
+                    Bitmap.CompressFormat.PNG -> MIMEConst.IMAGE_PNG
+                    Bitmap.CompressFormat.JPEG -> MIMEConst.IMAGE_JPEG
                     else -> {
                         @Suppress("DEPRECATION")
                         if (format == Bitmap.CompressFormat.WEBP || Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
                             (format == Bitmap.CompressFormat.WEBP_LOSSY || format == Bitmap.CompressFormat.WEBP_LOSSLESS)
                         ) {
-                            Constants.MIME.IMAGE_WEBP
+                            MIMEConst.IMAGE_WEBP
                         } else {
                             throw IllegalArgumentException("Unknown Bitmap Compress Format! $format")
                         }
@@ -253,13 +255,13 @@ object ImageUtils {
 
     private fun imageFileNameFix(source: String?, compressFormat: Bitmap.CompressFormat?, addFileNameTypePrefix: Boolean): String =
         if (source == null || source.isEmpty() || source.isBlank()) {
-            UUID.randomUUID().toString() + if (addFileNameTypePrefix) getFileTypePrefixByCompressType(compressFormat) else Constants.EMPTY
+            UUID.randomUUID().toString() + if (addFileNameTypePrefix) getFileTypePrefixByCompressType(compressFormat) else BaseConst.EMPTY
         } else {
             val lower = source.toLowerCase(Locale.CHINA)
             if (lower.endsWith(IMAGE_PNG) || lower.endsWith(IMAGE_JPEG) || lower.endsWith(IMAGE_JPG) || lower.endsWith(IMAGE_WEBP)) {
                 if (compressFormat != null) {
                     source.substring(0, source.lastIndexOf(TYPE_DIVIDER)) +
-                            if (addFileNameTypePrefix) getFileTypePrefixByCompressType(compressFormat) else Constants.EMPTY
+                            if (addFileNameTypePrefix) getFileTypePrefixByCompressType(compressFormat) else BaseConst.EMPTY
                 } else {
                     if (addFileNameTypePrefix) {
                         source
@@ -268,7 +270,7 @@ object ImageUtils {
                     }
                 }
             } else {
-                source + if (addFileNameTypePrefix) getFileTypePrefixByCompressType(compressFormat) else Constants.EMPTY
+                source + if (addFileNameTypePrefix) getFileTypePrefixByCompressType(compressFormat) else BaseConst.EMPTY
             }
         }
 

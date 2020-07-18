@@ -51,7 +51,7 @@ class CourseImportDialog : DialogFragment(), DialogInterface.OnMultiChoiceClickL
         setTitle(R.string.course_import)
         setMultiChoiceItems(getCourseNameArray(), checkedArray, this@CourseImportDialog)
         setNegativeButton(android.R.string.cancel, null)
-        setPositiveButton(android.R.string.yes) { _, _ ->
+        setPositiveButton(android.R.string.ok) { _, _ ->
             val activity = requireActivity()
             if (activity is CourseImportCallback) {
                 activity.onCourseImport(generateNewCourseList(), courseSet.term, courseType)

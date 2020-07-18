@@ -12,8 +12,10 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.dialog_course_time_edit.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.constants.BaseConst
+import tool.xfy9326.naucourse.constants.CourseConst
+import tool.xfy9326.naucourse.constants.TimeConst
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseTime
 import tool.xfy9326.naucourse.providers.beans.jwc.TimePeriod
 import tool.xfy9326.naucourse.providers.beans.jwc.TimePeriodList
@@ -51,7 +53,7 @@ class CourseTimeEditDialog : DialogFragment() {
         super.onCreate(savedInstanceState)
         position = arguments?.getSerializable(UPDATE_POSITION) as Int?
 
-        maxWeekNum = arguments?.getInt(MAX_WEEK_NUM) ?: Constants.Course.MAX_WEEK_NUM_SIZE
+        maxWeekNum = arguments?.getInt(MAX_WEEK_NUM) ?: CourseConst.MAX_WEEK_NUM_SIZE
         courseId = arguments?.getString(COURSE_ID)!!
 
         val savedCourseTime = savedInstanceState?.getSerializable(COURSE_TIME) as CourseTime?
@@ -86,7 +88,7 @@ class CourseTimeEditDialog : DialogFragment() {
             }
 
             if (courseTime?.location == getString(R.string.no_data)) {
-                et_courseLocation.setText(Constants.EMPTY)
+                et_courseLocation.setText(BaseConst.EMPTY)
             } else {
                 et_courseLocation.setText(courseTime?.location)
             }
@@ -192,8 +194,8 @@ class CourseTimeEditDialog : DialogFragment() {
         val weekDayNumStrArray = resources.getStringArray(R.array.weekday_num)
 
         picker_courseTimeWeekDay.apply {
-            minValue = Constants.Time.MIN_WEEK_DAY
-            maxValue = Constants.Time.MAX_WEEK_DAY
+            minValue = TimeConst.MIN_WEEK_DAY
+            maxValue = TimeConst.MAX_WEEK_DAY
             displayedValues = Array(weekDayNumStrArray.size) {
                 getString(R.string.week_day, weekDayNumStrArray[it])
             }
@@ -201,9 +203,9 @@ class CourseTimeEditDialog : DialogFragment() {
         }
 
         picker_courseStartTime.apply {
-            minValue = Constants.Course.MIN_COURSE_LENGTH
-            maxValue = Constants.Course.MAX_COURSE_LENGTH
-            displayedValues = Array(Constants.Course.MAX_COURSE_LENGTH) {
+            minValue = CourseConst.MIN_COURSE_LENGTH
+            maxValue = CourseConst.MAX_COURSE_LENGTH
+            displayedValues = Array(CourseConst.MAX_COURSE_LENGTH) {
                 getString(R.string.course_num, it + 1)
             }
             setOnScrollListener { v, scrollState ->
@@ -218,9 +220,9 @@ class CourseTimeEditDialog : DialogFragment() {
         }
 
         picker_courseEndTime.apply {
-            minValue = Constants.Course.MIN_COURSE_LENGTH
-            maxValue = Constants.Course.MAX_COURSE_LENGTH
-            displayedValues = Array(Constants.Course.MAX_COURSE_LENGTH) {
+            minValue = CourseConst.MIN_COURSE_LENGTH
+            maxValue = CourseConst.MAX_COURSE_LENGTH
+            displayedValues = Array(CourseConst.MAX_COURSE_LENGTH) {
                 getString(R.string.course_num, it + 1)
             }
             setOnScrollListener { v, scrollState ->

@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.DBConst
 import tool.xfy9326.naucourse.io.db.CourseHistoryDBHelper
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseHistory
 
@@ -20,6 +20,6 @@ interface CoursesHistoryDao {
     fun clearCourseHistory()
 
     @Suppress("AndroidUnresolvedRoomSqlReference")
-    @Query("delete from ${Constants.DB.SQL_LITE_TABLE} where ${Constants.DB.COLUMN_NAME} = '${CourseHistoryDBHelper.COURSES_HISTORY_TABLE_NAME}'")
+    @Query("delete from ${DBConst.SQL_LITE_TABLE} where ${DBConst.COLUMN_NAME} = '${CourseHistoryDBHelper.COURSES_HISTORY_TABLE_NAME}'")
     fun clearIndex()
 }

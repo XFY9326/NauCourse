@@ -12,16 +12,16 @@ import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import tool.xfy9326.naucourse.App
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.constants.BaseConst
 
 object ViewUtils {
     const val COURSE_DATA_JOIN_SYMBOL = "·"
 
-    fun EditText.clear() = this.setText(Constants.EMPTY)
+    fun EditText.clear() = this.setText(BaseConst.EMPTY)
 
     fun TextView.clear() {
-        this.text = Constants.EMPTY
+        this.text = BaseConst.EMPTY
     }
 
     @Suppress("unused")

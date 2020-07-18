@@ -7,7 +7,7 @@ import android.text.Spanned
 import android.text.style.ImageSpan
 import android.view.View
 import org.xml.sax.XMLReader
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.HTMLConst
 import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 import tool.xfy9326.naucourse.utils.utility.BitmapUtils
@@ -18,7 +18,7 @@ class AdvancedTagHandler : Html.TagHandler {
     private var clickListener: OnImageClickListener? = null
 
     override fun handleTag(opening: Boolean, tag: String?, output: Editable?, xmlReader: XMLReader?) {
-        if (Constants.HTML.ELEMENT_TAG_IMG == tag?.toLowerCase(Locale.getDefault()) && output != null) {
+        if (HTMLConst.ELEMENT_TAG_IMG == tag?.toLowerCase(Locale.getDefault()) && output != null) {
             val len = output.length
             output.getSpans(len - 1, len, ImageSpan::class.java).firstOrNull()?.let {
                 output.setSpan(object : AdvancedClickableSpan() {

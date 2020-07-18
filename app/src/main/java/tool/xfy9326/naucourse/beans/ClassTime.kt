@@ -1,6 +1,6 @@
 package tool.xfy9326.naucourse.beans
 
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.BaseConst
 
 // 上课时间
 data class ClassTime(
@@ -31,12 +31,14 @@ data class ClassTime(
 
     // 获取开始时间的字符串 HH:mm
     fun getStartTimeStr() =
-        "${String.format(Constants.KEEP_TWO_NUMBER_PLACES, startHour)}$TIME_JOIN_SYMBOL${String.format(
-            Constants.KEEP_TWO_NUMBER_PLACES,
+        "${String.format(BaseConst.KEEP_TWO_NUMBER_PLACES, startHour)}$TIME_JOIN_SYMBOL${String.format(
+            BaseConst.KEEP_TWO_NUMBER_PLACES,
             startMinute
         )}"
 
     // 获取结束时间的字符串 HH:mm
     fun getEndTimeStr() =
-        "${String.format(Constants.KEEP_TWO_NUMBER_PLACES, endHour)}$TIME_JOIN_SYMBOL${String.format(Constants.KEEP_TWO_NUMBER_PLACES, endMinute)}"
+        "${String.format(BaseConst.KEEP_TWO_NUMBER_PLACES, endHour)}$TIME_JOIN_SYMBOL${String.format(
+            BaseConst.KEEP_TWO_NUMBER_PLACES, endMinute
+        )}"
 }

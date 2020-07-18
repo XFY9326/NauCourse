@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_empty_room_search.*
 import kotlinx.android.synthetic.main.layout_list.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.constants.TimeConst
 import tool.xfy9326.naucourse.providers.beans.jwc.EmptyRoomInfo
 import tool.xfy9326.naucourse.providers.beans.jwc.EmptyRoomSearchParam
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
@@ -30,7 +30,7 @@ class EmptyRoomSearchActivity : ViewModelActivity<EmptyRoomViewModel>(), DatePic
     private var emptyRoomInfo: EmptyRoomInfo? = null
 
     companion object {
-        private val DATE_FORMAT_YMD = SimpleDateFormat(Constants.Time.FORMAT_YMD, Locale.CHINA)
+        private val DATE_FORMAT_YMD = SimpleDateFormat(TimeConst.FORMAT_YMD, Locale.CHINA)
     }
 
     override fun onCreateContentView(): Int = R.layout.activity_empty_room_search

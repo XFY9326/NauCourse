@@ -6,7 +6,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.HttpUrl
 import okhttp3.Response
 import tool.xfy9326.naucourse.BuildConfig
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.NetworkConst
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.network.SimpleNetworkManager
 import tool.xfy9326.naucourse.update.beans.UpdateIndex
@@ -22,9 +22,9 @@ object UpdateChecker {
     private const val UPDATE_INDEX = "Index"
 
     private val LATEST_VERSION_CHECK_URL =
-        HttpUrl.Builder().scheme(Constants.Network.HTTPS).host(UPDATE_SERVER).addPathSegment(UPDATE_TYPE).addPathSegment(UPDATE_LATEST).build()
+        HttpUrl.Builder().scheme(NetworkConst.HTTPS).host(UPDATE_SERVER).addPathSegment(UPDATE_TYPE).addPathSegment(UPDATE_LATEST).build()
     private val INDEX_VERSION_URL =
-        HttpUrl.Builder().scheme(Constants.Network.HTTPS).host(UPDATE_SERVER).addPathSegment(UPDATE_TYPE).addPathSegment(UPDATE_INDEX).build()
+        HttpUrl.Builder().scheme(NetworkConst.HTTPS).host(UPDATE_SERVER).addPathSegment(UPDATE_TYPE).addPathSegment(UPDATE_INDEX).build()
 
     suspend fun getNewUpdateInfo(forceCheck: Boolean = false): Pair<Boolean, UpdateInfo?>? = withContext(Dispatchers.IO) {
         if (BaseUtils.isBeta()) {
@@ -124,6 +124,6 @@ object UpdateChecker {
     }
 
     private fun buildSpecificVersionInfoUrl(version: Int) =
-        HttpUrl.Builder().scheme(Constants.Network.HTTPS).host(UPDATE_SERVER).addPathSegment(UPDATE_TYPE)
+        HttpUrl.Builder().scheme(NetworkConst.HTTPS).host(UPDATE_SERVER).addPathSegment(UPDATE_TYPE)
             .addPathSegment(UPDATE_VERSION).addPathSegment(version.toString()).build()
 }

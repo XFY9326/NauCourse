@@ -5,7 +5,8 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Response
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.HTMLConst
+import tool.xfy9326.naucourse.constants.NetworkConst
 import tool.xfy9326.naucourse.providers.beans.GeneralNews
 import tool.xfy9326.naucourse.providers.beans.GeneralNewsDetail
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
@@ -24,7 +25,7 @@ abstract class BaseNewsContent<T> : BaseNoParamContent<Set<GeneralNews>>() {
     protected open fun onBuildImageUrl(source: String): HttpUrl = source.toHttpUrl()
 
     fun getNewsImageUrl(source: String) =
-        if (source.startsWith(Constants.Network.HTTP)) {
+        if (source.startsWith(NetworkConst.HTTP)) {
             source.toHttpUrl()
         } else {
             onBuildImageUrl(source)
@@ -42,13 +43,13 @@ abstract class BaseNewsContent<T> : BaseNoParamContent<Set<GeneralNews>>() {
     }
 
     private fun imgTagFormat(document: Document) {
-        val imgTag = document.body()?.getElementsByTag(Constants.HTML.ELEMENT_TAG_IMG)
+        val imgTag = document.body()?.getElementsByTag(HTMLConst.ELEMENT_TAG_IMG)
         if (imgTag != null) {
             for (element in imgTag) {
                 val src = element.attr("src")
                 element.clearAttributes().attr("src", src)
-                element.previousElementSibling()?.appendElement(Constants.HTML.ELEMENT_TAG_BR)
-                element.appendElement(Constants.HTML.ELEMENT_TAG_BR)
+                element.previousElementSibling()?.appendElement(HTMLConst.ELEMENT_TAG_BR)
+                element.appendElement(HTMLConst.ELEMENT_TAG_BR)
             }
         }
     }

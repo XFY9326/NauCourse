@@ -10,9 +10,9 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.beans.CalendarItem
 import tool.xfy9326.naucourse.beans.ImageOperationType
+import tool.xfy9326.naucourse.constants.ImageConst
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.providers.contents.methods.www.SchoolCalendarImage
 import tool.xfy9326.naucourse.providers.contents.methods.www.SchoolCalendarList
@@ -102,7 +102,7 @@ class SchoolCalendarViewModel : BaseViewModel() {
         viewModelScope.launch(Dispatchers.Default) {
             // 直接通过Bitmap存储，防止复制图片的时候出现其他特殊问题
             imageOperationMutex.withLock {
-                if (ImageUtils.saveImageToAlbum(Constants.Image.SCHOOL_CALENDAR_IMAGE_NAME, Constants.Image.DIR_APP_IMAGE, bitmap, false)) {
+                if (ImageUtils.saveImageToAlbum(ImageConst.SCHOOL_CALENDAR_IMAGE_NAME, ImageConst.DIR_APP_IMAGE, bitmap, false)) {
                     imageOperation.postEventValue(ImageOperationType.IMAGE_SAVE_SUCCESS)
                 } else {
                     imageOperation.postEventValue(ImageOperationType.IMAGE_SAVE_FAILED)
@@ -115,7 +115,7 @@ class SchoolCalendarViewModel : BaseViewModel() {
         viewModelScope.launch(Dispatchers.Default) {
             // 通过存放bitmap的分享方式，而不是直接分享，防止更改分享uri时候使用了旧的图片或者其他情况
             imageOperationMutex.withLock {
-                val uri = ImageUtils.createImageShareTemp(Constants.Image.SCHOOL_CALENDAR_IMAGE_NAME, bitmap, false)
+                val uri = ImageUtils.createImageShareTemp(ImageConst.SCHOOL_CALENDAR_IMAGE_NAME, bitmap, false)
                 if (uri == null) {
                     imageOperation.postEventValue(ImageOperationType.IMAGE_SHARE_FAILED)
                 } else {

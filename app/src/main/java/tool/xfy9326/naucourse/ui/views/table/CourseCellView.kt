@@ -12,10 +12,10 @@ import android.widget.TextView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.setPadding
 import androidx.gridlayout.widget.GridLayout
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseCell
 import tool.xfy9326.naucourse.beans.CourseCellStyle
+import tool.xfy9326.naucourse.constants.BaseConst
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.ui.views.widgets.AdvancedFrameLayout
 import tool.xfy9326.naucourse.ui.views.widgets.AdvancedLinearLayout
@@ -127,7 +127,7 @@ class CourseCellView : AdvancedFrameLayout {
         setPadding(internalStyle.padding)
 
         val courseTimeNumText = (row + 1).toString()
-        val courseTimeText = "${courseTimeStrArr[row].first}${Constants.CHANGE_LINE}${courseTimeStrArr[row].second}"
+        val courseTimeText = "${courseTimeStrArr[row].first}${BaseConst.CHANGE_LINE}${courseTimeStrArr[row].second}"
 
         addViewInLayout(AdvancedLinearLayout(context).apply {
             layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
@@ -230,7 +230,7 @@ class CourseCellView : AdvancedFrameLayout {
                 if (courseInfo.thisWeekCourse || !courseTableStyle.notThisWeekCourseShowType.contains(SettingsPref.NotThisWeekCourseCellStyle.TEXT)) {
                     baseShowText
                 } else {
-                    val notThisWeekText = "${context.getString(R.string.not_current_week_course)}${Constants.CHANGE_LINE}"
+                    val notThisWeekText = "${context.getString(R.string.not_current_week_course)}${BaseConst.CHANGE_LINE}"
                     SpannableStringBuilder(notThisWeekText + baseShowText).apply {
                         setSpan(StyleSpan(Typeface.BOLD), 0, notThisWeekText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
                     }

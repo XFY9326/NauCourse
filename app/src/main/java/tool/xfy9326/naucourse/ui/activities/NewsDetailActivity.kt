@@ -15,9 +15,9 @@ import kotlinx.android.synthetic.main.activity_news_detail.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
 import kotlinx.coroutines.launch
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.SerializableNews
+import tool.xfy9326.naucourse.constants.TimeConst
 import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.providers.beans.GeneralNewsDetail
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
@@ -46,7 +46,7 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
     companion object {
         const val NEWS_DATA = "NEWS_DATA"
 
-        private val DATE_FORMAT_YMD = SimpleDateFormat(Constants.Time.FORMAT_YMD, Locale.CHINA)
+        private val DATE_FORMAT_YMD = SimpleDateFormat(TimeConst.FORMAT_YMD, Locale.CHINA)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

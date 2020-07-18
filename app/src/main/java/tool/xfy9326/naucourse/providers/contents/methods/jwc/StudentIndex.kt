@@ -4,7 +4,8 @@ import okhttp3.HttpUrl
 import okhttp3.Response
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.HTMLConst
+import tool.xfy9326.naucourse.constants.NetworkConst
 import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.network.clients.JwcClient
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentInfo
@@ -32,12 +33,12 @@ object StudentIndex : BaseNoParamContent<StudentInfo>() {
     private const val CREDIT_AND_RANKING_INFO_STR = "学分排名信息"
 
     private const val SELECT_CREDIT_AND_RANKING_PATH =
-        "${Constants.HTML.ELEMENT_TAG_DIV}[${Constants.HTML.ELEMENT_ATTR_TITLE}=$CREDIT_AND_RANKING_INFO_STR]"
+        "${HTMLConst.ELEMENT_TAG_DIV}[${HTMLConst.ELEMENT_ATTR_TITLE}=$CREDIT_AND_RANKING_INFO_STR]"
 
-    private val JWC_STUDENT_INDEX_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(JwcClient.JWC_HOST)
+    private val JWC_STUDENT_INDEX_URL = HttpUrl.Builder().scheme(NetworkConst.HTTP).host(JwcClient.JWC_HOST)
         .addPathSegment(JwcClient.JWC_STUDENTS_PATH).addPathSegment(JWC_STUDENT_INDEX_ASPX).build()
 
-    val JWC_STU_PHOTO_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(JwcClient.JWC_HOST)
+    val JWC_STU_PHOTO_URL = HttpUrl.Builder().scheme(NetworkConst.HTTP).host(JwcClient.JWC_HOST)
         .addPathSegment(JwcClient.JWC_STUDENTS_PATH).addPathSegment(JWC_STU_PHOTO_ASHX).addQueryParameter(URL_PARAM_T, URL_PARAM_T_VALUE).build()
 
     override fun onRequestData(): Response = networkClient.newAutoLoginCall(JWC_STUDENT_INDEX_URL)
@@ -56,8 +57,8 @@ object StudentIndex : BaseNoParamContent<StudentInfo>() {
     }
 
     private fun getPersonalInfo(bodyElement: Element): StudentPersonalInfo {
-        val tableElements = bodyElement.getElementsByTag(Constants.HTML.ELEMENT_TAG_TABLE).first()
-        val trElements = tableElements.getElementsByTag(Constants.HTML.ELEMENT_TAG_TR)
+        val tableElements = bodyElement.getElementsByTag(HTMLConst.ELEMENT_TAG_TABLE).first()
+        val trElements = tableElements.getElementsByTag(HTMLConst.ELEMENT_TAG_TR)
 
         var stuId: Pair<String, String>? = null
         var name: Pair<String, String>? = null
@@ -69,7 +70,7 @@ object StudentIndex : BaseNoParamContent<StudentInfo>() {
         var currentClass: Pair<String, String>? = null
 
         for ((index, trElement) in trElements.withIndex()) {
-            val tdElements = trElement.getElementsByTag(Constants.HTML.ELEMENT_TAG_TD)
+            val tdElements = trElement.getElementsByTag(HTMLConst.ELEMENT_TAG_TD)
             val pair = Pair(tdElements[0].text(), tdElements[1].text().trim())
             when (index) {
                 0 -> stuId = pair
@@ -87,7 +88,7 @@ object StudentIndex : BaseNoParamContent<StudentInfo>() {
     }
 
     private fun getLearningProcess(bodyElement: Element): Array<StudentLearningProcess> {
-        val trElements = bodyElement.getElementById(ELEMENT_ID_MY_LEARNING_PROCESS).getElementsByTag(Constants.HTML.ELEMENT_TAG_TR)
+        val trElements = bodyElement.getElementById(ELEMENT_ID_MY_LEARNING_PROCESS).getElementsByTag(HTMLConst.ELEMENT_TAG_TR)
 
         val learningProcessArr = arrayOfNulls<StudentLearningProcess>(trElements.size)
 
@@ -97,18 +98,18 @@ object StudentIndex : BaseNoParamContent<StudentInfo>() {
         var subjects: LinkedHashMap<StudentLearningProcess.SubjectType, Float>
 
         for ((arrIndex, trElement) in trElements.withIndex()) {
-            val tdElements = trElement.getElementsByTag(Constants.HTML.ELEMENT_TAG_TD)
+            val tdElements = trElement.getElementsByTag(HTMLConst.ELEMENT_TAG_TD)
             title = tdElements[0].text()
-            val divElements = tdElements[1].getElementsByTag(Constants.HTML.ELEMENT_TAG_DIV)
-            progress = divElements[0].attr(Constants.HTML.ELEMENT_ATTR_VALUE).toInt()
-            courseType = when (divElements[0].attr(Constants.HTML.ELEMENT_ATTR_ID)) {
+            val divElements = tdElements[1].getElementsByTag(HTMLConst.ELEMENT_TAG_DIV)
+            progress = divElements[0].attr(HTMLConst.ELEMENT_ATTR_VALUE).toInt()
+            courseType = when (divElements[0].attr(HTMLConst.ELEMENT_ATTR_ID)) {
                 ELEMENT_ID_BX -> StudentLearningProcess.CourseType.COMPULSORY
                 ELEMENT_ID_ZX -> StudentLearningProcess.CourseType.MAJOR_SELECTIVE
                 ELEMENT_ID_GC -> StudentLearningProcess.CourseType.OPTIONAL
                 ELEMENT_ID_SJ -> StudentLearningProcess.CourseType.PRACTICAL
                 else -> throw IOException("Unknown Learning Process Course Type! Type Title: $title")
             }
-            val spanElements = divElements[1].getElementsByTag(Constants.HTML.ELEMENT_TAG_SPAN)
+            val spanElements = divElements[1].getElementsByTag(HTMLConst.ELEMENT_TAG_SPAN)
             subjects = LinkedHashMap(spanElements.size)
             when (spanElements.size) {
                 3 -> {
@@ -134,10 +135,10 @@ object StudentIndex : BaseNoParamContent<StudentInfo>() {
     }
 
     private fun getCreditInfo(creditAndRankInfoElements0: Element): LinkedHashMap<String, Float> {
-        val trElements = creditAndRankInfoElements0.getElementsByTag(Constants.HTML.ELEMENT_TAG_TR)
+        val trElements = creditAndRankInfoElements0.getElementsByTag(HTMLConst.ELEMENT_TAG_TR)
 
-        val thElements = trElements[0].getElementsByTag(Constants.HTML.ELEMENT_TAG_TH)
-        val tdElements = trElements[1].getElementsByTag(Constants.HTML.ELEMENT_TAG_TD)
+        val thElements = trElements[0].getElementsByTag(HTMLConst.ELEMENT_TAG_TH)
+        val tdElements = trElements[1].getElementsByTag(HTMLConst.ELEMENT_TAG_TD)
 
         val size = min(thElements.size, tdElements.size)
         val creditInfoArr = LinkedHashMap<String, Float>(size)
@@ -150,7 +151,7 @@ object StudentIndex : BaseNoParamContent<StudentInfo>() {
     }
 
     private fun getRankingInfo(creditAndRankInfoElements1: Element): LinkedHashMap<String, String> {
-        val spanElements = creditAndRankInfoElements1.getElementsByTag(Constants.HTML.ELEMENT_TAG_SPAN)
+        val spanElements = creditAndRankInfoElements1.getElementsByTag(HTMLConst.ELEMENT_TAG_SPAN)
 
         val size = spanElements.size / 2
         val rankInfoArr = LinkedHashMap<String, String>(size)

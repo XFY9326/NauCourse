@@ -3,15 +3,15 @@ package tool.xfy9326.naucourse.utils.utility
 import android.os.Environment
 import androidx.core.content.ContextCompat
 import tool.xfy9326.naucourse.App
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.NetworkConst
 import java.io.File
 
 object PathUtils {
     fun getUrlFileName(source: String): String? =
-        if (Constants.Network.DIR in source) {
-            var name = source.substring(source.lastIndexOf(Constants.Network.DIR) + 1)
-            if (name.contains(Constants.Network.URL_QUERY_DIVIDE_SYMBOL)) {
-                name = name.substring(0, name.lastIndexOf(Constants.Network.URL_QUERY_DIVIDE_SYMBOL))
+        if (NetworkConst.DIR in source) {
+            var name = source.substring(source.lastIndexOf(NetworkConst.DIR) + 1)
+            if (name.contains(NetworkConst.URL_QUERY_DIVIDE_SYMBOL)) {
+                name = name.substring(0, name.lastIndexOf(NetworkConst.URL_QUERY_DIVIDE_SYMBOL))
             }
             if (name.isNotBlank() && name.isNotEmpty()) {
                 name

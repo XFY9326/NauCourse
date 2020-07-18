@@ -16,7 +16,7 @@ import kotlinx.coroutines.sync.Mutex
 import okhttp3.internal.toHexString
 import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.BuildConfig
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.OthersConst
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.utils.io.BaseIOUtils
 import java.util.*
@@ -125,5 +125,5 @@ object BaseUtils {
 
     fun Context.getPackageUri(): Uri = Uri.parse("package:${packageName}")
 
-    fun isBeta() = BuildConfig.FLAVOR == Constants.Others.FLAVOR_BETA
+    fun isBeta() = BuildConfig.FLAVOR == OthersConst.FLAVOR_BETA
 }

@@ -14,11 +14,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.constants.ImageConst
+import tool.xfy9326.naucourse.constants.PrefConst
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.tools.NotifyBus
+import tool.xfy9326.naucourse.tools.NotifyType
 import tool.xfy9326.naucourse.ui.dialogs.FullScreenLoadingDialog
 import tool.xfy9326.naucourse.ui.fragments.base.BaseSettingsPreferenceFragment
 import tool.xfy9326.naucourse.utils.utility.ImageUtils
@@ -38,41 +40,41 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment() {
     override val titleName: Int = R.string.settings_course_table
 
     override fun onPrefViewInit(savedInstanceState: Bundle?) {
-        findPreference<CheckBoxPreference>(Constants.Pref.ShowNextWeekCourseTableAhead)?.setOnPreferenceChangeListener { _, _ ->
-            NotifyBus[NotifyBus.Type.COURSE_TERM_UPDATE].notifyEvent()
+        findPreference<CheckBoxPreference>(PrefConst.ShowNextWeekCourseTableAhead)?.setOnPreferenceChangeListener { _, _ ->
+            NotifyBus[NotifyType.COURSE_TERM_UPDATE].notifyEvent()
             true
         }
 
-        addRefreshCourseTableListener(Constants.Pref.ShowNotThisWeekCourseInTable)
+        addRefreshCourseTableListener(PrefConst.ShowNotThisWeekCourseInTable)
 
-        addRefreshCourseTableListener(Constants.Pref.ForceShowCourseTableWeekends)
-        addRefreshCourseTableListener(Constants.Pref.SameCourseCellHeight)
-        addRefreshCourseTableListener(Constants.Pref.CenterHorizontalShowCourseText)
-        addRefreshCourseTableListener(Constants.Pref.CourseTableRoundCompat)
-        addRefreshCourseTableListener(Constants.Pref.CenterVerticalShowCourseText)
-        addRefreshCourseTableListener(Constants.Pref.UseRoundCornerCourseCell)
-        addRefreshCourseTableListener(Constants.Pref.DrawAllCellBackground)
-        addRefreshCourseTableListener(Constants.Pref.HighLightCourseTableTodayDate)
-        addRefreshCourseTableListener(Constants.Pref.CourseCellTextSize)
-        addRefreshCourseTableListener(Constants.Pref.NotThisWeekCourseShowType)
+        addRefreshCourseTableListener(PrefConst.ForceShowCourseTableWeekends)
+        addRefreshCourseTableListener(PrefConst.SameCourseCellHeight)
+        addRefreshCourseTableListener(PrefConst.CenterHorizontalShowCourseText)
+        addRefreshCourseTableListener(PrefConst.CourseTableRoundCompat)
+        addRefreshCourseTableListener(PrefConst.CenterVerticalShowCourseText)
+        addRefreshCourseTableListener(PrefConst.UseRoundCornerCourseCell)
+        addRefreshCourseTableListener(PrefConst.DrawAllCellBackground)
+        addRefreshCourseTableListener(PrefConst.HighLightCourseTableTodayDate)
+        addRefreshCourseTableListener(PrefConst.CourseCellTextSize)
+        addRefreshCourseTableListener(PrefConst.NotThisWeekCourseShowType)
 
-        addRefreshCourseTableBackgroundListener(Constants.Pref.CustomCourseTableBackground)
-        addRefreshCourseTableBackgroundListener(Constants.Pref.CourseTableBackgroundScareType)
-        addRefreshCourseTableBackgroundListener(Constants.Pref.CourseTableBackgroundAlpha)
-        addRefreshCourseTableBackgroundListener(Constants.Pref.CourseTableBackgroundFullScreen)
+        addRefreshCourseTableBackgroundListener(PrefConst.CustomCourseTableBackground)
+        addRefreshCourseTableBackgroundListener(PrefConst.CourseTableBackgroundScareType)
+        addRefreshCourseTableBackgroundListener(PrefConst.CourseTableBackgroundAlpha)
+        addRefreshCourseTableBackgroundListener(PrefConst.CourseTableBackgroundFullScreen)
 
-        addRefreshAllTableListener(Constants.Pref.EnableCourseTableTimeTextColor)
-        addRefreshAllTableListener(Constants.Pref.CourseTableTimeTextColor)
-        addRefreshAllTableListener(Constants.Pref.CustomCourseTableAlpha)
+        addRefreshAllTableListener(PrefConst.EnableCourseTableTimeTextColor)
+        addRefreshAllTableListener(PrefConst.CourseTableTimeTextColor)
+        addRefreshAllTableListener(PrefConst.CustomCourseTableAlpha)
 
-        findPreference<Preference>(Constants.Pref.ChooseCourseTableBackgroundPicture)?.setOnPreferenceClickListener {
+        findPreference<Preference>(PrefConst.ChooseCourseTableBackgroundPicture)?.setOnPreferenceClickListener {
             IntentUtils.selectPicture(this, SELECT_COURSE_TABLE_PICTURE_REQUEST_CODE)
-            NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE_BACKGROUND].notifyEvent()
+            NotifyBus[NotifyType.REBUILD_COURSE_TABLE_BACKGROUND].notifyEvent()
             false
         }
-        findPreference<SeekBarPreference>(Constants.Pref.CourseTableImageQuality)?.setOnPreferenceChangeListener { _, newValue ->
+        findPreference<SeekBarPreference>(PrefConst.CourseTableImageQuality)?.setOnPreferenceChangeListener { _, newValue ->
             modifyCourseTableBackgroundQuality(newValue as Int)
-            NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE_BACKGROUND].notifyEvent()
+            NotifyBus[NotifyType.REBUILD_COURSE_TABLE_BACKGROUND].notifyEvent()
             true
         }
     }
@@ -90,7 +92,7 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment() {
 
     private fun modifyCourseTableBackgroundQuality(quality: Int) {
         val imageName = AppPref.CourseTableBackgroundImageName
-        if (imageName != null && ImageUtils.localImageExists(imageName, Constants.Image.DIR_APP_IMAGE)) {
+        if (imageName != null && ImageUtils.localImageExists(imageName, ImageConst.DIR_APP_IMAGE)) {
             lifecycleScope.launch(Dispatchers.IO) {
                 imageMutex.withLock {
                     launch(Dispatchers.Main) {
@@ -100,7 +102,7 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment() {
                     val result =
                         ImageUtils.modifyLocalImage(
                             imageName,
-                            Constants.Image.DIR_APP_IMAGE,
+                            ImageConst.DIR_APP_IMAGE,
                             quality = quality
                         )
 
@@ -126,25 +128,25 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment() {
                     FullScreenLoadingDialog.showDialog(childFragmentManager)
                 }
                 AppPref.CourseTableBackgroundImageName?.let {
-                    ImageUtils.deleteLocalImage(it, Constants.Image.DIR_APP_IMAGE)
+                    ImageUtils.deleteLocalImage(it, ImageConst.DIR_APP_IMAGE)
                 }
-                val newImageName = Constants.Image.COURSE_TABLE_BACKGROUND_IMAGE_PREFIX + UUID.randomUUID().toString()
+                val newImageName = ImageConst.COURSE_TABLE_BACKGROUND_IMAGE_PREFIX + UUID.randomUUID().toString()
                 val result = ImageUtils.saveImageToLocalFromUri(
                     newImageName,
                     uri,
-                    Constants.Image.DIR_APP_IMAGE
+                    ImageConst.DIR_APP_IMAGE
                 )
                 val qualityModifyResult =
                     if (result != null) {
                         ImageUtils.modifyLocalImage(
-                            newImageName, Constants.Image.DIR_APP_IMAGE, quality =
+                            newImageName, ImageConst.DIR_APP_IMAGE, quality =
                             SettingsPref.CourseTableImageQuality
                         )
                     } else {
                         false
                     }
                 if (result == null || !qualityModifyResult) {
-                    ImageUtils.deleteLocalImage(newImageName, Constants.Image.DIR_APP_IMAGE)
+                    ImageUtils.deleteLocalImage(newImageName, ImageConst.DIR_APP_IMAGE)
                 } else {
                     AppPref.CourseTableBackgroundImageName = newImageName
                 }
@@ -168,22 +170,22 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment() {
 
     private fun addRefreshCourseTableListener(key: String) {
         findPreference<Preference>(key)?.setOnPreferenceChangeListener { _, _ ->
-            NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE].notifyEvent()
+            NotifyBus[NotifyType.REBUILD_COURSE_TABLE].notifyEvent()
             true
         }
     }
 
     private fun addRefreshAllTableListener(key: String) {
         findPreference<Preference>(key)?.setOnPreferenceChangeListener { _, _ ->
-            NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE].notifyEvent()
-            NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE_BACKGROUND].notifyEvent()
+            NotifyBus[NotifyType.REBUILD_COURSE_TABLE].notifyEvent()
+            NotifyBus[NotifyType.REBUILD_COURSE_TABLE_BACKGROUND].notifyEvent()
             true
         }
     }
 
     private fun addRefreshCourseTableBackgroundListener(key: String) {
         findPreference<Preference>(key)?.setOnPreferenceChangeListener { _, _ ->
-            NotifyBus[NotifyBus.Type.REBUILD_COURSE_TABLE_BACKGROUND].notifyEvent()
+            NotifyBus[NotifyType.REBUILD_COURSE_TABLE_BACKGROUND].notifyEvent()
             true
         }
     }

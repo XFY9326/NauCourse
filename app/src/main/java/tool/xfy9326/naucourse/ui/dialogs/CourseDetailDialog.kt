@@ -12,9 +12,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import kotlinx.android.synthetic.main.dialog_course_detail.view.*
 import kotlinx.android.synthetic.main.view_course_detail_item.view.*
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseDetail
+import tool.xfy9326.naucourse.constants.TimeConst
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import tool.xfy9326.naucourse.utils.views.ColorUtils
@@ -34,8 +34,8 @@ class CourseDetailDialog : DialogFragment() {
 
         private const val CONTENT_WIDTH_PERCENT = 0.75
 
-        private val DATE_FORMAT_MD_HM_CH = SimpleDateFormat(Constants.Time.FORMAT_MD_HM_CH, Locale.CHINA)
-        private val DATE_FORMAT_HM = SimpleDateFormat(Constants.Time.FORMAT_HM, Locale.CHINA)
+        private val DATE_FORMAT_MD_HM_CH = SimpleDateFormat(TimeConst.FORMAT_MD_HM_CH, Locale.CHINA)
+        private val DATE_FORMAT_HM = SimpleDateFormat(TimeConst.FORMAT_HM, Locale.CHINA)
 
         fun showDialog(fragmentManager: FragmentManager, courseDetail: CourseDetail) {
             CourseDetailDialog().apply {

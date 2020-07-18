@@ -2,7 +2,7 @@ package tool.xfy9326.naucourse.utils.debug
 
 import android.util.Log
 import tool.xfy9326.naucourse.BuildConfig
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.TimeConst
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import java.text.SimpleDateFormat
 import java.util.*
@@ -12,7 +12,7 @@ object LogUtils {
     @Suppress("MayBeConstant")
     private val LOG_ON = BuildConfig.DEBUG
     private val LOG_SAVE_ON get() = SettingsPref.DebugMode && SettingsPref.DebugLogCatch
-    private val DATE_FORMAT_YMD_HM_S = SimpleDateFormat(Constants.Time.FORMAT_YMD_HM_S, Locale.CHINA)
+    private val DATE_FORMAT_YMD_HM_S = SimpleDateFormat(TimeConst.FORMAT_YMD_HM_S, Locale.CHINA)
 
     inline fun <reified T> d(msg: String) {
         print(Log.DEBUG, T::class.java.simpleName, msg)

@@ -7,11 +7,11 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import tool.xfy9326.naucourse.App
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.beans.UserInfo
 import tool.xfy9326.naucourse.compat.beans.CourseCompat
 import tool.xfy9326.naucourse.compat.beans.CourseDetailCompat
+import tool.xfy9326.naucourse.constants.BaseConst
 import tool.xfy9326.naucourse.io.db.CourseCellStyleDBHelper
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.network.clients.base.LoginInfo
@@ -96,11 +96,11 @@ object OldDataCompat {
                             Course(
                                 fixedCourseId,
                                 oldDatum.courseName!!.trim(),
-                                oldDatum.courseTeacher?.trim() ?: Constants.EMPTY,
+                                oldDatum.courseTeacher?.trim() ?: BaseConst.EMPTY,
                                 oldDatum.courseCombinedClass?.trim(),
-                                oldDatum.courseClass?.trim() ?: Constants.EMPTY,
+                                oldDatum.courseClass?.trim() ?: BaseConst.EMPTY,
                                 oldDatum.courseScore?.trim()?.toFloatOrNull() ?: 0f,
-                                oldDatum.courseType?.trim() ?: Constants.EMPTY,
+                                oldDatum.courseType?.trim() ?: BaseConst.EMPTY,
                                 null,
                                 timeSet
                             )
@@ -139,7 +139,7 @@ object OldDataCompat {
                             CourseTime(
                                 context,
                                 id,
-                                it.location ?: Constants.EMPTY,
+                                it.location ?: BaseConst.EMPTY,
                                 /*
                                     单周 COURSE_DETAIL_WEEKMODE_SINGLE = 1
                                     双周 COURSE_DETAIL_WEEKMODE_DOUBLE = 2

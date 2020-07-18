@@ -2,8 +2,8 @@ package tool.xfy9326.naucourse.ui.views.recyclerview.adapters
 
 import android.content.Context
 import android.view.View
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.constants.TimeConst
 import tool.xfy9326.naucourse.providers.beans.GeneralNews
 import tool.xfy9326.naucourse.ui.views.recyclerview.adapters.base.ListRecyclerAdapter
 import tool.xfy9326.naucourse.ui.views.recyclerview.viewholders.NewsViewHolder
@@ -17,7 +17,7 @@ class NewsAdapter(context: Context, private val listener: OnNewsItemClickListene
     private val contextReference = WeakReference(context)
 
     companion object {
-        private val DATE_FORMAT_YMD = SimpleDateFormat(Constants.Time.FORMAT_YMD, Locale.CHINA)
+        private val DATE_FORMAT_YMD = SimpleDateFormat(TimeConst.FORMAT_YMD, Locale.CHINA)
     }
 
     override fun onBindLayout(): Int = R.layout.view_news_item

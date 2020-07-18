@@ -6,10 +6,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.activity_about.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourse.BuildConfig
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.constants.OthersConst
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.tools.NotifyBus
+import tool.xfy9326.naucourse.tools.NotifyType
 import tool.xfy9326.naucourse.ui.activities.base.BaseActivity
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
@@ -57,7 +58,7 @@ class AboutActivity : BaseActivity() {
             showToast(this, R.string.advanced_function_on)
         } else {
             advancedFunctionClickTime++
-            if (advancedFunctionClickTime >= Constants.Others.ADVANCED_FUNCTION_CLICK_TIME) {
+            if (advancedFunctionClickTime >= OthersConst.ADVANCED_FUNCTION_CLICK_TIME) {
                 showAdvancedFunctionDialog()
                 advancedFunctionClickTime = 0
             }
@@ -69,9 +70,9 @@ class AboutActivity : BaseActivity() {
             setTitle(R.string.attention)
             setMessage(R.string.advanced_function_warning)
             setNegativeButton(android.R.string.cancel, null)
-            setPositiveButton(android.R.string.yes) { _, _ ->
+            setPositiveButton(android.R.string.ok) { _, _ ->
                 AppPref.EnableAdvancedFunctions = true
-                NotifyBus[NotifyBus.Type.ADVANCED_FUNCTION_MODE_CHANGED].notifyEvent()
+                NotifyBus[NotifyType.ADVANCED_FUNCTION_MODE_CHANGED].notifyEvent()
                 showToast(this@AboutActivity, R.string.advanced_function_on)
             }
             setCancelable(false)

@@ -14,9 +14,9 @@ import androidx.core.graphics.drawable.toBitmap
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import tool.xfy9326.naucourse.BuildConfig
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.NextCourseBundle
+import tool.xfy9326.naucourse.constants.TimeConst
 import tool.xfy9326.naucourse.utils.BaseUtils
 import tool.xfy9326.naucourse.utils.BaseUtils.goAsync
 import tool.xfy9326.naucourse.utils.courses.ExtraCourseUtils
@@ -35,7 +35,7 @@ class NextCourseWidget : AppWidgetProvider() {
         private const val REQUEST_ON_CLICK_WIDGET_CONTENT = 1
         private val updateLock = Mutex()
 
-        private val DATE_FORMAT_HM = SimpleDateFormat(Constants.Time.FORMAT_HM, Locale.CHINA)
+        private val DATE_FORMAT_HM = SimpleDateFormat(TimeConst.FORMAT_HM, Locale.CHINA)
 
         private fun generateView(context: Context, nextCourseBundle: NextCourseBundle?): RemoteViews = when {
             nextCourseBundle == null || nextCourseBundle.courseDataEmpty ->

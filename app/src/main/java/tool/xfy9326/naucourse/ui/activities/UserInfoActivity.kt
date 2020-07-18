@@ -15,8 +15,8 @@ import kotlinx.android.synthetic.main.view_card_rank_info.*
 import kotlinx.android.synthetic.main.view_card_user_info.*
 import kotlinx.android.synthetic.main.view_grid_text_item.view.*
 import kotlinx.android.synthetic.main.view_learning_process_item.view.*
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.constants.BaseConst
 import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentLearningProcess
@@ -93,7 +93,7 @@ class UserInfoActivity : ViewModelActivity<UserInfoViewModel>() {
                 inflater.inflate(R.layout.view_learning_process_item, layout_userLearningProcess, false).apply {
                     tv_processCourseType.setText(I18NUtils.getCourseTypeResId(process.courseType))
                     pb_processBar.progress = process.progress
-                    tv_processPercent.text = process.progress.toString() + Constants.PERCENT
+                    tv_processPercent.text = process.progress.toString() + BaseConst.PERCENT
                     val views = arrayOfNulls<View>(process.subjects.size)
                     var i = 0
                     for (entry in process.subjects) {

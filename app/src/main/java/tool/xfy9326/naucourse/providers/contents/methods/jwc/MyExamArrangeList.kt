@@ -4,7 +4,10 @@ import okhttp3.HttpUrl
 import okhttp3.Response
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.BaseConst
+import tool.xfy9326.naucourse.constants.HTMLConst
+import tool.xfy9326.naucourse.constants.NetworkConst
+import tool.xfy9326.naucourse.constants.TimeConst
 import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.network.clients.JwcClient
 import tool.xfy9326.naucourse.providers.beans.jwc.Exam
@@ -15,12 +18,12 @@ import java.util.*
 object MyExamArrangeList : BaseNoParamContent<Array<Exam>>() {
     override val networkClient = getLoginClient<JwcClient>(LoginNetworkManager.ClientType.JWC)
 
-    private val DATE_FORMAT_YMD_HM_CH = SimpleDateFormat(Constants.Time.FORMAT_YMD_HM_CH, Locale.CHINA)
+    private val DATE_FORMAT_YMD_HM_CH = SimpleDateFormat(TimeConst.FORMAT_YMD_HM_CH, Locale.CHINA)
 
     private const val JWC_MY_EXAM_ARRANGE_LIST_ASPX = "MyExamArrangeList.aspx"
     private const val TIME_SPLIT_SYMBOL = "-"
 
-    private val JWC_MY_EXAM_ARRANGE_LIST_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(JwcClient.JWC_HOST)
+    private val JWC_MY_EXAM_ARRANGE_LIST_URL = HttpUrl.Builder().scheme(NetworkConst.HTTP).host(JwcClient.JWC_HOST)
         .addPathSegment(JwcClient.JWC_STUDENTS_PATH).addPathSegment(JWC_MY_EXAM_ARRANGE_LIST_ASPX).build()
 
     override fun onRequestData(): Response = networkClient.newAutoLoginCall(JWC_MY_EXAM_ARRANGE_LIST_URL)
@@ -28,7 +31,9 @@ object MyExamArrangeList : BaseNoParamContent<Array<Exam>>() {
     override fun onParseData(content: String): Array<Exam> = getExamArr(Jsoup.parse(content).body())
 
     private fun getExamArr(bodyElement: Element): Array<Exam> {
-        val trElements = bodyElement.getElementById(Constants.HTML.ELEMENT_ID_CONTENT).getElementsByTag(Constants.HTML.ELEMENT_TAG_TR)
+        val trElements = bodyElement.getElementById(HTMLConst.ELEMENT_ID_CONTENT).getElementsByTag(
+            HTMLConst.ELEMENT_TAG_TR
+        )
 
         if (trElements.size - 2 == 0) {
             return emptyArray()
@@ -47,7 +52,7 @@ object MyExamArrangeList : BaseNoParamContent<Array<Exam>>() {
         var type: String
 
         for ((arrIndex, i) in (2 until trElements.size).withIndex()) {
-            val tdElements = trElements[i].getElementsByTag(Constants.HTML.ELEMENT_TAG_TD)
+            val tdElements = trElements[i].getElementsByTag(HTMLConst.ELEMENT_TAG_TD)
 
             courseId = tdElements[1].text()
             name = tdElements[2].text()
@@ -61,7 +66,7 @@ object MyExamArrangeList : BaseNoParamContent<Array<Exam>>() {
 
             if (TIME_SPLIT_SYMBOL in dateStr) {
                 try {
-                    val daySplit = dateStr.split(Constants.SPACE)
+                    val daySplit = dateStr.split(BaseConst.SPACE)
                     val timeSplit = daySplit[1].split(TIME_SPLIT_SYMBOL)
                     startDate = readTime("${daySplit[0]} ${timeSplit[0]}")!!
                     endDate = readTime("${daySplit[0]} ${timeSplit[1]}")!!

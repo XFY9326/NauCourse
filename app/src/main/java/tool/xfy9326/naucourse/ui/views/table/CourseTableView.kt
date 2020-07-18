@@ -7,9 +7,10 @@ import android.view.ViewGroup.LayoutParams
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import kotlinx.coroutines.*
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CoursePkg
+import tool.xfy9326.naucourse.constants.CourseConst
+import tool.xfy9326.naucourse.constants.TimeConst
 import tool.xfy9326.naucourse.ui.views.widgets.AdvancedGridLayout
 import tool.xfy9326.naucourse.utils.courses.CourseStyleUtils
 import tool.xfy9326.naucourse.utils.courses.TimeUtils
@@ -20,8 +21,8 @@ import kotlin.math.max
 
 class CourseTableView : AdvancedGridLayout {
     companion object {
-        const val DEFAULT_TABLE_WIDTH_SIZE = Constants.Time.MAX_WEEK_DAY + 1
-        const val DEFAULT_TABLE_HEIGHT_SIZE = Constants.Course.MAX_COURSE_LENGTH
+        const val DEFAULT_TABLE_WIDTH_SIZE = TimeConst.MAX_WEEK_DAY + 1
+        const val DEFAULT_TABLE_HEIGHT_SIZE = CourseConst.MAX_COURSE_LENGTH
 
         private fun getCellHeightByWidth(view: View, width: Int, divideNum: Int = 1): Int {
             val widthSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY)

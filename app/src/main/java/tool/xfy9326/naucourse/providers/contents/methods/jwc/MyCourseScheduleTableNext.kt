@@ -4,7 +4,8 @@ import okhttp3.HttpUrl
 import okhttp3.Response
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.HTMLConst
+import tool.xfy9326.naucourse.constants.NetworkConst
 import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.network.clients.JwcClient
 import tool.xfy9326.naucourse.providers.beans.jwc.Course
@@ -18,7 +19,7 @@ object MyCourseScheduleTableNext : BaseNoParamContent<CourseSet>() {
     override val networkClient = getLoginClient<JwcClient>(LoginNetworkManager.ClientType.JWC)
 
     private const val COURSE_TABLE_NEXT_ASPX = "MyCourseScheduleTableNext.aspx"
-    private val COURSE_TABLE_NEXT_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(JwcClient.JWC_HOST)
+    private val COURSE_TABLE_NEXT_URL = HttpUrl.Builder().scheme(NetworkConst.HTTP).host(JwcClient.JWC_HOST)
         .addPathSegment(JwcClient.JWC_STUDENTS_PATH).addPathSegment(COURSE_TABLE_NEXT_ASPX).build()
 
     override fun onRequestData(): Response = networkClient.newAutoLoginCall(COURSE_TABLE_NEXT_URL)
@@ -29,8 +30,8 @@ object MyCourseScheduleTableNext : BaseNoParamContent<CourseSet>() {
     }
 
     private fun getCourseSet(document: Document): CourseSet {
-        val contentElement = document.getElementById(Constants.HTML.ELEMENT_ID_CONTENT)
-        val trElements = contentElement.getElementsByTag(Constants.HTML.ELEMENT_TAG_TR)
+        val contentElement = document.getElementById(HTMLConst.ELEMENT_ID_CONTENT)
+        val trElements = contentElement.getElementsByTag(HTMLConst.ELEMENT_TAG_TR)
 
         val courseSet = HashSet<Course>(trElements.size)
 
@@ -45,7 +46,7 @@ object MyCourseScheduleTableNext : BaseNoParamContent<CourseSet>() {
         var termStr: String? = null
 
         for (tr in 2 until trElements.size) {
-            val tdElements = trElements[tr].getElementsByTag(Constants.HTML.ELEMENT_TAG_TD)
+            val tdElements = trElements[tr].getElementsByTag(HTMLConst.ELEMENT_TAG_TD)
 
             if (tdElements.size < 9) {
                 throw IOException("Incomplete Course Data!")

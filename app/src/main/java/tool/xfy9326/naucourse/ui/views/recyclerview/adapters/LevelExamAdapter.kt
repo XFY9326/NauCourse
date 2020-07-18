@@ -2,8 +2,8 @@ package tool.xfy9326.naucourse.ui.views.recyclerview.adapters
 
 import android.content.Context
 import android.view.View
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.constants.BaseConst
 import tool.xfy9326.naucourse.providers.beans.jwc.LevelExam
 import tool.xfy9326.naucourse.ui.views.recyclerview.adapters.base.ListRecyclerAdapter
 import tool.xfy9326.naucourse.ui.views.recyclerview.viewholders.LevelExamViewHolder
@@ -21,7 +21,7 @@ class LevelExamAdapter(context: Context) : ListRecyclerAdapter<LevelExamViewHold
             tvLevelExamName.text = element.name
             tvLevelExamType.text = element.type
             tvLevelExamTerm.text = element.term.toString()
-            tvLevelExamGrade1.text = weakContext.get()?.getString(R.string.grade_1, element.grade1 ?: Constants.EMPTY)
+            tvLevelExamGrade1.text = weakContext.get()?.getString(R.string.grade_1, element.grade1 ?: BaseConst.EMPTY)
             tvLevelExamGrade2.text = weakContext.get()?.getString(R.string.grade_2, element.grade2)
 
             if (element.ticketNum.isEmpty() || element.ticketNum.isBlank()) {

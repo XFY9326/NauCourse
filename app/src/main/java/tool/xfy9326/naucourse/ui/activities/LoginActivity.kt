@@ -8,8 +8,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.view_login_panel.*
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.constants.BaseConst
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourse.ui.dialogs.UpdateDialog
 import tool.xfy9326.naucourse.ui.models.activity.LoginViewModel
@@ -94,7 +94,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
             if (resId != null) {
                 tv_loadingMsg.setText(resId)
             } else {
-                tv_loadingMsg.text = Constants.EMPTY
+                tv_loadingMsg.text = BaseConst.EMPTY
             }
         })
         viewModel.compatData.observeEvent(this, Observer {

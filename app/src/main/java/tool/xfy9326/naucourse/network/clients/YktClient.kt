@@ -6,7 +6,7 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.internal.closeQuietly
 import org.jsoup.Jsoup
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.NetworkConst
 import tool.xfy9326.naucourse.network.clients.base.LoginInfo
 import tool.xfy9326.naucourse.network.tools.NetworkTools
 import tool.xfy9326.naucourse.utils.debug.LogUtils
@@ -19,7 +19,7 @@ class YktClient(loginInfo: LoginInfo) : VPNClient(loginInfo) {
         private const val URL_LOGIN_PAGE = "PanToLogin.aspx"
         private const val URL_SSO_LOGIN_PAGE = "SSOLogin.aspx"
 
-        private val YKT_LOGIN_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(YKT_HOST).addPathSegment(URL_PATH_SSO_LOGIN)
+        private val YKT_LOGIN_URL = HttpUrl.Builder().scheme(NetworkConst.HTTP).host(YKT_HOST).addPathSegment(URL_PATH_SSO_LOGIN)
             .addPathSegment(URL_LOGIN_PAGE).build()
 
         private const val LOGIN_URL_PAGE = "login.aspx"

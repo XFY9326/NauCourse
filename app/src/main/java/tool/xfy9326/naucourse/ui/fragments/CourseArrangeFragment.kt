@@ -19,13 +19,14 @@ import kotlinx.android.synthetic.main.view_list_course_item.view.*
 import kotlinx.android.synthetic.main.view_list_course_item.view.iv_listCourseColor
 import kotlinx.android.synthetic.main.view_list_course_item.view.tv_listCourseName
 import kotlinx.android.synthetic.main.view_list_course_simple_item.view.*
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseBundle
 import tool.xfy9326.naucourse.beans.CourseItem
+import tool.xfy9326.naucourse.constants.TimeConst
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.tools.NotifyBus
+import tool.xfy9326.naucourse.tools.NotifyType
 import tool.xfy9326.naucourse.ui.activities.MainDrawerActivity
 import tool.xfy9326.naucourse.ui.dialogs.CourseDetailDialog
 import tool.xfy9326.naucourse.ui.fragments.base.DrawerToolbarFragment
@@ -41,8 +42,8 @@ import java.util.*
 
 class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
     companion object {
-        private val DATE_FORMAT_YMD = SimpleDateFormat(Constants.Time.FORMAT_YMD, Locale.CHINA)
-        private val DATE_FORMAT_HM = SimpleDateFormat(Constants.Time.FORMAT_HM, Locale.CHINA)
+        private val DATE_FORMAT_YMD = SimpleDateFormat(TimeConst.FORMAT_YMD, Locale.CHINA)
+        private val DATE_FORMAT_HM = SimpleDateFormat(TimeConst.FORMAT_HM, Locale.CHINA)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -114,12 +115,12 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
             viewModel.nextCourseBundle.postEventValue(null)
             IntentUtils.refreshNextCourseAlarmData(requireContext())
         }
-        NotifyBus[NotifyBus.Type.COURSE_ASYNC_UPDATE].observeNotification(
+        NotifyBus[NotifyType.COURSE_ASYNC_UPDATE].observeNotification(
             viewLifecycleOwner,
             notifyObserver,
             CourseArrangeFragment::class.java.simpleName
         )
-        NotifyBus[NotifyBus.Type.COURSE_STYLE_TERM_UPDATE].observeNotification(
+        NotifyBus[NotifyType.COURSE_STYLE_TERM_UPDATE].observeNotification(
             viewLifecycleOwner,
             notifyObserver,
             CourseArrangeFragment::class.java.simpleName

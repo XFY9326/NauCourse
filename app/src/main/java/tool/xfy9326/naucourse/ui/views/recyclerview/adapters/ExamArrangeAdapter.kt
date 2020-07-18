@@ -3,8 +3,8 @@ package tool.xfy9326.naucourse.ui.views.recyclerview.adapters
 import android.content.Context
 import android.view.View
 import androidx.core.view.isVisible
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.constants.TimeConst
 import tool.xfy9326.naucourse.providers.beans.jwc.Exam
 import tool.xfy9326.naucourse.ui.views.recyclerview.adapters.base.ListRecyclerAdapter
 import tool.xfy9326.naucourse.ui.views.recyclerview.viewholders.ExamArrangeViewHolder
@@ -16,7 +16,7 @@ import java.util.*
 
 class ExamArrangeAdapter(context: Context) : ListRecyclerAdapter<ExamArrangeViewHolder, Exam>(context, DifferItemCallback()) {
     companion object {
-        private val DATE_FORMAT_YMD_HM_CH = SimpleDateFormat(Constants.Time.FORMAT_YMD_HM_CH, Locale.CHINA)
+        private val DATE_FORMAT_YMD_HM_CH = SimpleDateFormat(TimeConst.FORMAT_YMD_HM_CH, Locale.CHINA)
     }
 
     private val weakContext = WeakReference(context)

@@ -4,7 +4,7 @@ import androidx.annotation.CallSuper
 import okhttp3.*
 import okhttp3.internal.closeQuietly
 import org.jsoup.Jsoup
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.NetworkConst
 import tool.xfy9326.naucourse.network.clients.base.BaseLoginClient
 import tool.xfy9326.naucourse.network.clients.base.LoginInfo
 import tool.xfy9326.naucourse.network.clients.base.LoginResponse
@@ -37,9 +37,9 @@ open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = nu
         private const val SSO_LOGOUT_PATH = "logout"
 
         private val SSO_LOGIN_URL =
-            HttpUrl.Builder().scheme(Constants.Network.HTTP).host(SSO_HOST).addPathSegment(SSO_PATH).addEncodedPathSegment(SSO_LOGIN_PATH).build()
+            HttpUrl.Builder().scheme(NetworkConst.HTTP).host(SSO_HOST).addPathSegment(SSO_PATH).addEncodedPathSegment(SSO_LOGIN_PATH).build()
         private val SSO_LOGOUT_URL =
-            HttpUrl.Builder().scheme(Constants.Network.HTTP).host(SSO_HOST).addPathSegment(SSO_PATH).addEncodedPathSegment(SSO_LOGOUT_PATH).build()
+            HttpUrl.Builder().scheme(NetworkConst.HTTP).host(SSO_HOST).addPathSegment(SSO_PATH).addEncodedPathSegment(SSO_LOGOUT_PATH).build()
 
         private val SSO_LOGIN_PARAM = arrayOf("lt", "execution", "_eventId", "useVCode", "isUseVCode", "sessionVcode")
         private const val SSO_LOGIN_PARAM_ERROR_COUNT = "errorCount"

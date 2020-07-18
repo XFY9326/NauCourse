@@ -5,7 +5,8 @@ import okhttp3.FormBody
 import okhttp3.HttpUrl
 import okhttp3.Request
 import okhttp3.Response
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.NetworkConst
+import tool.xfy9326.naucourse.constants.TimeConst
 import tool.xfy9326.naucourse.network.clients.JwcClient
 import tool.xfy9326.naucourse.providers.beans.jwc.EmptyRoomSearchParam
 import tool.xfy9326.naucourse.providers.beans.jwc.EmptyRoomSearchResult
@@ -25,8 +26,8 @@ object GetEmptyRoomInfo : BaseParamContent<Array<EmptyRoomSearchResult>, EmptyRo
     private const val POST_PARAM_END_DATE = "endDate"
 
     private const val PAGE_URL = "GetEmptyRoomInfo.ashx"
-    private val REQUEST_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(JwcClient.JWC_HOST).addPathSegment(PAGE_URL).build()
-    private val DATE_FORMAT_YMD = SimpleDateFormat(Constants.Time.FORMAT_YMD, Locale.CHINA)
+    private val REQUEST_URL = HttpUrl.Builder().scheme(NetworkConst.HTTP).host(JwcClient.JWC_HOST).addPathSegment(PAGE_URL).build()
+    private val DATE_FORMAT_YMD = SimpleDateFormat(TimeConst.FORMAT_YMD, Locale.CHINA)
 
     override val networkClient = getSimpleClient()
 

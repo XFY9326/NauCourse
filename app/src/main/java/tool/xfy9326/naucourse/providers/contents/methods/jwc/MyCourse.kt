@@ -4,7 +4,8 @@ import okhttp3.HttpUrl
 import okhttp3.Response
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.HTMLConst
+import tool.xfy9326.naucourse.constants.NetworkConst
 import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.network.clients.JwcClient
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseScore
@@ -15,7 +16,7 @@ object MyCourse : BaseNoParamContent<Array<CourseScore>>() {
 
     private const val JWC_MY_COURSE_ASPX = "MyCourse.aspx"
 
-    private val JWC_MY_COURSE_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(JwcClient.JWC_HOST)
+    private val JWC_MY_COURSE_URL = HttpUrl.Builder().scheme(NetworkConst.HTTP).host(JwcClient.JWC_HOST)
         .addPathSegment(JwcClient.JWC_STUDENTS_PATH).addPathSegment(JWC_MY_COURSE_ASPX).build()
 
     private const val NOT_ENTRY_STR = "未录入"
@@ -27,7 +28,9 @@ object MyCourse : BaseNoParamContent<Array<CourseScore>>() {
     override fun onParseData(content: String): Array<CourseScore> = getCourseScoreArr(Jsoup.parse(content).body())
 
     private fun getCourseScoreArr(bodyElement: Element): Array<CourseScore> {
-        val trElements = bodyElement.getElementById(Constants.HTML.ELEMENT_ID_CONTENT).getElementsByTag(Constants.HTML.ELEMENT_TAG_TR)
+        val trElements = bodyElement.getElementById(HTMLConst.ELEMENT_ID_CONTENT).getElementsByTag(
+            HTMLConst.ELEMENT_TAG_TR
+        )
 
         if (trElements.size - 2 == 0) {
             return emptyArray()
@@ -51,7 +54,7 @@ object MyCourse : BaseNoParamContent<Array<CourseScore>>() {
         var notPublish: Boolean
 
         for ((arrIndex, i) in (2 until trElements.size).withIndex()) {
-            val tdElements = trElements[i].getElementsByTag(Constants.HTML.ELEMENT_TAG_TD)
+            val tdElements = trElements[i].getElementsByTag(HTMLConst.ELEMENT_TAG_TD)
 
             ordinaryGrades = CourseScore.DEFAULT_GRADES
             midTermGrades = CourseScore.DEFAULT_GRADES

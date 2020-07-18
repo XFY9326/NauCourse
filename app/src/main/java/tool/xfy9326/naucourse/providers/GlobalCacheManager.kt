@@ -1,19 +1,16 @@
 package tool.xfy9326.naucourse.providers
 
-import android.os.Handler
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.joinAll
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourse.providers.info.methods.*
 import tool.xfy9326.naucourse.tools.NotifyBus
+import tool.xfy9326.naucourse.tools.NotifyType
 
 // 全局缓存管理
 object GlobalCacheManager {
     private const val CACHE_CLEAN_TIMEOUT = 5000L
-    private val cacheHandler = Handler()
+    private var cacheJob: Job? = null
 
     suspend fun loadInitCache() = withContext(Dispatchers.IO) {
         joinAll(
@@ -24,7 +21,7 @@ object GlobalCacheManager {
             launch {
                 CourseInfo.getInfo(CourseInfo.OperationType.INIT_DATA).apply {
                     if (!isSuccess && errorReason == ContentErrorReason.DATA_ERROR) {
-                        NotifyBus[NotifyBus.Type.COURSE_INIT_CONFLICT].notifyEvent()
+                        NotifyBus[NotifyType.COURSE_INIT_CONFLICT].notifyEvent()
                     }
                 }
             })
@@ -34,19 +31,17 @@ object GlobalCacheManager {
     @Synchronized
     fun startCacheCleanerTimer() {
         tryCancelCacheCleaner()
-        cacheHandler.postDelayed({
-            clearUnusedRunTimeCache()
-        }, CACHE_CLEAN_TIMEOUT)
+        cacheJob = GlobalScope.launch(Dispatchers.Default) {
+            delay(CACHE_CLEAN_TIMEOUT)
+
+            ExamInfo.clearCacheInfo()
+            LevelExamInfo.clearCacheInfo()
+            MyCourseHistoryInfo.clearCacheInfo()
+            MyCourseInfo.clearCacheInfo()
+            PersonalInfo.clearCacheInfo()
+        }
     }
 
     @Synchronized
-    fun tryCancelCacheCleaner() = cacheHandler.removeCallbacksAndMessages(null)
-
-    private fun clearUnusedRunTimeCache() {
-        ExamInfo.clearCacheInfo()
-        LevelExamInfo.clearCacheInfo()
-        MyCourseHistoryInfo.clearCacheInfo()
-        MyCourseInfo.clearCacheInfo()
-        PersonalInfo.clearCacheInfo()
-    }
+    fun tryCancelCacheCleaner() = cacheJob?.cancel()
 }

@@ -15,12 +15,14 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_nav_header.*
 import kotlinx.android.synthetic.main.view_nav_header.view.*
 import tool.xfy9326.naucourse.BuildConfig
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.constants.BaseConst
+import tool.xfy9326.naucourse.constants.OthersConst
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourse.tools.NotifyBus
+import tool.xfy9326.naucourse.tools.NotifyType
 import tool.xfy9326.naucourse.tools.livedata.Event
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourse.ui.dialogs.FullScreenLoadingDialog
@@ -72,7 +74,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         if (intent.getBooleanExtra(IntentUtils.NEW_VERSION_FLAG, false)) {
             onUpdateNewVersion()
         }
-        if (BuildConfig.FLAVOR != Constants.Others.FLAVOR_BETA && AppPref.ForceUpdateVersionCode > BuildConfig.VERSION_CODE) {
+        if (BuildConfig.FLAVOR != OthersConst.FLAVOR_BETA && AppPref.ForceUpdateVersionCode > BuildConfig.VERSION_CODE) {
             showToast(R.string.force_update_attention)
         }
     }
@@ -205,7 +207,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     override fun bindViewModel(viewModel: MainDrawerViewModel) {
         viewModel.studentCardBalance.observe(this, Observer {
             nav_main.getHeaderView(DEFAULT_NAV_HEADER_INDEX).tv_cardBalanceOrClass.post {
-                tv_cardBalanceOrClass.text = getString(R.string.balance, String.format(Constants.KEEP_TWO_DECIMAL_PLACES, it))
+                tv_cardBalanceOrClass.text = getString(R.string.balance, String.format(BaseConst.KEEP_TWO_DECIMAL_PLACES, it))
             }
         })
         viewModel.studentInfo.observe(this, Observer {
@@ -225,20 +227,20 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         viewModel.updateInfo.observeEvent(this, Observer {
             UpdateDialog.showDialog(supportFragmentManager, it)
         })
-        NotifyBus[NotifyBus.Type.DEFAULT_ENTER_INTERFACE_CHANGED].observeNotification(this, {
+        NotifyBus[NotifyType.DEFAULT_ENTER_INTERFACE_CHANGED].observeNotification(this, {
             showFragment(getDefaultFragmentType())
         })
-        NotifyBus[NotifyBus.Type.ADVANCED_FUNCTION_MODE_CHANGED].observeNotification(this, {
+        NotifyBus[NotifyType.ADVANCED_FUNCTION_MODE_CHANGED].observeNotification(this, {
             setAdvancedFunctions()
             viewModel.updateBalance()
             viewModel.refreshPersonalInfo()
         })
-        NotifyBus[NotifyBus.Type.COURSE_INIT_CONFLICT].observeNotification(this, {
+        NotifyBus[NotifyType.COURSE_INIT_CONFLICT].observeNotification(this, {
             DialogUtils.createCourseInitConflictDialog(this, lifecycle).show()
         })
         // 需要Activity在后台时也监听夜间模式设定变化，防止延迟的界面更新
         tryRemoveNightModeObserver()
-        nightModeObserver = NotifyBus[NotifyBus.Type.NIGHT_MODE_CHANGED].observeNotificationForever({
+        nightModeObserver = NotifyBus[NotifyType.NIGHT_MODE_CHANGED].observeNotificationForever({
             recreate()
         }, MainDrawerActivity::class.java.simpleName)
     }
@@ -264,7 +266,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     @Synchronized
     private fun tryRemoveNightModeObserver() {
         if (nightModeObserver != null) {
-            NotifyBus[NotifyBus.Type.NIGHT_MODE_CHANGED].removeObserver(nightModeObserver!!)
+            NotifyBus[NotifyType.NIGHT_MODE_CHANGED].removeObserver(nightModeObserver!!)
             nightModeObserver = null
         }
     }

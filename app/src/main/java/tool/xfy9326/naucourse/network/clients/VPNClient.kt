@@ -6,7 +6,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.internal.closeQuietly
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.NetworkConst
 import tool.xfy9326.naucourse.network.clients.base.LoginInfo
 import tool.xfy9326.naucourse.network.clients.base.LoginResponse
 import tool.xfy9326.naucourse.network.clients.base.ServerErrorException
@@ -40,10 +40,10 @@ open class VPNClient(loginInfo: LoginInfo, loginUrl: HttpUrl? = null) :
         private const val VPN_FROM_URL_PARAM = "fromUrl"
         private const val VPN_FROM_URL_PARAM_VALUE = "/"
 
-        private val VPN_LOGIN_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(VPN_HOST).addPathSegment(VPN_LOGIN_PATH)
+        private val VPN_LOGIN_URL = HttpUrl.Builder().scheme(NetworkConst.HTTP).host(VPN_HOST).addPathSegment(VPN_LOGIN_PATH)
             .addQueryParameter(VPN_CAS_LOGIN_PARAM, VPN_CAS_LOGIN_PARAM_VALUE)
             .addQueryParameter(VPN_FROM_URL_PARAM, VPN_FROM_URL_PARAM_VALUE).build()
-        private val VPN_LOGOUT_URL = HttpUrl.Builder().scheme(Constants.Network.HTTP).host(VPN_HOST).addPathSegment(VPN_LOGOUT_PATH).build()
+        private val VPN_LOGOUT_URL = HttpUrl.Builder().scheme(NetworkConst.HTTP).host(VPN_HOST).addPathSegment(VPN_LOGOUT_PATH).build()
 
         private const val VPN_LOGIN_PAGE_STR = "南京审计大学WEBVPN登录"
         private const val VPN_EXPIRED_STR = "授权过期"
@@ -71,11 +71,11 @@ open class VPNClient(loginInfo: LoginInfo, loginUrl: HttpUrl? = null) :
             }
 
             val requestBuilder = request.newBuilder()
-            val refererUrl = request.header(Constants.Network.HEADER_REFERER)
+            val refererUrl = request.header(NetworkConst.HEADER_REFERER)
             if (useVPN && refererUrl != null) {
                 val refererHttpUrl = refererUrl.toHttpUrl()
                 if (!refererHttpUrl.hasSameHost(vpnUrl)) {
-                    requestBuilder.header(Constants.Network.HEADER_REFERER, VPNTools.buildVPNUrl(refererHttpUrl).toString())
+                    requestBuilder.header(NetworkConst.HEADER_REFERER, VPNTools.buildVPNUrl(refererHttpUrl).toString())
                 }
             }
             requestBuilder.url(vpnUrl)
@@ -123,7 +123,7 @@ open class VPNClient(loginInfo: LoginInfo, loginUrl: HttpUrl? = null) :
             try {
                 val response = timeoutClient.newCall(request).execute()
                 val body = NetworkTools.getResponseContent(response)
-                if ((response.code == Constants.Network.HTTP_FORBIDDEN_STATUS && VPN_NECESSARY_STR in body) || ONLY_ALLOW_SCHOOL_IP_STR in body) {
+                if ((response.code == NetworkConst.HTTP_FORBIDDEN_STATUS && VPN_NECESSARY_STR in body) || ONLY_ALLOW_SCHOOL_IP_STR in body) {
                     response.closeQuietly()
                     useVPN = true
                     newVPNCall(newRequest)

@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import kotlinx.coroutines.launch
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.constants.PrefConst
 import tool.xfy9326.naucourse.ui.dialogs.UpdateDialog
 import tool.xfy9326.naucourse.ui.fragments.base.BaseSettingsPreferenceFragment
 import tool.xfy9326.naucourse.update.UpdateChecker
@@ -17,7 +17,7 @@ class UpdateSettingsFragment : BaseSettingsPreferenceFragment() {
     override val titleName: Int = R.string.settings_update
 
     override fun onPrefViewInit(savedInstanceState: Bundle?) {
-        findPreference<Preference>(Constants.Pref.CheckUpdatesNow)?.setOnPreferenceClickListener {
+        findPreference<Preference>(PrefConst.CheckUpdatesNow)?.setOnPreferenceClickListener {
             checkUpdates()
             true
         }

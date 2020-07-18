@@ -3,20 +3,20 @@ package tool.xfy9326.naucourse.providers.beans.jwc
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.DBConst
 import tool.xfy9326.naucourse.io.db.CourseSetDBHelper
 import java.io.Serializable
 
 @Entity(tableName = CourseSetDBHelper.TERM_TABLE_NAME)
 data class Term(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = Constants.DB.COLUMN_ID)
+    @ColumnInfo(name = DBConst.COLUMN_ID)
     val id: Int,
     val startYear: Int,
     val endYear: Int,
     val termNum: Short
 ) : Serializable {
-    constructor(startYear: Int, endYear: Int, termNum: Short) : this(Constants.DB.DEFAULT_ID, startYear, endYear, termNum)
+    constructor(startYear: Int, endYear: Int, termNum: Short) : this(DBConst.DEFAULT_ID, startYear, endYear, termNum)
 
     init {
         if (endYear < 0 || startYear < 0 || endYear - startYear != 1) {

@@ -6,15 +6,16 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.BuildConfig
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.BaseConst
+import tool.xfy9326.naucourse.constants.TimeConst
 import java.io.File
 import java.io.FileWriter
 import java.text.SimpleDateFormat
 import java.util.*
 
 object DebugIOUtils {
-    private val DATE_FORMAT_YMD = SimpleDateFormat(Constants.Time.FORMAT_YMD, Locale.CHINA)
-    private val DATE_FORMAT_YMD_HM_S = SimpleDateFormat(Constants.Time.FORMAT_YMD_HM_S, Locale.CHINA)
+    private val DATE_FORMAT_YMD = SimpleDateFormat(TimeConst.FORMAT_YMD, Locale.CHINA)
+    private val DATE_FORMAT_YMD_HM_S = SimpleDateFormat(TimeConst.FORMAT_YMD_HM_S, Locale.CHINA)
 
     private const val DEBUG_DIR = "Debug_Log"
     private const val FORCE_LOG_ON_FLAG = "debug_on"
@@ -79,7 +80,7 @@ object DebugIOUtils {
                     }
                     it.write(msg)
                     if (type == DebugSaveType.LOG) {
-                        it.write(Constants.CHANGE_LINE)
+                        it.write(BaseConst.CHANGE_LINE)
                     }
                     it.flush()
                 }

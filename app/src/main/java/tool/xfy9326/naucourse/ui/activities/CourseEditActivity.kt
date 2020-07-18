@@ -17,9 +17,9 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 import kotlinx.android.synthetic.main.activity_course_edit.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseCellStyle
+import tool.xfy9326.naucourse.constants.BaseConst
 import tool.xfy9326.naucourse.providers.beans.jwc.Course
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseTime
@@ -331,7 +331,7 @@ class CourseEditActivity : BaseActivity(), CourseTimeAdapter.CourseTimeCallback,
     private fun getEditText(editText: AppCompatEditText, nullable: Boolean = false): String? {
         val result = editText.text?.toString()?.trim()
         return if (result.isNullOrBlank() || result.isNullOrEmpty()) {
-            if (nullable) null else Constants.EMPTY
+            if (nullable) null else BaseConst.EMPTY
         } else {
             result
         }

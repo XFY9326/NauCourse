@@ -3,14 +3,14 @@ package tool.xfy9326.naucourse.providers.beans.jwc
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.DBConst
 import tool.xfy9326.naucourse.io.db.ExamDBHelper
 import java.util.*
 
 @Entity(tableName = ExamDBHelper.EXAM_TABLE_NAME)
 data class Exam(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = Constants.DB.COLUMN_ID)
+    @ColumnInfo(name = DBConst.COLUMN_ID)
     val id: Int,
     val courseId: String,
     val name: String,
@@ -28,7 +28,7 @@ data class Exam(
         courseId: String, name: String, credit: Float, teachClass: String,
         startDate: Date?, endDate: Date?, dateRawText: String, location: String, property: String, type: String
     ) :
-            this(Constants.DB.DEFAULT_ID, courseId, name, credit, teachClass, startDate, endDate, dateRawText, location, property, type)
+            this(DBConst.DEFAULT_ID, courseId, name, credit, teachClass, startDate, endDate, dateRawText, location, property, type)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

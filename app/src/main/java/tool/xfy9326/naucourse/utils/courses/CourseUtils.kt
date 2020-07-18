@@ -1,11 +1,11 @@
 package tool.xfy9326.naucourse.utils.courses
 
 import kotlinx.coroutines.*
-import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.beans.CourseCell
 import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.beans.CourseItem
 import tool.xfy9326.naucourse.beans.CourseTable
+import tool.xfy9326.naucourse.constants.TimeConst
 import tool.xfy9326.naucourse.io.store.CourseTableStore
 import tool.xfy9326.naucourse.providers.beans.jwc.Course
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
@@ -50,12 +50,12 @@ object CourseUtils {
         endWeekDayNum: Int
     ):
             CourseTable {
-        if (weekNum < Constants.Course.MIN_WEEK_NUM_SIZE || weekNum > maxWeekNum) {
+        if (weekNum < tool.xfy9326.naucourse.constants.CourseConst.MIN_WEEK_NUM_SIZE || weekNum > maxWeekNum) {
             throw IllegalArgumentException("Week Num Error! Num: $weekNum")
         }
         val courses = courseSet.courses
-        val temp = Array<Array<CourseCell?>>(Constants.Time.MAX_WEEK_DAY) {
-            arrayOfNulls(Constants.Course.MAX_COURSE_LENGTH)
+        val temp = Array<Array<CourseCell?>>(TimeConst.MAX_WEEK_DAY) {
+            arrayOfNulls(tool.xfy9326.naucourse.constants.CourseConst.MAX_COURSE_LENGTH)
         }
         for (course in courses) {
             for (time in course.timeSet) {
@@ -81,10 +81,10 @@ object CourseUtils {
                 }
             }
         }
-        val courseTable = ArrayList<Array<CourseCell>>(Constants.Time.MAX_WEEK_DAY)
+        val courseTable = ArrayList<Array<CourseCell>>(TimeConst.MAX_WEEK_DAY)
         var startP = 0
         var endP = temp.size - 1
-        if (weekNum == Constants.Course.MIN_WEEK_NUM_SIZE) {
+        if (weekNum == tool.xfy9326.naucourse.constants.CourseConst.MIN_WEEK_NUM_SIZE) {
             startP = startWeekDayNum - 1
         } else if (weekNum == maxWeekNum) {
             endP = endWeekDayNum - 1
@@ -228,5 +228,5 @@ object CourseUtils {
 
     fun hasWeekendCourse(courseTable: CourseTable): Boolean =
         courseTable.table.isNotEmpty() &&
-                (courseTable.table[Constants.Time.MAX_WEEK_DAY - 1].isNotEmpty() || courseTable.table[Constants.Time.MAX_WEEK_DAY - 2].isNotEmpty())
+                (courseTable.table[TimeConst.MAX_WEEK_DAY - 1].isNotEmpty() || courseTable.table[TimeConst.MAX_WEEK_DAY - 2].isNotEmpty())
 }

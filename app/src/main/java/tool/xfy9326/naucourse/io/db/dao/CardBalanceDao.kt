@@ -1,7 +1,7 @@
 package tool.xfy9326.naucourse.io.db.dao
 
 import androidx.room.*
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.DBConst
 import tool.xfy9326.naucourse.io.db.CardBalanceDBHelper
 import tool.xfy9326.naucourse.providers.beans.ykt.CardBalance
 
@@ -24,6 +24,6 @@ interface CardBalanceDao {
     fun clearCardBalance()
 
     @Suppress("AndroidUnresolvedRoomSqlReference")
-    @Query("delete from ${Constants.DB.SQL_LITE_TABLE} where ${Constants.DB.COLUMN_NAME} = '${CardBalanceDBHelper.CARD_BALANCE_TABLE_NAME}'")
+    @Query("delete from ${DBConst.SQL_LITE_TABLE} where ${DBConst.COLUMN_NAME} = '${CardBalanceDBHelper.CARD_BALANCE_TABLE_NAME}'")
     fun clearIndex()
 }

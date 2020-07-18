@@ -3,7 +3,7 @@ package tool.xfy9326.naucourse.network.clients
 import okhttp3.HttpUrl
 import okhttp3.Request
 import okhttp3.Response
-import tool.xfy9326.naucourse.Constants
+import tool.xfy9326.naucourse.constants.NetworkConst
 import tool.xfy9326.naucourse.network.clients.base.LoginInfo
 
 // http://alstu.nau.edu.cn
@@ -15,7 +15,7 @@ class AlstuClient(loginInfo: LoginInfo) : VPNClient(loginInfo) {
         private const val ALSTU_ERROR_LOGIN_STR = "location=\"LOGIN.ASPX\";"
 
         val ALSTU_INDEX_URL =
-            HttpUrl.Builder().scheme(Constants.Network.HTTP).host(ALSTU_HOST).addPathSegment(ALSTU_DEFAULT_ASPX).build()
+            HttpUrl.Builder().scheme(NetworkConst.HTTP).host(ALSTU_HOST).addPathSegment(ALSTU_DEFAULT_ASPX).build()
 
         private fun isAlstuIndexUrl(url: HttpUrl) = url.pathSegments.last().equals(ALSTU_DEFAULT_ASPX, true)
     }
