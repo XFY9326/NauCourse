@@ -77,7 +77,15 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>() {
             ActivityUtils.showSnackBar(layout_courseTableWindow, I18NUtils.getImageOperationTypeResId(it))
         })
         viewModel.nowShowWeekNum.observe(viewLifecycleOwner, Observer {
-            tv_nowShowWeekNum.text = getString(R.string.week_num, it)
+            tv_nowShowWeekNum.text = getString(
+                R.string.week_num,
+                if (it <= 0) {
+                    1
+                } else {
+                    it
+                }
+            )
+
             viewModel.requestShowWeekStatus(it)
         })
         viewModel.currentWeekStatus.observe(viewLifecycleOwner, Observer {
