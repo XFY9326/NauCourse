@@ -13,15 +13,8 @@ interface NewsDataDao {
 
     @Transaction
     fun getFixedAllNews(): List<GeneralNews> {
-        clearOutOfDateNews(NewsInfo.isNewsOutOfDateTimeStamp())
-        val newsArray = getAllNews()
-        newsArray.forEach {
-            if (it.postSource == GeneralNews.PostSource.UNKNOWN) {
-                newsArray.remove(it)
-                deleteNews(it)
-            }
-        }
-        return newsArray
+        clearUselessNews(NewsInfo.isNewsOutOfDateTimeStamp())
+        return getAllNews()
     }
 
     @Query("select * from ${NewsDBHelper.NEWS_TABLE_NAME} order by ${NewsDBHelper.COLUMN_POST_DATE} desc")
@@ -30,8 +23,8 @@ interface NewsDataDao {
     @Delete
     fun deleteNews(news: GeneralNews)
 
-    @Query("delete from ${NewsDBHelper.NEWS_TABLE_NAME} where ${NewsDBHelper.COLUMN_POST_DATE} < :timeStamp")
-    fun clearOutOfDateNews(timeStamp: Long)
+    @Query("delete from ${NewsDBHelper.NEWS_TABLE_NAME} where ${NewsDBHelper.COLUMN_POST_DATE} < :timeStamp or ${NewsDBHelper.COLUMN_POST_SOURCE} = '${NewsDBHelper.COLUMN_POST_SOURCE_UNKNOWN}'")
+    fun clearUselessNews(timeStamp: Long)
 
     @Query("delete from ${NewsDBHelper.NEWS_TABLE_NAME} where ${NewsDBHelper.COLUMN_POST_DATE} < :type")
     fun clearNewsByType(type: String)

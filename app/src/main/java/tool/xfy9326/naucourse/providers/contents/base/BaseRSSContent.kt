@@ -10,6 +10,7 @@ import tool.xfy9326.naucourse.network.clients.NgxClient
 import tool.xfy9326.naucourse.network.clients.base.BaseNetworkClient
 import tool.xfy9326.naucourse.providers.beans.GeneralNews
 import tool.xfy9326.naucourse.providers.beans.GeneralNewsDetail
+import tool.xfy9326.naucourse.providers.beans.PostSource
 import tool.xfy9326.naucourse.providers.beans.rss.RSSObject
 import tool.xfy9326.naucourse.providers.contents.base.rss.NauRSSTools
 import tool.xfy9326.naucourse.providers.contents.base.rss.RSSReader
@@ -28,7 +29,7 @@ abstract class BaseRSSContent : BaseNewsContent<RSSObject>() {
     abstract val templateId: Int
     abstract val columnId: Int
 
-    abstract val postSource: GeneralNews.PostSource
+    abstract val postSource: PostSource
     protected abstract val rssDetailServerHost: String
 
     companion object {
@@ -65,10 +66,10 @@ abstract class BaseRSSContent : BaseNewsContent<RSSObject>() {
 
     private fun getHost(): String =
         when (postSource) {
-            GeneralNews.PostSource.RSS_JW -> Constants.Network.JW_HOST
-            GeneralNews.PostSource.RSS_TW -> TwRSS.TW_HOST
-            GeneralNews.PostSource.RSS_XGC -> XgcRSS.XGC_HOST
-            GeneralNews.PostSource.RSS_XXB -> XxbRSS.XXB_HOST
+            PostSource.RSS_JW -> Constants.Network.JW_HOST
+            PostSource.RSS_TW -> TwRSS.TW_HOST
+            PostSource.RSS_XGC -> XgcRSS.XGC_HOST
+            PostSource.RSS_XXB -> XxbRSS.XXB_HOST
             else -> error("Incorrect RSS Post Source $postSource")
         }
 

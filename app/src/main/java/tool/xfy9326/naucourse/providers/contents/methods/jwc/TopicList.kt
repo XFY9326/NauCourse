@@ -10,6 +10,7 @@ import tool.xfy9326.naucourse.network.clients.JwcClient
 import tool.xfy9326.naucourse.network.clients.base.BaseLoginClient
 import tool.xfy9326.naucourse.providers.beans.GeneralNews
 import tool.xfy9326.naucourse.providers.beans.GeneralNewsDetail
+import tool.xfy9326.naucourse.providers.beans.PostSource
 import tool.xfy9326.naucourse.providers.beans.jwc.JwcTopic
 import tool.xfy9326.naucourse.providers.contents.base.BaseNewsContent
 import java.text.SimpleDateFormat
@@ -98,7 +99,7 @@ object TopicList : BaseNewsContent<JwcTopic>() {
                     newsDatum.postDate,
                     newsDatum.detailUrl,
                     newsDatum.type,
-                    GeneralNews.PostSource.JWC,
+                    PostSource.JWC,
                     newsDatum.clickAmount
                 )
             )

@@ -15,6 +15,7 @@ import tool.xfy9326.naucourse.network.clients.base.BaseLoginClient
 import tool.xfy9326.naucourse.network.tools.VPNTools
 import tool.xfy9326.naucourse.providers.beans.GeneralNews
 import tool.xfy9326.naucourse.providers.beans.GeneralNewsDetail
+import tool.xfy9326.naucourse.providers.beans.PostSource
 import tool.xfy9326.naucourse.providers.beans.alstu.AlstuMessage
 import tool.xfy9326.naucourse.providers.contents.base.BaseNewsContent
 import java.text.SimpleDateFormat
@@ -113,7 +114,7 @@ object DefaultMessage : BaseNewsContent<AlstuMessage>() {
                     newsDatum.title,
                     newsDatum.date,
                     newsDatum.url,
-                    GeneralNews.PostSource.ALSTU
+                    PostSource.ALSTU
                 )
             )
         }

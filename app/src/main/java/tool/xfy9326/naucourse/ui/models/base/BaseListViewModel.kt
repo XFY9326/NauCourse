@@ -14,7 +14,7 @@ import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 abstract class BaseListViewModel<E> : BaseViewModel() {
     private val dataGetMutex = Mutex()
 
-    val isRefreshing = MutableLiveData(false)
+    val isRefreshing = MutableLiveData<Boolean>()
     val errorMsg = EventLiveData<ContentErrorReason>()
     val listData = MutableLiveData<List<E>>()
 

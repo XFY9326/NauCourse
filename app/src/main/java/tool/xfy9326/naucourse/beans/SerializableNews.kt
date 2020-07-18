@@ -1,6 +1,7 @@
 package tool.xfy9326.naucourse.beans
 
 import tool.xfy9326.naucourse.providers.beans.GeneralNews
+import tool.xfy9326.naucourse.providers.beans.PostSource
 import java.io.Serializable
 import java.net.URL
 import java.util.*
@@ -16,7 +17,7 @@ data class SerializableNews(
     // 通知类型
     val type: String?,
     // 通知来源
-    val postSource: GeneralNews.PostSource,
+    val postSource: PostSource,
     // 点击量
     val clickAmount: Int?
 ) : Serializable {

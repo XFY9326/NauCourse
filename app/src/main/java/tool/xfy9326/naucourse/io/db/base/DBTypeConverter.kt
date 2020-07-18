@@ -3,7 +3,7 @@ package tool.xfy9326.naucourse.io.db.base
 import androidx.room.TypeConverter
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
-import tool.xfy9326.naucourse.providers.beans.GeneralNews
+import tool.xfy9326.naucourse.providers.beans.PostSource
 import tool.xfy9326.naucourse.providers.beans.jwc.Term
 import tool.xfy9326.naucourse.providers.beans.jwc.TimePeriodList
 import tool.xfy9326.naucourse.providers.beans.jwc.WeekMode
@@ -24,13 +24,13 @@ class DBTypeConverter {
     fun httpUrlToUrl(httpUrl: HttpUrl?): String? = httpUrl?.toString()
 
     @TypeConverter
-    fun postSourceToPostSourceName(postSource: GeneralNews.PostSource): String = postSource.name
+    fun postSourceToPostSourceName(postSource: PostSource): String = postSource.name
 
     @TypeConverter
-    fun fromPostSourceName(value: String): GeneralNews.PostSource = try {
-        GeneralNews.PostSource.valueOf(value)
+    fun fromPostSourceName(value: String): PostSource = try {
+        PostSource.valueOf(value)
     } catch (e: IllegalArgumentException) {
-        GeneralNews.PostSource.UNKNOWN
+        PostSource.UNKNOWN
     }
 
     @TypeConverter

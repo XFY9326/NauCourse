@@ -7,7 +7,7 @@ import okhttp3.HttpUrl
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.io.db.NewsDBHelper
 import tool.xfy9326.naucourse.providers.beans.GeneralNews
-import tool.xfy9326.naucourse.providers.beans.GeneralNews.PostSource
+import tool.xfy9326.naucourse.providers.beans.PostSource
 import tool.xfy9326.naucourse.providers.contents.base.BaseNewsContent
 import tool.xfy9326.naucourse.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourse.providers.contents.base.ContentResult

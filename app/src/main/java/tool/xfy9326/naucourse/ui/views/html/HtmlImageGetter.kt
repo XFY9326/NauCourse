@@ -10,12 +10,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import tool.xfy9326.naucourse.R
-import tool.xfy9326.naucourse.providers.beans.GeneralNews
+import tool.xfy9326.naucourse.providers.beans.PostSource
 import tool.xfy9326.naucourse.providers.info.methods.NewsInfo
 import tool.xfy9326.naucourse.tools.glide.ClientRequest
 import kotlin.math.min
 
-class HtmlImageGetter(private val context: Context, private val textView: TextView, private val newsType: GeneralNews.PostSource) : Html.ImageGetter {
+class HtmlImageGetter(private val context: Context, private val textView: TextView, private val newsType: PostSource) : Html.ImageGetter {
     companion object {
         private const val BITMAP_MAX_PERCENT = 7 / 12f
         private const val BITMAP_MIN_PERCENT = 1 / 2f

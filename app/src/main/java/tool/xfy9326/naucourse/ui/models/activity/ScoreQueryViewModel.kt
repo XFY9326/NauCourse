@@ -25,7 +25,7 @@ class ScoreQueryViewModel : BaseViewModel() {
     private var courseHistoryTemp: List<CourseHistory> = emptyList()
     private var courseScoreTemp: List<CourseScore> = emptyList()
 
-    val isRefreshing = MutableLiveData(false)
+    val isRefreshing = MutableLiveData<Boolean>()
     val errorMsg = EventLiveData<ContentErrorReason>()
     val courseHistory = MutableLiveData<List<CourseHistory>>()
     val courseScore = MutableLiveData<List<CourseScore>>()

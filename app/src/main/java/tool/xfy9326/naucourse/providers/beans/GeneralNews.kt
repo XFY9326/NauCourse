@@ -19,6 +19,7 @@ data class GeneralNews(
     val postDate: Date,
     val detailUrl: HttpUrl,
     val type: String?,
+    @ColumnInfo(name = NewsDBHelper.COLUMN_POST_SOURCE)
     val postSource: PostSource,
     val clickAmount: Int?
 ) {
@@ -34,10 +35,6 @@ data class GeneralNews(
     constructor(title: String, postDate: Date, detailUrl: HttpUrl, type: String, postSource: PostSource, clickAmount: Int) :
             this(Constants.DB.DEFAULT_ID, title, postDate, detailUrl, type, postSource, clickAmount)
 
-
-    enum class PostSource {
-        UNKNOWN, JWC, ALSTU, RSS_JW, RSS_TW, RSS_XGC, RSS_XXB
-    }
 
     companion object {
         @Suppress("unused")

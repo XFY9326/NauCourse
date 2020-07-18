@@ -11,8 +11,8 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import okhttp3.HttpUrl
 import tool.xfy9326.naucourse.beans.ImageOperationType
-import tool.xfy9326.naucourse.providers.beans.GeneralNews
 import tool.xfy9326.naucourse.providers.beans.GeneralNewsDetail
+import tool.xfy9326.naucourse.providers.beans.PostSource
 import tool.xfy9326.naucourse.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourse.providers.info.methods.NewsInfo
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
@@ -30,7 +30,7 @@ class NewsDetailViewModel : BaseViewModel() {
     val imageOperation = EventLiveData<ImageOperationType>()
     val imageShareUri = EventLiveData<Uri>()
 
-    fun requestNewsDetail(url: HttpUrl, postSource: GeneralNews.PostSource) {
+    fun requestNewsDetail(url: HttpUrl, postSource: PostSource) {
         if (loadingLock.tryLock()) {
             viewModelScope.launch {
                 try {

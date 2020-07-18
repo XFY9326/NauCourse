@@ -9,11 +9,11 @@ import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.io.prefs.AppPref
-import tool.xfy9326.naucourse.providers.beans.GeneralNews
+import tool.xfy9326.naucourse.providers.beans.PostSource
 import tool.xfy9326.naucourse.utils.views.I18NUtils
 
 class NewsTypeChoiceDialog : DialogFragment() {
-    private lateinit var newsTypeArray: List<GeneralNews.PostSource>
+    private lateinit var newsTypeArray: List<PostSource>
     private lateinit var newsTypeTextArray: Array<String>
     private lateinit var choiceStatus: BooleanArray
     private var statusChanged = false
@@ -34,8 +34,8 @@ class NewsTypeChoiceDialog : DialogFragment() {
 
     private fun initData(savedInstanceState: Bundle?) {
         // 排除 GeneralNews.PostSource.UNKNOWN
-        newsTypeArray = GeneralNews.PostSource.values().filterNot {
-            it == GeneralNews.PostSource.UNKNOWN
+        newsTypeArray = PostSource.values().filterNot {
+            it == PostSource.UNKNOWN
         }
 
         newsTypeTextArray = Array(newsTypeArray.size) {
@@ -79,7 +79,7 @@ class NewsTypeChoiceDialog : DialogFragment() {
             statusChanged = true
         }
         setNegativeButton(android.R.string.cancel, null)
-        setPositiveButton(android.R.string.yes) { _, _ ->
+        setPositiveButton(android.R.string.ok) { _, _ ->
             if (statusChanged) {
                 saveResult()
                 val fragment = requireParentFragment()

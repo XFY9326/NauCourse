@@ -132,7 +132,7 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>() {
         if (!viewModel.hasInitWithNowWeekNum) {
             viewModel.hasInitWithNowWeekNum = true
             val showWeekNum = if (weekNum.first == 0) 1 else if (weekNum.second) weekNum.first + 1 else weekNum.first
-            viewModel.nowShowWeekNum.postValue(showWeekNum - 1)
+            viewModel.nowShowWeekNum.value = showWeekNum - 1
             vp_courseTablePanel.setCurrentItem(showWeekNum - 1, false)
         }
     }
@@ -153,7 +153,7 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>() {
         vp_courseTablePanel.offscreenPageLimit = 1
         viewPagerCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                viewModel.nowShowWeekNum.postValue(position + 1)
+                viewModel.nowShowWeekNum.value = position + 1
             }
         }
         vp_courseTablePanel.registerOnPageChangeCallback(viewPagerCallback)

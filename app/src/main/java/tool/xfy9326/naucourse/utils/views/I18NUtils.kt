@@ -3,7 +3,7 @@ package tool.xfy9326.naucourse.utils.views
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.ImageOperationType
 import tool.xfy9326.naucourse.network.clients.base.LoginResponse.ErrorReason
-import tool.xfy9326.naucourse.providers.beans.GeneralNews.PostSource
+import tool.xfy9326.naucourse.providers.beans.PostSource
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentLearningProcess.CourseType
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentLearningProcess.SubjectType
 import tool.xfy9326.naucourse.providers.contents.base.ContentErrorReason

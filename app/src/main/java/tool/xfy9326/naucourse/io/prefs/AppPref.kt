@@ -4,6 +4,7 @@ import tool.xfy9326.naucourse.BuildConfig
 import tool.xfy9326.naucourse.Constants
 import tool.xfy9326.naucourse.io.prefs.base.BasePref
 import tool.xfy9326.naucourse.providers.beans.GeneralNews
+import tool.xfy9326.naucourse.providers.beans.PostSource
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import java.util.*
 
@@ -23,11 +24,11 @@ object AppPref : BasePref() {
 
     private var ShowNewsType by pref.stringSet()
 
-    fun readShowNewsType(deleteUnknownSource: Boolean = true): Set<GeneralNews.PostSource> {
+    fun readShowNewsType(deleteUnknownSource: Boolean = true): Set<PostSource> {
         val savedResult = ShowNewsType
         return if (savedResult == null) {
-            GeneralNews.PostSource.values().filterNot {
-                it == GeneralNews.PostSource.UNKNOWN
+            PostSource.values().filterNot {
+                it == PostSource.UNKNOWN
             }.toSet()
         } else {
             GeneralNews.parseStringSet(savedResult, deleteUnknownSource)

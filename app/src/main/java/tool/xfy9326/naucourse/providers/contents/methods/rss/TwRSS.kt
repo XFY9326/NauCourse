@@ -1,6 +1,6 @@
 package tool.xfy9326.naucourse.providers.contents.methods.rss
 
-import tool.xfy9326.naucourse.providers.beans.GeneralNews
+import tool.xfy9326.naucourse.providers.beans.PostSource
 import tool.xfy9326.naucourse.providers.contents.base.BaseRSSContent
 
 object TwRSS : BaseRSSContent() {
@@ -11,5 +11,5 @@ object TwRSS : BaseRSSContent() {
     override val columnId: Int = 3364
 
     override val rssDetailServerHost: String = TW_HOST
-    override val postSource: GeneralNews.PostSource = GeneralNews.PostSource.RSS_TW
+    override val postSource: PostSource = PostSource.RSS_TW
 }
