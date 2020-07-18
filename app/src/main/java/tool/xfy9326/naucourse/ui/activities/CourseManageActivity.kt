@@ -232,9 +232,32 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
             DialogUtils.createBottomMsgDialog(
                 this, lifecycle, getString(R.string.next_course_import_attention),
                 getString(R.string.next_course_import_attention_msg, term.toString())
-            ).show()
+            ).let {
+                it.setOnCancelListener {
+                    checkNotCompleteCourseData(courses)
+                }
+                it.show()
+            }
+        } else {
+            checkNotCompleteCourseData(courses)
         }
         courseAdapter.importCourse(courses)
+    }
+
+    private fun checkNotCompleteCourseData(courses: ArrayList<Course>) {
+        var dataComplete = true
+        for (course in courses) {
+            if (course.timeSet.isEmpty()) {
+                dataComplete = false
+                break
+            }
+        }
+        if (!dataComplete) {
+            DialogUtils.createBottomMsgDialog(
+                this, lifecycle, getString(R.string.not_complete_data_warning),
+                getString(R.string.not_complete_data_warning_content)
+            ).show()
+        }
     }
 
     override fun onEditCourseColor(adapter: CourseAdapter, position: Int, style: CourseCellStyle) {
