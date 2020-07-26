@@ -299,8 +299,8 @@
     <string name="auto_update_course_arrange">启动时自动更新课程安排</string>
     <string name="auto_update_course_arrange_sum">每次启动时自动更新课程安排\n注：首次启动必定刷新</string>
     <string name="notification">通知</string>
-    <string name="notify_before_next_course">显示下一节课的课程通知</string>
-    <string name="notify_before_next_course_sum">定时通过通知提示下一节课的课程\n注：需要允许应用自启动</string>
+    <string name="notify_before_next_course">启用下一节课的课程通知</string>
+    <string name="notify_before_next_course_sum">下课前10分钟通知提示下一节课的课程\n注：需要允许应用自启动</string>
     <string name="next_course_notification_channel">下一节课的课程通知</string>
     <string name="next_course_notification_channel_des">显示下一节课的课程通知</string>
     <string name="image_load_failed">图片加载失败</string>

@@ -117,34 +117,21 @@
             android:label="@string/app_error"
             android:launchMode="singleTask" />
 
-        <service
-            android:name=".services.NextCourseNotifyService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="${ApplicationId}.action.NOTIFY_NEXT_COURSE" />
-            </intent-filter>
-        </service>
-
-        <receiver
-            android:name=".receivers.DownloadCompleteListener"
-            android:exported="true">
+        <receiver android:name=".receivers.DownloadCompleteListener">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
         </receiver>
 
-        <receiver
-            android:name=".receivers.NextCourseAlarmReceiver"
-            android:exported="true">
+        <receiver android:name=".receivers.NextCourseAlarmReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="${ApplicationId}.action.NEXT_COURSE_ALARM" />
+                <action android:name="${ApplicationId}.action.NEXT_COURSE_NOTIFY" />
             </intent-filter>
         </receiver>
 
-        <receiver
-            android:name=".widget.NextCourseWidget"
-            android:exported="true">
+        <receiver android:name=".widget.NextCourseWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

@@ -2,7 +2,6 @@ package tool.xfy9326.naucourse.io.db
 
 import tool.xfy9326.naucourse.io.db.base.BaseDBHelper
 import tool.xfy9326.naucourse.io.db.room.CoursesDB
-import tool.xfy9326.naucourse.providers.beans.jwc.Course
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
 
 object CourseSetDBHelper : BaseDBHelper<CoursesDB.CoursesDataBase>() {
@@ -19,28 +18,14 @@ object CourseSetDBHelper : BaseDBHelper<CoursesDB.CoursesDataBase>() {
 
     override val db: CoursesDB.CoursesDataBase = CoursesDB.getDB()
 
-    @Synchronized
     fun storeNewCourseSet(courseSet: CourseSet) = with(db.getCoursesDataDao()) {
         storeCourseSet(courseSet)
     }
 
-    @Synchronized
     fun readCourseSet(): CourseSet? = with(db.getCoursesDataDao()) {
-        val dbCourseList = getCourses()
-        val term = getTerm()
-        if (dbCourseList.isNotEmpty() && term.isNotEmpty()) {
-            val courseSet = HashSet<Course>(dbCourseList.size)
-            dbCourseList.forEach {
-                it.timeSet = getCoursesTime(it.id).toHashSet()
-                courseSet.add(it)
-            }
-            CourseSet(courseSet, term[0])
-        } else {
-            null
-        }
+        getCourseSet()
     }
 
-    @Synchronized
     override fun clearAll() = with(db.getCoursesDataDao()) {
         clearAll()
     }

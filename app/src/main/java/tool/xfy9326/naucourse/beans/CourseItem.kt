@@ -25,4 +25,12 @@ data class CourseItem(
         val dateTimePeriod: DateTimePeriod,
         val weekDayNum: Short
     ) : Serializable
+
+    fun toNotifyData() = NextCourseNotification(
+        course.name,
+        course.teacher,
+        courseTime.location,
+        detail!!.dateTimePeriod.startDateTime.time,
+        detail.dateTimePeriod.endDateTime.time
+    )
 }

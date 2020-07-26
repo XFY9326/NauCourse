@@ -185,7 +185,7 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
             }).show()
 
     override fun onDestroy() {
-        AdvancedLinkMovementMethod.clearHandler()
+        AdvancedLinkMovementMethod.cancelLongClick()
         super.onDestroy()
     }
 }

@@ -68,7 +68,7 @@ class TermDatePickerDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
         ).apply {
             setCancelable(false)
             setCanceledOnTouchOutside(false)
-            setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.no)) { _, _ ->
+            setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel)) { _, _ ->
                 val fragment = requireActivity()
                 if (fragment is DatePickDialogCallback) {
                     fragment.onTermDatePartEditCanceled(nowStartDate, nowEndDate)

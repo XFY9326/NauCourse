@@ -141,7 +141,7 @@ abstract class BaseRSSContent : BaseNewsContent<RSSObject>() {
                 postAdmin = tmpPostAdmin[1]
                 postDate = readTime(tmpPostDate[1])!!
             }
-            else -> throw IllegalArgumentException("Unsupported RSS Template Id! Template Id: $templateId")
+            else -> throw IllegalArgumentException("Unsupported RSS Template ID! Template ID: $templateId")
         }
 
         val clickAmount = bodyElement.getElementsByClass(ELEMENT_CLASS_WP_VISIT_COUNT).first().text().toInt()

@@ -86,4 +86,6 @@ object AppPref : BasePref() {
     var CourseTableBackgroundImageName by pref.string()
 
     var EditAsyncCourseAttention by pref.boolean(defValue = false)
+
+    var LastNotifyCourseHash by pref.int(defValue = 0)
 }

@@ -1,5 +1,6 @@
 package tool.xfy9326.naucourse.compat.beans;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 // 旧版本的课程数据
@@ -7,13 +8,21 @@ import androidx.annotation.Nullable;
 public class CourseCompat {
     @Nullable
     private final CourseDetailCompat[] courseDetail = null;
+    @Nullable
     private String courseId = null;
+    @Nullable
     private String courseName = null;
+    @Nullable
     private String courseTeacher = null;
+    @Nullable
     private String courseClass = null;
+    @Nullable
     private String courseCombinedClass = null;
+    @Nullable
     private String courseScore = null;
+    @Nullable
     private String courseType = null;
+    @NonNull
     private String courseTerm = "0";
     private int courseColor = -1;
 
@@ -61,6 +70,7 @@ public class CourseCompat {
         return courseColor;
     }
 
+    @NonNull
     public String getCourseTerm() {
         return courseTerm;
     }

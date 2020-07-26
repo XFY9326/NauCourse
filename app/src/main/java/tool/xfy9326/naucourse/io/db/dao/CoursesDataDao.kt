@@ -21,6 +21,22 @@ interface CoursesDataDao {
     }
 
     @Transaction
+    fun getCourseSet(): CourseSet? {
+        val dbCourseList = getCourses()
+        val term = getTerm()
+        return if (dbCourseList.isNotEmpty() && term.isNotEmpty()) {
+            val courseSet = HashSet<Course>(dbCourseList.size)
+            dbCourseList.forEach {
+                it.timeSet = getCoursesTime(it.id).toHashSet()
+                courseSet.add(it)
+            }
+            CourseSet(courseSet, term[0])
+        } else {
+            null
+        }
+    }
+
+    @Transaction
     fun clearAll() {
         clearTerm()
         clearTableIndex(CourseSetDBHelper.TERM_TABLE_NAME)

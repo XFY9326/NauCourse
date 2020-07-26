@@ -130,7 +130,7 @@ class CourseTimeEditDialog : DialogFragment() {
             R.id.radioBtn_oddWeekMode -> WeekMode.ODD_WEEK_ONLY
             R.id.radioBtn_evenWeekMode -> WeekMode.EVEN_WEEK_ONLY
             R.id.radioBtn_allWeeksMode -> WeekMode.ALL_WEEKS
-            else -> throw IllegalArgumentException("Radio Button Id Error! Can't Convert To Week Mode! Id: $id")
+            else -> throw IllegalArgumentException("Radio Button Has Error ID! Can't Convert To Week Mode! ID: $id")
         }
 
     private fun buildWeekNumGrid(view: View) = view.apply {

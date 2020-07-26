@@ -2,7 +2,6 @@ package tool.xfy9326.naucourse.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.BuildConfig
 import tool.xfy9326.naucourse.R
@@ -12,6 +11,7 @@ import tool.xfy9326.naucourse.ui.activities.base.BaseActivity
 import tool.xfy9326.naucourse.utils.BaseUtils
 import tool.xfy9326.naucourse.utils.secure.AccountUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
+import tool.xfy9326.naucourse.utils.views.ActivityUtils
 
 
 class MainIndexActivity : BaseActivity() {
@@ -22,7 +22,7 @@ class MainIndexActivity : BaseActivity() {
             intent?.getBooleanExtra(BaseUtils.SHOW_ERROR_ACTIVITY_FLAG, false) == true -> startAppErrorActivity()
             else -> {
                 if (intent?.getBooleanExtra(BaseUtils.CRASH_RESTART_FLAG, false) == true) {
-                    Toast.makeText(App.instance, R.string.crash_msg, Toast.LENGTH_SHORT).show()
+                    ActivityUtils.showToast(App.instance, R.string.crash_msg)
                 }
                 selectStartActivity()
             }

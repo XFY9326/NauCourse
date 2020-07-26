@@ -6,9 +6,11 @@ import androidx.annotation.Nullable;
 @SuppressWarnings({"FieldCanBeLocal", "CanBeFinal"})
 public class CourseDetailCompat {
     //Num-Num,Num...
+    @Nullable
     private String[] weeks = null;
     private int weekDay = 0;
     //Num-Num,Num...
+    @Nullable
     private String[] courseTime = null;
     private int weekMode = 0;
     @Nullable

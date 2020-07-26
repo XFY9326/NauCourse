@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Environment
-import android.widget.Toast
 import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import tool.xfy9326.naucourse.R
@@ -85,7 +84,7 @@ object IntentUtils {
                 setDataAndType(uri, MIMEConst.APK)
             })
         } catch (e: Exception) {
-            Toast.makeText(context, R.string.application_launch_failed, Toast.LENGTH_SHORT).show()
+            showToast(context, R.string.application_launch_failed)
         }
     }
 

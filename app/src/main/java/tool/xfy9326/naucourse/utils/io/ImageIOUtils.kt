@@ -26,7 +26,7 @@ object ImageIOUtils {
     }
 
     fun modifyLocalImage(
-        file: File, compressFormat: Bitmap.CompressFormat = Bitmap.CompressFormat.WEBP, quality: Int = 100
+        file: File, compressFormat: Bitmap.CompressFormat = ImageUtils.WEBPCompat, quality: Int = 100
     ): Boolean {
         try {
             if (file.exists()) {

@@ -138,12 +138,17 @@ object TimeUtils {
     fun getWeekLength(startDate: Date, endDate: Date): Int {
         val startMills = getFixedTermStartDateCalendar(startDate).timeInMillis
         val endMills = getFixedTermEndDateCalendar(endDate).timeInMillis
-        return floor((endMills - startMills + 24 * 60 * 60 * 1000f) / (7 * 24 * 60 * 60 * 1000f)).toInt()
+        return floor((endMills - startMills) / (7 * 24 * 60 * 60 * 1000f)).toInt()
     }
 
-    private fun getFixedTermEndDateCalendar(date: Date) =
+    private fun getFixedTermEndDateCalendar(date: Date, actualEnd: Boolean = true) =
         getNewCalendar(date).apply {
-            val dayOffset = 7 - getWeekDayNum(this)
+            val dayOffset = 7 - getWeekDayNum(this) +
+                    if (actualEnd) {
+                        1
+                    } else {
+                        0
+                    }
             if (dayOffset != 0) add(Calendar.DATE, dayOffset)
             set(Calendar.MINUTE, 0)
             set(Calendar.HOUR_OF_DAY, 0)

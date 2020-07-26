@@ -33,6 +33,19 @@ object ImageUtils {
 
     private const val DIR_PICTURE_MAIN_DIR = "NauCourse"
 
+    val WEBPCompat: Bitmap.CompressFormat
+        get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Bitmap.CompressFormat.WEBP_LOSSLESS
+        } else {
+            @Suppress("DEPRECATION")
+            Bitmap.CompressFormat.WEBP
+        }
+
+    @Suppress("DEPRECATION")
+    fun isWEBP(format: Bitmap.CompressFormat?) =
+        format == Bitmap.CompressFormat.WEBP || Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+                (format == Bitmap.CompressFormat.WEBP_LOSSY || format == Bitmap.CompressFormat.WEBP_LOSSLESS)
+
     suspend fun saveImage(source: String, bitmap: Bitmap, imageOperationMutex: Mutex, imageOperation: EventLiveData<ImageOperationType>) =
         withContext(Dispatchers.IO) {
             imageOperationMutex.withLock {
@@ -109,12 +122,7 @@ object ImageUtils {
         fileName: String, dirName: String? = null,
         compressFormat: Bitmap.CompressFormat? = null, quality: Int = 100
     ): Boolean {
-        val format = compressFormat ?: if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            Bitmap.CompressFormat.WEBP_LOSSLESS
-        } else {
-            @Suppress("DEPRECATION")
-            Bitmap.CompressFormat.WEBP
-        }
+        val format = compressFormat ?: WEBPCompat
         val path = PathUtils.getImageLocalSavePath(dirName)
         return if (path == null) {
             false
@@ -163,7 +171,7 @@ object ImageUtils {
         addFileNameTypePrefix: Boolean = false // 对外分享图片时建议添加文件后缀名
     ): Uri? {
         if (!addFileNameTypePrefix && compressFormat == null) {
-            error("You Must Set Compress Format If File Name Type Prefix Is Not Added!")
+            error("You Must Set Compress Format If File Name Type Prefix Empty!")
         }
         val newFileName = imageFileNameFix(fileName, compressFormat, addFileNameTypePrefix)
         val format = getSaveImageFormatFromFileName(newFileName, compressFormat)!!
@@ -218,10 +226,7 @@ object ImageUtils {
                     Bitmap.CompressFormat.PNG -> MIMEConst.IMAGE_PNG
                     Bitmap.CompressFormat.JPEG -> MIMEConst.IMAGE_JPEG
                     else -> {
-                        @Suppress("DEPRECATION")
-                        if (format == Bitmap.CompressFormat.WEBP || Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
-                            (format == Bitmap.CompressFormat.WEBP_LOSSY || format == Bitmap.CompressFormat.WEBP_LOSSLESS)
-                        ) {
+                        if (isWEBP(format)) {
                             MIMEConst.IMAGE_WEBP
                         } else {
                             throw IllegalArgumentException("Unknown Bitmap Compress Format! $format")
@@ -281,12 +286,7 @@ object ImageUtils {
         } else if (lower.endsWith(IMAGE_JPEG) || lower.endsWith(IMAGE_JPG)) {
             Bitmap.CompressFormat.JPEG
         } else if (lower.endsWith(IMAGE_WEBP)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                Bitmap.CompressFormat.WEBP_LOSSLESS
-            } else {
-                @Suppress("DEPRECATION")
-                Bitmap.CompressFormat.WEBP
-            }
+            WEBPCompat
         } else {
             compressFormat
         }
@@ -297,10 +297,7 @@ object ImageUtils {
             Bitmap.CompressFormat.PNG -> IMAGE_PNG
             Bitmap.CompressFormat.JPEG -> IMAGE_JPEG
             else -> {
-                @Suppress("DEPRECATION")
-                if (compressFormat == Bitmap.CompressFormat.WEBP || Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
-                    (compressFormat == Bitmap.CompressFormat.WEBP_LOSSY || compressFormat == Bitmap.CompressFormat.WEBP_LOSSLESS)
-                ) {
+                if (isWEBP(compressFormat)) {
                     IMAGE_WEBP
                 } else {
                     defaultImagePrefix
