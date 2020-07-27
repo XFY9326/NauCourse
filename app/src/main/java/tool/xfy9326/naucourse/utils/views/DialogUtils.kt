@@ -8,9 +8,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -22,6 +20,7 @@ import kotlinx.android.synthetic.main.dialog_image_operation.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.OthersConst
 import tool.xfy9326.naucourse.io.prefs.AppPref
+import tool.xfy9326.naucourse.kt.bindLifecycle
 import tool.xfy9326.naucourse.ui.views.widgets.AnimateSlider
 import tool.xfy9326.naucourse.utils.io.TextIOUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
@@ -36,7 +35,7 @@ object DialogUtils {
             setCancelable(false)
             background = context.getDrawable(R.drawable.bg_dialog)
         }.create().also {
-            addAutoCloseListener(lifecycle, it)
+            it.bindLifecycle(lifecycle)
         }
 
     fun createCreditShowDialog(context: Context, lifecycle: Lifecycle, credit: Pair<Float, Float?>) =
@@ -52,7 +51,7 @@ object DialogUtils {
             setPositiveButton(android.R.string.ok, null)
             background = context.getDrawable(R.drawable.bg_dialog)
         }.create().also {
-            addAutoCloseListener(lifecycle, it)
+            it.bindLifecycle(lifecycle)
         }
 
     fun createEditAsyncCourseAttention(context: Context, lifecycle: Lifecycle) =
@@ -65,7 +64,7 @@ object DialogUtils {
             }
             background = context.getDrawable(R.drawable.bg_dialog)
         }.create().also {
-            addAutoCloseListener(lifecycle, it)
+            it.bindLifecycle(lifecycle)
         }
 
     fun createCourseColorPickerDialog(context: Context, color: Int, dialogId: Int): ColorPickerDialog =
@@ -82,7 +81,7 @@ object DialogUtils {
             setItems(context.resources.getStringArray(R.array.course_manage_add_list), listener)
             background = context.getDrawable(R.drawable.bg_dialog)
         }.create().also {
-            addAutoCloseListener(lifecycle, it)
+            it.bindLifecycle(lifecycle)
         }
 
     fun createUsingLicenseDialog(context: Context, lifecycle: Lifecycle) =
@@ -97,7 +96,7 @@ object DialogUtils {
             setPositiveButton(android.R.string.ok, null)
             background = context.getDrawable(R.drawable.bg_dialog)
         }.create().also {
-            addAutoCloseListener(lifecycle, it)
+            it.bindLifecycle(lifecycle)
         }
 
     fun createOpenSourceLicenseDialog(context: Context, lifecycle: Lifecycle) =
@@ -112,7 +111,7 @@ object DialogUtils {
             setPositiveButton(android.R.string.ok, null)
             background = context.getDrawable(R.drawable.bg_dialog)
         }.create().also {
-            addAutoCloseListener(lifecycle, it)
+            it.bindLifecycle(lifecycle)
         }
 
     fun createForgetPasswordDialog(context: Context, lifecycle: Lifecycle) =
@@ -125,7 +124,7 @@ object DialogUtils {
             setPositiveButton(android.R.string.ok, null)
             background = context.getDrawable(R.drawable.bg_dialog)
         }.create().also {
-            addAutoCloseListener(lifecycle, it)
+            it.bindLifecycle(lifecycle)
         }
 
     fun createLogoutAttentionDialog(context: Context, lifecycle: Lifecycle, logoutListener: DialogInterface.OnClickListener) =
@@ -136,7 +135,7 @@ object DialogUtils {
             setPositiveButton(android.R.string.ok, logoutListener)
             background = context.getDrawable(R.drawable.bg_dialog)
         }.create().also {
-            addAutoCloseListener(lifecycle, it)
+            it.bindLifecycle(lifecycle)
         }
 
     fun createImageOperationDialog(context: Context, lifecycle: Lifecycle, shareListener: (() -> Unit), saveListener: (() -> Unit)) =
@@ -155,8 +154,8 @@ object DialogUtils {
             }
 
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
-        }.also {
-            addAutoCloseListener(lifecycle, it)
+
+            bindLifecycle(lifecycle)
         }
 
     fun createCourseTableControlDialog(
@@ -189,8 +188,8 @@ object DialogUtils {
             }
 
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
-        }.also {
-            addAutoCloseListener(lifecycle, it)
+
+            bindLifecycle(lifecycle)
         }
 
     fun createBottomMsgDialog(context: Context, lifecycle: Lifecycle, title: String, msg: String, listener: View.OnClickListener? = null) =
@@ -215,8 +214,8 @@ object DialogUtils {
             }
 
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
-        }.also {
-            addAutoCloseListener(lifecycle, it)
+
+            bindLifecycle(lifecycle)
         }
 
     fun applyBackgroundAndWidth(context: Context?, dialog: Dialog?, widthPercent: Double) {
@@ -237,20 +236,6 @@ object DialogUtils {
             window?.apply {
                 setBackgroundDrawable(context.getDrawable(R.drawable.bg_dialog))
             }
-        }
-    }
-
-    // Activity销毁时自动关闭Dialog，防止窗体泄漏
-    fun addAutoCloseListener(lifecycle: Lifecycle, dialog: Dialog) {
-        val observer = object : DefaultLifecycleObserver {
-            override fun onDestroy(owner: LifecycleOwner) {
-                if (dialog.isShowing) dialog.dismiss()
-                lifecycle.removeObserver(this)
-            }
-        }
-        lifecycle.addObserver(observer)
-        dialog.setOnDismissListener {
-            lifecycle.removeObserver(observer)
         }
     }
 }

@@ -10,12 +10,12 @@ import kotlinx.android.synthetic.main.activity_score_query.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CreditCountItem
+import tool.xfy9326.naucourse.kt.enableHomeButton
+import tool.xfy9326.naucourse.kt.showSnackBar
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourse.ui.dialogs.CreditCountCourseSelectDialog
 import tool.xfy9326.naucourse.ui.models.activity.ScoreQueryViewModel
 import tool.xfy9326.naucourse.ui.views.viewpager.ScoreQueryViewPagerAdapter
-import tool.xfy9326.naucourse.utils.views.ActivityUtils
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 import tool.xfy9326.naucourse.utils.views.I18NUtils
 
@@ -38,7 +38,7 @@ class ScoreQueryActivity : ViewModelActivity<ScoreQueryViewModel>(), CreditCount
 
     override fun bindViewModel(viewModel: ScoreQueryViewModel) {
         viewModel.errorMsg.observeEvent(this, Observer {
-            ActivityUtils.showSnackBar(layout_scoreQuery, I18NUtils.getContentErrorResId(it)!!)
+            layout_scoreQuery.showSnackBar(I18NUtils.getContentErrorResId(it)!!)
         })
         viewModel.isRefreshing.observe(this, Observer {
             if (it) {
@@ -51,7 +51,7 @@ class ScoreQueryActivity : ViewModelActivity<ScoreQueryViewModel>(), CreditCount
             DialogUtils.createCreditShowDialog(this@ScoreQueryActivity, lifecycle, it).show()
         })
         viewModel.creditCountStatus.observeEvent(this, Observer {
-            ActivityUtils.showSnackBar(layout_scoreQuery, I18NUtils.getCreditCountStatusResId(it))
+            layout_scoreQuery.showSnackBar(I18NUtils.getCreditCountStatusResId(it))
         })
         viewModel.creditCourseSelect.observeEvent(this, Observer {
             CreditCountCourseSelectDialog().apply {

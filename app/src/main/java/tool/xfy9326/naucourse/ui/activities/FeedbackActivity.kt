@@ -17,10 +17,10 @@ import tool.xfy9326.naucourse.BuildConfig
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.NetworkConst
 import tool.xfy9326.naucourse.constants.OthersConst
+import tool.xfy9326.naucourse.kt.enableHomeButton
 import tool.xfy9326.naucourse.ui.activities.base.BaseActivity
 import tool.xfy9326.naucourse.utils.secure.AccountUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
 
 class FeedbackActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

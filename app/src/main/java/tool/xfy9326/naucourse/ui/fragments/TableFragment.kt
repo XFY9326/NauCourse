@@ -19,6 +19,8 @@ import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseCell
 import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.beans.CoursePkg
+import tool.xfy9326.naucourse.kt.runInMain
+import tool.xfy9326.naucourse.kt.showShortToast
 import tool.xfy9326.naucourse.ui.models.fragment.CourseTableViewModel
 import tool.xfy9326.naucourse.ui.views.table.CourseTableHeaderView
 import tool.xfy9326.naucourse.ui.views.table.CourseTableView
@@ -26,8 +28,6 @@ import tool.xfy9326.naucourse.ui.views.table.CourseTableViewHelper
 import tool.xfy9326.naucourse.ui.views.table.OnCourseCellClickListener
 import tool.xfy9326.naucourse.ui.views.viewpager.CourseTableViewPagerAdapter
 import tool.xfy9326.naucourse.utils.courses.TimeUtils
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
-import tool.xfy9326.naucourse.utils.views.ViewUtils.runInMain
 import kotlin.properties.Delegates
 
 class TableFragment : Fragment(), Observer<CoursePkg>, OnCourseCellClickListener {
@@ -63,7 +63,7 @@ class TableFragment : Fragment(), Observer<CoursePkg>, OnCourseCellClickListener
         applyLayoutTransition(layout_emptyCourseTable)
 
         contentViewModel.courseAndTermEmpty.observeNotification(viewLifecycleOwner, {
-            showToast(requireContext(), R.string.course_and_term_data_empty)
+            showShortToast(R.string.course_and_term_data_empty)
         }, "${TableFragment::class.java.simpleName}-$weekNum")
     }
 

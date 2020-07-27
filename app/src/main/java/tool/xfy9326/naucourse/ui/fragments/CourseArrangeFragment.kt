@@ -24,6 +24,7 @@ import tool.xfy9326.naucourse.beans.CourseBundle
 import tool.xfy9326.naucourse.beans.CourseItem
 import tool.xfy9326.naucourse.constants.TimeConst
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
+import tool.xfy9326.naucourse.kt.showSnackBar
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.tools.NotifyBus
 import tool.xfy9326.naucourse.tools.NotifyType
@@ -34,7 +35,6 @@ import tool.xfy9326.naucourse.ui.models.fragment.CourseArrangeViewModel
 import tool.xfy9326.naucourse.ui.views.widgets.AdvancedLinearLayout
 import tool.xfy9326.naucourse.utils.utility.AppWidgetUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBar
 import tool.xfy9326.naucourse.utils.views.I18NUtils
 import tool.xfy9326.naucourse.utils.views.ViewUtils
 import java.text.SimpleDateFormat
@@ -83,7 +83,7 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
             asl_todayCourse.postStopRefreshing()
         })
         viewModel.notifyMsg.observeEvent(viewLifecycleOwner, Observer {
-            showSnackBar(layout_todayCourse, I18NUtils.getTodayCourseNotifyTypeResId(it))
+            layout_todayCourse.showSnackBar(I18NUtils.getTodayCourseNotifyTypeResId(it))
         })
         viewModel.todayCourses.observe(viewLifecycleOwner, Observer {
             buildListCourseItem(layout_todayCourseContent, tv_todayCourseEmpty, it)

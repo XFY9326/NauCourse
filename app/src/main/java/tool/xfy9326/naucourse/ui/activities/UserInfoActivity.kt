@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.view_grid_text_item.view.*
 import kotlinx.android.synthetic.main.view_learning_process_item.view.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.BaseConst
+import tool.xfy9326.naucourse.kt.enableHomeButton
 import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentLearningProcess
@@ -24,7 +25,6 @@ import tool.xfy9326.naucourse.providers.beans.jwc.StudentPersonalInfo
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentPersonalInfo.Companion.toPlainText
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourse.ui.models.activity.UserInfoViewModel
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
 import tool.xfy9326.naucourse.utils.views.I18NUtils
 
 class UserInfoActivity : ViewModelActivity<UserInfoViewModel>() {

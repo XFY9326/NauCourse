@@ -16,6 +16,7 @@ import com.bumptech.glide.request.target.Target
 import com.github.chrisbanes.photoview.PhotoView
 import kotlinx.android.synthetic.main.activity_image_show.*
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.kt.showSnackBar
 import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.tools.glide.ClientRequest
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
@@ -24,7 +25,6 @@ import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 import tool.xfy9326.naucourse.utils.utility.BitmapUtils
 import tool.xfy9326.naucourse.utils.utility.PermissionUtils
 import tool.xfy9326.naucourse.utils.utility.ShareUtils
-import tool.xfy9326.naucourse.utils.views.ActivityUtils
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 import tool.xfy9326.naucourse.utils.views.I18NUtils
 
@@ -54,7 +54,7 @@ class ImageShowActivity : ViewModelActivity<ImageShowViewModel>(), View.OnLongCl
             startActivity(ShareUtils.getShareImageIntent(this, it))
         })
         viewModel.imageOperation.observeEvent(this, Observer {
-            ActivityUtils.showSnackBar(layout_imageView, I18NUtils.getImageOperationTypeResId(it))
+            layout_imageView.showSnackBar(I18NUtils.getImageOperationTypeResId(it))
         })
     }
 
@@ -79,7 +79,7 @@ class ImageShowActivity : ViewModelActivity<ImageShowViewModel>(), View.OnLongCl
                     e?.let {
                         ExceptionUtils.printStackTrace(this@ImageShowActivity, it)
                     }
-                    ActivityUtils.showSnackBar(layout_imageView, R.string.image_load_failed)
+                    layout_imageView.showSnackBar(R.string.image_load_failed)
                     return false
                 }
 
@@ -109,7 +109,7 @@ class ImageShowActivity : ViewModelActivity<ImageShowViewModel>(), View.OnLongCl
                     }
                 }).show()
         } else {
-            ActivityUtils.showSnackBar(layout_imageView, R.string.image_load_failed)
+            layout_imageView.showSnackBar(R.string.image_load_failed)
         }
         v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
         return true

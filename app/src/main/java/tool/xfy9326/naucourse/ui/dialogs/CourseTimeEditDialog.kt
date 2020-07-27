@@ -16,15 +16,15 @@ import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.BaseConst
 import tool.xfy9326.naucourse.constants.CourseConst
 import tool.xfy9326.naucourse.constants.TimeConst
+import tool.xfy9326.naucourse.kt.isEven
+import tool.xfy9326.naucourse.kt.isOdd
+import tool.xfy9326.naucourse.kt.showShortToast
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseTime
 import tool.xfy9326.naucourse.providers.beans.jwc.TimePeriod
 import tool.xfy9326.naucourse.providers.beans.jwc.TimePeriodList
 import tool.xfy9326.naucourse.providers.beans.jwc.WeekMode
 import tool.xfy9326.naucourse.ui.views.widgets.AdvancedFrameLayout
 import tool.xfy9326.naucourse.ui.views.widgets.CourseTimeEditCell
-import tool.xfy9326.naucourse.utils.BaseUtils.isEven
-import tool.xfy9326.naucourse.utils.BaseUtils.isOdd
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 import kotlin.properties.Delegates
 
@@ -105,7 +105,7 @@ class CourseTimeEditDialog : DialogFragment() {
                         }
                         dismiss()
                     } else {
-                        showToast(requireContext(), R.string.weeks_empty)
+                        showShortToast(R.string.weeks_empty)
                     }
                 }
             }

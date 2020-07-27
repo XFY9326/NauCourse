@@ -20,6 +20,7 @@ import tool.xfy9326.naucourse.constants.BaseConst
 import tool.xfy9326.naucourse.constants.OthersConst
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
+import tool.xfy9326.naucourse.kt.showShortToast
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourse.tools.NotifyBus
 import tool.xfy9326.naucourse.tools.NotifyType
@@ -36,7 +37,6 @@ import tool.xfy9326.naucourse.update.UpdateChecker
 import tool.xfy9326.naucourse.utils.BaseUtils
 import tool.xfy9326.naucourse.utils.io.BaseIOUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 
 class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationView.OnNavigationItemSelectedListener {
@@ -75,7 +75,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
             onUpdateNewVersion()
         }
         if (BuildConfig.FLAVOR != OthersConst.FLAVOR_BETA && AppPref.ForceUpdateVersionCode > BuildConfig.VERSION_CODE) {
-            showToast(R.string.force_update_attention)
+            showShortToast(R.string.force_update_attention)
         }
     }
 
@@ -254,7 +254,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
                 if (current - lastRequestBackTime <= DOUBLE_PRESS_BACK_TIME) {
                     finishAndRemoveTask()
                 } else {
-                    showToast(R.string.double_press_exit)
+                    showShortToast(R.string.double_press_exit)
                 }
                 lastRequestBackTime = current
             } else {

@@ -8,10 +8,10 @@ import kotlinx.android.synthetic.main.activity_app_error.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
 import kotlinx.coroutines.launch
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.kt.showShortToast
 import tool.xfy9326.naucourse.ui.dialogs.UpdateDialog
 import tool.xfy9326.naucourse.update.UpdateChecker
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 
 class AppErrorActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,16 +35,16 @@ class AppErrorActivity : AppCompatActivity() {
     }
 
     private fun checkUpdates(showToast: Boolean) {
-        if (showToast) showToast(R.string.checking_update)
+        if (showToast) showShortToast(R.string.checking_update)
         lifecycleScope.launch {
             val updateInfo = UpdateChecker.getNewUpdateInfo(true)
             if (updateInfo == null) {
-                if (showToast) showToast(R.string.update_check_failed)
+                if (showToast) showShortToast(R.string.update_check_failed)
             } else {
                 if (updateInfo.first) {
                     UpdateDialog.showDialog(supportFragmentManager, updateInfo.second!!)
                 } else {
-                    if (showToast) showToast(R.string.no_new_update)
+                    if (showToast) showShortToast(R.string.no_new_update)
                 }
             }
         }

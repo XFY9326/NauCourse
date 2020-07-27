@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.SerializableNews
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
+import tool.xfy9326.naucourse.kt.showSnackBar
 import tool.xfy9326.naucourse.providers.beans.GeneralNews
 import tool.xfy9326.naucourse.ui.activities.NewsDetailActivity
 import tool.xfy9326.naucourse.ui.dialogs.NewsTypeChoiceDialog
@@ -20,7 +21,6 @@ import tool.xfy9326.naucourse.ui.fragments.base.DrawerToolbarFragment
 import tool.xfy9326.naucourse.ui.models.fragment.NewsViewModel
 import tool.xfy9326.naucourse.ui.views.recyclerview.adapters.NewsAdapter
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBar
 import tool.xfy9326.naucourse.utils.views.I18NUtils
 
 class NewsFragment : DrawerToolbarFragment<NewsViewModel>(), NewsAdapter.OnNewsItemClickListener, NewsTypeChoiceDialog.OnNewsTypeChangedListener {
@@ -66,7 +66,7 @@ class NewsFragment : DrawerToolbarFragment<NewsViewModel>(), NewsAdapter.OnNewsI
             arv_newsList.scrollToPosition(0)
         })
         viewModel.errorMsg.observeEvent(viewLifecycleOwner, Observer {
-            showSnackBar(layout_news, I18NUtils.getContentErrorResId(it)!!)
+            layout_news.showSnackBar(I18NUtils.getContentErrorResId(it)!!)
         })
     }
 

@@ -6,10 +6,10 @@ import androidx.preference.Preference
 import kotlinx.coroutines.launch
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.PrefConst
+import tool.xfy9326.naucourse.kt.showShortToast
 import tool.xfy9326.naucourse.ui.dialogs.UpdateDialog
 import tool.xfy9326.naucourse.ui.fragments.base.BaseSettingsPreferenceFragment
 import tool.xfy9326.naucourse.update.UpdateChecker
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 
 @Suppress("unused")
 class UpdateSettingsFragment : BaseSettingsPreferenceFragment() {
@@ -24,16 +24,16 @@ class UpdateSettingsFragment : BaseSettingsPreferenceFragment() {
     }
 
     private fun checkUpdates() {
-        showToast(R.string.checking_update)
+        showShortToast(R.string.checking_update)
         lifecycleScope.launch {
             val updateInfo = UpdateChecker.getNewUpdateInfo(true)
             if (updateInfo == null) {
-                showToast(R.string.update_check_failed)
+                showShortToast(R.string.update_check_failed)
             } else {
                 if (updateInfo.first) {
                     UpdateDialog.showDialog(parentFragmentManager, updateInfo.second!!)
                 } else {
-                    showToast(R.string.no_new_update)
+                    showShortToast(R.string.no_new_update)
                 }
             }
         }

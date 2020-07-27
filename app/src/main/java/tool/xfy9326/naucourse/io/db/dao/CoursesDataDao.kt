@@ -15,9 +15,11 @@ interface CoursesDataDao {
         clearAll()
         putTerm(courseSet.term)
         putCourses(*courseSet.courses.toTypedArray())
-        courseSet.courses.forEach {
-            putCoursesTime(*it.timeSet.toTypedArray())
-        }
+        putCoursesTime(*ArrayList<CourseTime>().apply {
+            courseSet.courses.forEach {
+                addAll(it.timeSet)
+            }
+        }.toTypedArray())
     }
 
     @Transaction
@@ -39,10 +41,10 @@ interface CoursesDataDao {
     @Transaction
     fun clearAll() {
         clearTerm()
-        clearTableIndex(CourseSetDBHelper.TERM_TABLE_NAME)
         clearCoursesTime()
-        clearTableIndex(CourseSetDBHelper.COURSES_TIME_TABLE_NAME)
         clearCourses()
+        clearTableIndex(CourseSetDBHelper.TERM_TABLE_NAME)
+        clearTableIndex(CourseSetDBHelper.COURSES_TIME_TABLE_NAME)
     }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

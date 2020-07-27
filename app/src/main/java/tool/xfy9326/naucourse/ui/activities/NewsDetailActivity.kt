@@ -18,6 +18,9 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.SerializableNews
 import tool.xfy9326.naucourse.constants.TimeConst
+import tool.xfy9326.naucourse.kt.bindLifecycle
+import tool.xfy9326.naucourse.kt.enableHomeButton
+import tool.xfy9326.naucourse.kt.showSnackBar
 import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.providers.beans.GeneralNewsDetail
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
@@ -30,8 +33,6 @@ import tool.xfy9326.naucourse.utils.utility.BitmapUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import tool.xfy9326.naucourse.utils.utility.PermissionUtils
 import tool.xfy9326.naucourse.utils.utility.ShareUtils
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBar
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 import tool.xfy9326.naucourse.utils.views.I18NUtils
 import java.text.SimpleDateFormat
@@ -78,7 +79,7 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
                     startActivity(ShareUtils.getShareNewsIntent(this@NewsDetailActivity, newsData))
                 } else if (which == 1) {
                     if (isNewsDetailSet) {
-                        showSnackBar(layout_newsDetail, R.string.generating_image)
+                        layout_newsDetail.showSnackBar(R.string.generating_image)
                         lifecycleScope.launch {
                             try {
                                 layout_newsContent.drawToBitmap().let {
@@ -86,17 +87,17 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
                                     getViewModel().shareNewsImage(it)
                                 }
                             } catch (e: Exception) {
-                                showSnackBar(layout_newsDetail, R.string.share_when_news_loading)
+                                layout_newsDetail.showSnackBar(R.string.share_when_news_loading)
                             }
                         }
                     } else {
-                        showSnackBar(layout_newsDetail, R.string.share_when_news_loading)
+                        layout_newsDetail.showSnackBar(R.string.share_when_news_loading)
                     }
                 }
             }
             background = getDrawable(R.drawable.bg_dialog)
         }.create().apply {
-            DialogUtils.addAutoCloseListener(lifecycle, this)
+            bindLifecycle(lifecycle)
             show()
         }
     }
@@ -136,13 +137,13 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
             isNewsDetailSet = true
         })
         viewModel.errorNotifyType.observeEvent(this, Observer {
-            showSnackBar(layout_newsDetail, I18NUtils.getContentErrorResId(it)!!)
+            layout_newsDetail.showSnackBar(I18NUtils.getContentErrorResId(it)!!)
         })
         viewModel.imageShareUri.observeEvent(this, Observer {
             startActivity(ShareUtils.getShareImageIntent(this, it))
         })
         viewModel.imageOperation.observeEvent(this, Observer {
-            showSnackBar(layout_newsDetail, I18NUtils.getImageOperationTypeResId(it))
+            layout_newsDetail.showSnackBar(I18NUtils.getImageOperationTypeResId(it))
         })
     }
 

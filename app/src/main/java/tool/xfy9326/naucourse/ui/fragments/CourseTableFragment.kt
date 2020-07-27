@@ -24,6 +24,8 @@ import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.ImageConst
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
+import tool.xfy9326.naucourse.kt.showShortToast
+import tool.xfy9326.naucourse.kt.showSnackBar
 import tool.xfy9326.naucourse.tools.NotifyBus
 import tool.xfy9326.naucourse.tools.NotifyType
 import tool.xfy9326.naucourse.ui.dialogs.CourseDetailDialog
@@ -32,8 +34,6 @@ import tool.xfy9326.naucourse.ui.models.fragment.CourseTableViewModel
 import tool.xfy9326.naucourse.ui.views.viewpager.CourseTableViewPagerAdapter
 import tool.xfy9326.naucourse.utils.utility.ImageUtils
 import tool.xfy9326.naucourse.utils.utility.ShareUtils
-import tool.xfy9326.naucourse.utils.views.ActivityUtils
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 import tool.xfy9326.naucourse.utils.views.I18NUtils
 import tool.xfy9326.naucourse.utils.views.ViewUtils
@@ -69,13 +69,13 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>() {
 
     private fun bindLocalObserver(viewModel: CourseTableViewModel) {
         viewModel.getImageWhenCourseTableLoading.observeNotification(viewLifecycleOwner, {
-            ActivityUtils.showSnackBar(layout_courseTableWindow, R.string.operation_when_data_loading)
+            layout_courseTableWindow.showSnackBar(R.string.operation_when_data_loading)
         })
         viewModel.imageShareUri.observeEvent(viewLifecycleOwner, Observer {
             startActivity(ShareUtils.getShareImageIntent(requireContext(), it))
         })
         viewModel.imageOperation.observeEvent(viewLifecycleOwner, Observer {
-            ActivityUtils.showSnackBar(layout_courseTableWindow, I18NUtils.getImageOperationTypeResId(it))
+            layout_courseTableWindow.showSnackBar(I18NUtils.getImageOperationTypeResId(it))
         })
         viewModel.nowShowWeekNum.observe(viewLifecycleOwner, Observer {
             tv_nowShowWeekNum.text = getString(
@@ -139,7 +139,7 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>() {
     }
 
     private fun shareCourseTable() {
-        showToast(R.string.generating_image)
+        showShortToast(R.string.generating_image)
         getViewModel().createShareImage(requireContext(), vp_courseTablePanel.currentItem + 1, resources.displayMetrics.widthPixels)
     }
 

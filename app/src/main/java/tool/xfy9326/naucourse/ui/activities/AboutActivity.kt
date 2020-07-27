@@ -9,12 +9,13 @@ import tool.xfy9326.naucourse.BuildConfig
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.OthersConst
 import tool.xfy9326.naucourse.io.prefs.AppPref
+import tool.xfy9326.naucourse.kt.bindLifecycle
+import tool.xfy9326.naucourse.kt.enableHomeButton
+import tool.xfy9326.naucourse.kt.showShortToast
 import tool.xfy9326.naucourse.tools.NotifyBus
 import tool.xfy9326.naucourse.tools.NotifyType
 import tool.xfy9326.naucourse.ui.activities.base.BaseActivity
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 
 class AboutActivity : BaseActivity() {
@@ -55,7 +56,7 @@ class AboutActivity : BaseActivity() {
 
     private fun activeAdvancedFunction() {
         if (AppPref.EnableAdvancedFunctions) {
-            showToast(this, R.string.advanced_function_on)
+            showShortToast(R.string.advanced_function_on)
         } else {
             advancedFunctionClickTime++
             if (advancedFunctionClickTime >= OthersConst.ADVANCED_FUNCTION_CLICK_TIME) {
@@ -73,11 +74,11 @@ class AboutActivity : BaseActivity() {
             setPositiveButton(android.R.string.ok) { _, _ ->
                 AppPref.EnableAdvancedFunctions = true
                 NotifyBus[NotifyType.ADVANCED_FUNCTION_MODE_CHANGED].notifyEvent()
-                showToast(this@AboutActivity, R.string.advanced_function_on)
+                showShortToast(R.string.advanced_function_on)
             }
             setCancelable(false)
         }.create().also {
-            DialogUtils.addAutoCloseListener(lifecycle, it)
+            it.bindLifecycle(lifecycle)
         }.show()
     }
 }

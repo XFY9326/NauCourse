@@ -4,32 +4,13 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.drawable.*
 import android.os.Build
-import android.view.View
-import android.widget.EditText
-import android.widget.TextView
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.R
-import tool.xfy9326.naucourse.constants.BaseConst
 
 object ViewUtils {
     const val COURSE_DATA_JOIN_SYMBOL = "·"
-
-    fun EditText.clear() = this.setText(BaseConst.EMPTY)
-
-    fun TextView.clear() {
-        this.text = BaseConst.EMPTY
-    }
-
-    @Suppress("unused")
-    suspend fun <T : View> T.runInMain(block: suspend (T) -> Unit) {
-        withContext(Dispatchers.Main) {
-            block.invoke(this@runInMain)
-        }
-    }
 
     fun tryStartAnimateDrawable(drawable: Drawable) {
         if (drawable is AnimatedVectorDrawable) {

@@ -15,7 +15,7 @@ import tool.xfy9326.naucourse.beans.NextCourseBundle
 import tool.xfy9326.naucourse.beans.NextCourseNotification
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
-import tool.xfy9326.naucourse.utils.BaseUtils.goAsync
+import tool.xfy9326.naucourse.kt.goAsync
 import tool.xfy9326.naucourse.utils.courses.CourseUtils
 import tool.xfy9326.naucourse.utils.courses.ExtraCourseUtils
 import tool.xfy9326.naucourse.utils.courses.TimeUtils

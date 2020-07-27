@@ -11,14 +11,15 @@ import kotlinx.android.synthetic.main.layout_list.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.TimeConst
+import tool.xfy9326.naucourse.kt.bindLifecycle
+import tool.xfy9326.naucourse.kt.enableHomeButton
+import tool.xfy9326.naucourse.kt.showShortToast
+import tool.xfy9326.naucourse.kt.showSnackBar
 import tool.xfy9326.naucourse.providers.beans.jwc.EmptyRoomInfo
 import tool.xfy9326.naucourse.providers.beans.jwc.EmptyRoomSearchParam
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourse.ui.models.activity.EmptyRoomViewModel
 import tool.xfy9326.naucourse.ui.views.recyclerview.adapters.EmptyRoomAdapter
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBar
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 import tool.xfy9326.naucourse.utils.views.I18NUtils
 import java.text.SimpleDateFormat
@@ -49,10 +50,10 @@ class EmptyRoomSearchActivity : ViewModelActivity<EmptyRoomViewModel>(), DatePic
         })
         viewModel.errorMsg.observeEvent(this, Observer {
             if (it.second) {
-                showToast(I18NUtils.getContentErrorResId(it.first)!!)
+                showShortToast(I18NUtils.getContentErrorResId(it.first)!!)
                 finish()
             } else {
-                showSnackBar(layout_emptyRoom, I18NUtils.getContentErrorResId(it.first)!!)
+                layout_emptyRoom.showSnackBar(I18NUtils.getContentErrorResId(it.first)!!)
             }
         })
     }
@@ -83,27 +84,26 @@ class EmptyRoomSearchActivity : ViewModelActivity<EmptyRoomViewModel>(), DatePic
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)
             ).apply {
-                DialogUtils.addAutoCloseListener(lifecycle, this)
+                bindLifecycle(lifecycle)
                 show()
                 DialogUtils.applyButtonTextAndBackground(this@EmptyRoomSearchActivity, this)
             }
         }
         btn_emptyRoomSearch.setOnClickListener {
             if (asl_emptyRoom.isRefreshing) {
-                showSnackBar(layout_emptyRoom, R.string.empty_room_data_loading)
+                layout_emptyRoom.showSnackBar(R.string.empty_room_data_loading)
             } else {
                 val data = emptyRoomInfo
                 if (data != null) {
                     val startTime = sp_emptyRoomStart.selectedItem as EmptyRoomInfo.Time
                     val endTime = sp_emptyRoomEnd.selectedItem as EmptyRoomInfo.Time
                     if (startTime.num > endTime.num) {
-                        showSnackBar(layout_emptyRoom, R.string.empty_room_course_num_error)
+                        layout_emptyRoom.showSnackBar(R.string.empty_room_course_num_error)
                         return@setOnClickListener
                     }
                     val searchDate = DATE_FORMAT_YMD.parse(et_emptyRoomDate.text.toString()) ?: Date()
                     if (searchDate < data.startDate || searchDate > data.endDate) {
-                        showSnackBar(
-                            this, layout_emptyRoom,
+                        layout_emptyRoom.showSnackBar(
                             R.string.empty_room_date_error, DATE_FORMAT_YMD.format(data.startDate), DATE_FORMAT_YMD.format(data.endDate)
                         )
                         return@setOnClickListener
@@ -116,7 +116,7 @@ class EmptyRoomSearchActivity : ViewModelActivity<EmptyRoomViewModel>(), DatePic
                         )
                     )
                 } else {
-                    showSnackBar(layout_emptyRoom, R.string.empty_room_data_loading)
+                    layout_emptyRoom.showSnackBar(R.string.empty_room_data_loading)
                 }
             }
         }

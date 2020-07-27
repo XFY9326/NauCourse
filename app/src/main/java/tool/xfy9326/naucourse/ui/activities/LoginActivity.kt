@@ -10,17 +10,17 @@ import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.view_login_panel.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.BaseConst
+import tool.xfy9326.naucourse.kt.clear
+import tool.xfy9326.naucourse.kt.showSnackBar
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourse.ui.dialogs.UpdateDialog
 import tool.xfy9326.naucourse.ui.models.activity.LoginViewModel
 import tool.xfy9326.naucourse.utils.utility.AppWidgetUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBar
 import tool.xfy9326.naucourse.utils.views.AnimUtils
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 import tool.xfy9326.naucourse.utils.views.I18NUtils
 import tool.xfy9326.naucourse.utils.views.ViewUtils
-import tool.xfy9326.naucourse.utils.views.ViewUtils.clear
 
 
 class LoginActivity : ViewModelActivity<LoginViewModel>() {
@@ -55,10 +55,10 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
                 if (userId.isNotEmpty() && userId.isNotBlank() && userPw.isNotEmpty() && userPw.isNotBlank()) {
                     viewModel.doLogin(userId, userPw)
                 } else {
-                    showSnackBar(layout_activityLogin, R.string.login_info_empty)
+                    layout_activityLogin.showSnackBar(R.string.login_info_empty)
                 }
             } else {
-                showSnackBar(layout_activityLogin, R.string.eula_not_accept)
+                layout_activityLogin.showSnackBar(R.string.eula_not_accept)
             }
         }
         intent?.getBooleanExtra(IntentUtils.UPDATE_FROM_OLD_DATA_FLAG, false)?.let {
@@ -82,7 +82,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
             et_userId.setText(it)
         })
         viewModel.errorReasonType.observeEvent(this, Observer {
-            showSnackBar(layout_activityLogin, I18NUtils.getErrorMsgResId(it)!!)
+            layout_activityLogin.showSnackBar(I18NUtils.getErrorMsgResId(it)!!)
         })
         viewModel.loginSuccess.observeNotification(this, {
             startActivity(Intent(this, MainDrawerActivity::class.java))

@@ -8,10 +8,10 @@ import tool.xfy9326.naucourse.constants.BaseConst
 import tool.xfy9326.naucourse.constants.HTMLConst
 import tool.xfy9326.naucourse.constants.NetworkConst
 import tool.xfy9326.naucourse.constants.TimeConst
+import tool.xfy9326.naucourse.kt.insert
 import tool.xfy9326.naucourse.network.clients.JwcClient
 import tool.xfy9326.naucourse.providers.beans.jwc.SuspendCourse
 import tool.xfy9326.naucourse.providers.contents.base.BaseNoParamContent
-import tool.xfy9326.naucourse.utils.BaseUtils.insert
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList

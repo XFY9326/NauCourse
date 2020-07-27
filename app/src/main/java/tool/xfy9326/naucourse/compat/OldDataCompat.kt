@@ -106,7 +106,7 @@ object OldDataCompat {
                             )
                         )
                         styles.add(CourseStyleUtils.getDefaultCellStyle(courseId, oldDatum.courseColor))
-                        if (oldDatum.courseTerm != null) term = oldDatum.courseTerm.trim()
+                        term = oldDatum.courseTerm.trim()
                     }
                 } catch (e: Exception) {
                     ExceptionUtils.printStackTrace<OldDataCompat>(e)

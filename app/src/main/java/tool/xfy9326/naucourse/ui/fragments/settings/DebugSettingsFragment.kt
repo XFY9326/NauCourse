@@ -7,9 +7,9 @@ import kotlinx.android.synthetic.main.activity_settings.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.PrefConst
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
+import tool.xfy9326.naucourse.kt.showSnackBar
 import tool.xfy9326.naucourse.ui.fragments.base.BaseSettingsPreferenceFragment
 import tool.xfy9326.naucourse.utils.debug.DebugIOUtils
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBar
 
 @Suppress("unused")
 class DebugSettingsFragment : BaseSettingsPreferenceFragment() {
@@ -20,9 +20,9 @@ class DebugSettingsFragment : BaseSettingsPreferenceFragment() {
         findPreference<CheckBoxPreference>(PrefConst.DebugMode)?.isChecked = SettingsPref.DebugMode
         findPreference<Preference>(PrefConst.ClearDebugLogs)?.setOnPreferenceClickListener {
             if (DebugIOUtils.clearLogs()) {
-                showSnackBar(requireActivity().layout_settings, R.string.operation_success)
+                requireActivity().layout_settings.showSnackBar(R.string.operation_success)
             } else {
-                showSnackBar(requireActivity().layout_settings, R.string.operation_failed)
+                requireActivity().layout_settings.showSnackBar(R.string.operation_failed)
             }
             false
         }

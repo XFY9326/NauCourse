@@ -12,12 +12,13 @@ import androidx.fragment.app.Fragment
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.MIMEConst
 import tool.xfy9326.naucourse.io.prefs.AppPref
+import tool.xfy9326.naucourse.kt.showShortToast
 import tool.xfy9326.naucourse.receivers.NextCourseAlarmReceiver
 import tool.xfy9326.naucourse.ui.activities.MainIndexActivity
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 
 
 object IntentUtils {
+    private const val QQ_GROUP_KEY = "TCoF0ryy-exOFVeKAe1jTAxmgj-PS1t-"
     const val NEW_VERSION_FLAG = "NEW_VERSION_FLAG"
     const val UPDATE_FROM_OLD_DATA_FLAG = "UPDATE_FROM_OLD_DATA_FLAG"
 
@@ -28,14 +29,13 @@ object IntentUtils {
     )
 
     fun joinFeedbackQQGroup(context: Context) {
-        val key = "TCoF0ryy-exOFVeKAe1jTAxmgj-PS1t-"
         try {
             context.startActivity(Intent().apply {
                 data =
-                    Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D$key")
+                    Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D$QQ_GROUP_KEY")
             })
-        } catch (e: java.lang.Exception) {
-            showToast(context, R.string.application_launch_failed)
+        } catch (e: Exception) {
+            context.showShortToast(R.string.application_launch_failed)
         }
     }
 
@@ -47,7 +47,7 @@ object IntentUtils {
                 data = Uri.parse(url)
             })
         } catch (e: ActivityNotFoundException) {
-            showToast(context, R.string.application_launch_failed)
+            context.showShortToast(R.string.application_launch_failed)
         }
     }
 
@@ -60,7 +60,7 @@ object IntentUtils {
                 requestCode
             )
         } catch (e: ActivityNotFoundException) {
-            fragment.showToast(R.string.application_launch_failed)
+            fragment.showShortToast(R.string.application_launch_failed)
         }
     }
 
@@ -84,7 +84,7 @@ object IntentUtils {
                 setDataAndType(uri, MIMEConst.APK)
             })
         } catch (e: Exception) {
-            showToast(context, R.string.application_launch_failed)
+            context.showShortToast(R.string.application_launch_failed)
         }
     }
 

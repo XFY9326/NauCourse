@@ -20,6 +20,9 @@ import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.constants.BaseConst
+import tool.xfy9326.naucourse.kt.enableHomeButton
+import tool.xfy9326.naucourse.kt.showSnackBar
+import tool.xfy9326.naucourse.kt.showSnackBarWithCallback
 import tool.xfy9326.naucourse.providers.beans.jwc.Course
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseTime
@@ -31,9 +34,6 @@ import tool.xfy9326.naucourse.utils.BaseUtils
 import tool.xfy9326.naucourse.utils.courses.CourseStyleUtils
 import tool.xfy9326.naucourse.utils.courses.CourseUtils
 import tool.xfy9326.naucourse.utils.courses.TimeUtils
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBar
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBarWithCallback
 import tool.xfy9326.naucourse.utils.views.AnimUtils
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 
@@ -184,9 +184,9 @@ class CourseEditActivity : BaseActivity(), CourseTimeAdapter.CourseTimeCallback,
     }
 
     override fun onDeleteCourseTime(adapter: CourseTimeAdapter, courseTime: CourseTime, position: Int) {
-        showSnackBarWithCallback(layout_courseEdit, R.string.delete_course_time_success, R.string.revoke, View.OnClickListener {
+        layout_courseEdit.showSnackBarWithCallback(R.string.delete_course_time_success, R.string.revoke) {
             adapter.recoverCourseTime(courseTime, position)
-        })
+        }
     }
 
     override fun onEditCourseTime(adapter: CourseTimeAdapter, courseTime: CourseTime, position: Int) {
@@ -299,15 +299,15 @@ class CourseEditActivity : BaseActivity(), CourseTimeAdapter.CourseTimeCallback,
     private fun getEditResult(showAttention: Boolean): Course? {
         val timeSet = courseTimeAdapter.getCourseTimeSet()
         if (timeSet.size == 0) {
-            if (showAttention) showSnackBar(layout_courseEdit, R.string.course_time_empty)
+            if (showAttention) layout_courseEdit.showSnackBar(R.string.course_time_empty)
         } else if (timeSet.size != courseTimeAdapter.getCourseTimeList().size) {
-            if (showAttention) showSnackBar(layout_courseEdit, R.string.same_course_time_exists)
+            if (showAttention) layout_courseEdit.showSnackBar(R.string.same_course_time_exists)
         } else {
             val conflictResult = CourseSet.checkCourseTimeConflict(timeSet)
             if (conflictResult == null) {
                 val courseName = et_courseName.text?.toString()?.trim()
                 if (courseName.isNullOrBlank() || courseName.isNullOrEmpty()) {
-                    if (showAttention) showSnackBar(layout_courseEdit, R.string.course_name_empty)
+                    if (showAttention) layout_courseEdit.showSnackBar(R.string.course_name_empty)
                 } else {
                     return Course(
                         courseId,
@@ -340,10 +340,10 @@ class CourseEditActivity : BaseActivity(), CourseTimeAdapter.CourseTimeCallback,
     private fun checkSaveForExit() {
         val newCourse = getEditResult(false)
         if (newCourse != courseData || (newCourseStyle ?: courseStyle) != courseStyle) {
-            showSnackBarWithCallback(layout_courseEdit, R.string.exit_edit_without_save, android.R.string.ok, View.OnClickListener {
+            layout_courseEdit.showSnackBarWithCallback(R.string.exit_edit_without_save, android.R.string.ok) {
                 setResult(RESULT_OK)
                 super.onBackPressed()
-            })
+            }
         } else {
             setResult(RESULT_OK)
             super.onBackPressed()

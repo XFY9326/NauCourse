@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -17,6 +16,9 @@ import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
+import tool.xfy9326.naucourse.kt.enableHomeButton
+import tool.xfy9326.naucourse.kt.showSnackBar
+import tool.xfy9326.naucourse.kt.showSnackBarWithCallback
 import tool.xfy9326.naucourse.providers.beans.jwc.*
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourse.ui.dialogs.CourseImportDialog
@@ -27,9 +29,6 @@ import tool.xfy9326.naucourse.ui.models.activity.CourseManageViewModel
 import tool.xfy9326.naucourse.ui.views.recyclerview.AdvancedDivider
 import tool.xfy9326.naucourse.ui.views.recyclerview.SwipeItemCallback
 import tool.xfy9326.naucourse.ui.views.recyclerview.adapters.CourseAdapter
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBar
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBarWithCallback
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 import tool.xfy9326.naucourse.utils.views.I18NUtils
 import java.util.*
@@ -118,7 +117,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
         viewModel.importCourseResult.observeEvent(this, Observer {
             FullScreenLoadingDialog.close(supportFragmentManager)
             if (it.third != null) {
-                showSnackBar(layout_courseManage, R.string.course_import_failed, getString(I18NUtils.getContentErrorResId(it.third!!)!!))
+                layout_courseManage.showSnackBar(R.string.course_import_failed, getString(I18NUtils.getContentErrorResId(it.third!!)!!))
             } else {
                 CourseImportDialog().apply {
                     arguments = Bundle().apply {
@@ -133,9 +132,9 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
 
     override fun onCourseDeleted(adapter: CourseAdapter, lastDeleteItem: Pair<Course, CourseCellStyle>, lastDeleteItemPosition: Int) {
         getViewModel().setDataChanged()
-        showSnackBarWithCallback(layout_courseManage, R.string.delete_course_success, R.string.revoke, View.OnClickListener {
+        layout_courseManage.showSnackBarWithCallback(R.string.delete_course_success, R.string.revoke) {
             adapter.recoverCourse(lastDeleteItem, lastDeleteItemPosition)
-        })
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -154,15 +153,15 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
                 if (term != null) {
                     TermDateEditDialog.startTermDateEditDialog(supportFragmentManager, term)
                 } else {
-                    showSnackBar(layout_courseManage, R.string.term_date_empty)
+                    layout_courseManage.showSnackBar(R.string.term_date_empty)
                 }
             }
             R.id.menu_courseManageDeleteAll -> {
-                showSnackBarWithCallback(layout_courseManage, R.string.delete_all_courses_msg, android.R.string.ok, View.OnClickListener {
+                layout_courseManage.showSnackBarWithCallback(R.string.delete_all_courses_msg, android.R.string.ok) {
                     getViewModel().setDataChanged()
                     courseAdapter.deleteAllCourses()
-                    showSnackBar(layout_courseManage, R.string.delete_course_success)
-                })
+                    it.showSnackBar(R.string.delete_course_success)
+                }
             }
             R.id.menu_courseManageSave ->
                 if (getViewModel().dataChanged) {
@@ -212,7 +211,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
                             getViewModel().setDataChanged()
                             courseAdapter.updateCourseStyle(position, courseCellStyle)
                         } else {
-                            showSnackBar(layout_courseManage, R.string.course_edit_failed)
+                            layout_courseManage.showSnackBar(R.string.course_edit_failed)
                         }
                     } else if (requestCode == COURSE_ADD_RESULT) {
                         getViewModel().setDataChanged()
@@ -221,7 +220,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
                 }
             }
         } else {
-            showSnackBar(layout_courseManage, R.string.course_edit_failed)
+            layout_courseManage.showSnackBar(R.string.course_edit_failed)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -322,7 +321,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
         if (courseSet != null) {
             for (course in courseSet.courses) {
                 if (course.timeSet.isEmpty()) {
-                    showSnackBar(layout_courseManage, R.string.course_time_save_empty, course.name)
+                    layout_courseManage.showSnackBar(R.string.course_time_save_empty, course.name)
                     return null
                 }
             }
@@ -337,10 +336,10 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
                     if (courseSet.term == termDate.getTerm()) {
                         return Triple(courseSet, styles, termDate)
                     } else {
-                        showSnackBar(layout_courseManage, R.string.course_term_error)
+                        layout_courseManage.showSnackBar(R.string.course_term_error)
                     }
                 } else {
-                    showSnackBar(layout_courseManage, R.string.save_failed)
+                    layout_courseManage.showSnackBar(R.string.save_failed)
                 }
             } else {
                 showConflictMsg(
@@ -349,16 +348,16 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
                 )
             }
         } else {
-            showSnackBar(layout_courseManage, R.string.save_failed)
+            layout_courseManage.showSnackBar(R.string.save_failed)
         }
         return null
     }
 
     private fun checkSaveForExit() {
         if (getViewModel().dataChanged) {
-            showSnackBarWithCallback(layout_courseManage, R.string.exit_edit_without_save, android.R.string.ok, View.OnClickListener {
+            layout_courseManage.showSnackBarWithCallback(R.string.exit_edit_without_save, android.R.string.ok) {
                 super.onBackPressed()
-            })
+            }
         } else {
             super.onBackPressed()
         }

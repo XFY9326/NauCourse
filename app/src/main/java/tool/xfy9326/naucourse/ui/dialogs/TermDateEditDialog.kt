@@ -11,9 +11,9 @@ import kotlinx.android.synthetic.main.dialog_term_date_edit.view.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.CourseConst
 import tool.xfy9326.naucourse.constants.TimeConst
+import tool.xfy9326.naucourse.kt.showShortToast
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.utils.courses.TimeUtils
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 import java.text.SimpleDateFormat
 import java.util.*
@@ -79,11 +79,11 @@ class TermDateEditDialog : DialogFragment() {
             }
             btn_courseTermEditConfirm.setOnClickListener {
                 if (nowStartDate >= nowEndDate) {
-                    showToast(R.string.term_date_error)
+                    showShortToast(R.string.term_date_error)
                 } else {
                     val weekLength = TimeUtils.getWeekLength(nowStartDate, nowEndDate)
                     if (weekLength < CourseConst.MIN_WEEK_NUM_SIZE || weekLength > CourseConst.MAX_WEEK_NUM_SIZE) {
-                        showToast(R.string.term_date_length_error, CourseConst.MIN_WEEK_NUM_SIZE, CourseConst.MAX_WEEK_NUM_SIZE, weekLength)
+                        showShortToast(R.string.term_date_length_error, CourseConst.MIN_WEEK_NUM_SIZE, CourseConst.MAX_WEEK_NUM_SIZE, weekLength)
                     } else {
                         val activity = requireActivity()
                         if (activity is OnTermEditListener) {

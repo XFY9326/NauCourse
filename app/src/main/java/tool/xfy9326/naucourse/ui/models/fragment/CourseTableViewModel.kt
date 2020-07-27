@@ -12,6 +12,7 @@ import tool.xfy9326.naucourse.constants.CourseConst
 import tool.xfy9326.naucourse.io.db.CourseCellStyleDBHelper
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.io.store.CourseTableStore
+import tool.xfy9326.naucourse.kt.tryWithLock
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.providers.info.methods.CourseInfo
@@ -23,7 +24,6 @@ import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
 import tool.xfy9326.naucourse.ui.views.table.CourseTableStyle
 import tool.xfy9326.naucourse.ui.views.table.CourseTableViewHelper
-import tool.xfy9326.naucourse.utils.BaseUtils.tryWithLock
 import tool.xfy9326.naucourse.utils.courses.CourseUtils
 import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import tool.xfy9326.naucourse.utils.debug.LogUtils

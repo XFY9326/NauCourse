@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.kt.enableHomeButton
 import tool.xfy9326.naucourse.ui.activities.base.BaseActivity
 import tool.xfy9326.naucourse.ui.fragments.settings.MainSettingsScreenFragment
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
 
 class SettingsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -8,10 +8,10 @@ import kotlinx.android.synthetic.main.layout_list.*
 import kotlinx.android.synthetic.main.layout_refresh_list.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.kt.enableHomeButton
+import tool.xfy9326.naucourse.kt.showSnackBar
 import tool.xfy9326.naucourse.ui.models.base.BaseListViewModel
 import tool.xfy9326.naucourse.ui.views.recyclerview.adapters.base.ListRecyclerAdapter
-import tool.xfy9326.naucourse.utils.views.ActivityUtils
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.enableHomeButton
 import tool.xfy9326.naucourse.utils.views.I18NUtils
 
 abstract class ListViewModelActivity<E, T : BaseListViewModel<E>, VH : RecyclerView.ViewHolder> : ViewModelActivity<T>() {
@@ -22,7 +22,7 @@ abstract class ListViewModelActivity<E, T : BaseListViewModel<E>, VH : RecyclerV
     @CallSuper
     override fun bindViewModel(viewModel: T) {
         viewModel.errorMsg.observeEvent(this, Observer {
-            ActivityUtils.showSnackBar(layout_refresh_list, I18NUtils.getContentErrorResId(it)!!)
+            layout_refresh_list.showSnackBar(I18NUtils.getContentErrorResId(it)!!)
         })
         viewModel.listData.observe(this, Observer {
             adapter.submitList(it)

@@ -14,7 +14,7 @@ import android.view.animation.ScaleAnimation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
-import tool.xfy9326.naucourse.utils.BaseUtils.dpToPx
+import tool.xfy9326.naucourse.kt.dpToPx
 import tool.xfy9326.naucourse.utils.views.ViewUtils
 import kotlin.math.abs
 

@@ -9,6 +9,7 @@ import kotlinx.coroutines.sync.Mutex
 import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.beans.CourseManagePkg
 import tool.xfy9326.naucourse.io.db.CourseCellStyleDBHelper
+import tool.xfy9326.naucourse.kt.tryWithLock
 import tool.xfy9326.naucourse.providers.beans.jwc.Course
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourse.providers.beans.jwc.Term
@@ -21,7 +22,6 @@ import tool.xfy9326.naucourse.tools.NotifyType
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.tools.livedata.NotifyLivaData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
-import tool.xfy9326.naucourse.utils.BaseUtils.tryWithLock
 import tool.xfy9326.naucourse.utils.courses.CourseStyleUtils
 import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import tool.xfy9326.naucourse.utils.debug.LogUtils

@@ -2,8 +2,8 @@ package tool.xfy9326.naucourse.network.tools
 
 import okhttp3.HttpUrl
 import tool.xfy9326.naucourse.constants.NetworkConst
+import tool.xfy9326.naucourse.kt.toHex
 import tool.xfy9326.naucourse.network.clients.VPNClient
-import tool.xfy9326.naucourse.utils.BaseUtils.toHex
 import java.nio.charset.StandardCharsets
 import java.util.*
 import javax.crypto.Cipher

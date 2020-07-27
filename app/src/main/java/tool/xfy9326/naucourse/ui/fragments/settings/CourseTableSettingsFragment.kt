@@ -19,13 +19,13 @@ import tool.xfy9326.naucourse.constants.ImageConst
 import tool.xfy9326.naucourse.constants.PrefConst
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
+import tool.xfy9326.naucourse.kt.showSnackBar
 import tool.xfy9326.naucourse.tools.NotifyBus
 import tool.xfy9326.naucourse.tools.NotifyType
 import tool.xfy9326.naucourse.ui.dialogs.FullScreenLoadingDialog
 import tool.xfy9326.naucourse.ui.fragments.base.BaseSettingsPreferenceFragment
 import tool.xfy9326.naucourse.utils.utility.ImageUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.showSnackBar
 import java.util.*
 
 @Suppress("unused")
@@ -84,7 +84,7 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment() {
             if (resultCode == Activity.RESULT_OK && data != null && data.data != null) {
                 saveCourseTableBackground(data.data!!)
             } else {
-                showSnackBar(requireActivity().layout_settings, R.string.picture_choose_cancel)
+                requireActivity().layout_settings.showSnackBar(R.string.picture_choose_cancel)
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
@@ -108,8 +108,8 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment() {
 
                     launch(Dispatchers.Main) {
                         FullScreenLoadingDialog.close(childFragmentManager)
-                        showSnackBar(
-                            requireActivity().layout_settings, if (result) {
+                        requireActivity().layout_settings.showSnackBar(
+                            if (result) {
                                 R.string.picture_quality_modify_success
                             } else {
                                 R.string.picture_quality_modify_failed
@@ -152,8 +152,8 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment() {
                 }
                 withContext(Dispatchers.Main) {
                     FullScreenLoadingDialog.close(childFragmentManager)
-                    showSnackBar(
-                        requireActivity().layout_settings, if (result != null) {
+                    requireActivity().layout_settings.showSnackBar(
+                        if (result != null) {
                             if (qualityModifyResult) {
                                 R.string.course_table_background_set_success
                             } else {

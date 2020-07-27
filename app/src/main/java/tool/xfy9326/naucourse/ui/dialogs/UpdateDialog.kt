@@ -14,9 +14,9 @@ import tool.xfy9326.naucourse.BuildConfig
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
+import tool.xfy9326.naucourse.kt.showShortToast
 import tool.xfy9326.naucourse.update.beans.UpdateInfo
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
-import tool.xfy9326.naucourse.utils.views.ActivityUtils.showToast
 import tool.xfy9326.naucourse.utils.views.DialogUtils
 
 class UpdateDialog : DialogFragment() {
@@ -86,7 +86,7 @@ class UpdateDialog : DialogFragment() {
                         downloadUpdateFile(updateInfo.downloadSource.first().url)
                     }
                     else -> btn_updateNow.setOnClickListener {
-                        showToast(R.string.no_update_source)
+                        showShortToast(R.string.no_update_source)
                     }
                 }
 
@@ -107,7 +107,7 @@ class UpdateDialog : DialogFragment() {
 
     private fun downloadUpdateFile(url: String) {
         IntentUtils.requestDownloadUpdate(requireContext(), url, updateInfo.versionCode, updateInfo.versionName)
-        showToast(R.string.start_download_update)
+        showShortToast(R.string.start_download_update)
     }
 
     override fun onStart() {

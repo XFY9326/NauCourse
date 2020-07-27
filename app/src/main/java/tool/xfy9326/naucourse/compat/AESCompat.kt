@@ -1,7 +1,7 @@
 package tool.xfy9326.naucourse.compat
 
 import android.annotation.SuppressLint
-import tool.xfy9326.naucourse.utils.BaseUtils.hexToByteArray
+import tool.xfy9326.naucourse.kt.hexToByteArray
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 import java.nio.charset.StandardCharsets
 import javax.crypto.Cipher

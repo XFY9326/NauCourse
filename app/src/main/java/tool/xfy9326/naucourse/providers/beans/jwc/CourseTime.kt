@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.BaseConst
+import tool.xfy9326.naucourse.constants.CourseConst
 import tool.xfy9326.naucourse.constants.DBConst
 import tool.xfy9326.naucourse.constants.TimeConst
 import tool.xfy9326.naucourse.io.db.CourseSetDBHelper
@@ -52,11 +53,11 @@ data class CourseTime(
         weeksArray: TimePeriodList,
         rawWeeksStr: String,
         weekDay: Short,
-        courseNumStr: String,
+        coursesNumStr: String,
         coursesNumArray: TimePeriodList,
         rawCourseNumStr: String
     ) : this(
-        DBConst.DEFAULT_ID, courseId, location, weeksStr, weekMode, weeksArray, rawWeeksStr, weekDay, courseNumStr,
+        DBConst.DEFAULT_ID, courseId, location, weeksStr, weekMode, weeksArray, rawWeeksStr, weekDay, coursesNumStr,
         coursesNumArray,
         rawCourseNumStr
     )
@@ -77,7 +78,7 @@ data class CourseTime(
         weeksArray,
         getRawWeeksStr(context, weeksArray, weekMode),
         weekDay,
-        String(coursesNumArray.convertToCharArray(tool.xfy9326.naucourse.constants.CourseConst.MAX_COURSE_LENGTH)),
+        String(coursesNumArray.convertToCharArray(CourseConst.MAX_COURSE_LENGTH)),
         coursesNumArray,
         getRawCourseNumStr(context, coursesNumArray)
     )
@@ -86,14 +87,14 @@ data class CourseTime(
         private fun getWeeksCharArray(weeksArray: TimePeriodList, weekMode: WeekMode): CharArray =
             when (weekMode) {
                 WeekMode.ODD_WEEK_ONLY -> weeksArray.convertToCharArray(
-                    tool.xfy9326.naucourse.constants.CourseConst.MAX_WEEK_NUM_SIZE,
+                    CourseConst.MAX_WEEK_NUM_SIZE,
                     oddMode = true
                 )
                 WeekMode.EVEN_WEEK_ONLY -> weeksArray.convertToCharArray(
-                    tool.xfy9326.naucourse.constants.CourseConst.MAX_WEEK_NUM_SIZE,
+                    CourseConst.MAX_WEEK_NUM_SIZE,
                     evenMode = true
                 )
-                WeekMode.ALL_WEEKS -> weeksArray.convertToCharArray(tool.xfy9326.naucourse.constants.CourseConst.MAX_WEEK_NUM_SIZE)
+                WeekMode.ALL_WEEKS -> weeksArray.convertToCharArray(CourseConst.MAX_WEEK_NUM_SIZE)
             }
 
         private fun getRawWeeksStr(context: Context, weeksArray: TimePeriodList, weekMode: WeekMode): String =
@@ -125,18 +126,17 @@ data class CourseTime(
         if (weekDay !in TimeConst.MIN_WEEK_DAY..TimeConst.MAX_WEEK_DAY) {
             throw IllegalArgumentException("Course Time Week Day Error! Week Day: $weekDay")
         }
-        if (coursesNumStr.length !in tool.xfy9326.naucourse.constants.CourseConst.MIN_COURSE_LENGTH..tool.xfy9326.naucourse.constants.CourseConst.MAX_COURSE_LENGTH) {
+        if (coursesNumStr.length !in CourseConst.MIN_COURSE_LENGTH..CourseConst.MAX_COURSE_LENGTH) {
             throw IllegalArgumentException("Course Time Course Num Length Error! Start Course Num Size: ${coursesNumStr.length}")
         }
-        if (weeksStr.length !in tool.xfy9326.naucourse.constants.CourseConst.MIN_WEEK_NUM_SIZE..tool.xfy9326.naucourse.constants.CourseConst.MAX_WEEK_NUM_SIZE) {
+        if (weeksStr.length !in CourseConst.MIN_WEEK_NUM_SIZE..CourseConst.MAX_WEEK_NUM_SIZE) {
             throw IllegalArgumentException("Course Time Weeks Length Error! Weeks Size: ${weeksStr.length}")
         }
     }
 
     fun isWeekNumTrue(weekNum: Int): Boolean = TimePeriod.isIndexTrue(weeksCharArray, weekNum - 1)
 
-    @Suppress("MemberVisibilityCanBePrivate")
-    fun isCourseNumTrue(courseNum: Int): Boolean = TimePeriod.isIndexTrue(coursesNumCharArray, courseNum - 1)
+    private fun isCourseNumTrue(courseNum: Int): Boolean = TimePeriod.isIndexTrue(coursesNumCharArray, courseNum - 1)
 
     fun hasConflict(courseTime: CourseTime): Boolean {
         if (courseTime.weekDay == weekDay &&
@@ -182,22 +182,20 @@ data class CourseTime(
         other as CourseTime
 
         if (courseId != other.courseId) return false
-        if (location != other.location) return false
+        if (weeksStr != other.weeksStr) return false
         if (weekMode != other.weekMode) return false
-        if (weeksArray != other.weeksArray) return false
         if (weekDay != other.weekDay) return false
-        if (coursesNumArray != other.coursesNumArray) return false
+        if (coursesNumStr != other.coursesNumStr) return false
 
         return true
     }
 
     override fun hashCode(): Int {
         var result = courseId.hashCode()
-        result = 31 * result + location.hashCode()
+        result = 31 * result + weeksStr.hashCode()
         result = 31 * result + weekMode.hashCode()
-        result = 31 * result + weeksArray.hashCode()
         result = 31 * result + weekDay
-        result = 31 * result + coursesNumArray.hashCode()
+        result = 31 * result + coursesNumStr.hashCode()
         return result
     }
 }
