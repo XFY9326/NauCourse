@@ -113,8 +113,7 @@
             android:label="@string/feedback" />
 
         <activity
-            android:name=".ui.activities.AppErrorActivity"
-            android:label="@string/app_error"
+            android:name=".ui.activities.ErrorActivity"
             android:launchMode="singleTask" />
 
         <receiver android:name=".receivers.DownloadCompleteListener">

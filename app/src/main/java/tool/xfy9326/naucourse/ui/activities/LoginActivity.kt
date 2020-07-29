@@ -12,6 +12,7 @@ import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.BaseConst
 import tool.xfy9326.naucourse.kt.clear
 import tool.xfy9326.naucourse.kt.showSnackBar
+import tool.xfy9326.naucourse.kt.showSnackBarWithCallback
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourse.ui.dialogs.UpdateDialog
 import tool.xfy9326.naucourse.ui.models.activity.LoginViewModel
@@ -82,7 +83,11 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
             et_userId.setText(it)
         })
         viewModel.errorReasonType.observeEvent(this, Observer {
-            layout_activityLogin.showSnackBar(I18NUtils.getErrorMsgResId(it)!!)
+            layout_activityLogin.showSnackBarWithCallback(I18NUtils.getErrorMsgResId(it)!!, R.string.login_troubleshoot) {
+                startActivity(Intent(this, ErrorActivity::class.java).apply {
+                    putExtra(ErrorActivity.EXTRA_IS_LOGIN_FAILED_ERROR, true)
+                })
+            }
         })
         viewModel.loginSuccess.observeNotification(this, {
             startActivity(Intent(this, MainDrawerActivity::class.java))

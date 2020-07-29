@@ -8,8 +8,7 @@
     <string name="login">登录</string>
     <string name="forget_password">忘记密码？</string>
     <string name="find_password">找回密码</string>
-    <string name="forget_password_help">\u3000\u3000NAU课程表使用SSO(统一身份认证登录)登录，因此您应该使用SSO的密码进行登录。\n\u3000\u3000如果您已经忘记密码或不知道应该使用哪个密码，
-        您可以点击"找回密码"前往网页登录页面，点击找回密码即可进行密码重置申请。</string>
+    <string name="forget_password_help">\u3000\u3000NAU课程表使用SSO(统一身份认证登录)登录，因此您应该使用SSO的密码进行登录。\n\u3000\u3000如果您已经忘记密码或不知道应该使用哪个密码，您可以点击"找回密码"前往网页登录页面，点击找回密码即可进行密码重置申请。</string>
     <string name="read_and_accept">我已阅读并同意</string>
     <string name="eula_license">使用协议</string>
     <string name="application_launch_failed">相关应用启动失败！</string>
@@ -99,8 +98,8 @@
     <string name="today_course_loading">课程数据正在加载中！</string>
     <string name="today_course_no_course">今日暂无课程</string>
     <string name="term">%1$d-%2$d 第%3$d学期</string>
-    <string name="feedback">反馈</string>
-    <string name="online_feedback_back">问题反馈</string>
+    <string name="feedback">问题反馈</string>
+    <string name="online_feedback_back">在线反馈</string>
     <string name="online_feedback_back_sum">反馈服务由腾讯兔小巢提供</string>
     <string name="qq_group_title">QQ反馈群</string>
     <string name="qq_group" translatable="false">704668624</string>
@@ -412,7 +411,10 @@
     <string name="not_this_week_course_show_type_color">使用灰色课程格颜色</string>
     <string name="feedback_user_nickname">客户端用户</string>
     <string name="app_error">应用启动时出现错误！</string>
+    <string name="login_failed_help">登录时出现错误？</string>
     <string name="app_error_attention">\u3000\u3000监测到多次自动重启失败，这可能是因为应用数据出现错误或者应用漏洞导致。非常抱歉给您带来了不友好的使用体验，建议您尽快反馈错误以便修复该问题，您可以立即更新解决该问题或者尝试清空应用数据后重启。</string>
+    <string name="login_failed_attention">如果您多次登录失败，很可能是由于以下原因：\n1. 学校单点登录服务器错误；\n2. 用户名或密码错误；\n3. APP登录模块过时；\n4. 手机网络连接故障。\n遇到此类问题，您可以更新到最新版本后，自行尝试单点登录系统是否存在异常。若存在问题只能静待校方修复，反之则可以尽快反馈给开发者解决问题。</string>
     <string name="not_complete_data_warning">课程数据不完善</string>
     <string name="not_complete_data_warning_content">注意！导入的课程数据存在信息不完善，可能会导致无法保存</string>
+    <string name="login_troubleshoot">疑难解答</string>
 </resources>

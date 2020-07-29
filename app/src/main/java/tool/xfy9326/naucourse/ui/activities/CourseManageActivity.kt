@@ -160,7 +160,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
                 layout_courseManage.showSnackBarWithCallback(R.string.delete_all_courses_msg, android.R.string.ok) {
                     getViewModel().setDataChanged()
                     courseAdapter.deleteAllCourses()
-                    it.showSnackBar(R.string.delete_course_success)
+                    layout_courseManage.showSnackBar(R.string.delete_course_success)
                 }
             }
             R.id.menu_courseManageSave ->

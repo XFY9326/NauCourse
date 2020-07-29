@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.activities.AppErrorActivity">
+    tools:context=".ui.activities.ErrorActivity">
 
     <include layout="@layout/view_general_toolbar" />
 
@@ -23,10 +23,11 @@
             android:paddingEnd="20dp">
 
             <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_errorHelp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@string/login_failed_attention"
                 android:paddingBottom="20dp"
-                android:text="@string/app_error_attention"
                 android:textSize="16sp" />
 
             <com.google.android.material.button.MaterialButton

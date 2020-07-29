@@ -30,7 +30,7 @@ class MainIndexActivity : BaseActivity() {
     }
 
     private fun startAppErrorActivity() {
-        startActivity(Intent(this, AppErrorActivity::class.java))
+        startActivity(Intent(this, ErrorActivity::class.java))
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         finishAfterTransition()
     }

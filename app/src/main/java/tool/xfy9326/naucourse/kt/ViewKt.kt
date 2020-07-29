@@ -43,10 +43,8 @@ suspend fun <T : View> T.runInMain(block: suspend (T) -> Unit) {
 fun CoordinatorLayout.showSnackBar(@StringRes strId: Int, vararg params: Any) =
     Snackbar.make(this, context.getString(strId, *params), Snackbar.LENGTH_SHORT).show()
 
-fun CoordinatorLayout.showSnackBarWithCallback(@StringRes strId: Int, @StringRes actionStrId: Int, callback: (CoordinatorLayout) -> Unit) =
-    Snackbar.make(this, strId, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(actionStrId) {
-        callback.invoke(it as CoordinatorLayout)
-    }.show()
+fun CoordinatorLayout.showSnackBarWithCallback(@StringRes strId: Int, @StringRes actionStrId: Int, callback: (View) -> Unit) =
+    Snackbar.make(this, strId, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(actionStrId, callback).show()
 
 // Activity销毁时自动关闭Dialog，防止窗体泄漏
 fun Dialog.bindLifecycle(lifecycle: Lifecycle) {
