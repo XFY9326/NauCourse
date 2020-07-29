@@ -173,7 +173,7 @@ open class NgxClient(loginInfo: LoginInfo, private val fromUrl: HttpUrl? = null)
         okHttpClient.newBuilder().followRedirects(false).followSslRedirects(false).build()
             .newCall(request.newBuilder().build()).execute()
 
-    override fun validateLoginWithResponse(responseContent: String, responseUrl: HttpUrl): Boolean {
+    override fun validateLoginByResponse(responseContent: String, responseUrl: HttpUrl): Boolean {
         val fromUrl =
             if (this.isFromPathLogin) {
                 this.fromUrl

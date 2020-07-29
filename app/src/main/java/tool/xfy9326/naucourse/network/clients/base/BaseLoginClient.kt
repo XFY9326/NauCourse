@@ -64,14 +64,14 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
         }
 
     // 通过返回的数据判断是否登录成功
-    abstract fun validateLoginWithResponse(responseContent: String, responseUrl: HttpUrl): Boolean
+    abstract fun validateLoginByResponse(responseContent: String, responseUrl: HttpUrl): Boolean
 
     // 使用可自动登录的方式进行请求
     fun newAutoLoginCall(request: Request): Response {
         val response = newClientCall(request)
         val url = response.request.url
         val content = NetworkTools.getResponseContent(response)
-        return if (validateLoginWithResponse(content, url)) {
+        return if (validateLoginByResponse(content, url)) {
             if (validateNotInLoginPage(content)) {
                 response
             } else {

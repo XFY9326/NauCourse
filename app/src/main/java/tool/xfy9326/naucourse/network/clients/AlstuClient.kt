@@ -15,6 +15,7 @@ class AlstuClient(loginInfo: LoginInfo) : VPNClient(loginInfo) {
         private const val ALSTU_PAGE_STR = "奥蓝学生管理信息系统"
         private const val ALSTU_ERROR_LOGIN_STR = "location=\"LOGIN.ASPX\";"
         private const val SSO_LOGIN_NO_SERVICE_SUCCESS_STR = "您已经成功登录统一身份认证系统"
+        private const val VPN_INDEX_STR = "南京审计大学WEBVPN登录门户"
 
         val ALSTU_INDEX_URL =
             HttpUrl.Builder().scheme(NetworkConst.HTTP).host(ALSTU_HOST).addPathSegment(ALSTU_DEFAULT_ASPX).build()
@@ -22,13 +23,13 @@ class AlstuClient(loginInfo: LoginInfo) : VPNClient(loginInfo) {
         private fun isAlstuIndexUrl(url: HttpUrl) = url.pathSegments.last().equals(ALSTU_DEFAULT_ASPX, true)
     }
 
-    override fun validateLoginWithResponse(responseContent: String, responseUrl: HttpUrl): Boolean =
-        super.validateLoginWithResponse(responseContent, responseUrl) && SSO_LOGIN_NO_SERVICE_SUCCESS_STR !in responseContent &&
+    override fun validateLoginByResponse(responseContent: String, responseUrl: HttpUrl): Boolean =
+        super.validateLoginByResponse(responseContent, responseUrl) && SSO_LOGIN_NO_SERVICE_SUCCESS_STR !in responseContent &&
                 ALSTU_ERROR_LOGIN_STR !in responseContent && ALSTU_PAGE_STR in responseContent
 
     override fun login(): LoginResponse {
         val response = super.login()
-        if (response.isSuccess && SSO_LOGIN_NO_SERVICE_SUCCESS_STR in response.htmlContent!!) {
+        if (response.isSuccess && (SSO_LOGIN_NO_SERVICE_SUCCESS_STR in response.htmlContent!! || VPN_INDEX_STR in response.htmlContent)) {
             return LoginResponse(false, loginErrorReason = LoginResponse.ErrorReason.SERVER_ERROR)
         }
         return response

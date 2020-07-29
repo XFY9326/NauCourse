@@ -41,8 +41,8 @@ class YktClient(loginInfo: LoginInfo) : VPNClient(loginInfo) {
         LOGIN_PAGE_STR !in responseContent && USER_LOGIN_STR !in responseContent
                 && URL_SSO_LOGIN_PAGE !in responseContent && SSO_LOGIN_PAGE_STR !in responseContent
 
-    override fun validateLoginWithResponse(responseContent: String, responseUrl: HttpUrl): Boolean =
-        super.validateLoginWithResponse(
+    override fun validateLoginByResponse(responseContent: String, responseUrl: HttpUrl): Boolean =
+        super.validateLoginByResponse(
             responseContent,
             responseUrl
         ) && validateNotInLoginPage(responseContent) && LOGIN_URL_PAGE !in responseUrl.toString()
@@ -51,7 +51,7 @@ class YktClient(loginInfo: LoginInfo) : VPNClient(loginInfo) {
         val loginResponse = newVPNCall(patchVPNRequest(useVPN, Request.Builder().url(YKT_LOGIN_URL).build()))
         if (loginResponse.isSuccessful) {
             var content = NetworkTools.getResponseContent(loginResponse)
-            if (!validateLoginWithResponse(content, loginResponse.request.url)) {
+            if (!validateLoginByResponse(content, loginResponse.request.url)) {
                 val loginResult = login(loginResponse)
                 if (!loginResult.isSuccess) {
                     LogUtils.d<YktClient>("YktClient SSO Login Failed! Reason: ${loginResult.loginErrorReason} Url: ${loginResult.url}")

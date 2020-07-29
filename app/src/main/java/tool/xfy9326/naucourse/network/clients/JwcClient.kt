@@ -88,8 +88,8 @@ class JwcClient(loginInfo: LoginInfo) : SSOClient(loginInfo, JWC_SSO_LOGIN_URL) 
         return it.isSuccessful && it.request.url == JWC_LOGIN_URL
     }
 
-    override fun validateLoginWithResponse(responseContent: String, responseUrl: HttpUrl): Boolean {
-        return super.validateLoginWithResponse(responseContent, responseUrl) &&
+    override fun validateLoginByResponse(responseContent: String, responseUrl: HttpUrl): Boolean {
+        return super.validateLoginByResponse(responseContent, responseUrl) &&
                 getJwcLoginStatus(responseContent) == LoginResponse.ErrorReason.NONE
     }
 

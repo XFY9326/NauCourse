@@ -154,7 +154,7 @@ open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = nu
         }
 
     @CallSuper
-    override fun validateLoginWithResponse(responseContent: String, responseUrl: HttpUrl): Boolean =
+    override fun validateLoginByResponse(responseContent: String, responseUrl: HttpUrl): Boolean =
         if (isServiceLogin) {
             responseUrl.hasSameHost(serviceUrl)
         } else {

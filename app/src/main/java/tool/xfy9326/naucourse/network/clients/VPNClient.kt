@@ -102,8 +102,8 @@ open class VPNClient(loginInfo: LoginInfo, loginUrl: HttpUrl? = null) :
         return it.isSuccessful && SSO_LOGIN_PAGE_STR in content
     }
 
-    override fun validateLoginWithResponse(responseContent: String, responseUrl: HttpUrl): Boolean =
-        super.validateLoginWithResponse(responseContent, responseUrl) &&
+    override fun validateLoginByResponse(responseContent: String, responseUrl: HttpUrl): Boolean =
+        super.validateLoginByResponse(responseContent, responseUrl) &&
                 (VPN_LOGIN_PAGE_STR !in responseContent || (SSO_LOGIN_PAGE_STR !in responseContent && VPN_HOST_DATA_STR in responseContent))
 
     override fun validateNotInLoginPage(responseContent: String): Boolean =
@@ -141,7 +141,7 @@ open class VPNClient(loginInfo: LoginInfo, loginUrl: HttpUrl? = null) :
             throw ServerErrorException("VPN Server Expired!")
         }
 
-        if (!validateLoginWithResponse(callContent, callResult.request.url)) {
+        if (!validateLoginByResponse(callContent, callResult.request.url)) {
             val loginResponse =
                 if (useVPN) {
                     login(callResult)
