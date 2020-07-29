@@ -9,6 +9,7 @@ import tool.xfy9326.naucourse.network.tools.NetworkTools
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 import java.io.IOException
 import java.net.ConnectException
+import java.net.SocketException
 import java.net.SocketTimeoutException
 import java.util.concurrent.locks.ReentrantLock
 
@@ -39,7 +40,7 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
         } catch (e: Exception) {
             ExceptionUtils.printStackTrace<BaseLoginClient>(e)
             when (e) {
-                is SocketTimeoutException, is IOException, is NullPointerException, is ConnectException ->
+                is SocketTimeoutException, is SocketException, is IOException, is NullPointerException, is ConnectException ->
                     LoginResponse(false, loginErrorReason = LoginResponse.ErrorReason.CONNECTION_ERROR)
                 is HttpStatusException, is ServerErrorException -> LoginResponse(false, loginErrorReason = LoginResponse.ErrorReason.SERVER_ERROR)
                 else -> LoginResponse(false, loginErrorReason = LoginResponse.ErrorReason.UNKNOWN)

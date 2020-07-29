@@ -21,15 +21,20 @@ object ExceptionUtils : Thread.UncaughtExceptionHandler {
     private var exceptionHandler: Thread.UncaughtExceptionHandler? = null
 
     inline fun <reified T> printStackTrace(throwable: Throwable) {
-        print(T::class.java.simpleName, throwable)
+        printError(T::class.java.simpleName, throwable)
     }
 
     inline fun <reified T : Any> printStackTrace(clazz: T, throwable: Throwable) {
-        print(clazz::class.java.simpleName, throwable)
+        printError(clazz::class.java.simpleName, throwable)
     }
 
-    fun print(tag: String, throwable: Throwable) {
-        if (DebugIOUtils.FORCE_DEBUG_ON || THROWS_ON) throwable.printStackTrace()
+    fun printError(tag: String, throwable: Throwable) {
+        if (DebugIOUtils.FORCE_DEBUG_ON || THROWS_ON) {
+            synchronized(this) {
+                System.err.println("-----> Application Error! Exception: ${throwable.javaClass.simpleName} Tag: $tag <-----")
+                throwable.printStackTrace()
+            }
+        }
         if (DebugIOUtils.FORCE_DEBUG_ON || THROWS_SAVE_ON) saveThrowable(tag, getStackTraceString(throwable))
     }
 

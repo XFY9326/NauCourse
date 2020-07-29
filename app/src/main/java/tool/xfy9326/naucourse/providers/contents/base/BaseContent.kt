@@ -64,11 +64,13 @@ abstract class BaseContent<T> {
 
     protected abstract fun onRequestData(): Response
 
-    private fun parseData(contentData: String): ParseResult<T> = try {
-        ParseResult(true, onParseData(contentData))
-    } catch (e: Exception) {
-        ExceptionUtils.printStackTrace<BaseContent<T>>(e)
-        ParseResult(false)
+    private fun parseData(contentData: String): ParseResult<T> {
+        return try {
+            ParseResult(true, onParseData(contentData))
+        } catch (e: Exception) {
+            ExceptionUtils.printStackTrace<BaseContent<T>>(e)
+            ParseResult(false)
+        }
     }
 
     protected abstract fun onParseData(content: String): T

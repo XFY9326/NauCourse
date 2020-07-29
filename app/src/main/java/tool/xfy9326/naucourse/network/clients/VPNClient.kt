@@ -87,10 +87,7 @@ open class VPNClient(loginInfo: LoginInfo, loginUrl: HttpUrl? = null) :
     override fun login(): LoginResponse {
         val ssoResult = super.login()
         return if (ssoResult.isSuccess && VPN_LOGIN_PAGE_STR !in ssoResult.htmlContent!!) {
-            LoginResponse(
-                false,
-                loginErrorReason = LoginResponse.ErrorReason.SERVER_ERROR
-            )
+            LoginResponse(false, loginErrorReason = LoginResponse.ErrorReason.SERVER_ERROR)
         } else {
             ssoResult
         }
