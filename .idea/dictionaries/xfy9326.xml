@@ -37,6 +37,7 @@
       <w>codebeat</w>
       <w>coroutine</w>
       <w>cppcoreguidelines</w>
+      <w>crashrecord</w>
       <w>daba</w>
       <w>dandroid</w>
       <w>dapp</w>
@@ -95,6 +96,7 @@
       <w>rssoffer</w>
       <w>sbox</w>
       <w>seekbar</w>
+      <w>sharedpref</w>
       <w>slcc</w>
       <w>slogin</w>
       <w>sqlite</w>

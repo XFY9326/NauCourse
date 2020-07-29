@@ -2,7 +2,6 @@ package tool.xfy9326.naucourse.utils.utility
 
 import android.app.DownloadManager
 import android.app.PendingIntent
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -13,6 +12,8 @@ import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.MIMEConst
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.kt.showShortToast
+import tool.xfy9326.naucourse.kt.tryStartActivity
+import tool.xfy9326.naucourse.kt.tryStartActivityForResult
 import tool.xfy9326.naucourse.receivers.NextCourseAlarmReceiver
 import tool.xfy9326.naucourse.ui.activities.MainIndexActivity
 
@@ -29,37 +30,32 @@ object IntentUtils {
     )
 
     fun joinFeedbackQQGroup(context: Context) {
-        try {
-            context.startActivity(Intent().apply {
+        if (!context.tryStartActivity(Intent().apply {
                 data =
                     Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D$QQ_GROUP_KEY")
-            })
-        } catch (e: Exception) {
+            })) {
             context.showShortToast(R.string.application_launch_failed)
         }
     }
 
     fun launchUrlInBrowser(context: Context, url: String) {
-        try {
-            context.startActivity(Intent().apply {
+        if (!context.tryStartActivity(Intent().apply {
                 action = Intent.ACTION_VIEW
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 data = Uri.parse(url)
-            })
-        } catch (e: ActivityNotFoundException) {
+            })) {
             context.showShortToast(R.string.application_launch_failed)
         }
     }
 
     fun selectPicture(fragment: Fragment, requestCode: Int) {
-        try {
-            fragment.startActivityForResult(
+        if (!fragment.tryStartActivityForResult(
                 Intent(Intent.ACTION_GET_CONTENT)
                     .addCategory(Intent.CATEGORY_OPENABLE)
                     .setType(MIMEConst.IMAGE),
                 requestCode
             )
-        } catch (e: ActivityNotFoundException) {
+        ) {
             fragment.showShortToast(R.string.application_launch_failed)
         }
     }
@@ -78,12 +74,10 @@ object IntentUtils {
         })
 
     fun installApk(context: Context, uri: Uri) {
-        try {
-            context.startActivity(Intent(Intent.ACTION_VIEW).apply {
+        if (!context.tryStartActivity(Intent(Intent.ACTION_VIEW).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
                 setDataAndType(uri, MIMEConst.APK)
-            })
-        } catch (e: Exception) {
+            })) {
             context.showShortToast(R.string.application_launch_failed)
         }
     }

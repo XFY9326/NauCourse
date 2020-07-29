@@ -3,9 +3,12 @@
 package tool.xfy9326.naucourse.kt
 
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 
 
@@ -30,4 +33,20 @@ fun AppCompatActivity.enableHomeButton() {
 
 fun AppCompatActivity.disableActionBarTitle() {
     supportActionBar?.setDisplayShowTitleEnabled(false)
+}
+
+fun Context.tryStartActivity(intent: Intent, options: Bundle? = null): Boolean {
+    if (intent.resolveActivity(packageManager) != null) {
+        ContextCompat.startActivity(this, intent, options)
+        return true
+    }
+    return false
+}
+
+fun Fragment.tryStartActivityForResult(intent: Intent, requestCode: Int, options: Bundle? = null): Boolean {
+    if (intent.resolveActivity(requireContext().packageManager) != null) {
+        startActivityForResult(intent, requestCode, options)
+        return true
+    }
+    return false
 }
