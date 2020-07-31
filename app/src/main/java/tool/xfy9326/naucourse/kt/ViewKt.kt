@@ -2,7 +2,6 @@
 
 package tool.xfy9326.naucourse.kt
 
-import android.app.Dialog
 import android.content.res.Resources
 import android.graphics.Color
 import android.util.TypedValue
@@ -11,9 +10,6 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -45,17 +41,3 @@ fun CoordinatorLayout.showSnackBar(@StringRes strId: Int, vararg params: Any) =
 
 fun CoordinatorLayout.showSnackBarWithCallback(@StringRes strId: Int, @StringRes actionStrId: Int, callback: (View) -> Unit) =
     Snackbar.make(this, strId, Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).setAction(actionStrId, callback).show()
-
-// Activity销毁时自动关闭Dialog，防止窗体泄漏
-fun Dialog.bindLifecycle(lifecycle: Lifecycle) {
-    val observer = object : DefaultLifecycleObserver {
-        override fun onDestroy(owner: LifecycleOwner) {
-            if (isShowing) dismiss()
-            lifecycle.removeObserver(this)
-        }
-    }
-    lifecycle.addObserver(observer)
-    setOnDismissListener {
-        lifecycle.removeObserver(observer)
-    }
-}

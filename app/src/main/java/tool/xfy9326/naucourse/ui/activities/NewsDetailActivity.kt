@@ -18,7 +18,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.SerializableNews
 import tool.xfy9326.naucourse.constants.TimeConst
-import tool.xfy9326.naucourse.kt.bindLifecycle
+import tool.xfy9326.naucourse.kt.createWithLifecycle
 import tool.xfy9326.naucourse.kt.enableHomeButton
 import tool.xfy9326.naucourse.kt.showSnackBar
 import tool.xfy9326.naucourse.network.LoginNetworkManager
@@ -96,10 +96,7 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
                 }
             }
             background = getDrawable(R.drawable.bg_dialog)
-        }.create().apply {
-            bindLifecycle(lifecycle)
-            show()
-        }
+        }.createWithLifecycle(lifecycle).show()
     }
 
     override fun initView(savedInstanceState: Bundle?, viewModel: NewsDetailViewModel) {

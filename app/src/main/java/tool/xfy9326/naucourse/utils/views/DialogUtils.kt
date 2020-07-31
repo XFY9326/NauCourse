@@ -21,6 +21,7 @@ import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.OthersConst
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.kt.bindLifecycle
+import tool.xfy9326.naucourse.kt.createWithLifecycle
 import tool.xfy9326.naucourse.ui.views.widgets.AnimateSlider
 import tool.xfy9326.naucourse.utils.io.TextIOUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
@@ -34,9 +35,7 @@ object DialogUtils {
             setPositiveButton(android.R.string.ok, null)
             setCancelable(false)
             background = context.getDrawable(R.drawable.bg_dialog)
-        }.create().also {
-            it.bindLifecycle(lifecycle)
-        }
+        }.createWithLifecycle(lifecycle)
 
     fun createCreditShowDialog(context: Context, lifecycle: Lifecycle, credit: Pair<Float, Float?>) =
         MaterialAlertDialogBuilder(context).apply {
@@ -50,9 +49,7 @@ object DialogUtils {
             )
             setPositiveButton(android.R.string.ok, null)
             background = context.getDrawable(R.drawable.bg_dialog)
-        }.create().also {
-            it.bindLifecycle(lifecycle)
-        }
+        }.createWithLifecycle(lifecycle)
 
     fun createEditAsyncCourseAttention(context: Context, lifecycle: Lifecycle) =
         MaterialAlertDialogBuilder(context).apply {
@@ -63,9 +60,7 @@ object DialogUtils {
                 AppPref.EditAsyncCourseAttention = true
             }
             background = context.getDrawable(R.drawable.bg_dialog)
-        }.create().also {
-            it.bindLifecycle(lifecycle)
-        }
+        }.createWithLifecycle(lifecycle)
 
     fun createCourseColorPickerDialog(context: Context, color: Int, dialogId: Int): ColorPickerDialog =
         ColorPickerDialog.newBuilder().apply {
@@ -80,9 +75,7 @@ object DialogUtils {
         MaterialAlertDialogBuilder(context).apply {
             setItems(context.resources.getStringArray(R.array.course_manage_add_list), listener)
             background = context.getDrawable(R.drawable.bg_dialog)
-        }.create().also {
-            it.bindLifecycle(lifecycle)
-        }
+        }.createWithLifecycle(lifecycle)
 
     fun createUsingLicenseDialog(context: Context, lifecycle: Lifecycle) =
         MaterialAlertDialogBuilder(context).apply {
@@ -95,9 +88,7 @@ object DialogUtils {
             )
             setPositiveButton(android.R.string.ok, null)
             background = context.getDrawable(R.drawable.bg_dialog)
-        }.create().also {
-            it.bindLifecycle(lifecycle)
-        }
+        }.createWithLifecycle(lifecycle)
 
     fun createOpenSourceLicenseDialog(context: Context, lifecycle: Lifecycle) =
         MaterialAlertDialogBuilder(context).apply {
@@ -110,9 +101,7 @@ object DialogUtils {
             )
             setPositiveButton(android.R.string.ok, null)
             background = context.getDrawable(R.drawable.bg_dialog)
-        }.create().also {
-            it.bindLifecycle(lifecycle)
-        }
+        }.createWithLifecycle(lifecycle)
 
     fun createForgetPasswordDialog(context: Context, lifecycle: Lifecycle) =
         MaterialAlertDialogBuilder(context).apply {
@@ -123,9 +112,7 @@ object DialogUtils {
             }
             setPositiveButton(android.R.string.ok, null)
             background = context.getDrawable(R.drawable.bg_dialog)
-        }.create().also {
-            it.bindLifecycle(lifecycle)
-        }
+        }.createWithLifecycle(lifecycle)
 
     fun createLogoutAttentionDialog(context: Context, lifecycle: Lifecycle, logoutListener: DialogInterface.OnClickListener) =
         MaterialAlertDialogBuilder(context).apply {
@@ -134,9 +121,7 @@ object DialogUtils {
             setNegativeButton(android.R.string.cancel, null)
             setPositiveButton(android.R.string.ok, logoutListener)
             background = context.getDrawable(R.drawable.bg_dialog)
-        }.create().also {
-            it.bindLifecycle(lifecycle)
-        }
+        }.createWithLifecycle(lifecycle)
 
     fun createImageOperationDialog(context: Context, lifecycle: Lifecycle, shareListener: (() -> Unit), saveListener: (() -> Unit)) =
         BottomSheetDialog(context).apply {

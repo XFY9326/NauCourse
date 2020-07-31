@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.activity_school_calendar.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CalendarItem
-import tool.xfy9326.naucourse.kt.bindLifecycle
+import tool.xfy9326.naucourse.kt.createWithLifecycle
 import tool.xfy9326.naucourse.kt.enableHomeButton
 import tool.xfy9326.naucourse.kt.showShortToast
 import tool.xfy9326.naucourse.kt.showSnackBar
@@ -100,10 +100,7 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
             }
             setNegativeButton(android.R.string.cancel, null)
             background = context.getDrawable(R.drawable.bg_dialog)
-        }.create().apply {
-            bindLifecycle(lifecycle)
-            show()
-        }
+        }.createWithLifecycle(lifecycle).show()
     }
 
     @Synchronized

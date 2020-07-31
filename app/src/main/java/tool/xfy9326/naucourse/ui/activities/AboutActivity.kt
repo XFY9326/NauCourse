@@ -9,7 +9,7 @@ import tool.xfy9326.naucourse.BuildConfig
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.OthersConst
 import tool.xfy9326.naucourse.io.prefs.AppPref
-import tool.xfy9326.naucourse.kt.bindLifecycle
+import tool.xfy9326.naucourse.kt.createWithLifecycle
 import tool.xfy9326.naucourse.kt.enableHomeButton
 import tool.xfy9326.naucourse.kt.showShortToast
 import tool.xfy9326.naucourse.tools.NotifyBus
@@ -77,8 +77,6 @@ class AboutActivity : BaseActivity() {
                 showShortToast(R.string.advanced_function_on)
             }
             setCancelable(false)
-        }.create().also {
-            it.bindLifecycle(lifecycle)
-        }.show()
+        }.createWithLifecycle(lifecycle).show()
     }
 }
