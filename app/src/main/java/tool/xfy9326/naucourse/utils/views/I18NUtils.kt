@@ -67,7 +67,6 @@ object I18NUtils {
 
     fun getNewsPostSourceResId(postSource: PostSource): Int? =
         when (postSource) {
-            PostSource.ALSTU -> R.string.news_source_alstu
             PostSource.JWC -> R.string.news_source_jwc
             PostSource.RSS_JW -> R.string.news_source_rss_jw
             PostSource.RSS_TW -> R.string.news_source_rss_tw

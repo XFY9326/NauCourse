@@ -3,7 +3,7 @@ package tool.xfy9326.naucourse.providers.info.methods
 import tool.xfy9326.naucourse.io.db.CardBalanceDBHelper
 import tool.xfy9326.naucourse.providers.beans.ykt.CardBalance
 import tool.xfy9326.naucourse.providers.contents.base.ContentResult
-import tool.xfy9326.naucourse.providers.contents.methods.ykt.StudentCardBalance
+import tool.xfy9326.naucourse.providers.contents.methods.my.StudentCardBalance
 import tool.xfy9326.naucourse.providers.info.base.BaseSimpleContentInfo
 import tool.xfy9326.naucourse.providers.info.base.CacheExpire
 import tool.xfy9326.naucourse.providers.info.base.CacheExpireRule

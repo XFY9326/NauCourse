@@ -6,7 +6,10 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import tool.xfy9326.naucourse.io.db.NetworkDBHelper
 import tool.xfy9326.naucourse.io.prefs.UserPref
-import tool.xfy9326.naucourse.network.clients.*
+import tool.xfy9326.naucourse.network.clients.JwcClient
+import tool.xfy9326.naucourse.network.clients.MyClient
+import tool.xfy9326.naucourse.network.clients.NgxClient
+import tool.xfy9326.naucourse.network.clients.SSOClient
 import tool.xfy9326.naucourse.network.clients.base.LoginInfo
 import tool.xfy9326.naucourse.network.clients.base.LoginResponse
 import tool.xfy9326.naucourse.network.tools.NetworkTools
@@ -26,19 +29,15 @@ object LoginNetworkManager {
 
     private val clientMap = mapOf(
         ClientType.SSO to lazy { SSOClient(loginInfo) },
-        ClientType.VPN to lazy { VPNClient(loginInfo) },
         ClientType.JWC to lazy { JwcClient(loginInfo) },
-        ClientType.ALSTU to lazy { AlstuClient(loginInfo) },
-        ClientType.YKT to lazy { YktClient(loginInfo) },
+        ClientType.MY to lazy { MyClient(loginInfo) },
         ClientType.NGX to lazy { NgxClient(loginInfo) }
     )
 
     enum class ClientType {
         SSO,
-        VPN,
         JWC,
-        ALSTU,
-        YKT,
+        MY,
         NGX
     }
 
@@ -61,17 +60,16 @@ object LoginNetworkManager {
 
     suspend fun login(loginInfo: LoginInfo): LoginResponse = loginMutex.withLock {
         setLoginInfo(loginInfo)
-        val ssoResult = (getClient(ClientType.SSO)).login()
+        val ssoResult = getClient(ClientType.SSO).login()
         if (!ssoResult.isSuccess) {
             NetworkTools.getInstance().getCookieStore(NetworkTools.NetworkType.SSO).clearCookies()
         }
 
-        val vpnResult = (getClient(ClientType.VPN)).login()
         val ngxResult = (getClient(ClientType.NGX)).login()
         if (!ngxResult.isSuccess) {
             NetworkTools.getInstance().getCookieStore(NetworkTools.NetworkType.NGX).clearCookies()
         }
-        LogUtils.d<LoginNetworkManager>("Login Result: VPN: ${vpnResult.isSuccess}  SSO: ${ssoResult.isSuccess}  Ngx: ${ngxResult.isSuccess}")
+        LogUtils.d<LoginNetworkManager>("Login Result:  SSO: ${ssoResult.isSuccess}  Ngx: ${ngxResult.isSuccess}")
 
         ssoResult
     }

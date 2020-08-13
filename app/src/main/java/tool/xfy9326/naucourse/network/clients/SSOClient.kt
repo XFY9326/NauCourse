@@ -94,7 +94,7 @@ open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = nu
         return loginInternal(beforeLoginResponse, isServiceLogin)
     }
 
-    protected fun loginInternal(beforeLoginResponse: Response, isServiceLogin: Boolean): LoginResponse {
+    private fun loginInternal(beforeLoginResponse: Response, isServiceLogin: Boolean): LoginResponse {
         val ssoResponseUrl = beforeLoginResponse.request.url
         val ssoResponseContent = beforeLoginResponse.body?.string()!!
         beforeLoginResponse.closeQuietly()

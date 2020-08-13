@@ -48,7 +48,6 @@
     <string name="data_empty">当前暂无数据</string>
     <string name="news_type">类别：%1$s</string>
     <string name="news_click_amount">点击：%1$d</string>
-    <string name="news_source_alstu">奥兰系统</string>
     <string name="news_source_jwc">教务系统</string>
     <string name="news_source_rss_jw">教务委员会</string>
     <string name="news_source_rss_tw">团务委员会</string>

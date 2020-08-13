@@ -11,20 +11,19 @@ import tool.xfy9326.naucourse.providers.beans.PostSource
 import tool.xfy9326.naucourse.providers.contents.base.BaseNewsContent
 import tool.xfy9326.naucourse.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourse.providers.contents.base.ContentResult
-import tool.xfy9326.naucourse.providers.contents.methods.alstu.DefaultMessage
 import tool.xfy9326.naucourse.providers.contents.methods.jwc.TopicList
 import tool.xfy9326.naucourse.providers.contents.methods.rss.JwRSS
 import tool.xfy9326.naucourse.providers.contents.methods.rss.TwRSS
 import tool.xfy9326.naucourse.providers.contents.methods.rss.XgcRSS
 import tool.xfy9326.naucourse.providers.contents.methods.rss.XxbRSS
 import tool.xfy9326.naucourse.providers.info.base.BaseSimpleContentInfo
+import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 
 object NewsInfo : BaseSimpleContentInfo<List<GeneralNews>, PostSource>() {
     private const val INIT_PER_TYPE_NEWS_SIZE = 10
 
     private val CONTENT_MAP = mapOf<PostSource, BaseNewsContent<*>>(
         PostSource.JWC to TopicList,
-        PostSource.ALSTU to DefaultMessage,
         PostSource.RSS_JW to JwRSS,
         PostSource.RSS_TW to TwRSS,
         PostSource.RSS_XGC to XgcRSS,
@@ -42,7 +41,7 @@ object NewsInfo : BaseSimpleContentInfo<List<GeneralNews>, PostSource>() {
 
     override suspend fun getSimpleInfoContent(params: Set<PostSource>): ContentResult<List<GeneralNews>> {
         val resultList = HashSet<GeneralNews>(params.size * INIT_PER_TYPE_NEWS_SIZE)
-        val resultDeferred = arrayOfNulls<Deferred<ContentResult<Set<GeneralNews>>>>(params.size)
+        val resultDeferred = arrayOfNulls<Deferred<ContentResult<Set<GeneralNews>>?>>(params.size)
         return coroutineScope {
             for ((i, param) in params.withIndex()) {
                 resultDeferred[i] =
@@ -50,7 +49,12 @@ object NewsInfo : BaseSimpleContentInfo<List<GeneralNews>, PostSource>() {
                         if (param == PostSource.UNKNOWN) {
                             throw IllegalArgumentException("Unknown Post Source")
                         } else {
-                            CONTENT_MAP[param]?.getContentData()!!
+                            try {
+                                CONTENT_MAP[param]?.getContentData()!!
+                            } catch (e: Exception) {
+                                ExceptionUtils.printStackTrace<NewsInfo>(e)
+                                null
+                            }
                         }
                     }
             }
@@ -58,10 +62,10 @@ object NewsInfo : BaseSimpleContentInfo<List<GeneralNews>, PostSource>() {
             var contentErrorReason: ContentErrorReason? = null
             for (deferred in resultDeferred) {
                 val result = deferred!!.await()
-                if (result.isSuccess) {
+                if (result?.isSuccess == true) {
                     resultList.addAll(result.contentData!!)
                 } else {
-                    contentErrorReason = result.contentErrorResult
+                    contentErrorReason = result?.contentErrorResult ?: ContentErrorReason.OPERATION
                     break
                 }
             }
