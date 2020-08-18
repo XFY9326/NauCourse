@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.view_learning_process_item.view.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.BaseConst
 import tool.xfy9326.naucourse.kt.enableHomeButton
+import tool.xfy9326.naucourse.kt.showSnackBar
 import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentLearningProcess
@@ -47,6 +48,9 @@ class UserInfoActivity : ViewModelActivity<UserInfoViewModel>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_personalPhoto) {
             getViewModel().requestStuPhoto()
+        } else if (item.itemId == R.id.menu_refreshUserInfo) {
+            getViewModel().updatePersonalInfo()
+            layout_activityUserInfo.showSnackBar(R.string.refreshing_user_info)
         }
         return super.onOptionsItemSelected(item)
     }
@@ -62,6 +66,9 @@ class UserInfoActivity : ViewModelActivity<UserInfoViewModel>() {
         })
         viewModel.studentPhotoUrl.observeEvent(this, Observer {
             ImageShowActivity.showImageActivity(this, it, LoginNetworkManager.ClientType.JWC)
+        })
+        viewModel.userInfoRefreshFailed.observeEvent(this, Observer {
+            layout_activityUserInfo.showSnackBar(I18NUtils.getContentErrorResId(it)!!)
         })
     }
 

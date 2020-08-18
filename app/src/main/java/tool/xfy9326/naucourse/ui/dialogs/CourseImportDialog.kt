@@ -3,6 +3,7 @@ package tool.xfy9326.naucourse.ui.dialogs
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import tool.xfy9326.naucourse.R
@@ -65,7 +66,7 @@ class CourseImportDialog : DialogFragment(), DialogInterface.OnMultiChoiceClickL
 
     override fun onStart() {
         super.onStart()
-        dialog?.window?.setBackgroundDrawable(requireContext().getDrawable(R.drawable.bg_dialog))
+        dialog?.window?.setBackgroundDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.bg_dialog))
     }
 
     private fun getCourseNameArray() =

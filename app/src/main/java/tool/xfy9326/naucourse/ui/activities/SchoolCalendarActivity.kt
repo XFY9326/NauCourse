@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -99,7 +100,7 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
                 getViewModel().restoreToDefaultImage()
             }
             setNegativeButton(android.R.string.cancel, null)
-            background = context.getDrawable(R.drawable.bg_dialog)
+            background = ContextCompat.getDrawable(context, R.drawable.bg_dialog)
         }.createWithLifecycle(lifecycle).show()
     }
 

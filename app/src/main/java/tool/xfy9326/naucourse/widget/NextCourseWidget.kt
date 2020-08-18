@@ -10,6 +10,7 @@ import android.graphics.PorterDuffColorFilter
 import android.widget.RemoteViews
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -45,7 +46,7 @@ class NextCourseWidget : AppWidgetProvider() {
             nextCourseBundle.hasNextCourse -> {
                 val courseBundle = nextCourseBundle.courseBundle!!
                 RemoteViews(context.packageName, getNextCourseLayoutId(context)).apply {
-                    val colorDrawable = context.getDrawable(R.drawable.shape_today_course_color)!!
+                    val colorDrawable = ContextCompat.getDrawable(context, R.drawable.shape_today_course_color)!!
                     colorDrawable.colorFilter = PorterDuffColorFilter(courseBundle.courseCellStyle.color, PorterDuff.Mode.SRC_ATOP)
                     setImageViewBitmap(R.id.iv_widgetCourseColor, colorDrawable.toBitmap())
 

@@ -5,15 +5,16 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentInfo
+import tool.xfy9326.naucourse.providers.contents.base.ContentErrorReason
 import tool.xfy9326.naucourse.providers.contents.methods.jwc.StudentIndex
 import tool.xfy9326.naucourse.providers.info.methods.PersonalInfo
 import tool.xfy9326.naucourse.tools.livedata.EventLiveData
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
-import tool.xfy9326.naucourse.utils.debug.LogUtils
 
 class UserInfoViewModel : BaseViewModel() {
     val studentInfo = MutableLiveData<StudentInfo>()
     val studentPhotoUrl = EventLiveData<String>()
+    val userInfoRefreshFailed = EventLiveData<ContentErrorReason>()
 
     override fun onInitView(isRestored: Boolean) {
         if (tryInit()) {
@@ -28,13 +29,13 @@ class UserInfoViewModel : BaseViewModel() {
         }
     }
 
-    private fun updatePersonalInfo(initLoad: Boolean = false) {
+    fun updatePersonalInfo(initLoad: Boolean = false) {
         viewModelScope.launch(Dispatchers.Default) {
-            val personalInfo = PersonalInfo.getInfo(loadCache = initLoad)
+            val personalInfo = PersonalInfo.getInfo(loadCache = initLoad, forceRefresh = !initLoad)
             if (personalInfo.isSuccess) {
                 studentInfo.postValue(personalInfo.data!!)
-            } else {
-                LogUtils.d<UserInfoViewModel>("PersonalInfo Error: ${personalInfo.errorReason}")
+            } else if (!initLoad) {
+                userInfoRefreshFailed.postEventValue(personalInfo.errorReason)
             }
         }
     }

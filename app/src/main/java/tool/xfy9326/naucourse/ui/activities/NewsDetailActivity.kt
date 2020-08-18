@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Html
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.content.ContextCompat
 import androidx.core.view.drawToBitmap
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -95,7 +96,7 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
                     }
                 }
             }
-            background = getDrawable(R.drawable.bg_dialog)
+            background = ContextCompat.getDrawable(this@NewsDetailActivity, R.drawable.bg_dialog)
         }.createWithLifecycle(lifecycle).show()
     }
 

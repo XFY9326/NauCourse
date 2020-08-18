@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.transition.Fade
@@ -49,7 +50,7 @@ class FullScreenLoadingDialog : DialogFragment() {
         super.onStart()
         dialog?.window?.apply {
             isCancelable = false
-            setBackgroundDrawable(resources.getDrawable(android.R.color.transparent, null))
+            setBackgroundDrawable(ContextCompat.getDrawable(context, android.R.color.transparent))
         }
         animateDrawable.registerAnimationCallback(AnimUtils.getAnimationLoopCallback())
         animateDrawable.start()

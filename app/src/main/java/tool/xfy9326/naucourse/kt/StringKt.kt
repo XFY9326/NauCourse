@@ -8,6 +8,7 @@ private const val FILL_ZERO = "0"
 
 fun String.insert(offset: Int, str: String) = StringBuilder(this).insert(offset, str).toString()
 
+@Suppress("unused")
 fun ByteArray.toHex(): String {
     var tmp: String
     val textBuilder = StringBuilder()

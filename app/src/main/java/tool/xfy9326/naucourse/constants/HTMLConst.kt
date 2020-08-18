@@ -3,11 +3,10 @@ package tool.xfy9326.naucourse.constants
 object HTMLConst {
     const val ELEMENT_TAG_IMG = "img"
     const val ELEMENT_TAG_TD = "td"
-    const val ELEMENT_TAG_LI = "li"
     const val ELEMENT_TAG_BR = "br"
     const val ELEMENT_TAG_TR = "tr"
     const val ELEMENT_TAG_TH = "th"
-    const val ELEMENT_TAG_A = "a"
+    private const val ELEMENT_TAG_A = "a"
     const val ELEMENT_TAG_SPAN = "span"
     const val ELEMENT_TAG_TABLE = "table"
     const val ELEMENT_TAG_DIV = "div"

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.layout_list.view.*
@@ -67,7 +68,7 @@ class CreditCountCourseSelectDialog : DialogFragment() {
     override fun onStart() {
         super.onStart()
         dialog?.window?.apply {
-            setBackgroundDrawable(activity?.getDrawable(R.drawable.bg_dialog))
+            setBackgroundDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.bg_dialog))
             clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
         }
     }

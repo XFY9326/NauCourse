@@ -34,7 +34,7 @@ object DialogUtils {
             setMessage(R.string.online_course_init_conflict_attention_msg)
             setPositiveButton(android.R.string.ok, null)
             setCancelable(false)
-            background = context.getDrawable(R.drawable.bg_dialog)
+            background = ContextCompat.getDrawable(context, R.drawable.bg_dialog)
         }.createWithLifecycle(lifecycle)
 
     fun createCreditShowDialog(context: Context, lifecycle: Lifecycle, credit: Pair<Float, Float?>) =
@@ -48,7 +48,7 @@ object DialogUtils {
                 }
             )
             setPositiveButton(android.R.string.ok, null)
-            background = context.getDrawable(R.drawable.bg_dialog)
+            background = ContextCompat.getDrawable(context, R.drawable.bg_dialog)
         }.createWithLifecycle(lifecycle)
 
     fun createEditAsyncCourseAttention(context: Context, lifecycle: Lifecycle) =
@@ -59,7 +59,7 @@ object DialogUtils {
             setPositiveButton(R.string.i_see) { _, _ ->
                 AppPref.EditAsyncCourseAttention = true
             }
-            background = context.getDrawable(R.drawable.bg_dialog)
+            background = ContextCompat.getDrawable(context, R.drawable.bg_dialog)
         }.createWithLifecycle(lifecycle)
 
     fun createCourseColorPickerDialog(context: Context, color: Int, dialogId: Int): ColorPickerDialog =
@@ -74,7 +74,7 @@ object DialogUtils {
     fun createCourseAddDialog(context: Context, lifecycle: Lifecycle, listener: DialogInterface.OnClickListener) =
         MaterialAlertDialogBuilder(context).apply {
             setItems(context.resources.getStringArray(R.array.course_manage_add_list), listener)
-            background = context.getDrawable(R.drawable.bg_dialog)
+            background = ContextCompat.getDrawable(context, R.drawable.bg_dialog)
         }.createWithLifecycle(lifecycle)
 
     fun createUsingLicenseDialog(context: Context, lifecycle: Lifecycle) =
@@ -87,7 +87,7 @@ object DialogUtils {
                 )
             )
             setPositiveButton(android.R.string.ok, null)
-            background = context.getDrawable(R.drawable.bg_dialog)
+            background = ContextCompat.getDrawable(context, R.drawable.bg_dialog)
         }.createWithLifecycle(lifecycle)
 
     fun createOpenSourceLicenseDialog(context: Context, lifecycle: Lifecycle) =
@@ -100,7 +100,7 @@ object DialogUtils {
                 )
             )
             setPositiveButton(android.R.string.ok, null)
-            background = context.getDrawable(R.drawable.bg_dialog)
+            background = ContextCompat.getDrawable(context, R.drawable.bg_dialog)
         }.createWithLifecycle(lifecycle)
 
     fun createForgetPasswordDialog(context: Context, lifecycle: Lifecycle) =
@@ -111,7 +111,7 @@ object DialogUtils {
                 IntentUtils.launchUrlInBrowser(context, OthersConst.FORGET_PASSWORD)
             }
             setPositiveButton(android.R.string.ok, null)
-            background = context.getDrawable(R.drawable.bg_dialog)
+            background = ContextCompat.getDrawable(context, R.drawable.bg_dialog)
         }.createWithLifecycle(lifecycle)
 
     fun createLogoutAttentionDialog(context: Context, lifecycle: Lifecycle, logoutListener: DialogInterface.OnClickListener) =
@@ -120,14 +120,14 @@ object DialogUtils {
             setMessage(R.string.logout_msg)
             setNegativeButton(android.R.string.cancel, null)
             setPositiveButton(android.R.string.ok, logoutListener)
-            background = context.getDrawable(R.drawable.bg_dialog)
+            background = ContextCompat.getDrawable(context, R.drawable.bg_dialog)
         }.createWithLifecycle(lifecycle)
 
     fun createImageOperationDialog(context: Context, lifecycle: Lifecycle, shareListener: (() -> Unit), saveListener: (() -> Unit)) =
         BottomSheetDialog(context).apply {
             setContentView(R.layout.dialog_image_operation)
             val parentView = findViewById<ViewGroup>(com.google.android.material.R.id.design_bottom_sheet)
-            parentView?.background = context.getDrawable(R.drawable.bg_dialog)
+            parentView?.background = ContextCompat.getDrawable(context, R.drawable.bg_dialog)
 
             tv_dialogShareImage.setOnClickListener {
                 shareListener.invoke()
@@ -150,7 +150,7 @@ object DialogUtils {
         BottomSheetDialog(context).apply {
             setContentView(R.layout.dialog_course_control_panel)
             val parentView = findViewById<ViewGroup>(com.google.android.material.R.id.design_bottom_sheet)
-            parentView?.background = context.getDrawable(android.R.color.transparent)
+            parentView?.background = ContextCompat.getDrawable(context, R.drawable.bg_dialog)
 
             if (nowWeekNum != 0) tv_courseControlCurrentWeekNum.text = context.getString(R.string.current_week_num, nowWeekNum)
 
@@ -181,7 +181,7 @@ object DialogUtils {
         BottomSheetDialog(context).apply {
             setContentView(R.layout.dialog_bottom_msg)
             val parentView = findViewById<ViewGroup>(com.google.android.material.R.id.design_bottom_sheet)
-            parentView?.background = context.getDrawable(android.R.color.transparent)
+            parentView?.background = ContextCompat.getDrawable(context, R.drawable.bg_dialog)
 
             tv_dialogBottomTitle.text = title
             tv_dialogBottomContent.text = msg
@@ -208,7 +208,7 @@ object DialogUtils {
             val displayMetrics = context?.resources?.displayMetrics!!
             window?.apply {
                 setLayout((displayMetrics.widthPixels * widthPercent).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT)
-                setBackgroundDrawable(context.getDrawable(R.drawable.bg_dialog))
+                setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.bg_dialog))
             }
         }
     }
@@ -219,7 +219,7 @@ object DialogUtils {
             findViewById<Button>(android.R.id.button2)?.setTextColor(ContextCompat.getColor(context, R.color.colorDialogButtonText))
             findViewById<Button>(android.R.id.button3)?.setTextColor(ContextCompat.getColor(context, R.color.colorDialogButtonText))
             window?.apply {
-                setBackgroundDrawable(context.getDrawable(R.drawable.bg_dialog))
+                setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.bg_dialog))
             }
         }
     }

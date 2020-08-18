@@ -6,6 +6,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.text.Html
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
@@ -22,8 +23,8 @@ class HtmlImageGetter(private val context: Context, private val textView: TextVi
         private const val BITMAP_MAX_ZOOM = 3f
     }
 
-    private val defaultIcon = context.getDrawable(R.drawable.ic_image)!!
-    private val errorIcon = context.getDrawable(R.drawable.ic_broken_image)!!
+    private val defaultIcon = ContextCompat.getDrawable(context, R.drawable.ic_image)!!
+    private val errorIcon = ContextCompat.getDrawable(context, R.drawable.ic_broken_image)!!
     private val screenWidth = context.resources.displayMetrics.widthPixels
     private val screenHeight = context.resources.displayMetrics.heightPixels
 
