@@ -54,12 +54,12 @@ object LogUtils {
 
     private fun getOutputLog(type: Int, tag: String, msg: String) =
         "${DATE_FORMAT_YMD_HM_S.format(Date())} ${
-        when (type) {
-            Log.DEBUG -> "D"
-            Log.ERROR -> "E"
-            Log.WARN -> "W"
-            Log.INFO -> "I"
-            else -> "U"
-        }
+            when (type) {
+                Log.DEBUG -> "D"
+                Log.ERROR -> "E"
+                Log.WARN -> "W"
+                Log.INFO -> "I"
+                else -> "U"
+            }
         }/$tag: $msg"
 }

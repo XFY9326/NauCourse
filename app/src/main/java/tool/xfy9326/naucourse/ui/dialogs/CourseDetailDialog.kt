@@ -22,7 +22,6 @@ import tool.xfy9326.naucourse.utils.views.DialogUtils
 import tool.xfy9326.naucourse.utils.views.ViewUtils
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.Comparator
 
 class CourseDetailDialog : DialogFragment() {
     private lateinit var courseDetail: CourseDetail
@@ -159,9 +158,9 @@ class CourseDetailDialog : DialogFragment() {
 
     private fun loadMore(contentView: View, inflater: LayoutInflater) {
         val weekDayNumStrArray = resources.getStringArray(R.array.weekday_num)
-        val showList = courseDetail.course.timeSet.toList().sortedWith(Comparator { o1, o2 ->
+        val showList = courseDetail.course.timeSet.toList().sortedWith { o1, o2 ->
             o1.compareTo(o2)
-        })
+        }
         for ((i, courseTime) in showList.withIndex()) {
             contentView.layout_moreCourseInfo.addViewInLayout(
                 inflater.inflate(

@@ -2,7 +2,6 @@ package tool.xfy9326.naucourse.ui.activities.base
 
 import android.os.Bundle
 import androidx.annotation.CallSuper
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.layout_list.*
 import kotlinx.android.synthetic.main.layout_refresh_list.*
@@ -21,13 +20,13 @@ abstract class ListViewModelActivity<E, T : BaseListViewModel<E>, VH : RecyclerV
 
     @CallSuper
     override fun bindViewModel(viewModel: T) {
-        viewModel.errorMsg.observeEvent(this, Observer {
+        viewModel.errorMsg.observeEvent(this, {
             layout_refresh_list.showSnackBar(I18NUtils.getContentErrorResId(it)!!)
         })
-        viewModel.listData.observe(this, Observer {
+        viewModel.listData.observe(this, {
             adapter.submitList(it)
         })
-        viewModel.isRefreshing.observe(this, Observer {
+        viewModel.isRefreshing.observe(this, {
             if (it) {
                 asl_refreshLayout.isRefreshing = true
             } else {

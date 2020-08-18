@@ -4,7 +4,6 @@ import android.app.DatePickerDialog
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_empty_room_search.*
 import kotlinx.android.synthetic.main.layout_list.*
@@ -39,16 +38,16 @@ class EmptyRoomSearchActivity : ViewModelActivity<EmptyRoomViewModel>(), DatePic
     override fun onCreateViewModel(): EmptyRoomViewModel = ViewModelProvider(this)[EmptyRoomViewModel::class.java]
 
     override fun bindViewModel(viewModel: EmptyRoomViewModel) {
-        viewModel.isLoading.observeEvent(this, Observer {
+        viewModel.isLoading.observeEvent(this, {
             asl_emptyRoom.postStopRefreshing()
         })
-        viewModel.searchData.observe(this, Observer {
+        viewModel.searchData.observe(this, {
             applySearchData(it)
         })
-        viewModel.searchResult.observe(this, Observer {
+        viewModel.searchResult.observe(this, {
             adapter.submitList(it.toList())
         })
-        viewModel.errorMsg.observeEvent(this, Observer {
+        viewModel.errorMsg.observeEvent(this, {
             if (it.second) {
                 showShortToast(I18NUtils.getContentErrorResId(it.first)!!)
                 finish()

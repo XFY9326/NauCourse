@@ -8,7 +8,6 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.core.content.ContextCompat
 import androidx.core.view.drawToBitmap
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -127,20 +126,20 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
     )
 
     override fun bindViewModel(viewModel: NewsDetailViewModel) {
-        viewModel.isRefreshing.observeEvent(this, Observer {
+        viewModel.isRefreshing.observeEvent(this, {
             asl_newsDetail.postStopRefreshing()
         })
-        viewModel.newsDetail.observe(this, Observer {
+        viewModel.newsDetail.observe(this, {
             showNewsDetail(it)
             isNewsDetailSet = true
         })
-        viewModel.errorNotifyType.observeEvent(this, Observer {
+        viewModel.errorNotifyType.observeEvent(this, {
             layout_newsDetail.showSnackBar(I18NUtils.getContentErrorResId(it)!!)
         })
-        viewModel.imageShareUri.observeEvent(this, Observer {
+        viewModel.imageShareUri.observeEvent(this, {
             startActivity(ShareUtils.getShareImageIntent(this, it))
         })
-        viewModel.imageOperation.observeEvent(this, Observer {
+        viewModel.imageOperation.observeEvent(this, {
             layout_newsDetail.showSnackBar(I18NUtils.getImageOperationTypeResId(it))
         })
     }

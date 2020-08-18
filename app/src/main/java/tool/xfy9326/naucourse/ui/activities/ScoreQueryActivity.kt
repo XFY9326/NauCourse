@@ -3,7 +3,6 @@ package tool.xfy9326.naucourse.ui.activities
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_score_query.*
@@ -37,23 +36,23 @@ class ScoreQueryActivity : ViewModelActivity<ScoreQueryViewModel>(), CreditCount
     }
 
     override fun bindViewModel(viewModel: ScoreQueryViewModel) {
-        viewModel.errorMsg.observeEvent(this, Observer {
+        viewModel.errorMsg.observeEvent(this, {
             layout_scoreQuery.showSnackBar(I18NUtils.getContentErrorResId(it)!!)
         })
-        viewModel.isRefreshing.observe(this, Observer {
+        viewModel.isRefreshing.observe(this, {
             if (it) {
                 asl_scoreQuery.isRefreshing = true
             } else {
                 asl_scoreQuery.postStopRefreshing()
             }
         })
-        viewModel.credit.observeEvent(this, Observer {
+        viewModel.credit.observeEvent(this, {
             DialogUtils.createCreditShowDialog(this@ScoreQueryActivity, lifecycle, it).show()
         })
-        viewModel.creditCountStatus.observeEvent(this, Observer {
+        viewModel.creditCountStatus.observeEvent(this, {
             layout_scoreQuery.showSnackBar(I18NUtils.getCreditCountStatusResId(it))
         })
-        viewModel.creditCourseSelect.observeEvent(this, Observer {
+        viewModel.creditCourseSelect.observeEvent(this, {
             CreditCountCourseSelectDialog().apply {
                 arguments = Bundle().apply {
                     putSerializable(CreditCountCourseSelectDialog.CREDIT_COUNT_SELECT_ITEM, it.first)
@@ -80,13 +79,14 @@ class ScoreQueryActivity : ViewModelActivity<ScoreQueryViewModel>(), CreditCount
             viewModel.refreshData(forceUpdate = true)
         }
 
-        TabLayoutMediator(tabLayout_scoreQuery, vp_scoreQuery,
-            TabLayoutMediator.TabConfigurationStrategy { tab, position ->
-                when (position) {
-                    0 -> tab.setText(R.string.current_term_score)
-                    1 -> tab.setText(R.string.history_course_score)
-                }
-            }).attach()
+        TabLayoutMediator(
+            tabLayout_scoreQuery, vp_scoreQuery
+        ) { tab, position ->
+            when (position) {
+                0 -> tab.setText(R.string.current_term_score)
+                1 -> tab.setText(R.string.history_course_score)
+            }
+        }.attach()
     }
 
     override fun onCreditCountCourseSelected(items: ArrayList<CreditCountItem>, history: ArrayList<CreditCountItem>) {

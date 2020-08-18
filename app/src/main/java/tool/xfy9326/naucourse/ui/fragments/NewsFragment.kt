@@ -6,7 +6,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.fragment_news.*
 import kotlinx.android.synthetic.main.view_general_toolbar.*
@@ -58,14 +57,14 @@ class NewsFragment : DrawerToolbarFragment<NewsViewModel>(), NewsAdapter.OnNewsI
     }
 
     override fun bindViewModel(viewModel: NewsViewModel) {
-        viewModel.isRefreshing.observe(viewLifecycleOwner, Observer {
+        viewModel.isRefreshing.observe(viewLifecycleOwner, {
             asl_news.postStopRefreshing()
         })
-        viewModel.newsList.observe(viewLifecycleOwner, Observer {
+        viewModel.newsList.observe(viewLifecycleOwner, {
             newsAdapter.submitList(it)
             arv_newsList.scrollToPosition(0)
         })
-        viewModel.errorMsg.observeEvent(viewLifecycleOwner, Observer {
+        viewModel.errorMsg.observeEvent(viewLifecycleOwner, {
             layout_news.showSnackBar(I18NUtils.getContentErrorResId(it)!!)
         })
     }

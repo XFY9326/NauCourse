@@ -31,14 +31,18 @@ data class ClassTime(
 
     // 获取开始时间的字符串 HH:mm
     fun getStartTimeStr() =
-        "${String.format(BaseConst.KEEP_TWO_NUMBER_PLACES, startHour)}$TIME_JOIN_SYMBOL${String.format(
-            BaseConst.KEEP_TWO_NUMBER_PLACES,
-            startMinute
-        )}"
+        "${String.format(BaseConst.KEEP_TWO_NUMBER_PLACES, startHour)}$TIME_JOIN_SYMBOL${
+            String.format(
+                BaseConst.KEEP_TWO_NUMBER_PLACES,
+                startMinute
+            )
+        }"
 
     // 获取结束时间的字符串 HH:mm
     fun getEndTimeStr() =
-        "${String.format(BaseConst.KEEP_TWO_NUMBER_PLACES, endHour)}$TIME_JOIN_SYMBOL${String.format(
-            BaseConst.KEEP_TWO_NUMBER_PLACES, endMinute
-        )}"
+        "${String.format(BaseConst.KEEP_TWO_NUMBER_PLACES, endHour)}$TIME_JOIN_SYMBOL${
+            String.format(
+                BaseConst.KEEP_TWO_NUMBER_PLACES, endMinute
+            )
+        }"
 }

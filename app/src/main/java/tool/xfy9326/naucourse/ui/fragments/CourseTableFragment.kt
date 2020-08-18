@@ -14,7 +14,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.iterator
 import androidx.core.view.setMargins
 import androidx.core.view.setPadding
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
@@ -71,13 +70,13 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>() {
         viewModel.getImageWhenCourseTableLoading.observeNotification(viewLifecycleOwner, {
             layout_courseTableWindow.showSnackBar(R.string.operation_when_data_loading)
         })
-        viewModel.imageShareUri.observeEvent(viewLifecycleOwner, Observer {
+        viewModel.imageShareUri.observeEvent(viewLifecycleOwner, {
             startActivity(ShareUtils.getShareImageIntent(requireContext(), it))
         })
-        viewModel.imageOperation.observeEvent(viewLifecycleOwner, Observer {
+        viewModel.imageOperation.observeEvent(viewLifecycleOwner, {
             layout_courseTableWindow.showSnackBar(I18NUtils.getImageOperationTypeResId(it))
         })
-        viewModel.nowShowWeekNum.observe(viewLifecycleOwner, Observer {
+        viewModel.nowShowWeekNum.observe(viewLifecycleOwner, {
             tv_nowShowWeekNum.text = getString(
                 R.string.week_num,
                 if (it <= 0) {
@@ -89,20 +88,20 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>() {
 
             viewModel.requestShowWeekStatus(it)
         })
-        viewModel.currentWeekStatus.observe(viewLifecycleOwner, Observer {
+        viewModel.currentWeekStatus.observe(viewLifecycleOwner, {
             tv_notCurrentWeek.setText(I18NUtils.getCurrentWeekStatusResId(it!!))
         })
-        viewModel.todayDate.observe(viewLifecycleOwner, Observer {
+        viewModel.todayDate.observe(viewLifecycleOwner, {
             tv_todayDate.text = getString(R.string.today_date, it.first, it.second)
         })
-        viewModel.maxWeekNum.observe(viewLifecycleOwner, Observer {
+        viewModel.maxWeekNum.observe(viewLifecycleOwner, {
             courseTableViewPagerAdapter.updateMaxWeekNum(it)
             AppPref.MaxWeekNumCache = it
         })
-        viewModel.nowWeekNum.observe(viewLifecycleOwner, Observer {
+        viewModel.nowWeekNum.observe(viewLifecycleOwner, {
             updateNowWeekNum(viewModel, it)
         })
-        viewModel.courseDetailInfo.observeEvent(viewLifecycleOwner, Observer {
+        viewModel.courseDetailInfo.observeEvent(viewLifecycleOwner, {
             CourseDetailDialog.showDialog(childFragmentManager, it)
         })
     }

@@ -1,6 +1,5 @@
 package tool.xfy9326.naucourse.ui.fragments
 
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.layout_list.*
 import tool.xfy9326.naucourse.R
@@ -20,7 +19,7 @@ class CourseScoreFragment : ViewModelFragment<ScoreQueryViewModel>() {
     }
 
     override fun bindViewModel(viewModel: ScoreQueryViewModel) {
-        viewModel.courseScore.observe(viewLifecycleOwner, Observer {
+        viewModel.courseScore.observe(viewLifecycleOwner, {
             adapter.submitList(it)
         })
         viewModel.scrollToTop.observeNotification(viewLifecycleOwner, {

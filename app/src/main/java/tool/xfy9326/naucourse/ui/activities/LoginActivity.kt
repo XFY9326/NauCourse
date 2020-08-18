@@ -3,7 +3,6 @@ package tool.xfy9326.naucourse.ui.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import kotlinx.android.synthetic.main.activity_login.*
@@ -68,7 +67,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
     }
 
     override fun bindViewModel(viewModel: LoginViewModel) {
-        viewModel.isLoginLoading.observeEvent(this, Observer {
+        viewModel.isLoginLoading.observeEvent(this, {
             tv_loadingMsg.clear()
             et_userId.isEnabled = !it
             et_userPassword.isEnabled = !it
@@ -79,10 +78,10 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
 
             setLoadingAnimation(it)
         })
-        viewModel.savedCacheUserId.observeEvent(this, Observer {
+        viewModel.savedCacheUserId.observeEvent(this, {
             et_userId.setText(it)
         })
-        viewModel.errorReasonType.observeEvent(this, Observer {
+        viewModel.errorReasonType.observeEvent(this, {
             layout_activityLogin.showSnackBarWithCallback(I18NUtils.getErrorMsgResId(it)!!, R.string.login_troubleshoot) {
                 startActivity(Intent(this, ErrorActivity::class.java).apply {
                     putExtra(ErrorActivity.EXTRA_IS_LOGIN_FAILED_ERROR, true)
@@ -94,7 +93,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finishAfterTransition()
         })
-        viewModel.loginProcess.observeEvent(this, Observer {
+        viewModel.loginProcess.observeEvent(this, {
             val resId = I18NUtils.getLoadingProcessResId(it)
             if (resId != null) {
                 tv_loadingMsg.setText(resId)
@@ -102,12 +101,12 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
                 tv_loadingMsg.text = BaseConst.EMPTY
             }
         })
-        viewModel.compatData.observeEvent(this, Observer {
+        viewModel.compatData.observeEvent(this, {
             et_userId.setText(it.userId)
             et_userPassword.setText(it.userPw)
             cb_acceptEULA.isChecked = true
         })
-        viewModel.updateInfo.observeEvent(this, Observer { data ->
+        viewModel.updateInfo.observeEvent(this, { data ->
             viewModel.isLoginLoading.value?.peekContent()?.let {
                 if (!it) {
                     UpdateDialog.showDialog(supportFragmentManager, data)

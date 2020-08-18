@@ -7,7 +7,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -38,19 +37,19 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
     override fun onCreateViewModel(): SchoolCalendarViewModel = ViewModelProvider(this)[SchoolCalendarViewModel::class.java]
 
     override fun bindViewModel(viewModel: SchoolCalendarViewModel) {
-        viewModel.imageShareUri.observeEvent(this, Observer {
+        viewModel.imageShareUri.observeEvent(this, {
             startActivity(ShareUtils.getShareImageIntent(this, it))
         })
-        viewModel.imageOperation.observeEvent(this, Observer {
+        viewModel.imageOperation.observeEvent(this, {
             layout_schoolCalendar.showSnackBar(I18NUtils.getImageOperationTypeResId(it))
         })
-        viewModel.calendarImageUrl.observe(this, Observer {
+        viewModel.calendarImageUrl.observe(this, {
             setImageView(it)
         })
-        viewModel.calendarList.observeEvent(this, Observer {
+        viewModel.calendarList.observeEvent(this, {
             showCalendarList(it)
         })
-        viewModel.calendarLoadStatus.observeEvent(this, Observer {
+        viewModel.calendarLoadStatus.observeEvent(this, {
             if (it == SchoolCalendarViewModel.CalendarLoadStatus.LOADING_IMAGE_LIST) {
                 showShortToast(I18NUtils.getCalendarLoadStatusResId(it))
             } else {

@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.View
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -50,10 +49,10 @@ class ImageShowActivity : ViewModelActivity<ImageShowViewModel>(), View.OnLongCl
     override fun onCreateViewModel(): ImageShowViewModel = ViewModelProvider(this)[ImageShowViewModel::class.java]
 
     override fun bindViewModel(viewModel: ImageShowViewModel) {
-        viewModel.imageShareUri.observeEvent(this, Observer {
+        viewModel.imageShareUri.observeEvent(this, {
             startActivity(ShareUtils.getShareImageIntent(this, it))
         })
-        viewModel.imageOperation.observeEvent(this, Observer {
+        viewModel.imageOperation.observeEvent(this, {
             layout_imageView.showSnackBar(I18NUtils.getImageOperationTypeResId(it))
         })
     }

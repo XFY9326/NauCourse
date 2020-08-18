@@ -1,11 +1,9 @@
 package tool.xfy9326.naucourse.ui.activities
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -71,20 +69,21 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
         }
 
         fab_courseManage.setOnClickListener {
-            DialogUtils.createCourseAddDialog(this, lifecycle,
-                DialogInterface.OnClickListener { _, which ->
-                    when (which) {
-                        0 -> addNewCourse()
-                        1 -> {
-                            FullScreenLoadingDialog.showDialog(supportFragmentManager)
-                            getViewModel().importCourse(CourseManageViewModel.ImportCourseType.CURRENT_TERM)
-                        }
-                        2 -> {
-                            FullScreenLoadingDialog.showDialog(supportFragmentManager)
-                            getViewModel().importCourse(CourseManageViewModel.ImportCourseType.NEXT_TERM)
-                        }
+            DialogUtils.createCourseAddDialog(
+                this, lifecycle
+            ) { _, which ->
+                when (which) {
+                    0 -> addNewCourse()
+                    1 -> {
+                        FullScreenLoadingDialog.showDialog(supportFragmentManager)
+                        getViewModel().importCourse(CourseManageViewModel.ImportCourseType.CURRENT_TERM)
                     }
-                }).show()
+                    2 -> {
+                        FullScreenLoadingDialog.showDialog(supportFragmentManager)
+                        getViewModel().importCourse(CourseManageViewModel.ImportCourseType.NEXT_TERM)
+                    }
+                }
+            }.show()
         }
 
         if (!AppPref.EditAsyncCourseAttention && SettingsPref.AutoAsyncCourseData) {
@@ -99,13 +98,13 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
         )
 
     override fun bindViewModel(viewModel: CourseManageViewModel) {
-        viewModel.courseManagePkg.observe(this, Observer {
+        viewModel.courseManagePkg.observe(this, {
             courseAdapter.setCourseManagePkg(it)
         })
         viewModel.saveSuccess.observeNotification(this, {
             super.onBackPressed()
         })
-        viewModel.rawTermDate.observeEvent(this, Observer {
+        viewModel.rawTermDate.observeEvent(this, {
             courseAdapter.updateTermDate(it)
         })
         viewModel.onlineCourseConflict.observeNotification(this, {
@@ -114,7 +113,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
                 getString(R.string.online_course_conflict_attention_msg)
             ).show()
         })
-        viewModel.importCourseResult.observeEvent(this, Observer {
+        viewModel.importCourseResult.observeEvent(this, {
             FullScreenLoadingDialog.close(supportFragmentManager)
             if (it.third != null) {
                 layout_courseManage.showSnackBar(R.string.course_import_failed, getString(I18NUtils.getContentErrorResId(it.third!!)!!))

@@ -119,12 +119,12 @@ object NewsInfo : BaseSimpleContentInfo<List<GeneralNews>, PostSource>() {
     override suspend fun clearSimpleStoredInfo() = NewsDBHelper.clearAll()
 
     private fun sortNewsList(list: List<GeneralNews>): List<GeneralNews> =
-        list.sortedWith(Comparator { o1, o2 ->
+        list.sortedWith { o1, o2 ->
             val result1 = o2.postDate.time.compareTo(o1.postDate.time)
             if (result1 == 0) {
                 o2.title.compareTo(o1.title)
             } else {
                 result1
             }
-        })
+        }
 }

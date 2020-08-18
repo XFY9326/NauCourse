@@ -211,9 +211,9 @@ class CourseEditActivity : BaseActivity(), CourseTimeAdapter.CourseTimeCallback,
     private fun getSortedTimeList(): ArrayList<CourseTime> =
         if (courseData != null) {
             ArrayList(courseData!!.timeSet).apply {
-                sortWith(Comparator { o1, o2 ->
+                sortWith { o1, o2 ->
                     o1.compareTo(o2)
-                })
+                }
             }
         } else {
             ArrayList()

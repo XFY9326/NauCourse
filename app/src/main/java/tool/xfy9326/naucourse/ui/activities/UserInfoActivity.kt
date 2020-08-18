@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_user_info.*
 import kotlinx.android.synthetic.main.view_card_credit_info.*
@@ -61,13 +60,13 @@ class UserInfoActivity : ViewModelActivity<UserInfoViewModel>() {
     }
 
     override fun bindViewModel(viewModel: UserInfoViewModel) {
-        viewModel.studentInfo.observe(this, Observer {
+        viewModel.studentInfo.observe(this, {
             updateView(it)
         })
-        viewModel.studentPhotoUrl.observeEvent(this, Observer {
+        viewModel.studentPhotoUrl.observeEvent(this, {
             ImageShowActivity.showImageActivity(this, it, LoginNetworkManager.ClientType.JWC)
         })
-        viewModel.userInfoRefreshFailed.observeEvent(this, Observer {
+        viewModel.userInfoRefreshFailed.observeEvent(this, {
             layout_activityUserInfo.showSnackBar(I18NUtils.getContentErrorResId(it)!!)
         })
     }

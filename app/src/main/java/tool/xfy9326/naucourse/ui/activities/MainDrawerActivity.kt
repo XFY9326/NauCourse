@@ -1,6 +1,5 @@
 package tool.xfy9326.naucourse.ui.activities
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
@@ -198,19 +197,19 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     }
 
     private fun logout() {
-        DialogUtils.createLogoutAttentionDialog(this, lifecycle, DialogInterface.OnClickListener { _, _ ->
+        DialogUtils.createLogoutAttentionDialog(this, lifecycle) { _, _ ->
             FullScreenLoadingDialog.showDialog(supportFragmentManager)
             getViewModel().requestLogout()
-        }).show()
+        }.show()
     }
 
     override fun bindViewModel(viewModel: MainDrawerViewModel) {
-        viewModel.studentCardBalance.observe(this, Observer {
+        viewModel.studentCardBalance.observe(this, {
             nav_main.getHeaderView(DEFAULT_NAV_HEADER_INDEX).tv_cardBalanceOrClass.post {
                 tv_cardBalanceOrClass.text = getString(R.string.balance, String.format(BaseConst.KEEP_TWO_DECIMAL_PLACES, it))
             }
         })
-        viewModel.studentInfo.observe(this, Observer {
+        viewModel.studentInfo.observe(this, {
             nav_main.getHeaderView(DEFAULT_NAV_HEADER_INDEX).apply {
                 tv_userId.text = it.personalInfo.stuId.second
                 tv_userName.text = StudentInfo.trimExtra(it.personalInfo.name.second)
@@ -224,7 +223,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
             BaseUtils.restartApplication()
             finish()
         })
-        viewModel.updateInfo.observeEvent(this, Observer {
+        viewModel.updateInfo.observeEvent(this, {
             UpdateDialog.showDialog(supportFragmentManager, it)
         })
         NotifyBus[NotifyType.DEFAULT_ENTER_INTERFACE_CHANGED].observeNotification(this, {

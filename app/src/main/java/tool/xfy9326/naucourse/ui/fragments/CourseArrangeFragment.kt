@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.ImageViewCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.fragment_course_arrange.*
 import kotlinx.android.synthetic.main.view_card_next_course.*
@@ -79,35 +78,35 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
     }
 
     override fun bindViewModel(viewModel: CourseArrangeViewModel) {
-        viewModel.isRefreshing.observe(viewLifecycleOwner, Observer {
+        viewModel.isRefreshing.observe(viewLifecycleOwner) {
             asl_todayCourse.postStopRefreshing()
-        })
-        viewModel.notifyMsg.observeEvent(viewLifecycleOwner, Observer {
+        }
+        viewModel.notifyMsg.observeEvent(viewLifecycleOwner, {
             layout_todayCourse.showSnackBar(I18NUtils.getTodayCourseNotifyTypeResId(it))
         })
-        viewModel.todayCourses.observe(viewLifecycleOwner, Observer {
+        viewModel.todayCourses.observe(viewLifecycleOwner) {
             buildListCourseItem(layout_todayCourseContent, tv_todayCourseEmpty, it)
-        })
-        viewModel.tomorrowCourses.observe(viewLifecycleOwner, Observer {
+        }
+        viewModel.tomorrowCourses.observe(viewLifecycleOwner, {
             buildListCourseItem(layout_tomorrowCourseContent, tv_tomorrowCourseEmpty, it)
         })
-        viewModel.notThisWeekCourse.observe(viewLifecycleOwner, Observer {
+        viewModel.notThisWeekCourse.observe(viewLifecycleOwner, {
             buildListCourseItem(layout_notThisWeekCourseContent, tv_notThisWeekCourseEmpty, it, true)
         })
-        viewModel.nextCourseData.observe(viewLifecycleOwner, Observer {
+        viewModel.nextCourseData.observe(viewLifecycleOwner, {
             buildNextCourse(it)
         })
-        viewModel.nextCourseBundle.observeEvent(viewLifecycleOwner, Observer {
+        viewModel.nextCourseBundle.observeEvent(viewLifecycleOwner, {
             if (it == null) {
                 AppWidgetUtils.refreshNextCourseWidget(requireContext())
             } else {
                 AppWidgetUtils.updateNextCourseWidget(requireContext(), it)
             }
         })
-        viewModel.termDateData.observe(viewLifecycleOwner, Observer {
+        viewModel.termDateData.observe(viewLifecycleOwner, {
             buildTermDate(it)
         })
-        viewModel.courseDetail.observeEvent(viewLifecycleOwner, Observer {
+        viewModel.courseDetail.observeEvent(viewLifecycleOwner, {
             CourseDetailDialog.showDialog(childFragmentManager, it)
         })
         val notifyObserver = {
