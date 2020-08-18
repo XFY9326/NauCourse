@@ -150,7 +150,7 @@ object DialogUtils {
         BottomSheetDialog(context).apply {
             setContentView(R.layout.dialog_course_control_panel)
             val parentView = findViewById<ViewGroup>(com.google.android.material.R.id.design_bottom_sheet)
-            parentView?.background = ContextCompat.getDrawable(context, R.drawable.bg_dialog)
+            parentView?.background = ContextCompat.getDrawable(context, android.R.color.transparent)
 
             if (nowWeekNum != 0) tv_courseControlCurrentWeekNum.text = context.getString(R.string.current_week_num, nowWeekNum)
 
@@ -181,7 +181,7 @@ object DialogUtils {
         BottomSheetDialog(context).apply {
             setContentView(R.layout.dialog_bottom_msg)
             val parentView = findViewById<ViewGroup>(com.google.android.material.R.id.design_bottom_sheet)
-            parentView?.background = ContextCompat.getDrawable(context, R.drawable.bg_dialog)
+            parentView?.background = ContextCompat.getDrawable(context, android.R.color.transparent)
 
             tv_dialogBottomTitle.text = title
             tv_dialogBottomContent.text = msg
