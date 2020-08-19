@@ -24,8 +24,8 @@ android {
 
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 79
-        versionName '7.0.11'
+        versionCode 80
+        versionName '7.0.12'
 
         manifestPlaceholders = ['BUGLY_APP_ID': rootProject.ext.buglyAppId]
 
@@ -70,7 +70,7 @@ android {
             dimension 'version'
             applicationId rootProject.ext.applicationId
 
-            manifestPlaceholders = ['ApplicationId': "${applicationId}"]
+            manifestPlaceholders = ['ApplicationId': "${applicationId}", 'BUGLY_APP_CHANNEL': "stable"]
         }
         beta {
             dimension 'version'
@@ -79,7 +79,7 @@ android {
             applicationIdSuffix '.beta'
             versionNameSuffix '-beta'
 
-            manifestPlaceholders = ['ApplicationId': "${applicationId}${applicationIdSuffix}"]
+            manifestPlaceholders = ['ApplicationId': "${applicationId}${applicationIdSuffix}", 'BUGLY_APP_CHANNEL': "beta"]
         }
     }
 
@@ -170,7 +170,7 @@ dependencies {
     kapt "com.github.bumptech.glide:compiler:$glide_version"
 
     // Bugly
-    implementation 'com.tencent.bugly:crashreport:3.1.0'
+    implementation 'com.tencent.bugly:crashreport:3.2.3'
 
     // DB Debug
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.0'
