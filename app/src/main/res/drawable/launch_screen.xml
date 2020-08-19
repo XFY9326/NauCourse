@@ -9,19 +9,17 @@
         android:width="110dp"
         android:height="110dp"
         android:gravity="center_horizontal|top"
-        android:left="100dp"
-        android:right="100dp"
         android:top="100dp">
-        <bitmap android:src="@drawable/launch_screen_logo" />
+        <bitmap
+            android:mipMap="true"
+            android:src="@mipmap/ic_launcher" />
     </item>
 
     <item
         android:width="180dp"
         android:height="60dp"
         android:bottom="50dp"
-        android:gravity="center_horizontal|bottom"
-        android:left="100dp"
-        android:right="100dp">
+        android:gravity="center_horizontal|bottom">
         <bitmap android:src="@drawable/launch_screen_text" />
     </item>
 </layer-list>
