@@ -14,11 +14,14 @@ import kotlinx.coroutines.withContext
 import tool.xfy9326.naucourse.beans.CoursePkg
 import tool.xfy9326.naucourse.beans.CourseTable
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
+import tool.xfy9326.naucourse.kt.spToPx
 import tool.xfy9326.naucourse.utils.courses.CourseUtils
 import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import tool.xfy9326.naucourse.utils.views.ColorUtils
 
 object CourseTableViewHelper {
+    private val COURSE_TEXT_SIZE_OFFSET = 11f.spToPx()
+
     fun getShowWeekDaySize(courseTable: CourseTable, courseTableStyle: CourseTableStyle) =
         getShowWeekDaySize(courseTableStyle.forceShowCourseTableWeekends || CourseUtils.hasWeekendCourse(courseTable))
 
@@ -44,7 +47,7 @@ object CourseTableViewHelper {
             SettingsPref.EnableCourseTableTimeTextColor,
             SettingsPref.CourseTableTimeTextColor,
             SettingsPref.HighLightCourseTableTodayDate,
-            SettingsPref.CourseCellTextSize + 10f,
+            SettingsPref.CourseCellTextSize + COURSE_TEXT_SIZE_OFFSET,
             SettingsPref.getNotThisWeekCourseShowType()
         )
 

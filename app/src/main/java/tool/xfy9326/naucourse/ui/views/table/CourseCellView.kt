@@ -6,6 +6,7 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.widget.TextView
@@ -144,7 +145,7 @@ class CourseCellView : AdvancedFrameLayout {
             // 课程节次
             addViewInLayout(TextView(context).apply {
                 text = courseTimeNumText
-                textSize = internalStyle.timeNumTextSize
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, internalStyle.timeNumTextSize)
                 typeface = Typeface.defaultFromStyle(Typeface.BOLD)
                 setTextColor(internalStyle.textColor)
 
@@ -157,7 +158,7 @@ class CourseCellView : AdvancedFrameLayout {
             // 课程开始与结束时间
             addViewInLayout(TextView(context).apply {
                 text = courseTimeText
-                textSize = internalStyle.timeTextSize
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, internalStyle.timeTextSize)
                 setTextColor(internalStyle.textColor)
                 setPadding(0, internalStyle.timeTextPaddingTop, 0, 0)
 
@@ -198,7 +199,7 @@ class CourseCellView : AdvancedFrameLayout {
         addViewInLayout(TextView(context).apply {
             layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
 
-            textSize = courseTableStyle.courseCellTextSize
+            setTextSize(TypedValue.COMPLEX_UNIT_PX, courseTableStyle.courseCellTextSize)
 
             background =
                 if (!courseInfo.thisWeekCourse && courseTableStyle.notThisWeekCourseShowType.contains(SettingsPref.NotThisWeekCourseCellStyle.COLOR)) {

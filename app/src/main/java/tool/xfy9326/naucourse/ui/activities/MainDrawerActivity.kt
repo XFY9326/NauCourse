@@ -7,7 +7,6 @@ import android.view.MenuItem
 import android.view.View
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -23,7 +22,6 @@ import tool.xfy9326.naucourse.kt.showShortToast
 import tool.xfy9326.naucourse.providers.beans.jwc.StudentInfo
 import tool.xfy9326.naucourse.tools.NotifyBus
 import tool.xfy9326.naucourse.tools.NotifyType
-import tool.xfy9326.naucourse.tools.livedata.Event
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
 import tool.xfy9326.naucourse.ui.dialogs.FullScreenLoadingDialog
 import tool.xfy9326.naucourse.ui.dialogs.UpdateDialog
@@ -46,7 +44,6 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     }
 
     private var lastRequestBackTime: Long = 0
-    private var nightModeObserver: Observer<Event<Unit>>? = null
     private val fragmentTypeLock = Any()
     private var nowShowFragmentType: FragmentType? = null
 
@@ -206,7 +203,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     override fun bindViewModel(viewModel: MainDrawerViewModel) {
         viewModel.studentCardBalance.observe(this, {
             nav_main.getHeaderView(DEFAULT_NAV_HEADER_INDEX).tv_cardBalanceOrClass.post {
-                tv_cardBalanceOrClass.text = getString(R.string.balance, String.format(BaseConst.KEEP_TWO_DECIMAL_PLACES, it))
+                tv_cardBalanceOrClass?.text = getString(R.string.balance, String.format(BaseConst.KEEP_TWO_DECIMAL_PLACES, it))
             }
         })
         viewModel.studentInfo.observe(this, {
@@ -237,11 +234,6 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         NotifyBus[NotifyType.COURSE_INIT_CONFLICT].observeNotification(this) {
             DialogUtils.createCourseInitConflictDialog(this, lifecycle).show()
         }
-        // 需要Activity在后台时也监听夜间模式设定变化，防止延迟的界面更新
-        tryRemoveNightModeObserver()
-        nightModeObserver = NotifyBus[NotifyType.NIGHT_MODE_CHANGED].observeNotificationForever(MainDrawerActivity::class.java.simpleName) {
-            recreate()
-        }
     }
 
     override fun onBackPressed() {
@@ -259,14 +251,6 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
             } else {
                 moveTaskToBack(false)
             }
-        }
-    }
-
-    @Synchronized
-    private fun tryRemoveNightModeObserver() {
-        if (nightModeObserver != null) {
-            NotifyBus[NotifyType.NIGHT_MODE_CHANGED].removeObserver(nightModeObserver!!)
-            nightModeObserver = null
         }
     }
 
@@ -291,11 +275,6 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
             SettingsPref.EnterInterfaceType.COURSE_TABLE -> FragmentType.COURSE_TABLE
             SettingsPref.EnterInterfaceType.NEWS -> FragmentType.NEWS
         }
-
-    override fun onDestroy() {
-        tryRemoveNightModeObserver()
-        super.onDestroy()
-    }
 
     enum class FragmentType {
         COURSE_TABLE,
