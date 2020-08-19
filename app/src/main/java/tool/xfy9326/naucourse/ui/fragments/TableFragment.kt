@@ -62,9 +62,9 @@ class TableFragment : Fragment(), Observer<CoursePkg>, OnCourseCellClickListener
         applyLayoutTransition(layout_emptyCourseTableHeader)
         applyLayoutTransition(layout_emptyCourseTable)
 
-        contentViewModel.courseAndTermEmpty.observeNotification(viewLifecycleOwner, {
+        contentViewModel.courseAndTermEmpty.observeNotification(viewLifecycleOwner, "${TableFragment::class.java.simpleName}-$weekNum") {
             showShortToast(R.string.course_and_term_data_empty)
-        }, "${TableFragment::class.java.simpleName}-$weekNum")
+        }
     }
 
     override fun onChanged(t: CoursePkg) {

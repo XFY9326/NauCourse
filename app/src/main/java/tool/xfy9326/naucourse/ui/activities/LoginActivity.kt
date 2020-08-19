@@ -67,7 +67,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
     }
 
     override fun bindViewModel(viewModel: LoginViewModel) {
-        viewModel.isLoginLoading.observeEvent(this, {
+        viewModel.isLoginLoading.observeEvent(this) {
             tv_loadingMsg.clear()
             et_userId.isEnabled = !it
             et_userPassword.isEnabled = !it
@@ -77,42 +77,42 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
             btn_login.isEnabled = !it
 
             setLoadingAnimation(it)
-        })
-        viewModel.savedCacheUserId.observeEvent(this, {
+        }
+        viewModel.savedCacheUserId.observeEvent(this) {
             et_userId.setText(it)
-        })
-        viewModel.errorReasonType.observeEvent(this, {
+        }
+        viewModel.errorReasonType.observeEvent(this) {
             layout_activityLogin.showSnackBarWithCallback(I18NUtils.getErrorMsgResId(it)!!, R.string.login_troubleshoot) {
                 startActivity(Intent(this, ErrorActivity::class.java).apply {
                     putExtra(ErrorActivity.EXTRA_IS_LOGIN_FAILED_ERROR, true)
                 })
             }
-        })
-        viewModel.loginSuccess.observeNotification(this, {
+        }
+        viewModel.loginSuccess.observeNotification(this) {
             startActivity(Intent(this, MainDrawerActivity::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finishAfterTransition()
-        })
-        viewModel.loginProcess.observeEvent(this, {
+        }
+        viewModel.loginProcess.observeEvent(this) {
             val resId = I18NUtils.getLoadingProcessResId(it)
             if (resId != null) {
                 tv_loadingMsg.setText(resId)
             } else {
                 tv_loadingMsg.text = BaseConst.EMPTY
             }
-        })
-        viewModel.compatData.observeEvent(this, {
+        }
+        viewModel.compatData.observeEvent(this) {
             et_userId.setText(it.userId)
             et_userPassword.setText(it.userPw)
             cb_acceptEULA.isChecked = true
-        })
-        viewModel.updateInfo.observeEvent(this, { data ->
-            viewModel.isLoginLoading.value?.peekContent()?.let {
+        }
+        viewModel.updateInfo.observeEvent(this) { data ->
+            viewModel.isLoginLoading.value?.let {
                 if (!it) {
                     UpdateDialog.showDialog(supportFragmentManager, data)
                 }
             }
-        })
+        }
     }
 
     private fun setLoadingAnimation(setShow: Boolean) {

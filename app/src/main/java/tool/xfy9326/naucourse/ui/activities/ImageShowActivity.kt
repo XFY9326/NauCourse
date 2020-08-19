@@ -49,12 +49,12 @@ class ImageShowActivity : ViewModelActivity<ImageShowViewModel>(), View.OnLongCl
     override fun onCreateViewModel(): ImageShowViewModel = ViewModelProvider(this)[ImageShowViewModel::class.java]
 
     override fun bindViewModel(viewModel: ImageShowViewModel) {
-        viewModel.imageShareUri.observeEvent(this, {
+        viewModel.imageShareUri.observeEvent(this) {
             startActivity(ShareUtils.getShareImageIntent(this, it))
-        })
-        viewModel.imageOperation.observeEvent(this, {
+        }
+        viewModel.imageOperation.observeEvent(this) {
             layout_imageView.showSnackBar(I18NUtils.getImageOperationTypeResId(it))
-        })
+        }
     }
 
     override fun initView(savedInstanceState: Bundle?, viewModel: ImageShowViewModel) {

@@ -101,19 +101,19 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
         viewModel.courseManagePkg.observe(this, {
             courseAdapter.setCourseManagePkg(it)
         })
-        viewModel.saveSuccess.observeNotification(this, {
+        viewModel.saveSuccess.observeNotification(this) {
             super.onBackPressed()
-        })
-        viewModel.rawTermDate.observeEvent(this, {
+        }
+        viewModel.rawTermDate.observeEvent(this) {
             courseAdapter.updateTermDate(it)
-        })
-        viewModel.onlineCourseConflict.observeNotification(this, {
+        }
+        viewModel.onlineCourseConflict.observeNotification(this) {
             DialogUtils.createBottomMsgDialog(
                 this, lifecycle, getString(R.string.online_course_conflict_attention_title),
                 getString(R.string.online_course_conflict_attention_msg)
             ).show()
-        })
-        viewModel.importCourseResult.observeEvent(this, {
+        }
+        viewModel.importCourseResult.observeEvent(this) {
             FullScreenLoadingDialog.close(supportFragmentManager)
             if (it.third != null) {
                 layout_courseManage.showSnackBar(R.string.course_import_failed, getString(I18NUtils.getContentErrorResId(it.third!!)!!))
@@ -126,7 +126,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
                     isCancelable = false
                 }.show(supportFragmentManager, null)
             }
-        })
+        }
     }
 
     override fun onCourseDeleted(adapter: CourseAdapter, lastDeleteItem: Pair<Course, CourseCellStyle>, lastDeleteItemPosition: Int) {

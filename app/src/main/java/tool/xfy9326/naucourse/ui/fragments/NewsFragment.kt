@@ -64,9 +64,9 @@ class NewsFragment : DrawerToolbarFragment<NewsViewModel>(), NewsAdapter.OnNewsI
             newsAdapter.submitList(it)
             arv_newsList.scrollToPosition(0)
         })
-        viewModel.errorMsg.observeEvent(viewLifecycleOwner, {
+        viewModel.errorMsg.observeEvent(viewLifecycleOwner) {
             layout_news.showSnackBar(I18NUtils.getContentErrorResId(it)!!)
-        })
+        }
     }
 
     override fun onStart() {

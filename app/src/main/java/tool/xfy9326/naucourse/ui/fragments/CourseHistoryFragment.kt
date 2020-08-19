@@ -19,12 +19,12 @@ class CourseHistoryFragment : ViewModelFragment<ScoreQueryViewModel>() {
     }
 
     override fun bindViewModel(viewModel: ScoreQueryViewModel) {
-        viewModel.courseHistory.observe(viewLifecycleOwner, {
+        viewModel.courseHistory.observe(viewLifecycleOwner) {
             adapter.submitList(it)
-        })
-        viewModel.scrollToTop.observeNotification(viewLifecycleOwner, {
+        }
+        viewModel.scrollToTop.observeNotification(viewLifecycleOwner, CourseHistoryFragment::class.java.simpleName) {
             arv_dataList.smoothScrollToPosition(0)
-        }, CourseHistoryFragment::class.java.simpleName)
+        }
     }
 
     override fun initView(viewModel: ScoreQueryViewModel) {

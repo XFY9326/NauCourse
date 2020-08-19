@@ -67,16 +67,16 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>() {
     }
 
     private fun bindLocalObserver(viewModel: CourseTableViewModel) {
-        viewModel.getImageWhenCourseTableLoading.observeNotification(viewLifecycleOwner, {
+        viewModel.getImageWhenCourseTableLoading.observeNotification(viewLifecycleOwner) {
             layout_courseTableWindow.showSnackBar(R.string.operation_when_data_loading)
-        })
-        viewModel.imageShareUri.observeEvent(viewLifecycleOwner, {
+        }
+        viewModel.imageShareUri.observeEvent(viewLifecycleOwner) {
             startActivity(ShareUtils.getShareImageIntent(requireContext(), it))
-        })
-        viewModel.imageOperation.observeEvent(viewLifecycleOwner, {
+        }
+        viewModel.imageOperation.observeEvent(viewLifecycleOwner) {
             layout_courseTableWindow.showSnackBar(I18NUtils.getImageOperationTypeResId(it))
-        })
-        viewModel.nowShowWeekNum.observe(viewLifecycleOwner, {
+        }
+        viewModel.nowShowWeekNum.observe(viewLifecycleOwner) {
             tv_nowShowWeekNum.text = getString(
                 R.string.week_num,
                 if (it <= 0) {
@@ -85,41 +85,40 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>() {
                     it
                 }
             )
-
             viewModel.requestShowWeekStatus(it)
-        })
-        viewModel.currentWeekStatus.observe(viewLifecycleOwner, {
+        }
+        viewModel.currentWeekStatus.observe(viewLifecycleOwner) {
             tv_notCurrentWeek.setText(I18NUtils.getCurrentWeekStatusResId(it!!))
-        })
-        viewModel.todayDate.observe(viewLifecycleOwner, {
+        }
+        viewModel.todayDate.observe(viewLifecycleOwner) {
             tv_todayDate.text = getString(R.string.today_date, it.first, it.second)
-        })
-        viewModel.maxWeekNum.observe(viewLifecycleOwner, {
+        }
+        viewModel.maxWeekNum.observe(viewLifecycleOwner) {
             courseTableViewPagerAdapter.updateMaxWeekNum(it)
             AppPref.MaxWeekNumCache = it
-        })
-        viewModel.nowWeekNum.observe(viewLifecycleOwner, {
+        }
+        viewModel.nowWeekNum.observe(viewLifecycleOwner) {
             updateNowWeekNum(viewModel, it)
-        })
-        viewModel.courseDetailInfo.observeEvent(viewLifecycleOwner, {
+        }
+        viewModel.courseDetailInfo.observeEvent(viewLifecycleOwner) {
             CourseDetailDialog.showDialog(childFragmentManager, it)
-        })
+        }
     }
 
     private fun bindGlobalObserver(viewModel: CourseTableViewModel) {
-        NotifyBus[NotifyType.COURSE_STYLE_TERM_UPDATE].observeNotification(viewLifecycleOwner, {
+        NotifyBus[NotifyType.COURSE_STYLE_TERM_UPDATE].observeNotification(viewLifecycleOwner, CourseTableFragment::class.java.simpleName) {
             viewModel.refreshCourseData()
-        }, CourseTableFragment::class.java.simpleName)
-        NotifyBus[NotifyType.COURSE_TERM_UPDATE].observeNotification(viewLifecycleOwner, {
+        }
+        NotifyBus[NotifyType.COURSE_TERM_UPDATE].observeNotification(viewLifecycleOwner, CourseTableFragment::class.java.simpleName) {
             viewModel.refreshTimeInfo()
-        }, CourseTableFragment::class.java.simpleName)
-        NotifyBus[NotifyType.REBUILD_COURSE_TABLE].observeNotification(viewLifecycleOwner, {
+        }
+        NotifyBus[NotifyType.REBUILD_COURSE_TABLE].observeNotification(viewLifecycleOwner, CourseTableFragment::class.java.simpleName) {
             viewModel.rebuildCourseTable()
-        }, CourseTableFragment::class.java.simpleName)
-        NotifyBus[NotifyType.REBUILD_COURSE_TABLE_BACKGROUND].observeNotification(viewLifecycleOwner, {
+        }
+        NotifyBus[NotifyType.REBUILD_COURSE_TABLE_BACKGROUND].observeNotification(viewLifecycleOwner, CourseTableFragment::class.java.simpleName) {
             setCourseTableBackground()
             setFullScreenBackground(false)
-        }, CourseTableFragment::class.java.simpleName)
+        }
     }
 
     override fun onStart() {

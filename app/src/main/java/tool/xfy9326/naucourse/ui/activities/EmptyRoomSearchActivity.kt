@@ -38,23 +38,23 @@ class EmptyRoomSearchActivity : ViewModelActivity<EmptyRoomViewModel>(), DatePic
     override fun onCreateViewModel(): EmptyRoomViewModel = ViewModelProvider(this)[EmptyRoomViewModel::class.java]
 
     override fun bindViewModel(viewModel: EmptyRoomViewModel) {
-        viewModel.isLoading.observeEvent(this, {
+        viewModel.isLoading.observeEvent(this) {
             asl_emptyRoom.postStopRefreshing()
-        })
+        }
         viewModel.searchData.observe(this, {
             applySearchData(it)
         })
         viewModel.searchResult.observe(this, {
             adapter.submitList(it.toList())
         })
-        viewModel.errorMsg.observeEvent(this, {
+        viewModel.errorMsg.observeEvent(this) {
             if (it.second) {
                 showShortToast(I18NUtils.getContentErrorResId(it.first)!!)
                 finish()
             } else {
                 layout_emptyRoom.showSnackBar(I18NUtils.getContentErrorResId(it.first)!!)
             }
-        })
+        }
     }
 
     override fun initView(savedInstanceState: Bundle?, viewModel: EmptyRoomViewModel) {

@@ -22,9 +22,9 @@ class CourseScoreFragment : ViewModelFragment<ScoreQueryViewModel>() {
         viewModel.courseScore.observe(viewLifecycleOwner, {
             adapter.submitList(it)
         })
-        viewModel.scrollToTop.observeNotification(viewLifecycleOwner, {
+        viewModel.scrollToTop.observeNotification(viewLifecycleOwner, CourseScoreFragment::class.java.simpleName) {
             arv_dataList.smoothScrollToPosition(0)
-        }, CourseScoreFragment::class.java.simpleName)
+        }
     }
 
     override fun initView(viewModel: ScoreQueryViewModel) {

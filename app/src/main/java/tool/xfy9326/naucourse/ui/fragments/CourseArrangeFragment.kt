@@ -81,34 +81,34 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
         viewModel.isRefreshing.observe(viewLifecycleOwner) {
             asl_todayCourse.postStopRefreshing()
         }
-        viewModel.notifyMsg.observeEvent(viewLifecycleOwner, {
+        viewModel.notifyMsg.observeEvent(viewLifecycleOwner) {
             layout_todayCourse.showSnackBar(I18NUtils.getTodayCourseNotifyTypeResId(it))
-        })
+        }
         viewModel.todayCourses.observe(viewLifecycleOwner) {
             buildListCourseItem(layout_todayCourseContent, tv_todayCourseEmpty, it)
         }
-        viewModel.tomorrowCourses.observe(viewLifecycleOwner, {
+        viewModel.tomorrowCourses.observe(viewLifecycleOwner) {
             buildListCourseItem(layout_tomorrowCourseContent, tv_tomorrowCourseEmpty, it)
-        })
-        viewModel.notThisWeekCourse.observe(viewLifecycleOwner, {
+        }
+        viewModel.notThisWeekCourse.observe(viewLifecycleOwner) {
             buildListCourseItem(layout_notThisWeekCourseContent, tv_notThisWeekCourseEmpty, it, true)
-        })
-        viewModel.nextCourseData.observe(viewLifecycleOwner, {
+        }
+        viewModel.nextCourseData.observe(viewLifecycleOwner) {
             buildNextCourse(it)
-        })
-        viewModel.nextCourseBundle.observeEvent(viewLifecycleOwner, {
+        }
+        viewModel.nextCourseBundle.observeEvent(viewLifecycleOwner) {
             if (it == null) {
                 AppWidgetUtils.refreshNextCourseWidget(requireContext())
             } else {
                 AppWidgetUtils.updateNextCourseWidget(requireContext(), it)
             }
-        })
-        viewModel.termDateData.observe(viewLifecycleOwner, {
+        }
+        viewModel.termDateData.observe(viewLifecycleOwner) {
             buildTermDate(it)
-        })
-        viewModel.courseDetail.observeEvent(viewLifecycleOwner, {
+        }
+        viewModel.courseDetail.observeEvent(viewLifecycleOwner) {
             CourseDetailDialog.showDialog(childFragmentManager, it)
-        })
+        }
         val notifyObserver = {
             getViewModel().refreshArrangeCourses(showAttention = false, updateNextCourseWidget = false)
             viewModel.nextCourseBundle.postEventValue(null)
@@ -116,13 +116,13 @@ class CourseArrangeFragment : DrawerToolbarFragment<CourseArrangeViewModel>() {
         }
         NotifyBus[NotifyType.COURSE_ASYNC_UPDATE].observeNotification(
             viewLifecycleOwner,
-            notifyObserver,
-            CourseArrangeFragment::class.java.simpleName
+            CourseArrangeFragment::class.java.simpleName,
+            notifyObserver
         )
         NotifyBus[NotifyType.COURSE_STYLE_TERM_UPDATE].observeNotification(
             viewLifecycleOwner,
-            notifyObserver,
-            CourseArrangeFragment::class.java.simpleName
+            CourseArrangeFragment::class.java.simpleName,
+            notifyObserver
         )
     }
 

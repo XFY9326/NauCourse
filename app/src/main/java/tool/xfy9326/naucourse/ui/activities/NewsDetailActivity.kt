@@ -126,22 +126,22 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
     )
 
     override fun bindViewModel(viewModel: NewsDetailViewModel) {
-        viewModel.isRefreshing.observeEvent(this, {
+        viewModel.isRefreshing.observeEvent(this) {
             asl_newsDetail.postStopRefreshing()
-        })
+        }
         viewModel.newsDetail.observe(this, {
             showNewsDetail(it)
             isNewsDetailSet = true
         })
-        viewModel.errorNotifyType.observeEvent(this, {
+        viewModel.errorNotifyType.observeEvent(this) {
             layout_newsDetail.showSnackBar(I18NUtils.getContentErrorResId(it)!!)
-        })
-        viewModel.imageShareUri.observeEvent(this, {
+        }
+        viewModel.imageShareUri.observeEvent(this) {
             startActivity(ShareUtils.getShareImageIntent(this, it))
-        })
-        viewModel.imageOperation.observeEvent(this, {
+        }
+        viewModel.imageOperation.observeEvent(this) {
             layout_newsDetail.showSnackBar(I18NUtils.getImageOperationTypeResId(it))
-        })
+        }
     }
 
     private fun showNewsDetail(detail: GeneralNewsDetail) {

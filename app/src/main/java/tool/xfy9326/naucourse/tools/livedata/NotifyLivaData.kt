@@ -1,19 +1,26 @@
 package tool.xfy9326.naucourse.tools.livedata
 
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 
 // 用于只消费一次的通知
-class NotifyLivaData : EventLiveData<Unit>() {
-    fun notifyEvent() = postEventValue(Unit)
+@Suppress("unused")
+class NotifyLivaData {
+    private val liveData = EventLiveData<Unit>()
 
-    fun observeNotification(owner: LifecycleOwner, observer: () -> Unit, tag: String? = null) {
-        super.observeEvent(owner, {
-            observer.invoke()
-        }, tag)
-    }
+    fun notifyEvent() = liveData.postEventValue(Unit)
 
-    fun observeNotificationForever(observer: () -> Unit, tag: String? = null) =
-        super.observeEventForever({
+    fun removeObserver(observer: Observer<Event<Unit>>) = liveData.removeObserver(observer)
+
+    fun removeObservers(owner: LifecycleOwner) = liveData.removeObservers(owner)
+
+    fun observeNotification(owner: LifecycleOwner, tag: String? = null, observer: () -> Unit) =
+        liveData.observeEvent(owner, tag) {
             observer.invoke()
-        }, tag)
+        }
+
+    fun observeNotificationForever(tag: String? = null, observer: () -> Unit) =
+        liveData.observeEventForever(tag) {
+            observer.invoke()
+        }
 }

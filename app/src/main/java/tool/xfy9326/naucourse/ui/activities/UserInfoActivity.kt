@@ -63,12 +63,12 @@ class UserInfoActivity : ViewModelActivity<UserInfoViewModel>() {
         viewModel.studentInfo.observe(this, {
             updateView(it)
         })
-        viewModel.studentPhotoUrl.observeEvent(this, {
+        viewModel.studentPhotoUrl.observeEvent(this) {
             ImageShowActivity.showImageActivity(this, it, LoginNetworkManager.ClientType.JWC)
-        })
-        viewModel.userInfoRefreshFailed.observeEvent(this, {
+        }
+        viewModel.userInfoRefreshFailed.observeEvent(this) {
             layout_activityUserInfo.showSnackBar(I18NUtils.getContentErrorResId(it)!!)
-        })
+        }
     }
 
     @Synchronized

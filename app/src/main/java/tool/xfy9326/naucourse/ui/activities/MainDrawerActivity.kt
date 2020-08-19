@@ -46,7 +46,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     }
 
     private var lastRequestBackTime: Long = 0
-    private var nightModeObserver: Observer<in Event<Unit>>? = null
+    private var nightModeObserver: Observer<Event<Unit>>? = null
     private val fragmentTypeLock = Any()
     private var nowShowFragmentType: FragmentType? = null
 
@@ -218,30 +218,30 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
                 }
             }
         })
-        viewModel.logoutSuccess.observeNotification(this, {
+        viewModel.logoutSuccess.observeNotification(this) {
             FullScreenLoadingDialog.close(supportFragmentManager)
             BaseUtils.restartApplication()
             finish()
-        })
-        viewModel.updateInfo.observeEvent(this, {
+        }
+        viewModel.updateInfo.observeEvent(this) {
             UpdateDialog.showDialog(supportFragmentManager, it)
-        })
-        NotifyBus[NotifyType.DEFAULT_ENTER_INTERFACE_CHANGED].observeNotification(this, {
+        }
+        NotifyBus[NotifyType.DEFAULT_ENTER_INTERFACE_CHANGED].observeNotification(this) {
             showFragment(getDefaultFragmentType())
-        })
-        NotifyBus[NotifyType.ADVANCED_FUNCTION_MODE_CHANGED].observeNotification(this, {
+        }
+        NotifyBus[NotifyType.ADVANCED_FUNCTION_MODE_CHANGED].observeNotification(this) {
             setAdvancedFunctions()
             viewModel.updateBalance()
             viewModel.refreshPersonalInfo()
-        })
-        NotifyBus[NotifyType.COURSE_INIT_CONFLICT].observeNotification(this, {
+        }
+        NotifyBus[NotifyType.COURSE_INIT_CONFLICT].observeNotification(this) {
             DialogUtils.createCourseInitConflictDialog(this, lifecycle).show()
-        })
+        }
         // 需要Activity在后台时也监听夜间模式设定变化，防止延迟的界面更新
         tryRemoveNightModeObserver()
-        nightModeObserver = NotifyBus[NotifyType.NIGHT_MODE_CHANGED].observeNotificationForever({
+        nightModeObserver = NotifyBus[NotifyType.NIGHT_MODE_CHANGED].observeNotificationForever(MainDrawerActivity::class.java.simpleName) {
             recreate()
-        }, MainDrawerActivity::class.java.simpleName)
+        }
     }
 
     override fun onBackPressed() {

@@ -36,30 +36,30 @@ class ScoreQueryActivity : ViewModelActivity<ScoreQueryViewModel>(), CreditCount
     }
 
     override fun bindViewModel(viewModel: ScoreQueryViewModel) {
-        viewModel.errorMsg.observeEvent(this, {
+        viewModel.errorMsg.observeEvent(this) {
             layout_scoreQuery.showSnackBar(I18NUtils.getContentErrorResId(it)!!)
-        })
-        viewModel.isRefreshing.observe(this, {
+        }
+        viewModel.isRefreshing.observe(this) {
             if (it) {
                 asl_scoreQuery.isRefreshing = true
             } else {
                 asl_scoreQuery.postStopRefreshing()
             }
-        })
-        viewModel.credit.observeEvent(this, {
+        }
+        viewModel.credit.observeEvent(this) {
             DialogUtils.createCreditShowDialog(this@ScoreQueryActivity, lifecycle, it).show()
-        })
-        viewModel.creditCountStatus.observeEvent(this, {
+        }
+        viewModel.creditCountStatus.observeEvent(this) {
             layout_scoreQuery.showSnackBar(I18NUtils.getCreditCountStatusResId(it))
-        })
-        viewModel.creditCourseSelect.observeEvent(this, {
+        }
+        viewModel.creditCourseSelect.observeEvent(this) {
             CreditCountCourseSelectDialog().apply {
                 arguments = Bundle().apply {
                     putSerializable(CreditCountCourseSelectDialog.CREDIT_COUNT_SELECT_ITEM, it.first)
                     putSerializable(CreditCountCourseSelectDialog.CREDIT_COUNT_HISTORY_ITEM, it.second)
                 }
             }.show(supportFragmentManager, null)
-        })
+        }
     }
 
     override fun initView(savedInstanceState: Bundle?, viewModel: ScoreQueryViewModel) {

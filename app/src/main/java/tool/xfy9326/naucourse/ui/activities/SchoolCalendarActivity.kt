@@ -37,25 +37,25 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
     override fun onCreateViewModel(): SchoolCalendarViewModel = ViewModelProvider(this)[SchoolCalendarViewModel::class.java]
 
     override fun bindViewModel(viewModel: SchoolCalendarViewModel) {
-        viewModel.imageShareUri.observeEvent(this, {
+        viewModel.imageShareUri.observeEvent(this) {
             startActivity(ShareUtils.getShareImageIntent(this, it))
-        })
-        viewModel.imageOperation.observeEvent(this, {
+        }
+        viewModel.imageOperation.observeEvent(this) {
             layout_schoolCalendar.showSnackBar(I18NUtils.getImageOperationTypeResId(it))
-        })
-        viewModel.calendarImageUrl.observe(this, {
+        }
+        viewModel.calendarImageUrl.observe(this) {
             setImageView(it)
-        })
-        viewModel.calendarList.observeEvent(this, {
+        }
+        viewModel.calendarList.observeEvent(this) {
             showCalendarList(it)
-        })
-        viewModel.calendarLoadStatus.observeEvent(this, {
+        }
+        viewModel.calendarLoadStatus.observeEvent(this) {
             if (it == SchoolCalendarViewModel.CalendarLoadStatus.LOADING_IMAGE_LIST) {
                 showShortToast(I18NUtils.getCalendarLoadStatusResId(it))
             } else {
                 layout_schoolCalendar.showSnackBar(I18NUtils.getCalendarLoadStatusResId(it))
             }
-        })
+        }
     }
 
     override fun initView(savedInstanceState: Bundle?, viewModel: SchoolCalendarViewModel) {
