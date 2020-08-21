@@ -390,7 +390,7 @@
     <string name="clear_network_cache">清空网络缓存</string>
     <string name="clear_network_cache_sum">清空网页与图片的本地缓存</string>
     <string name="double_press_exit">再按一次返回键退出</string>
-    <string name="advanced_function_warning">\u3000高级功能仅限内部使用，若擅自使用后果自负！</string>
+    <string name="advanced_function_warning">\u3000高级功能仅限内部测试使用，一切信息以教务为准，若擅自使用出现任何问题后果自负！</string>
     <string name="edit_async_course_attention">\u3000\u3000由于您已经开启了自动同步课程数据功能，因此修改导入的课程时可能会出现修改的数据被重置的情况。\n\u3000\u3000注：您可以在 设置-数据-每天自动同步课程数据 手动设置</string>
     <string name="i_see">我已知晓</string>
     <string name="attention">注意</string>

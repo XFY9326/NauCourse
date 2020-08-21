@@ -33,7 +33,7 @@ class CourseTableHeaderView : AdvancedLinearLayout {
     private val highLightTextColorBackground = ContextCompat.getColor(context, R.color.colorCourseTimeHighLightBackground)
     private val otherCourseCellBackground = ContextCompat.getColor(context, R.color.colorOtherCourseCellBackground)
 
-    private val defaultCourseCellBackgroundRadius = resources.getDimensionPixelSize(R.dimen.course_cell_background_radius).toFloat()
+    private val defaultCourseCellBackgroundRadius = resources.getDimension(R.dimen.course_cell_background_radius)
     private val defaultCourseTimeTextColor = ContextCompat.getColor(context, R.color.colorCourseTimeDefault)
 
     private val layoutInflater = LayoutInflater.from(context)

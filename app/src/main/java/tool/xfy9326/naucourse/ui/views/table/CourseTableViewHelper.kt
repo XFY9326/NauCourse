@@ -11,16 +11,17 @@ import androidx.core.graphics.applyCanvas
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
+import tool.xfy9326.naucourse.App
+import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CoursePkg
 import tool.xfy9326.naucourse.beans.CourseTable
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
-import tool.xfy9326.naucourse.kt.spToPx
 import tool.xfy9326.naucourse.utils.courses.CourseUtils
 import tool.xfy9326.naucourse.utils.courses.TimeUtils
 import tool.xfy9326.naucourse.utils.views.ColorUtils
 
 object CourseTableViewHelper {
-    private val COURSE_TEXT_SIZE_OFFSET = 11f.spToPx()
+    private val COURSE_TEXT_SIZE_OFFSET = App.instance.resources.getDimension(R.dimen.course_text_size_offset)
 
     fun getShowWeekDaySize(courseTable: CourseTable, courseTableStyle: CourseTableStyle) =
         getShowWeekDaySize(courseTableStyle.forceShowCourseTableWeekends || CourseUtils.hasWeekendCourse(courseTable))

@@ -46,7 +46,7 @@ class CourseTableView : AdvancedGridLayout {
     private val timeCellVerticalPadding = resources.getDimensionPixelSize(R.dimen.course_time_cell_vertical_padding)
     private val courseCellTextPadding = resources.getDimensionPixelSize(R.dimen.course_cell_text_padding)
     private val timeCellTimeNumSize = resources.getDimensionPixelSize(R.dimen.course_time_cell_num_text_size).toFloat()
-    private val timeCellTimeSize = resources.getDimensionPixelSize(R.dimen.course_time_cell_text_size).toFloat()
+    private val timeCellTimeSize = resources.getDimension(R.dimen.course_time_cell_text_size)
     private val timeTextPaddingTop = resources.getDimensionPixelSize(R.dimen.course_time_text_padding)
 
     private val courseTextColorLight = ContextCompat.getColor(context, R.color.colorCourseTextLight)
@@ -54,7 +54,7 @@ class CourseTableView : AdvancedGridLayout {
     private val otherCourseCellBackground = ContextCompat.getColor(context, R.color.colorOtherCourseCellBackground)
     private val notThisWeekCourseColor = ContextCompat.getColor(context, R.color.colorNotThisWeekCourseCell)
 
-    private val defaultCourseCellBackgroundRadius = resources.getDimensionPixelSize(R.dimen.course_cell_background_radius).toFloat()
+    private val defaultCourseCellBackgroundRadius = resources.getDimension(R.dimen.course_cell_background_radius)
     private val defaultBottomFillCellHeight = resources.getDimensionPixelSize(R.dimen.course_table_bottom_corner_compat)
     private val defaultCourseTimeTextColor = ContextCompat.getColor(context, R.color.colorCourseTimeDefault)
 
