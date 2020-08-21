@@ -48,7 +48,7 @@ class UserInfoActivity : ViewModelActivity<UserInfoViewModel>() {
         if (item.itemId == R.id.menu_personalPhoto) {
             getViewModel().requestStuPhoto()
         } else if (item.itemId == R.id.menu_refreshUserInfo) {
-            getViewModel().updatePersonalInfo()
+            getViewModel().updatePersonalInfo(forceRefresh = true)
             layout_activityUserInfo.showSnackBar(R.string.refreshing_user_info)
         }
         return super.onOptionsItemSelected(item)

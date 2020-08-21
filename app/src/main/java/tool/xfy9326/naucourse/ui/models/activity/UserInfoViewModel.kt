@@ -29,12 +29,12 @@ class UserInfoViewModel : BaseViewModel() {
         }
     }
 
-    fun updatePersonalInfo(initLoad: Boolean = false) {
+    fun updatePersonalInfo(initLoad: Boolean = false, forceRefresh: Boolean = false) {
         viewModelScope.launch(Dispatchers.Default) {
-            val personalInfo = PersonalInfo.getInfo(loadCache = initLoad, forceRefresh = !initLoad)
+            val personalInfo = PersonalInfo.getInfo(loadCache = initLoad, forceRefresh = forceRefresh)
             if (personalInfo.isSuccess) {
                 studentInfo.postValue(personalInfo.data!!)
-            } else if (!initLoad) {
+            } else if (forceRefresh) {
                 userInfoRefreshFailed.postEventValue(personalInfo.errorReason)
             }
         }
