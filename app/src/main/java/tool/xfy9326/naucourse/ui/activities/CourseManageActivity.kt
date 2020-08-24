@@ -224,7 +224,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun onCourseImport(courses: ArrayList<Course>, term: Term, type: CourseManageViewModel.ImportCourseType) {
+    override fun onCourseImport(courses: ArrayList<Course>, term: Term, type: CourseManageViewModel.ImportCourseType, clearAll: Boolean) {
         getViewModel().setDataChanged()
         if (type == CourseManageViewModel.ImportCourseType.NEXT_TERM) {
             DialogUtils.createBottomMsgDialog(
@@ -239,7 +239,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
         } else {
             checkNotCompleteCourseData(courses)
         }
-        courseAdapter.importCourse(courses)
+        courseAdapter.importCourse(courses, clearAll)
     }
 
     private fun checkNotCompleteCourseData(courses: ArrayList<Course>) {

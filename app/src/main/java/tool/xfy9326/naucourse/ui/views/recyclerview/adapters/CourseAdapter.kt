@@ -83,9 +83,15 @@ class CourseAdapter(context: Context, @Volatile private var courseManagePkg: Cou
         return null
     }
 
-    fun importCourse(courses: ArrayList<Course>) = synchronized(isOperationEnabledLock) {
+    fun importCourse(courses: ArrayList<Course>, clearAll: Boolean) = synchronized(isOperationEnabledLock) {
         if (courseManagePkg != null) {
-            val result = CourseUtils.importCourseToList(courseManagePkg!!.courses, courses).sortedBy {
+            val result = CourseUtils.importCourseToList(
+                if (clearAll) {
+                    null
+                } else {
+                    courseManagePkg!!.courses
+                }, courses
+            ).sortedBy {
                 it.first.id
             }
             courseManagePkg!!.courses.clear()

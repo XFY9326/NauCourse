@@ -19,27 +19,35 @@ object CourseUtils {
     private const val CUSTOM_COURSE_ID_PREFIX = "NCC-"
 
     fun importCourseToList(
-        currentList: ArrayList<Pair<Course, CourseCellStyle>>,
+        currentList: ArrayList<Pair<Course, CourseCellStyle>>? = null,
         importedCourses: ArrayList<Course>
     ): ArrayList<Pair<Course, CourseCellStyle>> {
-        var hasSame: Boolean
-        val newCourses = ArrayList(currentList)
-        for (newCourse in importedCourses) {
-            hasSame = false
-            for (coursePair in currentList) {
-                if (newCourse.id == coursePair.first.id) {
-                    newCourses.remove(coursePair)
-                    newCourses.add(Pair(newCourse, coursePair.second))
-                    hasSame = true
-                    break
-                }
-            }
-
-            if (!hasSame) {
+        if (currentList.isNullOrEmpty()) {
+            val newCourses = ArrayList<Pair<Course, CourseCellStyle>>()
+            for (newCourse in importedCourses) {
                 newCourses.add(Pair(newCourse, CourseStyleUtils.getDefaultCellStyle(newCourse.id)))
             }
+            return newCourses
+        } else {
+            val newCourses = ArrayList(currentList)
+            var hasSame: Boolean
+            for (newCourse in importedCourses) {
+                hasSame = false
+                for (coursePair in currentList) {
+                    if (newCourse.id == coursePair.first.id) {
+                        newCourses.remove(coursePair)
+                        newCourses.add(Pair(newCourse, coursePair.second))
+                        hasSame = true
+                        break
+                    }
+                }
+
+                if (!hasSame) {
+                    newCourses.add(Pair(newCourse, CourseStyleUtils.getDefaultCellStyle(newCourse.id)))
+                }
+            }
+            return newCourses
         }
-        return newCourses
     }
 
     private fun getCourseTableByWeekNum(

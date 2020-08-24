@@ -52,13 +52,20 @@ class CourseImportDialog : DialogFragment(), DialogInterface.OnMultiChoiceClickL
         setTitle(R.string.course_import)
         setMultiChoiceItems(getCourseNameArray(), checkedArray, this@CourseImportDialog)
         setNegativeButton(android.R.string.cancel, null)
-        setPositiveButton(android.R.string.ok) { _, _ ->
-            val activity = requireActivity()
-            if (activity is CourseImportCallback) {
-                activity.onCourseImport(generateNewCourseList(), courseSet.term, courseType)
-            }
+        setNeutralButton(R.string.clear_and_import_course) { _, _ ->
+            importCourse(true)
+        }
+        setPositiveButton(R.string.import_course) { _, _ ->
+            importCourse(false)
         }
     }.create()
+
+    private fun importCourse(clearAll: Boolean) {
+        val activity = requireActivity()
+        if (activity is CourseImportCallback) {
+            activity.onCourseImport(generateNewCourseList(), courseSet.term, courseType, clearAll)
+        }
+    }
 
     override fun onClick(dialog: DialogInterface?, which: Int, isChecked: Boolean) {
         checkedArray[which] = isChecked
@@ -83,6 +90,6 @@ class CourseImportDialog : DialogFragment(), DialogInterface.OnMultiChoiceClickL
     }
 
     interface CourseImportCallback {
-        fun onCourseImport(courses: ArrayList<Course>, term: Term, type: CourseManageViewModel.ImportCourseType)
+        fun onCourseImport(courses: ArrayList<Course>, term: Term, type: CourseManageViewModel.ImportCourseType, clearAll: Boolean)
     }
 }

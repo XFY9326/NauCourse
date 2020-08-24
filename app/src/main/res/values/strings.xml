@@ -417,4 +417,6 @@
     <string name="not_complete_data_warning_content">注意！导入的课程数据存在信息不完善，可能会导致无法保存</string>
     <string name="login_troubleshoot">疑难解答</string>
     <string name="refreshing_user_info">正在刷新个人信息。。。</string>
+    <string name="clear_and_import_course">清空并导入</string>
+    <string name="import_course">导入</string>
 </resources>
