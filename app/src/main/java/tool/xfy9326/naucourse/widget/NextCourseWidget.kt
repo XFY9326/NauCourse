@@ -19,7 +19,6 @@ import tool.xfy9326.naucourse.constants.TimeConst
 import tool.xfy9326.naucourse.kt.goAsync
 import tool.xfy9326.naucourse.utils.BaseUtils
 import tool.xfy9326.naucourse.utils.courses.ExtraCourseUtils
-import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 import tool.xfy9326.naucourse.utils.utility.AppWidgetUtils
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import tool.xfy9326.naucourse.utils.views.ViewUtils
@@ -92,55 +91,39 @@ class NextCourseWidget : AppWidgetProvider() {
             )
     }
 
-    override fun onEnabled(context: Context?) {
-        context?.let {
-            // 初始化定时器
-            IntentUtils.startNextCourseAlarm(it)
-            val componentName = ComponentName(it, NextCourseWidget::class.java)
-            val appWidgetManager = AppWidgetManager.getInstance(it)
-            onUpdate(it, appWidgetManager, appWidgetManager.getAppWidgetIds(componentName))
-        }
+    override fun onEnabled(context: Context) {
+        // 初始化定时器
+        IntentUtils.startNextCourseAlarm(context)
+        val componentName = ComponentName(context, NextCourseWidget::class.java)
+        val appWidgetManager = AppWidgetManager.getInstance(context)
+        onUpdate(context, appWidgetManager, appWidgetManager.getAppWidgetIds(componentName))
     }
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         goAsync {
-            try {
-                // 数据刷新（无传入数据）
-                ExtraCourseUtils.getLocalCourseData().let {
-                    val nextCourseBundle = ExtraCourseUtils.getNextCourseInfo(it?.first, it?.second, it?.third)
-                    appWidgetManager.updateAppWidget(appWidgetIds, generateView(context, nextCourseBundle))
-                }
-            } catch (e: Exception) {
-                ExceptionUtils.printStackTrace(this, e)
+            // 数据刷新（无传入数据）
+            ExtraCourseUtils.getLocalCourseData().let {
+                val nextCourseBundle = ExtraCourseUtils.getNextCourseInfo(it?.first, it?.second, it?.third)
+                appWidgetManager.updateAppWidget(appWidgetIds, generateView(context, nextCourseBundle))
             }
         }
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        when (intent?.action) {
-            ACTION_NEXT_COURSE_WIDGET_UPDATE -> context?.let {
-                goAsync {
+        context?.let {
+            when (intent?.action) {
+                ACTION_NEXT_COURSE_WIDGET_UPDATE -> goAsync {
                     // 数据刷新（有传入数据）
-                    try {
-                        val componentName = ComponentName(it, NextCourseWidget::class.java)
-                        val nextCourseBundle = intent.getSerializableExtra(EXTRA_NEXT_COURSE_WIDGET_DATA) as NextCourseBundle
-                        AppWidgetManager.getInstance(it).updateAppWidget(componentName, generateView(it, nextCourseBundle))
-                    } catch (e: Exception) {
-                        ExceptionUtils.printStackTrace(this, e)
-                    }
+                    val componentName = ComponentName(it, NextCourseWidget::class.java)
+                    val nextCourseBundle = intent.getSerializableExtra(EXTRA_NEXT_COURSE_WIDGET_DATA) as NextCourseBundle
+                    AppWidgetManager.getInstance(it).updateAppWidget(componentName, generateView(it, nextCourseBundle))
                 }
-            }
-            AppWidgetUtils.ACTION_COURSE_WIDGET_CLEAR -> context?.let {
-                goAsync {
-                    try {
-                        val componentName = ComponentName(it, NextCourseWidget::class.java)
-                        AppWidgetManager.getInstance(it).updateAppWidget(componentName, generateView(it, null))
-                    } catch (e: Exception) {
-                        ExceptionUtils.printStackTrace(this, e)
-                    }
+                AppWidgetUtils.ACTION_COURSE_WIDGET_CLEAR -> goAsync {
+                    val componentName = ComponentName(it, NextCourseWidget::class.java)
+                    AppWidgetManager.getInstance(it).updateAppWidget(componentName, generateView(it, null))
                 }
+                else -> super.onReceive(context, intent)
             }
-            else -> super.onReceive(context, intent)
         }
     }
 }

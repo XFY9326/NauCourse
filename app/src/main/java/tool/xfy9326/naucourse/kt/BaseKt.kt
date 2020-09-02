@@ -7,6 +7,7 @@ import android.content.Context
 import android.net.Uri
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
+import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 
 
 fun Int.isOdd(): Boolean = this % 2 != 0
@@ -22,6 +23,8 @@ fun BroadcastReceiver.goAsync(
     coroutineScope.launch(dispatcher) {
         try {
             block()
+        } catch (e: Exception) {
+            ExceptionUtils.printStackTrace(this, e)
         } finally {
             result.finish()
         }
