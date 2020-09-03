@@ -182,6 +182,7 @@ data class CourseTime(
         other as CourseTime
 
         if (courseId != other.courseId) return false
+        if (location != other.location) return false
         if (weeksStr != other.weeksStr) return false
         if (weekMode != other.weekMode) return false
         if (weekDay != other.weekDay) return false
@@ -192,6 +193,7 @@ data class CourseTime(
 
     override fun hashCode(): Int {
         var result = courseId.hashCode()
+        result = 31 * result + location.hashCode()
         result = 31 * result + weeksStr.hashCode()
         result = 31 * result + weekMode.hashCode()
         result = 31 * result + weekDay
