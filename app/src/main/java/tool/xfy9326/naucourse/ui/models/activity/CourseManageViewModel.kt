@@ -98,7 +98,7 @@ class CourseManageViewModel : BaseViewModel() {
 
     fun refreshRawTermDate() {
         viewModelScope.launch(Dispatchers.Default) {
-            val result = TermDateInfo.getInfo(TermDateInfo.TermType.RAW_TERM, loadCache = true)
+            val result = TermDateInfo.getInfo(TermDateInfo.TermType.RAW_TERM)
             if (result.isSuccess) {
                 rawTermDate.postEventValue(result.data!!)
             } else {
