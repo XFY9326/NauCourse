@@ -56,8 +56,7 @@ object CourseUtils {
         maxWeekNum: Int,
         startWeekDayNum: Int,
         endWeekDayNum: Int
-    ):
-            CourseTable {
+    ): CourseTable {
         if (weekNum < tool.xfy9326.naucourse.constants.CourseConst.MIN_WEEK_NUM_SIZE || weekNum > maxWeekNum) {
             throw IllegalArgumentException("Week Num Error! Num: $weekNum")
         }
@@ -127,16 +126,16 @@ object CourseUtils {
     }
 
     private fun getCourseInDay(courseSet: CourseSet, termDate: TermDate, calendarNow: Calendar): Array<CourseItem> {
-        termDate.refreshCurrentWeekNum()
-        return if (termDate.inVacation) {
+        return if (termDate.inVacation(calendarNow.time)) {
             emptyArray()
         } else {
             val nowWeekDayNum = TimeUtils.getWeekDayNum(calendarNow)
+            val nowWeekNum = TimeUtils.getWeekNum(termDate, calendarNow.time)
             val courses = courseSet.courses
             val courseTable = ArrayList<CourseItem>()
             for (course in courses) {
                 for (time in course.timeSet) {
-                    if (time.weekDay.toInt() == nowWeekDayNum && time.isWeekNumTrue(termDate.currentWeekNum)) {
+                    if (time.weekDay.toInt() == nowWeekDayNum && time.isWeekNumTrue(nowWeekNum)) {
                         time.coursesNumArray.timePeriods.forEach {
                             courseTable.add(
                                 CourseItem(

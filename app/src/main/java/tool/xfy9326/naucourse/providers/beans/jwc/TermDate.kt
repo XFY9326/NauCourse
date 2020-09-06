@@ -51,6 +51,8 @@ data class TermDate(
         }
     }
 
+    fun inVacation(date: Date) = date.time < startDate.time || endDate.time + 24 * 60 * 60 * 1000 <= date.time
+
     fun refreshCurrentWeekNum() {
         currentWeekNum = TimeUtils.getWeekNum(startDate, endDate)
         inVacation = currentWeekNum <= 0
