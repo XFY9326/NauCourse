@@ -302,9 +302,7 @@ class CourseTableViewModel : BaseViewModel() {
         val maxWeek = TimeUtils.getWeekLength(termDate)
         val currentWeekNum = TimeUtils.getWeekNum(termDate)
         val showAhead =
-            if (courseSet != null && courseSet.hasCourse && SettingsPref.ShowNextWeekCourseTableAhead &&
-                !TimeUtils.inWeekend() && currentWeekNum < maxWeek
-            ) {
+            if (courseSet != null && courseSet.hasCourse && currentWeekNum < maxWeek && SettingsPref.ShowNextWeekCourseTableAhead && TimeUtils.inWeekend()) {
                 val index = if (currentWeekNum <= 0) {
                     0
                 } else {
