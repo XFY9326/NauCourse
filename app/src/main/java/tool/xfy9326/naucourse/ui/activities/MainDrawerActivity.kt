@@ -174,6 +174,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
                 R.id.menu_navCourseTable -> showFragment(FragmentType.COURSE_TABLE)
                 R.id.menu_navNews -> showFragment(FragmentType.NEWS)
                 R.id.menu_navSchoolCalendar -> openFunctionActivity(SchoolCalendarActivity::class.java)
+                R.id.menu_navSchoolBus -> openFunctionActivity(SchoolBusActivity::class.java)
                 R.id.menu_navLevelExam -> openFunctionActivity(LevelExamActivity::class.java)
                 R.id.menu_navExamArrange -> openFunctionActivity(ExamArrangeActivity::class.java)
                 R.id.menu_navSuspendCourseNotification -> openFunctionActivity(SuspendCourseActivity::class.java)
@@ -189,9 +190,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         return true
     }
 
-    private fun <T> openFunctionActivity(clazz: Class<T>) {
-        startActivity(Intent(this, clazz))
-    }
+    private fun <T> openFunctionActivity(clazz: Class<T>) = startActivity(Intent(this, clazz))
 
     private fun logout() {
         DialogUtils.createLogoutAttentionDialog(this, lifecycle) { _, _ ->

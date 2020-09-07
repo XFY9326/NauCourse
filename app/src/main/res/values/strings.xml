@@ -313,6 +313,7 @@
     <string name="exit_application_directly">返回主界面时直接退出应用</string>
     <string name="exit_application_directly_sum">返回主界面时不隐藏界面而直接退出</string>
     <string name="school_calendar">校历</string>
+    <string name="school_bus">校车查询</string>
     <string name="loading_calendar_list">正在加载校历列表。。。</string>
     <string name="loading_calendar_list_failed">校历列表加载失败</string>
     <string name="loading_calendar_failed">校历加载失败</string>

@@ -2,20 +2,19 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.activities.FeedbackActivity">
+    android:layout_height="match_parent">
 
     <include layout="@layout/view_general_toolbar" />
 
     <WebView
-        android:id="@+id/wv_feedback"
+        android:id="@+id/wv_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
         android:scrollbars="none" />
 
     <ProgressBar
-        android:id="@+id/pb_feedbackLoading"
+        android:id="@+id/pb_webViewLoading"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="3dp"

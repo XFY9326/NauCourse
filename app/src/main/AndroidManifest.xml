@@ -74,6 +74,10 @@
             android:label="@string/school_calendar" />
 
         <activity
+            android:name=".ui.activities.SchoolBusActivity"
+            android:label="@string/school_bus" />
+
+        <activity
             android:name=".ui.activities.LevelExamActivity"
             android:label="@string/level_exam" />
 

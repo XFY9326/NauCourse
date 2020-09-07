@@ -29,6 +29,10 @@
             android:icon="@drawable/ic_calendar"
             android:title="@string/school_calendar" />
         <item
+            android:id="@+id/menu_navSchoolBus"
+            android:icon="@drawable/ic_bus"
+            android:title="@string/school_bus" />
+        <item
             android:id="@+id/menu_navLevelExam"
             android:icon="@drawable/ic_level_exam"
             android:title="@string/level_exam" />
