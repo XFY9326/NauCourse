@@ -21,11 +21,9 @@ class EmptyRoomViewModel : BaseViewModel() {
     val errorMsg = EventLiveData<Pair<ContentErrorReason, Boolean>>() // Boolean: 是否Toast展示错误信息并退出
 
     override fun onInitView(isRestored: Boolean) {
-        if (tryInit()) {
-            viewModelScope.launch(Dispatchers.Default) {
-                isLoading.postEventValue(true)
-                getSearchData(true)
-            }
+        tryInit(Dispatchers.Default) {
+            isLoading.postEventValue(true)
+            getSearchData(true)
         }
     }
 

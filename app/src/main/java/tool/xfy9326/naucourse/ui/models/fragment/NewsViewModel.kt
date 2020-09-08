@@ -22,28 +22,26 @@ class NewsViewModel : BaseViewModel() {
     val errorMsg = EventLiveData<ContentErrorReason>()
 
     override fun onInitView(isRestored: Boolean) {
-        if (tryInit()) {
+        tryInit(Dispatchers.Default) {
             isRefreshing.postValue(true)
-            viewModelScope.launch(Dispatchers.Default) {
-                val newsInfoResult = NewsInfo.getInfo(loadCache = true)
-                if (newsInfoResult.isSuccess) {
-                    lastNewsHash = newsInfoResult.data!!.hashCode()
-                    newsList.postValue(newsInfoResult.data)
-                } else {
-                    LogUtils.d<NewsViewModel>("News Info Init Error: ${newsInfoResult.errorReason}")
-                }
-                if (!SettingsPref.AutoAsyncNewsInfo) {
-                    refreshNewsList()
-                }
-                isRefreshing.postValue(false)
+            val newsInfoResult = NewsInfo.getInfo(loadCache = true)
+            if (newsInfoResult.isSuccess) {
+                lastNewsHash = newsInfoResult.data!!.hashCode()
+                newsList.postValue(newsInfoResult.data)
+            } else {
+                LogUtils.d<NewsViewModel>("News Info Init Error: ${newsInfoResult.errorReason}")
             }
+            if (!SettingsPref.AutoAsyncNewsInfo) {
+                refreshNewsList()
+            }
+            isRefreshing.postValue(false)
         }
     }
 
     @Synchronized
     fun refreshNewsList() {
-        isRefreshing.postValue(true)
         viewModelScope.launch(Dispatchers.Default) {
+            isRefreshing.postValue(true)
             val newsInfoResult = NewsInfo.getInfo(AppPref.readShowNewsType())
             if (newsInfoResult.isSuccess) {
                 val newsHashCode = newsInfoResult.data!!.hashCode()

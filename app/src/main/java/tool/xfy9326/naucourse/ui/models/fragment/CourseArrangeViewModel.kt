@@ -52,9 +52,9 @@ class CourseArrangeViewModel : BaseViewModel() {
     }
 
     override fun onInitView(isRestored: Boolean) {
-        if (tryInit()) initJob = loadInitCache()
+        tryInit { initJob = loadInitCache() }
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             if (initJob != null) {
                 if (initJob?.isActive == true) initJob?.join()
                 refreshArrangeCourses(updateNextCourseWidget = false)

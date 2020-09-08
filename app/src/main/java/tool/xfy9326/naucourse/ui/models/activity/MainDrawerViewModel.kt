@@ -27,13 +27,13 @@ class MainDrawerViewModel : BaseViewModel() {
     val updateInfo = EventLiveData<UpdateInfo>()
 
     override fun onInitView(isRestored: Boolean) {
-        viewModelScope.launch(Dispatchers.Default) {
-            if (tryInit()) {
-                if (AppPref.EnableAdvancedFunctions) {
-                    updateBalance(true)
-                }
-                updatePersonalInfo(true)
+        tryInit(Dispatchers.Default) {
+            if (AppPref.EnableAdvancedFunctions) {
+                updateBalance(true)
             }
+            updatePersonalInfo(true)
+        }
+        viewModelScope.launch(Dispatchers.Default) {
             updatePersonalInfo()
         }
     }

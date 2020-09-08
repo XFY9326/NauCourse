@@ -39,7 +39,7 @@ class SchoolCalendarViewModel : BaseViewModel() {
 
     override fun onInitView(isRestored: Boolean) {
         viewModelScope.launch(Dispatchers.Default) {
-            if (tryInit()) {
+            tryInit {
                 val imageUrl = AppPref.CurrentSchoolCalendarImageUrl
                 if (imageUrl != null) {
                     calendarImageUrl.postValue(imageUrl)

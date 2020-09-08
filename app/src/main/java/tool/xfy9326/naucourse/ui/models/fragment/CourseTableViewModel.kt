@@ -88,8 +88,8 @@ class CourseTableViewModel : BaseViewModel() {
         }
     }
 
-    private suspend fun initTableCache() = withContext(Dispatchers.Default) {
-        if (tryInit()) {
+    private fun initTableCache() {
+        tryInit {
             initDeferred = viewModelScope.async(Dispatchers.Default) {
                 initCourseData()
                 true

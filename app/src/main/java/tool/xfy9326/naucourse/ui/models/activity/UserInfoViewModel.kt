@@ -17,7 +17,7 @@ class UserInfoViewModel : BaseViewModel() {
     val userInfoRefreshFailed = EventLiveData<ContentErrorReason>()
 
     override fun onInitView(isRestored: Boolean) {
-        if (tryInit()) {
+        tryInit {
             updatePersonalInfo(true)
         }
         updatePersonalInfo()
