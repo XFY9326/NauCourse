@@ -29,6 +29,8 @@ ENV PATH ${JAVA_HOME}/bin:$PATH
 
 # Android SDK
 ENV ANDROID_SDK /Android/sdk
+ENV ANDROID_HOME $ANDROID_SDK
+ENV PATH ${ANDROID_SDK}/tools:${ANDROID_SDK}/tools/bin:${ANDROID_SDK}/platform-tools:$PATH
 
 RUN mkdir -p ${ANDROID_SDK}
 
@@ -47,6 +49,3 @@ RUN yes | sdkmanager --sdk_root=${ANDROID_HOME} "platforms;android-${ANDROID_PLA
 
 RUN yes | sdkmanager --sdk_root=${ANDROID_HOME} "cmake;${ANDROID_CMAKE_VERSION}"
 RUN yes | sdkmanager --sdk_root=${ANDROID_HOME} "ndk;${ANDROID_NDK_VERSION}"
-
-ENV ANDROID_HOME $ANDROID_SDK
-ENV PATH ${ANDROID_SDK}/tools:${ANDROID_SDK}/tools/bin:${ANDROID_SDK}/platform-tools:$PATH
