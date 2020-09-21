@@ -13,10 +13,14 @@ import tool.xfy9326.naucourse.network.tools.NetworkTools.Companion.hasSameHost
 import java.io.IOException
 
 // http://sso.nau.edu.cn
-open class SSOClient(loginInfo: LoginInfo, private val serviceUrl: HttpUrl? = null) :
+open class SSOClient(
+    loginInfo: LoginInfo,
+    private val serviceUrl: HttpUrl? = null,
+    netWorkType: NetworkTools.NetworkType = NetworkTools.NetworkType.SSO
+) :
     BaseLoginClient(loginInfo) {
-    private val okHttpClient = NetworkTools.getInstance().getClient(NetworkTools.NetworkType.SSO)
-    private val cookieStore = NetworkTools.getInstance().getCookieStore(NetworkTools.NetworkType.SSO)
+    private val okHttpClient = NetworkTools.getInstance().getClient(netWorkType)
+    private val cookieStore = NetworkTools.getInstance().getCookieStore(netWorkType)
     private val isServiceLogin = serviceUrl != null
 
     private val loginUrl: HttpUrl

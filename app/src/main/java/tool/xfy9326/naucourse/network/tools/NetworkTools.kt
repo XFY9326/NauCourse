@@ -3,7 +3,9 @@ package tool.xfy9326.naucourse.network.tools
 import okhttp3.*
 import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.io.db.NetworkDBHelper
-import tool.xfy9326.naucourse.network.utils.CookieStore
+import tool.xfy9326.naucourse.network.utils.BaseCookieStore
+import tool.xfy9326.naucourse.network.utils.DBCookieStore
+import tool.xfy9326.naucourse.network.utils.TempCookieStore
 import tool.xfy9326.naucourse.network.utils.UAInterceptor
 import java.io.File
 import java.nio.charset.StandardCharsets
@@ -17,7 +19,7 @@ class NetworkTools private constructor() {
         @Volatile
         private lateinit var instance_: NetworkTools
 
-        private val cookieStoreMap = HashMap<NetworkType, CookieStore>()
+        private val cookieStoreMap = HashMap<NetworkType, BaseCookieStore>()
 
         private val okhttpClientMap = HashMap<NetworkType, OkHttpClient>()
 
@@ -47,7 +49,7 @@ class NetworkTools private constructor() {
             return instance_
         }
 
-        private fun createClient(cookieStore: CookieStore): OkHttpClient {
+        private fun createClient(cookieStore: BaseCookieStore): OkHttpClient {
             return OkHttpClient.Builder().apply {
                 connectTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS)
                 readTimeout(READ_TIME_OUT, TimeUnit.SECONDS)
@@ -81,10 +83,11 @@ class NetworkTools private constructor() {
             }
         }
 
-        private fun createCookieStore(type: NetworkType): CookieStore =
+        private fun createCookieStore(type: NetworkType): BaseCookieStore =
             when (type) {
-                NetworkType.SSO -> CookieStore(NetworkDBHelper.CookiesType.SSO)
-                NetworkType.NGX -> CookieStore(NetworkDBHelper.CookiesType.NGX)
+                NetworkType.SSO -> DBCookieStore(NetworkDBHelper.CookiesType.SSO)
+                NetworkType.NGX -> DBCookieStore(NetworkDBHelper.CookiesType.NGX)
+                NetworkType.TEMP -> TempCookieStore()
             }
 
         fun HttpUrl.hasSameHost(url: HttpUrl?): Boolean =
@@ -96,7 +99,8 @@ class NetworkTools private constructor() {
 
     enum class NetworkType {
         SSO,
-        NGX
+        NGX,
+        TEMP
     }
 
     @Synchronized
@@ -108,7 +112,7 @@ class NetworkTools private constructor() {
     }
 
     @Synchronized
-    fun getCookieStore(type: NetworkType): CookieStore {
+    fun getCookieStore(type: NetworkType): BaseCookieStore {
         if (!cookieStoreMap.containsKey(type)) {
             cookieStoreMap[type] = createCookieStore(type)
         }

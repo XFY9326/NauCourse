@@ -4,10 +4,12 @@ import okhttp3.Headers
 import okhttp3.HttpUrl
 import okhttp3.Request
 import okhttp3.Response
+import okhttp3.internal.closeQuietly
 import tool.xfy9326.naucourse.constants.NetworkConst
 import tool.xfy9326.naucourse.network.clients.base.LoginInfo
 import tool.xfy9326.naucourse.network.clients.base.LoginResponse
 import tool.xfy9326.naucourse.network.clients.base.ServerErrorException
+import tool.xfy9326.naucourse.network.tools.NetworkTools
 
 // http://jwc.nau.edu.cn
 class JwcClient(loginInfo: LoginInfo) : SSOClient(loginInfo, JWC_SSO_LOGIN_URL) {
@@ -54,6 +56,12 @@ class JwcClient(loginInfo: LoginInfo) : SSOClient(loginInfo, JWC_SSO_LOGIN_URL) 
                     url.querySize >= 2 && url.queryParameter(JWC_URL_PARAM_D) != null && url.queryParameter(JWC_URL_PARAM_R) != null
     }
 
+    private fun trySetLogoutStatus() {
+        val ssoTempClient = SSOClient(getLoginInfo(), JWC_SSO_LOGIN_URL, NetworkTools.NetworkType.TEMP)
+        if (ssoTempClient.login().isSuccess) ssoTempClient.newClientCall(JWC_LOGOUT_URL).closeQuietly()
+        ssoTempClient.logout()
+    }
+
     override fun login(): LoginResponse {
         return jwcLogin()
     }
@@ -63,6 +71,7 @@ class JwcClient(loginInfo: LoginInfo) : SSOClient(loginInfo, JWC_SSO_LOGIN_URL) 
         if (ssoResult.isSuccess) {
             val status = getJwcLoginStatus(ssoResult.htmlContent!!)
             return if (status == LoginResponse.ErrorReason.NONE && validateJwcLoginUrl(ssoResult.url!!)) {
+                trySetLogoutStatus()
                 jwcMainUrl = ssoResult.url
                 ssoResult
             } else if (!loginOnce && status == LoginResponse.ErrorReason.ALREADY_LOGIN) { // 如果已登录则注销后重试，只尝试一次
