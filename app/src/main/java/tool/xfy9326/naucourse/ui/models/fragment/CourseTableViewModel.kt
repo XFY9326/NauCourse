@@ -77,9 +77,7 @@ class CourseTableViewModel : BaseViewModel() {
     }
 
     override fun onFragmentAttach() {
-        viewModelScope.launch {
-            initTableCache()
-        }
+        initTableCache()
     }
 
     override fun onInitCache(isRestored: Boolean) {
@@ -145,7 +143,7 @@ class CourseTableViewModel : BaseViewModel() {
 
     fun requestCourseTable(weekNum: Int) {
         viewModelScope.launch(Dispatchers.Default) {
-            if (::initDeferred.isInitialized) {
+            if (hasInit() && ::initDeferred.isInitialized) {
                 if (initDeferred.isActive) initDeferred.await()
                 getCoursePkg(weekNum)?.let {
                     courseTablePkg[weekNum - 1].postValue(it)

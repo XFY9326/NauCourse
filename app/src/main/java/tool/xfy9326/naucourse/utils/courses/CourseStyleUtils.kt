@@ -6,12 +6,8 @@ import tool.xfy9326.naucourse.providers.beans.jwc.CourseSet
 import tool.xfy9326.naucourse.utils.views.ColorUtils
 
 object CourseStyleUtils {
-    fun getDefaultCellStyle(courseId: String, color: Int? = null): CourseCellStyle {
-        return CourseCellStyle(
-            courseId,
-            color ?: ColorUtils.getRandomMaterialColor()
-        )
-    }
+    fun getDefaultCellStyle(courseId: String, color: Int? = null) =
+        CourseCellStyle(courseId, color ?: ColorUtils.getRandomMaterialColor())
 
     fun getStyleByCourseId(
         courseId: String, styles: Array<CourseCellStyle>, createNewWhileNotFound: Boolean = false,
