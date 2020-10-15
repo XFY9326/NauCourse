@@ -20,7 +20,8 @@
         app:fabSize="normal"
         app:layout_anchor="@id/cv_courseBaseInfo"
         app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@drawable/ic_plus" />
+        app:srcCompat="@drawable/ic_plus"
+        tools:ignore="ContentDescription" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

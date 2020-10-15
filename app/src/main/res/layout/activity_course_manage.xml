@@ -20,7 +20,8 @@
         app:fabSize="normal"
         app:layout_anchor="@id/layout_courseManageList"
         app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@drawable/ic_plus" />
+        app:srcCompat="@drawable/ic_plus"
+        tools:ignore="ContentDescription" />
 
     <FrameLayout
         android:id="@+id/layout_courseManageList"

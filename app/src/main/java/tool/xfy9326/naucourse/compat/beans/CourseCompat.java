@@ -4,10 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 // 旧版本的课程数据
-@SuppressWarnings({"FieldCanBeLocal", "ConstantConditions", "CanBeFinal"})
+@SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
 public class CourseCompat {
     @Nullable
-    private final CourseDetailCompat[] courseDetail = null;
+    private CourseDetailCompat[] courseDetail = null;
     @Nullable
     private String courseId = null;
     @Nullable

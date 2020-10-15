@@ -3,8 +3,6 @@ FROM ubuntu:20.04
 LABEL maintainer="XFY9326@xfy9326.top"
 
 # Initial Settings
-ENV DEBIAN_FRONTEND noninteractive
-
 ENV ANDROID_COMMAND_LINE_TOOLS_VERSION 6609375
 
 ENV ANDROID_PLATFORM_VERSION 30
@@ -13,7 +11,13 @@ ENV ANDROID_BUILD_TOOLS_VERSION 30.0.2
 ENV ANDROID_NDK_VERSION 21.3.6528147
 ENV ANDROID_CMAKE_VERSION 3.10.2.4988404
 
+ENV GRADLE_VERSION 6.1.1
+ENV GRADLE_TYPE all
+ENV GRADLE_DIGEST cfmwm155h49vnt3hynmlrsdst
+
 # Environment
+ENV DEBIAN_FRONTEND noninteractive
+
 # For Users In China 
 RUN sed -i s@/archive.ubuntu.com/@/mirrors.tuna.tsinghua.edu.cn/@g /etc/apt/sources.list
 
@@ -49,3 +53,7 @@ RUN yes | sdkmanager --sdk_root=${ANDROID_HOME} "platforms;android-${ANDROID_PLA
 
 RUN yes | sdkmanager --sdk_root=${ANDROID_HOME} "cmake;${ANDROID_CMAKE_VERSION}"
 RUN yes | sdkmanager --sdk_root=${ANDROID_HOME} "ndk;${ANDROID_NDK_VERSION}"
+
+# Gradle
+RUN mkdir -p ~/.gradle/wrapper/dists/gradle-${GRADLE_VERSION}-${GRADLE_TYPE}/${GRADLE_DIGEST}/
+RUN wget --no-check-certificate -O ~/.gradle/wrapper/dists/gradle-${GRADLE_VERSION}-${GRADLE_TYPE}/${GRADLE_DIGEST}/gradle-${GRADLE_VERSION}-${GRADLE_TYPE}.zip "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-${GRADLE_TYPE}.zip"

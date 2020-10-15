@@ -3,7 +3,7 @@ package tool.xfy9326.naucourse.compat.beans;
 import androidx.annotation.Nullable;
 
 // 旧版本的课程详情数据
-@SuppressWarnings({"FieldCanBeLocal", "CanBeFinal"})
+@SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
 public class CourseDetailCompat {
     //Num-Num,Num...
     @Nullable

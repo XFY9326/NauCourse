@@ -7,7 +7,6 @@ import java.nio.charset.StandardCharsets
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 
-@SuppressLint("GetInstance")
 // 来自旧版NAU课程表，主要为了适配旧版数据，不应该作为新版的加密方法使用
 object AESCompat {
     private const val CIPHER_MODE = "AES"
@@ -30,6 +29,7 @@ object AESCompat {
         return SecretKeySpec(bytes, CIPHER_MODE)
     }
 
+    @SuppressLint("GetInstance")
     private fun decrypt(content: ByteArray, password: String): ByteArray? {
         try {
             Cipher.getInstance(CIPHER_MODE).apply {

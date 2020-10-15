@@ -39,7 +39,11 @@ class EmptyRoomSearchActivity : ViewModelActivity<EmptyRoomViewModel>(), DatePic
 
     override fun bindViewModel(viewModel: EmptyRoomViewModel) {
         viewModel.isLoading.observeEvent(this) {
-            asl_emptyRoom.postStopRefreshing()
+            if (it) {
+                asl_emptyRoom.isRefreshing = true
+            } else {
+                asl_emptyRoom.postStopRefreshing()
+            }
         }
         viewModel.searchData.observe(this, {
             applySearchData(it)

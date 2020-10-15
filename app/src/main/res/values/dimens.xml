@@ -29,5 +29,5 @@
     <dimen name="course_table_header_min_height">35dp</dimen>
     <dimen name="course_text_size_offset">12sp</dimen>
 
-    <dimen name="preference_seekbar_padding_horizontal" tools:ignore="PrivateResource">10dp</dimen>
+    <dimen name="preference_seekbar_padding_horizontal" tools:ignore="PrivateResource,UnusedResources">10dp</dimen>
 </resources>
