@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.network.clients
 
 import androidx.annotation.CallSuper
 import okhttp3.*
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.internal.closeQuietly
 import org.jsoup.Jsoup
 import tool.xfy9326.naucourse.constants.NetworkConst
@@ -10,20 +11,23 @@ import tool.xfy9326.naucourse.network.clients.base.LoginInfo
 import tool.xfy9326.naucourse.network.clients.base.LoginResponse
 import tool.xfy9326.naucourse.network.tools.NetworkTools
 import tool.xfy9326.naucourse.network.tools.NetworkTools.Companion.hasSameHost
+import tool.xfy9326.naucourse.network.utils.SSOPasswordUtils
 import java.io.IOException
 
 // http://sso.nau.edu.cn
 open class SSOClient(
     loginInfo: LoginInfo,
     private val serviceUrl: HttpUrl? = null,
-    netWorkType: NetworkTools.NetworkType = NetworkTools.NetworkType.SSO
+    netWorkType: NetworkTools.NetworkType = NetworkTools.NetworkType.SSO,
+    private val followLoginRedirect: Boolean = true
 ) :
     BaseLoginClient(loginInfo) {
     private val okHttpClient = NetworkTools.getInstance().getClient(netWorkType)
+    private val noRedirectOkHttpClient = okHttpClient.newBuilder().followRedirects(false).followSslRedirects(false).build()
     private val cookieStore = NetworkTools.getInstance().getCookieStore(netWorkType)
     private val isServiceLogin = serviceUrl != null
 
-    private val loginUrl: HttpUrl
+    val loginUrl: HttpUrl
 
     init {
         val loginUrlBuilder = SSO_LOGIN_URL.newBuilder()
@@ -34,7 +38,7 @@ open class SSOClient(
     }
 
     companion object {
-        private const val SSO_HOST = "sso.nau.edu.cn"
+        const val SSO_HOST = "sso.nau.edu.cn"
         private const val SSO_SERVICE_PARAM = "service"
         private const val SSO_PATH = "sso"
         private const val SSO_LOGIN_PATH = "login"
@@ -45,13 +49,14 @@ open class SSOClient(
         private val SSO_LOGOUT_URL =
             HttpUrl.Builder().scheme(NetworkConst.HTTP).host(SSO_HOST).addPathSegment(SSO_PATH).addEncodedPathSegment(SSO_LOGOUT_PATH).build()
 
-        private val SSO_LOGIN_PARAM = arrayOf("lt", "execution", "_eventId", "useVCode", "isUseVCode", "sessionVcode")
-        private const val SSO_LOGIN_PARAM_ERROR_COUNT = "errorCount"
-        private const val SSO_LOGIN_PARAM_ERROR_COUNT_VALUE = ""
+        private const val SSO_LOGIN_PARAM_ENCRYPTED = "encrypted"
+        private val SSO_LOGIN_PARAM = arrayOf("execution", SSO_LOGIN_PARAM_ENCRYPTED, "_eventId", "loginType", "submit")
+        private const val SSO_LOGIN_PARAM_REMEMBER_ME = "rememberMe"
+        private const val SSO_LOGIN_VALUE_TRUE = "true"
 
         private const val SSO_INPUT_TAG_NAME_ATTR = "name"
         private const val SSO_INPUT_TAG_VALUE_ATTR = "value"
-        private const val SSO_INPUT = "input[$SSO_INPUT_TAG_NAME_ATTR][$SSO_INPUT_TAG_VALUE_ATTR]"
+        private const val SSO_INPUT = "#fm1 > div:nth-child(5)"
         private const val SSO_POST_FORMAT = "input[$SSO_INPUT_TAG_NAME_ATTR=%s]"
         private const val SSO_POST_USERNAME = "username"
         private const val SSO_POST_PASSWORD = "password"
@@ -61,14 +66,19 @@ open class SSOClient(
         private const val SSO_LOGIN_PASSWORD_ERROR_STR = "密码错误"
         private const val SSO_LOGIN_INPUT_ERROR_STR = "请勿输入非法字符"
         private const val SSO_SERVER_ERROR = "单点登录系统未正常工作"
-        const val SSO_LOGIN_PAGE_STR = "南京审计大学统一身份认证登录"
+        const val SSO_LOGIN_PAGE_STR = "统一身份认证登录"
 
         private val SSO_HEADER = Headers.headersOf(
-            "Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
-            "Accept-Language", "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7",
-            "Connection", "keep-alive",
-            "Cache-Control", "max-age=0",
-            "Upgrade-Insecure-Requests", "1"
+            "Accept",
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+            "Accept-Language",
+            "zh-CN,zh;q=0.9",
+            "Connection",
+            "keep-alive",
+            "Cache-Control",
+            "max-age=0",
+            "Upgrade-Insecure-Requests",
+            "1"
         )
 
         private fun getSSOLoginStatus(htmlContent: String): LoginResponse.ErrorReason = when {
@@ -80,14 +90,19 @@ open class SSOClient(
         }
 
         private fun getLoginPostForm(userId: String, userPw: String, ssoResponseContent: String): FormBody = FormBody.Builder().apply {
-            add(SSO_POST_USERNAME, userId)
-            add(SSO_POST_PASSWORD, userPw)
+            add(SSO_LOGIN_PARAM_REMEMBER_ME, SSO_LOGIN_VALUE_TRUE)
+            var encryptPassword = false
             val htmlContent = Jsoup.parse(ssoResponseContent).select(SSO_INPUT)
             for (param in SSO_LOGIN_PARAM) {
                 val input = htmlContent.select(SSO_POST_FORMAT.format(param)).first()
-                add(param, input.attr(SSO_INPUT_TAG_VALUE_ATTR))
+                val value = input.attr(SSO_INPUT_TAG_VALUE_ATTR)
+                add(param, value)
+                if (param == SSO_LOGIN_PARAM_ENCRYPTED && value == SSO_LOGIN_VALUE_TRUE) {
+                    encryptPassword = true
+                }
             }
-            add(SSO_LOGIN_PARAM_ERROR_COUNT, SSO_LOGIN_PARAM_ERROR_COUNT_VALUE)
+            add(SSO_POST_USERNAME, userId)
+            add(SSO_POST_PASSWORD, if (encryptPassword) SSOPasswordUtils.encrypt(userPw) else userPw)
         }.build()
     }
 
@@ -110,7 +125,15 @@ open class SSOClient(
             val request = beforeLoginResponse.request.newBuilder().apply {
                 post(postForm)
             }.build()
-            newSSOCall(request).use {
+            newSSOCall(request, followLoginRedirect).use {
+                if (!followLoginRedirect && it.isRedirect) {
+                    val url = it.headers["Location"]?.toHttpUrlOrNull()
+                    return if (url == null) {
+                        LoginResponse(false, loginErrorReason = LoginResponse.ErrorReason.SERVER_ERROR)
+                    } else {
+                        onRedirectLogin(noRedirectOkHttpClient, url, it.body?.string())
+                    }
+                }
                 if (it.isSuccessful) {
                     val url = it.request.url
                     val content = it.body?.string()!!
@@ -145,6 +168,9 @@ open class SSOClient(
         else throw IOException("SSO Jump Url Error! $ssoResponseUrl")
     }
 
+    protected open fun onRedirectLogin(okHttpClient: OkHttpClient, url: HttpUrl, content: String?) =
+        LoginResponse(false, loginErrorReason = LoginResponse.ErrorReason.SERVER_ERROR)
+
     @CallSuper
     override fun logoutInternal(): Boolean = ssoLogout()
 
@@ -167,7 +193,13 @@ open class SSOClient(
 
     override fun newClientCall(request: Request): Response = newSSOCall(request)
 
-    private fun newSSOCall(request: Request): Response = okHttpClient.newCall(request.newBuilder().headers(SSO_HEADER).build()).execute()
+    private fun newSSOCall(request: Request, followRedirect: Boolean = true): Response {
+        return if (followRedirect) {
+            okHttpClient.newCall(request.newBuilder().headers(SSO_HEADER).build()).execute()
+        } else {
+            noRedirectOkHttpClient.newCall(request.newBuilder().headers(SSO_HEADER).build()).execute()
+        }
+    }
 
     final override fun getBeforeLoginResponse(): Response =
         newSSOCall(Request.Builder().apply {

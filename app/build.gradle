@@ -24,8 +24,8 @@ android {
 
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 84
-        versionName '7.1.2'
+        versionCode 85
+        versionName '7.2'
 
         manifestPlaceholders = ['BUGLY_APP_ID': rootProject.ext.buglyAppId]
 

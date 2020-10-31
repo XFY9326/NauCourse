@@ -86,7 +86,6 @@ class NetworkTools private constructor() {
         private fun createCookieStore(type: NetworkType): BaseCookieStore =
             when (type) {
                 NetworkType.SSO -> DBCookieStore(NetworkDBHelper.CookiesType.SSO)
-                NetworkType.NGX -> DBCookieStore(NetworkDBHelper.CookiesType.NGX)
                 NetworkType.TEMP -> TempCookieStore()
             }
 
@@ -99,7 +98,6 @@ class NetworkTools private constructor() {
 
     enum class NetworkType {
         SSO,
-        NGX,
         TEMP
     }
 

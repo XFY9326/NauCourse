@@ -9,7 +9,7 @@ import tool.xfy9326.naucourse.constants.HTMLConst
 import tool.xfy9326.naucourse.constants.NetworkConst
 import tool.xfy9326.naucourse.constants.TimeConst
 import tool.xfy9326.naucourse.network.LoginNetworkManager
-import tool.xfy9326.naucourse.network.clients.NgxClient
+import tool.xfy9326.naucourse.network.clients.NGXClient
 import tool.xfy9326.naucourse.network.clients.base.BaseNetworkClient
 import tool.xfy9326.naucourse.providers.beans.GeneralNews
 import tool.xfy9326.naucourse.providers.beans.GeneralNewsDetail
@@ -26,7 +26,7 @@ import java.util.*
 import kotlin.collections.HashSet
 
 abstract class BaseRSSContent : BaseNewsContent<RSSObject>() {
-    override val networkClient = getLoginClient<NgxClient>(LoginNetworkManager.ClientType.NGX)
+    override val networkClient = getLoginClient<NGXClient>(LoginNetworkManager.ClientType.NGX)
 
     abstract val siteId: Int
     abstract val templateId: Int

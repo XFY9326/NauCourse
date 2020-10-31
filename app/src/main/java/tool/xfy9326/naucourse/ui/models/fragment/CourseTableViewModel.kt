@@ -370,20 +370,22 @@ class CourseTableViewModel : BaseViewModel() {
         }
     }
 
-    private suspend fun makeCourseTable(courseSet: CourseSet, termDate: TermDate, postValue: Boolean = false) = withContext(Dispatchers.Default) {
+    private suspend fun makeCourseTable(courseSet: CourseSet, termDate: TermDate, postValue: Boolean = false) {
         courseTableArr = CourseUtils.generateAllCourseTable(courseSet, termDate, TimeUtils.getWeekLength(termDate))
-        if (postValue) {
-            val style = getCourseTableStyle()
-            for (i in 0 until min(courseTablePkg.size, courseTableArr.size)) {
-                val table = courseTableArr[i]
-                courseTablePkg[i].postValue(
-                    CoursePkg(
-                        termDate,
-                        table,
-                        CourseCellStyleDBHelper.loadCourseCellStyle(courseSet),
-                        style
+        withContext(Dispatchers.Default) {
+            if (postValue) {
+                val style = getCourseTableStyle()
+                for (i in 0 until min(courseTablePkg.size, courseTableArr.size)) {
+                    val table = courseTableArr[i]
+                    courseTablePkg[i].postValue(
+                        CoursePkg(
+                            termDate,
+                            table,
+                            CourseCellStyleDBHelper.loadCourseCellStyle(courseSet),
+                            style
+                        )
                     )
-                )
+                }
             }
         }
     }

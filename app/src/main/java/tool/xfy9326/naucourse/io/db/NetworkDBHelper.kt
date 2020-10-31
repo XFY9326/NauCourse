@@ -6,12 +6,10 @@ import tool.xfy9326.naucourse.io.db.base.BaseDBHelper
 import tool.xfy9326.naucourse.io.db.dao.BaseCookieDataDao
 import tool.xfy9326.naucourse.io.db.room.NetworkDB
 import tool.xfy9326.naucourse.network.beans.CookieData
-import tool.xfy9326.naucourse.network.beans.NGXCookieData
 import tool.xfy9326.naucourse.network.beans.SSOCookieData
 
 object NetworkDBHelper : BaseDBHelper<NetworkDB.NetworkDataBase>() {
     const val SSO_COOKIES_TABLE_NAME = "SSOCookies"
-    const val NGX_COOKIES_TABLE_NAME = "NGXCookies"
 
     const val COLUMN_HOST = "host"
     const val COLUMN_NAME = "name"
@@ -19,15 +17,13 @@ object NetworkDBHelper : BaseDBHelper<NetworkDB.NetworkDataBase>() {
     override val db: NetworkDB.NetworkDataBase = NetworkDB.getDB()
 
     enum class CookiesType {
-        SSO,
-        NGX;
+        SSO
     }
 
     @Synchronized
     fun loadForRequest(url: HttpUrl, type: CookiesType): List<Cookie> =
         when (type) {
             CookiesType.SSO -> loadForRequest(url, db.getSSOCookiesDataDao())
-            CookiesType.NGX -> loadForRequest(url, db.getNGXCookiesDataDao())
         }
 
     private fun loadForRequest(url: HttpUrl, dao: BaseCookieDataDao<*>): List<Cookie> = with(dao) {
@@ -43,7 +39,6 @@ object NetworkDBHelper : BaseDBHelper<NetworkDB.NetworkDataBase>() {
     fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>, type: CookiesType) =
         when (type) {
             CookiesType.SSO -> saveFromResponse(url, cookies, db.getSSOCookiesDataDao(), type)
-            CookiesType.NGX -> saveFromResponse(url, cookies, db.getNGXCookiesDataDao(), type)
         }
 
     private fun <T : CookieData> saveFromResponse(url: HttpUrl, cookies: List<Cookie>, dao: BaseCookieDataDao<T>, type: CookiesType) = with(dao) {
@@ -61,7 +56,6 @@ object NetworkDBHelper : BaseDBHelper<NetworkDB.NetworkDataBase>() {
     fun clearAllCookies(type: CookiesType) =
         when (type) {
             CookiesType.SSO -> clearAllCookies(db.getSSOCookiesDataDao())
-            CookiesType.NGX -> clearAllCookies(db.getNGXCookiesDataDao())
         }
 
     private fun clearAllCookies(dao: BaseCookieDataDao<*>) = dao.clearAllCookieData()
@@ -69,7 +63,6 @@ object NetworkDBHelper : BaseDBHelper<NetworkDB.NetworkDataBase>() {
     @Synchronized
     override fun clearAll() {
         clearAllCookies(db.getSSOCookiesDataDao())
-        clearAllCookies(db.getNGXCookiesDataDao())
     }
 
 
@@ -77,18 +70,6 @@ object NetworkDBHelper : BaseDBHelper<NetworkDB.NetworkDataBase>() {
     private fun <T : CookieData> parseCookies(url: HttpUrl, cookie: Cookie, type: CookiesType): T =
         when (type) {
             CookiesType.SSO -> SSOCookieData(
-                url.host,
-                cookie.name,
-                cookie.value,
-                cookie.expiresAt,
-                cookie.domain,
-                cookie.path,
-                cookie.secure,
-                cookie.httpOnly,
-                cookie.hostOnly,
-                cookie.persistent
-            )
-            CookiesType.NGX -> NGXCookieData(
                 url.host,
                 cookie.name,
                 cookie.value,

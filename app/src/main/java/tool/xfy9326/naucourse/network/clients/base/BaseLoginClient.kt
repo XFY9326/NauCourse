@@ -72,12 +72,7 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
         val url = response.request.url
         val content = NetworkTools.getResponseContent(response)
         return if (validateLoginByResponse(content, url)) {
-            if (validateNotInLoginPage(content)) {
-                response
-            } else {
-                response.closeQuietly()
-                newClientCall(request)
-            }
+            response
         } else {
             // 加锁防止重复登录
             if (loginLock.tryLock()) {
@@ -112,9 +107,6 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
 
     // 判断是否可以用返回的数据去登录
     abstract fun validateUseResponseToLogin(url: HttpUrl, content: String): Boolean
-
-    // 判断是否不在登录页面
-    protected open fun validateNotInLoginPage(responseContent: String): Boolean = true
 
     fun newAutoLoginCall(url: HttpUrl): Response = newAutoLoginCall(Request.Builder().url(url).build())
 }

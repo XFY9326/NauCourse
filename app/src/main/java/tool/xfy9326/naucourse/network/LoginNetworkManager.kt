@@ -8,7 +8,7 @@ import tool.xfy9326.naucourse.io.db.NetworkDBHelper
 import tool.xfy9326.naucourse.io.prefs.UserPref
 import tool.xfy9326.naucourse.network.clients.JwcClient
 import tool.xfy9326.naucourse.network.clients.MyClient
-import tool.xfy9326.naucourse.network.clients.NgxClient
+import tool.xfy9326.naucourse.network.clients.NGXClient
 import tool.xfy9326.naucourse.network.clients.SSOClient
 import tool.xfy9326.naucourse.network.clients.base.LoginInfo
 import tool.xfy9326.naucourse.network.clients.base.LoginResponse
@@ -31,7 +31,7 @@ object LoginNetworkManager {
         ClientType.SSO to lazy { SSOClient(loginInfo) },
         ClientType.JWC to lazy { JwcClient(loginInfo) },
         ClientType.MY to lazy { MyClient(loginInfo) },
-        ClientType.NGX to lazy { NgxClient(loginInfo) }
+        ClientType.NGX to lazy { NGXClient(loginInfo) }
     )
 
     enum class ClientType {
@@ -65,20 +65,16 @@ object LoginNetworkManager {
             NetworkTools.getInstance().getCookieStore(NetworkTools.NetworkType.SSO).clearCookies()
         }
 
-        val ngxResult = (getClient(ClientType.NGX)).login()
-        if (!ngxResult.isSuccess) {
-            NetworkTools.getInstance().getCookieStore(NetworkTools.NetworkType.NGX).clearCookies()
-        }
-        LogUtils.d<LoginNetworkManager>("Login Result:  SSO: ${ssoResult.isSuccess}  Ngx: ${ngxResult.isSuccess}")
+        LogUtils.d<LoginNetworkManager>("Login Result:  SSO: ${ssoResult.isSuccess}")
 
         ssoResult
     }
 
     suspend fun logout() = loginMutex.withLock {
         val jwcLogout = (getClient(ClientType.JWC)).logout()
-        val ssoLogout = (getClient(ClientType.SSO)).logout()
         val ngxLogout = (getClient(ClientType.NGX)).logout()
-        LogUtils.d<LoginNetworkManager>("Logout Result: Jwc: $jwcLogout  SSO: $ssoLogout  Ngx: $ngxLogout")
+        val ssoLogout = (getClient(ClientType.SSO)).logout()
+        LogUtils.d<LoginNetworkManager>("Logout Result: Jwc: $jwcLogout  NGX: $ngxLogout  SSO: $ssoLogout")
     }
 
     fun clearAllCacheAndCookies() {
