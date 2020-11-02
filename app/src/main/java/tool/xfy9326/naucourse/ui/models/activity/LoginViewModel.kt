@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.beans.UserInfo
 import tool.xfy9326.naucourse.compat.OldDataCompat
 import tool.xfy9326.naucourse.network.LoginNetworkManager
@@ -57,6 +58,33 @@ class LoginViewModel : BaseViewModel() {
                 compatData.postEventValue(loginInfo)
                 doLogin(loginInfo.userId, loginInfo.userPw, false)
             } else {
+                isLoginLoading.postEventValue(false)
+            }
+        }
+    }
+
+    fun changePasswordLogin(userId: String, userPw: String) {
+        isLoginLoading.postEventValue(true)
+        viewModelScope.launch(Dispatchers.Default) {
+            val loginResult = withContext(Dispatchers.Default) {
+                LoginNetworkManager.clearAllCacheAndCookies()
+
+                loginProcess.postEventValue(LoadingProcess.LOGGING_SSO)
+                val ssoLoginResult = LoginNetworkManager.login(LoginInfo(userId, userPw))
+                if (ssoLoginResult.isSuccess) {
+                    loginProcess.postEventValue(LoadingProcess.LOGGING_JWC)
+                    LoginNetworkManager.getClient(LoginNetworkManager.ClientType.JWC).login()
+                } else {
+                    ssoLoginResult
+                }
+            }
+
+            if (loginResult.isSuccess) {
+                App.instance.mayPasswordError = false
+                AccountUtils.saveUserInfo(UserInfo(userId, userPw))
+                loginSuccess.notifyEvent()
+            } else {
+                errorReasonType.postEventValue(loginResult.loginErrorReason)
                 isLoginLoading.postEventValue(false)
             }
         }

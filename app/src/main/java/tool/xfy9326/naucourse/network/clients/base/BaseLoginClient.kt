@@ -5,7 +5,10 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.internal.closeQuietly
 import org.jsoup.HttpStatusException
+import tool.xfy9326.naucourse.App
 import tool.xfy9326.naucourse.network.tools.NetworkTools
+import tool.xfy9326.naucourse.tools.NotifyBus
+import tool.xfy9326.naucourse.tools.NotifyType
 import tool.xfy9326.naucourse.utils.debug.ExceptionUtils
 import java.io.IOException
 import java.net.ConnectException
@@ -77,6 +80,9 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
             // 加锁防止重复登录
             if (loginLock.tryLock()) {
                 try {
+                    if (App.instance.mayPasswordError) {
+                        throw ServerErrorException("User Password May Error!")
+                    }
                     val result = if (validateUseResponseToLogin(url, content)) {
                         login(response)
                     } else {
@@ -84,6 +90,10 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
                     }
                     response.closeQuietly()
                     if (!result.isSuccess) {
+                        if (result.loginErrorReason == LoginResponse.ErrorReason.PASSWORD_ERROR) {
+                            App.instance.mayPasswordError = true
+                            NotifyBus[NotifyType.PASSWORD_ERROR].notifyEvent()
+                        }
                         throw ServerErrorException("Auto Login Failed! Url: $url Reason: ${result.loginErrorReason}")
                     }
                 } finally {

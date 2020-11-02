@@ -213,8 +213,8 @@ object DialogUtils {
         }
     }
 
-    fun applyButtonTextAndBackground(context: Context, dialog: Dialog) {
-        dialog.apply {
+    fun applyButtonTextAndBackground(context: Context, dialog: Dialog?) {
+        dialog?.apply {
             findViewById<Button>(android.R.id.button1)?.setTextColor(ContextCompat.getColor(context, R.color.colorDialogButtonText))
             findViewById<Button>(android.R.id.button2)?.setTextColor(ContextCompat.getColor(context, R.color.colorDialogButtonText))
             findViewById<Button>(android.R.id.button3)?.setTextColor(ContextCompat.getColor(context, R.color.colorDialogButtonText))

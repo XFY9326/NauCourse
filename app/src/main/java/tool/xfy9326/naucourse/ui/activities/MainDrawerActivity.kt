@@ -222,6 +222,12 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         viewModel.updateInfo.observeEvent(this) {
             UpdateDialog.showDialog(supportFragmentManager, it)
         }
+        NotifyBus[NotifyType.PASSWORD_ERROR].observeNotification(this) {
+            startActivity(
+                Intent(this, LoginActivity::class.java).putExtra(LoginActivity.INTENT_PASSWORD_ERROR_LOGIN, true)
+            )
+            finish()
+        }
         NotifyBus[NotifyType.DEFAULT_ENTER_INTERFACE_CHANGED].observeNotification(this) {
             showFragment(getDefaultFragmentType())
         }

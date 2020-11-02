@@ -420,5 +420,6 @@
     <string name="refreshing_user_info">正在刷新个人信息。。。</string>
     <string name="clear_and_import_course">清空并导入</string>
     <string name="import_course">导入</string>
+    <string name="password_error_may_change">由于您的密码可能发生了改变，现在需要重新登录！</string>
     <string name="term_custom_attention">自定义学期将会覆盖默认设置，若想要恢复为教务提供的标准学期时间，可以尝试重置学期！默认的标准学期时间会自动更新！</string>
 </resources>

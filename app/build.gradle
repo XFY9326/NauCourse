@@ -24,8 +24,8 @@ android {
 
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 85
-        versionName '7.2'
+        versionCode 86
+        versionName '7.2.1'
 
         manifestPlaceholders = ['BUGLY_APP_ID': rootProject.ext.buglyAppId]
 
@@ -140,7 +140,7 @@ dependencies {
 
     // AndroidX View
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
     // LifeCycle, ViewModel and LiveData
     implementation "androidx.lifecycle:lifecycle-process:$androidx_lifecycle_version"

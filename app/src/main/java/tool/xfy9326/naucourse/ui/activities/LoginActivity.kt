@@ -2,6 +2,7 @@ package tool.xfy9326.naucourse.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
@@ -10,6 +11,7 @@ import kotlinx.android.synthetic.main.view_login_panel.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.BaseConst
 import tool.xfy9326.naucourse.kt.clear
+import tool.xfy9326.naucourse.kt.showLongToast
 import tool.xfy9326.naucourse.kt.showSnackBar
 import tool.xfy9326.naucourse.kt.showSnackBarWithCallback
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
@@ -24,6 +26,11 @@ import tool.xfy9326.naucourse.utils.views.ViewUtils
 
 
 class LoginActivity : ViewModelActivity<LoginViewModel>() {
+    companion object {
+        const val INTENT_PASSWORD_ERROR_LOGIN = "PASSWORD_ERROR_LOGIN"
+    }
+
+    private var passwordErrorLogin = false
     private lateinit var loadingAnimateDrawable: AnimatedVectorDrawableCompat
 
     override fun onCreateContentView() = R.layout.activity_login
@@ -32,11 +39,21 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
 
     override fun onStart() {
         super.onStart()
-        getViewModel().checkUpdate()
-        AppWidgetUtils.clearWidget()
+        if (!passwordErrorLogin) {
+            getViewModel().checkUpdate()
+            AppWidgetUtils.clearWidget()
+        }
     }
 
     override fun initView(savedInstanceState: Bundle?, viewModel: LoginViewModel) {
+        passwordErrorLogin = intent.getBooleanExtra(INTENT_PASSWORD_ERROR_LOGIN, false)
+        if (passwordErrorLogin) {
+            et_userId.inputType = InputType.TYPE_NULL
+            et_userId.isClickable = false
+            cb_acceptEULA.isChecked = true
+            showLongToast(R.string.password_error_may_change)
+        }
+
         loadingAnimateDrawable = AnimatedVectorDrawableCompat.create(this, R.drawable.avd_anim_loading)!!
         iv_loginLoading.setImageDrawable(loadingAnimateDrawable)
         viewModel.requestSavedCacheUserId()
@@ -53,7 +70,11 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
             val acceptLicense = cb_acceptEULA.isChecked
             if (acceptLicense) {
                 if (userId.isNotEmpty() && userId.isNotBlank() && userPw.isNotEmpty() && userPw.isNotBlank()) {
-                    viewModel.doLogin(userId, userPw)
+                    if (passwordErrorLogin) {
+                        viewModel.changePasswordLogin(userId, userPw)
+                    } else {
+                        viewModel.doLogin(userId, userPw)
+                    }
                 } else {
                     layout_activityLogin.showSnackBar(R.string.login_info_empty)
                 }
@@ -61,7 +82,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
                 layout_activityLogin.showSnackBar(R.string.eula_not_accept)
             }
         }
-        intent?.getBooleanExtra(IntentUtils.UPDATE_FROM_OLD_DATA_FLAG, false)?.let {
+        intent.getBooleanExtra(IntentUtils.UPDATE_FROM_OLD_DATA_FLAG, false).let {
             if (it) viewModel.doLoginFromOldData()
         }
     }

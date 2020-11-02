@@ -24,6 +24,8 @@ class App : Application(), LifecycleObserver {
             private set
     }
 
+    var mayPasswordError: Boolean = false
+
     override fun onCreate() {
         super.onCreate()
         instance = this
