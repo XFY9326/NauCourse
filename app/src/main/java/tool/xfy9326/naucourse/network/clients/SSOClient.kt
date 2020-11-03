@@ -27,7 +27,7 @@ open class SSOClient(
     private val cookieStore = NetworkTools.getInstance().getCookieStore(netWorkType)
     private val isServiceLogin = serviceUrl != null
 
-    val loginUrl: HttpUrl
+    private val loginUrl: HttpUrl
 
     init {
         val loginUrlBuilder = SSO_LOGIN_URL.newBuilder()
@@ -66,6 +66,7 @@ open class SSOClient(
         private const val SSO_LOGIN_PASSWORD_ERROR_STR = "密码错误"
         private const val SSO_LOGIN_INPUT_ERROR_STR = "请勿输入非法字符"
         private const val SSO_SERVER_ERROR = "单点登录系统未正常工作"
+        private const val SSO_ACCOUNT_LOCK = "账号被锁定"
         const val SSO_LOGIN_PAGE_STR = "统一身份认证登录"
 
         private val SSO_HEADER = Headers.headersOf(
@@ -84,6 +85,7 @@ open class SSOClient(
         private fun getSSOLoginStatus(htmlContent: String): LoginResponse.ErrorReason = when {
             SSO_LOGIN_SUCCESS_STR in htmlContent -> LoginResponse.ErrorReason.NONE
             SSO_LOGIN_PASSWORD_ERROR_STR in htmlContent -> LoginResponse.ErrorReason.PASSWORD_ERROR
+            SSO_ACCOUNT_LOCK in htmlContent -> LoginResponse.ErrorReason.ACCOUNT_LOCK_ERROR
             SSO_LOGIN_INPUT_ERROR_STR in htmlContent -> LoginResponse.ErrorReason.INPUT_ERROR
             SSO_SERVER_ERROR in htmlContent -> LoginResponse.ErrorReason.SERVER_ERROR
             else -> LoginResponse.ErrorReason.UNKNOWN

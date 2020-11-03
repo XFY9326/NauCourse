@@ -50,6 +50,7 @@ object I18NUtils {
             ErrorReason.ALREADY_LOGIN -> R.string.already_login
             ErrorReason.INPUT_ERROR -> R.string.input_error
             ErrorReason.PASSWORD_ERROR -> R.string.password_error
+            ErrorReason.ACCOUNT_LOCK_ERROR -> R.string.account_lock_error
             ErrorReason.SERVER_ERROR -> R.string.server_error
             ErrorReason.UNKNOWN -> R.string.unknown_error
             ErrorReason.CONNECTION_ERROR -> R.string.connection_error

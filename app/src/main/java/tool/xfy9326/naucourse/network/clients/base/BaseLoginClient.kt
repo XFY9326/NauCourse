@@ -90,7 +90,9 @@ abstract class BaseLoginClient(private var loginInfo: LoginInfo) : BaseNetworkCl
                     }
                     response.closeQuietly()
                     if (!result.isSuccess) {
-                        if (result.loginErrorReason == LoginResponse.ErrorReason.PASSWORD_ERROR) {
+                        if (result.loginErrorReason == LoginResponse.ErrorReason.PASSWORD_ERROR ||
+                            result.loginErrorReason == LoginResponse.ErrorReason.ACCOUNT_LOCK_ERROR
+                        ) {
                             App.instance.mayPasswordError = true
                             NotifyBus[NotifyType.PASSWORD_ERROR].notifyEvent()
                         }

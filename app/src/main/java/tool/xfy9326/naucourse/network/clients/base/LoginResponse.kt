@@ -19,6 +19,9 @@ data class LoginResponse(
         // 密码错误
         PASSWORD_ERROR,
 
+        // 账户被锁定
+        ACCOUNT_LOCK_ERROR,
+
         // 输入错误
         INPUT_ERROR,
 

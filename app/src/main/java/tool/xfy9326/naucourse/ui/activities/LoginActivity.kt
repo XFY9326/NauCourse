@@ -51,7 +51,7 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
             et_userId.inputType = InputType.TYPE_NULL
             et_userId.isClickable = false
             cb_acceptEULA.isChecked = true
-            showLongToast(R.string.password_error_may_change)
+            showLongToast(R.string.password_change_error)
         }
 
         loadingAnimateDrawable = AnimatedVectorDrawableCompat.create(this, R.drawable.avd_anim_loading)!!
