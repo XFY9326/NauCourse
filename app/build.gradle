@@ -1,17 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'bugly'
-
-rootProject.ext {
-    applicationId = 'tool.xfy9326.naucourse'
-    buglyAppId = '7b78d5ccdc'
-}
-
-bugly {
-    appId = rootProject.ext.buglyAppId
-    appKey = 'a5a6c50e-b240-4f5c-b7bd-f1087d308bd1'
-}
 
 android {
     compileSdkVersion 30
@@ -19,14 +8,12 @@ android {
     ndkVersion '22.0.7026061'
 
     defaultConfig {
-        applicationId rootProject.ext.applicationId
+        applicationId 'tool.xfy9326.naucourse'
 
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 87
         versionName '7.2.2'
-
-        manifestPlaceholders = ['BUGLY_APP_ID': rootProject.ext.buglyAppId]
 
         resConfigs 'zh'
         applicationVariants.all {
@@ -48,18 +35,13 @@ android {
     }
 
     buildTypes {
-        debug {
-            minifyEnabled false
-            manifestPlaceholders = ['DEBUG': "true"]
-        }
-
         release {
             zipAlignEnabled true
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            manifestPlaceholders = ['DEBUG': "false"]
             packagingOptions {
+                exclude 'META-INF/*.version'
                 exclude 'DebugProbesKt.bin'
                 exclude 'META-INF/CHANGES'
                 exclude 'META-INF/README.md'
@@ -77,18 +59,18 @@ android {
     productFlavors {
         stable {
             dimension 'version'
-            applicationId rootProject.ext.applicationId
+            applicationId 'tool.xfy9326.naucourse'
 
-            manifestPlaceholders = ['ApplicationId': "${applicationId}", 'BUGLY_APP_CHANNEL': "stable"]
+            manifestPlaceholders = ['ApplicationId': "${applicationId}"]
         }
         beta {
             dimension 'version'
-            applicationId rootProject.ext.applicationId
+            applicationId 'tool.xfy9326.naucourse'
 
             applicationIdSuffix '.beta'
             versionNameSuffix '-beta'
 
-            manifestPlaceholders = ['ApplicationId': "${applicationId}${applicationIdSuffix}", 'BUGLY_APP_CHANNEL': "beta"]
+            manifestPlaceholders = ['ApplicationId': "${applicationId}${applicationIdSuffix}"]
         }
     }
 
@@ -177,7 +159,4 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$glide_version"
     implementation "com.github.bumptech.glide:okhttp3-integration:$glide_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
-
-    // Bugly
-    implementation 'com.tencent.bugly:crashreport:3.2.3'
 }
