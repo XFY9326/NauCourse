@@ -3,8 +3,6 @@
 本应用是南京审计大学的非官方开源课程表  
 你可以在[酷安](https://www.coolapk.com/apk/178329) 下载到本应用最新的版本
 
-#### 本仓库仅会同步稳定版本迭代的更新
-
     NauCourse Android Application
     Copyright (C) 2020  XFY9326
 
