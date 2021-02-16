@@ -1,9 +1,10 @@
 package tool.xfy9326.naucourse.ui.views.recyclerview.adapters
 
 import android.content.Context
-import android.view.View
+import android.view.ViewGroup
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.BaseConst
+import tool.xfy9326.naucourse.databinding.ViewCourseScoreItemBinding
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseScore
 import tool.xfy9326.naucourse.ui.views.recyclerview.adapters.base.ListRecyclerAdapter
 import tool.xfy9326.naucourse.ui.views.recyclerview.viewholders.CourseScoreViewHolder
@@ -12,9 +13,8 @@ import java.lang.ref.WeakReference
 class CourseScoreAdapter(context: Context) : ListRecyclerAdapter<CourseScoreViewHolder, CourseScore>(context, DifferItemCallback()) {
     private val weakContext = WeakReference(context)
 
-    override fun onBindLayout(): Int = R.layout.view_course_score_item
-
-    override fun onCreateViewHolder(view: View): CourseScoreViewHolder = CourseScoreViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        CourseScoreViewHolder(ViewCourseScoreItemBinding.inflate(layoutInflater, parent, false))
 
     override fun onBindViewHolder(holder: CourseScoreViewHolder, position: Int, element: CourseScore) {
         holder.apply {

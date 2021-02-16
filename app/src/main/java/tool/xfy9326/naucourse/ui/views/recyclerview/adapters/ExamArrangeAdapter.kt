@@ -1,10 +1,11 @@
 package tool.xfy9326.naucourse.ui.views.recyclerview.adapters
 
 import android.content.Context
-import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.isVisible
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.TimeConst
+import tool.xfy9326.naucourse.databinding.ViewExamItemBinding
 import tool.xfy9326.naucourse.providers.beans.jwc.Exam
 import tool.xfy9326.naucourse.ui.views.recyclerview.adapters.base.ListRecyclerAdapter
 import tool.xfy9326.naucourse.ui.views.recyclerview.viewholders.ExamArrangeViewHolder
@@ -21,9 +22,8 @@ class ExamArrangeAdapter(context: Context) : ListRecyclerAdapter<ExamArrangeView
 
     private val weakContext = WeakReference(context)
 
-    override fun onBindLayout(): Int = R.layout.view_exam_item
-
-    override fun onCreateViewHolder(view: View): ExamArrangeViewHolder = ExamArrangeViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        ExamArrangeViewHolder(ViewExamItemBinding.inflate(layoutInflater, parent, false))
 
     override fun onBindViewHolder(holder: ExamArrangeViewHolder, position: Int, element: Exam) {
         holder.apply {

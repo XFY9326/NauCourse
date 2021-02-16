@@ -4,10 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import kotlinx.android.synthetic.main.activity_error.*
-import kotlinx.android.synthetic.main.view_general_toolbar.*
 import kotlinx.coroutines.launch
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.databinding.ActivityErrorBinding
 import tool.xfy9326.naucourse.kt.showShortToast
 import tool.xfy9326.naucourse.ui.dialogs.UpdateDialog
 import tool.xfy9326.naucourse.update.UpdateChecker
@@ -18,14 +17,18 @@ class ErrorActivity : AppCompatActivity() {
         const val EXTRA_IS_LOGIN_FAILED_ERROR = "IS_LOGIN_FAILED_ERROR"
     }
 
+    private val binding by lazy {
+        ActivityErrorBinding.inflate(layoutInflater)
+    }
+
     private var isLoginError: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isLoginError = intent.getBooleanExtra(EXTRA_IS_LOGIN_FAILED_ERROR, false)
 
-        setContentView(R.layout.activity_error)
-        setSupportActionBar(tb_general)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar.tbGeneral)
         initView()
         checkUpdates(false)
     }
@@ -34,19 +37,19 @@ class ErrorActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(true)
         if (isLoginError) {
             supportActionBar?.setTitle(R.string.login_failed_help)
-            tv_errorHelp.setText(R.string.login_failed_attention)
+            binding.tvErrorHelp.setText(R.string.login_failed_attention)
         } else {
             supportActionBar?.setTitle(R.string.app_error)
-            tv_errorHelp.setText(R.string.app_error_attention)
+            binding.tvErrorHelp.setText(R.string.app_error_attention)
         }
 
-        btn_errUpdateCheck.setOnClickListener {
+        binding.btnErrUpdateCheck.setOnClickListener {
             checkUpdates(true)
         }
-        btn_errAddQQGroup.setOnClickListener {
+        binding.btnErrAddQQGroup.setOnClickListener {
             IntentUtils.joinFeedbackQQGroup(this)
         }
-        btn_errFeedback.setOnClickListener {
+        binding.btnErrFeedback.setOnClickListener {
             startActivity(Intent(this, FeedbackActivity::class.java))
         }
     }

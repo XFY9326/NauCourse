@@ -7,20 +7,23 @@ import android.view.MenuItem
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import androidx.core.view.isVisible
-import kotlinx.android.synthetic.main.activity_webview.*
-import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.databinding.ActivityWebviewBinding
 import tool.xfy9326.naucourse.kt.enableHomeButton
 import tool.xfy9326.naucourse.utils.utility.IntentUtils
 
 abstract class WebViewActivity : BaseActivity() {
     protected abstract val openInBrowserUrl: String
 
+    private val binding by lazy {
+        ActivityWebviewBinding.inflate(layoutInflater)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_webview)
+        setContentView(binding.root)
         initView()
-        onWebViewPrepared(wv_main)
+        onWebViewPrepared(binding.wvMain)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -34,7 +37,7 @@ abstract class WebViewActivity : BaseActivity() {
                 finish()
                 return true
             }
-            R.id.menu_feedbackRefresh -> wv_main.reload()
+            R.id.menu_feedbackRefresh -> binding.wvMain.reload()
             R.id.menu_feedbackOpenInBrowser -> IntentUtils.launchUrlInBrowser(this, openInBrowserUrl)
         }
         return super.onOptionsItemSelected(item)
@@ -42,9 +45,9 @@ abstract class WebViewActivity : BaseActivity() {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun initView() {
-        setSupportActionBar(tb_general)
+        setSupportActionBar(binding.toolbar.tbGeneral)
         enableHomeButton()
-        wv_main.apply {
+        binding.wvMain.apply {
             settings.apply {
                 javaScriptEnabled = true
                 domStorageEnabled = true
@@ -59,7 +62,7 @@ abstract class WebViewActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        wv_main.apply {
+        binding.wvMain.apply {
             if (canGoBack()) {
                 goBack()
             } else {
@@ -69,7 +72,7 @@ abstract class WebViewActivity : BaseActivity() {
     }
 
     protected fun changeProgressBar(newProgress: Int) {
-        pb_webViewLoading.apply {
+        binding.pbWebViewLoading.apply {
             isVisible = newProgress != 100
             progress = newProgress
         }

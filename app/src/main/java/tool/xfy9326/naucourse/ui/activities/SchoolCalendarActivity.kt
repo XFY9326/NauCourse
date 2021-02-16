@@ -14,10 +14,9 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.activity_school_calendar.*
-import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CalendarItem
+import tool.xfy9326.naucourse.databinding.ActivitySchoolCalendarBinding
 import tool.xfy9326.naucourse.kt.createWithLifecycle
 import tool.xfy9326.naucourse.kt.enableHomeButton
 import tool.xfy9326.naucourse.kt.showShortToast
@@ -32,7 +31,11 @@ import tool.xfy9326.naucourse.utils.views.I18NUtils
 class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
     private var isCalendarSet = false
 
-    override fun onCreateContentView(): Int = R.layout.activity_school_calendar
+    private val binding by lazy {
+        ActivitySchoolCalendarBinding.inflate(layoutInflater)
+    }
+
+    override fun onCreateContentView() = binding.root
 
     override fun onCreateViewModel(): SchoolCalendarViewModel = ViewModelProvider(this)[SchoolCalendarViewModel::class.java]
 
@@ -41,7 +44,7 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
             startActivity(ShareUtils.getShareImageIntent(this, it))
         }
         viewModel.imageOperation.observeEvent(this) {
-            layout_schoolCalendar.showSnackBar(I18NUtils.getImageOperationTypeResId(it))
+            binding.layoutSchoolCalendar.showSnackBar(I18NUtils.getImageOperationTypeResId(it))
         }
         viewModel.calendarImageUrl.observe(this) {
             setImageView(it)
@@ -53,13 +56,13 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
             if (it == SchoolCalendarViewModel.CalendarLoadStatus.LOADING_IMAGE_LIST) {
                 showShortToast(I18NUtils.getCalendarLoadStatusResId(it))
             } else {
-                layout_schoolCalendar.showSnackBar(I18NUtils.getCalendarLoadStatusResId(it))
+                binding.layoutSchoolCalendar.showSnackBar(I18NUtils.getCalendarLoadStatusResId(it))
             }
         }
     }
 
     override fun initView(savedInstanceState: Bundle?, viewModel: SchoolCalendarViewModel) {
-        setSupportActionBar(tb_general)
+        setSupportActionBar(binding.toolbar.tbGeneral)
         enableHomeButton()
     }
 
@@ -108,7 +111,7 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
         Glide.with(this).load(url).override(resources.displayMetrics.widthPixels, resources.displayMetrics.heightPixels)
             .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                    layout_schoolCalendar.showSnackBar(
+                    binding.layoutSchoolCalendar.showSnackBar(
                         I18NUtils.getCalendarLoadStatusResId(SchoolCalendarViewModel.CalendarLoadStatus.IMAGE_LOAD_FAILED)
                     )
                     return false
@@ -120,22 +123,22 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
                 ): Boolean {
                     isCalendarSet = true
 
-                    pb_calendarLoading.hide()
-                    pv_calendarImage.visibility = View.VISIBLE
+                    binding.pbCalendarLoading.hide()
+                    binding.pvCalendarImage.visibility = View.VISIBLE
 
                     return false
                 }
-            }).fitCenter().into(pv_calendarImage)
+            }).fitCenter().into(binding.pvCalendarImage)
     }
 
     @Synchronized
     private fun getBitmapFromImageView(): Bitmap? {
         return if (isCalendarSet) {
-            BitmapUtils.getBitmapFromDrawable(pv_calendarImage.drawable).also {
-                if (it == null) layout_schoolCalendar.showSnackBar(R.string.image_operation_when_calendar_loading)
+            BitmapUtils.getBitmapFromDrawable(binding.pvCalendarImage.drawable).also {
+                if (it == null) binding.layoutSchoolCalendar.showSnackBar(R.string.image_operation_when_calendar_loading)
             }
         } else {
-            layout_schoolCalendar.showSnackBar(R.string.image_operation_when_calendar_loading)
+            binding.layoutSchoolCalendar.showSnackBar(R.string.image_operation_when_calendar_loading)
             null
         }
     }
@@ -144,7 +147,7 @@ class SchoolCalendarActivity : ViewModelActivity<SchoolCalendarViewModel>() {
     private fun resetImageView() {
         isCalendarSet = false
 
-        pv_calendarImage.visibility = View.GONE
-        pb_calendarLoading.show()
+        binding.pvCalendarImage.visibility = View.GONE
+        binding.pbCalendarLoading.show()
     }
 }

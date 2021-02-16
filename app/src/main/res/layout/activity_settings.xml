@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".ui.activities.SettingsActivity">
 
-    <include layout="@layout/view_general_toolbar" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/view_general_toolbar" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fg_settingsContent"

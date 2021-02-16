@@ -3,10 +3,7 @@ package tool.xfy9326.naucourse.ui.activities.base
 import android.os.Bundle
 import androidx.annotation.CallSuper
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.layout_list.*
-import kotlinx.android.synthetic.main.layout_refresh_list.*
-import kotlinx.android.synthetic.main.view_general_toolbar.*
-import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.databinding.LayoutRefreshListBinding
 import tool.xfy9326.naucourse.kt.enableHomeButton
 import tool.xfy9326.naucourse.kt.showSnackBar
 import tool.xfy9326.naucourse.ui.models.base.BaseListViewModel
@@ -16,34 +13,38 @@ import tool.xfy9326.naucourse.utils.views.I18NUtils
 abstract class ListViewModelActivity<E, T : BaseListViewModel<E>, VH : RecyclerView.ViewHolder> : ViewModelActivity<T>() {
     private lateinit var adapter: ListRecyclerAdapter<VH, E>
 
-    override fun onCreateContentView(): Int = R.layout.layout_refresh_list
+    private val binding by lazy {
+        LayoutRefreshListBinding.inflate(layoutInflater)
+    }
+
+    override fun onCreateContentView() = binding.root
 
     @CallSuper
     override fun bindViewModel(viewModel: T) {
         viewModel.errorMsg.observeEvent(this) {
-            layout_refresh_list.showSnackBar(I18NUtils.getContentErrorResId(it)!!)
+            binding.layoutRefreshList.showSnackBar(I18NUtils.getContentErrorResId(it)!!)
         }
         viewModel.listData.observe(this) {
             adapter.submitList(it)
         }
         viewModel.isRefreshing.observe(this) {
             if (it) {
-                asl_refreshLayout.isRefreshing = true
+                binding.aslRefreshLayout.isRefreshing = true
             } else {
-                asl_refreshLayout.postStopRefreshing()
+                binding.aslRefreshLayout.postStopRefreshing()
             }
         }
     }
 
     @CallSuper
     override fun initView(savedInstanceState: Bundle?, viewModel: T) {
-        setSupportActionBar(tb_general)
+        setSupportActionBar(binding.toolbar.tbGeneral)
         enableHomeButton()
 
         adapter = onCreateAdapter()
-        arv_dataList.adapter = adapter
+        binding.list.arvDataList.adapter = adapter
 
-        asl_refreshLayout.setOnRefreshListener {
+        binding.aslRefreshLayout.setOnRefreshListener {
             viewModel.getData(forceUpdate = true)
         }
     }

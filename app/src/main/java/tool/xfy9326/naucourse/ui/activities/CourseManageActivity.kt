@@ -4,14 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
-import kotlinx.android.synthetic.main.activity_course_manage.*
-import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseCellStyle
+import tool.xfy9326.naucourse.databinding.ActivityCourseManageBinding
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.kt.enableHomeButton
@@ -36,24 +36,60 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
     ColorPickerDialogListener, TermDatePickerDialog.DatePickDialogCallback, CourseImportDialog.CourseImportCallback {
     companion object {
         private const val COLOR_PICKER_DIALOG_ID = 1
-
-        private const val COURSE_EDIT_RESULT = 1
-        private const val COURSE_ADD_RESULT = 2
     }
 
     private lateinit var courseAdapter: CourseAdapter
 
-    override fun onCreateContentView(): Int = R.layout.activity_course_manage
+    private val binding by lazy {
+        ActivityCourseManageBinding.inflate(layoutInflater)
+    }
+    private val addCourse = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == RESULT_OK) {
+            val data = it.data
+            if (data != null) {
+                val course = data.getSerializableExtra(CourseEditActivity.COURSE_DATA) as Course?
+                val courseCellStyle = data.getSerializableExtra(CourseEditActivity.COURSE_CELL_STYLE) as CourseCellStyle?
+                if (course != null && courseCellStyle != null) {
+                    getViewModel().setDataChanged()
+                    courseAdapter.insertCourse(course, courseCellStyle)
+                }
+            }
+        } else {
+            binding.layoutCourseManage.showSnackBar(R.string.course_edit_failed)
+        }
+    }
+    private val editCourse = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == RESULT_OK) {
+            val data = it.data
+            if (data != null) {
+                val course = data.getSerializableExtra(CourseEditActivity.COURSE_DATA) as Course?
+                val courseCellStyle = data.getSerializableExtra(CourseEditActivity.COURSE_CELL_STYLE) as CourseCellStyle?
+                if (course != null && courseCellStyle != null) {
+                    val position = courseAdapter.updateCourse(course)
+                    if (position != null) {
+                        getViewModel().setDataChanged()
+                        courseAdapter.updateCourseStyle(position, courseCellStyle)
+                    } else {
+                        binding.layoutCourseManage.showSnackBar(R.string.course_edit_failed)
+                    }
+                }
+            }
+        } else {
+            binding.layoutCourseManage.showSnackBar(R.string.course_edit_failed)
+        }
+    }
+
+    override fun onCreateContentView() = binding.root
 
     override fun onCreateViewModel(): CourseManageViewModel = ViewModelProvider(this)[CourseManageViewModel::class.java]
 
     override fun initView(savedInstanceState: Bundle?, viewModel: CourseManageViewModel) {
-        setSupportActionBar(tb_general)
+        setSupportActionBar(binding.toolbar.tbGeneral)
         enableHomeButton()
 
         courseAdapter = CourseAdapter(this, this)
 
-        arv_courseManageList.apply {
+        binding.arvCourseManageList.apply {
             addItemDecoration(
                 AdvancedDivider(
                     this@CourseManageActivity,
@@ -68,7 +104,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
             adapter = courseAdapter
         }
 
-        fab_courseManage.setOnClickListener {
+        binding.fabCourseManage.setOnClickListener {
             DialogUtils.createCourseAddDialog(
                 this, lifecycle
             ) { _, which ->
@@ -92,9 +128,8 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
     }
 
     private fun addNewCourse() =
-        startActivityForResult(
-            Intent(this, CourseEditActivity::class.java).putExtra(CourseEditActivity.TERM_DATE, courseAdapter.getTermDate()),
-            COURSE_ADD_RESULT
+        addCourse.launch(
+            Intent(this, CourseEditActivity::class.java).putExtra(CourseEditActivity.TERM_DATE, courseAdapter.getTermDate())
         )
 
     override fun bindViewModel(viewModel: CourseManageViewModel) {
@@ -116,7 +151,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
         viewModel.importCourseResult.observeEvent(this) {
             FullScreenLoadingDialog.close(supportFragmentManager)
             if (it.third != null) {
-                layout_courseManage.showSnackBar(R.string.course_import_failed, getString(I18NUtils.getContentErrorResId(it.third!!)!!))
+                binding.layoutCourseManage.showSnackBar(R.string.course_import_failed, getString(I18NUtils.getContentErrorResId(it.third!!)!!))
             } else {
                 CourseImportDialog().apply {
                     arguments = Bundle().apply {
@@ -131,7 +166,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
 
     override fun onCourseDeleted(adapter: CourseAdapter, lastDeleteItem: Pair<Course, CourseCellStyle>, lastDeleteItemPosition: Int) {
         getViewModel().setDataChanged()
-        layout_courseManage.showSnackBarWithCallback(R.string.delete_course_success, R.string.revoke) {
+        binding.layoutCourseManage.showSnackBarWithCallback(R.string.delete_course_success, R.string.revoke) {
             adapter.recoverCourse(lastDeleteItem, lastDeleteItemPosition)
         }
     }
@@ -152,14 +187,14 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
                 if (term != null) {
                     TermDateEditDialog.startTermDateEditDialog(supportFragmentManager, term)
                 } else {
-                    layout_courseManage.showSnackBar(R.string.term_date_empty)
+                    binding.layoutCourseManage.showSnackBar(R.string.term_date_empty)
                 }
             }
             R.id.menu_courseManageDeleteAll -> {
-                layout_courseManage.showSnackBarWithCallback(R.string.delete_all_courses_msg, android.R.string.ok) {
+                binding.layoutCourseManage.showSnackBarWithCallback(R.string.delete_all_courses_msg, android.R.string.ok) {
                     getViewModel().setDataChanged()
                     courseAdapter.deleteAllCourses()
-                    layout_courseManage.showSnackBar(R.string.delete_course_success)
+                    binding.layoutCourseManage.showSnackBar(R.string.delete_course_success)
                 }
             }
             R.id.menu_courseManageSave ->
@@ -197,32 +232,6 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
         TermDateEditDialog.startTermDateEditDialog(supportFragmentManager, startTermDate, endTermDate)
 
     override fun onBackPressed() = checkSaveForExit()
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == RESULT_OK) {
-            if (data != null) {
-                val course = data.getSerializableExtra(CourseEditActivity.COURSE_DATA) as Course?
-                val courseCellStyle = data.getSerializableExtra(CourseEditActivity.COURSE_CELL_STYLE) as CourseCellStyle?
-                if (course != null && courseCellStyle != null) {
-                    if (requestCode == COURSE_EDIT_RESULT) {
-                        val position = courseAdapter.updateCourse(course)
-                        if (position != null) {
-                            getViewModel().setDataChanged()
-                            courseAdapter.updateCourseStyle(position, courseCellStyle)
-                        } else {
-                            layout_courseManage.showSnackBar(R.string.course_edit_failed)
-                        }
-                    } else if (requestCode == COURSE_ADD_RESULT) {
-                        getViewModel().setDataChanged()
-                        courseAdapter.insertCourse(course, courseCellStyle)
-                    }
-                }
-            }
-        } else {
-            layout_courseManage.showSnackBar(R.string.course_edit_failed)
-        }
-        super.onActivityResult(requestCode, resultCode, data)
-    }
 
     override fun onCourseImport(courses: ArrayList<Course>, term: Term, type: CourseManageViewModel.ImportCourseType, clearAll: Boolean) {
         getViewModel().setDataChanged()
@@ -293,12 +302,11 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
     override fun onDialogDismissed(dialogId: Int) {}
 
     override fun onEditCourse(adapter: CourseAdapter, termDate: TermDate, courseItem: Pair<Course, CourseCellStyle>) {
-        startActivityForResult(
+        editCourse.launch(
             Intent(this, CourseEditActivity::class.java)
                 .putExtra(CourseEditActivity.TERM_DATE, termDate)
                 .putExtra(CourseEditActivity.COURSE_DATA, courseItem.first)
-                .putExtra(CourseEditActivity.COURSE_CELL_STYLE, courseItem.second),
-            COURSE_EDIT_RESULT
+                .putExtra(CourseEditActivity.COURSE_CELL_STYLE, courseItem.second)
         )
     }
 
@@ -320,7 +328,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
         if (courseSet != null) {
             for (course in courseSet.courses) {
                 if (course.timeSet.isEmpty()) {
-                    layout_courseManage.showSnackBar(R.string.course_time_save_empty, course.name)
+                    binding.layoutCourseManage.showSnackBar(R.string.course_time_save_empty, course.name)
                     return null
                 }
             }
@@ -335,10 +343,10 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
                     if (courseSet.term == termDate.getTerm()) {
                         return Triple(courseSet, styles, termDate)
                     } else {
-                        layout_courseManage.showSnackBar(R.string.course_term_error)
+                        binding.layoutCourseManage.showSnackBar(R.string.course_term_error)
                     }
                 } else {
-                    layout_courseManage.showSnackBar(R.string.save_failed)
+                    binding.layoutCourseManage.showSnackBar(R.string.save_failed)
                 }
             } else {
                 showConflictMsg(
@@ -347,14 +355,14 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel>(), CourseA
                 )
             }
         } else {
-            layout_courseManage.showSnackBar(R.string.save_failed)
+            binding.layoutCourseManage.showSnackBar(R.string.save_failed)
         }
         return null
     }
 
     private fun checkSaveForExit() {
         if (getViewModel().dataChanged) {
-            layout_courseManage.showSnackBarWithCallback(R.string.exit_edit_without_save, android.R.string.ok) {
+            binding.layoutCourseManage.showSnackBarWithCallback(R.string.exit_edit_without_save, android.R.string.ok) {
                 super.onBackPressed()
             }
         } else {

@@ -26,8 +26,9 @@ class NewsViewModel : BaseViewModel() {
             isRefreshing.postValue(true)
             val newsInfoResult = NewsInfo.getInfo(loadCache = true)
             if (newsInfoResult.isSuccess) {
-                lastNewsHash = newsInfoResult.data!!.hashCode()
-                newsList.postValue(newsInfoResult.data)
+                val data = newsInfoResult.data!!
+                lastNewsHash = data.hashCode()
+                newsList.postValue(data)
             } else {
                 LogUtils.d<NewsViewModel>("News Info Init Error: ${newsInfoResult.errorReason}")
             }
@@ -44,10 +45,11 @@ class NewsViewModel : BaseViewModel() {
             isRefreshing.postValue(true)
             val newsInfoResult = NewsInfo.getInfo(AppPref.readShowNewsType())
             if (newsInfoResult.isSuccess) {
-                val newsHashCode = newsInfoResult.data!!.hashCode()
+                val data = newsInfoResult.data!!
+                val newsHashCode = data.hashCode()
                 if (lastNewsHash != newsHashCode) {
                     lastNewsHash = newsHashCode
-                    newsList.postValue(newsInfoResult.data)
+                    newsList.postValue(data)
                     if (newsInfoResult.data.isEmpty()) {
                         errorMsg.postEventValue(ContentErrorReason.EMPTY_DATA)
                     }

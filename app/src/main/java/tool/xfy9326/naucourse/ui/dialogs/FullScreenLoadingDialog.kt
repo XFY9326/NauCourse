@@ -10,8 +10,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.transition.Fade
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
-import kotlinx.android.synthetic.main.dialog_full_screen_loading.view.*
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.databinding.DialogFullScreenLoadingBinding
 import tool.xfy9326.naucourse.utils.views.AnimUtils
 
 class FullScreenLoadingDialog : DialogFragment() {
@@ -36,14 +36,14 @@ class FullScreenLoadingDialog : DialogFragment() {
         exitTransition = Fade()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         dialog?.apply {
             requestWindowFeature(Window.FEATURE_NO_TITLE)
         }
-        return inflater.inflate(R.layout.dialog_full_screen_loading, container, false).apply {
+        return DialogFullScreenLoadingBinding.inflate(layoutInflater, container, false).apply {
             animateDrawable = AnimatedVectorDrawableCompat.create(requireContext(), R.drawable.avd_anim_loading_circle)!!
-            iv_dialogFullScreenLoading.setImageDrawable(animateDrawable)
-        }
+            ivDialogFullScreenLoading.setImageDrawable(animateDrawable)
+        }.root
     }
 
     override fun onStart() {

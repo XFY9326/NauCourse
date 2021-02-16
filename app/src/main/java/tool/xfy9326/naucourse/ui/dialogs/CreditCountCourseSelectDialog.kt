@@ -7,9 +7,9 @@ import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.layout_list.view.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CreditCountItem
+import tool.xfy9326.naucourse.databinding.LayoutListBinding
 import tool.xfy9326.naucourse.ui.views.recyclerview.adapters.CreditCountAdapter
 import tool.xfy9326.naucourse.utils.BaseUtils
 
@@ -49,15 +49,16 @@ class CreditCountCourseSelectDialog : DialogFragment() {
             adapter = CreditCountAdapter(requireContext())
             adapter.submitList(currentItems)
 
-            val view = layoutInflater.inflate(R.layout.layout_list, null).apply {
-                layout_list.setPadding(0, resources.getDimensionPixelSize(R.dimen.credit_count_course_select_dialog_padding), 0, 0)
-                arv_dataList.adapter = adapter
-                setView(this)
-            }
+            setView(
+                LayoutListBinding.inflate(layoutInflater).apply {
+                    layoutList.setPadding(0, resources.getDimensionPixelSize(R.dimen.credit_count_course_select_dialog_padding), 0, 0)
+                    arvDataList.adapter = adapter
+                }.root
+            )
 
             setNegativeButton(android.R.string.cancel, null)
             setPositiveButton(R.string.count) { _, _ ->
-                BaseUtils.hideKeyboard(requireContext(), view.windowToken)
+                BaseUtils.hideKeyboard(requireContext(), requireView().windowToken)
                 requireActivity().let {
                     if (it is OnCreditCountCourseSelectedListener) it.onCreditCountCourseSelected(adapter.getSelectedItems(), historyItems)
                 }

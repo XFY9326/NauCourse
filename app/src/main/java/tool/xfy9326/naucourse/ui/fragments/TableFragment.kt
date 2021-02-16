@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import kotlinx.android.synthetic.main.fragment_table.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -19,6 +18,7 @@ import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseCell
 import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.beans.CoursePkg
+import tool.xfy9326.naucourse.databinding.FragmentTableBinding
 import tool.xfy9326.naucourse.kt.runInMain
 import tool.xfy9326.naucourse.kt.showShortToast
 import tool.xfy9326.naucourse.ui.models.fragment.CourseTableViewModel
@@ -36,6 +36,10 @@ class TableFragment : Fragment(), Observer<CoursePkg>, OnCourseCellClickListener
     private val courseUpdateLock = Mutex()
     private var weekNum by Delegates.notNull<Int>()
 
+    private var _binding: FragmentTableBinding? = null
+    private val binding
+        get() = _binding!!
+
     override fun onAttach(context: Context) {
         weekNum = arguments?.getInt(CourseTableViewPagerAdapter.COURSE_TABLE_WEEK_NUM)!!
         contentViewModel = ViewModelProvider(requireParentFragment())[CourseTableViewModel::class.java]
@@ -48,19 +52,24 @@ class TableFragment : Fragment(), Observer<CoursePkg>, OnCourseCellClickListener
         super.onAttach(context)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return if (view == null) {
-            inflater.inflate(R.layout.fragment_table, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        val v = view
+        return if (v == null) {
+            val binding = FragmentTableBinding.inflate(layoutInflater, container, false).also {
+                this._binding = it
+            }
+            binding.root
         } else {
             val parent = requireView().parent as ViewGroup?
-            parent?.removeView(view)
-            view
+            parent?.removeView(v)
+            _binding = FragmentTableBinding.bind(v)
+            v
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        applyLayoutTransition(layout_emptyCourseTableHeader)
-        applyLayoutTransition(layout_emptyCourseTable)
+        binding.layoutEmptyCourseTableHeader.let(::applyLayoutTransition)
+        binding.layoutEmptyCourseTable.let(::applyLayoutTransition)
 
         contentViewModel.courseAndTermEmpty.observeNotification(viewLifecycleOwner, "${TableFragment::class.java.simpleName}-$weekNum") {
             showShortToast(R.string.course_and_term_data_empty)
@@ -80,7 +89,7 @@ class TableFragment : Fragment(), Observer<CoursePkg>, OnCourseCellClickListener
         val dateInfo = TimeUtils.getWeekNumDateArray(coursePkg.termDate, weekNum)
 
         if (view != null) {
-            layout_emptyCourseTable.apply {
+            binding.layoutEmptyCourseTable.apply {
                 if (childCount > 0) {
                     (getChildAt(0) as CourseTableView).setTableData(coursePkg, showWeekDaySize + 1)
                 } else {
@@ -92,7 +101,7 @@ class TableFragment : Fragment(), Observer<CoursePkg>, OnCourseCellClickListener
                     }
                 }
             }
-            layout_emptyCourseTableHeader.apply {
+            binding.layoutEmptyCourseTableHeader.apply {
                 if (childCount > 0) {
                     runInMain {
                         (it.getChildAt(0) as CourseTableHeaderView).setHeaderData(showWeekDaySize, dateInfo, coursePkg.courseTableStyle)
@@ -110,12 +119,12 @@ class TableFragment : Fragment(), Observer<CoursePkg>, OnCourseCellClickListener
                 setOnCourseCellClickListener(this@TableFragment)
             }
             lifecycleScope.launchWhenStarted {
-                layout_emptyCourseTable.addView(courseTable)
+                binding.layoutEmptyCourseTable.addView(courseTable)
             }
 
             val courseTableHeader = CourseTableHeaderView.create(requireContext(), showWeekDaySize, dateInfo, coursePkg.courseTableStyle)
             lifecycleScope.launchWhenStarted {
-                layout_emptyCourseTableHeader.addView(courseTableHeader)
+                binding.layoutEmptyCourseTableHeader.addView(courseTableHeader)
             }
         }
         return@withContext
@@ -135,5 +144,10 @@ class TableFragment : Fragment(), Observer<CoursePkg>, OnCourseCellClickListener
     override fun onDetach() {
         contentViewModel.courseTablePkg[weekNum - 1].removeObserver(this)
         super.onDetach()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

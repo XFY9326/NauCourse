@@ -7,7 +7,9 @@
     android:layout_height="match_parent"
     tools:context=".ui.activities.EmptyRoomSearchActivity">
 
-    <include layout="@layout/view_general_toolbar" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/view_general_toolbar" />
 
     <tool.xfy9326.naucourse.ui.views.widgets.AdvancedSwipeRefreshLayout
         android:id="@+id/asl_emptyRoom"
@@ -141,7 +143,9 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
-                <include layout="@layout/layout_list" />
+                <include
+                    android:id="@+id/list"
+                    layout="@layout/layout_list" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 

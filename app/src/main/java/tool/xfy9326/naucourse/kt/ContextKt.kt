@@ -42,11 +42,3 @@ fun Context.tryStartActivity(intent: Intent, options: Bundle? = null): Boolean {
     }
     return false
 }
-
-fun Fragment.tryStartActivityForResult(intent: Intent, requestCode: Int, options: Bundle? = null): Boolean {
-    if (intent.resolveActivity(requireContext().packageManager) != null) {
-        startActivityForResult(intent, requestCode, options)
-        return true
-    }
-    return false
-}

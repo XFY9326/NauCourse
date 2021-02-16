@@ -2,11 +2,8 @@ package tool.xfy9326.naucourse.ui.fragments.base
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.CallSuper
-import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
 
@@ -27,17 +24,6 @@ abstract class ViewModelFragment<T : BaseViewModel> : Fragment() {
     }
 
     @CallSuper
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return if (view == null) {
-            inflater.inflate(onCreateContentView(), container, false)
-        } else {
-            val parent = requireView().parent as ViewGroup?
-            parent?.removeView(view)
-            view
-        }
-    }
-
-    @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         prepareCacheInit(contentViewModel, savedInstanceState != null)
@@ -51,9 +37,6 @@ abstract class ViewModelFragment<T : BaseViewModel> : Fragment() {
     }
 
     fun getViewModel(): T = contentViewModel
-
-    @LayoutRes
-    protected abstract fun onCreateContentView(): Int
 
     protected abstract fun onCreateViewModel(): T
 

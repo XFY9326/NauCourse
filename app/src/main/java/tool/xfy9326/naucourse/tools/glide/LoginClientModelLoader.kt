@@ -6,7 +6,7 @@ import com.bumptech.glide.signature.ObjectKey
 import java.io.InputStream
 
 class LoginClientModelLoader : ModelLoader<ClientRequest, InputStream> {
-    override fun buildLoadData(model: ClientRequest, width: Int, height: Int, options: Options): ModelLoader.LoadData<InputStream>? {
+    override fun buildLoadData(model: ClientRequest, width: Int, height: Int, options: Options): ModelLoader.LoadData<InputStream> {
         return ModelLoader.LoadData(ObjectKey(model), ClientDataFetcher(model))
     }
 

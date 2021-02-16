@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.databinding.ViewCourseTimeItemBinding
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseTime
 import tool.xfy9326.naucourse.ui.views.recyclerview.viewholders.CourseTimeViewHolder
 import java.lang.ref.WeakReference
@@ -20,7 +21,7 @@ class CourseTimeAdapter(context: Context, private val timeList: ArrayList<Course
     override fun getItemCount(): Int = timeList.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseTimeViewHolder =
-        CourseTimeViewHolder(layoutInflater.inflate(R.layout.view_course_time_item, parent, false))
+        CourseTimeViewHolder(ViewCourseTimeItemBinding.inflate(layoutInflater, parent, false))
 
     fun appendCourseTime(courseTime: CourseTime) {
         timeList.add(courseTime)

@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.activity_empty_room_search.*
-import kotlinx.android.synthetic.main.layout_list.*
-import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.TimeConst
+import tool.xfy9326.naucourse.databinding.ActivityEmptyRoomSearchBinding
 import tool.xfy9326.naucourse.kt.bindLifecycle
 import tool.xfy9326.naucourse.kt.enableHomeButton
 import tool.xfy9326.naucourse.kt.showShortToast
@@ -33,16 +31,20 @@ class EmptyRoomSearchActivity : ViewModelActivity<EmptyRoomViewModel>(), DatePic
         private val DATE_FORMAT_YMD = SimpleDateFormat(TimeConst.FORMAT_YMD, Locale.CHINA)
     }
 
-    override fun onCreateContentView(): Int = R.layout.activity_empty_room_search
+    private val binding by lazy {
+        ActivityEmptyRoomSearchBinding.inflate(layoutInflater)
+    }
+
+    override fun onCreateContentView() = binding.root
 
     override fun onCreateViewModel(): EmptyRoomViewModel = ViewModelProvider(this)[EmptyRoomViewModel::class.java]
 
     override fun bindViewModel(viewModel: EmptyRoomViewModel) {
         viewModel.isLoading.observeEvent(this) {
             if (it) {
-                asl_emptyRoom.isRefreshing = true
+                binding.aslEmptyRoom.isRefreshing = true
             } else {
-                asl_emptyRoom.postStopRefreshing()
+                binding.aslEmptyRoom.postStopRefreshing()
             }
         }
         viewModel.searchData.observe(this, {
@@ -56,29 +58,29 @@ class EmptyRoomSearchActivity : ViewModelActivity<EmptyRoomViewModel>(), DatePic
                 showShortToast(I18NUtils.getContentErrorResId(it.first)!!)
                 finish()
             } else {
-                layout_emptyRoom.showSnackBar(I18NUtils.getContentErrorResId(it.first)!!)
+                binding.layoutEmptyRoom.showSnackBar(I18NUtils.getContentErrorResId(it.first)!!)
             }
         }
     }
 
     override fun initView(savedInstanceState: Bundle?, viewModel: EmptyRoomViewModel) {
-        setSupportActionBar(tb_general)
+        setSupportActionBar(binding.toolbar.tbGeneral)
         enableHomeButton()
 
-        if (et_emptyRoomDate.text.isNullOrEmpty() || et_emptyRoomDate.text.isNullOrBlank()) {
-            et_emptyRoomDate.setText(DATE_FORMAT_YMD.format(Date()))
+        if (binding.etEmptyRoomDate.text.isNullOrEmpty() || binding.etEmptyRoomDate.text.isNullOrBlank()) {
+            binding.etEmptyRoomDate.setText(DATE_FORMAT_YMD.format(Date()))
         }
         adapter = EmptyRoomAdapter(this)
-        arv_dataList.enableEmptyViewShowDelay = false
-        arv_dataList.adapter = adapter
+        binding.list.arvDataList.enableEmptyViewShowDelay = false
+        binding.list.arvDataList.adapter = adapter
 
-        asl_emptyRoom.setOnRefreshListener {
+        binding.aslEmptyRoom.setOnRefreshListener {
             viewModel.refreshSearchData()
         }
 
-        btn_emptyRoomDate.setOnClickListener {
+        binding.btnEmptyRoomDate.setOnClickListener {
             val calendar = Calendar.getInstance(Locale.CHINA).apply {
-                time = DATE_FORMAT_YMD.parse(et_emptyRoomDate.text.toString()) ?: Date()
+                time = DATE_FORMAT_YMD.parse(binding.etEmptyRoomDate.text.toString()) ?: Date()
             }
             DatePickerDialog(
                 this,
@@ -92,21 +94,21 @@ class EmptyRoomSearchActivity : ViewModelActivity<EmptyRoomViewModel>(), DatePic
                 DialogUtils.applyButtonTextAndBackground(this@EmptyRoomSearchActivity, this)
             }
         }
-        btn_emptyRoomSearch.setOnClickListener {
-            if (asl_emptyRoom.isRefreshing) {
-                layout_emptyRoom.showSnackBar(R.string.empty_room_data_loading)
+        binding.btnEmptyRoomSearch.setOnClickListener {
+            if (binding.aslEmptyRoom.isRefreshing) {
+                binding.layoutEmptyRoom.showSnackBar(R.string.empty_room_data_loading)
             } else {
                 val data = emptyRoomInfo
                 if (data != null) {
-                    val startTime = sp_emptyRoomStart.selectedItem as EmptyRoomInfo.Time
-                    val endTime = sp_emptyRoomEnd.selectedItem as EmptyRoomInfo.Time
+                    val startTime = binding.spEmptyRoomStart.selectedItem as EmptyRoomInfo.Time
+                    val endTime = binding.spEmptyRoomEnd.selectedItem as EmptyRoomInfo.Time
                     if (startTime.num > endTime.num) {
-                        layout_emptyRoom.showSnackBar(R.string.empty_room_course_num_error)
+                        binding.layoutEmptyRoom.showSnackBar(R.string.empty_room_course_num_error)
                         return@setOnClickListener
                     }
-                    val searchDate = DATE_FORMAT_YMD.parse(et_emptyRoomDate.text.toString()) ?: Date()
+                    val searchDate = DATE_FORMAT_YMD.parse(binding.etEmptyRoomDate.text.toString()) ?: Date()
                     if (searchDate < data.startDate || searchDate > data.endDate) {
-                        layout_emptyRoom.showSnackBar(
+                        binding.layoutEmptyRoom.showSnackBar(
                             R.string.empty_room_date_error, DATE_FORMAT_YMD.format(data.startDate), DATE_FORMAT_YMD.format(data.endDate)
                         )
                         return@setOnClickListener
@@ -119,7 +121,7 @@ class EmptyRoomSearchActivity : ViewModelActivity<EmptyRoomViewModel>(), DatePic
                         )
                     )
                 } else {
-                    layout_emptyRoom.showSnackBar(R.string.empty_room_data_loading)
+                    binding.layoutEmptyRoom.showSnackBar(R.string.empty_room_data_loading)
                 }
             }
         }
@@ -131,22 +133,22 @@ class EmptyRoomSearchActivity : ViewModelActivity<EmptyRoomViewModel>(), DatePic
             set(Calendar.MONTH, month)
             set(Calendar.DAY_OF_MONTH, dayOfMonth)
         }
-        et_emptyRoomDate.setText(DATE_FORMAT_YMD.format(calendar.time))
+        binding.etEmptyRoomDate.setText(DATE_FORMAT_YMD.format(calendar.time))
     }
 
     private fun applySearchData(data: EmptyRoomInfo) {
         this.emptyRoomInfo = data
 
-        tv_emptyRoomTerm.text = getString(R.string.empty_room_term, data.term)
-        tv_emptyRoomStartEndDate.text = getString(
+        binding.tvEmptyRoomTerm.text = getString(R.string.empty_room_term, data.term)
+        binding.tvEmptyRoomStartEndDate.text = getString(
             R.string.empty_room_start_end_date, DATE_FORMAT_YMD.format(data.startDate), DATE_FORMAT_YMD.format(data.endDate)
         )
 
-        sp_emptyRoomStart.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, data.BJC).apply {
+        binding.spEmptyRoomStart.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, data.BJC).apply {
             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
 
-        sp_emptyRoomEnd.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, data.EJC).apply {
+        binding.spEmptyRoomEnd.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, data.EJC).apply {
             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
     }

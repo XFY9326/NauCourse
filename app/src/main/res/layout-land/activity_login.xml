@@ -13,13 +13,17 @@
         android:gravity="center_vertical"
         android:paddingTop="24dp">
 
-        <include layout="@layout/view_welcome" />
+        <include
+            android:id="@+id/title"
+            layout="@layout/view_welcome" />
 
         <Space
             android:layout_width="50dp"
             android:layout_height="wrap_content" />
 
-        <include layout="@layout/view_login_panel" />
+        <include
+            android:id="@+id/panel"
+            layout="@layout/view_login_panel" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

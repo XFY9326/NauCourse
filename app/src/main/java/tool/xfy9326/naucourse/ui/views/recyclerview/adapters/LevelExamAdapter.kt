@@ -2,8 +2,10 @@ package tool.xfy9326.naucourse.ui.views.recyclerview.adapters
 
 import android.content.Context
 import android.view.View
+import android.view.ViewGroup
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.BaseConst
+import tool.xfy9326.naucourse.databinding.ViewLevelExamItemBinding
 import tool.xfy9326.naucourse.providers.beans.jwc.LevelExam
 import tool.xfy9326.naucourse.ui.views.recyclerview.adapters.base.ListRecyclerAdapter
 import tool.xfy9326.naucourse.ui.views.recyclerview.viewholders.LevelExamViewHolder
@@ -12,9 +14,8 @@ import java.lang.ref.WeakReference
 class LevelExamAdapter(context: Context) : ListRecyclerAdapter<LevelExamViewHolder, LevelExam>(context, DifferItemCallback()) {
     private val weakContext = WeakReference(context)
 
-    override fun onBindLayout(): Int = R.layout.view_level_exam_item
-
-    override fun onCreateViewHolder(view: View): LevelExamViewHolder = LevelExamViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        LevelExamViewHolder(ViewLevelExamItemBinding.inflate(layoutInflater, parent, false))
 
     override fun onBindViewHolder(holder: LevelExamViewHolder, position: Int, element: LevelExam) {
         holder.apply {

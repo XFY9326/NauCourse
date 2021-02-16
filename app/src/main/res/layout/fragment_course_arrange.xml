@@ -7,7 +7,9 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <include layout="@layout/view_general_toolbar" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/view_general_toolbar" />
 
     <tool.xfy9326.naucourse.ui.views.widgets.AdvancedSwipeRefreshLayout
         android:id="@+id/asl_todayCourse"
@@ -29,13 +31,21 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <include layout="@layout/view_card_next_course" />
+                <include
+                    android:id="@+id/next_course"
+                    layout="@layout/view_card_next_course" />
 
-                <include layout="@layout/view_card_today_course" />
+                <include
+                    android:id="@+id/today_course"
+                    layout="@layout/view_card_today_course" />
 
-                <include layout="@layout/view_card_tomorrow_course" />
+                <include
+                    android:id="@+id/tomorrow_course"
+                    layout="@layout/view_card_tomorrow_course" />
 
-                <include layout="@layout/view_card_not_this_week_course" />
+                <include
+                    android:id="@+id/not_this_week_course"
+                    layout="@layout/view_card_not_this_week_course" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 

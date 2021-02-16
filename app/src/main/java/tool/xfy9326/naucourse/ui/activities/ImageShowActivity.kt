@@ -13,8 +13,8 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.github.chrisbanes.photoview.PhotoView
-import kotlinx.android.synthetic.main.activity_image_show.*
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.databinding.ActivityImageShowBinding
 import tool.xfy9326.naucourse.kt.showSnackBar
 import tool.xfy9326.naucourse.network.LoginNetworkManager
 import tool.xfy9326.naucourse.tools.glide.ClientRequest
@@ -31,6 +31,10 @@ class ImageShowActivity : ViewModelActivity<ImageShowViewModel>(), View.OnLongCl
     private lateinit var imageUrl: String
     private var loginClientType: LoginNetworkManager.ClientType? = null
 
+    private val binding by lazy {
+        ActivityImageShowBinding.inflate(layoutInflater)
+    }
+
     companion object {
         const val EXTRA_IMAGE_URL = "EXTRA_IMAGE_URL"
         const val EXTRA_LOGIN_CLIENT_TYPE = "EXTRA_LOGIN_CLIENT_TYPE"
@@ -44,7 +48,7 @@ class ImageShowActivity : ViewModelActivity<ImageShowViewModel>(), View.OnLongCl
         }
     }
 
-    override fun onCreateContentView(): Int = R.layout.activity_image_show
+    override fun onCreateContentView() = binding.root
 
     override fun onCreateViewModel(): ImageShowViewModel = ViewModelProvider(this)[ImageShowViewModel::class.java]
 
@@ -53,7 +57,7 @@ class ImageShowActivity : ViewModelActivity<ImageShowViewModel>(), View.OnLongCl
             startActivity(ShareUtils.getShareImageIntent(this, it))
         }
         viewModel.imageOperation.observeEvent(this) {
-            layout_imageView.showSnackBar(I18NUtils.getImageOperationTypeResId(it))
+            binding.layoutImageView.showSnackBar(I18NUtils.getImageOperationTypeResId(it))
         }
     }
 
@@ -61,9 +65,9 @@ class ImageShowActivity : ViewModelActivity<ImageShowViewModel>(), View.OnLongCl
         imageUrl = intent?.extras?.getString(EXTRA_IMAGE_URL)!!
         loginClientType = intent?.extras?.getSerializable(EXTRA_LOGIN_CLIENT_TYPE) as LoginNetworkManager.ClientType?
 
-        pv_imageView.setOnLongClickListener(this)
-        pv_imageView.setOnClickListener(this)
-        layout_imageView.setOnClickListener(this)
+        binding.pvImageView.setOnLongClickListener(this)
+        binding.pvImageView.setOnClickListener(this)
+        binding.layoutImageView.setOnClickListener(this)
 
         Glide.with(this).let {
             val type = loginClientType
@@ -78,7 +82,7 @@ class ImageShowActivity : ViewModelActivity<ImageShowViewModel>(), View.OnLongCl
                     e?.let {
                         ExceptionUtils.printStackTrace(this@ImageShowActivity, it)
                     }
-                    layout_imageView.showSnackBar(R.string.image_load_failed)
+                    binding.layoutImageView.showSnackBar(R.string.image_load_failed)
                     return false
                 }
 
@@ -86,11 +90,11 @@ class ImageShowActivity : ViewModelActivity<ImageShowViewModel>(), View.OnLongCl
                     resource: Drawable?, model: Any?, target: Target<Drawable>?,
                     dataSource: DataSource?, isFirstResource: Boolean
                 ): Boolean {
-                    pb_imageLoading.hide()
-                    pv_imageView.visibility = View.VISIBLE
+                    binding.pbImageLoading.hide()
+                    binding.pvImageView.visibility = View.VISIBLE
                     return false
                 }
-            }).fitCenter().into(pv_imageView)
+            }).fitCenter().into(binding.pvImageView)
     }
 
     override fun onClick(v: View?) {
@@ -108,7 +112,7 @@ class ImageShowActivity : ViewModelActivity<ImageShowViewModel>(), View.OnLongCl
                     }
                 }).show()
         } else {
-            layout_imageView.showSnackBar(R.string.image_load_failed)
+            binding.layoutImageView.showSnackBar(R.string.image_load_failed)
         }
         v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
         return true

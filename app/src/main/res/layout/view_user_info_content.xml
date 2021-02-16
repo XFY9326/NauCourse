@@ -8,12 +8,20 @@
     android:paddingEnd="20dp"
     android:paddingBottom="10dp">
 
-    <include layout="@layout/view_card_user_info" />
+    <include
+        android:id="@+id/user_info"
+        layout="@layout/view_card_user_info" />
 
-    <include layout="@layout/view_card_learning_process" />
+    <include
+        android:id="@+id/learning_process"
+        layout="@layout/view_card_learning_process" />
 
-    <include layout="@layout/view_card_credit_info" />
+    <include
+        android:id="@+id/credit_info"
+        layout="@layout/view_card_credit_info" />
 
-    <include layout="@layout/view_card_rank_info" />
+    <include
+        android:id="@+id/rank_info"
+        layout="@layout/view_card_rank_info" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

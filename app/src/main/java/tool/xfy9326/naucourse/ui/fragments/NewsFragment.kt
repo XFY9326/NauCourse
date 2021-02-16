@@ -2,15 +2,11 @@ package tool.xfy9326.naucourse.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import androidx.appcompat.widget.Toolbar
+import android.view.*
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.fragment_news.*
-import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.SerializableNews
+import tool.xfy9326.naucourse.databinding.FragmentNewsBinding
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.kt.showSnackBar
 import tool.xfy9326.naucourse.providers.beans.GeneralNews
@@ -24,18 +20,38 @@ import tool.xfy9326.naucourse.utils.views.I18NUtils
 
 class NewsFragment : DrawerToolbarFragment<NewsViewModel>(), NewsAdapter.OnNewsItemClickListener, NewsTypeChoiceDialog.OnNewsTypeChangedListener {
     private lateinit var newsAdapter: NewsAdapter
+    private var _binding: FragmentNewsBinding? = null
+    private val binding
+        get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        retainInstance = true
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateContentView(): Int = R.layout.fragment_news
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        val v = view
+        return if (v == null) {
+            val binding = FragmentNewsBinding.inflate(layoutInflater, container, false).also {
+                this._binding = it
+            }
+            binding.root
+        } else {
+            val parent = requireView().parent as ViewGroup?
+            parent?.removeView(v)
+            _binding = FragmentNewsBinding.bind(v)
+            v
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     override fun onCreateViewModel(): NewsViewModel = ViewModelProvider(this)[NewsViewModel::class.java]
 
-    override fun onBindToolbar(): Toolbar = tb_general.apply {
+    override fun onBindToolbar() = binding.toolbar.tbGeneral.apply {
         title = getString(R.string.news)
     }
 
@@ -58,14 +74,14 @@ class NewsFragment : DrawerToolbarFragment<NewsViewModel>(), NewsAdapter.OnNewsI
 
     override fun bindViewModel(viewModel: NewsViewModel) {
         viewModel.isRefreshing.observe(viewLifecycleOwner, {
-            asl_news.postStopRefreshing()
+            binding.aslNews.postStopRefreshing()
         })
         viewModel.newsList.observe(viewLifecycleOwner, {
             newsAdapter.submitList(it)
-            arv_newsList.scrollToPosition(0)
+            binding.arvNewsList.scrollToPosition(0)
         })
         viewModel.errorMsg.observeEvent(viewLifecycleOwner) {
-            layout_news.showSnackBar(I18NUtils.getContentErrorResId(it)!!)
+            binding.layoutNews.showSnackBar(I18NUtils.getContentErrorResId(it)!!)
         }
     }
 
@@ -79,12 +95,12 @@ class NewsFragment : DrawerToolbarFragment<NewsViewModel>(), NewsAdapter.OnNewsI
     override fun initView(viewModel: NewsViewModel) {
         newsAdapter = NewsAdapter(requireContext(), this)
 
-        tb_general.setOnClickListener {
-            arv_newsList.smoothScrollToPosition(0)
+        binding.toolbar.tbGeneral.setOnClickListener {
+            binding.arvNewsList.smoothScrollToPosition(0)
         }
 
-        arv_newsList.adapter = newsAdapter
-        asl_news.setOnRefreshListener {
+        binding.arvNewsList.adapter = newsAdapter
+        binding.aslNews.setOnRefreshListener {
             viewModel.refreshNewsList()
         }
     }

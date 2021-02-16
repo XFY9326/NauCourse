@@ -9,9 +9,7 @@ import tool.xfy9326.naucourse.network.utils.TempCookieStore
 import tool.xfy9326.naucourse.network.utils.UAInterceptor
 import java.io.File
 import java.nio.charset.StandardCharsets
-import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.HashMap
 
 class NetworkTools private constructor() {
 
@@ -90,10 +88,10 @@ class NetworkTools private constructor() {
             }
 
         fun HttpUrl.hasSameHost(url: HttpUrl?): Boolean =
-            url != null && this.host.toLowerCase(Locale.CHINA) == url.host.toLowerCase(Locale.CHINA)
+            url != null && this.host.equals(url.host, ignoreCase = true)
 
         fun HttpUrl.hasSameHost(host: String?): Boolean =
-            host != null && this.host.toLowerCase(Locale.CHINA) == host.toLowerCase(Locale.CHINA)
+            host != null && this.host.equals(host, ignoreCase = true)
     }
 
     enum class NetworkType {

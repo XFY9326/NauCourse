@@ -53,7 +53,9 @@
         app:behavior_overlapTop="50dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <include layout="@layout/view_user_info_content" />
+        <include
+            android:id="@+id/content"
+            layout="@layout/view_user_info_content" />
 
     </androidx.core.widget.NestedScrollView>
 

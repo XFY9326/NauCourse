@@ -30,7 +30,7 @@ object NewsInfo : BaseSimpleContentInfo<List<GeneralNews>, PostSource>() {
         PostSource.RSS_XXB to XxbRSS
     )
 
-    override suspend fun loadSimpleStoredInfo(): List<GeneralNews>? =
+    override suspend fun loadSimpleStoredInfo(): List<GeneralNews> =
         sortNewsList(NewsDBHelper.getGeneralNewsArray())
 
     override fun onReadSimpleCache(data: List<GeneralNews>): List<GeneralNews> {

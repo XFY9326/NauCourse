@@ -9,13 +9,12 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.view_nav_header.*
-import kotlinx.android.synthetic.main.view_nav_header.view.*
 import tool.xfy9326.naucourse.BuildConfig
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.BaseConst
 import tool.xfy9326.naucourse.constants.OthersConst
+import tool.xfy9326.naucourse.databinding.ActivityMainBinding
+import tool.xfy9326.naucourse.databinding.ViewNavHeaderBinding
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.kt.showShortToast
@@ -46,6 +45,10 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     private var lastRequestBackTime: Long = 0
     private val fragmentTypeLock = Any()
     private var nowShowFragmentType: FragmentType? = null
+
+    private val binding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,17 +90,17 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         }
     }
 
-    override fun onCreateContentView(): Int = R.layout.activity_main
+    override fun onCreateContentView() = binding.root
 
     override fun onCreateViewModel(): MainDrawerViewModel = ViewModelProvider(this)[MainDrawerViewModel::class.java]
 
     override fun initView(savedInstanceState: Bundle?, viewModel: MainDrawerViewModel) {
-        nav_main.setNavigationItemSelectedListener(this)
-        nav_main.getHeaderView(DEFAULT_NAV_HEADER_INDEX).setOnClickListener {
+        binding.navMain.setNavigationItemSelectedListener(this)
+        binding.navMain.getHeaderView(DEFAULT_NAV_HEADER_INDEX).setOnClickListener {
             startActivity(Intent(this, UserInfoActivity::class.java))
-            drawer_main.closeDrawers()
+            binding.drawerMain.closeDrawers()
         }
-        nav_main.getChildAt(0)?.isVerticalScrollBarEnabled = false
+        binding.navMain.getChildAt(0)?.isVerticalScrollBarEnabled = false
         setAdvancedFunctions()
     }
 
@@ -109,7 +112,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     private fun setAdvancedFunctions() {
         val advancedFunctionSwitch = AppPref.EnableAdvancedFunctions
         if (advancedFunctionSwitch) {
-            drawer_main.addDrawerListener(object : DrawerLayout.DrawerListener {
+            binding.drawerMain.addDrawerListener(object : DrawerLayout.DrawerListener {
                 override fun onDrawerStateChanged(newState: Int) {}
 
                 override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
@@ -119,7 +122,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
                 override fun onDrawerOpened(drawerView: View) = getViewModel().updateBalance()
             })
         }
-        nav_main.menu.setGroupVisible(R.id.menu_groupAdvancedFunction, advancedFunctionSwitch)
+        binding.navMain.menu.setGroupVisible(R.id.menu_groupAdvancedFunction, advancedFunctionSwitch)
     }
 
     private fun preloadFragments() {
@@ -168,7 +171,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        drawer_main.postDelayed({
+        binding.drawerMain.postDelayed({
             when (item.itemId) {
                 R.id.menu_navCourseArrange -> showFragment(FragmentType.COURSE_ARRANGE)
                 R.id.menu_navCourseTable -> showFragment(FragmentType.COURSE_TABLE)
@@ -186,7 +189,7 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
                 R.id.menu_navExit -> finishAndRemoveTask()
             }
         }, 250)
-        drawer_main.closeDrawers()
+        binding.drawerMain.closeDrawers()
         return true
     }
 
@@ -200,17 +203,19 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     }
 
     override fun bindViewModel(viewModel: MainDrawerViewModel) {
+        val headerBinding = ViewNavHeaderBinding.bind(binding.navMain.getHeaderView(DEFAULT_NAV_HEADER_INDEX))
         viewModel.studentCardBalance.observe(this, {
-            nav_main.getHeaderView(DEFAULT_NAV_HEADER_INDEX).tv_cardBalanceOrClass.post {
-                tv_cardBalanceOrClass?.text = getString(R.string.balance, String.format(BaseConst.KEEP_TWO_DECIMAL_PLACES, it))
+            headerBinding.tvCardBalanceOrClass.post {
+                headerBinding.tvCardBalanceOrClass.text = getString(R.string.balance, String.format(BaseConst.KEEP_TWO_DECIMAL_PLACES, it))
             }
         })
         viewModel.studentInfo.observe(this, {
-            nav_main.getHeaderView(DEFAULT_NAV_HEADER_INDEX).apply {
-                tv_userId.text = it.personalInfo.stuId.second
-                tv_userName.text = StudentInfo.trimExtra(it.personalInfo.name.second)
+
+            binding.navMain.getHeaderView(DEFAULT_NAV_HEADER_INDEX).apply {
+                headerBinding.tvUserId.text = it.personalInfo.stuId.second
+                headerBinding.tvUserName.text = StudentInfo.trimExtra(it.personalInfo.name.second)
                 if (!AppPref.EnableAdvancedFunctions) {
-                    tv_cardBalanceOrClass.text = it.personalInfo.currentClass.second
+                    headerBinding.tvCardBalanceOrClass.text = it.personalInfo.currentClass.second
                 }
             }
         })
@@ -242,8 +247,8 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
     }
 
     override fun onBackPressed() {
-        if (drawer_main.isDrawerOpen(GravityCompat.START)) {
-            drawer_main.closeDrawer(GravityCompat.START)
+        if (binding.drawerMain.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerMain.closeDrawer(GravityCompat.START)
         } else {
             if (SettingsPref.ExitApplicationDirectly) {
                 val current = System.currentTimeMillis()

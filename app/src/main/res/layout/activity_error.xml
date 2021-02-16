@@ -7,7 +7,9 @@
     android:orientation="vertical"
     tools:context=".ui.activities.ErrorActivity">
 
-    <include layout="@layout/view_general_toolbar" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/view_general_toolbar" />
 
     <ScrollView
         android:layout_width="match_parent"

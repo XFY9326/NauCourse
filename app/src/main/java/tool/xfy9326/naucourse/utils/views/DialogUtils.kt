@@ -14,11 +14,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.slider.Slider
 import com.jaredrummler.android.colorpicker.ColorPickerDialog
-import kotlinx.android.synthetic.main.dialog_bottom_msg.*
-import kotlinx.android.synthetic.main.dialog_course_control_panel.*
-import kotlinx.android.synthetic.main.dialog_image_operation.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.OthersConst
+import tool.xfy9326.naucourse.databinding.DialogBottomMsgBinding
+import tool.xfy9326.naucourse.databinding.DialogCourseControlPanelBinding
+import tool.xfy9326.naucourse.databinding.DialogImageOperationBinding
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.kt.bindLifecycle
 import tool.xfy9326.naucourse.kt.createWithLifecycle
@@ -125,18 +125,19 @@ object DialogUtils {
 
     fun createImageOperationDialog(context: Context, lifecycle: Lifecycle, shareListener: (() -> Unit), saveListener: (() -> Unit)) =
         BottomSheetDialog(context).apply {
-            setContentView(R.layout.dialog_image_operation)
+            setContentView(DialogImageOperationBinding.inflate(layoutInflater).apply {
+                tvDialogShareImage.setOnClickListener {
+                    shareListener.invoke()
+                    dismiss()
+                }
+                tvDialogSaveImage.setOnClickListener {
+                    saveListener.invoke()
+                    dismiss()
+                }
+            }.root)
+
             val parentView = findViewById<ViewGroup>(com.google.android.material.R.id.design_bottom_sheet)
             parentView?.background = ContextCompat.getDrawable(context, R.drawable.bg_dialog)
-
-            tv_dialogShareImage.setOnClickListener {
-                shareListener.invoke()
-                dismiss()
-            }
-            tv_dialogSaveImage.setOnClickListener {
-                saveListener.invoke()
-                dismiss()
-            }
 
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
 
@@ -148,24 +149,24 @@ object DialogUtils {
         maxWeekNum: Int, weekNumChangeListener: ((Int) -> Unit)
     ) =
         BottomSheetDialog(context).apply {
-            setContentView(R.layout.dialog_course_control_panel)
+            setContentView(DialogCourseControlPanelBinding.inflate(layoutInflater).apply {
+                if (nowWeekNum != 0) tvCourseControlCurrentWeekNum.text = context.getString(R.string.current_week_num, nowWeekNum)
+
+                sliderCourseControlWeekNum.apply {
+                    valueTo = maxWeekNum.toFloat()
+                    value = nowShowWeekNum.toFloat()
+                    setLabelFormatter {
+                        context.getString(R.string.week_num, it.toInt())
+                    }
+                    setOnSlideFinishListener(object : AnimateSlider.OnSlideFinishListener {
+                        override fun onValueChanged(slider: Slider, value: Float) {
+                            weekNumChangeListener.invoke(slider.value.toInt())
+                        }
+                    })
+                }
+            }.root)
             val parentView = findViewById<ViewGroup>(com.google.android.material.R.id.design_bottom_sheet)
             parentView?.background = ContextCompat.getDrawable(context, android.R.color.transparent)
-
-            if (nowWeekNum != 0) tv_courseControlCurrentWeekNum.text = context.getString(R.string.current_week_num, nowWeekNum)
-
-            slider_courseControlWeekNum.apply {
-                valueTo = maxWeekNum.toFloat()
-                value = nowShowWeekNum.toFloat()
-                setLabelFormatter {
-                    context.getString(R.string.week_num, it.toInt())
-                }
-                setOnSlideFinishListener(object : AnimateSlider.OnSlideFinishListener {
-                    override fun onValueChanged(slider: Slider, value: Float) {
-                        weekNumChangeListener.invoke(slider.value.toInt())
-                    }
-                })
-            }
 
             window?.apply {
                 addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
@@ -179,24 +180,25 @@ object DialogUtils {
 
     fun createBottomMsgDialog(context: Context, lifecycle: Lifecycle, title: String, msg: String, listener: View.OnClickListener? = null) =
         BottomSheetDialog(context).apply {
-            setContentView(R.layout.dialog_bottom_msg)
+            setContentView(DialogBottomMsgBinding.inflate(layoutInflater).apply {
+                tvDialogBottomTitle.text = title
+                tvDialogBottomContent.text = msg
+                if (listener != null) {
+                    btnDialogBottomConfirm.setOnClickListener(listener)
+                } else {
+                    btnDialogBottomConfirm.setOnClickListener {
+                        dismiss()
+                    }
+                }
+                val maxWidth = context.resources.getDimensionPixelSize(R.dimen.bottom_msg_dialog_max_width)
+                val windowsWidth = context.resources.displayMetrics.widthPixels
+                cvDialogBottomMsg.layoutParams.apply {
+                    width = min(maxWidth, windowsWidth)
+                }
+            }.root)
+
             val parentView = findViewById<ViewGroup>(com.google.android.material.R.id.design_bottom_sheet)
             parentView?.background = ContextCompat.getDrawable(context, android.R.color.transparent)
-
-            tv_dialogBottomTitle.text = title
-            tv_dialogBottomContent.text = msg
-            if (listener != null) {
-                btn_dialogBottomConfirm.setOnClickListener(listener)
-            } else {
-                btn_dialogBottomConfirm.setOnClickListener {
-                    dismiss()
-                }
-            }
-            val maxWidth = context.resources.getDimensionPixelSize(R.dimen.bottom_msg_dialog_max_width)
-            val windowsWidth = context.resources.displayMetrics.widthPixels
-            cv_dialogBottomMsg.layoutParams.apply {
-                width = min(maxWidth, windowsWidth)
-            }
 
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
 

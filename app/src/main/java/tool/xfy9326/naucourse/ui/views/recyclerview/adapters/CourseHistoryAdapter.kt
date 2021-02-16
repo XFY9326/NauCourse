@@ -3,7 +3,9 @@ package tool.xfy9326.naucourse.ui.views.recyclerview.adapters
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.View
+import android.view.ViewGroup
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.databinding.ViewCourseHistoryItemBinding
 import tool.xfy9326.naucourse.providers.beans.jwc.CourseHistory
 import tool.xfy9326.naucourse.ui.views.recyclerview.adapters.base.ListRecyclerAdapter
 import tool.xfy9326.naucourse.ui.views.recyclerview.viewholders.CourseHistoryViewHolder
@@ -12,9 +14,8 @@ import java.lang.ref.WeakReference
 class CourseHistoryAdapter(context: Context) : ListRecyclerAdapter<CourseHistoryViewHolder, CourseHistory>(context, DifferItemCallback()) {
     private val weakContext = WeakReference(context)
 
-    override fun onBindLayout(): Int = R.layout.view_course_history_item
-
-    override fun onCreateViewHolder(view: View): CourseHistoryViewHolder = CourseHistoryViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        CourseHistoryViewHolder(ViewCourseHistoryItemBinding.inflate(layoutInflater, parent, false))
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: CourseHistoryViewHolder, position: Int, element: CourseHistory) {

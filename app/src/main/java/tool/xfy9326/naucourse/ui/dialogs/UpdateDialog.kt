@@ -9,9 +9,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.dialog_update.view.*
 import tool.xfy9326.naucourse.BuildConfig
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.databinding.DialogUpdateBinding
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.kt.showShortToast
@@ -52,57 +52,58 @@ class UpdateDialog : DialogFragment() {
         MaterialAlertDialogBuilder(requireContext()).apply {
             setTitle(R.string.found_new_version)
 
-            val view = layoutInflater.inflate(R.layout.dialog_update, null).apply {
-                tv_updateVersion.text = getString(
-                    R.string.update_version_info, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE,
-                    updateInfo.versionName, updateInfo.versionCode
-                )
-                tv_updateAttention.isVisible = updateInfo.forceUpdate
-                tv_updateChangeLog.text = updateInfo.changeLog
+            setView(
+                DialogUpdateBinding.inflate(layoutInflater).apply {
+                    tvUpdateVersion.text = getString(
+                        R.string.update_version_info, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE,
+                        updateInfo.versionName, updateInfo.versionCode
+                    )
+                    tvUpdateAttention.isVisible = updateInfo.forceUpdate
+                    tvUpdateChangeLog.text = updateInfo.changeLog
 
-                when {
-                    updateInfo.downloadSource.size > 1 -> {
-                        val menu = PopupMenu(context, btn_updateNow).apply {
-                            for ((i, source) in updateInfo.downloadSource.withIndex()) {
-                                menu.add(Menu.NONE, i, Menu.NONE, source.sourceName)
+                    when {
+                        updateInfo.downloadSource.size > 1 -> {
+                            val menu = PopupMenu(context, btnUpdateNow).apply {
+                                for ((i, source) in updateInfo.downloadSource.withIndex()) {
+                                    menu.add(Menu.NONE, i, Menu.NONE, source.sourceName)
+                                }
+                                gravity = Gravity.BOTTOM or Gravity.END
                             }
-                            gravity = Gravity.BOTTOM or Gravity.END
-                        }
-                        menu.setOnMenuItemClickListener {
-                            val source = updateInfo.downloadSource[it.itemId]
-                            if (source.isDirectLink && !SettingsPref.UseBrowserDownloadDirectLinkUpdate) {
-                                downloadUpdateFile(source.url)
-                            } else {
-                                IntentUtils.launchUrlInBrowser(requireContext(), source.url)
+                            menu.setOnMenuItemClickListener {
+                                val source = updateInfo.downloadSource[it.itemId]
+                                if (source.isDirectLink && !SettingsPref.UseBrowserDownloadDirectLinkUpdate) {
+                                    downloadUpdateFile(source.url)
+                                } else {
+                                    IntentUtils.launchUrlInBrowser(requireContext(), source.url)
+                                }
+                                return@setOnMenuItemClickListener true
                             }
-                            return@setOnMenuItemClickListener true
-                        }
 
-                        btn_updateNow.setOnClickListener {
-                            menu.show()
+                            btnUpdateNow.setOnClickListener {
+                                menu.show()
+                            }
+                        }
+                        updateInfo.downloadSource.isNotEmpty() -> btnUpdateNow.setOnClickListener {
+                            downloadUpdateFile(updateInfo.downloadSource.first().url)
+                        }
+                        else -> btnUpdateNow.setOnClickListener {
+                            showShortToast(R.string.no_update_source)
                         }
                     }
-                    updateInfo.downloadSource.isNotEmpty() -> btn_updateNow.setOnClickListener {
-                        downloadUpdateFile(updateInfo.downloadSource.first().url)
-                    }
-                    else -> btn_updateNow.setOnClickListener {
-                        showShortToast(R.string.no_update_source)
-                    }
-                }
 
-                btn_updateCancel.isVisible = !updateInfo.forceUpdate
-                btn_updateIgnore.isVisible = !updateInfo.forceUpdate
-                if (!updateInfo.forceUpdate) {
-                    btn_updateCancel.setOnClickListener {
-                        dismiss()
+                    btnUpdateCancel.isVisible = !updateInfo.forceUpdate
+                    btnUpdateIgnore.isVisible = !updateInfo.forceUpdate
+                    if (!updateInfo.forceUpdate) {
+                        btnUpdateCancel.setOnClickListener {
+                            dismiss()
+                        }
+                        btnUpdateIgnore.setOnClickListener {
+                            AppPref.IgnoreUpdateVersionCode = updateInfo.versionCode
+                            dismiss()
+                        }
                     }
-                    btn_updateIgnore.setOnClickListener {
-                        AppPref.IgnoreUpdateVersionCode = updateInfo.versionCode
-                        dismiss()
-                    }
-                }
-            }
-            setView(view)
+                }.root
+            )
         }.create()
 
     private fun downloadUpdateFile(url: String) {

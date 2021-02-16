@@ -8,14 +8,11 @@ import androidx.annotation.IdRes
 import androidx.core.view.setMargins
 import androidx.fragment.app.DialogFragment
 import androidx.gridlayout.widget.GridLayout
-import androidx.lifecycle.lifecycleScope
-import kotlinx.android.synthetic.main.dialog_course_time_edit.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.BaseConst
 import tool.xfy9326.naucourse.constants.CourseConst
 import tool.xfy9326.naucourse.constants.TimeConst
+import tool.xfy9326.naucourse.databinding.DialogCourseTimeEditBinding
 import tool.xfy9326.naucourse.kt.isEven
 import tool.xfy9326.naucourse.kt.isOdd
 import tool.xfy9326.naucourse.kt.showShortToast
@@ -48,6 +45,7 @@ class CourseTimeEditDialog : DialogFragment() {
     private var maxWeekNum by Delegates.notNull<Int>()
     private var position: Int? = null
     private lateinit var timeViewList: ArrayList<CourseTimeEditCell>
+    private lateinit var binding: DialogCourseTimeEditBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,50 +68,44 @@ class CourseTimeEditDialog : DialogFragment() {
         super.onSaveInstanceState(outState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         dialog?.apply {
             requestWindowFeature(Window.FEATURE_NO_TITLE)
         }
+        binding = DialogCourseTimeEditBinding.inflate(layoutInflater, container, false).apply {
+            radioGroupWeekMode.check(getWeekModeId())
 
-        return inflater.inflate(R.layout.dialog_course_time_edit, container, false).apply {
-            radioGroup_weekMode.check(getWeekModeId())
+            buildWeekNumGrid()
+            setupRadioGroup()
 
-            lifecycleScope.launch(Dispatchers.Main) {
-                buildWeekNumGrid(this@apply)
-                setupRadioGroup(this@apply)
-            }
-
-            lifecycleScope.launch(Dispatchers.Main) {
-                buildTimeWheel(this@apply)
-            }
+            buildTimeWheel()
 
             if (courseTime?.location == getString(R.string.no_data)) {
-                et_courseLocation.setText(BaseConst.EMPTY)
+                etCourseLocation.setText(BaseConst.EMPTY)
             } else {
-                et_courseLocation.setText(courseTime?.location)
+                etCourseLocation.setText(courseTime?.location)
             }
 
-            btn_courseTimeEditConfirm.setOnClickListener {
-                lifecycleScope.launch(Dispatchers.Main) {
-                    val newCourseTime = generateCourseTime()
-                    if (newCourseTime.weeksArray.size > 0) {
-                        if (newCourseTime != oldCourseTime) {
-                            val activity = requireActivity()
-                            if (activity is OnEditCompleteListener) {
-                                activity.onCourseTimeUpdated(newCourseTime, position)
-                            }
+            btnCourseTimeEditConfirm.setOnClickListener {
+                val newCourseTime = generateCourseTime()
+                if (newCourseTime.weeksArray.size > 0) {
+                    if (newCourseTime != oldCourseTime) {
+                        val activity = requireActivity()
+                        if (activity is OnEditCompleteListener) {
+                            activity.onCourseTimeUpdated(newCourseTime, position)
                         }
-                        dismiss()
-                    } else {
-                        showShortToast(R.string.weeks_empty)
                     }
+                    dismiss()
+                } else {
+                    showShortToast(R.string.weeks_empty)
                 }
             }
 
-            btn_courseTimeEditCancel.setOnClickListener {
+            btnCourseTimeEditCancel.setOnClickListener {
                 dismiss()
             }
         }
+        return binding.root
     }
 
     @IdRes
@@ -133,30 +125,30 @@ class CourseTimeEditDialog : DialogFragment() {
             else -> throw IllegalArgumentException("Radio Button Has Error ID! Can't Convert To Week Mode! ID: $id")
         }
 
-    private fun buildWeekNumGrid(view: View) = view.apply {
+    private fun buildWeekNumGrid() = binding.apply {
         timeViewList.clear()
         val size = resources.getDimensionPixelSize(R.dimen.course_time_button_size)
         val margin = resources.getDimensionPixelSize(R.dimen.course_time_button_margin)
         val count =
-            if (gl_courseWeeks.measuredWidth != 0) {
-                gl_courseWeeks.measuredWidth / (size + margin * 2)
+            if (glCourseWeeks.measuredWidth != 0) {
+                glCourseWeeks.measuredWidth / (size + margin * 2)
             } else {
                 DEFAULT_BUTTON_COUNT_IN_ROW
             }
-        gl_courseWeeks.columnCount =
+        glCourseWeeks.columnCount =
             when {
                 count <= 0 -> 1
                 count.isOdd() -> count - 1
                 else -> count
             }
         val views = Array(maxWeekNum) {
-            createCourseTimeButton(view, it + 1, size, margin, courseTime?.isWeekNumTrue(it + 1) ?: DEFAULT_WEEK_NUM_CHECK)
+            createCourseTimeButton(it + 1, size, margin, courseTime?.isWeekNumTrue(it + 1) ?: DEFAULT_WEEK_NUM_CHECK)
         }
-        gl_courseWeeks.replaceAllViews(views)
+        glCourseWeeks.replaceAllViews(views)
     }
 
-    private fun setupRadioGroup(view: View) = view.apply {
-        radioGroup_weekMode.setOnCheckedChangeListener { _, checkedId ->
+    private fun setupRadioGroup() = binding.apply {
+        radioGroupWeekMode.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.radioBtn_oddWeekMode -> for (cell in timeViewList) cell.isChecked = cell.showNum.isOdd()
                 R.id.radioBtn_evenWeekMode -> for (cell in timeViewList) cell.isChecked = cell.showNum.isEven()
@@ -164,7 +156,7 @@ class CourseTimeEditDialog : DialogFragment() {
         }
     }
 
-    private fun createCourseTimeButton(view: View, num: Int, size: Int, margin: Int, checked: Boolean) =
+    private fun createCourseTimeButton(num: Int, size: Int, margin: Int, checked: Boolean) =
         AdvancedFrameLayout(requireContext()).apply {
             layoutParams = GridLayout.LayoutParams().apply {
                 rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1, 1f)
@@ -178,9 +170,9 @@ class CourseTimeEditDialog : DialogFragment() {
                 setOnCheckedChangeListener(object : CourseTimeEditCell.OnCheckedChangeListener {
                     override fun onCheckedChanged(cellView: CourseTimeEditCell, isChecked: Boolean) {
                         if (isChecked) {
-                            when (view.radioGroup_weekMode.checkedRadioButtonId) {
-                                R.id.radioBtn_oddWeekMode -> if (cellView.showNum.isEven()) view.radioBtn_allWeeksMode.isChecked = true
-                                R.id.radioBtn_evenWeekMode -> if (cellView.showNum.isOdd()) view.radioBtn_allWeeksMode.isChecked = true
+                            when (binding.radioGroupWeekMode.checkedRadioButtonId) {
+                                R.id.radioBtn_oddWeekMode -> if (cellView.showNum.isEven()) binding.radioBtnAllWeeksMode.isChecked = true
+                                R.id.radioBtn_evenWeekMode -> if (cellView.showNum.isOdd()) binding.radioBtnAllWeeksMode.isChecked = true
                             }
                         }
                     }
@@ -190,10 +182,10 @@ class CourseTimeEditDialog : DialogFragment() {
             addViewInLayout(cellView)
         }
 
-    private fun buildTimeWheel(view: View) = view.apply {
+    private fun buildTimeWheel() = binding.apply {
         val weekDayNumStrArray = resources.getStringArray(R.array.weekday_num)
 
-        picker_courseTimeWeekDay.apply {
+        pickerCourseTimeWeekDay.apply {
             minValue = TimeConst.MIN_WEEK_DAY
             maxValue = TimeConst.MAX_WEEK_DAY
             displayedValues = Array(weekDayNumStrArray.size) {
@@ -202,7 +194,7 @@ class CourseTimeEditDialog : DialogFragment() {
             if (courseTime != null) value = courseTime!!.weekDay.toInt()
         }
 
-        picker_courseStartTime.apply {
+        pickerCourseStartTime.apply {
             minValue = CourseConst.MIN_COURSE_LENGTH
             maxValue = CourseConst.MAX_COURSE_LENGTH
             displayedValues = Array(CourseConst.MAX_COURSE_LENGTH) {
@@ -211,7 +203,7 @@ class CourseTimeEditDialog : DialogFragment() {
             setOnScrollListener { v, scrollState ->
                 if (scrollState == NumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
                     val newVal = v.value
-                    if (view.picker_courseEndTime.value < newVal) view.picker_courseEndTime.value = newVal
+                    if (pickerCourseEndTime.value < newVal) pickerCourseEndTime.value = newVal
                 }
             }
             // 课程时间在单个时间项只被允许设定一段，因此只编辑第一段
@@ -219,7 +211,7 @@ class CourseTimeEditDialog : DialogFragment() {
                 value = courseTime!!.coursesNumArray.timePeriods[0].start
         }
 
-        picker_courseEndTime.apply {
+        pickerCourseEndTime.apply {
             minValue = CourseConst.MIN_COURSE_LENGTH
             maxValue = CourseConst.MAX_COURSE_LENGTH
             displayedValues = Array(CourseConst.MAX_COURSE_LENGTH) {
@@ -228,8 +220,8 @@ class CourseTimeEditDialog : DialogFragment() {
             setOnScrollListener { v, scrollState ->
                 if (scrollState == NumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
                     val newVal = v.value
-                    if (view.picker_courseStartTime.value > newVal) {
-                        view.picker_courseStartTime.value = newVal
+                    if (pickerCourseStartTime.value > newVal) {
+                        pickerCourseStartTime.value = newVal
                     }
                 }
             }
@@ -290,7 +282,7 @@ class CourseTimeEditDialog : DialogFragment() {
 
     private fun generateCourseTime(): CourseTime {
         requireView().apply {
-            var weekMode = getWeekModeById(requireView().radioGroup_weekMode.checkedRadioButtonId)
+            var weekMode = getWeekModeById(binding.radioGroupWeekMode.checkedRadioButtonId)
             val weeksList = readWeeksList(weekMode)
 
             // 单双周若只有一个周上课，则改为任意周模式
@@ -298,8 +290,8 @@ class CourseTimeEditDialog : DialogFragment() {
                 weekMode = WeekMode.ALL_WEEKS
             }
 
-            val weekDay = picker_courseTimeWeekDay.value.toShort()
-            val locationInput = et_courseLocation.text?.toString()?.trim()
+            val weekDay = binding.pickerCourseTimeWeekDay.value.toShort()
+            val locationInput = binding.etCourseLocation.text?.toString()?.trim()
             val location =
                 if (locationInput.isNullOrEmpty() || locationInput.isNullOrBlank()) {
                     getString(R.string.no_data)
@@ -307,8 +299,8 @@ class CourseTimeEditDialog : DialogFragment() {
                     locationInput
                 }
 
-            val courseStart = picker_courseStartTime.value
-            val courseEnd = picker_courseEndTime.value
+            val courseStart = binding.pickerCourseStartTime.value
+            val courseEnd = binding.pickerCourseEndTime.value
             val coursesNumArray = TimePeriodList(
                 arrayOf(
                     if (courseStart == courseEnd) {

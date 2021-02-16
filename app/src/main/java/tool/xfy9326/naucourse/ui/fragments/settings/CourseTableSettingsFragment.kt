@@ -1,14 +1,12 @@
 package tool.xfy9326.naucourse.ui.fragments.settings
 
-import android.app.Activity
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.SeekBarPreference
-import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -16,28 +14,33 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.ImageConst
+import tool.xfy9326.naucourse.constants.MIMEConst
 import tool.xfy9326.naucourse.constants.PrefConst
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.kt.showSnackBar
 import tool.xfy9326.naucourse.tools.NotifyBus
 import tool.xfy9326.naucourse.tools.NotifyType
+import tool.xfy9326.naucourse.ui.activities.SettingsActivity.Companion.requireSettingsActivity
 import tool.xfy9326.naucourse.ui.dialogs.FullScreenLoadingDialog
 import tool.xfy9326.naucourse.ui.fragments.base.BaseSettingsPreferenceFragment
 import tool.xfy9326.naucourse.utils.utility.ImageUtils
-import tool.xfy9326.naucourse.utils.utility.IntentUtils
 import java.util.*
 
 @Suppress("unused")
 class CourseTableSettingsFragment : BaseSettingsPreferenceFragment() {
     private val imageMutex = Mutex()
 
-    companion object {
-        private const val SELECT_COURSE_TABLE_PICTURE_REQUEST_CODE = 1
-    }
-
     override val preferenceResId = R.xml.settings_course_table
     override val titleName: Int = R.string.settings_course_table
+
+    private val getBackgroundImage = registerForActivityResult(ActivityResultContracts.GetContent()) {
+        if (it != null) {
+            saveCourseTableBackground(it)
+        } else {
+            requireSettingsActivity().coordinatorLayout.showSnackBar(R.string.picture_choose_cancel)
+        }
+    }
 
     override fun onPrefViewInit(savedInstanceState: Bundle?) {
         findPreference<CheckBoxPreference>(PrefConst.ShowNextWeekCourseTableAhead)?.setOnPreferenceChangeListener { _, _ ->
@@ -68,7 +71,7 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment() {
         addRefreshAllTableListener(PrefConst.CustomCourseTableAlpha)
 
         findPreference<Preference>(PrefConst.ChooseCourseTableBackgroundPicture)?.setOnPreferenceClickListener {
-            IntentUtils.selectPicture(this, SELECT_COURSE_TABLE_PICTURE_REQUEST_CODE)
+            getBackgroundImage.launch(MIMEConst.IMAGE)
             NotifyBus[NotifyType.REBUILD_COURSE_TABLE_BACKGROUND].notifyEvent()
             false
         }
@@ -77,17 +80,6 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment() {
             NotifyBus[NotifyType.REBUILD_COURSE_TABLE_BACKGROUND].notifyEvent()
             true
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == SELECT_COURSE_TABLE_PICTURE_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK && data != null && data.data != null) {
-                saveCourseTableBackground(data.data!!)
-            } else {
-                requireActivity().layout_settings.showSnackBar(R.string.picture_choose_cancel)
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun modifyCourseTableBackgroundQuality(quality: Int) {
@@ -108,7 +100,7 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment() {
 
                     launch(Dispatchers.Main) {
                         FullScreenLoadingDialog.close(childFragmentManager)
-                        requireActivity().layout_settings.showSnackBar(
+                        requireSettingsActivity().coordinatorLayout.showSnackBar(
                             if (result) {
                                 R.string.picture_quality_modify_success
                             } else {
@@ -152,7 +144,7 @@ class CourseTableSettingsFragment : BaseSettingsPreferenceFragment() {
                 }
                 withContext(Dispatchers.Main) {
                     FullScreenLoadingDialog.close(childFragmentManager)
-                    requireActivity().layout_settings.showSnackBar(
+                    requireSettingsActivity().coordinatorLayout.showSnackBar(
                         if (result != null) {
                             if (qualityModifyResult) {
                                 R.string.course_table_background_set_success

@@ -7,7 +7,9 @@
     android:layout_height="match_parent"
     tools:context=".ui.activities.CourseEditActivity">
 
-    <include layout="@layout/view_general_toolbar" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/view_general_toolbar" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_courseEdit"

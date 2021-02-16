@@ -4,10 +4,7 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewOutlineProvider
-import androidx.appcompat.widget.Toolbar
+import android.view.*
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -18,9 +15,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import kotlinx.android.synthetic.main.fragment_course_table.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.ImageConst
+import tool.xfy9326.naucourse.databinding.FragmentCourseTableBinding
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.io.prefs.SettingsPref
 import tool.xfy9326.naucourse.kt.showShortToast
@@ -41,17 +38,33 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>() {
     private lateinit var courseTableViewPagerAdapter: CourseTableViewPagerAdapter
     private lateinit var viewPagerCallback: ViewPager2.OnPageChangeCallback
 
+    private var _binding: FragmentCourseTableBinding? = null
+    private val binding
+        get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        retainInstance = true
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateContentView(): Int = R.layout.fragment_course_table
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        val v = view
+        return if (v == null) {
+            val binding = FragmentCourseTableBinding.inflate(layoutInflater, container, false).also {
+                this._binding = it
+            }
+            binding.root
+        } else {
+            val parent = requireView().parent as ViewGroup?
+            parent?.removeView(v)
+            _binding = FragmentCourseTableBinding.bind(v)
+            v
+        }
+    }
 
     override fun onCreateViewModel(): CourseTableViewModel = ViewModelProvider(this)[CourseTableViewModel::class.java]
 
-    override fun onBindToolbar(): Toolbar = tb_courseTable
+    override fun onBindToolbar() = binding.tbCourseTable
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -68,16 +81,16 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>() {
 
     private fun bindLocalObserver(viewModel: CourseTableViewModel) {
         viewModel.getImageWhenCourseTableLoading.observeNotification(viewLifecycleOwner) {
-            layout_courseTableWindow.showSnackBar(R.string.operation_when_data_loading)
+            binding.layoutCourseTableWindow.showSnackBar(R.string.operation_when_data_loading)
         }
         viewModel.imageShareUri.observeEvent(viewLifecycleOwner) {
             startActivity(ShareUtils.getShareImageIntent(requireContext(), it))
         }
         viewModel.imageOperation.observeEvent(viewLifecycleOwner) {
-            layout_courseTableWindow.showSnackBar(I18NUtils.getImageOperationTypeResId(it))
+            binding.layoutCourseTableWindow.showSnackBar(I18NUtils.getImageOperationTypeResId(it))
         }
         viewModel.nowShowWeekNum.observe(viewLifecycleOwner) {
-            tv_nowShowWeekNum.text = getString(
+            binding.tvNowShowWeekNum.text = getString(
                 R.string.week_num,
                 if (it <= 0) {
                     1
@@ -88,10 +101,10 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>() {
             viewModel.requestShowWeekStatus(it)
         }
         viewModel.currentWeekStatus.observe(viewLifecycleOwner) {
-            tv_notCurrentWeek.setText(I18NUtils.getCurrentWeekStatusResId(it!!))
+            binding.tvNotCurrentWeek.setText(I18NUtils.getCurrentWeekStatusResId(it!!))
         }
         viewModel.todayDate.observe(viewLifecycleOwner) {
-            tv_todayDate.text = getString(R.string.today_date, it.first, it.second)
+            binding.tvTodayDate.text = getString(R.string.today_date, it.first, it.second)
         }
         viewModel.maxWeekNum.observe(viewLifecycleOwner) {
             courseTableViewPagerAdapter.updateMaxWeekNum(it)
@@ -132,13 +145,13 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>() {
             viewModel.hasInitWithNowWeekNum = true
             val showWeekNum = if (weekNum.first == 0) 1 else if (weekNum.second) weekNum.first + 1 else weekNum.first
             viewModel.nowShowWeekNum.value = showWeekNum - 1
-            vp_courseTablePanel.setCurrentItem(showWeekNum - 1, false)
+            binding.vpCourseTablePanel.setCurrentItem(showWeekNum - 1, false)
         }
     }
 
     private fun shareCourseTable() {
         showShortToast(R.string.generating_image)
-        getViewModel().createShareImage(requireContext(), vp_courseTablePanel.currentItem + 1, resources.displayMetrics.widthPixels)
+        getViewModel().createShareImage(requireContext(), binding.vpCourseTablePanel.currentItem + 1, resources.displayMetrics.widthPixels)
     }
 
     override fun initView(viewModel: CourseTableViewModel) {
@@ -148,16 +161,16 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>() {
 
         courseTableViewPagerAdapter = CourseTableViewPagerAdapter(this, AppPref.MaxWeekNumCache)
 
-        vp_courseTablePanel.adapter = courseTableViewPagerAdapter
-        vp_courseTablePanel.offscreenPageLimit = 1
+        binding.vpCourseTablePanel.adapter = courseTableViewPagerAdapter
+        binding.vpCourseTablePanel.offscreenPageLimit = 1
         viewPagerCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 viewModel.nowShowWeekNum.value = position + 1
             }
         }
-        vp_courseTablePanel.registerOnPageChangeCallback(viewPagerCallback)
+        binding.vpCourseTablePanel.registerOnPageChangeCallback(viewPagerCallback)
 
-        layout_dateInfoBar.setOnClickListener {
+        binding.layoutDateInfoBar.setOnClickListener {
             turnToDefaultWeek(viewModel)
         }
     }
@@ -167,18 +180,18 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>() {
             AppPref.CourseTableBackgroundImageName?.let {
                 val imageFile = ImageUtils.getLocalImageFile(it, ImageConst.DIR_APP_IMAGE)
                 if (imageFile?.exists() == true) {
-                    iv_courseTableBackground.apply {
+                    binding.ivCourseTableBackground.apply {
                         alpha = SettingsPref.CourseTableBackgroundAlpha / 100f
                         scaleType = SettingsPref.getCourseTableBackgroundScareType()
                         visibility = View.VISIBLE
                     }
                     Glide.with(this@CourseTableFragment).load(imageFile).transition(DrawableTransitionOptions.withCrossFade())
-                        .into(iv_courseTableBackground)
+                        .into(binding.ivCourseTableBackground)
                     return
                 }
             }
         }
-        iv_courseTableBackground.visibility = View.GONE
+        binding.ivCourseTableBackground.visibility = View.GONE
     }
 
     private fun setFullScreenBackground(isInit: Boolean) {
@@ -190,67 +203,71 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>() {
     }
 
     private fun enableFullScreenBackground() {
-        layout_courseTableWindow.fitsSystemWindows = false
-        ViewCompat.requestApplyInsets(layout_courseTableWindow)
-        layout_courseTableWindow.setPadding(0)
+        binding.apply {
+            layoutCourseTableWindow.fitsSystemWindows = false
+            ViewCompat.requestApplyInsets(layoutCourseTableWindow)
+            layoutCourseTableWindow.setPadding(0)
 
-        layout_courseTableAppBar.fitsSystemWindows = true
-        ViewCompat.requestApplyInsets(layout_courseTableAppBar)
+            layoutCourseTableAppBar.fitsSystemWindows = true
+            ViewCompat.requestApplyInsets(layoutCourseTableAppBar)
 
-        iv_courseTableBackground.apply {
-            layoutParams = CoordinatorLayout.LayoutParams(layoutParams).apply {
-                setMargins(0)
+            ivCourseTableBackground.apply {
+                layoutParams = CoordinatorLayout.LayoutParams(layoutParams).apply {
+                    setMargins(0)
+                }
             }
-        }
-        layout_courseTableAppBar.apply {
-            outlineProvider = null
-            background = null
-            alpha = SettingsPref.CustomCourseTableAlpha / 100f
-        }
-        tb_courseTable.background = null
-
-        val colorTimeText =
-            if (SettingsPref.EnableCourseTableTimeTextColor) {
-                SettingsPref.CourseTableTimeTextColor
-            } else {
-                ContextCompat.getColor(requireContext(), R.color.colorCourseTimeDefault)
+            layoutCourseTableAppBar.apply {
+                outlineProvider = null
+                background = null
+                alpha = SettingsPref.CustomCourseTableAlpha / 100f
             }
+            tbCourseTable.background = null
 
-        tv_nowShowWeekNum.setTextColor(colorTimeText)
-        tv_todayDate.setTextColor(colorTimeText)
-        tv_notCurrentWeek.setTextColor(colorTimeText)
-        tb_courseTable.navigationIcon?.colorFilter = PorterDuffColorFilter(colorTimeText, PorterDuff.Mode.SRC)
-        tb_courseTable.menu.iterator().forEach {
-            it.icon?.colorFilter = PorterDuffColorFilter(colorTimeText, PorterDuff.Mode.SRC_ATOP)
+            val colorTimeText =
+                if (SettingsPref.EnableCourseTableTimeTextColor) {
+                    SettingsPref.CourseTableTimeTextColor
+                } else {
+                    ContextCompat.getColor(requireContext(), R.color.colorCourseTimeDefault)
+                }
+
+            tvNowShowWeekNum.setTextColor(colorTimeText)
+            tvTodayDate.setTextColor(colorTimeText)
+            tvNotCurrentWeek.setTextColor(colorTimeText)
+            tbCourseTable.navigationIcon?.colorFilter = PorterDuffColorFilter(colorTimeText, PorterDuff.Mode.SRC)
+            tbCourseTable.menu.iterator().forEach {
+                it.icon?.colorFilter = PorterDuffColorFilter(colorTimeText, PorterDuff.Mode.SRC_ATOP)
+            }
         }
     }
 
     private fun disableFullScreenBackground(isInit: Boolean) {
-        layout_courseTableWindow.fitsSystemWindows = true
-        ViewCompat.requestApplyInsets(layout_courseTableWindow)
+        binding.apply {
+            layoutCourseTableWindow.fitsSystemWindows = true
+            ViewCompat.requestApplyInsets(layoutCourseTableWindow)
 
-        layout_courseTableAppBar.fitsSystemWindows = false
-        ViewCompat.requestApplyInsets(layout_courseTableAppBar)
+            layoutCourseTableAppBar.fitsSystemWindows = false
+            ViewCompat.requestApplyInsets(layoutCourseTableAppBar)
 
-        if (!isInit) {
-            iv_courseTableBackground.apply {
-                layoutParams = CoordinatorLayout.LayoutParams(layoutParams).apply {
-                    setMargins(0, ViewUtils.getActionBarSize(requireContext()), 0, 0)
+            if (!isInit) {
+                ivCourseTableBackground.apply {
+                    layoutParams = CoordinatorLayout.LayoutParams(layoutParams).apply {
+                        setMargins(0, ViewUtils.getActionBarSize(requireContext()), 0, 0)
+                    }
                 }
-            }
-            layout_courseTableAppBar.apply {
-                outlineProvider = ViewOutlineProvider.BOUNDS
-                setBackgroundResource(R.color.colorPrimary)
-                alpha = 1f
-            }
-            tb_courseTable.setBackgroundResource(R.color.colorPrimary)
+                layoutCourseTableAppBar.apply {
+                    outlineProvider = ViewOutlineProvider.BOUNDS
+                    setBackgroundResource(R.color.colorPrimary)
+                    alpha = 1f
+                }
+                tbCourseTable.setBackgroundResource(R.color.colorPrimary)
 
-            tv_nowShowWeekNum.setTextColor(Color.WHITE)
-            tv_todayDate.setTextColor(Color.WHITE)
-            tv_notCurrentWeek.setTextColor(Color.WHITE)
-            tb_courseTable.navigationIcon?.clearColorFilter()
-            tb_courseTable.menu.iterator().forEach {
-                it.icon?.clearColorFilter()
+                tvNowShowWeekNum.setTextColor(Color.WHITE)
+                tvTodayDate.setTextColor(Color.WHITE)
+                tvNotCurrentWeek.setTextColor(Color.WHITE)
+                tbCourseTable.navigationIcon?.clearColorFilter()
+                tbCourseTable.menu.iterator().forEach {
+                    it.icon?.clearColorFilter()
+                }
             }
         }
     }
@@ -260,12 +277,12 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>() {
         val showAhead = viewModel.showNextWeekAhead
         if (defaultWeek != null) {
             if (defaultWeek == 0) {
-                vp_courseTablePanel.setCurrentItem(0, true)
+                binding.vpCourseTablePanel.setCurrentItem(0, true)
             } else {
                 if (showAhead == true) {
-                    vp_courseTablePanel.setCurrentItem(defaultWeek, true)
+                    binding.vpCourseTablePanel.setCurrentItem(defaultWeek, true)
                 } else {
-                    vp_courseTablePanel.setCurrentItem(defaultWeek - 1, true)
+                    binding.vpCourseTablePanel.setCurrentItem(defaultWeek - 1, true)
                 }
             }
         }
@@ -273,15 +290,16 @@ class CourseTableFragment : DrawerToolbarFragment<CourseTableViewModel>() {
 
     private fun showCourseTableControlPanel() {
         DialogUtils.createCourseTableControlDialog(
-            requireContext(), viewLifecycleOwner.lifecycle, getViewModel().currentWeekNum ?: 0, vp_courseTablePanel.currentItem + 1,
+            requireContext(), viewLifecycleOwner.lifecycle, getViewModel().currentWeekNum ?: 0, binding.vpCourseTablePanel.currentItem + 1,
             AppPref.MaxWeekNumCache
         ) {
-            vp_courseTablePanel.setCurrentItem(it - 1, true)
+            binding.vpCourseTablePanel.setCurrentItem(it - 1, true)
         }.show()
     }
 
     override fun onDestroyView() {
-        vp_courseTablePanel.unregisterOnPageChangeCallback(viewPagerCallback)
+        binding.vpCourseTablePanel.unregisterOnPageChangeCallback(viewPagerCallback)
         super.onDestroyView()
+        _binding = null
     }
 }

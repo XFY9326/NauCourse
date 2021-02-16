@@ -36,7 +36,7 @@ object MyLevelExam : BaseNoParamContent<Array<LevelExam>>() {
             return emptyArray()
         }
 
-        val levelExamArr = arrayOfNulls<LevelExam>(trElements.size - 2)
+        val levelExamArr = LinkedHashSet<LevelExam>(trElements.size - 2)
 
         var type: String
         var name: String
@@ -47,7 +47,7 @@ object MyLevelExam : BaseNoParamContent<Array<LevelExam>>() {
         var certificateNum: String
         var notes: String
 
-        for ((arrIndex, i) in (2 until trElements.size).withIndex()) {
+        for (i in 2 until trElements.size) {
             val tdElements = trElements[i].getElementsByTag(HTMLConst.ELEMENT_TAG_TD)
 
             type = tdElements[1].text()
@@ -64,9 +64,9 @@ object MyLevelExam : BaseNoParamContent<Array<LevelExam>>() {
             certificateNum = tdElements[7].text()
             notes = tdElements[8].text()
 
-            levelExamArr[arrIndex] = LevelExam(type, name, grade1, grade2, term, ticketNum, certificateNum, notes)
+            levelExamArr.add(LevelExam(type, name, grade1, grade2, term, ticketNum, certificateNum, notes))
         }
 
-        return levelExamArr.requireNoNulls()
+        return levelExamArr.toTypedArray()
     }
 }

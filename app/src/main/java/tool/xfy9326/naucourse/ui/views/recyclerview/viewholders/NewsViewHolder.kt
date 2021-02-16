@@ -1,16 +1,15 @@
 package tool.xfy9326.naucourse.ui.views.recyclerview.viewholders
 
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textview.MaterialTextView
-import kotlinx.android.synthetic.main.view_news_item.view.*
+import tool.xfy9326.naucourse.databinding.ViewNewsItemBinding
 
-class NewsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val cvNewsCard: MaterialCardView = view.cv_newsCard
-    val tvNewsTitle: MaterialTextView = view.tv_newsTitle
-    val tvNewsType: MaterialTextView = view.tv_newsType
-    val tvNewsSource: MaterialTextView = view.tv_newsSource
-    val tvNewsClickAmount: MaterialTextView = view.tv_newsClickAmount
-    val tvNewsPostDate: MaterialTextView = view.tv_newsPostDate
+class NewsViewHolder(binding: ViewNewsItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    val cvNewsCard: MaterialCardView = binding.cvNewsCard
+    val tvNewsTitle: MaterialTextView = binding.tvNewsTitle
+    val tvNewsType: MaterialTextView = binding.tvNewsType
+    val tvNewsSource: MaterialTextView = binding.tvNewsSource
+    val tvNewsClickAmount: MaterialTextView = binding.tvNewsClickAmount
+    val tvNewsPostDate: MaterialTextView = binding.tvNewsPostDate
 }

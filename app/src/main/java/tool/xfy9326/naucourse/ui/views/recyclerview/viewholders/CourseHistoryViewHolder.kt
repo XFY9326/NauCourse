@@ -1,17 +1,16 @@
 package tool.xfy9326.naucourse.ui.views.recyclerview.viewholders
 
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textview.MaterialTextView
-import kotlinx.android.synthetic.main.view_course_history_item.view.*
+import tool.xfy9326.naucourse.databinding.ViewCourseHistoryItemBinding
 
-class CourseHistoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val tvCourseHistoryName: MaterialTextView = view.tv_courseHistoryName
-    val tvCourseHistoryProperty: MaterialTextView = view.tv_courseHistoryProperty
-    val tvCourseHistoryTerm: MaterialTextView = view.tv_courseHistoryTerm
-    val tvCourseHistoryCredit: MaterialTextView = view.tv_courseHistoryCredit
-    val tvCourseHistoryWeight: MaterialTextView = view.tv_courseHistoryWeight
-    val tvCourseHistoryScore: MaterialTextView = view.tv_courseHistoryScore
-    val tvCourseHistoryType: MaterialTextView = view.tv_courseHistoryType
-    val tvCourseHistoryNote: MaterialTextView = view.tv_courseHistoryNote
+class CourseHistoryViewHolder(binding: ViewCourseHistoryItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    val tvCourseHistoryName: MaterialTextView = binding.tvCourseHistoryName
+    val tvCourseHistoryProperty: MaterialTextView = binding.tvCourseHistoryProperty
+    val tvCourseHistoryTerm: MaterialTextView = binding.tvCourseHistoryTerm
+    val tvCourseHistoryCredit: MaterialTextView = binding.tvCourseHistoryCredit
+    val tvCourseHistoryWeight: MaterialTextView = binding.tvCourseHistoryWeight
+    val tvCourseHistoryScore: MaterialTextView = binding.tvCourseHistoryScore
+    val tvCourseHistoryType: MaterialTextView = binding.tvCourseHistoryType
+    val tvCourseHistoryNote: MaterialTextView = binding.tvCourseHistoryNote
 }

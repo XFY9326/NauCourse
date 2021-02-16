@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/view_general_toolbar" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/view_general_toolbar" />
 
     <tool.xfy9326.naucourse.ui.views.widgets.AdvancedSwipeRefreshLayout
         android:id="@+id/asl_scoreQuery"

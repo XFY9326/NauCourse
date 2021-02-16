@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/view_general_toolbar" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/view_general_toolbar" />
 
     <tool.xfy9326.naucourse.ui.views.widgets.AdvancedSwipeRefreshLayout
         android:id="@+id/asl_refreshLayout"
@@ -15,7 +17,9 @@
         app:color_scheme="@array/refresh_layout_color_scheme"
         app:trigger_async_distance="@integer/default_refresh_layout_trigger_async_distance">
 
-        <include layout="@layout/layout_list" />
+        <include
+            android:id="@+id/list"
+            layout="@layout/layout_list" />
 
     </tool.xfy9326.naucourse.ui.views.widgets.AdvancedSwipeRefreshLayout>
 

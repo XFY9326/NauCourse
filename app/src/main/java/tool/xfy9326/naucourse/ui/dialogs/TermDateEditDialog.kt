@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import android.view.Window
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import kotlinx.android.synthetic.main.dialog_term_date_edit.view.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.CourseConst
 import tool.xfy9326.naucourse.constants.TimeConst
+import tool.xfy9326.naucourse.databinding.DialogTermDateEditBinding
 import tool.xfy9326.naucourse.kt.showShortToast
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.utils.courses.TimeUtils
@@ -51,33 +51,33 @@ class TermDateEditDialog : DialogFragment() {
         nowEndDate = arguments?.getSerializable(TERM_DATE_END) as Date
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         dialog?.apply {
             requestWindowFeature(Window.FEATURE_NO_TITLE)
         }
-        return inflater.inflate(R.layout.dialog_term_date_edit, container, false).apply {
-            tv_courseTermCurrent.text = getString(R.string.current_term, TermDate.getTerm(nowStartDate))
-            tv_courseTermStart.text = getString(R.string.current_term_date_start, DATE_FORMAT_YMD.format(nowStartDate))
-            tv_courseTermEnd.text = getString(R.string.current_term_date_end, DATE_FORMAT_YMD.format(nowEndDate))
+        return DialogTermDateEditBinding.inflate(layoutInflater, container, false).apply {
+            tvCourseTermCurrent.text = getString(R.string.current_term, TermDate.getTerm(nowStartDate))
+            tvCourseTermStart.text = getString(R.string.current_term_date_start, DATE_FORMAT_YMD.format(nowStartDate))
+            tvCourseTermEnd.text = getString(R.string.current_term_date_end, DATE_FORMAT_YMD.format(nowEndDate))
 
-            btn_courseTermEditStart.setOnClickListener {
+            btnCourseTermEditStart.setOnClickListener {
                 showDateEditDialog(TermDatePickerDialog.DateType.START_DATE)
             }
-            btn_courseTermEditEnd.setOnClickListener {
+            btnCourseTermEditEnd.setOnClickListener {
                 showDateEditDialog(TermDatePickerDialog.DateType.END_DATE)
             }
 
-            btn_courseTermEditClear.setOnClickListener {
+            btnCourseTermEditClear.setOnClickListener {
                 val activity = requireActivity()
                 if (activity is OnTermEditListener) {
                     activity.onTermCustomClear()
                 }
                 dismiss()
             }
-            btn_courseTermEditCancel.setOnClickListener {
+            btnCourseTermEditCancel.setOnClickListener {
                 dismiss()
             }
-            btn_courseTermEditConfirm.setOnClickListener {
+            btnCourseTermEditConfirm.setOnClickListener {
                 if (nowStartDate >= nowEndDate) {
                     showShortToast(R.string.term_date_error)
                 } else {
@@ -93,7 +93,7 @@ class TermDateEditDialog : DialogFragment() {
                     }
                 }
             }
-        }
+        }.root
     }
 
     private fun showDateEditDialog(dateType: TermDatePickerDialog.DateType) {

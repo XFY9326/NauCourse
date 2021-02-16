@@ -15,11 +15,10 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.widget.ImageViewCompat
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
-import kotlinx.android.synthetic.main.activity_course_edit.*
-import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.constants.BaseConst
+import tool.xfy9326.naucourse.databinding.ActivityCourseEditBinding
 import tool.xfy9326.naucourse.kt.enableHomeButton
 import tool.xfy9326.naucourse.kt.showSnackBar
 import tool.xfy9326.naucourse.kt.showSnackBarWithCallback
@@ -61,6 +60,10 @@ class CourseEditActivity : BaseActivity(), CourseTimeAdapter.CourseTimeCallback,
 
     private var isShowMoreInfoExpanded = false
 
+    private val binding by lazy {
+        ActivityCourseEditBinding.inflate(layoutInflater)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         savedInstanceState?.let {
@@ -68,8 +71,8 @@ class CourseEditActivity : BaseActivity(), CourseTimeAdapter.CourseTimeCallback,
             newCourseStyle = it.getSerializable(COURSE_CELL_STYLE) as CourseCellStyle?
         }
         readIntentData()
-        setContentView(R.layout.activity_course_edit)
-        setSupportActionBar(tb_general)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar.tbGeneral)
         enableHomeButton()
         viewInit(savedInstanceState)
     }
@@ -94,7 +97,7 @@ class CourseEditActivity : BaseActivity(), CourseTimeAdapter.CourseTimeCallback,
             }
             R.id.menu_courseEditSave -> {
                 currentFocus?.clearFocus()
-                BaseUtils.hideKeyboard(this, layout_courseEdit.windowToken)
+                BaseUtils.hideKeyboard(this, binding.layoutCourseEdit.windowToken)
 
                 val newCourse = getEditResult(true)
                 if (newCourse != null) {
@@ -132,9 +135,9 @@ class CourseEditActivity : BaseActivity(), CourseTimeAdapter.CourseTimeCallback,
     }
 
     private fun viewInit(savedInstanceState: Bundle?) {
-        btn_showMoreCourseEditInfo.setOnClickListener {
+        binding.btnShowMoreCourseEditInfo.setOnClickListener {
             currentFocus?.clearFocus()
-            BaseUtils.hideKeyboard(this, layout_courseEdit.windowToken)
+            BaseUtils.hideKeyboard(this, binding.layoutCourseEdit.windowToken)
 
             (it as AppCompatImageButton).apply {
                 if (isShowMoreInfoExpanded) {
@@ -149,7 +152,7 @@ class CourseEditActivity : BaseActivity(), CourseTimeAdapter.CourseTimeCallback,
             }
         }
 
-        fab_courseEdit.setOnClickListener {
+        binding.fabCourseEdit.setOnClickListener {
             CourseTimeEditDialog().apply {
                 arguments = Bundle().apply {
                     putString(CourseTimeEditDialog.COURSE_ID, courseId)
@@ -159,12 +162,12 @@ class CourseEditActivity : BaseActivity(), CourseTimeAdapter.CourseTimeCallback,
         }
 
         if (isShowMoreInfoExpanded) {
-            btn_showMoreCourseEditInfo.setImageResource(R.drawable.ic_load_less)
-            layout_courseEditInfo.visibility = View.VISIBLE
+            binding.btnShowMoreCourseEditInfo.setImageResource(R.drawable.ic_load_less)
+            binding.layoutCourseEditInfo.visibility = View.VISIBLE
         }
 
-        ImageViewCompat.setImageTintList(iv_courseEditColor, ColorStateList.valueOf((newCourseStyle ?: courseStyle).color))
-        layout_courseEditColor.setOnClickListener {
+        ImageViewCompat.setImageTintList(binding.ivCourseEditColor, ColorStateList.valueOf((newCourseStyle ?: courseStyle).color))
+        binding.layoutCourseEditColor.setOnClickListener {
             DialogUtils.createCourseColorPickerDialog(this, (newCourseStyle ?: courseStyle).color, COLOR_PICKER_DIALOG_ID)
                 .show(supportFragmentManager, null)
         }
@@ -180,11 +183,11 @@ class CourseEditActivity : BaseActivity(), CourseTimeAdapter.CourseTimeCallback,
 
         courseTimeAdapter = CourseTimeAdapter(this, timeList, this)
 
-        arv_courseDetailList.adapter = courseTimeAdapter
+        binding.arvCourseDetailList.adapter = courseTimeAdapter
     }
 
     override fun onDeleteCourseTime(adapter: CourseTimeAdapter, courseTime: CourseTime, position: Int) {
-        layout_courseEdit.showSnackBarWithCallback(R.string.delete_course_time_success, R.string.revoke) {
+        binding.layoutCourseEdit.showSnackBarWithCallback(R.string.delete_course_time_success, R.string.revoke) {
             adapter.recoverCourseTime(courseTime, position)
         }
     }
@@ -220,33 +223,33 @@ class CourseEditActivity : BaseActivity(), CourseTimeAdapter.CourseTimeCallback,
         }
 
     private fun loadMore() {
-        layout_courseEditInfo.measure(
+        binding.layoutCourseEditInfo.measure(
             View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
             View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
         )
-        animateExpand(layout_courseEditInfo.measuredHeight)
-        layout_courseEditInfo.animation = AnimUtils.getAnimationFadeVisible(this)
-        layout_courseEditInfo.visibility = View.VISIBLE
+        animateExpand(binding.layoutCourseEditInfo.measuredHeight)
+        binding.layoutCourseEditInfo.animation = AnimUtils.getAnimationFadeVisible(this)
+        binding.layoutCourseEditInfo.visibility = View.VISIBLE
     }
 
     private fun loadLess() {
-        animateExpand(-layout_courseEditInfo.measuredHeight)
-        layout_courseEditInfo.animation = AnimUtils.getAnimationFadeGone(this)
-        layout_courseEditInfo.visibility = View.GONE
+        animateExpand(-binding.layoutCourseEditInfo.measuredHeight)
+        binding.layoutCourseEditInfo.animation = AnimUtils.getAnimationFadeGone(this)
+        binding.layoutCourseEditInfo.visibility = View.GONE
     }
 
     private fun animateExpand(changeHeight: Int) =
-        ValueAnimator.ofInt(cv_courseBaseInfo.measuredHeight, cv_courseBaseInfo.measuredHeight + changeHeight).apply {
+        ValueAnimator.ofInt(binding.cvCourseBaseInfo.measuredHeight, binding.cvCourseBaseInfo.measuredHeight + changeHeight).apply {
             duration = EXPAND_ANIMATION_DURATION
             interpolator = FastOutSlowInInterpolator()
             addUpdateListener {
                 val value = animatedValue as Int
-                cv_courseBaseInfo.layoutParams.height = value
-                cv_courseBaseInfo.requestLayout()
+                binding.cvCourseBaseInfo.layoutParams.height = value
+                binding.cvCourseBaseInfo.requestLayout()
             }
             addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationStart(animation: Animator?) {
-                    btn_showMoreCourseEditInfo.visibility = View.INVISIBLE
+                    binding.btnShowMoreCourseEditInfo.visibility = View.INVISIBLE
                 }
 
                 override fun onAnimationEnd(animation: Animator?) = resetAfterExpandLayout()
@@ -256,28 +259,28 @@ class CourseEditActivity : BaseActivity(), CourseTimeAdapter.CourseTimeCallback,
         }
 
     private fun resetAfterExpandLayout() {
-        cv_courseBaseInfo.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-        cv_courseBaseInfo.requestLayout()
+        binding.cvCourseBaseInfo.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        binding.cvCourseBaseInfo.requestLayout()
 
-        btn_showMoreCourseEditInfo.animation = AnimUtils.getAnimationFadeVisible(this@CourseEditActivity)
-        btn_showMoreCourseEditInfo.visibility = View.VISIBLE
+        binding.btnShowMoreCourseEditInfo.animation = AnimUtils.getAnimationFadeVisible(this@CourseEditActivity)
+        binding.btnShowMoreCourseEditInfo.visibility = View.VISIBLE
     }
 
     private fun applyCourseInfoData() {
-        et_courseName.setText(courseData?.name)
-        et_teacherName.setText(courseData?.teacher)
-        et_courseCredit.setText(courseData?.credit?.toString())
-        et_teachClass.setText(courseData?.teachClass)
-        et_courseClass.setText(courseData?.courseClass)
-        et_courseType.setText(courseData?.type)
-        et_courseProperty.setText(courseData?.property)
+        binding.etCourseName.setText(courseData?.name)
+        binding.etTeacherName.setText(courseData?.teacher)
+        binding.etCourseCredit.setText(courseData?.credit?.toString())
+        binding.etTeachClass.setText(courseData?.teachClass)
+        binding.etCourseClass.setText(courseData?.courseClass)
+        binding.etCourseType.setText(courseData?.type)
+        binding.etCourseProperty.setText(courseData?.property)
     }
 
     override fun onColorSelected(dialogId: Int, color: Int) {
         if (dialogId == COLOR_PICKER_DIALOG_ID) {
             synchronized(this) {
                 newCourseStyle = (newCourseStyle ?: courseStyle).copy(color = color)
-                ImageViewCompat.setImageTintList(iv_courseEditColor, ColorStateList.valueOf(color))
+                ImageViewCompat.setImageTintList(binding.ivCourseEditColor, ColorStateList.valueOf(color))
             }
         }
     }
@@ -299,25 +302,25 @@ class CourseEditActivity : BaseActivity(), CourseTimeAdapter.CourseTimeCallback,
     private fun getEditResult(showAttention: Boolean): Course? {
         val timeSet = courseTimeAdapter.getCourseTimeSet()
         if (timeSet.size == 0) {
-            if (showAttention) layout_courseEdit.showSnackBar(R.string.course_time_empty)
+            if (showAttention) binding.layoutCourseEdit.showSnackBar(R.string.course_time_empty)
         } else if (timeSet.size != courseTimeAdapter.getCourseTimeList().size) {
-            if (showAttention) layout_courseEdit.showSnackBar(R.string.same_course_time_exists)
+            if (showAttention) binding.layoutCourseEdit.showSnackBar(R.string.same_course_time_exists)
         } else {
             val conflictResult = CourseSet.checkCourseTimeConflict(timeSet)
             if (conflictResult == null) {
-                val courseName = et_courseName.text?.toString()?.trim()
+                val courseName = binding.etCourseName.text?.toString()?.trim()
                 if (courseName.isNullOrBlank() || courseName.isNullOrEmpty()) {
-                    if (showAttention) layout_courseEdit.showSnackBar(R.string.course_name_empty)
+                    if (showAttention) binding.layoutCourseEdit.showSnackBar(R.string.course_name_empty)
                 } else {
                     return Course(
                         courseId,
                         courseName,
-                        getEditText(et_teacherName)!!,
-                        getEditText(et_courseClass, true),
-                        getEditText(et_teachClass)!!,
-                        getEditText(et_courseCredit)?.toFloatOrNull() ?: 0f,
-                        getEditText(et_courseType)!!,
-                        getEditText(et_courseProperty, true),
+                        getEditText(binding.etTeacherName)!!,
+                        getEditText(binding.etCourseClass, true),
+                        getEditText(binding.etTeachClass)!!,
+                        getEditText(binding.etCourseCredit)?.toFloatOrNull() ?: 0f,
+                        getEditText(binding.etCourseType)!!,
+                        getEditText(binding.etCourseProperty, true),
                         timeSet
                     )
                 }
@@ -340,7 +343,7 @@ class CourseEditActivity : BaseActivity(), CourseTimeAdapter.CourseTimeCallback,
     private fun checkSaveForExit() {
         val newCourse = getEditResult(false)
         if (newCourse != courseData || (newCourseStyle ?: courseStyle) != courseStyle) {
-            layout_courseEdit.showSnackBarWithCallback(R.string.exit_edit_without_save, android.R.string.ok) {
+            binding.layoutCourseEdit.showSnackBarWithCallback(R.string.exit_edit_without_save, android.R.string.ok) {
                 setResult(RESULT_OK)
                 super.onBackPressed()
             }

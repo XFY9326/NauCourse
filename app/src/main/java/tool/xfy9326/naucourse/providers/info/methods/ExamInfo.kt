@@ -17,7 +17,7 @@ object ExamInfo : BaseSimpleContentInfo<Array<Exam>, Nothing>() {
         CACHE_EXPIRE_HOUR, CacheExpireTimeUnit.HOUR
     )
 
-    override suspend fun loadSimpleStoredInfo(): Array<Exam>? = ExamDBHelper.getExam()
+    override suspend fun loadSimpleStoredInfo(): Array<Exam> = ExamDBHelper.getExam()
 
     override suspend fun getSimpleInfoContent(params: Set<Nothing>): ContentResult<Array<Exam>> = MyExamArrangeList.getContentData()
 

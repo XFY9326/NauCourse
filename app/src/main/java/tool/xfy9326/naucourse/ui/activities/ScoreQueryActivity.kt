@@ -5,10 +5,9 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.android.synthetic.main.activity_score_query.*
-import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CreditCountItem
+import tool.xfy9326.naucourse.databinding.ActivityScoreQueryBinding
 import tool.xfy9326.naucourse.kt.enableHomeButton
 import tool.xfy9326.naucourse.kt.showSnackBar
 import tool.xfy9326.naucourse.ui.activities.base.ViewModelActivity
@@ -19,7 +18,11 @@ import tool.xfy9326.naucourse.utils.views.DialogUtils
 import tool.xfy9326.naucourse.utils.views.I18NUtils
 
 class ScoreQueryActivity : ViewModelActivity<ScoreQueryViewModel>(), CreditCountCourseSelectDialog.OnCreditCountCourseSelectedListener {
-    override fun onCreateContentView(): Int = R.layout.activity_score_query
+    private val binding by lazy {
+        ActivityScoreQueryBinding.inflate(layoutInflater)
+    }
+
+    override fun onCreateContentView() = binding.root
 
     override fun onCreateViewModel(): ScoreQueryViewModel = ViewModelProvider(this)[ScoreQueryViewModel::class.java]
 
@@ -37,20 +40,20 @@ class ScoreQueryActivity : ViewModelActivity<ScoreQueryViewModel>(), CreditCount
 
     override fun bindViewModel(viewModel: ScoreQueryViewModel) {
         viewModel.errorMsg.observeEvent(this) {
-            layout_scoreQuery.showSnackBar(I18NUtils.getContentErrorResId(it)!!)
+            binding.layoutScoreQuery.showSnackBar(I18NUtils.getContentErrorResId(it)!!)
         }
         viewModel.isRefreshing.observe(this) {
             if (it) {
-                asl_scoreQuery.isRefreshing = true
+                binding.aslScoreQuery.isRefreshing = true
             } else {
-                asl_scoreQuery.postStopRefreshing()
+                binding.aslScoreQuery.postStopRefreshing()
             }
         }
         viewModel.credit.observeEvent(this) {
             DialogUtils.createCreditShowDialog(this@ScoreQueryActivity, lifecycle, it).show()
         }
         viewModel.creditCountStatus.observeEvent(this) {
-            layout_scoreQuery.showSnackBar(I18NUtils.getCreditCountStatusResId(it))
+            binding.layoutScoreQuery.showSnackBar(I18NUtils.getCreditCountStatusResId(it))
         }
         viewModel.creditCourseSelect.observeEvent(this) {
             CreditCountCourseSelectDialog().apply {
@@ -63,24 +66,24 @@ class ScoreQueryActivity : ViewModelActivity<ScoreQueryViewModel>(), CreditCount
     }
 
     override fun initView(savedInstanceState: Bundle?, viewModel: ScoreQueryViewModel) {
-        setSupportActionBar(tb_general)
+        setSupportActionBar(binding.toolbar.tbGeneral)
         enableHomeButton()
 
-        vp_scoreQuery.apply {
+        binding.vpScoreQuery.apply {
             offscreenPageLimit = 2
             adapter = ScoreQueryViewPagerAdapter(this@ScoreQueryActivity)
         }
 
-        tb_general.setOnClickListener {
+        binding.toolbar.tbGeneral.setOnClickListener {
             viewModel.scrollToTop.notifyEvent()
         }
 
-        asl_scoreQuery.setOnRefreshListener {
+        binding.aslScoreQuery.setOnRefreshListener {
             viewModel.refreshData(forceUpdate = true)
         }
 
         TabLayoutMediator(
-            tabLayout_scoreQuery, vp_scoreQuery
+            binding.tabLayoutScoreQuery, binding.vpScoreQuery
         ) { tab, position ->
             when (position) {
                 0 -> tab.setText(R.string.current_term_score)

@@ -1,8 +1,11 @@
 package tool.xfy9326.naucourse.ui.fragments
 
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.layout_list.*
-import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.databinding.LayoutListBinding
 import tool.xfy9326.naucourse.ui.fragments.base.ViewModelFragment
 import tool.xfy9326.naucourse.ui.models.activity.ScoreQueryViewModel
 import tool.xfy9326.naucourse.ui.views.recyclerview.adapters.CourseHistoryAdapter
@@ -10,7 +13,29 @@ import tool.xfy9326.naucourse.ui.views.recyclerview.adapters.CourseHistoryAdapte
 class CourseHistoryFragment : ViewModelFragment<ScoreQueryViewModel>() {
     private lateinit var adapter: CourseHistoryAdapter
 
-    override fun onCreateContentView(): Int = R.layout.layout_list
+    private var _binding: LayoutListBinding? = null
+    private val binding
+        get() = _binding!!
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        val v = view
+        return if (v == null) {
+            val binding = LayoutListBinding.inflate(layoutInflater, container, false).also {
+                this._binding = it
+            }
+            binding.root
+        } else {
+            val parent = requireView().parent as ViewGroup?
+            parent?.removeView(v)
+            _binding = LayoutListBinding.bind(v)
+            v
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     override fun onCreateViewModel(): ScoreQueryViewModel = ViewModelProvider(requireActivity())[ScoreQueryViewModel::class.java]
 
@@ -23,11 +48,11 @@ class CourseHistoryFragment : ViewModelFragment<ScoreQueryViewModel>() {
             adapter.submitList(it)
         }
         viewModel.scrollToTop.observeNotification(viewLifecycleOwner, CourseHistoryFragment::class.java.simpleName) {
-            arv_dataList.smoothScrollToPosition(0)
+            binding.arvDataList.smoothScrollToPosition(0)
         }
     }
 
     override fun initView(viewModel: ScoreQueryViewModel) {
-        arv_dataList.adapter = adapter
+        binding.arvDataList.adapter = adapter
     }
 }

@@ -1,20 +1,19 @@
 package tool.xfy9326.naucourse.ui.views.recyclerview.viewholders
 
-import android.view.View
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textview.MaterialTextView
-import kotlinx.android.synthetic.main.view_exam_item.view.*
+import tool.xfy9326.naucourse.databinding.ViewExamItemBinding
 
-class ExamArrangeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val tvExamProperty: MaterialTextView = view.tv_examProperty
-    val tvExamTypeAndCredit: MaterialTextView = view.tv_examTypeAndCredit
-    val tvExamName: MaterialTextView = view.tv_examName
-    val tvExamTeachClass: MaterialTextView = view.tv_examTeachClass
-    val tvExamStartTime: MaterialTextView = view.tv_examStartTime
-    val tvExamEndTime: MaterialTextView = view.tv_examEndTime
-    val tvExamLocation: MaterialTextView = view.tv_examLocation
-    val tvExamCountDown: MaterialTextView = view.tv_examCountDown
-    val tvExamCountDownTimeUnit: MaterialTextView = view.tv_examCountDownTimeUnit
-    val layoutExamCountDown: LinearLayoutCompat = view.layout_examCountDown
+class ExamArrangeViewHolder(binding: ViewExamItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    val tvExamProperty: MaterialTextView = binding.tvExamProperty
+    val tvExamTypeAndCredit: MaterialTextView = binding.tvExamTypeAndCredit
+    val tvExamName: MaterialTextView = binding.tvExamName
+    val tvExamTeachClass: MaterialTextView = binding.tvExamTeachClass
+    val tvExamStartTime: MaterialTextView = binding.tvExamStartTime
+    val tvExamEndTime: MaterialTextView = binding.tvExamEndTime
+    val tvExamLocation: MaterialTextView = binding.tvExamLocation
+    val tvExamCountDown: MaterialTextView = binding.tvExamCountDown
+    val tvExamCountDownTimeUnit: MaterialTextView = binding.tvExamCountDownTimeUnit
+    val layoutExamCountDown: LinearLayoutCompat = binding.layoutExamCountDown
 }

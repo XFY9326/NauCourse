@@ -6,10 +6,9 @@ import android.text.InputType
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
-import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.view_login_panel.*
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.BaseConst
+import tool.xfy9326.naucourse.databinding.ActivityLoginBinding
 import tool.xfy9326.naucourse.kt.clear
 import tool.xfy9326.naucourse.kt.showLongToast
 import tool.xfy9326.naucourse.kt.showSnackBar
@@ -33,7 +32,11 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
     private var passwordErrorLogin = false
     private lateinit var loadingAnimateDrawable: AnimatedVectorDrawableCompat
 
-    override fun onCreateContentView() = R.layout.activity_login
+    private val binding by lazy {
+        ActivityLoginBinding.inflate(layoutInflater)
+    }
+
+    override fun onCreateContentView() = binding.root
 
     override fun onCreateViewModel() = ViewModelProvider(this)[LoginViewModel::class.java]
 
@@ -48,26 +51,26 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
     override fun initView(savedInstanceState: Bundle?, viewModel: LoginViewModel) {
         passwordErrorLogin = intent.getBooleanExtra(INTENT_PASSWORD_ERROR_LOGIN, false)
         if (passwordErrorLogin) {
-            et_userId.inputType = InputType.TYPE_NULL
-            et_userId.isClickable = false
-            cb_acceptEULA.isChecked = true
+            binding.panel.etUserId.inputType = InputType.TYPE_NULL
+            binding.panel.etUserId.isClickable = false
+            binding.panel.cbAcceptEULA.isChecked = true
             showLongToast(R.string.password_change_error)
         }
 
         loadingAnimateDrawable = AnimatedVectorDrawableCompat.create(this, R.drawable.avd_anim_loading)!!
-        iv_loginLoading.setImageDrawable(loadingAnimateDrawable)
+        binding.panel.ivLoginLoading.setImageDrawable(loadingAnimateDrawable)
         viewModel.requestSavedCacheUserId()
 
-        tv_EULALicense.setOnClickListener {
+        binding.panel.tvEULALicense.setOnClickListener {
             DialogUtils.createUsingLicenseDialog(this, lifecycle).show()
         }
-        tv_forgetPassword.setOnClickListener {
+        binding.panel.tvForgetPassword.setOnClickListener {
             DialogUtils.createForgetPasswordDialog(this, lifecycle).show()
         }
-        btn_login.setOnClickListener {
-            val userId = et_userId.text.toString()
-            val userPw = et_userPassword.text.toString()
-            val acceptLicense = cb_acceptEULA.isChecked
+        binding.panel.btnLogin.setOnClickListener {
+            val userId = binding.panel.etUserId.text.toString()
+            val userPw = binding.panel.etUserPassword.text.toString()
+            val acceptLicense = binding.panel.cbAcceptEULA.isChecked
             if (acceptLicense) {
                 if (userId.isNotEmpty() && userId.isNotBlank() && userPw.isNotEmpty() && userPw.isNotBlank()) {
                     if (passwordErrorLogin) {
@@ -76,10 +79,10 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
                         viewModel.doLogin(userId, userPw)
                     }
                 } else {
-                    layout_activityLogin.showSnackBar(R.string.login_info_empty)
+                    binding.layoutActivityLogin.showSnackBar(R.string.login_info_empty)
                 }
             } else {
-                layout_activityLogin.showSnackBar(R.string.eula_not_accept)
+                binding.layoutActivityLogin.showSnackBar(R.string.eula_not_accept)
             }
         }
         intent.getBooleanExtra(IntentUtils.UPDATE_FROM_OLD_DATA_FLAG, false).let {
@@ -89,21 +92,21 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
 
     override fun bindViewModel(viewModel: LoginViewModel) {
         viewModel.isLoginLoading.observeEvent(this) {
-            tv_loadingMsg.clear()
-            et_userId.isEnabled = !it
-            et_userPassword.isEnabled = !it
-            tv_EULALicense.isEnabled = !it
-            tv_forgetPassword.isEnabled = !it
-            cb_acceptEULA.isEnabled = !it
-            btn_login.isEnabled = !it
+            binding.panel.tvLoadingMsg.clear()
+            binding.panel.etUserId.isEnabled = !it
+            binding.panel.etUserPassword.isEnabled = !it
+            binding.panel.tvEULALicense.isEnabled = !it
+            binding.panel.tvForgetPassword.isEnabled = !it
+            binding.panel.cbAcceptEULA.isEnabled = !it
+            binding.panel.btnLogin.isEnabled = !it
 
             setLoadingAnimation(it)
         }
         viewModel.savedCacheUserId.observeEvent(this) {
-            et_userId.setText(it)
+            binding.panel.etUserId.setText(it)
         }
         viewModel.errorReasonType.observeEvent(this) {
-            layout_activityLogin.showSnackBarWithCallback(I18NUtils.getErrorMsgResId(it)!!, R.string.login_troubleshoot) {
+            binding.layoutActivityLogin.showSnackBarWithCallback(I18NUtils.getErrorMsgResId(it)!!, R.string.login_troubleshoot) {
                 startActivity(Intent(this, ErrorActivity::class.java).apply {
                     putExtra(ErrorActivity.EXTRA_IS_LOGIN_FAILED_ERROR, true)
                 })
@@ -117,15 +120,15 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
         viewModel.loginProcess.observeEvent(this) {
             val resId = I18NUtils.getLoadingProcessResId(it)
             if (resId != null) {
-                tv_loadingMsg.setText(resId)
+                binding.panel.tvLoadingMsg.setText(resId)
             } else {
-                tv_loadingMsg.text = BaseConst.EMPTY
+                binding.panel.tvLoadingMsg.text = BaseConst.EMPTY
             }
         }
         viewModel.compatData.observeEvent(this) {
-            et_userId.setText(it.userId)
-            et_userPassword.setText(it.userPw)
-            cb_acceptEULA.isChecked = true
+            binding.panel.etUserId.setText(it.userId)
+            binding.panel.etUserPassword.setText(it.userPw)
+            binding.panel.cbAcceptEULA.isChecked = true
         }
         viewModel.updateInfo.observeEvent(this) { data ->
             viewModel.isLoginLoading.value?.let {
@@ -138,13 +141,13 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
 
     private fun setLoadingAnimation(setShow: Boolean) {
         if (setShow) {
-            setupAnimationWidget(iv_loginLoading, btn_login)
+            setupAnimationWidget(binding.panel.ivLoginLoading, binding.panel.btnLogin)
             loadingAnimateDrawable.registerAnimationCallback(AnimUtils.getAnimationLoopCallback())
             ViewUtils.tryStartAnimateDrawable(loadingAnimateDrawable)
         } else {
             loadingAnimateDrawable.clearAnimationCallbacks()
             ViewUtils.tryStopAnimateDrawable(loadingAnimateDrawable)
-            setupAnimationWidget(btn_login, iv_loginLoading)
+            setupAnimationWidget(binding.panel.btnLogin, binding.panel.ivLoginLoading)
         }
     }
 

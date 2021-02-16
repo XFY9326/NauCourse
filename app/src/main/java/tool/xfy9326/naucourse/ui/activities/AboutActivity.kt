@@ -3,11 +3,10 @@ package tool.xfy9326.naucourse.ui.activities
 import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.activity_about.*
-import kotlinx.android.synthetic.main.view_general_toolbar.*
 import tool.xfy9326.naucourse.BuildConfig
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.OthersConst
+import tool.xfy9326.naucourse.databinding.ActivityAboutBinding
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.kt.createWithLifecycle
 import tool.xfy9326.naucourse.kt.enableHomeButton
@@ -20,36 +19,39 @@ import tool.xfy9326.naucourse.utils.views.DialogUtils
 
 class AboutActivity : BaseActivity() {
     private var advancedFunctionClickTime = 0
+    private val binding by lazy {
+        ActivityAboutBinding.inflate(layoutInflater)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_about)
-        setSupportActionBar(tb_general)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar.tbGeneral)
         enableHomeButton()
         setView()
     }
 
     private fun setView() {
         @Suppress("ConstantConditionIf")
-        tv_aboutVersion.text =
+        binding.tvAboutVersion.text =
             if (BuildConfig.DEBUG) {
                 getString(R.string.version_detail_debug, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
             } else {
                 getString(R.string.version_detail, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
             }
-        layout_aboutEULA.setOnClickListener {
+        binding.layoutAboutEULA.setOnClickListener {
             DialogUtils.createUsingLicenseDialog(this, lifecycle).show()
         }
-        layout_aboutOpenSourceLicense.setOnClickListener {
+        binding.layoutAboutOpenSourceLicense.setOnClickListener {
             DialogUtils.createOpenSourceLicenseDialog(this, lifecycle).show()
         }
-        layout_aboutApp.setOnClickListener {
+        binding.layoutAboutApp.setOnClickListener {
             activeAdvancedFunction()
         }
-        layout_aboutFeedbackOnline.setOnClickListener {
+        binding.layoutAboutFeedbackOnline.setOnClickListener {
             startActivity(Intent(this, FeedbackActivity::class.java))
         }
-        layout_aboutFeedbackQQGroup.setOnClickListener {
+        binding.layoutAboutFeedbackQQGroup.setOnClickListener {
             IntentUtils.joinFeedbackQQGroup(this)
         }
     }

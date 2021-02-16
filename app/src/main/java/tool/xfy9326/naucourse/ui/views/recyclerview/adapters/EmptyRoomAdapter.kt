@@ -1,17 +1,18 @@
 package tool.xfy9326.naucourse.ui.views.recyclerview.adapters
 
 import android.content.Context
-import android.view.View
+import android.view.ViewGroup
 import tool.xfy9326.naucourse.R
+import tool.xfy9326.naucourse.databinding.ViewEmptyRoomItemBinding
 import tool.xfy9326.naucourse.providers.beans.jwc.EmptyRoomSearchResult
 import tool.xfy9326.naucourse.ui.views.recyclerview.adapters.base.ListRecyclerAdapter
 import tool.xfy9326.naucourse.ui.views.recyclerview.viewholders.EmptyRoomViewHolder
 
 class EmptyRoomAdapter(private val context: Context) :
     ListRecyclerAdapter<EmptyRoomViewHolder, EmptyRoomSearchResult>(context, DifferItemCallback()) {
-    override fun onBindLayout(): Int = R.layout.view_empty_room_item
 
-    override fun onCreateViewHolder(view: View): EmptyRoomViewHolder = EmptyRoomViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        EmptyRoomViewHolder(ViewEmptyRoomItemBinding.inflate(layoutInflater, parent, false))
 
     override fun onBindViewHolder(holder: EmptyRoomViewHolder, position: Int, element: EmptyRoomSearchResult) {
         holder.apply {

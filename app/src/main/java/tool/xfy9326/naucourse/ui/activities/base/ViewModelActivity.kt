@@ -1,7 +1,7 @@
 package tool.xfy9326.naucourse.ui.activities.base
 
 import android.os.Bundle
-import androidx.annotation.LayoutRes
+import android.view.View
 import tool.xfy9326.naucourse.ui.models.base.BaseViewModel
 
 abstract class ViewModelActivity<T : BaseViewModel> : BaseActivity() {
@@ -23,8 +23,7 @@ abstract class ViewModelActivity<T : BaseViewModel> : BaseActivity() {
 
     protected fun getViewModel(): T = contentViewModel
 
-    @LayoutRes
-    protected abstract fun onCreateContentView(): Int
+    protected abstract fun onCreateContentView(): View
 
     protected abstract fun onCreateViewModel(): T
 

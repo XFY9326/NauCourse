@@ -7,9 +7,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.RecyclerView
-import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.CourseCellStyle
 import tool.xfy9326.naucourse.beans.CourseManagePkg
+import tool.xfy9326.naucourse.databinding.ViewCourseManageItemBinding
 import tool.xfy9326.naucourse.providers.beans.jwc.Course
 import tool.xfy9326.naucourse.providers.beans.jwc.TermDate
 import tool.xfy9326.naucourse.ui.views.recyclerview.SwipeItemCallback
@@ -117,7 +117,7 @@ class CourseAdapter(context: Context, @Volatile private var courseManagePkg: Cou
     override fun onSwipedItem(viewHolder: CourseViewHolder, position: Int) = removeCourse(position)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder =
-        CourseViewHolder(layoutInflater.inflate(R.layout.view_course_manage_item, parent, false))
+        CourseViewHolder(ViewCourseManageItemBinding.inflate(layoutInflater, parent, false))
 
     override fun getItemCount(): Int = synchronized(isOperationEnabledLock) {
         if (courseManagePkg != null) {

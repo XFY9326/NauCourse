@@ -7,13 +7,11 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Environment
 import androidx.core.content.getSystemService
-import androidx.fragment.app.Fragment
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.MIMEConst
 import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.kt.showShortToast
 import tool.xfy9326.naucourse.kt.tryStartActivity
-import tool.xfy9326.naucourse.kt.tryStartActivityForResult
 import tool.xfy9326.naucourse.receivers.NextCourseAlarmReceiver
 import tool.xfy9326.naucourse.ui.activities.MainIndexActivity
 
@@ -45,18 +43,6 @@ object IntentUtils {
                 data = Uri.parse(url)
             })) {
             context.showShortToast(R.string.application_launch_failed)
-        }
-    }
-
-    fun selectPicture(fragment: Fragment, requestCode: Int) {
-        if (!fragment.tryStartActivityForResult(
-                Intent(Intent.ACTION_GET_CONTENT)
-                    .addCategory(Intent.CATEGORY_OPENABLE)
-                    .setType(MIMEConst.IMAGE),
-                requestCode
-            )
-        ) {
-            fragment.showShortToast(R.string.application_launch_failed)
         }
     }
 

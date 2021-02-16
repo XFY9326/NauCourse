@@ -11,13 +11,12 @@ import androidx.core.view.drawToBitmap
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.activity_news_detail.*
-import kotlinx.android.synthetic.main.view_general_toolbar.*
 import kotlinx.coroutines.launch
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.beans.SerializableNews
 import tool.xfy9326.naucourse.constants.TimeConst
+import tool.xfy9326.naucourse.databinding.ActivityNewsDetailBinding
 import tool.xfy9326.naucourse.kt.createWithLifecycle
 import tool.xfy9326.naucourse.kt.enableHomeButton
 import tool.xfy9326.naucourse.kt.showSnackBar
@@ -50,12 +49,16 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
         private val DATE_FORMAT_YMD = SimpleDateFormat(TimeConst.FORMAT_YMD, Locale.CHINA)
     }
 
+    private val binding by lazy {
+        ActivityNewsDetailBinding.inflate(layoutInflater)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         newsData = intent?.getSerializableExtra(NEWS_DATA) as SerializableNews
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateContentView(): Int = R.layout.activity_news_detail
+    override fun onCreateContentView() = binding.root
 
     override fun onCreateViewModel(): NewsDetailViewModel = ViewModelProvider(this)[NewsDetailViewModel::class.java]
 
@@ -79,19 +82,19 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
                     startActivity(ShareUtils.getShareNewsIntent(this@NewsDetailActivity, newsData))
                 } else if (which == 1) {
                     if (isNewsDetailSet) {
-                        layout_newsDetail.showSnackBar(R.string.generating_image)
+                        binding.layoutNewsDetail.showSnackBar(R.string.generating_image)
                         lifecycleScope.launch {
                             try {
-                                layout_newsContent.drawToBitmap().let {
+                                binding.layoutNewsDetail.drawToBitmap().let {
                                     BitmapUtils.drawDefaultWaterPrint(this@NewsDetailActivity, it)
                                     getViewModel().shareNewsImage(it)
                                 }
                             } catch (e: Exception) {
-                                layout_newsDetail.showSnackBar(R.string.share_when_news_loading)
+                                binding.layoutNewsDetail.showSnackBar(R.string.share_when_news_loading)
                             }
                         }
                     } else {
-                        layout_newsDetail.showSnackBar(R.string.share_when_news_loading)
+                        binding.layoutNewsDetail.showSnackBar(R.string.share_when_news_loading)
                     }
                 }
             }
@@ -102,19 +105,22 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
     override fun initView(savedInstanceState: Bundle?, viewModel: NewsDetailViewModel) {
         val postSourceTextResId = I18NUtils.getNewsPostSourceResId(newsData.postSource)!!
 
-        tb_general.setTitle(postSourceTextResId)
-        setSupportActionBar(tb_general)
+        binding.toolbar.tbGeneral.setTitle(postSourceTextResId)
+        setSupportActionBar(binding.toolbar.tbGeneral)
         enableHomeButton()
 
-        tv_newsDetailTitle.text = newsData.title
+        binding.tvNewsDetailTitle.text = newsData.title
         if (newsData.clickAmount == null) {
-            tv_newsDetailInfo.text = getString(R.string.news_detail_info, getString(postSourceTextResId))
+            binding.tvNewsDetailInfo.text = getString(R.string.news_detail_info, getString(postSourceTextResId))
         } else {
-            tv_newsDetailInfo.text = getString(R.string.news_detail_info_with_click_amount, getString(postSourceTextResId), newsData.clickAmount)
+            binding.tvNewsDetailInfo.text = getString(
+                R.string.news_detail_info_with_click_amount, getString(postSourceTextResId), newsData
+                    .clickAmount
+            )
         }
-        tv_newsDetailDate.text = DATE_FORMAT_YMD.format(newsData.postDate)
+        binding.tvNewsDetailDate.text = DATE_FORMAT_YMD.format(newsData.postDate)
 
-        asl_newsDetail.setOnRefreshListener {
+        binding.aslNewsDetail.setOnRefreshListener {
             requestNewsDetail(viewModel)
         }
 
@@ -127,31 +133,31 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
 
     override fun bindViewModel(viewModel: NewsDetailViewModel) {
         viewModel.isRefreshing.observeEvent(this) {
-            asl_newsDetail.postStopRefreshing()
+            binding.aslNewsDetail.postStopRefreshing()
         }
         viewModel.newsDetail.observe(this, {
             showNewsDetail(it)
             isNewsDetailSet = true
         })
         viewModel.errorNotifyType.observeEvent(this) {
-            layout_newsDetail.showSnackBar(I18NUtils.getContentErrorResId(it)!!)
+            binding.layoutNewsDetail.showSnackBar(I18NUtils.getContentErrorResId(it)!!)
         }
         viewModel.imageShareUri.observeEvent(this) {
             startActivity(ShareUtils.getShareImageIntent(this, it))
         }
         viewModel.imageOperation.observeEvent(this) {
-            layout_newsDetail.showSnackBar(I18NUtils.getImageOperationTypeResId(it))
+            binding.layoutNewsDetail.showSnackBar(I18NUtils.getImageOperationTypeResId(it))
         }
     }
 
     private fun showNewsDetail(detail: GeneralNewsDetail) {
         val postSourceTextResId = I18NUtils.getNewsPostSourceResId(newsData.postSource)!!
 
-        tv_newsDetailInfo.text = getString(R.string.news_detail_info_with_click_amount, getString(postSourceTextResId), detail.clickAmount)
+        binding.tvNewsDetailInfo.text = getString(R.string.news_detail_info_with_click_amount, getString(postSourceTextResId), detail.clickAmount)
 
-        tv_newsDetailContent.text = try {
+        binding.tvNewsDetailContent.text = try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                val imageGetter = HtmlImageGetter(this, tv_newsDetailContent, newsData.postSource)
+                val imageGetter = HtmlImageGetter(this, binding.tvNewsDetailContent, newsData.postSource)
                 val tagHandler = AdvancedTagHandler().apply {
                     setOnImageClickListener(this@NewsDetailActivity)
                     setOnImageLongPressListener(this@NewsDetailActivity)
@@ -166,7 +172,7 @@ class NewsDetailActivity : ViewModelActivity<NewsDetailViewModel>(), AdvancedTag
             detail.htmlContent
         }
 
-        tv_newsDetailContent.movementMethod = AdvancedLinkMovementMethod
+        binding.tvNewsDetailContent.movementMethod = AdvancedLinkMovementMethod
     }
 
     override fun onHtmlTextImageClick(source: String, clientType: LoginNetworkManager.ClientType?) {

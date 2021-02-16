@@ -17,7 +17,7 @@ object MyCourseInfo : BaseSimpleContentInfo<Array<CourseScore>, Nothing>() {
         CACHE_EXPIRE_DAY, CacheExpireTimeUnit.DAY
     )
 
-    override suspend fun loadSimpleStoredInfo(): Array<CourseScore>? = CourseScoreDBHelper.getCourseScores()
+    override suspend fun loadSimpleStoredInfo(): Array<CourseScore> = CourseScoreDBHelper.getCourseScores()
 
     override suspend fun getSimpleInfoContent(params: Set<Nothing>): ContentResult<Array<CourseScore>> = MyCourse.getContentData()
 
