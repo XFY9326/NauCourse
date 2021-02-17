@@ -102,6 +102,9 @@ class MainDrawerActivity : ViewModelActivity<MainDrawerViewModel>(), NavigationV
         }
         binding.navMain.getChildAt(0)?.isVerticalScrollBarEnabled = false
         setAdvancedFunctions()
+        if (AppPref.ShowArchiveAttention) {
+            DialogUtils.createArchiveAttentionDialog(this, lifecycle).show()
+        }
     }
 
     private fun onUpdateNewVersion() {

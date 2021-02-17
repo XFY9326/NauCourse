@@ -37,6 +37,24 @@ object DialogUtils {
             background = ContextCompat.getDrawable(context, R.drawable.bg_dialog)
         }.createWithLifecycle(lifecycle)
 
+    fun createArchiveAttentionDialog(context: Context, lifecycle: Lifecycle) =
+        MaterialAlertDialogBuilder(context).apply {
+            setTitle(R.string.archive_attention)
+            setMessage(R.string.archive_attention_msg)
+            setPositiveButton(android.R.string.ok) { _, _ ->
+                AppPref.ShowArchiveAttention = false
+            }
+            setNeutralButton(R.string.archive_attention_passage, null)
+            setCancelable(false)
+            background = ContextCompat.getDrawable(context, R.drawable.bg_dialog)
+        }.createWithLifecycle(lifecycle).also { dialog ->
+            dialog.setOnShowListener {
+                dialog.getButton(Dialog.BUTTON_NEUTRAL).setOnClickListener {
+                    IntentUtils.launchUrlInBrowser(context, "https://www.xfy9326.top/2021/02/17/naucourse_puresshedule/")
+                }
+            }
+        }
+
     fun createCreditShowDialog(context: Context, lifecycle: Lifecycle, credit: Pair<Float, Float?>) =
         MaterialAlertDialogBuilder(context).apply {
             setTitle(R.string.credit_count)

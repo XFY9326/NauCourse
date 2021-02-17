@@ -10,7 +10,7 @@ import androidx.lifecycle.LifecycleOwner
 // Activity销毁时自动关闭Dialog，防止窗体泄漏
 fun Dialog.bindLifecycle(lifecycle: Lifecycle) {
     val observer = object : DefaultLifecycleObserver {
-        override fun onStop(owner: LifecycleOwner) {
+        override fun onDestroy(owner: LifecycleOwner) {
             if (isShowing) dismiss()
             owner.lifecycle.removeObserver(this)
         }

@@ -70,6 +70,8 @@ object AppPref : BasePref() {
 
     var LastInstalledVersionCode by pref.int(defValue = 0)
 
+    var ShowArchiveAttention by pref.boolean(defValue = true)
+
     var CurrentSchoolCalendarUrl by pref.string(key = CURRENT_SCHOOL_CALENDAR_URL)
     var CurrentSchoolCalendarImageUrl by pref.string(key = CURRENT_SCHOOL_CALENDAR_IMAGE_URL)
 

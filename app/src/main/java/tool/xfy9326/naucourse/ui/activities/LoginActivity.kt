@@ -9,6 +9,7 @@ import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import tool.xfy9326.naucourse.R
 import tool.xfy9326.naucourse.constants.BaseConst
 import tool.xfy9326.naucourse.databinding.ActivityLoginBinding
+import tool.xfy9326.naucourse.io.prefs.AppPref
 import tool.xfy9326.naucourse.kt.clear
 import tool.xfy9326.naucourse.kt.showLongToast
 import tool.xfy9326.naucourse.kt.showSnackBar
@@ -87,6 +88,9 @@ class LoginActivity : ViewModelActivity<LoginViewModel>() {
         }
         intent.getBooleanExtra(IntentUtils.UPDATE_FROM_OLD_DATA_FLAG, false).let {
             if (it) viewModel.doLoginFromOldData()
+        }
+        if (AppPref.ShowArchiveAttention) {
+            DialogUtils.createArchiveAttentionDialog(this, lifecycle).show()
         }
     }
 

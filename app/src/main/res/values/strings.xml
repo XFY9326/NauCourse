@@ -423,4 +423,7 @@
     <string name="import_course">导入</string>
     <string name="password_change_error">由于登录密码错误或账号被锁定，需要重新登录！</string>
     <string name="term_custom_attention">自定义学期将会覆盖默认设置，若想要恢复为教务提供的标准学期时间，可以尝试重置学期！默认的标准学期时间会自动更新！</string>
+    <string name="archive_attention">关于NAU课程表</string>
+    <string name="archive_attention_msg">NAU课程表将会在未来停止维护，只要学校网页不改动，目前所有功能依然可以正常使用。更多未来规划相关的消息可以点击"开发者的话"查看文章。</string>
+    <string name="archive_attention_passage">开发者的话</string>
 </resources>
