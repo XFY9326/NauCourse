@@ -66,7 +66,8 @@ class CourseDetailDialog : DialogFragment() {
         dialog?.apply {
             requestWindowFeature(Window.FEATURE_NO_TITLE)
         }
-        binding = DialogCourseDetailBinding.inflate(layoutInflater, container, false).apply {
+        binding = DialogCourseDetailBinding.inflate(layoutInflater, container, false)
+        binding.apply {
             layoutCourseTitle.setBackgroundColor(courseDetail.courseCellStyle.color)
             tvCourseName.text = courseDetail.course.name
 

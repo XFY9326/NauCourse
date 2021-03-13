@@ -72,7 +72,8 @@ class CourseTimeEditDialog : DialogFragment() {
         dialog?.apply {
             requestWindowFeature(Window.FEATURE_NO_TITLE)
         }
-        binding = DialogCourseTimeEditBinding.inflate(layoutInflater, container, false).apply {
+        binding = DialogCourseTimeEditBinding.inflate(layoutInflater, container, false)
+        binding.apply {
             radioGroupWeekMode.check(getWeekModeId())
 
             buildWeekNumGrid()
